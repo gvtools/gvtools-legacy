@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
+	<META NAME="CREATED" CONTENT="20050304;9024500">
+	<META NAME="CHANGED" CONTENT="20050323;16380400">
+	<STYLE>
+	<!--
+		@page { size: 21.59cm 27.94cm }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="es-ES" DIR="LTR">
+<P>GDBMS</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">Introducci&oacute;n 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Parseado 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Extensibilidad 
+	</P>
+</OL>
+<OL START=3>
+	<OL>
+		<LI><P STYLE="margin-bottom: 0cm">Drivers</P>
+		<LI><P STYLE="margin-bottom: 0cm">Funciones</P>
+		<LI><P STYLE="margin-bottom: 0cm">Tipos 
+		</P>
+	</OL>
+</OL>
+<OL START=4>
+	<LI><P>Ejecuci&oacute;n de consultas 
+	</P>
+</OL>
+<P><BR><BR>
+</P>
+<P><B>1.- Introducci&oacute;n</B></P>
+<P>GDBMS es una librer&iacute;a de acceso a datos extensible que
+permite la ejecuci&oacute;n de un subconjunto del est&aacute;ndar SQL
+sobre fuentes de datos heterog&eacute;neas. Esto quiere decir que se
+puede realizar una instrucci&oacute;n SQL que involucre tablas que
+residan en servidores de base de datos distintos, o incluso entre una
+tabla de un servidor remoto y un fichero en local.</P>
+<P><B>2.- Procesado de instrucciones</B></P>
+<P>Para ejecutar las instrucciones primero hay que analizarlas
+sint&aacute;cticamente. Esto se realiza con la librer&iacute;a <A HREF="https://javacc.dev.java.net/">javacc</A>
+usando la gram&aacute;tica <A HREF="sql.html">sql.html</A>, lo cual
+nos genera un &aacute;rbol sint&aacute;ctico asociado a la
+instrucci&oacute;n y es en esta primera fase donde se detectan los
+errores sint&aacute;cticos. 
+</P>
+<P>Una vez obtenido el &aacute;rbol sint&aacute;ctico, se obtiene un
+arbol de adaptadores de forma paralela en la que cada nodo de dicho
+&aacute;rbol se basa en la informaci&oacute;n del nodo
+correspondiente del &aacute;rbol sint&aacute;ctico para proporcionar
+informaci&oacute;n de m&aacute;s alto nivel. Cada nodo del &aacute;rbol
+de adaptadores tiene un nodo correspondiente en el arbol sint&aacute;ctico,
+sin embargo, no sucede al rev&eacute;s. Un nodo del &aacute;rbol
+sint&aacute;ctico no tiene por qu&eacute; tener una correspondencia
+con un nodo del de adaptadores. Lo que quiere decir esto es que un
+nodo adaptador puede representar un nodo sint&aacute;ctico o un
+sub&aacute;rbol sint&aacute;ctico. Durante la ejecuci&oacute;n de las
+instrucciones, se puede pedir informaci&oacute;n a dicho &aacute;rbol
+tal como el valor de una expresi&oacute;n para una determinada fila.
+En este caso, asociado a al nodo del &aacute;rbol sint&aacute;ctico
+(nodo sint&aacute;ctico desde ahora) que representa la expresi&oacute;n
+habr&aacute; un nodo adaptador que en base a los valores de los nodos
+sint&aacute;cticos devolver&aacute; el valor de la expresi&oacute;n
+para la fila que se est&aacute; evaluando.</P>
+<P><B>3.- Extensibilidad</B></P>
+<P>Hay varios puntos en los que se puede extender a gdbms</P>
+<P STYLE="font-style: normal"><U>3.1.- Drivers</U></P>
+<P>La fuente de datos sobre la que opera gdbms es un DataSource, que
+es una clase que proporciona acceso a los datos que representa y
+permite algunas operaciones adicionales como acceder a los campos por
+nombre, etc. Adem&aacute;s existen DataSource que son producto de
+operaciones, es decir, una join entre dos DataSource es otro
+DataSource. Las DataSouce's usan a los drivers para acceder a los
+datos.</P>
+<P>Se pueden crear drivers para leer informaci&oacute;n de ficheros
+de disco y para acceder a tablas de bases de datos. El acceso a estas
+&uacute;ltimas se realiza mediante JDBC por lo que se puede acceder
+actualmente a cualquier sistema de base de datos para el cual exista
+un driver JDBC.</P>
+<P>Para crear un DataSource en gdbms tenemos varias alternativas.
+Todas ellas vienen definidas por la clase DataSourceFactory, que
+proporciona varios m&eacute;todos para obtener los DataSource. 
+</P>
+<P>Si la informaci&oacute;n se encuentra en un fichero o en una base
+de datos podemos a&ntilde;adir la fuente de datos al sistema mediante
+las llamadas addXXXDataSource y luego obtener los DataSource asociado
+mediante la llamada createRandomDataSource(String sql). De &eacute;sta
+&uacute;ltima llamada, podemos deducir que las fuentes de datos de
+base de datos no tienen por qu&eacute; corresponderse con una tabla
+completa y pueden ser una consulta sobre una tabla que recupere un
+subconjunto de los campos y de los registros. Cabe destacar que en
+estos m&eacute;todos estamos indicando datos que definen la fuente de
+datos (ubicaci&oacute;n del fichero, nombres de las columnas, etc...)
+por lo que si se cambia esta informaci&oacute;n seguramente no se
+podr&aacute; obtener un DataSource asociado al origen de los datos.</P>
+<P>Adem&aacute;s de los drivers de fichero y de base de datos,
+existen unas interfaces que al ser implementadas permiten a la
+factor&iacute;a crear DataSource. Esto es fundamental para integrar
+gdbms en otros sistemas como por ejemplo gvSIG, en la que hay objetos
+que han leido la informaci&oacute;n alfanum&eacute;rica y se quiere
+obtener un DataSource que acceda a estos datos.</P>
+<P>Si la informaci&oacute;n se encuentra en un objeto que ya contiene
+la informaci&oacute;n por estar en un framework de otro sistema y
+simplemente se quiere tener un DataSource con la informaci&oacute;n
+de dicho objeto, se deber&aacute; usar la llamada
+addDataSource(ReadDriver rd, String dataSourceName) y que dicho
+objeto implemente la interfaz ReadDriver.</P>
+<P><U>3.2.- Funciones</U></P>
+<P><U>3.3.- Tipos</U></P>
+<P><B>4.- Ejecuci&oacute;n de consultas</B></P>
+<P STYLE="font-weight: medium">La ejecuci&oacute;n de una instrucci&oacute;n
+SQL puede ser delegada en un servidor de base de datos, con el ahorro
+temporal de la ejecuci&oacute;n, si los DataSource's implicados
+cumple que son del mismo servidor y son accedidas con el mismo
+usuario y password y est&aacute;n registrados de una determinada
+manera. En caso de encontrarse una SQL que cumpla la condici&oacute;n
+anterior se deber&aacute; de sustituir los nombres de los datasource
+por los nombres de las tablas a las que acceden y al final de la
+cl&aacute;usula where habr&iacute;a que a&ntilde;adir con AND las
+condiciones where de los datasource. Una vez realizado eso se podr&iacute;a
+delegar en el servidor dicha instrucci&oacute;n.</P>
+<P STYLE="font-weight: medium">Las condiciones para delegar la
+ejecuci&oacute;n en el servidor son:</P>
+<UL>
+	<LI><P STYLE="font-weight: medium">Que las tablas residan en el
+	mismo servidor.</P>
+	<LI><P STYLE="font-weight: medium">Que sean accedidas por el mismo
+	usuario, porque de lo contrario el resultado podr&iacute;a tener
+	datos que no fueran visibles completamente por ninguno de los
+	usuarios de la base de datos</P>
+	<LI><P><SPAN STYLE="font-weight: medium">Que est&eacute;n
+	registradas mediante el m&eacute;todo addDBDataSource en el que se
+	le especifica la tabla, la clausula where. Esto limita el conjunto
+	de consultas SQL que se pueden delegar en el servidor ya que la
+	complejidad se reduce significativamente. Hay que realizar un
+	proceso de traducci&oacute;n de nombres de gdbms a los nombres
+	propios del sistema donde se va a delegar la instrucci&oacute;n
+	adem&aacute;s de a&ntilde;adir la cl&aacute;usula where de las
+	tablas implicadas, etc, ...</SPAN></P>
+</UL>
+<P STYLE="font-weight: medium">Por otro lado cabe resaltar varios
+inconvenientes que presenta el hecho de que se delegue en el servidor
+la ejecuci&oacute;n. El primero es que las referencias a campos de la
+tabla deben ser cualificadas, ya que de lo contrario se deber&iacute;a
+de hacer peticiones adicionales al servidor con la finalidad de saber
+a qu&eacute; tabla pertenece cada campo. El segundo es el coste
+temporal de ejecutar una consulta sobre varias tablas sin que &eacute;sta
+se delegue en el servidor. Por una parte hay que traerse del servidor
+las tablas implicadas que no tiene por qu&eacute; estar en la m&aacute;quina
+local (de hecho es l&oacute;gico que no sea as&iacute;) y por la
+otra, una vez los datos han sido descargados se deber&aacute; de
+realizar la operaci&oacute;n en Java que no destaca por la velocidad
+de ejecuci&oacute;n. Es por esto que si se quiere realizar una
+operaci&oacute;n con tablas que residan en el mismo servidor,
+conviene a&ntilde;adir una nueva fuente de datos indicando la
+consulta SQL que la define. De esta manera nos aseguramos de que la
+ejecuci&oacute;n se realiza en el servidor.</P>
+<P STYLE="font-weight: medium">En caso de que no se pueda delegar la
+ejecuci&oacute;n en ning&uacute;n servidor el resultado se computa en
+el n&uacute;cleo de gdbms mediante una serie de decoradores que se
+ponen sobre los DataSouce's involucrados en la instrucci&oacute;n.
+Estos decoradores implementan la interfaz DataSouce por lo que el
+resultado de la operaci&oacute;n es tambi&eacute;n un DataSouce. Para
+una ejecuci&oacute;n m&aacute;s eficiente se simplifica el arbol de
+adaptadores. Durante la ejecuci&oacute;n de una instrucci&oacute;n,
+se procesa el sub&aacute;rbol de expresiones m&uacute;ltiples veces
+para evaluarla, es por esto que la simplificaci&oacute;n de este
+&aacute;rbol aporta una aceleraci&oacute;n del procesado de las
+instrucciones. Para simplificar el &aacute;rbol el proceso realizado
+consiste en recorrer el sub&aacute;rbol de expresiones y para cada
+expresi&oacute;n que s&oacute;lo tenga como hijo una subexpresi&oacute;n
+y no realice ninguna operaci&oacute;n sobre el resultado de la
+expresi&oacute;n anterior, se hace un bypass del padre a ese &uacute;nico
+hijo, elimin&aacute;ndose el nodo en proceso. Los nodos susceptibles
+de desaparecer son los siguientes:</P>
+<UL>
+	<LI><P STYLE="font-weight: medium">AndExpr</P>
+	<LI><P STYLE="font-weight: medium">NotExpr</P>
+	<LI><P STYLE="font-weight: medium">OrExpr</P>
+	<LI><P STYLE="font-weight: medium">ProductExpr</P>
+	<LI><P STYLE="font-weight: medium">SumExpr</P>
+	<LI><P STYLE="font-weight: medium">Term</P>
+</UL>
+</BODY>
+</HTML>

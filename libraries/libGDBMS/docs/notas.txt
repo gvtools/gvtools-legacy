@@ -1,0 +1,68 @@
+Hacer que el método remove de DataSource elimine la vista del servidor
+en caso de que la haya. Hacer un test con esto también.
+
+Meter en le análisis la delegación en el servidor
+
+Hacer un script para hacer una release en el directorio dist
+
+Usar maven para obtener los jars
+
+terminar la parte de persistencia y hacer una release
+
+Añadir los data source de base de datos mediante SQL teniendo en cuenta
+la persistencia
+	El código que hay en la delegación se pondrá al registrar el data
+	source de query
+	Cuando se delegue, lo que se hará será crear el datasource de query
+	y llamar a create datasource
+
+Especificar la cláusula where y los campos cuando se obtenga el DataSource. Así 
+siempre operaremos sobre todo el DataSource, no influye mucho el tema secuencial o
+aleatorio
+
+Planificar las releases y hacer el documento de análisis
+	DataSources con fuentes de datos de base de datos mediante SQL
+	Persistencia de los DataSource del punto anterior
+	*** primera release ***
+	Filtrado del DataSource al obtenerlos (where y conjunto de campos)
+	*** segunda release ***
+	Parte de escritura
+	*** tercera release ***
+
+
+NOTAS DEL DESARROLLO
+
+Los dataSource tienen una referencia al DataSourceFactory que los creó. Pero
+deberían de tener un método de inicialización para recibir
+la referencia y pasársela al driver que hay por debajo
+
+Tipos no soportados por el driver de JDBC
+CLOB, BLOB, ARRAY, 
+DISTINCT, STRUCT, REF, DATALINK y JAVA_OBJECT
+
+el operador "||" no está implementado
+
+REFACTORINGS
+DBDataSourceAdapter y DBTableDataSourceAdapter debe ser una clase sola
+
+driverName en FileDriverInfo y driverInfo en DBDriverInfo son lo mismo
+
+El getName del DataSource debe devolver el nombre, y debe haber un getAlias
+para obtener el alias
+
+La UnionDataSource lanza RuntimeExceptions cuando creo que 
+no debería
+
+Refactoring para poner que al crear los datasources por defecto se ponga modo
+automático y todos los campos y sin where.
+
+el INTO del SELECT se debe de quitar
+
+Hay una excepción capturada en el SemanticParser que debe de ser propagada,
+de hecho, todas deben ser propagadas. No se pueden propagar, pero se
+pueden guardar y luego lanzarse en el método getInstr
+
+¿Que pasa si en la lista de campos de una select hay más de una columna 
+referenciando a la misma columna:
+			select id, id from persona;
+en access se devuelve una columna con el nombre expr000	

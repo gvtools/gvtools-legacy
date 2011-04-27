@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+/*
+ * Copyright 2001-2004 The Apache Software Foundation.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ -->
+
+
+<project>
+  <!-- the version of maven's project object model -->
+
+  <pomVersion>3</pomVersion>
+  <!-- a unique name for this project -->
+
+  <id>gdbms</id>
+  <!-- a short but descriptive name for the project -->
+
+  <name>	Generic DataBase Management System</name>
+  <!-- The version of the project under development, e.g.
+       1.1, 1.2, 2.0-SNAPSHOT -->
+
+  <currentVersion>0.8-SNAPSHOT</currentVersion>
+  <!-- details about the organization that 'owns' the project -->
+
+<!--  <organization>
+    <name></name>
+    <url>http:///</url>
+    <logo>http://.gif</logo>
+  </organization>-->
+  <!-- the year the project started -->
+
+  <inceptionYear>2005</inceptionYear>
+  <package>com.hardcode.gdbms</package>
+  <logo>http://gdbms.sourceforge.net/images/gdbms.jpg</logo>
+  <description>GDBMS is a library that allows to make queries to data sets hosted in different formats and hosts. It follows the SQL92 syntax and extends it in several poins. Allows extensions to data sets types, queries, functions and data types.</description>
+  <!-- a short description of what the project does -->
+
+  <shortDescription>GDBMS is a library that allows to make queries to data sets hosted in different formats and hosts.</shortDescription>
+  <!-- the project home page -->
+
+  <url>http://gdbms.sourceforge.net/</url>
+  <issueTrackingUrl>https://sourceforge.net/tracker/?group_id=128650&amp;atid=712327</issueTrackingUrl>
+<!--  <siteAddress>http://gdbms.sourceforge.net/</siteAddress>
+  <siteDirectory>/www/maven.apache.org/reference/plugins/examples/</siteDirectory>
+  <distributionDirectory>/www/maven.apache.org/builds/</distributionDirectory>
+   the version control repository and http url for online access
+       the connection element has the form:
+       scm:<system>:<system specific connection string> -->
+
+  <repository>
+    <developerConnection>scm:cvs:ext:elgallego@cvs.sourceforge.net:/cvsroot/gdbms:CVSROOT</developerConnection>
+    <url>http://cvs.sourceforge.net/viewcvs.py/gdbms/</url>
+  </repository>
+  <!-- any mailing lists for the project -->
+
+  <mailingLists/>
+  <!-- who the developers are for the project -->
+
+  <developers>
+	<developer>
+		<name>Fernando González Cortés</name>
+		<id>elgallego</id>
+		<email>discoduro2@terra.es</email>
+	</developer>
+	<developer>
+		<name>Juan José Lull Noguera</name>
+	</developer>
+	<developer>
+		<name>David García Goñi</name>
+	</developer>
+  </developers>
+  <!-- jar files the project is dependent on -->
+
+  <licenses>
+	<license name="LGPL" url="http://www.opensource.org/licenses/lgpl-license.php"/>
+  </licenses>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<url>http://www.junit.org/index.htm</url>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.8</version>
+			<url>http://logging.apache.org/log4j/docs/index.html</url>
+		</dependency>
+		<dependency>
+			<groupId>driver-manager</groupId>
+			<artifactId>driver-manager</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>crimson</groupId>
+			<artifactId>crimson</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>jts</groupId>
+			<artifactId>jts</artifactId>
+			<version>1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<jar>hsqldb.jar</jar>
+			<url>hsqldb.sourceforge.net</url>
+		</dependency>
+		<dependency>
+			<groupId>mysql-driver</groupId>
+			<artifactId>mysql-driver</artifactId>
+			<jar>mysql-connector-java-3.0.15-ga-bin.jar</jar>
+		</dependency>
+		<dependency>
+			<groupId>postgresql-driver</groupId>
+			<artifactId>postgresql-driver</artifactId>
+			<jar>postgresql-8.0-310.jdbc3.jar</jar>
+		</dependency>
+		<dependency>
+			<groupId>postgis-driver</groupId>
+			<artifactId>postgis-driver</artifactId>
+			<jar>postgis.jar</jar>
+		</dependency>
+		<dependency>
+			<groupId>geotools/gt2</groupId>
+			<artifactId>main</artifactId>
+			<jar>main-SNAPSHOT.jar</jar>
+		</dependency>
+		<dependency>
+			<groupId>IverUtiles</groupId>
+			<artifactId>IverUtiles</artifactId>
+			<jar>iver-utiles.jar</jar>
+		</dependency>	
+	</dependencies>
+  <!-- build information for the project -->
+
+  <build>
+    <nagEmailAddress>discoduro2@terra.es</nagEmailAddress>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
+    <unitTest>
+      <includes>
+        <include>**/AllTests.java</include>
+      </includes>
+    </unitTest>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
+</project>

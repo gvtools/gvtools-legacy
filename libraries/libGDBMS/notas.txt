@@ -1,0 +1,102 @@
+PRUEBAS
+editar una tabla obtenida con un alias
+Edición de todos los tipos de datos con todos los tipos
+de drivers. CSV a lo mejor no, pero postgresql, mysql
+y hsqldb sí.
+Por lo menos hay que probar con postgresql y mysql todos los 
+	tests de edición
+Tests del driver SHP
+	Que lea todos los tipos de geometrías
+
+POR HACER
+Que se puedan añadir campos a un fichero en edición
+El parámetro de IndexFactory sobre el tamaño del índice en memoria ha de sacarse a 
+un fichero de propiedades
+El código de finalización del DataSourceFactory no finaliza bien
+Poner pruebas pequeñitas de shp's en el directorio resources o hacer
+que no se distribuyan con los fuentes. O ambas cosas
+Cuando se haga la finalizacion correcta hay que hacer que la tabla de la
+base de datos de los tests no se cree con CASCADE para comprobar que se limpia
+bien
+Refactoring de DataWares y DataSources
+Tests con drivers complejos
+Que lea geometrías JTS
+	Probar el test del driver SHP
+	Que el test del driver de SHP se transforme en un
+		test espacial genérico 
+Documentar
+Versión 0.8 de GDBMS
+Arreglar el checkStyle
+tests de las dos versiones de SHP
+Driver de mySQL
+****
+El driver de mysql es de la versión 4.1. Con gestores anteriores no
+	funcionará si se intenta escribir un timestamp, modificar nomenclatura
+
+Implementar los métodos getStatementString del driver de postgreSQL 
+
+getMemento de AggregateDataSource
+
+Especificar la cláusula where y los campos cuando se obtenga el DataSource. Así 
+siempre operaremos sobre todo el DataSource, no influye mucho el tema secuencial o
+aleatorio
+
+¿Como se le va a especificar un predicado espacial en la cláusula
+where en mysql que no admite los predicados OGC?
+	MySQL sin embargo sí que puede filtrar por un rectángulo que
+es lo que necesitamos
+
+NOTAS DEL DESARROLLO
+*************************************************************
+Los DataSource y DataWare se pueden fusionar de manera que los DataSource implementen
+los métodos del DataWare mediante delegación
+
+Los dataSource tienen una referencia al DataSourceFactory que los creó. Pero
+deberían de tener un método de inicialización para recibir
+la referencia y pasársela al driver que hay por debajo
+
+Tipos no soportados por el driver de JDBC
+CLOB, BLOB, ARRAY, 
+DISTINCT, STRUCT, REF, DATALINK y JAVA_OBJECT
+
+el operador "||" no está implementado
+
+REFACTORINGS
+*************************************************************
+habría que hacer que las estructuras de datos "source info" generaran
+ellas solas el DataSource, dejando esta parte más extensible
+
+Quitar el getWhereFilter y que se compruebe mediante casting del 
+datasource (si no es automático).
+
+el getMemento de FilteredDataSource es igual que el de 
+OrderedDataSource y DistinctDataSource. Además contienen
+todas el campo fnaSupport
+
+equals debe devolver BooleanValue
+
+DBSourceInfo si no se usa nunca se puede fusionar con 
+DBTableSourceInfo
+
+getFieldName y isAggregated en SumExprAdapter y
+ProductExprAdapter tiene exáctamente el mismo código
+
+Los adaptadores no están correctamente cerrados en su paquete, ya que
+deben tener la palabra public para que compile
+
+¿El getName del DataSource debe devolver el nombre, y debe haber un getAlias
+para obtener el alias?
+
+Refactoring para poner que al crear los datasources por defecto se ponga modo
+automático y todos los campos y sin where.
+
+el INTO del SELECT se debe de quitar de la gramática
+
+Hay una excepción capturada en el SemanticParser que debe de ser propagada,
+de hecho, todas deben ser propagadas. No se pueden propagar, pero se
+pueden guardar y luego lanzarse en el método getInstr
+
+¿Que pasa si en la lista de campos de una select hay más de una columna 
+referenciando a la misma columna:
+			select id, id from persona;
+en access se devuelve una columna con el nombre expr000	

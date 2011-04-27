@@ -1,0 +1,194 @@
+<project name="GDBMS" default="generar-todos" basedir=".">
+	<description>
+        Instala el plugin
+    </description>
+	<!-- set global properties for this build -->
+	<property name="drivers-dir" location="../libFMap/drivers" />
+	<property name="classes-dir" location="bin" />
+	<property name="src" location="src/main/java" />
+	<property name="build" location="bin"/>
+	<property name="src-test" location="src/test/java"/>
+	<property name="build-test" location="bin-test"/>
+	<property name="apiReferenceDir" value="docs/dist/html/APIReference"/>
+	<property name="compile-sourcepath" value="../libFMap/src"/>
+	<import file="../binaries/ant/utilities.xml"/>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<echo>
+			Compiling ${ant.project.name}...</echo>
+	</target>
+
+	<target name="generar-todos" depends="init, csvstring, odbc, mysql, postgresql, hsqldb, oracle, create-jar" description="Genera los jars de todos los drivers ">
+	</target>
+
+	<target name="csvstring" description="Genera el jar de csvstring">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/csvstring" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/csvstring" />
+		<jar jarfile="${drivers-dir}/csvstring/csvstring.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/csvstring/**" />
+	</target>
+
+	<target name="postgis" description="Genera el jar de postgis">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/postgis" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+
+		<mkdir dir="${drivers-dir}/postgis" />
+		<jar jarfile="${drivers-dir}/postgis/postgis.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/postgis/**" />
+	</target>
+
+	<target name="odbc" description="Genera el jar de odbc">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/odbc" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/odbc" />
+		<jar jarfile="${drivers-dir}/odbc/odbc.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/odbc/**" />
+	</target>
+
+	<target name="hsqldb" description="Genera el jar de hsqldb">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/hsqldb" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/hsqldb" />
+		<jar jarfile="${drivers-dir}/hsqldb/hsqldb.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/hsqldb/**" />
+	</target>
+
+	<target name="oracle" description="Genera el jar de oracle">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/oracle" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/oracle" />
+		<jar jarfile="${drivers-dir}/oracle/oracle.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/oracle/**" />
+	</target>
+
+	<target name="hsqldb transactional" description="Genera el jar de hsqldb transaccional">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/hsqldbTransactional" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/hsqldbTransactional" />
+		<jar jarfile="${drivers-dir}/hsqldbTransactional/hsqldb.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/hsqldbTransactional/**" />
+	</target>
+
+	<target name="mysql" description="Genera el jar de mysql">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/mysql" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/mysql" />
+		<jar jarfile="${drivers-dir}/mysql/mysql.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/mysql/**" />
+	</target>
+
+	<target name="postgresql" description="Genera el jar de postgresql">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/postgresql" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/postgresql" />
+		<jar jarfile="${drivers-dir}/postgresql/postgresql.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/postgresql/**" />
+	</target>
+
+	<!-- los siguientes drivers no se usan, estan en FMap -->
+	<target name="csv" description="Genera el jar de csv">
+		<!--
+		Ojo No es un driver estandar, es para un formato concreto.
+		 -->
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/csv" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/csv" />
+		<jar jarfile="${drivers-dir}/csv/csv.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/csv/**" />
+	</target>
+
+	<target name="dbf" description="Genera el jar de dbf">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/dbf" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/dbf" />
+		<jar jarfile="${drivers-dir}/dbf/dbf.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/dbf/**" />
+	</target>
+
+	<target name="dxf" description="Genera el jar de dxf">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/dxf" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/dxf" />
+		<jar jarfile="${drivers-dir}/dxf/dxf.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/dxf/**" />
+	</target>
+
+	<target name="shp" description="Genera el jar de shapefile de ESRI">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/shp" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/shp" />
+		<jar jarfile="${drivers-dir}/shp/shp.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/shapefile/**" />
+	</target>
+
+	<target name="foo" description="Genera el jar foo">
+		<delete failonerror="false">
+			<fileset dir="${drivers-dir}/foo" excludes="**/.svn,**/.svn/**"/>
+		</delete>
+		<mkdir dir="${drivers-dir}/foo" />
+		<jar jarfile="${drivers-dir}/foo/foo.jar" basedir="${build-test}" includes="com/hardcode/gdbms/driver/foodriver/**" />
+	</target>
+	<!-- hasta aqui los drivers que no se usan -->
+
+	<target name="create-jar" description="Genera el jar de gdbms">
+		<delete file="../libFMap/lib/gdbms-0-8-SNAPSHOT.jar"/>
+		<jar jarfile="../libFMap/lib/gdbms-0.8-SNAPSHOT.jar">
+			<fileset dir="${build}" includes="com/hardcode/gdbms/engine/**" />
+			<fileset dir="${build}" includes="com/hardcode/gdbms/parser/**" />
+			<fileset dir="${build}" includes="com/hardcode/gdbms/driver/DriverUtilities.*" />
+			<fileset dir="${build}" includes="com/hardcode/gdbms/driver/exceptions/**" />
+		</jar>
+	</target>
+
+	<target name="buildAPIReference" description="Crea el documento Javadoc del componente">
+		<delete dir="${apiReferenceDir}"/>
+		<mkdir dir="${apiReferenceDir}"/>
+  		<javadoc
+			author="true"
+			version="true"
+			destdir="${apiReferenceDir}"
+	  		maxmemory="512m"
+			source="1.4"
+			doctitle="DOCUMENTACION DEL API"
+			>
+  			<fileset dir="."
+  				includes="src/main/**/*.java" />
+  		</javadoc>
+	</target>
+
+	<target name="buildDocBook">
+		<exec executable= "xsltproc" failonerror="false">
+			<arg line="-o ./docs/src/developersGuide/model/model.html /usr/share/xml/docbook/stylesheet/nwalsh/xhtml/docbook.xsl ./docs/src/developersGuide/model/model.docbook"/>
+		</exec>
+	</target>
+
+	<target name="batch-build"
+			description="compile the sources, create the jar file"
+			depends="init,compile,generar-todos">
+	</target>
+
+	<target name="compile" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			excludes="test/**"
+			classpath="${eclipseClasspath}"
+			sourcepath="${compile-sourcepath}"/>
+	</target>
+
+	<target name="clean" description="clean up" >
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="com.iver.gvsig.centerviewpoint.AllTests"/>
+		</antcall>
+	</target>
+</project>

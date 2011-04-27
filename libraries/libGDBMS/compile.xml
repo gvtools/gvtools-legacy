@@ -1,0 +1,81 @@
+<project name="all" default="compile-javacc" basedir=".">
+
+  <target name="init">
+    <tstamp/>
+    <property environment="env"/>
+    <property name="src" value="src"/>
+    <property name="build" value="bin"/>
+    <property name="doc" value="/home/andrew/doc/html/javadoc" />
+    <property name="javacchome" value="C:/software/javacc-3.2"/>
+	<!--    <property name="build.compiler" value="jikes" />
+    <property name="junitclasspath" value="/home/andrew/junit3.8.1/junit.jar"/>
+    <property name="classpath" value="${junitclasspath}:${build}"/>-->
+    <!-- <echo message="classpath: ${classpath}"/> -->
+  </target>
+
+  <target name="clean" depends="init">
+    <delete>
+      <fileset dir="${build}"/>
+    </delete>
+  </target>
+
+  <target name="compile-javacc" depends="init">
+    <delete failonerror="true">
+      <fileset dir="${src}/com/hardcode/gdbms/parser">
+        <include name="*.java"/>
+      </fileset>
+    </delete>
+<!--    <jjtree target="${src}/com/hardcode/gdbms/parser/sql.jj"
+            static="no"
+            nodescopehook="true"
+            javacchome="${javacchome}"/>-->
+    <javacc target="${src}/com/hardcode/gdbms/parser/sql.jj"
+            static="no"
+            javacchome="${javacchome}"/>
+  </target>
+<!--  
+  <target name="doc-public" depends="init">
+    <delete>
+      <fileset dir="${doc}/public"/>
+    </delete>
+    <javadoc packagenames="org.acooke.*"
+             sourcepath="${src}"
+             destdir="${doc}/public"
+             public="true">
+      <doctitle><![CDATA[<h1>org.acooke - public</h1>]]></doctitle>
+    </javadoc>
+  </target>
+
+  <target name="doc-package" depends="init">
+    <delete>
+      <fileset dir="${doc}/package"/>
+    </delete>
+    <javadoc packagenames="org.acooke.*"
+             sourcepath="${src}"
+             destdir="${doc}/package"
+             package="true">
+      <doctitle><![CDATA[<h1>org.acooke - package</h1>]]></doctitle>
+    </javadoc>
+  </target>
+
+  <target name="doc-private" depends="init">
+    <delete>
+      <fileset dir="${doc}/private"/>
+    </delete>
+    <javadoc packagenames="org.acooke.*"
+             sourcepath="${src}"
+             destdir="${doc}/private"
+             private="true">
+      <doctitle><![CDATA[<h1>org.acooke - private</h1>]]></doctitle>
+    </javadoc>
+  </target>
+
+  <target name="doc" depends="init">
+    <parallel>
+      <antcall target="doc-private"/>
+      <antcall target="doc-package"/>
+      <antcall target="doc-public"/>
+    </parallel>
+  </target>
+-->
+</project>

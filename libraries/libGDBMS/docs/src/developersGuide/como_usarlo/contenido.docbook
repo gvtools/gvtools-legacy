@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "/usr/share/xml/docbook/schema/dtd/4.4/docbookx.dtd"
+	[	
+	<!ENTITY inicializacion SYSTEM "inicializacion.docbook">
+	<!ENTITY laClaseDataSource SYSTEM "laClaseDataSource.docbook">
+	<!ENTITY fuenteFichero SYSTEM "fuenteFichero.docbook">
+	]
+>
+
+<book><title>Como usar GDBMS</title>
+&inicializacion;
+&laClaseDataSource;
+&fuenteFichero;
+
+</book> 

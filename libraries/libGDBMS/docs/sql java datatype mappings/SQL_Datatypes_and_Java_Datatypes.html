@@ -1,0 +1,298 @@
+<html><head>
+
+    <style type="text/css">
+        A.noLink        { text-decoration: none; }
+        A.noLinkYellow  { color:yellow;  text-decoration: none; }
+        A.noLinkBlue    { color:blue;  text-decoration: none; }
+        A.noLinkOrange  { color:orange;  text-decoration: none; }
+        A.noLinkCyan    { color:cyan;  text-decoration: none; }
+        A.noLinkGreen   { color:cream;  text-decoration: none; }
+        A.noLinkRed     { color:red;  text-decoration: none; }
+    </style><title>SQL Datatypes and Java Datatypes</title>
+
+    
+
+    <script language="JavaScript" type="text/javascript">
+
+        function cancelForm() {
+            location = "./MAIN_home.shtml";
+        }
+
+    </script></head>
+<body bgcolor="#ffffff" link="#0000ff" vlink="#0000ff" alink="#0000ff">
+
+    <img src="SQL_Datatypes_and_Java_Datatypes_files/header_programming.gif" alt="">
+    <p>
+
+    <i><b><font color="#ff0000"><u>SQL Datatypes and Java Datatypes</u></font></b></i>
+    <br>
+
+    </p><p>
+    <a class="noLinkBlue" onmouseover="window.parent.status='Return to Programming Corner'; return true;" href="http://www.idevelopment.info/data/Programming/java/PROGRAMMING_Java_Programming.shtml"><img src="SQL_Datatypes_and_Java_Datatypes_files/back_button.gif" border="no" alt=""></a> &nbsp;&nbsp;Return to the Java Programming Corner.
+    </p><hr noshade="noshade">
+
+
+    <!--
+     | **********************************************
+     |   Overview
+     | **********************************************
+     +-->
+   
+    <p>
+    <font color="#990000"><b>Overview</b></font>
+    </p><p>
+
+    </p><blockquote>
+
+    Support for different datatypes in SQL2 is poor. Since Java is an 
+    object-oriented language, support is extremely rich. Therefore a huge
+    disconnect exists between what sits in the database adn the way you want
+    it represented in your Java application. The SQL concept of a variable 
+    width, single-byte character array, for example, is the VARCHAR datatype.
+    Java actually has no concept of a variable width, single-byte character
+    array: Java doesn't even have a single-byte character type. The closest
+    thing is the String class.
+    <p>
+    To make matters worse, many database engines internally support their own
+    datatypes and loosely translate them to a SQL2 type. All Oracle numeric
+    types, for example, map to the SQL NUMERIC type. JDBC, fortunately, lets
+    you retrieve data in their Java forms defined by a JDBC-specified datatype
+    mapping. You do not need to worry that a SQL LONG has a different 
+    representation in Sybase than it does in Oracle. You just call the 
+    ResultSet getLong() method to retrieve numbers you wish to treat as Java
+    longs.
+    </p><p>
+    You do need to be somewhat concerned when designing the database,
+    however. If you pull a 64-bit number into a Java application via
+    getInt(), you risk getting bad data. Similarly, if you save a Java float
+    into a numeric field with a scale of 0, you will lose data. The important
+    rule of thumb for Java programming, however, is think and work in Java
+    and use the database to support the Java application. Do not let the 
+    database drive Java.
+    </p><p>
+    These mappings are simply the JDBC specification for direct type mappings
+    and not a law prescribing the format you must use in Java for your SQL 
+    data. In other words, you can retrieve an INTEGER column into Java as a 
+    long or put a Java Date object in a TIMESTAMP field. Some conversions are,
+    nevertheless, nonsensical. You cannot save a Java boolean into a database
+    DATE field.
+
+    </p></blockquote>
+
+
+    <!--
+     | **************************************************
+     |   JDBC Specification SQL to Java Datatype Mappings
+     | **************************************************
+     +-->
+
+    <p>
+    <font color="#990000"><b>JDBC Specification SQL to Java Datatype Mappings</b> (SQL3 Types in Italic)</font>
+    </p><p>
+
+    </p><blockquote>
+
+
+    <table cellspacing="1" cellpadding="1" border="1" width="550">
+
+        <tbody><tr bgcolor="#c0c0c0">
+            <td><b>SQL Type (from java.sql.Types)</b></td>
+            <td><b>Java Type</b></td>
+        </tr>
+        <tr>
+            <td>BIT</td>
+            <td>boolean</td>
+        </tr>
+        <tr>
+            <td>TINYINT</td>
+            <td>byte</td>
+        </tr>
+        <tr>
+            <td>SMALLINT</td>
+            <td>short</td>
+        </tr>
+        <tr>
+            <td>INTEGER</td>
+            <td>int</td>
+        </tr>
+        <tr>
+            <td>BIGINT</td>
+            <td>long</td>
+        </tr>
+        <tr>
+            <td>REAL</td>
+            <td>float</td>
+        </tr>
+        <tr>
+            <td>FLOAT</td>
+            <td>double</td>
+        </tr>
+        <tr>
+            <td>DOUBLE</td>
+            <td>double</td>
+        </tr>
+        <tr>
+            <td>DECIMAL</td>
+            <td>java.math.BigDecimal</td>
+        </tr>
+        <tr>
+            <td>NUMERIC</td>
+            <td>java.math.BigDecimal</td>
+        </tr>
+        <tr>
+            <td>CHAR</td>
+            <td>java.lang.String</td>
+        </tr>
+        <tr>
+            <td>VARCHAR</td>
+            <td>java.lang.String</td>
+        </tr>
+        <tr>
+            <td>LONGVARCHAR</td>
+            <td>java.lang.String</td>
+        </tr>
+        <tr>
+            <td>DATE</td>
+            <td>java.sql.Date</td>
+        </tr>
+        <tr>
+            <td>TIME</td>
+            <td>java.sql.Time</td>
+        </tr>
+        <tr>
+            <td>TIMESTAMP</td>
+            <td>java.sql.Timestamp</td>
+        </tr>
+        <tr>
+            <td>BINARY</td>
+            <td>byte[]</td>
+        </tr>
+        <tr>
+            <td>VARBINARY</td>
+            <td>byte[]</td>
+        </tr>
+        <tr>
+            <td>LONGVARBINARY</td>
+            <td>byte[]</td>
+        </tr>
+        <tr>
+            <td><i>BLOB</i></td>
+            <td>java.sql.Blob</td>
+        </tr>
+        <tr>
+            <td><i>CLOB</i></td>
+            <td>java.sql.Clob</td>
+        </tr>
+        <tr>
+            <td><i>ARRAY</i></td>
+            <td>java.sql.Array</td>
+        </tr>
+        <tr>
+            <td><i>REF</i></td>
+            <td>java.sql.Ref</td>
+        </tr>
+        <tr>
+            <td><i>STRUCT</i></td>
+            <td>java.sql.Struct</td>
+        </tr>
+    </tbody></table>
+
+    </blockquote>
+
+
+    <!--
+     | **************************************************
+     |   JDBC Specification Java to SQL Datatype Mappings
+     | **************************************************
+     +-->
+
+    <p>
+    <font color="#990000"><b>JDBC Specification Java to SQL Datatype Mappings</b></font>
+    </p><p>
+
+    </p><blockquote>
+    
+    <table cellspacing="1" cellpadding="1" border="1" width="550">
+
+        <tbody><tr bgcolor="#c0c0c0">
+            <td><b>Java Type</b></td>
+            <td><b>SQL Type (from java.sql.Types)</b></td>
+        </tr>
+        <tr>
+            <td>boolean</td>
+            <td>BIT</td>
+        </tr>
+        <tr>
+            <td>byte</td>
+            <td>TINYINT</td>
+        </tr>
+        <tr>
+            <td>short</td>
+            <td>SMALLINT</td>
+        </tr>
+        <tr>
+            <td>int</td>
+            <td>INTEGER</td>
+        </tr>
+        <tr>
+            <td>long</td>
+            <td>BIGINT</td>
+        </tr>
+        <tr>
+            <td>float</td>
+            <td>REAL</td>
+        </tr>
+        <tr>
+            <td>double</td>
+            <td>DOUBLE</td>
+        </tr>
+        <tr>
+            <td>java.math.BigDecimal</td>
+            <td>NUMERIC</td>
+        </tr>
+        <tr>
+            <td>java.lang.String</td>
+            <td>VARCHAR or LONGVARCHAR</td>
+        </tr>
+        <tr>
+            <td>byte[]</td>
+            <td>VARBINARY or LONGVARBINARY</td>
+        </tr>
+        <tr>
+            <td>java.sql.Date</td>
+            <td>DATE</td>
+        </tr>
+        <tr>
+            <td>java.sql.Time</td>
+            <td>TIME</td>
+        </tr>
+        <tr>
+            <td>java.sql.Timestamp</td>
+            <td>TIMESTAMP</td>
+        </tr>
+        <tr>
+            <td>java.sql.Blob</td>
+            <td>BLOB</td>
+        </tr>
+        <tr>
+            <td>java.sql.Clob</td>
+            <td>CLOB</td>
+        </tr>
+        <tr>
+            <td>java.sql.Array</td>
+            <td>ARRAY</td>
+        </tr>
+        <tr>
+            <td>java.sql.Ref</td>
+            <td>REF</td>
+        </tr>
+        <tr>
+            <td>java.sql.Struct</td>
+            <td>STRUCT</td>
+        </tr>
+    </tbody></table>
+    
+    </blockquote>
+
+
+</body></html>

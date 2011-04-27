@@ -1,0 +1,11 @@
+<project name="libGDBMS.compile-classpath" basedir=".">
+	<property name="andamiLibs" location="../_fwAndami/lib"/>
+	<!-- defines the classpath to be used for compilation -->
+	<path id="libGDBMS.compile-classpath">
+   	    <pathelement location="${andamiLibs}/crimson"/>
+	    <pathelement location="${andamiLibs}/dbf"/>
+	    <pathelement location="${andamiLibs}/iver-utiles.jar"/>
+	    <pathelement location="${andamiLibs}/log4j-1.2.8.jar"/>
+	    <pathelement location="lib/kxml2-2.2.2.jar"/>
+	</path>
+</project>
