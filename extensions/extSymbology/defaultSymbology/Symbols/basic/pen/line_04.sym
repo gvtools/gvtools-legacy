@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="org.gvsig.symbology.fmap.symbols.MarkerLineSymbol"/>
+    <property key="isShapeVisible" value="true"/>
+    <property key="desc" value="04"/>
+    <property key="unit" value="-1"/>
+    <property key="referenceSystem" value="0"/>
+    <property key="separation" value="1.1"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="64,64,64,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="1.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="0"/>
+        <property key="id" value="marker"/>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle"/>
+        <property key="desc" value="theLineStyle"/>
+        <property key="lineWidth" value="1.0"/>
+        <property key="dashPhase" value="0.0"/>
+        <property key="endCap" value="0"/>
+        <property key="lineJoin" value="2"/>
+        <property key="miterLimit" value="10.0"/>
+        <property key="offset" value="0.0"/>
+        <property key="unit" value="0"/>
+        <property key="id" value="lineStyle"/>
+    </xml-tag>
+</xml-tag>

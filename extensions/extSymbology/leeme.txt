@@ -1,0 +1,48 @@
+Compilación
+
+
+Los proyectos involucrados son
+
+1. appgvSIG: compilación normal
+2. libFMap: Compilación normal
+3. extSymbology:
+
+La primera vez que se descarga el proyecto aparecen errores de dependencias. 
+Los errores ocurren porque hay ficheros que son generados por JavaCC. JavaCC
+es una herramienta que permite crear analizadores y compiladores o intérpretes
+de un lenguaje definido por una gramática y una serie de reglas semánticas. Los
+errores de dependencia se refieren a clases generadas por JavaCC
+
+El proyecto, en realidad, tiene todas las herramientas necesarias y sus
+dependencias se autosatisfacen. La razón por la que estas clases no estan
+subidas es que cuando se crean, se marcan como ficheros generados automáticamente
+y el cliente SVN no los incluye en la lista de archivos para subir cuando se hace
+"commit". Esto es así porque si el ordenador que descarga el proyecto tiene el
+plugin de Eclipse de JavaCC, la generación de estos archivos es automática. De
+la misma manera que un cambio en classpath.xml provoca que el proyecto se
+reconstruya, un cambio en el fichero de gramática provoca que JavaCC
+(re)construya los ficheros de fuentes de las clases del compilador.
+
+Así que, si el plugin de Eclipse de JavaCC está instalado, entonces los errores
+de dependencias no resueltas no deberían de aparecer. Pero para evitar tener que
+instalar el plugin, se ha imitado su comportamiento automático dentro de una tarea
+de ant dentro del archivo build.xml y se ha incluído un archvo .jar que es el
+JavaCC en el directorio ext-tools para que ant pueda ejecutar la tarea. Es decir,
+o bien el plugin o bien ext-tools/javacc.jar deben de existir en el entorno de
+desarrollo.
+
+Como consecuencia, y solamente la primera vez que se descarga en el workspace,
+es necesario ejecutar el build.xml para que estos archivos .java se generen, y
+seguidamente refrescar el proyecto. Entonces la dependencias se autosatisfarán,
+el proyecto se compilará en su totalidad y al ejecutar por segunda vez build.xml
+el plugin de Andami se empaquetará completamente (si se ejecuta solamente la
+primera vez la compilación solo será parcial y habrá clases (.class) que no se
+encontrarán puesto que no se pudieron compilar ya que había fallos de dependencias).
+
+Localizacion
+
+Todos los proyectos se encuentran en el SVN regular
+
+https://gvsig.org/svn/gvSIG
+
+Jaume

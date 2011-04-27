@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="org.gvsig.symbology.fmap.styles.SimpleLabelStyle"/>
+    <property key="desc" value="Carretera Nacional"/>
+    <property key="markerPointX" value="0.0"/>
+    <property key="markerPointY" value="0.0"/>
+    <property key="minXArray" value=""/>
+    <property key="minYArray" value=""/>
+    <property key="widthArray" value=""/>
+    <property key="heightArray" value=""/>
+    <xml-tag>
+        <property key="id" value="LabelStyle"/>
+        <property key="className" value="org.gvsig.symbology.fmap.styles.SVGStyle"/>
+        <property key="source" value="Carretera Nacional.svg"/>
+        <property key="desc"/>
+    </xml-tag>
+</xml-tag>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="org.gvsig.symbology.fmap.symbols.PictureMarkerSymbol"/>
+    <property key="isShapeVisible" value="true"/>
+    <property key="desc" value="prueba"/>
+    <property key="imagePath" value="http://maps.massgis.state.ma.us/images/question_mark.gif"/>
+    <property key="selImagePath" value="http://maps.massgis.state.ma.us/images/question_mark.gif"/>
+    <property key="size" value="39.04761904761903"/>
+    <property key="unit" value="-1"/>
+    <property key="referenceSystem" value="0"/>
+</xml-tag>

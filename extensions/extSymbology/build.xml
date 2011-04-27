@@ -1,0 +1,259 @@
+<project name="extSymbology" default="generate-without-source" basedir=".">
+    <description>
+        Instala el plugin en Andami
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="bin"/>
+  <property name="dist"  location="dist"/>
+  <property name="build-test"  location="bin-test"/>
+  <property name="src-test" location="src-test"/>
+  <property name="andami" location="../_fwAndami"/>
+  <property name="extensionsDir" location="${andami}/gvSIG/extensiones"/>
+  <property name="andamiJar" location="${andami}/andami.jar"/>
+  <property name="gvsigJar" location="${extensionsDir}/com.iver.cit.gvsig/lib/com.iver.cit.gvsig.jar"/>
+  <property name="fmapLibs" location="../libFMap/lib" />
+  <property name="andamiLibs" location="${andami}/lib" />
+  <property name="fmapJar" location="../libFMap/dist/lib/fmap.jar"/>
+  <property name="fmapRTJar" location="org.gvsig.symbology-ext.jar"/>
+
+	<property name="default_symbols_dir" location="./defaultSymbology"/>
+	<property name="symbols-dir" location="${default_symbols_dir}/Symbols"/>
+	<property name="home" location="${user.home}"/>
+	<property name="target-symbols" location="${home}/gvSIG/Symbols"/>
+
+	<property name="styles-dir" location="${default_symbols_dir}/Styles"/>
+	<property name="target-styles" location="${home}/gvSIG/Styles"/>
+
+	<!--<import file="compile-classpath.xml"/>-->
+  <!--<property name="compile-classpath" value="${andamiJar}:${gvsigJar}:${fmapJar}:${andamiLibs}/iver-utiles.jar:${cmsLibs}/jecw-0.0.2.jar:${cmsLibs}/jecwcompress-1.0.0.jar:${cmsLibs}/jgdal-0.6.1.jar:${cmsLibs}/jmrsid-0.0.2.jar:${fmapLibs}/libproj.jar" />-->
+  <import file="../binaries/ant/utilities.xml"/>
+
+  <!--Plugins-->
+
+  <property name="log4j-jar" location="${andamiLibs}/log4j-1.2.8.jar" />
+  <property name="gdbms-jar" location="${fmapLibs}/gdbms-0.8-SNAPSHOT.jar"/>
+  <property name="generated-src" location="generated-src"/>
+
+  <property name="labelparserpackage" value="org/gvsig/symbology/fmap/labeling/parse"/>
+  <property name="LabelParserJar" value="org.gvsig.fmap.label-expr-parser"/>
+  <property name="LabelJarParserName" value="${LabelParserJar}.jar"/>
+
+
+  <property name="filterexprparserpackage" value="org/gvsig/symbology/fmap/rendering/filter/parser"/>
+  <property name="FilterExprParserJar" value="org.gvsig.fmap.filter-expr-parser"/>
+  <property name="FilterExprParserName" value="${FilterExprParserJar}.jar"/>
+
+  <property name="javacchome" location="ext-tools"/>
+
+  <property name="plugin" value="org.gvsig.extended-symbology"/>
+  <property name="jarName" value="${plugin}.jar"/>
+
+
+  <property name="RemoteServicesJar" value="org.gvsig.remote-client.sld"/>
+  <property name="jarRSerName" value="${RemoteServicesJar}.jar"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+
+	<echo>
+		Compiling ${ant.project.name}...</echo>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${dist}"/>
+  	<!-- Creamos un fichero con el timeStamp para que lo lea el FPanelAbout -->
+  	<!-- <buildnumber/> -->
+  </target>
+
+
+
+  <target name="generate-without-source"
+  		description="generate the distribution without the source file"
+  	depends="init,copy-symbols,copy-styles,filter-expression-parser-jar,label-expression-parser-jar,compile-sources,create-jar,copy-data-files,copy-to-fmap,move-to-andami">
+  </target>
+	<target name="copy-symbols">
+		  <copy todir="${target-symbols}">
+		   <fileset dir="${symbols-dir}" includes="**"/>
+		  </copy>
+	</target>
+	<target name="copy-styles">
+		  <copy todir="${target-styles}">
+		   <fileset dir="${styles-dir}" includes="**"/>
+		  </copy>
+	</target>
+	<target name="batch-build"
+			description="compile the sources, create the jar file"
+			depends="init,copy-symbols,copy-styles,filter-expression-parser-jar,label-expression-parser-jar, compile,create-jar,copy-data-files,copy-to-fmap,move-to-andami">
+	</target>
+
+	<target name="import_BN">
+		<antcall target="gvSIG-import-build-number"/>
+	</target>
+
+	<target name="compile-sources" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+		<!--<javac  srcdir="${src}"
+			destdir="${build}"
+			source="1.4"
+			target="1.4"
+			debug="${debug}"
+			debuglevel="${debuglevel}"
+			classpath="${compile-classpath}"/>-->
+	</target>
+
+	<target name="compile" description="compile the source" depends="import_BN,compile-sources"/>
+
+	<target name="create-jar"
+			description="Creates the plugin jar">
+		<mkdir dir="${dist}"/>
+
+	  	<!-- Jar de la extensión - ->
+	  	<jar jarfile="${dist}/${jarName}" basedir="${build}"
+	  	includes="org/gvsig/symbology/*.class,org/gvsig/symbology/gui/**/**"
+	    excludes="org/gvsig/symbology/labeling/**/**"
+	  	/>
+
+
+	  	<jar jarfile="${dist}/${jarName}" basedir="${build}"
+	  	includes="org/gvsig/symbology/gui/**/**" update="yes"
+	  	/>
+	  	-->
+
+	  	<!-- Jar de FMap - ->
+	  	<jar jarfile="${fmapRTJar}" basedir="${build}"
+	  	excludes="org/gvsig/symbology/*,org/gvsig/symbology/gui/**/**"
+	  	includes="org/gvsig/symbology/**/**"
+	  	/>
+
+		-->
+
+		<!-- Jar de la extensión -->
+
+
+		<jar jarfile="${dist}/${jarName}" basedir="${build}"
+		includes="org/gvsig/symbology/**,org/gvsig/symbology/gui/**/**,com/iver/cit/gvsig/project/documents/view/**/**"
+		excludes="org/gvsig/symbology/fmap/**"/>
+
+		<!-- Jar de FMap -->
+		<jar jarfile="${fmapRTJar}" basedir="${build}"
+			includes="org/gvsig/symbology/fmap/**"/>
+
+		<jar jarfile="${dist}/${jarRSerName}" basedir="${build}"
+		includes="org/gvsig/remoteClient/sld/**/**"
+		/>
+
+	</target>
+
+
+	<target name="label-expression-parser-jar"
+		description="This target builds the label expression parser jar. It requires Javacc to be installed">
+		<!-- build the parser -->
+
+		<property name="srcdir-lab" value="${generated-src}/src/${labelparserpackage}"/>
+		<property name="destdir-lab" value="${generated-src}/bin/${labelparserpackage}"/>
+		<mkdir dir="${srcdir-lab}"/>
+		<javacc javacchome="${javacchome}"
+		    target="${src}/${labelparserpackage}/LabelExpressionParser.jj"
+		    outputdirectory="${srcdir-lab}"
+		    static="false"
+			lookahead="2"
+		/>
+
+		<!-- Jar de LabelExpressionParser -->
+		<mkdir dir="${destdir-lab}"/>
+		<echo>javac -classpath=${fmapRTJar}:${gdbms-jar}:${log4j-jar} ${generated-src}/bin"</echo>
+		<gvSIG-javac srcdir="${srcdir-lab}" classpath="${gdbms-jar}:${log4j-jar}:${fmapJar}" sourcepath="./src" destdir="${generated-src}/bin"/>
+	    <!--
+		<jar jarfile="${dist}/${LabelParserJar}.jar" basedir="${generated-src}/bin" includes="${labelparserpackage}/**/**"
+		/>
+		<move file="${dist}/${LabelJarParserName}" todir="${fmapLibs}"/>-->
+		<copy todir="${src}/${labelparserpackage}/">
+			<fileset dir="${generated-src}/src/${labelparserpackage}" includes="*.java"/>
+		</copy>
+		<deltree dir="${generated-src}"/>
+	</target>
+
+	<target name="filter-expression-parser-jar"
+		description="This target builds the filter expression parser jar. It requires Javacc to be installed">
+		<!-- build the parser -->
+
+		<property name="srcdir-filt" value="${generated-src}/src/${filterexprparserpackage}"/>
+		<property name="destdir-filt" value="${generated-src}/bin/${filterexprparserpackage}"/>
+		<mkdir dir="${srcdir-filt}"/>
+		<javacc javacchome="${javacchome}"
+		    target="${src}/${filterexprparserpackage}/ExpressionParser.jj"
+		    outputdirectory="${srcdir-filt}"
+		    static="false"
+
+		/>
+
+		<!-- Jar de FilterExpressionParser -->
+		<mkdir dir="${destdir-filt}"/>
+		<echo>javac -classpath=${fmapRTJar}:${gdbms-jar}:${log4j-jar}:${fmapJar} ${generated-src}/bin"</echo>
+		<gvSIG-javac srcdir="${srcdir-filt}" classpath="${gdbms-jar}:${log4j-jar}:${fmapJar}" sourcepath="./src" destdir="${generated-src}/bin"/>
+	    <!--
+		<jar jarfile="${dist}/${FilterExprJarParserName}.jar" basedir="${generated-src}/bin" includes="${filterparserpackage}/**/**"
+		/>
+		<move file="${dist}/${FilterExprJarParserName}" todir="${fmapLibs}"/>-->
+		<copy todir="${src}/${filterexprparserpackage}/">
+			<fileset dir="${generated-src}/src/${filterexprparserpackage}" includes="*.java"/>
+		</copy>
+		<deltree dir="${generated-src}"/>
+	</target>
+
+	<target name="copy-data-files">
+	    <copy file="config/config.xml" todir="${dist}"/>
+		<copy todir="${dist}">
+			<fileset dir="config" includes="text*.properties"/>
+		</copy>
+		<copy todir="${dist}/images">
+			<fileset dir="images/" includes="*"/>
+		</copy>
+		<copy todir="${dist}/docs">
+			<fileset dir="docs/" includes="*"/>
+		</copy>
+
+		<copy todir="${dist}/default_symbology">
+		   <fileset dir="${default_symbols_dir}" includes="**"/>
+		</copy>
+	</target>
+
+	<target name="move-to-andami">
+	  	<move file="${fmapRTJar}" todir="${extensionsDir}/com.iver.cit.gvsig/lib/"/>
+		<move  file="${dist}/${jarRSerName}" todir="${extensionsDir}/com.iver.cit.gvsig/lib/"/>
+		<move todir="${extensionsDir}/${plugin}/">
+	    	<fileset dir="${dist}" includes="**/**"/>
+    	</move>
+	</target>
+
+	<target name="copy-to-fmap">
+	 	<copy file="${fmapRTJar}" todir="${fmapLibs}"/>
+		<copy file="${dist}/${jarRSerName}" todir="${fmapLibs}"/>
+
+	</target>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${dist}"/>
+    <delete dir="${build}"/>
+  </target>
+
+  <target name="uninstall"
+    description="Desinstala de gvSIG la extensión" >
+    <delete file="${extensionsDir}/com.iver.cit.gvsig/lib/gvsig.extended-symbology.jar"/>
+    <delete file="${extensionsDir}/com.iver.cit.gvsig/lib/fmap.extended-symbology.jar"/>
+  </target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="org.gvsig.symbology.AllTests"/>
+		</antcall>
+	</target>
+</project>
+

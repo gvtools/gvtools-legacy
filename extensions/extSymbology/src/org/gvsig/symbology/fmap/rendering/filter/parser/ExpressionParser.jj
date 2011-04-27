@@ -1,0 +1,430 @@
+
+options{
+  STATIC = false;
+  LOOKAHEAD = 1;
+}
+PARSER_BEGIN(ExpressionParser)
+
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
+ *
+ * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ *
+ * For more information, contact:
+ *
+ *  Generalitat Valenciana
+ *   Conselleria d'Infraestructures i Transport
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
+ *   46010 VALENCIA
+ *   SPAIN
+ *
+ *      +34 963862235
+ *   gvsig@gva.es
+ *      www.gvsig.gva.es
+ *
+ *    or
+ *
+ *   IVER T.I. S.A
+ *   Salamanca 50
+ *   46005 Valencia
+ *   Spain
+ *
+ *   +34 963163400
+ *   dac@iver.es
+ */
+package org.gvsig.symbology.fmap.rendering.filter.parser;
+import java.util.*;
+import java.io.*;
+
+
+import com.hardcode.gdbms.engine.values.*;
+import org.gvsig.symbology.fmap.rendering.filter.operations.*;
+
+/**
+ *
+ * @author Pepe Vidal Salvador - jose.vidal.salvador@iver.es
+ *
+ */
+public class ExpressionParser{
+
+    private Stack stack = new Stack();
+	private static OperatorsFactory operators = OperatorsFactory.getInstance();
+	private Hashtable<String, Value> symbols = new Hashtable<String, Value>();
+	private ArrayList<String> classNames = new ArrayList<String>();
+
+
+ public ArrayList<String> getClassNames (){
+ 	return classNames;
+ }
+
+  public void addClassName(String name){
+	 for (int i = 0; i < classNames.size(); i++) {
+		if(classNames.get(i).compareTo(name)==0)
+			return;
+	}
+	 classNames.add(name);
+ }
+    public Expression getExpression(){
+    return (Expression)stack.pop();
+  }
+
+	 public Stack getStack(){
+
+                return this.stack;
+        }
+
+  public ExpressionParser(StringReader reader, Hashtable<String, Value> symbolsTable) {
+	this(reader);
+	  this.symbols = symbolsTable;
+}
+
+public void putSymbol(String string, Value value){
+	this.symbols.put(string,value);
+}
+
+  public static void main(String[]args)throws ParseException,ExpressionException{
+         ExpressionParser parser = new ExpressionParser(new StringReader("true && true"));
+         parser.Expression();
+         parser.getStack();
+         Expression exp = parser.getExpression();
+
+  }
+}
+PARSER_END(ExpressionParser)
+SKIP :
+{
+ 	" "
+|	"\r"
+|	"\t"
+|	"\n"
+}
+
+
+TOKEN : /* OPERATORS */
+{
+	< PLUS: "+" >
+|	< MINUS: "-" >
+|	< MULTIPLY: "*" >
+|	< DIVIDE: "/" >
+|	< GT: ">" >
+|	< LT: "<" >
+|	< NOT: "!" >
+|	< EQ: "==" >
+|	< LE: "<=" >
+|	< GE: ">=" >
+|	< NE: "!=" >
+|	< OR: "||" >
+|	< AND: "&&" >
+}
+TOKEN : /* MISC */
+{
+	< #DOT: "." >
+|	< OPEN_SQ_BRACKETS : "[" >
+|	< CLOSE_SQ_BRACKETS : "]" >
+|	< OPEN_PARENTHESIS : "(" >
+|	< CLOSE_PARENTHESIS : ")" >
+|	< DOUBLE_QUOTE : "\"" >
+|	< COMMA : "," >
+|   < EOFIELD : ":" >
+|	< EOEXPR : ";" >
+}
+TOKEN : /* CONSTANTS AND IDENTIFIERS */
+{
+	< BOOLEAN: "true" | "false" >
+|   < NULL: "null">
+|	< IDENTIFIER: ( <LETTER> ) ( <LETTER>|<DIGIT> )* >
+|	< #LETTER: ( ["_","$","%"] | ( ["a"-"z"] ) | ( ["A"-"Z"] ) |("á")|("é")|("í")|("ó")|("ú")|("à")|("è")|("ò")|("Á")|("É")|("Í")|("Ó")|("Ú")|("À")|("È")|("Ò")) >
+}
+TOKEN : /* NUMBER */
+{
+    < #DIGIT: ["0"-"9"] >
+|	< INTEGER: ( <DIGIT> )+ >
+|	< FLOATING_POINT: (<DIGIT>)+ "." (<DIGIT>)* (<EXPONENT>)? (["f","F","d","D"])?
+      | <DOT> (<DIGIT>)+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (<DIGIT>)+ <EXPONENT> (["f","F","d","D"])?
+      | (<DIGIT>)+ (<EXPONENT>)? ["f","F","d","D"] >
+|	< #EXPONENT: ["e","E"] (["+","-"])? (<DIGIT>)+ >
+}
+TOKEN: /* STRING */
+{
+	< STRING: ( <DOUBLE_QUOTE> ( <CHAR_STRING> )* <DOUBLE_QUOTE> )>
+|	< CHAR_STRING : ~[ "\"", ";","\n","\r"] >
+}
+void Expression():{}{
+  AndExpression()(<OR>AndExpression(){
+    Expression leftExpression = (Expression)stack.pop();
+    Expression rightExpression = (Expression)stack.pop();
+
+ 	Expression orExpr = new OrOperator(symbols);
+ 	orExpr.addArgument(0, rightExpression);
+ 	orExpr.addArgument(0, leftExpression);
+
+    stack.push(orExpr);
+
+  }
+  )*
+}
+void AndExpression():{
+  Token x;
+}
+{
+  EqCompExpression()((x = <AND>)EqCompExpression(){
+    Expression rightExpression = (Expression)stack.pop();
+    Expression leftExpression = (Expression)stack.pop();
+
+    Expression func = new AndOperator(symbols);
+
+    func.addArgument(0, rightExpression);
+    func.addArgument(0, leftExpression);
+
+    stack.push(func);
+  }
+  )*
+}
+void EqCompExpression():{
+  Token x;
+}
+{
+  ComparisonExpression()((x = <EQ>
+  | x = <NE>)ComparisonExpression(){
+    Expression rightExpression = (Expression)stack.pop();
+    Expression leftExpression = (Expression)stack.pop();
+    Expression func = null;
+
+    if (x.kind == EQ)func = new EqOperator(symbols);
+    else if (x.kind == NE)func = new NeOperator(symbols);
+
+    func.addArgument(0, rightExpression);
+    func.addArgument(0, leftExpression);
+
+    stack.push(func);
+  }
+  )*
+}
+void ComparisonExpression():{
+  Token x;
+}
+{
+  AdditiveExpression()((x = <LT>
+  | x = <LE>
+  | x = <GT>
+  | x = <GE>)AdditiveExpression(){
+    Expression rightExpression = (Expression)stack.pop();
+    Expression leftExpression = (Expression)stack.pop();
+    Expression func = null;
+
+
+    if (x.kind == LT)func = new LessThanOperator(symbols);
+    else if (x.kind == LE)func = new LessThanOrEqualsOperator(symbols);
+    else if (x.kind == GT)func = new GreaterThanOperator(symbols);
+    else if (x.kind == GE)func = new GreaterThanOrEqualsOperator(symbols);
+
+    func.addArgument(0, rightExpression);
+    func.addArgument(0, leftExpression);
+
+    stack.push(func);
+  }
+  )*
+}
+void AdditiveExpression():{
+  Token x;
+}
+{
+  MultiplicativeExpression()((x = <PLUS>
+  | x = <MINUS>)MultiplicativeExpression(){
+    Expression rightExpression = (Expression)stack.pop();
+    Expression leftExpression = (Expression)stack.pop();
+    Expression func = null;
+
+    if (x.kind == PLUS)func = new AddOperator(symbols);
+    else func = new MinusOperator(symbols);
+
+    func.addArgument(0, rightExpression);
+    func.addArgument(0, leftExpression);
+
+    stack.push(func);
+  }
+  )*
+}
+void MultiplicativeExpression():{
+  Token x;
+}
+{
+  UnaryElement()((x = <MULTIPLY>
+  | x = <DIVIDE>)UnaryElement(){
+  	try{
+  			Expression A = (Expression) stack.pop();
+			Expression B = (Expression) stack.pop();
+			 boolean aInt = (((Expression) A).evaluate() instanceof Integer);
+			 boolean bInt = (((Expression) B).evaluate() instanceof Integer);
+			if (aInt &&	bInt) {
+				int a = (Integer) A.evaluate();
+				int b = (Integer) B.evaluate();
+				if (x.kind == MULTIPLY)
+					stack.push(new NumericalConstant(new Integer(b * a),symbols));
+				else
+					stack.push(new NumericalConstant(new Integer(b / a),symbols));
+			} else {
+
+				double a = new Double(((Expression)A).evaluate().toString());
+                double b = new Double(((Expression)B).evaluate().toString());
+				if (x.kind == MULTIPLY)
+					stack.push(new NumericalConstant(new Double(b * a),symbols));
+				else
+					stack.push(new NumericalConstant(new Double(b / a),symbols));
+			}}catch (ClassCastException ex) {
+                  ex.printStackTrace();
+            } catch (ExpressionException e) {
+				  e.printStackTrace();
+			}
+
+	})*
+}
+void UnaryElement():{
+  Token x = null;
+}
+{
+  (x = <PLUS>
+  | x = <MINUS>)UnaryElement(){
+  	      try{
+                 Object A = stack.pop();
+                         if ((((Expression) A).evaluate() instanceof Integer)) {
+                                int a = (Integer) ((Expression) A).evaluate();
+                                if (x.kind == PLUS)
+                                        stack.push(new NumericalConstant(new Integer(a),symbols));
+                                else
+                                        stack.push(new NumericalConstant(new Integer(-a),symbols));
+                        } else {
+                                double a = (Double) ((Expression) A).evaluate();
+                                if (x.kind == PLUS)
+                                        stack.push(new NumericalConstant(new Double(a),symbols));
+                                else
+                                        stack.push(new NumericalConstant(new Double(-a),symbols));
+                        }
+                         } catch (ClassCastException ex) {
+               ex.printStackTrace();
+             }catch (ExpressionException ex) {
+                 ex.printStackTrace();
+             }
+  }
+
+  | BooleanUnaryElement()
+}
+
+void BooleanUnaryElement():
+{
+	Token t;
+}
+{
+	 t = <NOT> UnaryElement() {
+	 	Expression rightExpression = (Expression)stack.pop();
+		Expression func = new NotOperator(symbols);
+		func.addArgument(0, rightExpression);
+		stack.push(func);
+	}
+| Element()
+}
+void Element():{
+  Token x;
+  String y =  "[$,A-Z,_,a-z]([$,A-Z,_,a-z]|[0-9])*";
+}
+{
+
+  ("["x = <IDENTIFIER>"]"){
+
+    ReplaceOperator func = new ReplaceOperator(symbols);
+     func.addArgument(x.image);
+   	stack.push(func);
+	addClassName(x.image);
+
+  }
+  | (x = <INTEGER>){
+  	NumericalConstant intC = new NumericalConstant(Integer.valueOf(x.image),symbols);
+   	stack.push(intC);
+  }
+  | (x = <FLOATING_POINT>){
+  	NumericalConstant doubleC = new NumericalConstant(Double.valueOf(x.image),symbols);
+   	stack.push(doubleC);
+  }
+  |(x = <STRING>) {
+    StringConstant stringValue = new StringConstant(x.image.substring(1, x.image.length()-1),symbols);
+    stack.push(stringValue);
+  }
+  | (x = <BOOLEAN>){
+    BooleanConstant boolValue = new BooleanConstant(x.image,symbols);
+    stack.push(boolValue);
+  }
+  | x = <NULL>{
+  	NullConstant nullValue = new NullConstant(symbols);
+    stack.push(nullValue);
+  }
+  | LOOKAHEAD(2)function()
+  | "("Expression()")"
+}
+void function():{
+  String functionName;
+  int argCount = 0;
+  Expression function;
+  Token x;
+}
+{
+ LOOKAHEAD(2)
+  <IDENTIFIER>{
+    functionName = token.image;
+  }
+  argCount = Arguments(){
+    try {
+      function = (Expression) operators.getOperator(functionName);
+    }
+    catch (Exception e){
+      throw new ParseException("Problem with function '"+functionName+"': "+e.toString());
+    }
+    if (function == null)throw new ParseException("Nonexisting function name '"+functionName+"'");
+    for (int i = 0;
+    i<argCount;
+    i++){
+      Expression arg = (Expression)stack.pop();
+      function.addArgument(0, arg);
+    }
+    stack.push(function);
+  }
+  |(x = <IDENTIFIER>){
+    StringConstant stringValue = new StringConstant(x.image,symbols);
+    stack.push(stringValue);
+  }
+}
+int Arguments():{
+  int argCount = 0;
+}
+{
+  <OPEN_PARENTHESIS>[argCount = ArgumentList()]<CLOSE_PARENTHESIS>{
+    return argCount;
+  }
+}
+int ArgumentList():{
+  int argCount = 0;
+}
+{
+  Expression(){
+    argCount++;
+  }
+  (<COMMA>Expression(){
+    argCount++;
+  }
+  )*{
+    return argCount;
+  }
+}
