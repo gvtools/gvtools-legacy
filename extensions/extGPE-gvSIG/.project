@@ -1,0 +1,32 @@
+<projectDescription>
+  <name>extGPE-gvSIG</name>
+  <comment>Base POM for all GvSIG extension projects. This pom knows
+		how to build and made an extension for GvSIG. The property
+		&quot;gvsig-path&quot; must be set up correctly.</comment>
+  <projects>
+    <project>_fwAndami</project>
+    <project>appgvSIG</project>
+    <project>libDriverManager</project>
+    <project>libDXF</project>
+    <project>libExceptions</project>
+    <project>libFMap</project>
+    <project>libGPE</project>
+    <project>libGPE-GML</project>
+    <project>libGPE-KML</project>
+    <project>libGPE-XML</project>
+    <project>libInternationalization</project>
+    <project>libIverUtiles</project>
+    <project>libProjection</project>
+    <project>libRaster</project>
+    <project>libRemoteServices</project>
+    <project>libUIComponent</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>

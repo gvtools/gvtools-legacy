@@ -1,0 +1,46 @@
+<assembly>
+  <id>distribution</id>
+  <formats>
+    <format>dir</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <directory>config</directory>
+	  <outputDirectory>${extension-distribution}</outputDirectory>
+    </fileSet>
+	<fileSet>
+      <directory>images</directory>
+	  <outputDirectory>/${extension-distribution}/images</outputDirectory>
+    </fileSet>
+  </fileSets>
+  <files>
+    <file>
+      <source>build.number</source>
+      <outputDirectory>${extension-distribution}</outputDirectory>
+    </file>
+  </files>
+  	<dependencySets>
+  		<dependencySet>
+			<useProjectArtifact>false</useProjectArtifact>
+			<useProjectAttachments>true</useProjectAttachments>
+  			<outputDirectory>${extension-distribution}/${library-dir}
+        	</outputDirectory>
+        	<includes>
+        		<include>org.gvsig:extGPE-gvSIG:jar:gui</include>
+        	</includes>
+  		</dependencySet>
+  		<dependencySet>
+			<useProjectArtifact>false</useProjectArtifact>
+			<useProjectAttachments>true</useProjectAttachments>
+  			<outputDirectory>${gvsig-extension-distribution}/lib
+        	</outputDirectory>
+        	<includes>
+        		<include>org.gvsig:libGPE**</include>
+        		<include>org.gvsig:extGPE-gvSIG:jar:fmap</include>
+        		<include>org.gvsig.legacy:stax</include>
+        		<include>org.gvsig.legacy:stax-api</include>
+        	</includes>
+  		</dependencySet>
+	</dependencySets>
+</assembly>
+
