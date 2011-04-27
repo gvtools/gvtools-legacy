@@ -1,0 +1,112 @@
+<project name="Parte raster de FMap" default="generate-without-source" basedir=".">
+    <description>
+        Instala el plugin en Andami
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="src-test" location="src-test"/>
+  <property name="build" location="bin"/>
+  <property name="build-test" location="bin-test"/>
+  <property name="dist"  location="dist"/>
+  <property name="lib" location="lib" />
+  <property name="mainplugin" value="com.iver.cit.gvsig"/>
+  <property name="andami" location="../_fwAndami"/>
+  <property name="extensionsDir" location="${andami}/gvSIG/extensiones"/>
+  <property name="drivers-dir" location="${extensionsDir}/${mainplugin}/drivers" />
+  <property name="lib-dir" location="${extensionsDir}/${mainplugin}/lib"/>
+	<property name="jarName" location="org.gvsig.raster" />
+	<property name="andamiLibs" location="${andami}/lib" />
+	<property name="andamiJar" location="${andami}/andami.jar"/>
+	<property name="fmapLibs" location="../libFMap/lib" />
+	<property name="gvsigJar" location="${extensionsDir}/${mainplugin}/lib/${mainplugin}.jar"/>
+	<!--<property name="compile-classpath" value="${andamiJar}:${gvsigJar}:${andamiLibs}/beans.jar:${andamiLibs}/castor-0.9.5.3-xml.jar:${fmapLibs}/driver-manager-1.1.jar:${fmapLibs}/fmap.jar:${fmapLibs}/gdbms-0.8-SNAPSHOT.jar:${lib}/gt2-wms.jar:${andamiLibs}/iver-utiles.jar:${fmapLibs}/jts-1.7.jar:${fmapLibs}/kxml2.jar:${fmapLibs}/libproj.jar:${andamiLibs}/log4j-1.2.8.jar:${fmapLibs}/remote-clients.jar:${andamiLibs}/tempFileManager.jar" />-->
+	<import file="../binaries/ant/utilities.xml"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+   <!-- <tstamp/> -->
+	<echo>
+		Compiling ${ant.project.name}...</echo>
+    <!-- Create the build directory structure used by compile -->
+<!--    <mkdir dir="${build}"/>
+    <mkdir dir="${dist}"/> -->
+
+  </target>
+
+  <target name="generate-without-source"
+  		description="generate the distribution without the source file">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}"/>
+
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${jarName}.jar" basedir="${build}" includes="org/gvsig/raster/**"/>
+
+  	<copy file="${jarName}.jar" todir="${lib-dir}"/>
+  	<copy file="${jarName}.jar" todir="${fmapLibs}"/>
+
+  	<copy todir="${lib-dir}">
+    	<fileset dir="./lib" includes="*.jar"/>
+    	<fileset dir="." includes=".keystore"/>
+    </copy>
+  	<copy todir="${fmapLibs}/">
+  		<fileset dir="." includes="${jarName}.jar"/>
+    </copy>
+
+  </target>
+
+  <target name="clean" description="clean up" >
+		<delete dir="${dist}"/>
+		<delete dir="${build}"/>
+  </target>
+
+	<target name="batch-build"
+			description="compile the sources, create the jar file"
+			depends="init,compile,create-jar,copy-libs">
+	</target>
+
+	<target name="compile" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+			excludes="test/**"/>
+		<!--<javac  srcdir="${src}"
+				destdir="${build}"
+				classpath="${compile-classpath}"
+	   			source="${JavaSourceVersion}"
+				target="${JavaTargetVersion}"
+				debug="${debug}"
+				debuglevel="${debuglevel}"
+				excludes="test/**"
+				encoding="${encoding}"/>-->
+	</target>
+
+	<target name="create-jar"
+			description="Creates the plugin jar">
+		<mkdir dir="${dist}"/>
+		<jar jarfile="${jarName}.jar" basedir="${build}" includes="org/gvsig/raster/**"/>
+	</target>
+
+
+	<target name="copy-libs">
+	  	<copy file="${jarName}.jar" todir="${lib-dir}"/>
+	  	<copy file="${jarName}.jar" todir="${fmapLibs}"/>
+
+	  	<copy todir="${lib-dir}">
+	    	<fileset dir="./lib" includes="*.jar"/>
+	    	<fileset dir="." includes=".keystore"/>
+	    </copy>
+	  	<copy todir="${fmapLibs}/">
+	  		<fileset dir="." includes="${jarName}.jar"/>
+	    </copy>
+	</target>
+	
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="org.gvsig.raster.AllTests"/>
+		</antcall>
+	</target>
+
+</project>
+

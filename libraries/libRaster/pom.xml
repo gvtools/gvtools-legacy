@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gvsig</groupId>
+	<artifactId>libRaster</artifactId>
+	<packaging>jar</packaging>
+	<version>1.9-SNAPSHOT</version>
+	<name>libRaster</name>
+	<url>http://gvsig.org</url>
+	<parent>
+		<groupId>org.gvsig</groupId>
+		<artifactId>gvsig-library-base-pom</artifactId>
+		<version>1.9-SNAPSHOT</version>
+	</parent>
+	<properties>
+        <build-dir>${basedir}/../build</build-dir>
+    </properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.gvsig</groupId>
+			<artifactId>libProjection</artifactId>
+			<version>1.9-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.gvsig</groupId>
+			<artifactId>libInternationalization</artifactId>
+			<version>1.9-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>jecw</groupId>
+			<artifactId>jecw</artifactId>
+			<version>0.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>jgdal</groupId>
+			<artifactId>jgdal</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>jmrsid</groupId>
+			<artifactId>jmrsid</artifactId>
+			<version>0.0.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.gvsig</groupId>
+			<artifactId>jpotrace</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.gvsig.legacy</groupId>
+			<artifactId>kxml2</artifactId>
+			<version>gvsig</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<testSourceDirectory>src-test</testSourceDirectory>
+		<resources>
+			<resource>
+				<directory>src</directory>
+				<includes>
+					<include>**/*.gif</include>
+					<include>**/*.png</include>
+					<include>**/*.PNG</include>
+					<include> **/*.bmp</include>
+					<include> **/*.jpg</include>
+					<include> **/*.jpeg</include>
+					<include> **/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+</project>

@@ -1,0 +1,188 @@
+Georreferenciación
+- Implementación del arrastre (Pan) para que la imagen siga el cursor mientras se arrastra.
+- Zoom pequeño sobre la vista en tiempo real cuando movemos el cursor sobre esta. Esto solo disponible 
+para la opción (sin cartografía de referencia). Esto lo he visto en otra aplicación y es muy útil.
+- Introducir coordenada Z como comentó Jose. Esto se me ha pasado durante todo el proceso. 
+No se muy bien que tratamiento deberíamos darle a esta coordenada. En principio solo pensaba 
+guardarla pero sería conveniente preguntarle.
+- En la georreferenciación con cartografía de referencia desde servidores remotos al cargar la georreferenciación
+hace zoom todo por lo que perdemos la perspectiva de la zona que estamos tratando. Debería tener la posibilidad
+de conservar el zoom que ha seleccionado en la vista.
+
+-----------------------------------
+Carga de capas como proceso para simplificar el lanzamiento de procesos en uno en la carga de la capa. Habria que 
+	modificar la ventana de incremento para que no fuera lanzada enseguida.
+
+Control de concurrencia en el acceso a librerías. Varios intentos al mismo tiempo de reproyección, lectura, overviews, etc... 
+	provocan el pete de la librería.
+
+Recorte de ecw con remuestreo (vecino más próximo) no va. ClippingProcess (L199) la interpolación 
+	por vecino más próximo se hace en el driver y las otras con las clases que interpolan. El de ecw no sabe.
+ 
+Implementación de persistencia de proyecto cuando se le aplica un realce por expansión del contraste.
+* Bugs: Probar recorte con p198* bandas 1,2,3,4,5,7 (quitando la 7 va bien, con ella sale negro)
+	Cuando un filtro depende del orden de las bandas el filtro aplicado en la visualización no es igual
+		al que sale al generar capa. Esto es porque al generar capa se usa el orden en el que están salvadas en disco.
+La interpolación tiene creación de buffers en memoria a piñon. Si la capa es muy grande esto no irá bien
+* Serialización del filtro LinearStretch
+Introducir un factor de escala para todos los raster. Se pueden incluir en los metadatos (RMF como ScaleDataFactor)
+Tipos de datos en IBuffer. Cambiar a la lista de tipos que hay comentada. Es más completa que la actual y más cercana a gdal.
+Modis
+	- Subdatasets. Cada subdataset corresponde a un raster.
+	- Fichero HDF. Con el open del fichero se accede a los metadatos que aportan la lista de subdatasets
+	- ScaleFactor. Metadato con factor de escala para acceso a datos. Un hdf puede ser short con factor
+	de escala 10000. Cada valor del raster se divide entre 10000 dando un valor entre 0 y 1.
+	- Definir soporte a distintos productos. Calculo del factor de escala distinto en distintos productos
+Exportar a RGB. Salva una capa completa a RGB
+WMS: Exportar una capa con paleta a JPG ---> convertir a RGB?
+Filtro transparencia por pixel y opacidad para el interfaz general de filtros
+Acabar CompositeDataset
+Revisar opciones de exportación de TIFF cuando metamos 1.4.x de gdal o superior (gdal formats)
+Exportación de tablas de color a formatos 
+	ctb de landserf
+	csv
+Valor de RGB y Band_Value debería ser igual en un raster de 3 bandas y zoom 1:1
+El localizador no recibe cambios de propiedades de visualización que se hacen en la capa original.
+Quitar dependencia de andami en la capa raster
+Meter rotación a la georreferenciación del recorte y salvado de capa. Ajustar el extent de la petición con rotación.
+Bug: Cuando la inclinación del raster es muy pronunciada tarda un huevo en leer todo el raster.
+Probar tests y Eliminar setAreaOfIntererest con el ancho
+Rotación para el driver de memoria
+Obtener proyección wkt desde mrsid, ecw y jp2
+Cancelación
+	ErmapperWriter
+Abrir en memoria del filtrado (usar driver de memoria)
+Acabar driver de MrSID: comprobar readCompleteLine,los getWindowRaster
+Descubrimiento y registro para drivers y filtros.
+Problema de interferencias con el método de interpolación bicúbico
+Acabar caché
+readCompleteLine + test para ECW
+Drivers escritura y grid para escritura y exportación de formatos
+Avisos de tiempos no razonables para terminar operaciones (Estadisticas, histograma para imagenes muy grandes)
+Calculo de estadisticas (se pregunta al usuario si se hacen?, al principio?, se aprovecha que se recorre la imagen?)
+Exportación de grid a distintos formatos con filtros aplicados
+Suavizado en la visualización de pixeles con zoom a gran escala. Mirar OpenEV
+ILWIS liberado. Pegarle un vistazo.
+
+Tareas generales:
+		Libreria de colores. Libreria en la que se puedan almacenar colores como ROIs pueden ser seleccionados por:
+			Tool de selección de color de pixeles desde la vista. Se cargan en una librería de colores. 
+			Tool de selección de color de pixeles desde una herramienta como transparencia por pixel. Se cargan en una librería de colores.
+	Apertura de sensores de satelite con determinada configuración (IDR)
+	Incorporar modis
+
+Implementar deshacer para filtrado y operaciones raster a nivel de librería.
+Imagenes de pruebas de distintos formatos:
+	netCDF, HDF, SRF, 
+	
+Cuadro de configuración:
+	- Check - Generar estadisticas al cargar un raster (OFF)	
+	- Tamaño del pixel inspector
+		
+Necesidades de las librerias nativas
+	setColorInterpretation en GdalRasterBand
+	Revisar en la libreria de escritura de ecw porque peta al asignar la proyección
+	Añadir modificaciones para MODIS. getMetadata con diferentes nombres de campos.
+	
+Documentación de desarrollo
+	Como hacer un driver 
+	Como hacer un filtro.
+	Como leer y escribir información en el fichero de metadatos de raster
+	Como gestionar una tarea (process)
+	Como hacer una panel especifico para un filtro. (generación automática de paneles)
+	Como construir una funcionalidad con previsualización
+	Como usar los nombres de capa únicos y ser informado cuando alguien usa el nombre que tenemos.(RasterLibrary)
+	Como crear una entrada en el menú contextual y barra de menú de raster
+	Como trabajar con capas raster
+	Como salvar a un formato raster
+	Como usar BasePanel
+	Como importar y exportar en un formato de tabla de color
+	
+Problemas detectados en la escritura
+	Al leer ILWIS getGeoTransform da valores incorrectos de tamaño de pixel (probar versión 1.4.0 de gdal).
+	Formato RST de IDRISIS pone mal la interpretación de color
+	Formato RMF con tipo de datos double
+	
+Problemas detectados en WMS y WCS
+	Aplicación de paletas de color: Cada tile descargado tiene una paleta distinta por lo que no es posible 
+		modificarla globalmente tal y como lo hacemos ahora. Es necesario una herramienta distinta.
+	Salvar Como: Al salvar un WMS con paleta salva solo una capa visualizandose en escala de grises. Aunque 
+		le añadieramos una paleta no se veria bien porque cada tile tiene rangos de valores distintos (cada uno tiene una paleta distinta).
+	Filtros que necesitan de calculos asociados a un RasterDataset. Por ejemplo Realce necesita de un calculo
+		de estadisticas que se hacen a partir del RasterDataset. WMS no tiene uno para todo el raster descargado
+		por lo que al accesder a este tipo de operaciones peta convenientemente.
+	Tendriamos que desactivar la opción de poder seleccionar una entrada en el menú del TOC hasta que no se
+		acabe de cargar la capa completa.
+	Se bloquea todo mientras está descargando y no se muestra ningún dialogo.
+	
+Cambios FMap
+	FPanelLocConfig (Para obtener el mapcontrol del localizador)
+	CompoundBehavior (evento para la ventana de zoom)
+	_fwAndami (WindowInfo [setAdicionalInfo] para cerrar ventanas asociadas a la capa)
+Cambios gvSIG
+	Eliminar capa: Cierra las ventanas asociadas a la capa.
+	
+Pruebas
+	Abrir un jpg, tif, ecw y mrsid. 
+		Hacer zoom > 1:1 comprobar que los pixeles se ven bien y que InfoByPoint devuelve valore correctos
+	Salvar como: Al menos jpeg2000, jpg, resto. Comprobar que se modifican las opciones, al menos compresión.
+	Probar el cierre de todas las ventanas asociadas a una capa.
+	 Transparencias:    gif o raster con tabla de color con trasparencia,
+					 	png con banda transparente, 
+					 	png con transparencia en metadatos 
+					 	png con transparencia en la cabecera
+	Tablas de color:	Comprobar que ve la leyenda en el TOC. (gif)
+						WCS: Tablas 8 bits y != 8 bits (WMS NO!!!)
+						Probar raster tablas != 8 bits
+						Salvar y recuperar proyecto con tablas
+						Salvar tablas predeterminadas en un raster
+						Montar un mapa con leyenda
+				WCS:	Para un WCS (con paleta sin tiles, con paleta con tiles
+									datos!= de 8 bits sin tiles, datos!= de 8 bits con tiles 
+									8 bits sin tiles, 8 bits con tiles) {
+						 	Salvar proyecto con v10 y recuperar con la actual, volver a salvar con la actual y recuperarlo nuevamente
+						 	Comprobar que puede modificarse la tabla de color
+						 	Comprobar que se cancela bien y luego puede seguir haciendo zoom
+						 	Comporbar que sale la tabla en el TOC y se modifica al ser cambiada
+						 	Salvar capa completa
+						 	Comprobaciones histograma (Ver histograma)
+						 		Comprobar que el hacer zoom se siguen visualizando tanto los datos visualizados como el completo.
+						}
+				WMS:	Salvar proyecto con v10 y recuperar con la actual, volver a salvar con la actual y recuperarlo nuevamente
+	 Vista analisis:	Abrir y cerrar en distintas vistas.
+	 					Comprobar la sincronia de Abrir/Cerrar entre distintas vistas.
+	 					Comprobar la precisión del pixel con zoom grande.
+	 					Comprobar el cambio de escala
+	 	Histograma:		Comprobar para los datos visualizados y para los completos {
+	 						Activación y desactivación de bandas 
+	 						Comprobar q limpiar todo y mostrar todo no tiene diferencias con el original
+	 						Comprobar los 3 tipos y que no hay variaciones al pasar de uno a otro.
+	 						Eliminar extremos 
+	 					}
+		Persistencia:	Salvar un raster con realce, recorte, brillo y contraste y recuperarla con la actual
+						Salvar un raster con la v10 con realce, recorte, brillo y contraste y recuperarla con la actual
+Problemas conocidos
+	- Interpretación de los tipos de dato de gdal. Tanto en rasterband_interfaz.c como en GdalNative se hace una
+		interpretación incorrecta de los tipos de dato. Esto quiere decir que se cargarían buffers de tipo de datos
+		erroneos en caso de llegar un tipo de dato GDT_USHORT o tipo complejo. Mirar la conversión que hacemos en RasterUtilities
+		para ver la equivalencia.
+	- No salva la proyección a jpg2000
+	- Cuando se exporta un raster ecw, jp2 o mrsid a cualquier formato no lee la proyección de origen
+	- Al modificar la transparencia por pixel en la visualización, al modificar luego un filtro (por ej brillo)
+		hace que el brillo cambie el valor del pixel por lo que los pixeles que eran transparentes porque tenía un
+		valor dejen de serlo. Lo lógico podría ser crear una capa nueva con los filtros pero no hay transparencia por
+		pixel en el filtrado.
+	- Las capas WCS != 8 bits con tiles, cuando se aplica el filtro de realce con recorte cada tiles sale distinto.
+	- Recortar capas ecw con más de 3 bandas genera las bandas a partir de la 3 en negro.
+	- Cuando se crea un multiraster con varias bandas y alguna es de resolución distinta, si las visualizamos conjuntamente y 
+		aplicamos una transformación con la herramienta de geolocalizar, la banda de resolución diferente da problemas.
+	- Estabilización de la generación de overviews. En ocasiones se genera mal el fichero .aux (fichero auxiliar que usa gdal)
+	y provoca cierres abruptos de gvSIG si vuelves a intentar generar overviews.
+		
+Documentación 
+	Revisar Funcionalidades: Tablas de color, Geolocalización, Save As, Propiedades raster, ....
+	Revisar libreria
+	Definición de excepciones que faltan
+	Cancelación de procesos
+	Estados de una capa raster
+	
