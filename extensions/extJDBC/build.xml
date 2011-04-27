@@ -1,0 +1,116 @@
+<project name="extJDBC" default="generate-without-source" basedir=".">
+    <description>
+        Instala el plugin en Andami
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="bin"/>
+  <property name="src-test" location="src-test"/>
+  <property name="build-test" location="bin-test"/>
+  <property name="dist"  location="dist"/>
+  <property name="lib"  location="lib"/>
+  <property name="mainplugin" value="com.iver.cit.gvsig"/>
+  <property name="plugin" value="com.iver.cit.gvsig.jdbc_spatial"/>
+  <property name="driverjar" value="jdbc_spatial"/>
+	<property name="andami" location="../_fwAndami"/>
+	<property name="extensionsDir" location="${andami}/gvSIG/extensiones"/>
+  	<property name="drivers-dir" location="${extensionsDir}/${mainplugin}/drivers/jdbc_spatial" />
+	<property name="lib-dir" location="${extensionsDir}/${mainplugin}/lib"/>
+	<import file="../binaries/ant/utilities.xml"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+	<echo>
+		Compiling ${ant.project.name}...</echo>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+    <mkdir dir="${dist}"/>
+	<mkdir dir="${drivers-dir}" />
+
+  </target>
+
+  <target name="generate-without-source"
+  		description="generate the distribution without the source file"
+  	depends="init,create-jar,copy-data-files,copy-to-andami,clean-dist">
+
+  </target>
+
+	<target name="batch-build"
+			description="compile the sources, create the jar file"
+			depends="init,compile,create-jar,copy-data-files,copy-to-andami">
+	</target>
+
+	<target name="compile" description="compile the source" >
+		<antcall target="gvSIG-import-build-number"/>
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+	</target>
+
+	<target name="create-jar"
+			description="Creates the plugin jar">
+
+
+	  	<jar jarfile="${dist}/${driverjar}.jar" basedir="${build}"
+	  		includes="com/iver/cit/gvsig/fmap/drivers/jdbc/*.class com/iver/cit/gvsig/fmap/drivers/jdbc/postgis/** com/iver/cit/gvsig/fmap/drivers/jdbc/mysql/**"
+	  	/>
+	  	<jar jarfile="${dist}/${driverjar}-driver.jar" basedir="${build}"
+	  		includes="com/iver/cit/gvsig/fmap/drivers/jdbc/*.class com/iver/cit/gvsig/fmap/drivers/jdbc/postgis/** com/iver/cit/gvsig/fmap/drivers/jdbc/mysql/**"
+	  	/>
+
+	    <jar jarfile="${dist}/${plugin}.jar" basedir="${build}"
+	    	includes="com/iver/cit/gvsig/** "
+	    	excludes="com/iver/cit/gvsig/fmap/drivers/**" />
+
+	</target>
+
+	<target name="copy-data-files">
+
+	    <copy file="config/config.xml" todir="${dist}"/>
+
+		<copy file="build.number" todir="${dist}"/>
+		<copy todir="${dist}">
+			<fileset dir="config" includes="text*.properties"/>
+		</copy>
+		<copy todir="${dist}/images">
+			<fileset dir="images/" includes="*"/>
+		</copy>
+	</target>
+
+	<target name="copy-to-andami">
+		<copy file="build.number" todir="${extensionsDir}/${plugin}"/>
+
+	  	<copy todir="${drivers-dir}">
+	  		<fileset dir="${dist}" includes="${driverjar}.jar"/>
+	 	</copy>
+	    <copy todir="${extensionsDir}/${plugin}/">
+	    	<fileset dir="${dist}" excludes="${driverjar}.jar,${driverjar}-driver.jar"/>
+	    </copy>
+	    <copy todir="${lib-dir}">
+	    	<fileset dir="${dist}" includes="${driverjar}-driver.jar"/>
+	    </copy>
+
+	</target>
+
+	<target name="clean-dist">
+	    <delete dir="${dist}"/>
+	</target>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${dist}"/>
+    <delete dir="${build}"/>
+  </target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="org.gvsig.remoteClient.AllTests"/>
+		</antcall>
+	</target>
+</project>
+
