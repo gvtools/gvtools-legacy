@@ -1,0 +1,112 @@
+<project name="Core plugin" default="dist" basedir=".">
+    <description>
+        Instala el plugin
+    </description>
+  <!-- set global properties for this build -->
+	<property name="src" location="src"/>
+	<property name="src-test" location="src-test"/>
+	<property name="lib" location="../_fwAndami/lib"/>
+	<property name="build" location="bin"/>
+	<property name="build-test" location="bin-test"/>
+	<property name="dist"  location="dist"/>
+	<property name="andamiJar" location="../_fwAndami/andami.jar"/>
+	<property name="plugin" value="com.iver.core"/>
+	<property name="targetDir" location="../_fwAndami/gvSIG/extensiones"/>
+	<!--<property name="compile-classpath" value="${lib}/castor-0.9.5.3-xml.jar:${lib}/iver-utiles.jar:${lib}/log4j-1.2.8.jar:${andamiJar}:${lib}/beans.jar" />-->
+	<import file="../binaries/ant/utilities.xml"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+	<echo>
+		Compiling ${ant.project.name}...</echo>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="dist" description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}"/>
+
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <copy todir="${build}">
+    	<fileset dir="${src}" includes="**"/>
+    </copy>
+    <jar jarfile="${dist}/${plugin}.jar" basedir="${build}"/>
+    <copy file="config/config.xml" todir="${dist}"/>
+  	<copy file="build.number" todir="${dist}"/>
+    <copy todir="${dist}">
+    	<fileset dir="config" includes="text*.properties"/>
+    </copy>
+    <copy todir="${dist}/images">
+    	<fileset dir="images/" includes="*"/>
+    </copy>
+    <copy todir="${dist}">
+    	<fileset dir="." includes="*.jar"/>
+    </copy>
+
+    <move todir="${targetDir}/${plugin}/">
+    	<fileset dir="${dist}" includes="**/**"/>
+    </move>
+  </target>
+
+    <target name="batch-build"
+    	    description="compile the sources, create the jar file"
+    	    depends="compile,create-jar,copy-data-files,move-to-andami">
+    </target>
+
+    <target name="compile" description="compile the source" >
+		<antcall target="gvSIG-import-build-number"/>
+        <!-- Compile the Java code from ${src} to ${build} -->
+    	<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+        <!--<javac	srcdir="${src}"
+				destdir="${build}"
+				source="1.4"
+				target="1.4"
+				debug="${debug}"
+				debuglevel="${debuglevel}"
+				classpath="${compile-classpath}"/>-->
+	</target>
+
+	<target name="copy-data-files">
+		<copy file="config/config.xml" todir="${dist}"/>
+		<copy file="build.number" todir="${dist}"/>
+		<copy todir="${dist}">
+			<fileset dir="config" includes="text*.properties"/>
+		</copy>
+		<copy todir="${dist}/images">
+			<fileset dir="images/" includes="*"/>
+		</copy>
+		<copy todir="${dist}">
+			<fileset dir="." includes="*.jar"/>
+		</copy>
+    </target>
+
+	<target name="move-to-andami" description="Moves the build directory to andami">
+	    <move todir="${targetDir}/${plugin}/">
+	    	<fileset dir="${dist}" includes="**/**"/>
+	    </move>
+	</target>
+
+	<target name="create-jar" description="Crea el jar de la aplicacion">
+		<mkdir dir="${dist}"/>
+		<jar jarfile="${dist}/${plugin}.jar" basedir="${build}"/>
+	</target>
+
+	<target name="clean" description="clean up" >
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="com.iver.core.AllTests"/>
+		</antcall>
+	</target>
+</project>
+
