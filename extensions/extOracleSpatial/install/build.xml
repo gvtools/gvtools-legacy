@@ -1,0 +1,51 @@
+<project name="instalador-extJDBC" default="init" basedir=".">
+	
+	<property name="output_dir" location="./extjdbc_installer"/>
+	<property name="zip_output_dir" location="./pub"/>
+	
+	<property name="dir_inst" location="C:\Archivos de programa"/>
+	<property name="base_dir" location="./"/>		
+	<property name="dir_libs" location="C:\Archivos de programa\IzPack\lib"/>
+	<property name="vers" location="1.0.2"/>
+	<property name="izpack_dir" location="C:\Archivos de programa\IzPack"/>
+	<property name="GVSIG_VERSION" value="1.0.2"/>
+	
+	<buildnumber file="./../ospatial.number"/>
+	<property name="JARNAME" value="oracle_spatial_driver"/>
+	<property name="zip-bin" value="oracle_spatial_driver_installer"/>
+
+	<!--
+	<property name="dir_inst" location="/usr/local"/>
+	<property name="base_dir" location="./"/>		
+	
+	<property name="izpack_dir" location="../../IzPack"/>
+	<property name="dir_libs" location="${izpack_dir}/lib"/>
+	<property name="vers" value="0.6"/>
+	<property name="JARNAME" value="arcims-0.6"/>
+	<property name="GVSIG_VERSION" value="0.6"/>
+	-->
+	
+	<taskdef name="izpack" classpath="${dir_libs}/compiler.jar" classname="com.izforge.izpack.ant.IzPackTask"/>
+	
+	<target name="init">
+		<izpack input="${base_dir}/install.xml" 
+				output="${output_dir}/${JARNAME}" 
+				installerType="standard" 
+				basedir="${base_dir}" 
+				izPackDir="${izpack_dir}/"/>
+		
+		<zip destfile="${zip_output_dir}/${zip-bin}-BN${build.number}.zip"
+			basedir="${output_dir}" includes="**/**"/>
+	</target>
+	
+	<target name="clean">
+		<delete>
+			<fileset dir=".">
+			    <include name="**.zip"/>
+			</fileset>
+		</delete>
+		<delete dir="bin" />
+		<delete dir="extensions" />
+	</target>
+	
+</project>

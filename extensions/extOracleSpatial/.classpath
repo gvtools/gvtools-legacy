@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/Utiles/src"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar" sourcepath="/libDriverManager"/>
+	<classpathentry kind="lib" path="/libFMap/lib/mysql-connector-java-3.1.7-bin.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jtsio-1.8.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.9.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/JWizardComponent.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
