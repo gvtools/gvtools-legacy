@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/JimiProClasses.zip"/>
+	<classpathentry kind="lib" path="lib/iText-2.1.5.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/pdf-transcoder.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/units-0.01.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt2-main.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt2-postgis.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt2-legacy.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/geoapi-2.0.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/castor-0.9.5.3-xml.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/libIverUtiles/src"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/xerces_2_5_0.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/remote-clients.jar"/>
+	<classpathentry kind="lib" path="lib/zql.jar"/>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/looks-2.1.4.jar"/>
+	<classpathentry kind="lib" path="/libFMap/drivers/csvstring/csvstring.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.gvsig.raster.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/JWizardComponent.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar"/>
+	<classpathentry kind="lib" path="lib/jpedalSTD.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/batik-bridge.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/batik-gvt.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/batik-script.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/batik-util.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/xml-apis-ext.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.9.jar"/>
+	<classpathentry kind="lib" path="lib/org.gvsig.printing.cups-support.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libCorePlugin"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,578 @@
+<project name="appgvSIG" default="dist" basedir=".">
+    <description>
+        gvSIG Main build
+    </description>
+
+	<import file="../binaries/ant/utilities.xml"/>
+
+	<!--
+		============================================
+		Properties for build of the appgvSIG project
+		============================================
+	-->
+	<property name="version" value="1.2 ${eclipse.startTime}"/>
+	<property name="src" location="src"/>
+	<property name="build" location="bin"/>
+	<property name="src-test" location="src-test"/>
+	<property name="build-test" location="bin-test"/>
+	<property name="dist"  location="dist"/>
+	<property name="lib"   location="lib"/>
+	<property name="plugin" value="com.iver.cit.gvsig"/>
+	<property name="fmapdir" value="../libFMap"/>
+	<property name="andami" location="../_fwAndami"/>
+	<property name="extensionDir" location="${andami}/gvSIG/extensiones"/>
+	<property name="andamiLibs" value="${andami}/lib"/>
+	<property name="fmapLibs"   location="${fmapdir}/lib"/>
+	<property name="andamiJar"  value="${andami}/andami.jar"/>
+
+	<!--
+		============================================
+		Properties for global build
+		============================================
+	-->
+
+	<property name="gvSIG_projects" value="
+		libExceptions,
+		libInternationalization,
+		libIverUtiles,
+		libUIComponent,
+		_fwAndami,
+		libCorePlugin,
+		extDockingSkin,
+		libProjection,
+		libRaster,
+		libDXF,
+		libDriverManager,
+		libRemoteServices,
+		libGDBMS,
+		libFMap,
+		libGPE,
+		libGPE-XML,
+		libGPE-GML,
+		libGPE-KML,
+		appgvSIG,
+		libJCRS,
+		extJCRS,
+		libTopology,
+		libDwg,
+		extDwg,
+		libCacheService,
+		extSymbology,
+		extRasterTools-SE,
+		extAddEventTheme,
+		extJDBC,
+		extCAD,
+		extGPE-gvSIG,
+		appCatalogAndGazetteerClient,
+		extCatalogAndGazetteer,
+		extDataLocator,
+		extGeoProcessing,
+		extGeoprocessingExtensions,
+		extGeoreferencing,
+		extTopology,
+		extOracleSpatial,
+		extSDE,
+		extScripting,
+		extAnnotations,
+		extExpressionField,
+		extWCS,
+		extWFS2,
+		extWMS,
+		extCenterViewToPoint,
+		libArcIMS,
+		extArcims,
+		extRemoteSensing,
+		extGraph,
+		extHelp,
+		extIconThemeBase,
+		lib3DMap,
+		ext3Dgui,
+		extSextanteGvsigBindings,
+		extTableSummarize,
+		extSelectionTools,
+		extProjectBackup,
+		extQuickInfo,
+		extDerivedGeometries,
+		extHyperlink,
+		extI18n,
+		extQuickPrint,
+		extLayerLoadingOrder,
+		extTableImport,
+		extTableExport,
+		binaries
+	"/>
+
+	<property name="mandatoryProjets" value="
+		_fwAndami,
+		libCorePlugin,
+		libFMap,
+		appgvSIG,
+		extJCRS
+	"/>
+
+	<property name="global.installBaseDir" location="${andami}"/>
+
+	<property name="JUnitProjectResults" value="JUnitProjectResults"/>
+	<property name="JUnitProjectResultsFile" value="JUnitProjectResults.txt"/>
+	<property name="JUnitGlobalResults" location="JUnitGlobalResults"/>
+	<property name="JUnitGlobalResultsFile" location="JUnitGlobalResults.txt"/>
+	<property name="JUnitSummaryFile" location="JUnitGlobalResults.txt"/>
+	<property name="FlagTestError" location="JUnitFlagError"/>
+
+	<!--
+		============================================
+		Targets for build of the appgvSIG project
+		============================================
+	-->
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<echo>
+			Compiling ${ant.project.name}...</echo>
+
+		<property file="build.number"/>
+		<!-- Creamos un fichero con el timeStamp para que lo lea el FPanelAbout -->
+		<!-- <buildnumber/> -->
+	</target>
+
+	<target name="dist"
+				depends="init,create-jar,copy-libs,copy-data-files,move-to-andami"
+				description="Generate the distribution of the gvSIG plugin. To build just the appgvSIG project from Eclipse " >
+		<!-- Create the distribution directory -->
+	</target>
+
+	<target name="compile" description="compile the source">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}"/>
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"/>
+
+	</target>
+
+	<target name="create-jar" description="Creates the jar file">
+		<mkdir dir="${dist}/lib"/>
+		<jar jarfile="${dist}/lib/${plugin}.jar" basedir="${build}"/>
+	</target>
+
+	<target name="copy-libs">
+		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+		<copy todir="${dist}/lib">
+			<fileset dir="./lib" includes="*.jar,*.zip"/>
+		</copy>
+		<ant dir="../libFMap" target="batch-build" inheritAll="false">
+			<property name="debug" value="${debug}"/>
+			<property name="debuglevel" value="${debuglevel}"/>
+			<property name="encoding" value="ISO_8859_1"/>
+		</ant>
+		<copy todir="${dist}/lib">
+			<fileset dir="${fmapdir}/dist/lib/" includes="*.jar,*.zip"/>
+		</copy>
+
+	</target>
+
+	<target name="batch-build"
+			description="Global build for the whole gvSIG + extensions. Compiles all the sources and builds the application so that it's ready to execute"
+			depends="init,compile,create-jar,copy-libs,copy-data-files,move-to-andami">
+	</target>
+
+	<target name="copy-data-files">
+        <copy todir="${dist}">
+                <fileset dir="config" includes="*" />
+        </copy>
+		<copy file="build.number" todir="${dist}"/>
+		<copy todir="${dist}/images">
+			<fileset dir="images/" includes="*"/>
+		</copy>
+		<copy todir="${dist}/northimages">
+			<fileset dir="northimages/" includes="*"/>
+		</copy>
+    </target>
+
+	<target name="move-to-andami" description="Moves the build directory to andami">
+		<move todir="${extensionDir}/${plugin}/">
+			<fileset dir="${dist}" includes="**/**"/>
+		</move>
+	</target>
+
+	<target name="clean"
+			description="clean up" >
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}"/>
+		<!--<delete dir="${dist}"/> -->
+	</target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="com.iver.cit.gvsig.AllTests"/>
+		</antcall>
+	</target>
+
+	<!--
+		============================================
+		Targets for global build
+		============================================
+	-->
+
+	<!-- Public Targets -->
+	<!-- Comment to use it with debug on
+	<target name="make-binary-distribution"
+            description="
+				Prepare for do a binary distribution of the application.
+				This increments the build number and then makes a global build"
+            depends="clean-all,buildNumber,build-all-DebugOff">
+    </target>
+    -->
+	<target name="make-binary-distribution"
+            description="
+				Prepare for do a binary distribution of the application.
+				This increments the build number and then makes a global build"
+            depends="clean-all,buildNumber,build-all">
+    </target>
+
+	<target name="make-binary-distribution-JS1.5_JT1.4"
+            description="
+			Prepare for do a binary distribution of the application.
+			This increments the build number and then makes a global build.
+			Source Java 1.5 and Target Java 1.4"
+            depends="clean-all,buildNumber,build-all-JS1.5_JT1.4-DebugOff">
+    </target>
+
+	<target name="make-binary-distribution-test"
+            description="
+			Prepare for a binary distribution of the application
+			without increments the global build number"
+            depends="clean-all,build-all-DebugOff">
+    </target>
+
+	<target name="make-binary-distribution-JS1.5_JT1.4-test"
+            description="
+			Prepare for a binary distribution of the application
+			without increments the global build number.
+			Source Java 1.5 and Target Java 1.4"
+            depends="clean-all,build-all-JS1.5_JT1.4-DebugOff">
+    </target>
+
+    <target name="clean_andami_gvSIGdir"
+            description="clean up the gvSIG andami deploy">
+        <delete dir="${andami}/gvSIG" failonerror="false"/>
+    </target>
+
+	<target name="build-all"
+		description="
+			Global build for the whole gvSIG.
+			Compiles all the sources and builds the application so that it's ready to execute
+	">
+		<antcall target="build-all-projects">
+			<param name="debug" value="on"/>
+			<param name="debuglevel" value="lines, vars, source"/>
+		</antcall>
+	</target>
+
+	<target name="build-all-DebugOff"
+		description="
+			Global build for the whole gvSIG.
+			Compiles all the sources and builds the application so that it's ready to execute.
+			Do not generate debug info in complilation.
+	">
+		<antcall target="build-all-projects">
+			<param name="debug" value="off"/>
+			<param name="debuglevel" value=""/>
+		</antcall>
+	</target>
+
+	<target name="build-all-JS1.5_JT1.4"
+		description="
+			Global build for the whole gvSIG.
+			Compiles all the sources and builds the application so that it's ready to execute.
+			Source Java 1.5 and Target Java 1.4
+	">
+		<antcall target="build-all-projects">
+			<param name="JavaSourceVersion" value="1.5"/>
+			<param name="JavaTargetVersion" value="jsr14"/>
+		</antcall>
+	</target>
+
+	<target name="build-all-JS1.5_JT1.4-DebugOff"
+		description="
+			Global build for the whole gvSIG.
+			Compiles all the sources and builds the application so that it's ready to execute.
+			Source Java 1.5 and Target Java 1.4.
+			Do not generate debug info in complilation.
+	">
+		<antcall target="build-all-projects">
+			<param name="JavaSourceVersion" value="1.5"/>
+			<param name="JavaTargetVersion" value="jsr14"/>
+			<param name="debug" value="off"/>
+			<param name="debuglevel" value=""/>
+		</antcall>
+	</target>
+
+
+	<target name="build-all-projects"
+			description="Builds the application, excluding extensions">
+		<property file="build.number"/>
+		<foreach list="${gvSIG_projects}" trim="true" delimiter="," target="batch-build-project" param="bb-project.name"/>
+	</target>
+
+	<target name="clean-all"
+				depends="clean_andami_gvSIGdir,clean-all-projects"
+				description="clean up application and projets" />
+
+	<target name="clean-all-projects"
+		description="cleans the base components of gvSIG: appgvSIG + libs">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<foreach list="${gvSIG_projects}"  trim="true" delimiter="," target="clean-project" param="c-project.name"/>
+	</target>
+
+	<target name="install-all"
+					depends="install-all-projects"
+					description="Generate jars and copy files to Andami for the whole application (gvSIG+libs+extensions). Compilation is supposed to be automatically done by Eclipse" />
+
+	<target name="install-all-projects"
+				description="Generate jars and copy files to Andami for the application (gvSIG+libs). Compilation is supposed to be automatically done by Eclipse" >
+		<foreach list="${gvSIG_projects}" trim="true"  delimiter="," target="install-project" param="i-project.name"/>
+	</target>
+
+	<target name="update-all-classpath-files"
+				description="Updates the timestamp of all projects.
+					This force eclipse to update jar missing errors.">
+		<foreach list="${gvSIG_projects}" trim="true"  delimiter="," target="update-proyect-classpath-file" param="u-cp-project.name"/>
+	</target>
+
+
+
+	<!-- utility targets -->
+
+
+	<target name="buildNumber"
+				description="Generates the build.number for the application">
+		<propertyfile
+				file="build.number"
+				comment="Build Number for ANT. Do not edit!">
+			<entry  key="build.number" default="0" type="int" operation="+" pattern="0000"/>
+		</propertyfile>
+	</target>
+
+	<target name="install-project">
+		<property name="i-project.dir" location="../${i-project.name}"/>
+		<if>
+			<available file="${i-project.dir}" type="dir"/>
+			<then>
+				<echo>
+					Install ${i-project.name}
+				</echo>
+				<ant dir="${i-project.dir}" inheritAll="false">
+					<property name="buildNumberFile" location="build.number"/>
+				</ant>
+			</then>
+			<else>
+				<if>
+					<contains string="${mandatoryProjets}" substring="${i-project.name}"/>
+					<then>
+						<fail message="The required project is missing for Install: ${i-project.name}"/>
+					</then>
+					<else>
+						<echo>
+							Skip ${i-project.name} project from Intall
+						</echo>
+					</else>
+				</if>
+			</else>
+		</if>
+	</target>
+
+
+	<target name="clean-project">
+		<property name="c-project.dir" location="../${c-project.name}"/>
+		<if>
+			<available file="${c-project.dir}" type="dir"/>
+			<then>
+				<echo>
+					Clean ${c-project.name}
+				</echo>
+				<ant dir="${c-project.dir}" target="clean" inheritAll="false"/>
+			</then>
+			<else>
+				<if>
+					<contains string="${mandatoryProjets}" substring="${c-project.name}"/>
+					<then>
+						<fail message="The required project is missing for Clean: ${c-project.name}"/>
+					</then>
+					<else>
+						<echo>
+							Skip ${c-project.name} project from Clean
+						</echo>
+					</else>
+				</if>
+			</else>
+		</if>
+	</target>
+
+	<target name="batch-build-project">
+		<property name="bb-project.dir" location="../${bb-project.name}"/>
+		<if>
+			<available file="${bb-project.dir}" type="dir"/>
+			<then>
+				<echo>
+					Batch-build ${bb-project.name}
+				</echo>
+				<ant dir="${bb-project.dir}" target="batch-build" inheritAll="false">
+					<property name="debug" value="${debug}"/>
+					<property name="debuglevel" value="${debuglevel}"/>
+					<property name="encoding" value="${encoding}"/>
+					<property name="JavaSourceVersion" value="${JavaSourceVersion}"/>
+					<property name="JavaTargetVersion" value="${JavaTargetVersion}"/>
+					<property name="buildNumberFile" location="build.number"/>
+				</ant>
+			</then>
+			<else>
+				<if>
+					<contains string="${mandatoryProjets}" substring="${bb-project.name}"/>
+					<then>
+						<fail message="The required project is missing for Batch build: ${bb-extension.name}"/>
+					</then>
+					<else>
+						<echo>
+							Skip ${bb-project.name} project from Batch build
+						</echo>
+					</else>
+				</if>
+			</else>
+		</if>
+	</target>
+
+	<target name="update-proyect-classpath-file">
+		<property name="u-cp-project.dir" location="../${u-cp-project.name}"/>
+		<if>
+			<available file="${u-cp-project.dir}" type="dir"/>
+			<then>
+				<if>
+					<available file="${u-cp-project.dir}/.classpath" type="file"/>
+					<then>
+						<touch file="${u-cp-project.dir}/.classpath"/>
+						<echo>
+							Update classpath file of ${u-cp-project.name}
+						</echo>
+					</then>
+				</if>
+			</then>
+			<else>
+				<if>
+					<contains string="${mandatoryProjets}" substring="${u-cp-project.name}"/>
+					<then>
+						<if>
+							<available file="${u-cp-project.dir}/.classpath" type="file"/>
+							<then>
+								<fail message="The required project is missing for Update classpath file: ${u-cp-project.name}"/>
+							</then>
+						</if>
+					</then>
+					<else>
+						<echo>
+							Skip ${u-cp-project.name} project from Update classpath file
+						</echo>
+					</else>
+				</if>
+			</else>
+		</if>
+	</target>
+
+	<target name="run-one-test">
+		<property name="target.project.dir" location="../${target.project.name}"/>
+		<if>
+			<available file="${target.project.dir}" type="dir"/>
+			<then>
+				<echo>
+					Running tests: ${target.project.dir}
+				</echo>
+				<trycatch property="AnErrorHappened">
+					<try>
+						<ant dir="${target.project.dir}"
+							target="run-tests"
+							inheritAll="false">
+							<property name="JUnitProjectResults" value="${JUnitProjectResults}"/>
+							<property name="JUnitProjectResultsFile" value="${JUnitProjectResultsFile}"/>
+							<property name="JUnitGlobalResults" value="${JUnitGlobalResults}"/>
+							<property name="JUnitGlobalResultsFile" value="${JUnitGlobalResultsFile}"/>
+							<property name="JUnitSummaryFile" value="${JUnitSummaryFile}"/>
+							<property name="buildNumberFile" location="${buildNumberFile}"/>
+						</ant>
+					</try>
+					<catch>
+						<echo	level="error"
+								append="true"
+								file="${FlagTestError}">${target.project.name}: ${AnErrorHappened}</echo>
+						<echo level="error">${target.project.name}: ${AnErrorHappened}</echo>
+						<echo append="true" file="${JUnitGlobalResultsFile}">JUnitTests for ${target.project.name}: FAILED.${line.separator}</echo>
+						<echo append="true" file="${target.project.dir}/${JUnitProjectResultsFile}">${AnErrorHappened}</echo>
+					</catch>
+				</trycatch>
+			</then>
+			<else>
+				<echo>
+					Skip ${target.project.dir} project from RunTests
+				</echo>
+				<echo append="true" file="${JUnitGlobalResultsFile}">JUnitTests for ${target.project.name}: SKIPPED.${line.separator}</echo>
+			</else>
+		</if>
+	</target>
+
+	<target name="run-all-tests">
+		<delete file="${FlagTestError}" />
+		<move 	file="${JUnitGlobalResultsFile}"
+				tofile="${JUnitGlobalResults}.old"
+				failonerror="false" />
+		<property name="buildNumberFile" location="build.number"/>
+		<foreach	list="${gvSIG_projects}"
+					delimiter=","
+	  				trim="true"
+					target="run-one-test"
+					param="target.project.name">
+					<param name="buildNumberFile" location="${buildNumberFile}"/>
+		</foreach>
+
+		<foreach 	list="${gvSIG_projects}"
+	  				trim="true"
+					delimiter=","
+					target="concat-test-output"
+					param="target.project.name" />
+
+		<if>
+			<available file="${FlagTestError}" type="file"/>
+			<then>
+				<echo file="${JUnitGlobalResultsFile}.tmp"> === Global JUnit Results: FAILURE.${line.separator}${line.separator}</echo>
+				<concat  destfile="${JUnitGlobalResultsFile}.tmp2"
+						binary="true">
+					<fileset file="${JUnitGlobalResultsFile}.tmp"/>
+					<fileset file="${JUnitGlobalResultsFile}"/>
+				</concat>
+				<move file="${JUnitGlobalResultsFile}.tmp2" tofile="${JUnitGlobalResultsFile}"/>
+				<delete file="${JUnitGlobalResultsFile}.tmp"/>
+				<echo level="error">JUnitTests: FAILURE.
+					See ${JUnitGlobalResultsFile} file for details.
+				</echo>
+			</then>
+			<else>
+				<echo file="${JUnitGlobalResultsFile}.tmp"> === Global JUnit Results: SUCCESS.${line.separator}${line.separator}</echo>
+				<concat  destfile="${JUnitGlobalResultsFile}.tmp2"
+						binary="true">
+					<fileset file="${JUnitGlobalResultsFile}.tmp"/>
+					<fileset file="${JUnitGlobalResultsFile}"/>
+				</concat>
+				<move file="${JUnitGlobalResultsFile}.tmp2" tofile="${JUnitGlobalResultsFile}"/>
+				<delete file="${22JUnitGlobalResultsFile}.tmp"/>
+				<echo>JUnitTests: SUCCESS.
+						See ${JUnitGlobalResultsFile} file for details.
+				</echo>
+			</else>
+		</if>
+		<delete file="${FlagTestError}" />
+	</target>
+
+</project>
+

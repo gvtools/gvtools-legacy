@@ -1,0 +1,45 @@
+<project name="appgvSIG.compile-classpath" basedir=".">
+	<!-- defines the classpath to be used for compilation -->
+	<property name="gvSIGLibs"   location="../appgvSIG/lib"/>
+	<property name="andami"   location="../_fwAndami"/>
+	<property name="fmap" location="../libFMap"/>
+	<property name="andamiLibs"   location="${andami}/lib"/>
+	<property name="andamiJar"   location="${andami}/andami.jar"/>
+	<property name="mainPlugin" location="${andami}/gvSIG/extensiones/com.iver.cit.gvsig" />
+	<property name="driversDir" location="${mainPlugin}/drivers"/>
+	<path id="appgvSIG.compile-classpath">
+	    <pathelement location="${gvSIGLibs}/batik-awt-util.jar"/>
+   	    <pathelement location="${gvSIGLibs}/batik-bridge.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-css.jar"/>
+  	    <pathelement location="${gvSIGLibs}/batik-dom.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-ext.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-extension.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-gui-util.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-gvt.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-parser.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-script.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-svg-dom.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-svggen.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-swing.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-transcoder.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-util.jar"/>
+	    <pathelement location="${gvSIGLibs}/batik-xml.jar"/>
+	    <pathelement location="${andamiLibs}/beans.jar"/>
+	    <pathelement location="${andamiLibs}/castor-0.9.5.3-xml.jar"/>
+		<pathelement location="${driversDir}/csvstring/csvstring.jar" />
+	    <pathelement location="${fmap}/dist/lib/fmap.jar"/>
+	    <pathelement location="${gvSIGLibs}/itext-1.4.2.jar"/>
+	    <pathelement location="${andamiJar}"/>
+	    <pathelement location="${gvSIGLibs}/jep-2.24.jar"/>
+	    <pathelement location="${gvSIGLibs}/JimiProClasses.zip"/>
+	    <pathelement location="${gvSIGLibs}/junit.jar"/>
+	    <pathelement location="${andamiLibs}/JWizardComponent.jar"/>
+	    <pathelement location="${andamiLibs}/iver-utiles.jar"/>
+	    <pathelement location="${andamiLibs}/log4j-1.2.8.jar"/>
+	    <pathelement location="${andamiLibs}/looks-2.0.2.jar"/>
+	    <pathelement location="${gvSIGLibs}/js.jar"/>
+	    <pathelement location="${gvSIGLibs}/pdf-transcoder.jar"/>
+	    <pathelement location="${gvSIGLibs}/xml-apis.jar"/>
+	    <pathelement location="${gvSIGLibs}/zql.jar"/>
+	</path>
+</project>
