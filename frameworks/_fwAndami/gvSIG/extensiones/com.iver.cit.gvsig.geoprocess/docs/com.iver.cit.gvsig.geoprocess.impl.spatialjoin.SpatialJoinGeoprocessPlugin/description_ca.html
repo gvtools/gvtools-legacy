@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Enlace Espacial</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.0  (Linux)">
+	<META NAME="CREATED" CONTENT="20070803;10333200">
+	<META NAME="CHANGED" CONTENT="20070803;10371600">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { size: 21cm 29.7cm }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="es-ES" DIR="LTR">
+<P ALIGN=JUSTIFY STYLE="margin-top: 0.49cm; margin-bottom: 0.49cm"><FONT SIZE=3><SPAN LANG="ca-ES"><FONT COLOR="#800000"><B>Enlla&ccedil;
+espacial</B> </FONT></SPAN></FONT>
+</P>
+<P LANG="ca-ES" ALIGN=JUSTIFY STYLE="margin-top: 0.49cm; margin-bottom: 0.49cm">
+Este geoproc&eacute;s, igual que una uni&oacute; entre taules, permet
+transferir els atributs d'una capa a una altra basant-se en una
+caracter&iacute;stica comuna. A difer&egrave;ncia de la uni&oacute;
+de les bases de dades relacionals, en este cas la caracter&iacute;stica
+comuna no &eacute;s que un camp de les dos taules prenga el mateix
+valor (la clau de la uni&oacute;), sin&oacute; que els elements
+relacionats de les dos capes complisquen uns criteris espacials. 
+</P>
+<P LANG="ca-ES" ALIGN=JUSTIFY STYLE="margin-top: 0.49cm; margin-bottom: 0.49cm">
+El geoproc&eacute;s enlla&ccedil; espacial implementat per l'extensi&oacute;
+de geoprocessament de gvSIG permet seguir dos tipus de criteris
+espacials per a establir l'enlla&ccedil; espacial: 
+</P>
+<UL>
+	<LI VALUE=1><P ALIGN=JUSTIFY STYLE="margin-top: 0.49cm; margin-bottom: 0cm">
+	<SPAN LANG="ca-ES"><B>Ve&iacute; m&eacute;s pr&ograve;xim (relaci&oacute;
+	1-&gt;1)</B>. Assigna a un element de la capa origen els atributs de
+	l'element m&eacute;s pr&ograve;xim de la capa enlla&ccedil;ada. En
+	el cas que l'element m&eacute;s pr&ograve;xim intersecte (o estiga
+	contingut per al cas de pol&iacute;gons) l'element original, hi ha,
+	per tant, diverses interseccions, l'algoritme prendr&agrave; el
+	primer element analitzat de les possibles interseccions. </SPAN>
+	</P>
+	<LI><P ALIGN=JUSTIFY STYLE="margin-bottom: 0.49cm"><SPAN LANG="ca-ES"><B>Contingut
+	en (relaci&oacute; 1-&gt;M).</B> Relaciona un element de la capa
+	origen amb diversos elements de la capa dest&iacute; (en concret,
+	amb aquells que s&oacute;n intersectats). En este cas la capa origen
+	no heretar&agrave; els atributs de la capa relacionada, sin&oacute;
+	que l'operativa ser&agrave; molt pareguda a la del geoproc&eacute;s
+	Dissoldre. Per als M elements relacionats amb un element de la capa
+	origen, es donar&agrave; a l'usuari la possibilitat de triar una o
+	diverses funcions resum (mitjana, m&iacute;nima, m&agrave;xima,
+	sumatori) que s'aplicaran sobre els atributs num&egrave;rics de la
+	capa enlla&ccedil;ada. </SPAN>
+	</P>
+</UL>
+<P LANG="ca-ES" ALIGN=JUSTIFY STYLE="margin-top: 0.49cm; margin-bottom: 0.49cm">
+<IMG SRC="spatialjoindesc.png" NAME="Imagen1" ALIGN=LEFT WIDTH=271 HEIGHT=285 BORDER=0>Este
+geoproc&eacute;s pot ser de gran utilitat per a la realitzaci&oacute;
+d'an&agrave;lisi de corredor. Per exemple: 
+</P>
+<UL>
+	<LI VALUE=1><P LANG="ca-ES" ALIGN=JUSTIFY STYLE="margin-top: 0.49cm; margin-bottom: 0cm">
+	Quines zones urbanes no tenen una parada d'autobusos en un radi de
+	500 m. 
+	</P>
+	<LI><P LANG="ca-ES" ALIGN=JUSTIFY STYLE="margin-bottom: 0cm">Quines
+	zones urbanes no tenen col&middot;legis en un radi de 1.000 m. 
+	</P>
+	<LI><P LANG="ca-ES" ALIGN=JUSTIFY STYLE="margin-bottom: 0cm">Quins
+	pous incomplixen la normativa en no respectar la dist&agrave;ncia
+	m&iacute;nima entre dos consecutius. 
+	</P>
+	<LI><P LANG="ca-ES" ALIGN=JUSTIFY STYLE="margin-bottom: 0.49cm">Etc.
+		</P>
+</UL>
+</BODY>
+</HTML>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="org.gvsig.symbology.fmap.symbols.PictureMarkerSymbol"/>
+    <property key="isShapeVisible" value="true"/>
+    <property key="desc" value="54"/>
+    <property key="imagePath" value="basic/symbol/basic_54.svg"/>
+    <property key="selImagePath" value="basic/symbol/basic_54sel.svg"/>
+    <property key="size" value="32.0"/>
+    <property key="unit" value="-1"/>
+    <property key="referenceSystem" value="0"/>
+</xml-tag>

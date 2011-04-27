@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+    <property key="desc" value="31"/>
+    <property key="isShapeVisible" value="true"/>
+    <property key="color" value="255,255,255,255"/>
+    <property key="rotation" value="0.0"/>
+    <property key="offsetX" value="0.0"/>
+    <property key="offsetY" value="0.0"/>
+    <property key="size" value="4.0"/>
+    <property key="outline" value="false"/>
+    <property key="unit" value="-1"/>
+    <property key="referenceSystem" value="0"/>
+    <property key="markerStyle" value="0"/>
+</xml-tag>

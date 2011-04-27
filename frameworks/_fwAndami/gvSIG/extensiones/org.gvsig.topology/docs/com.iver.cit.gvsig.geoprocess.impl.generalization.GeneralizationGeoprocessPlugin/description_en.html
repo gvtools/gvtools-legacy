@@ -1,0 +1,28 @@
+!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Linear Generalization</TITLE>
+</HEAD>
+<BODY LANG="es-ES" DIR="LTR">
+<P>
+<FONT COLOR="#800000">
+<B>Linear Generalization</B>
+</FONT>
+</P>
+<P>Linear Generalization is a kind of data compression algorithm. Consist in reduce the number of vertices needed to represent a linear geometry
+without modify its spatial identity.
+
+</P>
+<P>
+<IMG SRC="generalization_desc.png" NAME="Imagen1" ALIGN=LEFT BORDER=0>
+</P>
+<P>
+gvSIG supports two types of linear generalization: topologic and non-topologic. In topologic generalization geometry topology is preserved
+(closed polylines will remain closed, polygon's holes will be contained in polygon's shell, etc.)
+Non-topologic generalization is implemented with Douglas-Peucker algorithm.
+Distance tolerance is a parameter to specify the compression level of the resulting geometries.
+
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
+    <property key="color" value="122,255,200,255"/>
+    <property key="outline" value="255,0,0,255"/>
+    <property key="desc" value="&lt;html&gt;&lt;center&gt;Complex Symbol:&lt;br&gt;SimpleFill + MarkerFill&lt;br&gt;using CharacterSymbol&lt;/center&gt;&lt;/html&gt;"/>
+    <property key="isShapeVisible" value="true"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.MarkerFillSymbol"/>
+        <property key="rotation" value="0.0"/>
+        <property key="grid" value="true"/>
+        <property key="xOffset" value="10.0"/>
+        <property key="yOffset" value="10.0"/>
+        <property key="xSeparation" value="20.0"/>
+        <property key="ySeparation" value="20.0"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.CharacterMarkerSymbol"/>
+            <property key="color" value="0,0,0,255"/>
+            <property key="font" value="dialog.plain"/>
+            <property key="fontStyle" value="0"/>
+            <property key="symbolCode" value="115"/>
+            <property key="desc" value="Copia de smoking area.sym"/>
+            <property key="isShapeVisible" value="true"/>
+            <property key="xOffset" value="0.0"/>
+            <property key="yOffset" value="0.0"/>
+            <property key="rotation" value="0.0"/>
+        </xml-tag>
+    </xml-tag>
+</xml-tag>

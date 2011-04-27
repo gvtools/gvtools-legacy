@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.project.documents.layout.gui.Layout"/>
+    <property key="name" value="layout"/>
+    <property key="isCuadricula" value="false"/>
+    <property key="isEditable" value="true"/>
+    <property key="numBehind" value="0"/>
+    <property key="numBefore" value="35"/>
+    <property key="followHeaderEncoding" value="true"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.project.documents.layout.Attributes"/>
+        <property key="DPI" value="300"/>
+        <property key="DPISCREEN" value="72"/>
+        <property key="m_TypeUnit" value="1.0"/>
+        <property key="m_numX" value="0.25"/>
+        <property key="m_numY" value="0.25"/>
+        <property key="m_unitX" value="1.5559293523969722"/>
+        <property key="m_unitY" value="1.5559293523969722"/>
+        <property key="hasmargin" value="false"/>
+        <property key="m_resolutionSel" value="1"/>
+        <property key="m_typeSel" value="5"/>
+        <property key="m_selTypeUnit" value="2"/>
+        <property key="m_area" value="2.54 ,2.54 ,2.54 ,2.54"/>
+        <property key="anchoXalto" value="1.413793103448276"/>
+        <property key="m_isLandSel" value="true"/>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.project.documents.layout.Size"/>
+            <property key="ancho" value="118.9"/>
+            <property key="alto" value="84.1"/>
+        </xml-tag>
+        <xml-tag>
+            <property key="className" value="com.iver.cit.gvsig.project.documents.layout.Size"/>
+            <property key="ancho" value="118.9"/>
+            <property key="alto" value="84.1"/>
+        </xml-tag>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="FFrameView"/>
+        <property key="m_name" value="Sin título - 0"/>
+        <property key="x" value="2.7315234137078583"/>
+        <property key="y" value="2.0037583748342964"/>
+        <property key="w" value="105.11993044217083"/>
+        <property key="h" value="80.27146286410375"/>
+        <property key="m_Selected" value="0"/>
+        <property key="tag" value="view"/>
+        <property key="m_rotation" value="0.0"/>
+        <property key="level" value="31"/>
+        <property key="num" value="1"/>
+        <property key="m_Mode" value="0"/>
+        <property key="m_typeScale" value="0"/>
+        <property key="m_extension" value="0"/>
+        <property key="m_quality" value="0"/>
+        <property key="m_viewing" value="0"/>
+        <property key="m_bLinked" value="true"/>
+        <property key="m_mapUnits" value="1"/>
+        <property key="m_Scale" value="571498.0"/>
+        <property key="indice" value="-1"/>
+        <property key="showGrid" value="false"/>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="FFrameText"/>
+        <property key="m_name" value="FFrame"/>
+        <property key="x" value="109.38551866928768"/>
+        <property key="y" value="2.261895780517319"/>
+        <property key="w" value="7.738131173598305"/>
+        <property key="h" value="4.411408515057584"/>
+        <property key="m_Selected" value="0"/>
+        <property key="tag" value="tittle"/>
+        <property key="m_rotation" value="0.0"/>
+        <property key="level" value="32"/>
+        <property key="num" value="1"/>
+        <property key="s" value=""/>
+        <property key="m_isFixed" value="false"/>
+        <property key="m_pos" value="0"/>
+        <property key="fontName" value="SansSerif.plain"/>
+        <property key="fontStyle" value="0"/>
+        <property key="textColor" value="0,0,0,255"/>
+        <property key="transicionPixelsMilimetros" value="true"/>
+        <property key="cellPadding" value="0.0"/>
+        <property key="fontSize" value="0"/>
+        <property key="fixedFontSize" value="false"/>
+        <property key="surrounded" value="false"/>
+        <property key="hasTitle" value="false"/>
+        <property key="title"/>
+        <property key="titleSize" value="0"/>
+        <property key="frameBorderSize" value="0.0"/>
+        <property key="frameColor" value="0,0,0,255"/>
+        <property key="titleColor" value="0,0,0,255"/>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="FFrameLegend"/>
+        <property key="m_name" value="FFrame"/>
+        <property key="x" value="110.01762234585826"/>
+        <property key="y" value="7.809673268604085"/>
+        <property key="w" value="6.868952628566433"/>
+        <property key="h" value="14.034174161970045"/>
+        <property key="m_Selected" value="0"/>
+        <property key="tag" value="legend"/>
+        <property key="m_rotation" value="0.0"/>
+        <property key="level" value="33"/>
+        <property key="num" value="1"/>
+        <property key="m_numLayers" value="0"/>
+        <property key="m_max" value="0"/>
+        <property key="m_quality" value="0"/>
+        <property key="m_viewing" value="0"/>
+        <property key="fontName" value="SansSerif.plain"/>
+        <property key="fontStyle" value="0"/>
+        <property key="index" value="0"/>
+        <property key="nameLayers" value="anotacion2.shp"/>
+        <property key="areVisible" value="true"/>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="FFrameScaleBar"/>
+        <property key="m_name" value="FFrame"/>
+        <property key="x" value="110.51060270846916"/>
+        <property key="y" value="73.04804086420425"/>
+        <property key="w" value="6.498273980402885"/>
+        <property key="h" value="2.7200229721913303"/>
+        <property key="m_Selected" value="0"/>
+        <property key="tag" value="scale"/>
+        <property key="m_rotation" value="0.0"/>
+        <property key="level" value="34"/>
+        <property key="num" value="1"/>
+        <property key="m_bIntervalSet" value="false"/>
+        <property key="m_dif" value="0.8801508833312559"/>
+        <property key="m_hasleft" value="1"/>
+        <property key="m_nameUnit" value="Metros"/>
+        <property key="m_numUnit" value="1.4761999660474006"/>
+        <property key="m_height" value="80.27146286410375"/>
+        <property key="m_style" value="1"/>
+        <property key="m_units" value="1"/>
+        <property key="m_interval" value="2000.0"/>
+        <property key="m_numinterval" value="3"/>
+        <property key="m_numleft" value="2"/>
+        <property key="m_mapUnits" value="1"/>
+        <property key="fontName" value="SansSerif.plain"/>
+        <property key="fontStyle" value="0"/>
+        <property key="numDec" value="0"/>
+        <property key="index" value="0"/>
+        <property key="barcolor" value="0,0,0,255"/>
+        <property key="textcolor" value="0,0,0,255"/>
+        <property key="showNameUnits" value="true"/>
+        <property key="showDescription" value="true"/>
+        <property key="aboveName" value="false"/>
+        <property key="aboveIntervals" value="true"/>
+        <property key="aboveDescription" value="false"/>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="FFramePicture"/>
+        <property key="m_name" value="FFrame"/>
+        <property key="x" value="110.50431565878489"/>
+        <property key="y" value="76.34076969123936"/>
+        <property key="w" value="6.524345421809031"/>
+        <property key="h" value="5.932752551326573"/>
+        <property key="m_Selected" value="0"/>
+        <property key="tag" value="image"/>
+        <property key="m_rotation" value="0.0"/>
+        <property key="level" value="35"/>
+        <property key="num" value="1"/>
+        <property key="m_path" value=""/>
+        <property key="m_quality" value="0"/>
+        <property key="m_viewing" value="1"/>
+    </xml-tag>
+</xml-tag>

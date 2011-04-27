@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>DIFERENCIA</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.0  (Linux)">
+	<META NAME="CREATED" CONTENT="20070803;10474300">
+	<META NAME="CHANGED" CONTENT="20070808;10381000">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { size: 21cm 29.7cm }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="es-ES" DIR="LTR">
+<P ALIGN=JUSTIFY STYLE="margin-bottom: 0.49cm"><FONT COLOR="#800000"><B>DISSOLVER</B>
+<B>/ DISSOLVE</B></FONT></P>
+<P ALIGN=JUSTIFY>Este geoprocesso atua apenas sobre uma s&oacute;
+camada de entrada, cujo tipo de geometria dever&aacute; ser
+obrigatoriamente do tipo “pol&iacute;gono”. O algoritmo analisa
+cada pol&iacute;gono da camada de entrada, de tal forma que fusionar&aacute;
+em um s&oacute; pol&iacute;gono aqueles pol&iacute;gonos que tenham
+valor id&ecirc;ntico para um atributo especificado. 
+</P>
+<P ALIGN=JUSTIFY>Al&eacute;m disso, permite introduzir o <B>crit&eacute;rio
+espacial</B> na decis&atilde;o de fusionar v&aacute;rios pol&iacute;gonos.
+Desta forma, podemos <B>condicionar/ordenar</B> que dois pol&iacute;gonos
+s&oacute; sejam fusionados se, al&eacute;m dos atributos possu&iacute;rem
+o mesmo valor, <B>sejam adjacentes espacialmente</B>.<FONT COLOR="#ff0000">
+</FONT>
+</P>
+<IMG SRC="dissolvedesc.png" NAME="Imagen1" ALIGN=LEFT WIDTH=271 HEIGHT=285 BORDER=0>
+<P LANG="ca-ES" ALIGN=JUSTIFY STYLE="margin-left: 0.64cm"><B><FONT COLOR="#000000">Isto
+pode ser de utilidade em m&uacute;ltiplas situa&ccedil;&otilde;es.
+Suponhamos, por exemplo, que dispomos de uma camada de pol&iacute;gonos
+que representa os munic&iacute;pios de uma determinada comunidade
+aut&ocirc;noma. Neste momento necessitamos, para realizar um
+relat&oacute;rio, dispor de uma camada de pol&iacute;gonos com as
+prov&iacute;ncias, mas neste momento n&atilde;o temos esta
+informa&ccedil;&atilde;o. Podemos gerar uma camada de prov&iacute;ncias
+usando o geoprocesso &quot;Dissolver&quot;, especificando que se
+fusionar&atilde;o aqueles pol&iacute;gonos que tenham mesmo valor
+para o campo &quot;PROVCOD&quot; (c&oacute;digo da prov&iacute;ncia).
+</FONT></B>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<plugin-config>
+	<depends plugin-name="com.iver.cit.gvsig" />
+	<libraries library-dir="."/>
+	<resourceBundle name="text"/>
+	<extensions>
+		<extension class-name="org.gvsig.gps.GPSExtension"
+			description="GPS Support"
+			active="true"
+			priority="1">
+			<menu text="Archivo/GPS/gps_control_panel"
+				key="g" mnemonic="g"
+				tooltip="gps"
+				action-command="GPS_CONTROL_PANEL"
+				position="1"/>
+			<menu text="Archivo/GPS/pinta_punts_capturats"
+				key="g" mnemonic="g"
+				tooltip="gps"
+				action-command="PAINT_POINTS"
+				position="2"/>
+		</extension>	
+	</extensions>
+</plugin-config>
