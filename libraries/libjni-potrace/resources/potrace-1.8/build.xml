@@ -1,0 +1,54 @@
+	<project name="potrace-1.8" default="main" basedir=".">
+	<description>
+		Compila la librería potrace 1.8
+	</description>
+	<property name="build" location="bin/" />
+	<property name="cmake_build" location="." />
+	<property environment="env"/>
+	<condition property="potrace_version" value="1.8.0">
+		<os family="unix"/>
+	</condition>
+	<condition property="potrace_version" value="180">
+		<os family="windows"/>
+	</condition>
+	<condition property="cmake_generator" value="'Unix Makefiles'">
+		<os family="unix"/>
+	</condition>
+	<condition property="cmake_generator" value="'Eclipse CDT4 - MinGW Makefiles'">
+		<os family="windows"/>
+	</condition>		
+
+	<target name="main" description="prepare and compile natives" depends="clean,prepare-natives,compile-natives">
+	</target>
+
+	<target name="prepare-natives" description="prepares the natives to be compiled">
+		<mkdir dir="${cmake_build}"/>
+		<delete file="${cmake_build}/CMakeCache.txt"/>
+		<exec dir="${cmake_build}" executable="cmake" os="Linux" >
+			<arg line="." />
+			<arg line="-G${cmake_generator}" />
+			<arg line="-DCMAKE_BUILD_TYPE=Release" />
+			<arg line="-DJPOTRACE_VERSION=${jpotrace_version}" />
+		</exec>
+		<exec dir="${cmake_build}" executable="cmake" os="Windows 98,Windows 2000,Windows XP,Windows NT (Unknown)">
+			<arg line="." />
+			<arg line="-G${cmake_generator}" />
+			<arg line="-DCMAKE_BUILD_TYPE=Release" />
+			<arg line="-DJPOTRACE_VERSION=${jpotrace_version}" />
+		</exec>
+	</target>
+
+	<target name="compile-natives" description="compiles natives">
+		<exec dir="${cmake_build}" executable="make" os="Linux">
+		</exec>
+		<exec dir="${cmake_build}" executable="nmake" os="Windows 98,Windows 2000,Windows XP,Windows NT (Unknown)">
+			<arg line="install" />
+		</exec>
+	</target>
+		
+	<target name="clean" description="clean distribution">
+		<delete dir="lib-dist"/>
+		<delete dir="BMCMake"/>
+	</target>
+
+</project>
