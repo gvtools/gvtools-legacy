@@ -1,0 +1,231 @@
+<project name="extScripting" default="install" basedir=".">
+    <description>
+        Instala el plugin de Centrar la Vista sobre un punto en Andami.
+    </description>
+  <!-- set global properties for this build -->
+  <property name="extensions-dir" location="../_fwAndami/gvSIG/extensiones"/>
+  <property name="src" location="src"/>
+  <property name="build" location="bin"/>
+  <property name="src-test" location="src-test"/>
+  <property name="build-test" location="bin-test"/>
+  <property name="doc"  location="doc"/>
+  <property name="scripts"  location="scripts"/>
+  <property name="dist"  location="dist"/>
+  <property name="lib"  location="lib"/>
+  <property name="extensionDir" location="../_fwAndami/gvSIG/extensiones"/>
+  <property name="mainplugin" value="com.iver.cit.gvsig"/>
+  <property name="without_src"  location="without_src"/>
+  <property name="plugin" value="org.gvsig.scripting"/>
+  <property name="jarName" value="${plugin}.jar"/>
+  <property name="andami" location="../_fwAndami"/>
+  <property name="andamiLibs" location="${andami}/lib"/>
+  <property name="fmap" location="../libFMap"/>
+  <property name="fmapLibs" location="${fmap}/lib"/>
+  <property name="installBaseDir" location="${andami}"/>
+  <property name="installDir" location="${installBaseDir}/gvSIG/extensiones/${plugin}"/>
+  <property name="installLibDir" location="${installBaseDir}/gvSIG/extensiones/${mainplugin}/lib"/>
+  <import file="../binaries/ant/utilities.xml"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+	<echo>
+		Compiling ${ant.project.name}...</echo>
+  </target>
+
+  <target name="dist" depends="init"
+	description="generate the distribution" >
+    <!-- Remove previous distribution directory -->
+    <delete dir="${dist}"/>
+    <!-- Create the distribution directory structure -->
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${dist}/src"/>
+    <mkdir dir="${dist}/doc"/>
+    <mkdir dir="${dist}/bin"/>
+  	<mkdir dir="${dist}/scripts"/>
+  	<mkdir dir="${dist}/lib"/>
+    <mkdir dir="${dist}/bin/org"/>
+    <mkdir dir="${dist}/bin/org/gvsig"/>
+  	<mkdir dir="${dist}/bin/org/gvsig/scripting"/>
+  	<mkdir dir="${dist}/bin/org/gvsig/scripting/images"/>
+    <mkdir dir="${dist}/images"/>
+    <mkdir dir="${dist}/config"/>
+    <!-- Copy necessary distribution files to dist dir -->
+    <copy todir="${dist}/src">
+      <fileset dir="${src}"/>
+    </copy>
+    <copy todir="${dist}/lib">
+      <fileset dir="${lib}"/>
+    </copy>
+    <copy todir="${dist}/doc">
+      <fileset dir="${doc}"/>
+    </copy>
+    <copy todir="${dist}/scripts">
+      <fileset dir="${scripts}"/>
+    </copy>
+    <copy todir="${dist}/images">
+      <fileset dir="images"/>
+    </copy>
+    <copy file="config/config.xml" todir="${dist}/config"/>
+  	<copy file="build.number" todir="${dist}"/>
+    <copy file="build.xml" todir="${dist}"/>
+    <copy todir="${dist}">
+    	<fileset dir="config" includes="text*.properties"/>
+    </copy>
+    <copy todir="${dist}/bin/org/gvsig/scripting">
+    	<fileset dir="config" includes="text*.properties"/>
+    </copy>
+    <jar jarfile="${dist}/bin/org/gvsig/scripting/${plugin}.jar" basedir="${build}"/>
+  	<copy file="config/config.xml" todir="${dist}/bin/org/gvsig/scripting"/>
+  	<copy file="build.number" todir="${dist}/bin/org/gvsig/scripting"/>
+    <copy todir="${dist}/bin/org/gvsig/scripting/images">
+      <fileset dir="images"/>
+    </copy>
+    <!-- Zip distribution -->
+    <zip destfile="${dist}/gvSIGScriptingPlugin.zip"
+         basedir="${dist}"
+         update="true"
+    />
+  </target>
+
+  <target name="clean-orig" depends="dist"
+		description="clean dist directory" >
+    <!-- Clean the distribution directory -->
+    <delete dir="${dist}/src"/>
+  	<delete dir="${dist}/lib"/>
+    <delete dir="${dist}/doc"/>
+    <delete dir="${dist}/bin"/>
+  	<delete dir="${dist}/scripts"/>
+    <delete dir="${dist}/images"/>
+    <delete dir="${dist}/config"/>
+  	<delete file="${dist}/build.xml"/>
+  	<delete>
+        <fileset dir="${dist}" includes="**/*.properties"/>
+    </delete>
+  </target>
+
+  <target name="generate-without-source" depends="init" description="generate the distribution without the source file" >
+
+    <!-- Create the distribution directory -->
+  	<delete dir="${without_src}"/>
+  	<mkdir dir="${without_src}"/>
+  	<mkdir dir="${without_src}/${mainplugin}/lib"/>
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${without_src}/${mainplugin}/lib/${plugin}.jar" basedir="${build}"/>
+    <copy file="config/config.xml" todir="${without_src}"/>
+  	<copy file="build.number" todir="${without_src}"/>
+    <copy todir="${without_src}">
+    	<fileset dir="config" includes="text*.properties"/>
+    </copy>
+    <!--copy todir="${without_src}/${mainplugin}/lib"-->
+    <copy todir="${without_src}/${mainplugin}/lib">
+    	<fileset dir="${lib}" includes="*.jar,*.zip"/>
+    </copy>
+    <copy todir="${without_src}/images">
+    	<fileset dir="images/" includes="*"/>
+    </copy>
+    <copy todir="${without_src}/scripts">
+    	<fileset dir="${scripts}" includes="**/**"/>
+    </copy>
+  </target>
+
+
+    <target name="dist-without-source" depends="generate-without-source" description="make a zip file">
+        <move todir="${dist}/${mainplugin}/">
+        	<fileset dir="${without_src}/${mainplugin}/"/>
+        </move>
+        <move todir="${dist}/${plugin}/">
+        	<fileset dir="${without_src}" includes="**/**"/>
+        </move>
+
+        <zip destfile="./gvSIGScriptingPlugin.zip"
+             basedir="${dist}"
+             update="false"/>
+
+    	<delete dir="${dist}/${plugin}/"/>
+    	<delete dir="${dist}/${mainplugin}/"/>
+        <move todir="${dist}/" file="./gvSIGScriptingPlugin.zip"/>
+
+    </target>
+
+
+
+  <target name="install-extension" depends="generate-without-source" description="instal extension to andami directory">
+    <move todir="${extensionDir}/${mainplugin}/lib">
+    	<fileset dir="${without_src}/${mainplugin}/lib" includes="*.jar,*.zip"/>
+    </move>
+  	<delete dir="${without_src}/${mainplugin}/lib"/>
+  	<delete dir="${without_src}/${mainplugin}"/>
+    <move todir="${extensions-dir}/${plugin}/">
+    	<fileset dir="${without_src}" includes="**/**"/>
+    </move>
+  </target>
+
+	<target name="batch-build"
+			description="compile the sources, create the jar file"
+			depends="init,compile,create-jar,copy-data-files,copy-scripts,move-to-installDir">
+	</target>
+
+	<target name="install"
+			description="compile the sources, create the jar file"
+			depends="init,create-jar,copy-data-files,copy-scripts,move-to-installDir">
+	</target>
+
+	<target name="compile" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<antcall target="gvSIG-import-build-number"/>
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+	</target>
+
+	<target name="create-jar"
+			description="Creates the plugin jar">
+		<mkdir dir="${dist}"/>
+	    <jar jarfile="${dist}/${jarName}" basedir="${build}" />
+	</target>
+
+	<target name="copy-data-files">
+	    <copy file="config/config.xml" todir="${dist}"/>
+		<copy file="build.number" todir="${dist}"/>
+		<copy todir="${dist}">
+			<fileset dir="config" includes="text*.properties"/>
+		</copy>
+		<copy todir="${dist}/images">
+			<fileset dir="images/" includes="*"/>
+		</copy>
+	</target>
+
+	<target name="copy-scripts">
+		<copy todir="${dist}/scripts">
+			<fileset dir="${scripts}" includes="**/**"/>
+		</copy>
+	</target>
+
+	<target name="move-to-installDir">
+	    <move todir="${installLibDir}">
+	    	<fileset dir="${dist}" includes="${jarName}"/>
+	    </move>
+		<move todir="${installDir}">
+			<fileset dir="${dist}" includes="**/**"/>
+		</move>
+		<copy todir="${installLibDir}">
+			<fileset dir="${lib}" includes="**/**"/>
+		</copy>
+	</target>
+
+	  <target name="clean"
+	        description="clean up" >
+	    <!-- Delete the ${build} and ${dist} directory trees -->
+	    <delete dir="${build}"/>
+	    <delete dir="${dist}"/>
+	  </target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="org.gvsig.scripting.AllTests"/>
+		</antcall>
+	</target>
+</project>
