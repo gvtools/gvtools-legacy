@@ -1,0 +1,17 @@
+<project name="FMap_SLD" default="generar_clases">
+
+<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+  <classpath>
+    <fileset dir="../../lib" includes="*.jar" excludes="ant.jar"/>
+    <fileset dir="../../..">
+      <include name="jaxp/**/*.jar"/>
+      <include name="jwsdp-shared/lib/**/*.jar"/>
+    </fileset>
+  </classpath>
+</taskdef>
+
+<xjc target="src">
+  <schema  dir="src" includes="*.xsd"/>
+</xjc>
+
+</project>

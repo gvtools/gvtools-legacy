@@ -1,0 +1,202 @@
+package com.iver.cit.gvsig.fmap.layers;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+
+import org.cresques.cts.IProjection;
+
+import com.hardcode.driverManager.DriverLoadException;
+import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
+import com.iver.cit.gvsig.exceptions.layers.DriverLayerException;
+import com.iver.cit.gvsig.exceptions.layers.FileLayerException;
+import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
+import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
+import com.iver.cit.gvsig.exceptions.layers.NameLayerException;
+import com.iver.cit.gvsig.exceptions.layers.ProjectionLayerException;
+import com.iver.cit.gvsig.exceptions.layers.XMLLayerException;
+import com.iver.cit.gvsig.fmap.crs.CRSFactory;
+import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
+import com.iver.cit.gvsig.fmap.drivers.WithDefaultLegend;
+import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
+import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
+import com.iver.cit.gvsig.fmap.rendering.styling.labeling.AttrInTableLabelingStrategy;
+import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
+import com.iver.utiles.XMLEntity;
+
+public class FLayerFileVectorial extends FLyrVect{
+	private boolean loaded = false;
+	private File dataFile = null;
+	private VectorialFileDriver fileDriver = null;
+
+	public FLayerFileVectorial() {
+		super();
+	}
+
+	public FLayerFileVectorial(String name, String fileName,String driverName,String projectionName) throws Exception {
+		super();
+
+		this.setName(name);
+
+		this.setFileName(fileName);
+
+		this.setDriverByName(driverName);
+
+		this.setProjectionByName(projectionName);
+	}
+
+	/* Esto deberia ir en el FLyrDefault */
+	public void setProjectionByName(String projectionName) throws Exception{
+		IProjection proj = CRSFactory.getCRS(projectionName);
+		if (proj == null) {
+			throw new Exception("No se ha encontrado la proyeccion: "+ projectionName);
+		}
+		this.setProjection(proj);
+
+	}
+
+	public void setFileName(String filePath) throws FileNotFoundException{
+		if (dataFile != null) {
+			//TODO: que excepcion lanzar???
+			return;
+		}
+		File file = new File(filePath);
+		if (!file.exists()) {
+			throw new FileNotFoundException(filePath);
+		}
+		this.dataFile = file;
+	}
+
+	public void setFile(File file) throws FileNotFoundException {
+		if (dataFile != null) {
+			//TODO: que excepcion lanzar???
+			return;
+		}
+		if (!file.exists()) {
+			throw new FileNotFoundException(file.getAbsolutePath());
+		}
+		this.dataFile = new File(file.getAbsolutePath());
+	}
+
+	public String getFileName() {
+		if (this.dataFile == null) {
+			return null;
+		}
+		return this.dataFile.getAbsolutePath();
+	}
+
+
+	public void setDriver(VectorialFileDriver driver) {
+		this.fileDriver = driver;
+	}
+
+	public void setDriverByName(String driverName) throws DriverLoadException {
+		this.setDriver(
+		  (VectorialFileDriver)LayerFactory.getDM().getDriver(driverName)
+		);
+	}
+
+	public VectorialFileDriver getDriver() {
+		return this.fileDriver;
+	}
+
+	/* FIXME: esto tendria que tener declarado un throws de algo*/
+	public void wakeUp() throws LoadLayerException {
+		if (!loaded) {
+			this.load();
+		}
+
+	}
+
+
+	public void load() throws LoadLayerException {
+		if (this.dataFile == null) {
+			this.setAvailable(false);
+			throw new FileLayerException(getName(),null);
+		}
+		if (this.getName() == null || this.getName().length() == 0) {
+			this.setAvailable(false);
+			throw new NameLayerException(getName(),null);
+		}
+		if (this.fileDriver == null) {
+			this.setAvailable(false);
+			throw new DriverLayerException(getName(),null);
+		}
+		if (this.getProjection() == null) {
+			this.setAvailable(false);
+			throw new ProjectionLayerException(getName(),null);
+		}
+
+			VectorialFileAdapter adapter = new VectorialFileAdapter(this.dataFile);
+			adapter.setDriver(this.fileDriver);
+
+			this.setSource(adapter);
+
+			try {
+				this.putLoadSelection();
+				this.putLoadLegend();
+				this.initializeLegendDefault();
+			} catch (LegendLayerException e) {
+				this.setAvailable(false);
+				throw new LegendLayerException(getName(),e);
+			} catch (XMLException e) {
+				this.setAvailable(false);
+				throw new XMLLayerException(getName(),e);
+			} catch (ReadDriverException e) {
+				this.setAvailable(false);
+				throw new LoadLayerException(getName(),e);
+			}
+		this.cleanLoadOptions();
+		this.loaded = true;
+	}
+
+	/* Esto deberia ir en FLyrVect */
+	private void initializeLegendDefault() throws LegendLayerException, ReadDriverException {
+		if (this.getLegend() == null) {
+            if (this.getRecordset().getDriver() instanceof WithDefaultLegend) {
+                WithDefaultLegend aux = (WithDefaultLegend) this.getRecordset().getDriver();
+                this.setLegend((IVectorLegend) aux.getDefaultLegend());
+
+                ILabelingStrategy labeler = aux.getDefaultLabelingStrategy();
+                if (labeler instanceof AttrInTableLabelingStrategy) {
+                	((AttrInTableLabelingStrategy) labeler).setLayer(this);
+                }
+
+                this.setLabelingStrategy(labeler);
+            } else {
+                this.setLegend(LegendFactory.createSingleSymbolLegend(
+                        this.getShapeType()));
+            }
+		}
+	}
+
+	public void setXMLEntity(XMLEntity xml) throws XMLException {
+        IProjection proj = null;
+        if (xml.contains("proj")) {
+            proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
+        }
+        else
+        {
+            proj = this.getMapContext().getViewPort().getProjection();
+        }
+		this.setName(xml.getName());
+		this.setProjection(proj);
+		try {
+			this.setDriver(
+				(VectorialFileDriver)LayerFactory.getDM().getDriver(
+					xml.getStringProperty("driverName")
+				)
+			);
+		} catch (DriverLoadException e) {
+			throw new XMLException(e);
+		} catch (ClassCastException e) {
+			throw new XMLException(e);
+		}
+		try {
+			this.setFileName(xml.getStringProperty("file"));
+		} catch (FileNotFoundException e) {
+			throw new XMLException(e);
+		}
+
+		super.setXMLEntityNew(xml);
+	}
+}

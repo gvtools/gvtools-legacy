@@ -1,0 +1,451 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>An&aacute;lisis CAD</title>
+</head>
+<body>
+<big><big><big>An&aacute;lisis CAD<br>
+</big></big></big><big><big><big><small><a href="#1_Capas">1. Capas</a><br>
+<a href="#2_Geometrias">2. Geometr&iacute;as</a><br>
+<a href="#3_Editor">3. Editor</a><br>
+<a href="#4_Boques"></a></small></big></big></big><big><big><big><small><br>
+<a name="1_Capas"></a>1. Capas<br>
+</small></big></big></big><big><big><small><small>&nbsp;&nbsp; Los
+ficheros de CAD se van a abrir mediante una capa colecci&oacute;n (a
+partir de ahora <span style="font-weight: bold;">capa CAD</span>) de
+la cual colgar&aacute;n las capas individuales correspondientes a las
+capas internas del fichero de CAD (a partir de ahora <span
+ style="font-weight: bold;">capa interna CAD</span>). Durante la
+edici&oacute;n, aparece el concepto de capa activa que es distinto al
+concepto de capa activa mantenido en FMap. Utilizaremos el
+t&eacute;rmino <span style="font-weight: bold;">capa en edici&oacute;n</span>
+para referirnos a la capa interna CAD sobre la que se insertar&aacute;n
+las geometr&iacute;as dibujadas durante la edici&oacute;n y el
+t&eacute;rmino <span style="font-weight: bold;">capa activa</span>
+para la capa/s seleccionada/s cuando no estamos editando sobre la que
+se realizan operaciones de zoom al tema, selecci&oacute;n, ... De esta
+manera para editar un archivo CAD pondremos como capa activa la capa
+CAD del fichero que queremos editar y diremos a gvSIG que queremos
+comenzar la edici&oacute;n. En ese instante, una de las capas internas
+CAD (usualmente la capa cero) se pondr&aacute; como capa en
+edici&oacute;n y no podremos poner como capa en edici&oacute;n ninguna
+capa que no pertenezca a la capa que estamos editando.<br>
+<br>
+&nbsp;&nbsp;&nbsp; Las capas internas CAD tienen una serie de atributos:<br>
+</small></small></big></big>
+<ul>
+  <li>Visibilidad: Toda capa en gvSIG tiene ese atributo, por lo que ya
+est&aacute; implementado</li>
+  <li>En edici&oacute;n: Cuando se pone en edici&oacute;n una capa CAD,
+s&oacute;lo una de sus capas internas CAD estar&aacute; en
+edici&oacute;n.</li>
+  <li>Bloqueada: No se permite la edici&oacute;n sobre ella</li>
+  <li>Color de dibujo.<br>
+  </li>
+  <li>Tipo de linea.<br>
+  </li>
+</ul>
+<big><big><small><small><br>
+</small></small></big></big><big><big><big><small><a name="2_Geometrias"></a>2.
+Geometr&iacute;as<br>
+</small></big></big></big>&nbsp;&nbsp;&nbsp; Las geometr&iacute;as de
+CAD ser&aacute;n como las geometr&iacute;as de FMap pero con algunas
+caracter&iacute;sticas adicionales ya que deber&aacute;n de tener un
+color (permiti&eacute;ndose los valores t&iacute;picos de un campo de
+color m&aacute;s los valores "por capa" y "por bloque") y un tipo de
+linea asociado. Adem&aacute;s, para la realizaci&oacute;n del snapping,
+toda geometr&iacute;a deber&aacute; de devolver una serie de puntos de
+snapping a los que ajustar los puntos que introduce el usuario y para
+el uso de la herramienta por defecto, deber&aacute; de devolver los
+puntos sobre los que se situar&aacute;n handlers para la
+modificaci&oacute;n de los mismos.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp; Los
+puntos a los que se puede ajustar mediante el snapping son los
+siguientes:
+<br>
+<!--[if !supportLists]--><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""><span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;">
+</span></span></span><!--[endif]-->
+<ul>
+  <li><span style="font-size: 11pt; line-height: 150%;">Punto
+m&aacute;s cercano</span> </li>
+  <li><span style="font-size: 11pt; line-height: 150%;">Punto final</span>
+  </li>
+  <li><span style="font-size: 11pt; line-height: 150%;">Punto medio</span>
+  </li>
+  <li><span style="font-size: 11pt; line-height: 150%;">Centro</span> </li>
+  <li><span style="font-size: 11pt; line-height: 150%;"><span
+ style="font-family: &quot;times new roman&quot;;">T</span>angente</span> </li>
+  <li><span style="font-size: 11pt; line-height: 150%;">Perpendicular</span>
+  </li>
+  <li><span style="font-size: 11pt; line-height: 150%;">Cuadrante</span>
+  </li>
+  <li><span style="font-size: 11pt; line-height: 150%;">Punto de
+inserci&oacute;n</span> </li>
+  <li><span style="font-size: 11pt; line-height: 150%;">Punto
+intersecci&oacute;n</span></li>
+</ul>
+<!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[if !supportLists]--><!--[if !supportLists]--><!--[if !supportLists]--><!--[if !supportLists]--><br>
+<br>
+&nbsp;&nbsp;&nbsp; Distinguimos dos tipos de geometr&iacute;as, las
+simples y las complejas. La manera de utilizar geometr&iacute;as
+complejas ser&aacute; mediante una geometr&iacute;a especial que sea
+una colecci&oacute;n de geometr&iacute;as. Algunas de las
+geometr&iacute;as simples pueden dibujarse especificando distintas
+coordenadas y todas pueden dibujarse mediante el uso del rat&oacute;n y
+mediante el uso de la consola. Tenemos la siguiente
+clasificaci&oacute;n de geometr&iacute;as junto con sus distintos
+m&eacute;todos
+de dibujado:<br>
+<p
+ style="margin: 5.95pt 0cm 5.95pt 72pt; text-indent: -18pt; line-height: 150%;"><!--[if !supportLists]--><span
+ style="font-size: 10pt; line-height: 150%; font-family: &quot;Courier New&quot;;"><span
+ style=""></span></span></p>
+<ul>
+  <li>&nbsp;&nbsp;<span style="font-weight: bold;"> </span>Simples </li>
+</ul>
+<!--[if !supportLists]-->
+<ul style="margin-left: 40px;">
+  <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: &quot;Courier New&quot;;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Punto. </span></li>
+  <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: &quot;Courier New&quot;;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">L&iacute;nea. </span><span
+ style="font-size: 11pt; line-height: 150%;">Permite
+dibujar una l&iacute;nea especificando el punto de inicio y el punto
+final. Como se ha
+comentado se pueden elegir entre varias opciones a la hora de indicar
+estos
+puntos, por ejemplo una vez dibujado el punto de inicio podemos definir
+el
+punto final especificando la longitud del segmento y su
+orientaci&oacute;n (&aacute;ngulo).</span> </li>
+  <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: &quot;Courier New&quot;;"><span
+ style=""><span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;"></span></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Arco.</span><span
+ style="font-size: 11pt; line-height: 150%;"> Un arco
+es una porci&oacute;n de un c&iacute;rculo. Se define mediante tres
+puntos. Hay varios
+m&eacute;todos para dibujar un c&iacute;rculo:</span> </li>
+  <ul>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Tres puntos (inicio,
+segundo y final).</span> </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Inicio, centro y final.</span>
+    </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Inicio, centro, longitud
+de la cuerda.</span> </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Inicio, final, radio.</span>
+    </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Inicio, final,
+&aacute;ngulo inclu&iacute;do.</span> </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Inicio, final,
+direcci&oacute;n inicial.</span><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"></span><span
+ style="font-size: 11pt; line-height: 150%;"></span></li>
+    <li><span style="font-size: 11pt; line-height: 150%;">Inicio,
+radio, &aacute;ngulo.</span></li>
+  </ul>
+  <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: &quot;Courier New&quot;;"><span
+ style=""><span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;"></span></span></span><span
+ style="font-size: 11pt; line-height: 150%;"><span
+ style="font-family: &quot;times new roman&quot;;">C</span>&iacute;rculo. </span><span
+ style="font-size: 11pt; line-height: 150%;">Se
+especifica mediante cualquiera de los siguientes m&eacute;todos:.</span>
+  </li>
+  <ul>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Centro, Radio.</span> </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Centro, Di&aacute;metro.</span>
+    </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Dos puntos.</span> </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Tres puntos.</span> </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""><span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;"></span></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Radio, tangente, tangente</span></li>
+    <li><span style="font-size: 11pt; line-height: 150%;"></span><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""><span
+ style="font-family: &quot;Times New Roman&quot;; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;"></span></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Convertir arco a
+c&iacute;rculo.</span></li>
+  </ul>
+  <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: &quot;Courier New&quot;;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Elipse. </span><span
+ style="font-size: 11pt; line-height: 150%;">M&eacute;todos
+para dibujar una elipse:</span> </li>
+  <ul>
+    <li><span style="font-size: 11pt; line-height: 150%;">Eje, eje.</span>
+    </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Eje, rotaci&oacute;n.</span>
+    </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Centro, eje.</span> </li>
+    <li><span
+ style="font-size: 10pt; line-height: 150%; font-family: Wingdings;"><span
+ style=""></span></span><span
+ style="font-size: 11pt; line-height: 150%;">Centro, rotaci&oacute;n.</span></li>
+  </ul>
+</ul>
+<!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]--><!--[if !supportLists]--><!--[endif]-->
+<ul>
+  <li>Complejas</li>
+</ul>
+<!--[if !supportLists]--><span
+ style="font-size: 10pt; line-height: 150%; font-family: &quot;Courier New&quot;;"><span
+ style=""></span></span>
+<ul style="margin-left: 40px;">
+  <li><span style="font-size: 11pt; line-height: 150%;">Polil&iacute;nea.
+    </span><span style="font-size: 11pt; line-height: 150%;">Es
+una entidad formada por un conjunto de l&iacute;neas y/o arcos.</span> </li>
+  <li><span style="font-size: 11pt; line-height: 150%;">Rect&aacute;ngulo.
+    </span><span style="font-size: 11pt; line-height: 150%;">Se
+dibuja un rect&aacute;ngulo especificando sus esquinas opuestas. Por
+defecto se dibuja
+paralelo a la alineaci&oacute;n del grill. Debe permitir la
+opci&oacute;n de dibujar un
+cuadrado.</span> </li>
+  <li><span style="font-size: 11pt; line-height: 150%;">Dibujar
+pol&iacute;gonos.</span><span
+ style="font-size: 11pt; line-height: 150%;"> Est&aacute;n compuestos
+por un m&iacute;nimo de 3 lados de igual longitud (en otros
+programas de CAD tienen un m&aacute;ximo de alrededor de 1000 lados).
+M&eacute;todos para
+dibujar un pol&iacute;gono:</span> </li>
+  <ul>
+    <li><span style="font-size: 11pt; line-height: 150%;">Centro y
+distancia del centro a cada v&eacute;rtice.</span> </li>
+    <li><span style="font-size: 11pt; line-height: 150%;">Centro y
+v&eacute;rtice (se especifica la ubicaci&oacute;n de un v&eacute;rtice).</span></li>
+    <li><span style="font-size: 11pt; line-height: 150%;"></span><span
+ style="font-size: 11pt; line-height: 150%;">Centro y distancia al
+punto medio de un lado.</span></li>
+  </ul>
+  <li><span style="font-size: 11pt; line-height: 150%;">Spline. </span><span
+ style="font-size: 11pt; line-height: 150%;">Es una
+curva suave definida por un conjunto de puntos. Se define especificando
+los
+puntos que la definen. Debe tener la opci&oacute;n de Tolerancia, que
+determina con
+cuanta precisi&oacute;n la spline se ajusta al conjunto de puntos que
+se especifica.</span> </li>
+  <li><span style="font-size: 11pt; line-height: 150%;">Bloques. </span><span
+ style="font-size: 11pt; line-height: 150%;">Los
+bloques son unas entidades especiales que una vez guardadas pueden ser
+insertadas y manipuladas en el dibujo como una entidad &uacute;nica.
+Las operaciones
+con bloques m&aacute;s comunes son:</span> </li>
+  <ul>
+    <li><span style="font-size: 11pt; line-height: 150%;">Crear un
+bloque.</span> </li>
+    <li><span style="font-size: 11pt; line-height: 150%;">Insertar un
+bloque.</span></li>
+  </ul>
+</ul>
+<span style="font-size: 11pt; line-height: 150%;"><a name="3_Editor"></a><big><big><big>3.
+Editor<br>
+</big></big></big></span><span
+ style="font-size: 11pt; line-height: 150%;"></span>&nbsp;&nbsp;&nbsp;
+El editor de geometr&iacute;as se dispondr&aacute; en dos capas, la
+capa del modelo y la capa de la interfaz, con el fin de que
+independientemente de que se a&ntilde;adan las geometr&iacute;as desde
+la consola o mediante el uso del rat&oacute;n, la ejecuci&oacute;n de
+las acciones pase siempre por los mismos m&eacute;todos del modelo.
+Para entender este apartado conviene estar m&iacute;nimamente
+familiarizado con la interfaz gr&aacute;fica de AutoCAD 2004 o
+similares.<br>
+<small><br>
+</small><big>3.1 Modelo del editor</big><br>
+&nbsp;&nbsp;&nbsp; El modelo del editor tendr&aacute; una herramienta
+seleccionada mediante la cual operar&aacute; con las geometr&iacute;as
+de las capas internas CAD (la capa interna CAD en edici&oacute;n si la
+herramienta es de dibujo). Las herramientas de edici&oacute;n
+constar&aacute;n de dos partes a nivel conceptual: <br>
+<ul>
+  <li>la parte del comportamiento que toma los par&aacute;metros</li>
+  <li>el resultado producido por estos. <br>
+  </li>
+</ul>
+&nbsp;&nbsp;&nbsp; Por ejemplo, en la herramienta a nivel de interfaz
+que dibuja un c&iacute;rculo, la opci&oacute;n de especificar 3 puntos,
+centro y radio, etc y la posterior secuencia de puntos que se pide
+ser&iacute;a su comportamiento mientras que el circulo insertado en la
+capa interna CAD ser&iacute;a el resultado de la herramienta.<br>
+<br>
+&nbsp;&nbsp;&nbsp; Se han diferenciado estas dos partes de la
+herramienta con el fin de explicar en profundidad la parte del
+comportamiento. Dicho comportamiento viene definido por un
+aut&oacute;mata de estados finitos por cuyos estados nos iremos
+desplazando durante la introducci&oacute;n de datos. Por ejemplo, el
+diagrama de estados finitos de la herramienta c&iacute;rculo
+ser&iacute;a el siguiente (TODO poner el diagrama) (para el AutoCAD
+2004):<br>
+<div style="text-align: left;"><img alt=""
+ src="../../FMap%2003%20CAD/docs/cad/diagramas/linea.gif"
+ style="height: 440px; width: 500px;"><br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; Los estados vendr&aacute;n identificados por un
+n&uacute;mero entero, mientras que las transiciones ser&aacute;n
+strings correspondi&eacute;ndose al texto que hay que escribir en la
+consola de edici&oacute;n o textos especiales indicando acciones de
+usuario. Estas acciones son independientemente del interfaz usado para
+realizar la acci&oacute;n (rat&oacute;n, teclado, ...). Entre las
+transiciones permitidas podemos destacar las transiciones de "punto",
+"numero", "aceptar" y "cancelar".<br>
+<br>
+&nbsp;&nbsp;&nbsp; La edici&oacute;n de CAD se realizar&aacute; sobre
+un MapControl. Para ello contamos con el inconveniente de que las
+herramientas de MapControl no tienen estado y han de pintar ellas toda
+la imagen. Por el contrario, las herramientas que estamos definiendo
+tienen un estado y al dibujar y operar deben conocer cu&aacute;l es o
+cu&aacute;les son las geometr&iacute;as seleccionadas, recibiendo un
+objeto sobre el que dibujar&aacute;n en el que ya est&aacute;n
+dibujadas las geometr&iacute;as del fichero en edici&oacute;n. Para
+emplear herramientas de CAD utilizaremos pues una herramienta especial
+CADToolAdapter que capturar&aacute; los eventos del rat&oacute;n,
+transform&aacute;ndolos en eventos de transici&oacute;n entre estados
+para la herramienta de CAD seleccionada. El CADToolAdapter
+deber&aacute; de dibujar la capa en edici&oacute;n y luego delegar el
+dibujado en la herramienta CAD seleccionada. Resumiendo, la herramienta
+CADToolAdapter servir&aacute; de adaptador entre las facilidades que
+proporcional MapControl para las herramientas y las necesidades de las
+herramientas de CAD.<br>
+<br>
+&nbsp;&nbsp;&nbsp; Las funciones del CADToolAdapter ser&aacute;n las
+siguientes:<br>
+<ul>
+  <li>Mantener una referencia al <a
+ href="Edici%F3n%20vectorial%20en%20FMap.html">EditableFeatureSource</a>
+que est&aacute; en edici&oacute;n.</li>
+  <li>Mantener la selecci&oacute;n actual de la fuente de datos
+editable.</li>
+  <li>Traducir los eventos de rat&oacute;n y las entradas por consola
+en transiciones entre estados de la CadTool seleccionada.</li>
+  <li>Dibujar la fuente de datos y delegar el dibujado del estado
+actual de la herramienta en la CadTool seleccionada.</li>
+  <li>Obtener los puntos de snap dado un punto y dibujar el efecto del
+snaping para la posici&oacute;n actual del rat&oacute;n sea cual sea el
+estado de la herramienta seleccionada.</li>
+  <li>Obtener el punto de rastreo para la posici&oacute;n actual del
+rat&oacute;n si est&aacute; activado<br>
+  </li>
+  <li>Traducir los puntos recibidos del MapControl de coordenadas de la
+imagen a coordenadas del mapa ajustando al punto de snap en caso haber
+alguno y estar activada dicha funcionalidad.</li>
+  <li>Traducir los eventos del MapControl en transiciones en el estado
+de las herramientas de CAD.</li>
+  <li>Obtener el estado de la herramienta de CAD y poner la pregunta
+correspondiente en la consola. Escuchar la respuesta y generar una
+transici&oacute;n en consecuencia<br>
+  </li>
+</ul>
+&nbsp;&nbsp;&nbsp; Para realizar el snapping, se deben de introducir en
+un &iacute;ndice espacial, los puntos de snapping de todas las
+geometr&iacute;as, adem&aacute;s de que deben mantenerse actualizados
+dichos &iacute;ndices. Esto quiere decir que si se modifica una
+geometr&iacute;a se deber&aacute;n de eliminar los puntos de la
+geometr&iacute;a antes de la modificaci&oacute;n e insertar los puntos
+de la geometr&iacute;a tras la modificaci&oacute;n. Adem&aacute;s, al
+realizar snapping, debe aparecer en el editor un tooltip indicando el
+tipo del punto al que se hace snapping (centro, punto medio, ...)
+adem&aacute;s de que el efecto del snapping puede dibujarse de distinta
+manera en funci&oacute;n del tipo de punto por lo que el tipo de punto
+deber&aacute; ser retornado por las geometr&iacute;as y almacenado en
+el &iacute;ndice espacial junto con el punto en s&iacute;. <br>
+<br>
+&nbsp;&nbsp;&nbsp; Para la gesti&oacute;n del snapping se deber&aacute;
+de tener un &iacute;ndice espacial
+con los puntos susceptibles de entrar en acci&oacute;n durante el
+snapping.
+Para ello al insertar una geometr&iacute;a habr&aacute; que realizar
+las siguientes operaciones:<br>
+<ul>
+  <li>TODO<br>
+  </li>
+</ul>
+&nbsp;&nbsp;&nbsp; Similar al snapping por puntos est&aacute;n los
+siguientes ajustes:<br>
+<ul>
+  <li>Rastreo polar: Se ajusta la posici&oacute;n actual del
+rat&oacute;n a las rectas horizontal y vertical que pasan por el punto
+origen de la acci&oacute;n.</li>
+  <li>Modo orto: Similar al rastreo polar, pero con la diferencia de
+que el modo orto ajusta siempre mientras que el rastreo polar ajusta
+s&oacute;lo cuando el puntero del rat&oacute;n est&aacute;
+pr&oacute;ximo a las dos lineas comentadas.</li>
+  <li>Rastreo de referencia a objetos: Cuando el usuario se queda en el
+area de snap de un punto un determinado tiempo sin salir de ella, dicho
+punto queda seleccionado de forma que se ajustar&aacute; la
+posici&oacute;n del rat&oacute;n
+a las rectas horizontal y vertical que pasan por dicho punto.</li>
+</ul>
+&nbsp;&nbsp;&nbsp; Para soportar todo lo anterior las capas vectoriales
+FLyrVect
+dibujar&aacute;n la capa en edici&oacute;n (y no la capa original)
+cuando se
+ponen en estado de edici&oacute;n.<br>
+<br>
+<big>3.2 Interfaz del editor</big><br>
+<span style="font-size: 11pt; line-height: 150%;"></span><!--[if !supportLists]--><!--[if !supportLists]--><!--[if !supportLists]-->&nbsp;&nbsp;&nbsp;
+La interfaz del editor ser&aacute; un MapControl m&aacute;s una consola
+de edici&oacute;n interactiva. Dicha consola deber&aacute; de tener las
+siguientes caracter&iacute;sticas:<br>
+<ul>
+  <li>Hist&oacute;rico de introducciones del usuario <br>
+  </li>
+  <li>Tener el foco impl&iacute;citamente siempre</li>
+  <li>Aspectos usuales de toda consola</li>
+</ul>
+<br>
+</body>
+</html>

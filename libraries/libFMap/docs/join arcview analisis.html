@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
+	<META NAME="CREATED" CONTENT="20050421;11160300">
+	<META NAME="CHANGED" CONTENT="20050421;11231700">
+	<STYLE>
+	<!--
+		@page { size: 21.59cm 27.94cm; margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		H1 { margin-bottom: 0.21cm }
+		H1.western { font-family: "Bitstream Vera Sans", sans-serif; font-size: 16pt }
+		H1.cjk { font-family: "HG Mincho Light J", "MS Mincho", "HG Mincho J", "HG Mincho L", "HG Mincho", "Mincho", "MS PMincho", "HG Mincho Light J", "MS Gothic", "HG Gothic J", "HG Gothic B", "HG Gothic", "Gothic", "MS PGothic", "Andale Sans UI", "Arial Unicode MS", "Lucida Sans Unicode", "Tahoma"; font-size: 16pt }
+		H1.ctl { font-family: "Tahoma", "Lucidasans", "Lucida Sans", "Arial Unicode MS"; font-size: 16pt }
+		H2 { margin-bottom: 0.21cm }
+		H2.western { font-family: "Bitstream Vera Sans", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-family: "HG Mincho Light J", "MS Mincho", "HG Mincho J", "HG Mincho L", "HG Mincho", "Mincho", "MS PMincho", "HG Mincho Light J", "MS Gothic", "HG Gothic J", "HG Gothic B", "HG Gothic", "Gothic", "MS PGothic", "Andale Sans UI", "Arial Unicode MS", "Lucida Sans Unicode", "Tahoma"; font-size: 14pt; font-style: italic }
+		H2.ctl { font-size: 14pt; font-style: italic }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="es-ES" DIR="LTR">
+<H1 CLASS="western">An&aacute;lisis de join de arcView</H1>
+<DIV ID="&Iacute;ndice de contenido1" DIR="LTR">
+	<DIV ID="&Iacute;ndice de contenido1_Head" DIR="LTR">
+		<P STYLE="margin-top: 0.42cm; page-break-after: avoid"><FONT FACE="Bitstream Vera Sans, sans-serif"><FONT SIZE=4 STYLE="font-size: 16pt"><B>&Iacute;ndice
+		de contenido</B></FONT></FONT></P>
+	</DIV>
+	<P STYLE="margin-bottom: 0cm">An&aacute;lisis de join de arcView	1</P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm">Definici&oacute;n	1</P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm">Conflictos de
+	nombres	1</P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm">Anidamiento de
+	joins	1</P>
+</DIV>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H2 CLASS="western">Definici&oacute;n</H2>
+<P STYLE="margin-bottom: 0cm">	La primera tabla es la tabla sobre la
+que se a&ntilde;aden los valores, la segunda es la que a&ntilde;ade
+sus valores a la primera. El campo de join es el campo de cada tabla
+usado en la operaci&oacute;n.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">	Para cada registro de la primera tabla
+se le hace corresponder con el primer registro de la segunda tabla
+que cumpla la condici&oacute;n de igualdad para el campo de join de
+cada tabla. Si no hay registros en la segunda tabla que cumplan la
+condici&oacute;n se quedar&aacute;n los valores correspondientes a
+los campos de la segunda tabla a null. Lo mismo ocurre si el valor de
+la primera tabla es nulo. El esquema de la tabla resultante es la
+uni&oacute;n de los esquemas exceptuando el campo de la join que no
+se pondr&aacute; el de la segunda tabla.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H2 CLASS="western">Conflictos de nombres</H2>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">	Si hay dos campos con el mismo nombre
+en los esquemas de las tablas no se resuelve el conflicto. De esta
+manera no se podr&aacute; acceder por nombre a los campos en
+conflicto de la parte del esquema correspondiente a la segunda tabla.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H2 CLASS="western">Anidamiento de joins</H2>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">	El resultado de una join puede ser
+usado como tabla primera o segunda para una join posterior. 
+</P>
+<P STYLE="margin-bottom: 0cm">	El resultado de quitar las joins es el
+de obtener la tabla original, independientemente de las joins
+anidadas que hubiera en la tabla.</P>
+<P STYLE="margin-bottom: 0cm">	</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+</BODY>
+</HTML>

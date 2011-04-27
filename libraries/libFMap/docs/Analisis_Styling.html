@@ -1,0 +1,136 @@
+<style type="text/css">
+<!--
+.textoNormal {
+	font-family: Arial, Helvetica, sans-serif;
+}
+-->
+</style>
+<body class="textoNormal">
+<h2>NOTA: en d:\java\reserva he dejado las pruebas de uso directo de las entidades 
+  JTS y LiteShape</h2>
+<h2><strong>AN&Aacute;LISIS STYLING (LEYENDAS)</strong></h2>
+<h3>1.- Objetivos (Requisitos)</h3>
+<p>Objetivo principal:</p>
+<p> <strong> PERMITIR QUE EN gvSIG SE PUEDA UTILIZAR CUALQUIER TIPO DE SÍMBOLO</strong></strong></p>
+<p>Haremos una implementaci&oacute;n de los s&iacute;mbolos m&aacute;s habituales. 
+  Con &quot;cualquier s&iacute;mbolo&quot; me refiero a que dejaremos una puerta 
+  abierta para que un desarrollador implemente su propio s&iacute;mbolo especial.</p>
+<p>Los s&iacute;mbolos m&aacute;s habituales:</p>
+<ol>
+  <li>Para puntos</li>
+  <ul>
+    <li>C&iacute;rculo, cuadrado, tri&aacute;ngulo, cruz, icono + tama&ntilde;os 
+      y colores</li>
+  </ul>
+  <li>Para Líneas</li>
+  <ul>
+    <li>Cont&iacute;nua, raya-raya, raya-punto-raya, raya-punto-punto-raya, raya-cruz-raya 
+      + grosores y colores.</li>
+  </ul>
+  <li>Para Pol&iacute;gonos</li>
+  <ul>
+    <li>Relleno uniforme, sin relleno, tramado a 45&ordm;, a -45&ordm;, horizontal, 
+      vertical, tramado con fondo, gradiente, con bitmap + grosores aplicados 
+      al contorno y colores aplicados al tramado y al contorno.</li>
+  </ul>
+  <li>Para Etiquetas</li>
+  <ul>
+    <li>Se podr&aacute; fijar la fuente, el tama&ntilde;o de la fuente (en pixels 
+      o coordenadas de mapa), la posici&oacute;n relativa de la etiqueta, si lleva 
+      halo o no, la inclinaci&oacute;n, adem&aacute;s de distinguir entre lo necesario 
+      para etiquetar un punto, l&iacute;nea o pol&iacute;gono (ver ArcMap).</li>
+  </ul>
+  
+</ol>
+	
+Objetivos secundarios (algunos de ellos puede que los obviemos o postpongamos 
+el desarrollo para cuando haya tiempo. Por ejemplo, la compatibilidad con SLD 
+es discutible, ya que ahora mismo da la impresi&oacute;n de que ning&uacute;n 
+servidor soporta SLD con garant&iacute;as =&gt; No se puede probar bien): 
+<ul>
+  <li>Guardar un s&iacute;mbolo definido por el usuario.</li>
+  <li>Definir s&iacute;mbolos compuestos de otros s&iacute;mbolos.</li>
+  <li>Permitir que un desarrollador cree su propio s&iacute;mbolo, con comportamiento 
+    especial de dibujado (se trata de soportar lo que tiene MapObjects, de que 
+    te puedas hacer t&uacute; (como desarrollador) tus propios s&iacute;mbolos. 
+    Por ejemplo, para pintar una l&iacute;nea con una sinusoidal + cruces).</li>
+  <li>Compatible con SLD =&gt; La leyenda de este tipo se tiene que poder escribir 
+    en SLD, y viceversa, un fichero SLD tiene que poder transformarse a esta leyenda.</li>
+  <li>Que sea aplicable a capas de acceso de tipo secuencial, por si hace falta 
+    tener capas de este estilo.</li>
+  <li>Que se pueda guardar como leyenda, para poder ser recuperada con posterioridad, 
+    tanto fuera como dentro del fichero de proyecto.</li>
+</ul>
+<h3>2.- Antecedentes.</h3>
+<p>En FMap existe un sistema de leyendas orientado a acceso aleatorio y (en principio) 
+  una serie de leyendas basadas en un campo.</p>
+<p>En SLD, se puede utilizar una leyenda con acceso secuencial, fijar un s&iacute;mbolo 
+  en base a cualquier combinaci&oacute;n de campos y/o relaciones geom&eacute;tricas 
+  (Filtros).</p>
+<p>FMap se puede ir ampliando con leyendas de todo tipo, pero al estudiar c&oacute;mo 
+  lo hace SLD, creo que podemos hacer algo parecido y mejorar algunas carencias.</p>
+<p>A su vez, el SLD tambi&eacute;n tiene una serie de limitaciones. A saber:</p>
+<p>- No est&aacute; definida la posibilidad de fijar un tama&ntilde;o de s&iacute;mbolo 
+  en coordenadas de mundo real. Esto es imprescindible para s&iacute;mbolos de 
+  tipo puntual y para etiquetas.</p>
+<p>- La forma de aplicar los s&iacute;mbolos es lenta (se tiene que recorrer todos 
+  los s&iacute;mbolos, evaluando uno a uno sus condiciones para ver si se aplican 
+  o no.</p>
+<p>- No permite la agrupaci&oacute;n de s&iacute;mbolos para formar uno complejo. 
+  Se puede conseguir el efecto poniendo tantos s&iacute;mbolos como se quiera, 
+  pero entonces el usuario, para editar el s&iacute;mbolo tiene que editar cada 
+  uno de los s&iacute;mbolos que lo forman (tanto a nivel gr&aacute;fico como 
+  sus filtros). Esto afecta a la hora de interactuar con el usuario.</p>
+<h3>3.- Aspectos a tener en cuenta (Funcionalidades):</h3>
+<p> Un directorio con s&iacute;mbolos predefinidos (para puntos, l&iacute;neas, 
+  pol&iacute;gonos y textos).</p>
+<p>Si no se encuentra la im&aacute;gen que tenemos que emplear con el s&iacute;mbolo, 
+  lanzar una excepci&oacute;n de tipo &quot;File not found&quot;, con el nombre 
+  del fichero que se busca.</p>
+<p>Para evaluar si un s&iacute;mbolo se aplica o no, se puede emplear el mecanismo 
+  de Filtros definido en geoAPI. Un filtro toma una Feature (Geometr&iacute;a 
+  + atributos), la eval&uacute;a y si es cierta la condici&oacute;n, llama al 
+  dibujado, si no, no. Esto lo que permite es que podamos asignar un s&iacute;mbolo 
+  en base a criterios de todo tipo (basado en el valor de un campo, en los valores 
+  de 2 campos o m&aacute;s, en un criterio espacial (por ejemplo, poner un s&iacute;mbolo 
+  a todos los pol&iacute;gonos que contengan un punto, o que su per&iacute;metro 
+  sea mayor que X).</p>
+<p>El interfaz con el usuario es important&iacute;simo. Un usuario debe poder 
+  definir el s&iacute;mbolo con facilidad, tanto su parte gr&aacute;fica como 
+  la parte de filtro, aquella que vamos a usar para definir si un s&iacute;mbolo 
+  se ha de aplicar a una feature o no.</p>
+<p>El usuario ha de poder escoger entre los s&iacute;mbolos predefinidos por nosotros 
+  y los que pueda definir otro plugin. (Un s&iacute;mbolo se definir&aacute; por 
+  un archivo dentro del directorio de s&iacute;mbolos, o por una clase que implemente 
+  el interfaz IFSymbol. Estas clases se podr&aacute;n registrar de forma parecida 
+  al mecanismo actual de drivers). Para que un usuario pueda especificar las caracter&iacute;sticas 
+  de estos nuevos s&iacute;mbolos, deberemos implementar un mecanismo que le permita 
+  al desarrollador especificar qu&eacute; panel va asociado con qu&eacute; s&iacute;mbolo.</p>
+<p>Lo mismo pasa con los filtros. Nosotros implementaremos los m&aacute;s comunes, 
+  pero dejaremos la puerta abierta al resto.</p>
+<p>Para mostrar los s&iacute;mbolos de una capa mixta, en lugar de mostrarlos 
+  todos en la misma l&iacute;nea (dibujar un rect&aacute;ngulo, l&iacute;nea, 
+  punto y texto), los vamos a dibujar cada uno con su l&iacute;nea, y solo si 
+  existen. Es decir, si hemos definido una leyenda sobre un tema de DXF, pondremos 
+  un icono en el tema que indica que es mixto, y unos s&iacute;mbolos por defecto 
+  para pol&iacute;gonos, l&iacute;neas, puntos y texto, uno debajo del otro. Si 
+  definimos alg&uacute;n s&iacute;mbolo m&aacute;s a la leyenda, aparecer&aacute; 
+  encima de los que son por defecto. Si modificamos la leyenda por defecto quitando 
+  alguno de esos s&iacute;mbolos, ya no aparecer&aacute;n en el TOC o la leyenda 
+  del Layout, o donde toque.</p>
+<p>Tambi&eacute;n daremos la posibilidad de &quot;habilitar/deshabilitar&quot; 
+  (o vis&iacute;ble/invisible) un s&iacute;mbolo pinchando sobre el s&iacute;mbolo 
+  en el TOC. Esto es muy &uacute;til porque cuando quieres ver solo un determinado 
+  tipo de entidades, las puedes poner invisibles sin tocar la leyenda, y puedes 
+  volver a la leyenda habitual f&aacute;cilmente, sin tener que recargar una leyenda 
+  o fijar colores, tipos de l&iacute;nea, etc. La idea es, por ejemplo, mostar 
+  la descripci&oacute;n del s&iacute;mbolo en gris, o tachado en el TOC. O con 
+  un icono de ojo abierto/cerrrado, como lo hace Flash. En el Layout, ponerlo 
+  como si no estuviera. Esta funcionalidad no es prioritaria, desarrollarla al 
+  final, pero tenerla en cuenta en el dise&ntilde;o.</p>
+<p>El usuario podr&aacute; tener una serie de s&iacute;mbolos &quot;favoritos&quot;, 
+  o que use con m&aacute;s frecuencia. Tampoco es prioritario. Desarrollarlo al 
+  final, o guardar estas tareas para alg&uacute;n becario o colaborador que quiera 
+  empezar. </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>

@@ -1,0 +1,133 @@
+<style type="text/css">
+<!--
+.textoNormal {
+	font-family: Arial, Helvetica, sans-serif;
+}
+-->
+</style>
+<body class="textoNormal">
+<h2><strong>DISE&Ntilde;O STYLING (LEYENDAS)</strong></h2>
+<h3>1.- Descripci&oacute;n de la soluci&oacute;n propuesta</h3>
+<p>Se me ocurre que en lugar de que una leyenda SLD sea una colecci&oacute;n &quot;plana&quot; 
+  de s&iacute;mbolos, deber&iacute;a ser un &aacute;rbol. De esta manera, podemos 
+  trabajar con s&iacute;mbolos complejos (compuestos de otros s&iacute;mbolos). 
+  Cuando se quiera generar el SLD a partir de una leyenda nuestra, se recorre 
+  el &aacute;rbol en profundidad, escribiendo solo los nodos finales. Si se quiere 
+  obtener la leyenda de un SLD, obtendremos un &aacute;rbol &quot;plano&quot;, 
+  solo con nodos finales.</p>
+<p>La lectura/escritura de un SLD no es una tarea cr&iacute;tica. Da igual si 
+  se hace r&aacute;pido o no, as&iacute; que he optado por usar Geotools2, y traducir 
+  los s&iacute;mbolos que entrega la clase SLDTransformer. Con esto ya tenemos 
+  un parser, y solo necesitamos traducir nuestros s&iacute;mbolos a los s&iacute;mbolos 
+  de GT2. Nosotros implementaremos los s&iacute;mbolos t&iacute;picos que gestiona 
+  GT2, y el resto de ampliaciones, si se pueden exportar bien, y si no, se pone 
+  algo por defecto.</p>
+<p>Adem&aacute;s, no tenemos ning&uacute;n servidor libre que implemente bien 
+  SLD todav&iacute;a.</p>
+<p>El patr&oacute;n escogido es el Composite =&gt; una colecci&oacute;n de s&iacute;mbolos 
+  tambi&eacute;n implementa la interfaz del s&iacute;mbolo.</p>
+<p>Para que un desarrollador pueda crear un s&iacute;mbolo que se comporte de 
+  una manera especial, el s&iacute;mbolo deber&iacute;a tener una llamada para 
+  dibujar un shape. Por tanto, habr&iacute;a que cambiar el sistema de dibujado 
+  un poco, que no sea una clase &quot;FGraphicUtilities&quot; la que dibuja, sino 
+  que sea el s&iacute;mbolo el responsable del dibujado.</p>
+<p>La idea es que a un s&iacute;mbolo simple le pasa el graphics, un Shape y una 
+  matriz de transformaci&oacute;n, y te dibuja en el graphics. Dependiendo del 
+  tipo de s&iacute;mbolo que sea, ya estar&aacute; preparado para pintar pol&iacute;gonos 
+  con relleno, l&iacute;neas, puntos o etiquetas. Para eso, montamos una herencia 
+  con clases como FSymbolPolygon, FSymbolLine, FSymbolPoint, FSymbolPoint, FSymbolLabelPoint, 
+  FSymbolLabelLine, FSymbolLabelPolygon. Es decir, cuando creas un s&iacute;mbolo, 
+  ya sabes para qu&eacute; lo quieres (para puntos, l&iacute;neas, etc).</p>
+<p>Para conseguir la extensibilidad con los s&iacute;mbolos, es decir, que un 
+  desarrollador implemente su s&iacute;mbolo especial, le pondremos al interfaz 
+  s&iacute;mbolo una funci&oacute;n que devuelva la clase de un panel que sirva 
+  para especificar ese s&iacute;mbolo. Es decir, el desarrollador suministra, 
+  adem&aacute;s del s&iacute;mbolo, la clase que devolver&aacute; ese s&iacute;mbolo. 
+  Esta clase ser&aacute; un panel extendido que devolver&aacute; el s&iacute;mbolo. 
+  A la hora de dar a escoger al usuario los s&iacute;mbolos que puede seleccionar, 
+  miraremos los s&iacute;mbolos que devuelvan algo coherente (una clase instanciable) 
+  con esa llamada. Si no se suministra esa clase, no damos la posiblidad de escoger 
+  el s&iacute;mbolo especial.</p>
+<p>Para cada tipo de s&iacute;mbolo que suministramos nosotros, daremos una clase 
+  panel para ese s&iacute;mbolo.</p>
+<p>Para aclarar m&aacute;s las cosas:</p>
+<p>Un s&iacute;mbolo tendr&aacute; una funci&oacute;n getShapeType que indicar&aacute; 
+  si es adecuado para renderizar puntos, l&iacute;neas o pol&iacute;gonos. En 
+  funci&oacute;n del tipo de shape de una capa, cuando le demos al bot&oacute;n 
+  de leyenda, aparecer&aacute;n solo los s&iacute;mbolos que sean adecuados a 
+  ese tipo de shape. Por ejemplo, si la capa es de puntos, solo aparecer&aacute;n 
+  s&iacute;mbolos aplicables a los puntos. Si la capa es mixta, el usuario podr&aacute; 
+  seleccionar a qu&eacute; tipo de shape le est&aacute; poniendo el s&iacute;mbolo. 
+  (Un combo box con algo como &quot;Ver s&iacute;mbolos para puntos&quot;, &quot;l&iacute;neas&quot;, 
+  &quot;pol&iacute;gonos&quot;). Dentro de la ventana de &quot;Selector de s&iacute;mbolo&quot;, 
+  habr&aacute; una zona con los s&iacute;mbolos de la librer&iacute;a, un &quot;preview&quot;, 
+  una zona de botones con los botones de OK, Cancel, Save... y Propiedades, y 
+  una zona de opciones comunes a todos los s&iacute;mbolos de la clase seleccionada. 
+  Las opciones comunes son:</p>
+<p>- Para puntos: Color, tama&ntilde;o, &aacute;ngulo</p>
+<p>- Para l&iacute;neas: Color, ancho</p>
+<p>- Para pol&iacute;gonos: Fill color, outline width, outline color</p>
+<p>Cuando apretamos al bot&oacute;n de Propiedades de s&iacute;mbolo, entramos 
+  en otro formulario con 4 zonas: Preview, Layers y Properties. La zona de Layers 
+  controla los diferentes s&iacute;mbolos que componen el nuestro (al pintar, 
+  se dibuja primero el de m&aacute;s abajo y se va subiendo). La zona Properties 
+  empieza con un combo box llamado &quot;Tipo de s&iacute;mbolo&quot;. Este combo 
+  se tiene que rellenar en tiempo real a partir de las clases que implementen 
+  el interfaz IFSymbol adecuado a lo que pretendemos dibujar. Por ejemplo, en 
+  ArcGis y para pol&iacute;gonos, este combo muestra &quot;Gradient Fill Symbol&quot;, 
+  &quot;Line Fill Symbol&quot;, &quot;Marker Fill Symbol&quot;, &quot;Picture 
+  Fill Symbol&quot;, &quot;Simple Fill Symbol&quot; (ordenados alfab&eacute;ticamente). 
+  Nosotros vamos a implementar por ahora Simple Fill Symbol y Line Fill Symbol, 
+  pero el resto no deber&iacute;a costar mucho.</p>
+<p>Los tipo de s&iacute;mbolo para <strong>l&iacute;nea</strong> en ArcGis son:</p>
+<p>- Simple Line: Color, Estilo (solido, dashed, dotted, dash-dot, dash-dot-dot), 
+  Grosor</p>
+<p>- Cartographic Line: Tiene 3 pesta&ntilde;as (Cartographic Line, Template y 
+  Line Properties). En la primera pesta&ntilde;a puedes fijar el color, grosor 
+  y &quot;Line caps&quot; (Butt, Round y Square) y &quot;Line Joins&quot; (Mitter, 
+  Round, Bevel). En la pesta&ntilde;a de template, el pattern que va a usar la 
+  l&iacute;nea, y en la pesta&ntilde;a de Line Properties, el offset y los &quot;decoradores&quot; 
+  (c&oacute;mo termina la l&iacute;nea (con flecha, c&iacute;rculo, etc)).</p>
+<p>- Hash Line Symbol (en realidad, se parece a una mezcla de una simple s&oacute;lida 
+  + otra dashed). Lo &uacute;nico es que la capa de dashed puede girar sus tramitos 
+  con un &aacute;ngulo de rotaci&oacute;n) Creo que por ahora no hace falta implementarlo 
+  en gvSIG.</p>
+<p>- Marker Line Symbol. Adem&aacute;s de los mismo que en Cartographic Line, 
+  una pesta&ntilde;a para seleccionar el s&iacute;mbolo que quieres que se repita.</p>
+<p>- Picture Line Symbol. Esta la podemos implementar como una imagen que recuperas 
+  de disco, y la usas para crear un TexturePaint. </p>
+<p>Para <strong>Pol&iacute;gono</strong>:</p>
+<p>- Simple Fill Symbol: Una pesta&ntilde;a con el color de Fondo, el outline 
+  color, el grosor del outline y un bot&oacute;n para seleccionar el tipo de l&iacute;nea 
+  que abre la ventana &quot;Symbol Selector&quot; mostrando todos los tipos de 
+  l&iacute;nea disponibles.</p>
+<p>- Line Fill Symbol: Una pesta&ntilde;a con el color del tramado, 3 n&uacute;meros 
+  con el &aacute;ngulo, el offset y la separaci&oacute;n, y 2 botones que llaman 
+  al &quot;Symbol Selector&quot; para seleccionar el tipo de l&iacute;nea a usar 
+  con el tramado y con el outline.</p>
+<p>- Marker Fill Symbol. Una pesta&ntilde;a (no 2 como en ArcGis) con el color 
+  del s&iacute;mbolo, un bot&oacute;n para el tipo de s&iacute;mbolo a emplear, 
+  el outline, si lo quieres matricial o aleatorio, el offset en x e y, y la separaci&oacute;n 
+  en x e y.</p>
+<p>- Picture Fill: Usar una imagen para montar un TexturePaint</p>
+<p>- Gradient Fill: Fijar el outline, la rampa de colores, si lo quieres linear 
+  o circular y el &aacute;ngulo.</p>
+<p>Para <strong>puntos</strong>:</p>
+<p>- Character Marker Symbol: 2 pesta&ntilde;as, una con Color, Car&aacute;cter, 
+  Fuente, Tama&ntilde;o, &Aacute;ngulo, Offset y otra con la m&aacute;scara, donde 
+  podemos fijar el halo (con o sin halo, y si es con halo, fijar el color y el 
+  tama&ntilde;o). </p>
+<p>- Picture Marker Symbol: Escoges la im&aacute;gen de un fichero, y le puedes 
+  fijar el tama&ntilde;o. (Quiz&aacute;s alguna vez se puede necesitar fijar tambi&eacute;n 
+  la rotaci&oacute;n y el offset).</p>
+<p>- Single Marker Symbol: Color, Estilo (C&iacute;rculo, cuadrado, cruz, X, rombo), 
+  tama&ntilde;o, use outline, outline size, offset (x e y). Tambi&eacute;n con 
+  pesta&ntilde;a de m&aacute;scara.</p>
+<p>&nbsp;</p>
+<h3>Propuesta de Diagrama de Objetos:</h3>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>

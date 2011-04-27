@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Edici&oacute;n vectorial en FMap</title>
+</head>
+<body>
+<big><big><big>Edici&oacute;n vectorial en FMap<br>
+</big><small><small>&nbsp;&nbsp;&nbsp; La edici&oacute;n vectorial en
+FMap se realiza sobre fuentes de datos vectoriales mediante el uso de
+ficheros auxiliares, en los cuales se va introduciendo las
+geometr&iacute;as modificadas y a&ntilde;adidas. Para esto, FMap
+proporciona la interfaz EditableFeatureSource, la cual proporciona los
+m&eacute;todos adecuados para a&ntilde;adir geometr&iacute;as y
+modificar o eliminar las ya existentes.<br>
+<br>
+&nbsp;&nbsp;&nbsp; La edici&oacute;n se efectuar&aacute; de manera
+transaccional, s&oacute;lo realizandose la escritura en la fuente de
+datos en edici&oacute;n cuando el usuario determine el fin de la
+edici&oacute;n. Llegado este momento, se deber&aacute; poder
+identificar qu&eacute; ha pasado con cada geometr&iacute;a.
+Inicialmente, cada geometr&iacute;a se identifica por su
+posici&oacute;n ordinal dentro de la capa que se edita y si durante la
+edici&oacute;n, se modifica la geometr&iacute;a i-&eacute;sima, se
+deber&aacute; de situar al geometr&iacute;a modificada en un fichero
+auxiliar, manteniendo la informaci&oacute;n que asocia la
+geometr&iacute;a i-&eacute;sima con la geometr&iacute;a insertada en el
+fichero auxiliar. Para ello habr&aacute; que mantener una
+colecci&oacute;n de correspondencias entre las geometr&iacute;as y su
+ubicaci&oacute;n f&iacute;sica tras la edici&oacute;n. En el caso de la
+eliminaci&oacute;n de una geometr&iacute;a se deber&aacute; de mantener
+la informaci&oacute;n que indica que dicha geometr&iacute;a ha sido
+eliminada. Esto &uacute;ltimo nos lleva a que durante la
+edici&oacute;n, la geometr&iacute;a i-&eacute;sima no puede dejar de
+existir, puede ser marcada como geometr&iacute;a nula, pero si se
+elimina la geometr&iacute;a i-&eacute;sima, las siguientes llamadas a
+getGeometry(i) del EditableFeatureSource deben devolver una
+NullGeometry y en ning&uacute;n caso la geometr&iacute;a
+(i+1)-&eacute;sima.<br>
+<br>
+</small></small></big></big><big><big><small><small>&nbsp;&nbsp;&nbsp;
+De todo lo anterior se deduce que los ficheros auxiliares ir&aacute;n
+creciendo de forma cont&iacute;nua aunque se eliminen
+geometr&iacute;as, por lo
+que ser&aacute; necesario crear un mecanismo de compactaci&oacute;n. En
+dicho mecanismo, lo &uacute;nico que se compacta son los ficheros
+auxiliares que est&eacute;n en uso, creando un fichero s&oacute;lo con
+las geometr&iacute;as que actualmente est&eacute;n en uso.</small></small></big></big><br>
+<big><big><small><small><br>
+&nbsp;&nbsp;&nbsp; Se identifican fuentes de datos editables de dos
+naturalezas. </small></small></big></big><big><big><small><small>Al
+comenzar y terminar la edici&oacute;n, las operaciones a realizar son
+distintas en funci&oacute;n de dicha naturaleza:<br>
+</small></small></big></big>
+<ul>
+  <li><big><big><small><small>Los ficheros vectoriales.</small></small></big></big></li>
+</ul>
+<div style="margin-left: 40px;">Al terminar la edici&oacute;n se
+deber&aacute; procesar las geometr&iacute;as en orden y escribirlas en
+el fichero que estuviese en edici&oacute;n, machacando el contenido que
+hubiese anteriormente.<br>
+</div>
+<big><big></big></big>
+<ul>
+  <li><big><big><small><small>Las fuentes de datos remotas con
+identificador para las geometr&iacute;as.</small></small></big></big></li>
+</ul>
+<div style="margin-left: 40px;">Al comenzar la edici&oacute;n,
+protocolos como WFS permiten realizar un "lock" sobre las
+geometr&iacute;as que se van a editar, de forma que se puede preguntar
+al servidor si las geometr&iacute;as que se van a poner en
+edici&oacute;n est&aacute;n disponibles o no y permitiendo editar el
+subconjunto de &eacute;stas que no tienen un "lock". Otros protocolos
+pueden no permitir la edici&oacute;n si alguien est&aacute; editando,
+etc.<br>
+</div>
+<div style="margin-left: 40px;">Al terminar la edici&oacute;n se
+deber&aacute;n procesar las instrucciones necesarias para modificar
+s&oacute;lo las geometr&iacute;as afectadas, es decir, eliminar las
+geometr&iacute;as que hayan sido eliminadas durante la edici&oacute;n,
+y modificar las geometr&iacute;as que fueron modificadas durante la
+edici&oacute;n. Esto &uacute;ltimo requiere algo de complejidad ya que
+una geometr&iacute;a puede ser modificada m&uacute;ltiples veces
+durante la edici&oacute;n pero s&oacute;lo debe realizarse una
+instrucci&oacute;n de modificaci&oacute;n en el servidor (esto no es
+estrictamente necesario pero s&iacute; conveniente para evitar trabajo
+a un servidor compartido por un n&uacute;mero indefinido de clientes).
+Por otro lado si se modifica una geometr&iacute;a y luego se deshace la
+modificaci&oacute;n, &eacute;sta no ha de modificarse en el servidor,
+ni si quiera para dejarla como est&aacute; ya que ello puede suponer
+problemas de sincronismo cuando varios clientes est&aacute;n editando
+simultaneamente los datos.<br>
+</div>
+<br>
+<big><big><small><small><br>
+<big><big>Operaciones<br>
+</big></big></small></small></big></big>&nbsp;&nbsp;&nbsp; Las
+operaciones que se deben poder realizar sobre un EditableFeatureSource
+son:<br>
+<ul>
+  <li>Obtenci&oacute;n de la geometr&iacute;a i-&eacute;sima. Cabe
+destacar que esta geometr&iacute;a puede ser:</li>
+  <ul>
+    <li>Original de la capa</li>
+    <li>Modificaci&oacute;n de una geometr&iacute;a original de la capa</li>
+    <li>Una geometr&iacute;a nueva</li>
+    <li>Modificaci&oacute;n de una geometr&iacute;a nueva<br>
+    </li>
+  </ul>
+  <li>Modificaci&oacute;n de una geometr&iacute;a. Igual que en el caso
+anterior puede ser:<br>
+  </li>
+  <ul>
+    <li>Original de la capa</li>
+    <li>Modificaci&oacute;n de una geometr&iacute;a original de la capa</li>
+    <li>Una geometr&iacute;a nueva</li>
+    <li>Modificaci&oacute;n de una geometr&iacute;a nueva<br>
+    </li>
+  </ul>
+  <li>Eliminaci&oacute;n de una geometr&iacute;a.</li>
+  <ul>
+    <li>Original de la capa</li>
+    <li>Modificaci&oacute;n de una geometr&iacute;a original de la capa</li>
+    <li>Una geometr&iacute;a nueva</li>
+    <li>Modificaci&oacute;n de una geometr&iacute;a nueva<br>
+    </li>
+  </ul>
+  <li>Adici&oacute;n de una geometr&iacute;a.</li>
+  <li>Deshacer acci&oacute;n</li>
+  <li>Rehacer acci&oacute;n</li>
+</ul>
+<big><big>Pila de comandos<br>
+</big></big>&nbsp;&nbsp;&nbsp; Durante la edici&oacute;n pueden suceder
+imprevistos como que se vaya la luz, se cierre el programa por
+alg&uacute;n error, etc. Como la edici&oacute;n se realiza de manera
+transaccional, cualquier fallo de este tipo resultar&aacute; en una
+p&eacute;rdida total de los datos editados hasta el momento. Este
+problema, se puede enlazar con el mecanismo de deshacer/rehacer
+comandos y darle soluci&oacute;n de una manera &uacute;nica,
+manteniendo en disco un fichero dietario en el que se van apilando los
+comandos que van siendo realizados. Este fichero tendr&aacute; en la
+cabecera informaci&oacute;n relativa a qu&eacute; fuente de datos
+estaba siendo editada y la lista de comandos realizados con la
+finalidad de que se pueda volver al estado en el que estaba cuando se
+finaliz&oacute; la edici&oacute;n de forma abrupta.<br>
+</body>
+</html>

@@ -1,0 +1,138 @@
+- OJO: Las capas basadas en bases de datos espaciales trabajan de forma
+  poco uniforme. Las llamadas a las funciones no son iguales, unas
+  tienen más funcionalidades que otras, e incluso las llamadas para
+  crear entidades WKT son disitintas. Por ejemplo, para PostGis se
+  usa GeometryFromText, y para mySQL se usa GeomFromText. Y las
+  consultas de intersecciónes también son distintas, y muchas cosas
+  más. Habrá que mirar cómo lo han homogeneizado en GT2.
+
+
+Para la capa PostGIS, necesitaremos tener en cuenta:
+
+- Para la conexión, necesitamos los parámetros de conexión a la base de datos:
+	· Host.
+	· Port.
+	· Nombre de la base de datos.
+	· Usuario.
+	· Contraseña.
+	· Sentencia SQL que vamos a usar para obtener la información.
+	
+- Siguiendo el ejemplo de MapServer (ellos también necesitan tener un 
+identificador único por fila <=> Acceso random)
+LAYER
+ CONNECTION "user=theuser password=thepass dbname=thedb host=theserver"
+ DATA "the_geom FROM (SELECT roads.oid AS oid, roads.the_geom AS the_geom, road_names.name as name
+   FROM roads LEFT JOIN road_names ON roads.road_name_id = road_names.road_name_id) AS named_roads
+   USING UNIQUE oid USING SRID=-1"
+ MAXSCALE 20000
+
+- Necesitaremos un Asistente (Wizard) para la conexión y la creación de la consulta
+  SQL. Notar lo de "USING UNIQUE oid". Lo del SRID es el código EPSG de 
+  la proyección en la que quieres recuperar los datos. (Es decir, los
+  puedes obtener reproyectados ya. Eso afecta a la hora de crear la SQL,
+  en ese Wizard hay que tener en cuenta la proyección de la vista sobre
+  la que quieres añadir ese tema).
+  
+- Por cuestiones de velocidad: ¿Cabe la posibilidad de usar sus propias entidades
+  gráficas o sería mejor hacer nuestro propio driver que entregue entidades
+  FShape?. => Hacer una prueba con sus entidades primero.
+  Ya he hecho la prueba. Es mejor con nuestras entidades. Pero quedan
+  unas pruebas muy importantes: comprobar si se puede con el driver 8.0
+  obtener las entidades binarias, y traducir a partir de ahí a IGeometry.
+  
+  Ejemplo de uso:
+import java.sql.*; 
+import java.util.*; 
+import java.lang.*; 
+import org.postgis.*; 
+
+public class JavaGIS { 
+  public static void main(String[] args) 
+  { 
+    java.sql.Connection conn; 
+    try 
+    { 
+      /* 
+      * Load the JDBC driver and establish a connection. 
+      */  
+      Class.forName("org.postgresql.Driver"); 
+      String url = "jdbc:postgresql://localhost:5432/database"; 
+      conn = DriverManager.getConnection(url, "postgres", ""); 
+    
+      /* 
+      * Add the geometry types to the connection. Note that you 
+      * must cast the connection to the pgsql-specific connection * implementation before calling the addDataType() method. 
+      */
+      ((org.postgresql.Connection)conn).addDataType("geometry","org.postgis.PGgeometry");
+      ((org.postgresql.Connection)conn).addDataType("box3d","org.postgis.PGbox3d");
+
+      /* 
+      * Create a statement and execute a select query. 
+      */ 
+      Statement s = conn.createStatement(); 
+      ResultSet r = s.executeQuery("select AsText(geom) as geom,id from geomtable"); 
+      while( r.next() ) 
+      { 
+        /* 
+        * Retrieve the geometry as an object then cast it to the geometry type. 
+        * Print things out. 
+        */ 
+        PGgeometry geom = (PGgeometry)r.getObject(1); 
+        int id = r.getInt(2);
+        System.out.println("Row " + id + ":"); 
+        System.out.println(geom.toString()); 
+      }
+      s.close(); 
+      conn.close(); 
+    } 
+    catch( Exception e ) 
+    { 
+      e.printStackTrace(); 
+    }  
+  }
+}
+ 
+
+The "PGgeometry" object is a wrapper object which contains a specific topological geometry object (subclasses of the abstract class "Geometry") depending on the type: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon.
+
+PGgeometry geom = (PGgeometry)r.getObject(1); 
+if( geom.getType() = Geometry.POLYGON ) 
+{ 
+  Polygon pl = (Polygon)geom.getGeometry();
+  for( int r = 0; r < pl.numRings(); r++ ) 
+  { 
+    LinearRing rng = pl.getRing(r);
+    System.out.println("Ring: " + r); 
+    for( int p = 0; p < rng.numPoints(); p++ ) 
+    { 
+      Point pt = rng.getPoint(p); 
+      System.out.println("Point: " + p);
+      System.out.println(pt.toString()); 
+    } 
+  } 
+}
+ 
+  
+  
+- Cuando se esté bajando los datos... ¿ponemos algún indicador de que no han
+  bajado todavía todos (un relojito en el toc, o algo así).
+  
+- Mi idea es que sea una capa un tanto especial, porque si modificamos la
+  sentencia SQL podemos conseguir que el servidor haga el análisis y nos
+  entregue la capa ya filtrada, o con una serie de operaciones espaciales.
+  Mejor aún: 2 sql, una que origina la capa, y otra que te permite hacer
+  otro tipo de consultas, incluso de las que no devuelven recordsets.
+  Para permitir esto, le ponemos al adapter funciones que permitan recuperar
+  la sentencia original. (Ver diagrama de objetos del piloto). 
+  
+- Si se acepta el acceso en modo "conectado" (tarde o temprano será necesario, 
+  creo yo), se necesita la DBStrategy, que recupera las entidades que 
+  se van a pintar con ese extent. Y para ello, si no usamos algo como
+  lo del "oid" (identificador único), necesitamos recorrer lo que devuelve
+  de manera secuencial, con el GeometryIterator. Y para que esto sea compatible
+  con los símbolos, necesitaremos lo que ya está planificado de simbología
+  tipo GT2, orientado a SLD y con filtros por Feature (le pasas la feature, 
+  se evalúa dentro del simbolizer (en base al tipo de Geometry y/o sus
+  atributos) y te devuelve el/los símbolos a aplicar.
+  
+  

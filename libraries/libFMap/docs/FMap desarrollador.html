@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
+	<META NAME="CREATED" CONTENT="20050307;9023300">
+	<META NAME="CHANGED" CONTENT="20050307;9551600">
+	<STYLE>
+	<!--
+		@page { size: 21.59cm 27.94cm }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="es-ES" DIR="LTR">
+<H1>Sistema de temas vectoriales de FMap.</H1>
+<P>Para distinguir capas de FMap de capas de software a las primeras
+nos referiremos como &ldquo;temas&rdquo; a partir de ahora.</P>
+<P>Un tema en FMap est&aacute; implementado en tres capas, desde
+abajo hacia arriba, la capa de driver, la capa de adaptador y la capa
+de interfaz.</P>
+<P><BR><BR>
+</P>
+<CENTER>
+	<TABLE WIDTH=299 BORDER=1 CELLPADDING=4 CELLSPACING=3>
+		<COL WIDTH=136>
+		<COL WIDTH=136>
+		<TR VALIGN=TOP>
+			<TD WIDTH=136>
+				<P ALIGN=CENTER>Tema</P>
+			</TD>
+			<TD WIDTH=136>
+				<P ALIGN=CENTER>Operaciones</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=2 WIDTH=283 VALIGN=TOP>
+				<P ALIGN=CENTER>Adaptaci&oacute;n</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD COLSPAN=2 WIDTH=283 VALIGN=TOP>
+				<P ALIGN=CENTER>Driver</P>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<P><BR><BR>
+</P>
+<P>La capa del driver viene definida por la implementaci&oacute;n de
+una de las subinterfaces hijas de VectorialDriver, elegida en funci&oacute;n
+de la naturaleza del origen de los datos (Base de datos, fichero,
+servidor WFS). Adem&aacute;s de esta interfaz puede ser necesario
+implementar otras interfaces adicionales que ayudan a la definici&oacute;n
+del origen de datos (BoundedShapes). La &uacute;nica finalidad de
+esta capa es la de extraer la informaci&oacute;n del origen de datos
+f&iacute;sico en entidades propias de FMap y proporcionarselas a la
+capa superior.</P>
+<P>La capa de adaptaci&oacute;n viene definida por la interfaz
+VectorialAdapter. Esta capa se encarga de, dada una implementaci&oacute;n
+de la capa inferior (driver) proporcionar a la capa superior una
+interfaz com&uacute;n, de forma que la capa superior pueda operar con
+datos vectoriales de manera transparente a su origen de datos. &Eacute;sta
+es la capa en la que se implementa toda la &ldquo;inteligencia&rdquo;
+de la fuente de datos: cacheado, indexado espacial interno de FMap,
+pool de conexiones, ...</P>
+<P>La capa de interfaz consiste en todo aquello que accede a la capa
+de adaptaci&oacute;n. Se puede subdividir en dos: la subcapa de tema
+y la subcapa de operaciones.</P>
+<P>La subcapa de tema es la que da &ldquo;personalidad&rdquo; al
+tema. Esta capa se encarga de darle un nombre, asociar el tema con
+una leyenda, darle capacidad de selecci&oacute;n, ...</P>
+<P>Una de las funcionalidades que le da la subcapa de tema al mismo
+es la de realizar operaciones sobre los datos, dando as&iacute; lugar
+a la otra subcapa, la de operaciones.</P>
+<P>La subcapa de operaciones est&aacute; definida por unas
+estrategias y unos visitors que se explicar&aacute;n m&aacute;s
+adelante. Baste decir que se encuentran en &eacute;sta los algoritmos
+realizados sobre el adaptador (selecci&oacute;n por punto, selecci&oacute;n
+por geometr&iacute;a, ...).</P>
+<P>Para tener una visi&oacute;n m&aacute;s global del sistema de
+capas de FMap se puede comentar que la interfaz DataStore de geotools
+se situar&iacute;a en el nivel de Adaptaci&oacute;n.</P>
+<H1>Subcapa de operaciones</H1>
+<P>Las operaciones que se pueden realizar sobre una capa vienen dadas
+por la interfaz FeatureVisitor. En dicha interfaz se define una
+operaci&oacute;n sobre una fuente de datos sin especificar la
+estrategia de recorrido de las geometr&iacute;as (aleatoria,
+secuencial, indexada, ...). La estrategia de recorrido viene definida
+por la implementaci&oacute;n concreta de la interfaz Strategy. Dicha
+clase implementar&aacute; una estrategia de recorrido y delegar&aacute;
+la operaci&oacute;n en el FeatureVisitor concreto que operar&aacute;
+sobre las geometr&iacute;as. 
+</P>
+<P>El recorrido se realiza sobre el adaptador, por lo que una
+estrategia sirve para cualquier fuente de datos (para cualquier
+implementaci&oacute;n de la capa driver). Por otro lado, el v&iacute;sitor
+no define la estrategia de recorrido y por lo tanto es independiente
+del tipo de acceso del adaptador (secuencial o aleatorio).</P>
+<P><BR><BR>
+</P>
+</BODY>
+</HTML>

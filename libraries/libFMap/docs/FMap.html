@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>FMap</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<table width="600" border="0">
+  <tr> 
+    <td>&nbsp;</td>
+    <td bgcolor="#E86D26" colspan="2"><a href="#1._Introducci%F3n" class="Nivel2"><font color="#FFFFFF">1. 
+      Introducci&oacute;n</font></a></td>
+  </tr>
+  <tr> 
+    <td width="25">&nbsp;</td>
+    <td bgcolor="#E86D26" colspan="2"><font color="#FFFFFF"><a href="#2._Capas" class="Nivel2"><font color="#FFFFFF">2. 
+      Capas</font></a></font></td>
+  </tr>
+  <tr> 
+    <td>&nbsp;</td>
+    <td colspan="2">&nbsp;&nbsp;&nbsp; <a
+ href="#2.1_VectorialData">2.1 VectorialData</a></td>
+  </tr>
+  <tr> 
+    <td>&nbsp;</td>
+    <td colspan="2" class="Nivel2"><a href="#ViewPort"><font color="#FFFFFF">3. 
+      ViewPort</font></a></td>
+  </tr>
+  <tr> 
+    <td>&nbsp;</td>
+    <td colspan="2" class="Nivel2"><a href="#Eventos"><font color="#FFFFFF">4. 
+      Eventos</font></a></td>
+  </tr>
+  <tr> 
+    <td>&nbsp;</td>
+    <td colspan="2">&nbsp;&nbsp;&nbsp; <a href="#AtomicEvents">4.1 AtomicEvent's</a></td>
+  </tr>
+  <tr> 
+    <td>&nbsp;</td>
+    <td colspan="2" class="Nivel2"><a href="#Drivers" class="Nivel2"><font color="#FFFFFF">5. 
+      Drivers</font></a></td>
+  </tr>
+  <tr> 
+    <td>&nbsp;</td>
+    <td colspan="2">&nbsp;&nbsp;&nbsp; <a href="#VectorialFileDriver">5.1 
+      VectorialFileDriver</a></td>
+  </tr>
+  <tr> 
+    <td>&nbsp;</td>
+    <td colspan="2" class="Nivel2"><a href="#Interfaz_de_usuario" class="Nivel2"><font color="#FFFFFF">6. 
+      Interfaz de usuario</font></a></td>
+  </tr>
+  <tr> 
+    <td height="16">&nbsp;</td>
+    <td colspan="2">&nbsp;&nbsp;&nbsp; <a href="#MapControl">6.1 
+      MapControl</a></td>
+  </tr>
+  <tr> 
+    <td>&nbsp;</td>
+    <td colspan="2">&nbsp;&nbsp;&nbsp; <a href="#MapBehaviors">6.2 
+      MapBehavior</a></td>
+  </tr>
+  <tr> 
+    <td height="31">&nbsp;</td>
+    <td colspan="2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <a
+ href="#Creacion_de_una_herramienta_en_base_a_un">6.2.1 Creaci&oacute;n de una 
+      herramienta en base a un behavior existente</a><br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <a
+ href="#Creacion_de_una_herramienta_con_un">6.2.2 Creaci&oacute;n de una herramienta 
+      con un comportamiento no implementado</a></td>
+  </tr>
+  <tr> 
+    <td width="25">&nbsp;</td>
+    <td colspan="2">&nbsp;&nbsp;&nbsp; <a
+ href="#Composicion_de_herramientas">6.3 Composici&oacute;n de herramientas</a></td>
+  </tr>
+  <tr> 
+</table>
+<p><strong><font size="+2"><a name="1._Introduccion"></a>1. Introducci&oacute;n</font></strong><br><br>
+  &nbsp;&nbsp;&nbsp; En el paquete FMap, un mapa est&aacute; 
+  compuesto por:<br>
+</p>
+<ul>
+  <li>Una instancia de la clase FMap que sirve como frontend al usuario
+programador.</li>
+  <li>Un elemento de interfaz de usuario en el que se
+visualizar&aacute; el mapa. T&iacute;picamente ser&aacute; un
+MapControl, pero potencialmente puede ser cualquier control.</li>
+  <li>Una instancia de ViewPort, en el cual se almacena la
+informaci&oacute;n relativa a la parte de la cartograf&iacute;a que se
+quiere ver, la ventana donde se muestra, la escala, ...</li>
+  <li>Una colecci&oacute;n de capas: la cartograf&iacute;a</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp; Para obtener una imagen de un mapa hay que:<br>
+</p>
+<ul>
+  <li>Configurar el directorio de los drivers. Debido a que FMap es
+extensible por medio de drivers, hay que decirle d&oacute;nde se
+encuentran estos, de lo contrario saltar&aacute; una excepci&oacute;n.</li>
+</ul>
+<pre>	LayerFactory.setDriversPath("C:\\drivers");<br></pre>
+<ul>
+  <li>Configurar el ViewPort. Al a&ntilde;adir la capa al mapa, muchos de los 
+    datos relacionados con la cartograf&iacute;a se configurar&aacute;n autom&aacute;ticamente 
+    con lo que s&oacute;lo nos queda configurar el tama&ntilde;o de la ventana. 
+    (TODO: Explicar algo de proyecciones)<br>
+  </li>
+</ul>
+<pre>	ViewPort vp = new ViewPort(ProjectionPool.get("ed50utm30"));<br>	vp.setImageSize(new Dimension(100, 100));<br>	FMap mapa = new FMap(vp);<br></pre>
+<ul>
+  <li>&nbsp;A&ntilde;adir cartograf&iacute;a al mapa. Esto se hace
+mediante la clase LayerFactory la cual contiene m&eacute;todos para
+crear capas a partir de ficheros, urls de servidores, ... en los que
+hay que especificar adem&aacute;s el driver que se quiere usar para
+leer los datos. A continuaci&oacute;n tenemos un ejemplo en el que se
+crea una capa vectorial a partir de un shapefile y luego se
+a&ntilde;ade al mapa. (TODO: Explicar la relaci&oacute;n entre las
+proyecciones del viewport y la de la capa que se a&ntilde;ade)</li>
+</ul>
+</div>
+<pre>	l = LayerFactory.createLayer("Vias", "DemoSHPDriver", new File("c:\\vias.shp"), ProjectionPool.get("ed50utm30"));<br>	mapa.getLayers().addLayer(l);<br></pre>
+<ul>
+  <li>Ahora ya solo queda dibujar la imagen</li>
+</ul>
+<pre>	BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);<br>	mapa.draw(img, img.createGraphics());<br><br></pre>
+<p>El ejemplo concreto que se acaba de mostrar se corresponde al ImageFrame del 
+  ejemplo "com.iver.cit.gvsig.fmap.DrawImage". Para un ejemplo de uso de FMap 
+  desde un elemento complejo de interfaz de usuario ver <a
+ href="#Interfaz_de_usuario">Interfaz de usuario</a><br>
+  <br>
+  <strong><a name="2._Capas"></a><font size="+2">2. Capas</font></strong><br><br>
+  &nbsp;&nbsp;&nbsp; Cada mapa visualiza en una imagen cartograf&iacute;a 
+  cuyo origen puede ser muy diverso: ficheros, servidores WMS, ... Para a&ntilde;adir 
+  un origen de datos cartogr&aacute;ficos a un mapa aparece el concepto de Capa. 
+  Las capas representan un origen de datos cartogr&aacute;ficos independientemente 
+  de su ubicaci&oacute;n y naturaleza. Fmap tiene un m&eacute;todo getLayers() 
+  el cual devuelve una capa especial, consistente en un conjunto de capas inicialmente 
+  vac&iacute;o que son utilizadas para realizar las operaciones de dibujado, impresi&oacute;n, 
+  ... <br>
+  &nbsp;&nbsp;&nbsp; En FMap, una capa viene definida por la interfaz FLayer de 
+  modo que toda clase que implemente la interfaz FLayer es una capa. Adem&aacute;s 
+  de esta interfaz, hay un conjunto de interfaces que definen las caracter&iacute;sticas 
+  de una capa. Estas est&aacute;n en el paquete "com.iver.cit.gvsig.fmap.layer.layerOperations" 
+  y permiten crear capas con distintas capacidades a medida de la necesidad del 
+  programador, usuario, estandar, ...<br>
+  &nbsp;&nbsp;&nbsp; Por otro lado, la creaci&oacute;n de las capas que inicialmente 
+  parten con gvSIG est&aacute; centralizada en FLayers teniendo &eacute;sta m&eacute;todos 
+  est&aacute;ticos para crear cualquiera de estas capas f&aacute;cilmente.<br>
+  &nbsp;&nbsp;&nbsp; Una vez se obtiene una referencia a FLayer, si se quiere 
+  realizar una operaci&oacute;n concreta, se debe de comprobar si dicha capa implementa 
+  la interfaz del paquete "com.iver.cit.gvsig.fmap.layer.layerOperations" que 
+  da soporte a dicha operaci&oacute;n, teniendo que hacer un casting para realizar 
+  la operaci&oacute;n. Por ejemplo, el siguiente c&oacute;digo borrar&iacute;a 
+  la selecci&oacute;n de todas las capas activas con soporte de selecci&oacute;n 
+  de un array layers :<br>
+</p>
+<pre>		for (Iterator iter = layers.iterator(); iter.hasNext();) {<br>			FLayer layer = (FLayer) iter.next();<br><br>			if (layer.isActive()) {<br>				if (layer instanceof Selectable) {<br>					((Selectable) layer).clearSelection();<br>				}<br>			}<br>		}<br></pre>
+<p>&nbsp;&nbsp;&nbsp; Para entender de forma m&aacute;s completa las operaciones 
+  que se pueden hacer con las capas se puede leer la documentaci&oacute;n a nivel 
+  de API de las interfaces del paquete mencionado anteriormente.<br>
+  &nbsp;&nbsp;&nbsp; (TODO: Poner la descripci&oacute;n de las interfaces aqu&iacute;)<br>
+  <br>
+  <strong><font size="+1"><a name="2.1_VectorialData"></a>2.1 VectorialData</font></strong><br>
+  <br>
+  &nbsp;&nbsp;&nbsp; Menci&oacute;n a parte merece la interfaz VectorialData 
+  por su sofistificaci&oacute;n. Las capas vectoriales en FMap pueden tener una 
+  fuente de datos secuencial o aleatoria, en funci&oacute;n del driver utilizado, 
+  por lo que una selecci&oacute;n por rect&aacute;ngulo deber&iacute;a de implementarse 
+  dos veces, una para cada tipo de driver. Para evitar esto hemos empleado un 
+  mecanismo mediante el cual, el programador debe implementar unas clases que 
+  derivan de com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor. En 
+  esta interfaz hay 3 m&eacute;todos: start, visit y stop. Estos m&eacute;todos 
+  est&aacute;n documentados en la API. Pongamos un sencillo ejemplo: para realizar 
+  una selecci&oacute;n por rect&aacute;ngulo tendra que<br>
+</p>
+<ul>
+  <li>Crear una clase que implemente FeatureVisitor y que reciba en su
+constructor o mediante un "setter" el rect&aacute;ngulo mediante el
+cual se va a realizar la selecci&oacute;n:</li>
+</ul>
+<pre>	public void setRect(Rectangle2D r) {<br>		rect = r;<br>	}<br></pre>
+<ul>
+  <li>En el m&eacute;todo start se comprueba que la capa es
+seleccionable, porque es una condici&oacute;n necesaria para hacer una
+selecci&oacute;n por rect&aacute;ngulo.</li>
+</ul>
+<pre>	public boolean start(FLayer layer) {<br>		return layer instanceof Selectable;<br>	}<br></pre>
+<ul>
+  <li>En el m&eacute;todo visit, que ser&aacute; invocado para cada
+geometr&iacute;a de la capa, se comprueba si la geometr&iacute;a ha de
+ser seleccionada. Si es seleccionada se guarda dicha informaci&oacute;n
+en un BitSet.</li>
+</ul>
+<pre>	public void visit(IGeometry g, int index) {<br>		if (g.intersects(rect)) {<br>			bitset.set(index, true);<br>		} else {<br>			bitset.set(index, false);<br>		}<br>	}<br></pre>
+<ul>
+  <li>Para terminar con la implementaci&oacute;n, en el m&eacute;todo
+stop se seleccionan las geometr&iacute;as de la capa sobre la cual se
+ha operado que se han comprobado que quedaban dentro del
+rect&aacute;ngulo.</li>
+</ul>
+<pre>		((Selectable) layer).setSelection(bitset);<br></pre>
+<ul>
+  <li>Por &uacute;ltimo queda ejecutar el algoritmo de selecci&oacute;n
+sobre una capa. Nada m&aacute;s facil que comprobar si la capa
+implementa VectorialData (acepta FeatureVisitor's), crear una instancia
+del visitor que acabamos de implementar, pasarle el rect&aacute;ngulo
+con el que seleccionaremos e invocar:</li>
+</ul>
+<pre>		((VectorialData) layer).process(new SelectionByRectVisitor(r));<br><br></pre>
+<p>&nbsp;&nbsp;&nbsp; Como se puede comprobar, en ning&uacute;n momento hemos 
+  necesitado saber si el origen de la capa es secuencial o aleatorio. En el paquete 
+  "com.iver.cit.gvsig.fmap.operations.strategies" hay muchos m&aacute;s ejemplos 
+  de FeatureVisitors.<br>
+  <br>
+  <strong><font size="+2"><a name="ViewPort"></a>3. ViewPort</font></strong><font size="+2"></font></strong><br><br>
+  &nbsp;&nbsp;&nbsp;
+  	La clase ViewPort guarda la información relativa a las transformaciónes de coordenadas y datos acerca de la proyección
+	actual. Para ello, almacena el tamaño de la imagen sobre la que se dibuja, el rectángulo de visualización, el rectángulo
+	ajustado al marco de visualización, etc.
+	También se ocupa de gestionar los "listeners" que escuchan los eventos de cambio de "extent", y de realizar los cálculos
+	de área, perímetro y distancia. <br> <br>
+  <strong><font size="+2"><a name="Eventos"></a>4. Eventos</font></strong><br>
+  <br>
+  &nbsp;&nbsp;&nbsp; FMap pone a disposici&oacute;n del programador todo un mecanismo 
+  para que se pueda saber "lo que est&aacute; pasando por dentro del mapa". Cada 
+  elemento de FMap tiene un m&eacute;todo de la forma addXXXListener, mediente 
+  el cual el programador puede registrarse como observador de los eventos que 
+  ocurren en el objeto en cuesti&oacute;n. Por ejemplo, el ViewPort tiene un addViewPortListener 
+  que recibe una interfaz ViewPortListener. La clase que implemente esta interfaz 
+  y sea registrada mediante el m&eacute;todo addViewPortListener ser&aacute; notificada 
+  de los eventos de cambio de extent y cambio de color de fondo en el ViewPort 
+  mediante invocaciones a los m&eacute;todos de la interfaz que implementa. Esto 
+  presenta un problema y para mostrarlo vamos a suponer que tenemos un control 
+  de interfaz de usuario que escucha eventos del ViewPort y de la colecci&oacute;n 
+  de capas, de manera que cuando se a&ntilde;ade una capa o se modifica el extent 
+  se redibuja la imagen que muestra. Resulta que cuando se a&ntilde;ade la primera 
+  capa se modifica tambi&eacute;n el extent por lo que en el caso del control 
+  del ejemplo se refrescar&aacute; la imagen dos veces de manera innecesaria. 
+  La soluci&oacute;n son los AtomicEvent's.<br>
+  <br>
+  <strong><font size="+1">&nbsp;&nbsp;&nbsp; <a name="AtomicEvents"></a>4.1 AtomicEvent's</font></strong><br>
+  <br>
+  &nbsp;&nbsp;&nbsp; Para solucionar el problema anterior FMap incorpora dos m&eacute;todos 
+  beginAtomicEvent y endAtomicEvent. Estos m&eacute;todos no afectan a la gesti&oacute;n 
+  de eventos de los elementos individuales de FMap, afecta a la gesti&oacute;n 
+  de eventos desde FMap. Al igual que otros elementos del paquete FMap contiene 
+  un m&eacute;todo addAtomicEventListener con la funcionalidad an&aacute;loga 
+  a los addXXXListener comentados antes. Una vez registrado, el listener ser&aacute; 
+  notificado de cualquier evento que suceda por dentro de esa instancia de FMap 
+  (en las capas, viewport, leyenda, ...) con la &uacute;nica diferencia que podr&aacute; 
+  ser notificado de varios eventos al mismo tiempo. Si un trozo de c&oacute;digo 
+  se encuentra entre las instrucciones beginAtomicEvent y endAtomicEvent, los 
+  objetos individuales (ViewPort, Layers, ...) disparar&aacute;n eventos de la 
+  misma manera, pero la instancia de FMap acumular&aacute; los eventos desde que 
+  se ejecuta beginAtomicEvent hasta que se ejecuta endAtomicEvent, momento en 
+  el cual se disparar&aacute; un AtomicEvent con los eventos acumulados embebidos 
+  en el anterior. En caso de que no se use beginAtomicEvent y endAtomicEvent FMap 
+  no acumular&aacute; eventos, pero seguir&aacute; dispar&aacute;ndolos a medida 
+  que le van llegando. Como ejemplo de listener de AtomicEvent tenemos la clase 
+  NewMapControl, la cual escucha atomic events en la clase interna MapContextListener. 
+  Como ejemplo de c&oacute;digo que usa beginAtomicEvent y endAtomicEvent tenemos 
+  el m&eacute;todo execute de la extensi&oacute;n com.iver.cit.gvsig.Abrir en 
+  gvSIG<br>
+  <br>
+  <strong><font size="+2"><a name="Drivers"></a>5 Drivers</font></strong><br>
+  <br>
+  &nbsp;&nbsp;&nbsp; FMap lee las fuentes de datos mediante el uso de drivers, 
+  lo cual permite a cualquiera implementar un driver determinado para cualquier 
+  formato existente. Para ello hay que configurar un directorio en el que se colocan 
+  los drivers cada uno dentro de su directorio de la siguiente manera:<br>
+  <br>
+</p>
+<div style="text-align: center;"><img alt="" src="images/dir.png"
+ style="width: 293px; height: 189px;"><br>
+</div>
+<p><br>
+  &nbsp;&nbsp;&nbsp; Cada tipo de driver (vectorial, raster, ...) debe ser implementado 
+  mediante una interfaz distinta (VectorialFileDriver, WMSDriver, ...) y adem&aacute;s 
+  de implementar esta interfaz, se pueden implementar otras interfaces que a&ntilde;aden 
+  un valor a&ntilde;adido al driver.<br>
+  <br>
+  <strong><font size="+1"><a name="VectorialFileDriver"></a>5.1 VectorialFileDriver</font><br>
+  <br>
+  </strong>&nbsp;&nbsp;&nbsp; Para crear un driver de un fichero de 
+  tipo vectorial hay que implementar la interfaz VectorialFileDriver cuyos m&eacute;todos 
+  est&aacute;n documentados en el JavaDoc. Mediante esta interfaz el driver obtiene 
+  el acceso a los datos geogr&aacute;ficos de los ficheros vectoriales. Adem&aacute;s 
+  de esta interfaz hay que implementar una interfaz para el acceso a los datos 
+  alfanum&eacute;ricos. Dependiendo de c&oacute;mo est&eacute;n organizados estos 
+  datos se puede implementar com.iver.cit.gvsig.fmap.drivers.ExternalData, que 
+  es una interfaz &uacute;til para cuando los datos alfanum&eacute;ricos se encuentran 
+  en un fichero distinto al fichero de datos geogr&aacute;ficos (caso del shapefile), 
+  o se puede implementar com.hardcode.gdbms.engine.data.FileDriver que es adecuado 
+  para los casos en los que la tabla de datos alfanum&eacute;ricos se encuentra 
+  en el mismo soporte que los datos geogr&aacute;ficos (caso del DGN).<br>
+  <br>
+  &nbsp;&nbsp;&nbsp; Una vez implementadas estas dos interfaces, se pueden implementar 
+  otras para darle un valor a&ntilde;adido a los drivers:<br>
+</p>
+<ul>
+  <li>BoundedShapes: Acelera el procesado de las geometr&iacute;as a la
+hora de dibujar<br>
+  </li>
+  <li>WithDefaultLegend: Establece la leyenda por defecto de los
+ficheros del driver.<br>
+  </li>
+</ul>
+<p><br>
+  <strong><font size="+2"><a name="Interfaz_de_usuario"></a>6 Interfaz de usuario</font></strong><br>
+  <br>
+  &nbsp;&nbsp;&nbsp; Con el paquete FMap se proporciona un control de interfaz 
+  de usuario junto con una serie de herramientas dise&ntilde;adas para este control. 
+  MapControl es la interfaz de usuario sobre FMap que se proporciona con gvSIG 
+  y automatiza gran parte de la programaci&oacute;n del interfaz gr&aacute;fico 
+  de un mapa, lanzando el dibujado en un segundo plano, redibujando autom&aacute;ticamente 
+  cuando el FMap que tiene por debajo queda invalidado, ... Adem&aacute;s se proporcionan 
+  una serie de herramientas preparadas para su uso y extensibles de manera que 
+  la incorporaci&oacute;n de nuevas herramientas por parte del usuario sea un 
+  proceso trivial siempre que el comportamiento de la herramienta ya est&eacute; 
+  programado. En las secciones posteriores se ver&aacute; esto en m&aacute;s detalle.<br>
+  <br>
+  <strong><a name="MapControl"></a><font size="+1">6.1 MapControl</font></strong><br>
+  <br>
+  &nbsp;&nbsp;&nbsp; MapControl es un control de usuario que tiene 
+  como modelo una instancia de FMap a la que se puede acceder mediante el m&eacute;todo 
+  getMapContext(). A continuaci&oacute;n presentamos los pasos b&aacute;sicos 
+  para mostrar un Frame con un MapControl sin herramientas. En la secci&oacute;n 
+  siguiente se a&ntilde;adir&aacute;n herramientas con comportamientos ya existentes 
+  y c&oacute;mo a&ntilde;adir herramientas con un comportamiento no programado 
+  todav&iacute;a.<br>
+</p>
+<ul>
+  <li>Partimos de un JFrame con un BorderLayout y un MapControl en el
+centro.</li>
+  <li>Se configura el directorio de los drivers como en el ejemplo
+ImageFrame</li>
+</ul>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; LayerFactory.setDriversPath(</pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; "C:\\eclipse3\\workspace\\Andami\\gvSIG\\extensiones\\com.iver.cit.gvsig\\drivers");</pre>
+<ul>
+  <li>Se a&ntilde;aden las capas al mapa que hay como modelo del
+MapControl</li>
+</ul>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; FLayer l = LayerFactory.createLayer("Vias", "gvSIG shp driver",</pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; new File("C:/Documents and Settings/fernando/Mis documentos/vias.shp"),</pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ProjectionPool.get("EPSG:23030"));</pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; newMapControl.getMapContext().getLayers().addLayer(l);</pre>
+<ul>
+  <li>Se a&ntilde;ade una herramienta y se selecciona</li>
+</ul>
+<pre>		newMapControl.addMapTool("zoom", new RectangleBehavior(new ZoomInListenerImpl(newMapControl)));<br>		newMapControl.setTool("zoom");<br><br></pre>
+<p><strong><font size="+1"><a name="MapBehaviors"></a>6.2 MapBehaviors</font></strong><br>
+  <br>
+  &nbsp;&nbsp;&nbsp; Las herramientas que se proporcionan en FMap 
+  son en realidad comportamientos. Se define un comportamiento del rat&oacute;n 
+  tal como hacer un rect&aacute;ngulo (clase RectangleBehavior), dibujar una polilinea 
+  (PolylineBehavior), etc. y estos comportamientos disparan eventos relacionados 
+  con su propio comportamiento, por ejemplo, la herramienta de hacer rect&aacute;ngulo 
+  cuando el usuario termina de dibujar el rect&aacute;ngulo se lanza un evento 
+  rectangle definido en la interfaz com.iver.cit.gvsig.fmap.tools.RectangleListener. 
+  De esta manera, para implementar las herramientas que tengan el comportamiento 
+  de dibujado de rect&aacute;ngulo (zoom in, selecci&oacute;n por rect&aacute;ngulo, 
+  ...) s&oacute;lo tienen que implementarse los listeners de los eventos. En el 
+  ejemplo anterior hemos visto como se a&ntilde;ad&iacute;a una herramienta al 
+  MapControl mediante el behavior RectangleMapBehavior el cual toma en su constructor 
+  la acci&oacute;n que se realiza con el rect&aacute;ngulo (acercar la imagen).<br>
+  <br>
+  <strong><a name="Creacion_de_una_herramienta_en_base_a_un"></a>6.2.1 Creaci&oacute;n 
+  de una herramienta en base a un behavior existente</strong><br><br>
+  &nbsp;&nbsp;&nbsp; Para crear una herramienta con un comportamiento ya 
+  implementado, hay que implementar la interfaz que dicho behavior espera. Para 
+  averiguar qu&eacute; interfaz es &eacute;sta hay que leer la documentaci&oacute;n 
+  de cada behavior. En el paquete "com.iver.cit.gvsig.fmap.tools" hay m&uacute;ltiples 
+  ejemplos sobre como implementar las interfaces de los distintos behaviors.<br>
+  &nbsp;&nbsp; <br>
+  <strong><a name="Creacion_de_una_herramienta_con_un"></a>6.2.2 Creaci&oacute;n 
+  de una herramienta con un comportamiento no implementado</strong><br><br>
+  &nbsp;&nbsp;&nbsp; Para realizar una herramienta para la cual no haya 
+  un behavior definido se pueden realizar dos aproximaciones:<br>
+</p>
+<ul>
+  <li>Implementar un behavior que delegue mediante eventos el
+comportamiento de la herramienta del mismo modo que hacen los behaviors
+de FMap y luego implementar un listener de los eventos que la behavior
+implementada genera, lo cual queda lejos del alcance del presente
+documento.</li>
+  <li>Implementar una herramienta de forma completa. Para ello hay que
+crear una clase que derive de
+com.iver.cit.gvsig.fmap.tools.Behavior.Behavior e implementar los
+m&eacute;todos necesarios. Para m&aacute;s informaci&oacute;n sobre
+c&oacute;mo implementar esta clase se puede ver el javadoc de la misma.<br>
+  </li>
+</ul>
+<p><br>
+  <strong><font size="+1"><a name="Composicion_de_herramientas"></a>6.3 Composici&oacute;n 
+  de herramientas</font></strong><br>
+  <br>
+  &nbsp;&nbsp;&nbsp; El modelo de herramientas sigue un patr&oacute;n 
+  composite. Esto quiere decir que existe una herramienta especial que consiste 
+  realmente en un conjunto de herramientas. Teor&iacute;a a parte, esto quiere 
+  decir que podemos tener varias herramientas seleccionadas simult&aacute;neamente 
+  como una s&oacute;la. Por ejemplo, podemos tener una herramienta que haga zoom 
+  in, a la vez que podemos tener la herramienta que haga zoomout con el bot&oacute;n 
+  derecho del rat&oacute;n y a la vez que tenemos una maptool que muestra la coordenada 
+  de la posici&oacute;n actual del rat&oacute;n. Tenemos un ejemplo de esto en 
+  la clase View de gvSIG:<br>
+</p>
+<pre>        m_MapControl.addMapTool("zoomIn", new CompoundBehavior(new RectangleBehavior(zil),<br>		new PointBehavior(zoil), new MouseMovementBehavior(sbl)));<br></pre>
+<p>&nbsp;&nbsp;&nbsp; Que a&ntilde;ade la herramienta compuesta por las 3 herramientas 
+  simples deseadas. Tambi&eacute;n existe un m&eacute;todo de conveniencia que 
+  acepta un array de Behaviour's y crea internamente el CompoundBehavior.<br>
+  <br>
+</p>
+</body>
+</html>
