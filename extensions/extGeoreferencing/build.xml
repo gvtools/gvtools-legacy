@@ -1,0 +1,160 @@
+<project name="Generar extension en Andami para Georeferenciación" default="generate-without-source" basedir=".">
+    <description>
+        Instala el plugin de Georeferenciación en Andami
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="bin"/>
+  <property name="src-test" location="src-test"/>
+  <property name="build-test" location="bin-test"/>
+  <property name="dist"  location="dist"/>
+  <property name="images"  location="images"/>
+  <property name="mainplugin" value="com.iver.cit.gvsig"/>
+  <property name="plugin" value="org.gvsig.georeferencing"/>
+  <property name="fmap-plugin" value="fmap-georeferencing"/>
+  <property name="driverjar" value="georeferencing"/>
+	<property name="andami" location="../_fwAndami"/>
+  <property name="extensionsDir" location="${andami}/gvSIG/extensiones"/>
+  <property name="drivers-dir" location="${extensionsDir}/${mainplugin}/drivers" />
+
+	<property name="andamiJar" location="${andami}/andami.jar"/>
+	<property name="mainPluginDir" location="${extensionsDir}/${mainplugin}"/>
+	<property name="gvsigJar" location="${extensionsDir}/${mainplugin}/lib/${mainplugin}.jar"/>
+	<property name="andamiLibs" location="${andami}/lib"/>
+	<property name="fmapLibs" location="../libFMap/lib" />
+	<property name="fmapJar" location="../libFMap/dist/lib/fmap.jar"/>
+	<import file="../binaries/ant/utilities.xml"/>
+
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+	<echo>
+		Compiling ${ant.project.name}...</echo>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+    <mkdir dir="${dist}"/>
+  	<!-- Creamos un fichero con el timeStamp para que lo lea el FPanelAbout -->
+  	<buildnumber/>
+
+  </target>
+
+	  <target name="import-build-number">
+	  	<copy todir=".">
+	  		<fileset file="${buildNumberFile}"/>
+	  	</copy>
+	  </target>
+
+	<target name="generate-without-source"
+	  		description="generate the distribution without the source file"
+			depends="create-jar,copy-data-files,copy-libs,move-to-andami"/>
+
+  <target name="generate-without-source_old"
+  		description="generate the distribution without the source file">
+
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}"/>
+
+  	<!-- Jars de las extensiones -->
+  	<jar jarfile="${dist}/${plugin}.jar" basedir="${build}"
+  	    	includes="org/gvsig/georeferencing/**" />
+  	<copy file="lib/jama.jar" todir="${extensionsDir}/com.iver.cit.gvsig/lib/"/>
+	<copy file="lib/flanagan.jar" todir="${extensionsDir}/com.iver.cit.gvsig/lib/"/>
+  	<copy file="config/config.xml" todir="${dist}"/>
+  	<copy file="build.number" todir="${dist}"/>
+    <copy file="config/plugin.dtd" todir="${dist}"/>
+    <copy todir="${dist}">
+    	<fileset dir="config/" includes="text*.properties"/>
+    </copy>
+  	<mkdir dir="${dist}/images" />
+  	<copy todir="${dist}/images">
+  		<fileset dir="images" includes="*"/>
+ 	</copy>
+
+
+  	<copy todir="${extensionsDir}/${mainplugin}/images">
+  	  		<fileset dir="images" includes="*.gif"/>
+  	 </copy>
+
+  	<copy todir="${extensionsDir}/${mainplugin}/images">
+  	  		<fileset dir="images" includes="*.png"/>
+  	 </copy>
+
+  	<move todir="${extensionsDir}/${plugin}/">
+  			<fileset dir="${dist}" includes="${plugin}.jar"/>
+  	</move>
+  	<move todir="${extensionsDir}/${mainplugin}/lib">
+  			<fileset dir="${dist}" includes="${fmap-plugin}.jar"/>
+  	</move>
+  	<move todir="${extensionsDir}/${plugin}/">
+  	    	<fileset dir="${dist}" includes="**/**"/>
+  	</move>
+  </target>
+
+	<target name="batch-build"
+			description="compile the sources, create the jar file"
+			depends="compile,create-jar,copy-data-files,copy-libs,move-to-andami">
+	</target>
+
+	<target name="compile" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<antcall target="gvSIG-import-build-number"/>
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+	</target>
+
+	<target name="create-jar"
+			description="Creates the plugin jar">
+		<mkdir dir="${dist}"/>
+	  	<jar jarfile="${dist}/${plugin}.jar" basedir="${build}"
+	  	    	includes="org/gvsig/georeferencing/**" />
+	</target>
+
+	<target name="copy-data-files">
+	  	<copy file="config/config.xml" todir="${dist}"/>
+	  	<copy file="build.number" todir="${dist}"/>
+	    <copy file="config/plugin.dtd" todir="${dist}"/>
+	    <copy todir="${dist}">
+	    	<fileset dir="config/" includes="text*.properties"/>
+	    </copy>
+	  	<mkdir dir="${dist}/images" />
+	  	<copy todir="${dist}/images">
+	  		<fileset dir="images" includes="*"/>
+	 	</copy>
+	</target>
+
+	<target name="copy-libs">
+	  	<copy file="lib/jama.jar" todir="${extensionsDir}/com.iver.cit.gvsig/lib/"/>
+		<copy file="lib/flanagan.jar" todir="${extensionsDir}/com.iver.cit.gvsig/lib/"/>
+	</target>
+
+	<target name="move-to-andami">
+	  	<copy todir="${extensionsDir}/${mainplugin}/images">
+	  	  		<fileset dir="images" includes="*.gif"/>
+	  	 </copy>
+
+	  	<copy todir="${extensionsDir}/${mainplugin}/images">
+	  	  		<fileset dir="images" includes="*.png"/>
+	  	 </copy>
+	  	<move todir="${extensionsDir}/${plugin}/">
+			<fileset dir="${dist}" includes="**/**"/>
+	  	</move>
+	</target>
+
+	<target name="clean"
+        description="clean up" >
+    	<!-- Delete the ${build} and ${dist} directory trees -->
+	    <delete dir="${dist}"/>
+    	<delete dir="${build}"/>
+	</target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="org.gvsig.georeferencing.AllTests"/>
+		</antcall>
+	</target>
+</project>
+

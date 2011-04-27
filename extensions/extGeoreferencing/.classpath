@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
+	<classpathentry kind="src" path="/libFMap"/>
+	<classpathentry kind="src" path="/appgvSIG"/>
+	<classpathentry kind="lib" path="lib/jama.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry sourcepath="/extRasterTools-SE" kind="lib" path="/libFMap/lib/org.gvsig.fmap.raster.jar"/>
+	<classpathentry sourcepath="/extRasterTools-SE/src" kind="lib" path="/libFMap/lib/org.gvsig.raster.gui.jar"/>
+	<classpathentry sourcepath="/libUIComponent/src" kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libRaster"/>
+	<classpathentry sourcepath="/libIverUtiles/src" kind="lib" path="/_fwAndami/lib/iver-utiles.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar"/>
+	<classpathentry sourcepath="/libExceptions/src" kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar"/>
+	<classpathentry sourcepath="/libGDBMS" kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/flanagan.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
