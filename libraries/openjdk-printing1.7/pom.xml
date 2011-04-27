@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gvsig</groupId>
+	<artifactId>openjdk-printing1.7</artifactId>
+	<packaging>jar</packaging>
+	<version>1.9-SNAPSHOT</version>
+	<name>openjdk-printing1.7</name>
+	<url>http://maven.apache.org</url>
+	<parent>
+		<groupId>org.gvsig</groupId>
+		<artifactId>gvsig-library-base-pom</artifactId>
+		<version>1.9-SNAPSHOT</version>
+	</parent>
+    <properties>
+        <build-dir>${basedir}/../build</build-dir>
+    </properties>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<testSourceDirectory>test</testSourceDirectory>
+		<resources>
+            <resource>
+                <directory>src</directory>
+                <includes>
+                    <include>**/*.gif</include>
+                    <include>**/*.png</include>
+                    <include>**/*.PNG</include>
+                    <include> **/*.bmp</include>
+                    <include> **/*.jpg</include>
+                    <include> **/*.jpeg</include>
+                    <include>**/*.properties</include>
+                </includes>
+                <targetPath>backport1_7/sun/print/resources</targetPath>
+			</resource>
+        </resources>
+	</build>
+</project>
