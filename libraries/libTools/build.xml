@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ======================================================================
+     02/09/2008 09:29
+
+     libTools
+     Build library libTols
+
+     jmvivo
+     ====================================================================== -->
+<project name="libTools" default="batch-build">
+	<description>
+            Build del libDataStore
+    </description>
+	<dirname file="${ant.file.libTools}" property="proyectDir"/>
+	<import file="${proyectDir}/../binaries/ant/utilities.xml"/>
+
+	<property name="src" location="${proyectDir}/src"/>
+	<property name="src-test" location="${proyectDir}/src-test"/>
+	<property name="build" location="${proyectDir}/bin"/>
+	<property name="build-test" location="${proyectDir}/bin-test"/>
+	<property name="dist" location="${proyectDir}/dist"/>
+	<property name="jarName" value="org.gvsig.tools.jar"/>
+
+
+	<!-- =================================
+          target: generate-source
+         ================================= -->
+	<target name="generate-source" description="--> genera el tar de fuentes">
+		<!-- TODO -->
+		<echo level="warning">TODO!!!!</echo>
+	</target>
+
+
+
+	<!-- =================================
+          target: compile
+         ================================= -->
+	<target name="compile" depends="" description="--> Compile sources">
+		<mkdir dir="${build}"/>
+		<mkdir dir="${build-test}"/>
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+			srcdir="${src-test}"
+			destdir="${build-test}"/>
+
+	</target>
+
+	<!-- =================================
+          target: batch-build
+         ================================= -->
+	<target name="batch-build" depends="compile" description="--> Prepare library">
+		<mkdir dir="${dist}"/>
+		<jar destfile="${dist}/${jarName}" basedir="${build}"/>
+	</target>
+
+	<!-- =================================
+          target: clean
+         ================================= -->
+	<target name="clean" depends="" description="--> Clean proyect">
+		<delete>
+			<fileset dir="${build}">
+				<include name="***"/>
+				<exclude name=".svn"/>
+			</fileset>
+			<fileset dir="${build-test}">
+				<include name="***"/>
+				<exclude name=".svn"/>
+			</fileset>
+
+		</delete>
+		<delete file="${dist}/${jarName}"/>
+
+	</target>
+
+</project>
