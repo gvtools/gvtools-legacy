@@ -1,0 +1,27 @@
+<project name="extRasterTools-SE.compile-classpath" basedir=".">
+	<!-- defines the classpath to be used for compilation -->
+	
+	<property name="gvSIGLibs"   location="../appgvSIG/lib"/>
+	<property name="andami"   location="../_fwAndami"/>
+	<property name="fmap" location="../libFMap"/>
+	<property name="andamiLibs"   location="${andami}/lib"/>
+	<property name="andamiJar"   location="${andami}/andami.jar"/>
+	<property name="fmapLibs" location="${fmap}/lib"/>
+	<property name="mainPlugin" location="${andami}/gvSIG/extensiones/com.iver.cit.gvsig" />
+	<property name="gvsigJar" location="${mainPlugin}/lib/com.iver.cit.gvsig.jar"/>
+	<property name="driversDir" location="${mainPlugin}/drivers"/>
+	<property name="fmapJar" location="${mainPlugin}/lib/fmap.jar"/>
+	<property name="cmsLibs" location="../libCq CMS for java/lib" />
+	
+	<path id="appgvSIG.compile-classpath">
+	    <pathelement location="${andamiJar}"/>
+		<pathelement location="${gvsigJar}"/>
+		<pathelement location="${fmapJar}"/>
+	    <pathelement location="${andamiLibs}/iver-utiles.jar"/>
+	    <pathelement location="${cmsLibs}/jecw-0.0.2.jar"/>
+	    <pathelement location="${cmsLibs}/jecwcompress-1.0.0.jar"/>
+	    <pathelement location="${cmsLibs}/jgdal-0.6.1.jar"/>
+	    <pathelement location="${cmsLibs}/jmrsid-0.0.2.jar"/>
+		<pathelement location="${fmapLibs}/libproj.jar"/>
+	</path>
+</project>

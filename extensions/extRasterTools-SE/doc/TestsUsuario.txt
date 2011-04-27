@@ -1,0 +1,177 @@
+Persistencia
+------------
+
+- Salvar un raster con realce, brillo y contraste y recuperarla con la actual
+
+- Salvar un raster con la v10 con realce, brillo y contraste y recuperarla con la actual
+
+- Salvar y recuperar un WCS != 8 bits asignandole una paleta y crear un mapa.
+
+- Abrir un jpg, tif, ecw y mrsid. 
+
+- Hacer zoom > 1:1 comprobar que los pixeles se ven bien y que InfoByPoint devuelve valore correctos
+
+- Salvar como: Al menos jpeg2000, jpg, resto. Comprobar que se modifican las opciones, al menos compresión.
+
+- Probar el cierre de todas las ventanas asociadas a una capa.
+
+Transparencias
+--------------
+
+- gif o raster con tabla de color con trasparencia,
+
+- png con banda transparente, 
+
+- png con transparencia en metadatos 
+
+- png con transparencia en la cabecera
+
+Tablas de color
+---------------
+
+- Comprobar que ve la leyenda en el TOC. (gif)
+
+- WCS: Tablas 8 bits y != 8 bits (WMS NO!!!)
+
+- Probar raster tablas != 8 bits
+
+- Salvar y recuperar proyecto con tablas
+
+- Salvar tablas predeterminadas en un raster
+
+- Montar un mapa con leyenda
+
+- WCS:	Para un WCS (con paleta sin tiles, con paleta con tiles, datos!= de 8 bits sin tiles, datos!= de 8 bits con tiles, 8 bits sin tiles, 8 bits con tiles) 
+
+	Comprobar que puede modificarse la tabla de color
+
+	Comprobar que se cancela bien y luego puede seguir haciendo zoom
+
+	Comporbar que sale la tabla en el TOC y se modifica al ser cambiada
+
+	Salvar capa completa
+
+	Comprobaciones histograma (Ver histograma)
+
+	Comprobar que el hacer zoom se siguen visualizando tanto los datos visualizados como el completo.
+
+
+- WMS:	Salvar proyecto con v10 y recuperar con la actual, volver a salvar con la actual y recuperarlo nuevamente
+
+Vista analisis
+--------------	
+
+- Comprobar la sincronia de Abrir/Cerrar entre distintas vistas.
+
+- Comprobar la precisión del pixel con zoom grande.
+
+- Comprobar el cambio de escala
+
+Histograma
+----------
+
+- Comprobar para los datos visualizados y para los completos 
+
+	 Activación y desactivación de bandas 
+
+	 Comprobar q limpiar todo y mostrar todo no tiene diferencias con el original
+
+	 Comprobar los 3 tipos y que no hay variaciones al pasar de uno a otro.
+
+	 Eliminar extremos 
+
+	 Comprobar los rango de valores de las estadísticas (coincidencia con el tipo de datos de la imagen)
+
+	 Probar tipo de datos 8 bits, Float y Short
+
+	 Probar un dataset formado por multiples datasets. Sobre todo el tema de bandas.
+
+	 Probar al menos para ecw o jp2, mrsid, y algún formato soportado por gdal(tif, png jpg)
+
+	 Probar que las capas cuando no se cargan dentro del rango de visualizacion, funciona correctamente el histograma tanto en modo visual (no se ve nada) o modo completo. (Es importante que para testearlo, no sea visible en la primera carga, porque sino ya ha calculado datos previamente) 
+
+
+Recorte
+-------
+
+- repetir para ecw, tif (gdal), mrsid 
+
+     - repetir para un raster con buffer en memoria y buffer de solo lectura 
+
+		Con una imagen de tipo de dato byte hacer un recorte generando una capa por banda comprobando que las bandas resultantes son correctas (uniendolas y con InfoByPoint).
+
+		Con una imagen de tipo de dato byte hacer un recorte con las bandas en una capa comprobando que las bandas resultantes son correctas (uniendolas y con InfoByPoint).
+
+		Con una imagen de tipo de datos distinto de byte y más de 3 bandas hacer un recorte generando una capa por banda comprobando que las bandas resultantes son correctas (uniendolas y con InfoByPoint).
+
+		Con una imagen de tipo de datos distinto de byte y más de 3 bandas hacer un recorte con las bandas en una capa comprobando que las bandas resultantes son correctas (uniendolas y con InfoByPoint).
+
+		Unir 3 bandas del mismo extent en un solo dataset y hacer un recorte en un solo raster.
+	
+
+
+Test automático
+- Repetir para ecw, tif byte, tif short, tif integer, tif float, tif double, mrsid, multibanda
+
+	Hacer un recorte generando una capa por banda comprobando que las bandas resultantes son correctas.
+
+	Hacer un recorte con las bandas en una sola capa variando el orden de estas comprobando que las bandas resultantes son correctas.
+
+	Doblar la resolución por vecino más próximo y comparar el resultado con la fuente de datos (2 píxeles de salida es 1 de entrada)
+
+	Dividir la resolución por vecino más próximo y comparar el resultado con la fuente de datos (2 píxeles de salida es 1 de entrada)
+ 
+
+- Repetir para bilinear, distancia inversa, bsplines 
+
+	Cambiar la resolución interpolando y comparar con un resultado esperado
+ 
+
+- Para un raster con buffer de solo lectura 
+
+	Hacer un recorte generando una capa por banda comprobando que las bandas resultantes son correctas.
+
+	Hacer un recorte con las bandas en una sola capa variando el orden de estas comprobando que las bandas resultantes son correctas.
+
+	Doblar la resolución por vecino más próximo y comparar el resultado con la fuente de datos (2 píxeles de salida es 1 de entrada)
+
+	Dividir la resolución por vecino más próximo y comparar el resultado con la fuente de datos (2 píxeles de salida es 1 de entrada)
+ 
+
+Salvar Como
+-----------
+
+- Unir 3 bandas con mismo extent en un solo dataset y salvar la capa completa.
+
+- Probar el salvado de una capa en todos los tipos disponibles
+
+Salvar a raster
+---------------
+
+- Comprobaciones de interfaz:
+
+	Al introducir la escala deben modificarse los Mts/pixel y tamaño
+
+	Al introducir los mts/pixel deben modificarse la escala y tamaño
+
+	Al introducir el tamaño deben modificarse la escala y los mtrs/pixel
+
+	Al variar la resolución debe cambiar el tamaño en pixels en proporción. Si variamos la resolución cuando está en una medida distinta de pixel, al volver a pixel debe tener el nuevo tamaño en píxeles.
+
+	No debe activarse el botón de "Aplicar" hasta que no están los datos de tamaño y ficheros seleccionados.
+
+Comprobar que la resolución del fichero de salida es correcta.
+
+Salvar un jpg y jpeg2000 con mayor y menor calidad y comprobar que tamaño y calidad del fichero de salida varia.
+
+Imágenes Grass
+--------------
+
+Imágenes RAW
+------------
+
+Reproyección
+------------
+
+Vectorización
+-------------
