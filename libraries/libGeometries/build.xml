@@ -1,0 +1,21 @@
+<project name="libFMap-Geometries" default="dist" basedir=".">
+	<description>
+        FMap Geometries
+    </description>
+	<property name="build" location="bin"/>
+	<property name="src" location="src"/>
+	<property name="dist"  location="dist"/>		
+	<property name="jarName" value="org.gvsig.fmap.geometries"/>
+	<property name="targetDir" location="../libFMap/lib" />
+			
+	<target name="dist" description="generate the distribution" >
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist}" />
+		
+		<jar jarfile="${dist}/${jarName}.jar" basedir="${build}" />
+		<move todir="${targetDir}" overwrite="true">
+		   	<fileset dir="${dist}" includes="**/**"/>
+		 </move>
+	</target>	
+	
+</project>
