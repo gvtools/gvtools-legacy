@@ -1,0 +1,69 @@
+<project name="libExceptions" default="create-jar" basedir=".">
+  	<!-- set global properties for this build -->
+	<property name="src"  location="src"/>
+	<property name="build"  location="bin"/>
+	<property name="src-test"  location="src-test"/>
+	<property name="build-test"  location="bin-test"/>
+	<property name="dist"  location="dist"/>
+	<property name="targetDir" location="dist"/>
+	<property name="fmapLibs" location="../libFMap/lib" />
+	<property name="andamiLibs" location="../_fwAndami/lib" />
+	<property name="remoteServicesLibs" location="../libRemoteServices/lib" />
+	<property name="jarName" value="org.gvsig.exceptions"/>
+	<!--<property name="compile-classpath" value="" />-->
+	<import file="../binaries/ant/utilities.xml"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+	<echo>
+		Compiling ${ant.project.name}...</echo>
+  </target>
+
+	<target name="batch-build"
+				description="compile the sources, create the jar file"
+				depends="init,compile,create-jar">
+	</target>
+
+	<target name="compile" description="compile the source">
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+
+		<!--<javac	srcdir="${src}"
+				destdir="${build}"
+				source="1.4"
+				target="1.4"
+				debug="${debug}"
+				debuglevel="${debuglevel}"
+				classpath="${compile-classpath}"/>-->
+		<!-- copy any images or resources present in the src dir -->
+		<copy todir="${build}">
+			<fileset dir="${src}" excludes="**/*.java" casesensitive="false"/>
+		</copy>
+	</target>
+
+	<target name="create-jar" description="Crea el jar de la aplicacion">
+		<mkdir dir="${dist}" />
+	  	<jar jarfile="${targetDir}/${jarName}.jar" basedir="${build}"/>
+		<copy todir="${andamiLibs}">
+			<fileset dir="${targetDir}" includes="${jarName}.jar" />
+		</copy>
+	</target>
+
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="org.gvsig.gui.beans.AllTests"/>
+		</antcall>
+	</target>
+
+</project>
