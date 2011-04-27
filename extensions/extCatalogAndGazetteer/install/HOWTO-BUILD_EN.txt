@@ -1,0 +1,11 @@
+ HOW THE INSTALER HAS TO BE GENERATED
+ ===========================
+- It is only possible to execute it on Linux
+- gvSIG has to be builded on ../_fwAndami/bin
+- The main plugin has to have a 'build.number' file in its andami directory, that indicates the distribution build number.
+- The build.xml 'distribution' target has to be executed.
+- The 'install' project has to be on the workspace root (it contains the Izpack, and other things)
+- The file variables.sh contains some variables that can be changed to personalize the plugin name, the version, the destination directory, the included extensions.... The  APPNAME variable will normally has the "gvSIG" value, but thios value can change if we are generating an extension (e.g: "nomenclatorIGN").
+- The appropriate packs have to be defined on the XML configuration file (install.xml), and the file has to be checked.
+- The candidate directories has to be updated on the resources/userInputSpec.xml file if the gvSIG version where we can install has been changed
+- The distribucion.sh script has to been run from its directory.  (e.g: "cd workspace/extXXX/install ; ./distribucion.sh ").

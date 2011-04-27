@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/appgvSIG"/>
+	<classpathentry kind="lib" path="/libFMap/lib/postgis-jdbc-driver.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/postgresql-74.213.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/castor-0.9.5.3-xml.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/gvsig-i18n.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/Utiles/src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/appCatalogAndGazetteerClient"/>
+	<classpathentry kind="lib" path="/appCatalogAndGazetteerClient/lib/commons-httpclient-2.0.2.jar"/>
+	<classpathentry kind="lib" path="/appCatalogAndGazetteerClient/lib/ostermillerutils_1_04_03_for_java_1_4.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
