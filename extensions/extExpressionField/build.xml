@@ -1,0 +1,155 @@
+<project name="extExpressionField" default="deploy" basedir=".">
+	<description>
+        Instala el plugin de Centrar la Vista sobre un punto en Andami.
+    </description>
+	<!-- set global properties for this build -->
+	<property name="src" location="src"/>
+	<property name="build" location="bin"/>
+	<property name="src-test" location="src-test"/>
+	<property name="build-test" location="build-test"/>
+	<property name="doc"  location="doc"/>
+	<property name="dist"  location="dist"/>
+	<property name="dist-src-name"  value="dist-src"/>
+	<property name="dist-src"  location="${dist-src-name}"/>
+	<property name="without_src"  location="without_src"/>
+	<property name="plugin" value="com.iver.gvsig.expressionfield"/>
+	<property name="mainplugin" value="com.iver.cit.gvsig"/>
+	<property name="extensionDir" location="../_fwAndami/gvSIG/extensiones"/>
+	<property name="readMe.files" value="Leeme-ExpressionField.txt, Readme-ExpressionField.txt"/>
+	<property name="andami" location="../_fwAndami"/>
+	<property name="andamiLibs" location="${andami}/lib"/>
+	<property name="fmap" location="../libFMap"/>
+	<property name="fmapLibs" location="${fmap}/lib"/>
+	<property name="scripting" location="../extScripting"/>
+	<property name="scriptingLibs" location="${scripting}/lib"/>
+	<property name="installLibDir" location="${extensionDir}/${mainplugin}/lib"/>
+	<property name="cad_gvsig_jar" location="${extensionDir}/${mainplugin}.cad/${mainplugin}.cad.jar"/>
+	<import file="../binaries/ant/utilities.xml"/>
+	<target name="init">
+		<!-- Create the time stamp -->
+        <echo>
+            Compiling ${ant.project.name}...</echo>
+		<tstamp/>
+   		<mkdir dir="${without_src}"/>
+	</target>
+
+
+	<target name="generate-source-package">
+		<delete dir="${dist-src}" quiet="yes"/>
+		<mkdir dir="${dist-src}"/>
+		<basename file="${basedir}" property="extensionProjectDir"/>
+		<mkdir dir="${dist-src}/${extensionProjectDir}"/>
+		<copy todir="${dist-src}/${extensionProjectDir}">
+			<fileset dir="${basedir}"/>
+		</copy>
+		<copy todir="${dist-src}">
+			<fileset dir="${basedir}/install/resources" includes="${readMe.files}"/>
+		</copy>
+		<delete dir="${dist-src}/${extensionProjectDir}/bin"/>
+		<mkdir dir="${dist-src}/${extensionProjectDir}/bin"/>
+		<delete dir="${dist-src}/${extensionProjectDir}/install"/>
+		<delete dir="${dist-src}/${extensionProjectDir}/dist" quiet="yes"/>
+		<delete dir="${dist-src}/${extensionProjectDir}/dist-src" quiet="yes"/>
+		<loadproperties srcFile="build.number"/>
+		<replace casesensitive="true"
+	  	  	token="#build.number#"
+	  		value="${build.number}"
+	  		dir="${dist-src}"
+	  		includes="${readMe.files}"/>
+		<zip destfile="${dist-src}/gvsig_expressionfield-01_${build.number}-src.zip"
+	  	       basedir="${dist-src-name}"
+	  	       excludes="*.zip"
+	  	  />
+
+	</target>
+
+	<target name="distribution" description="increment build number and generate the distribution without the source file" >
+		<echo> Obsoleto: este proyecto se distribuye con gvSIG de base </echo>
+        <!--     -->
+	</target>
+	<target name="generate-without-source" description="generate the distribution without the source file" >
+		<!-- Create the distribution directory -->
+		<mkdir dir="${without_src}"/>
+
+		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+		<jar jarfile="${without_src}/${plugin}.jar" basedir="${build}"/>
+		<copy file="config/config.xml" todir="${without_src}"/>
+		<copy file="build.number" todir="${without_src}"/>
+		<copy file="config/about.htm" todir="${without_src}"/>
+		<loadproperties srcFile="build.number"/>
+		<replace casesensitive="true"
+  		file="${without_src}/about.htm"
+  	  	token="#build.number#"
+  		value="${build.number}"/>
+		<copy todir="${without_src}">
+			<fileset dir="config" includes="text*.properties"/>
+		</copy>
+		<copy todir="${without_src}/images">
+			<fileset dir="images/" includes="*"/>
+		</copy>
+		<move todir="${extensionDir}/${plugin}/">
+			<fileset dir="${without_src}" includes="**/**"/>
+		</move>
+	</target>
+
+
+    <target name="deploy"
+            description="compile the sources, create the jar file"
+            depends="init,create-jar,copy-data-files,move-to-andami">
+    </target>
+
+    <target name="batch-build"
+            description="compile the sources, create the jar file"
+            depends="init,compile,create-jar,copy-data-files,move-to-andami">
+    </target>
+
+    <target name="compile" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<antcall target="gvSIG-import-build-number"/>
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"	/>
+    </target>
+
+    <target name="create-jar"
+            description="Creates the plugin jar">
+		<jar jarfile="${without_src}/${plugin}.jar" basedir="${build}"/>
+    </target>
+
+    <target name="copy-data-files">
+		<copy file="config/config.xml" todir="${without_src}"/>
+		<copy file="build.number" todir="${without_src}"/>
+		<copy file="config/about.htm" todir="${without_src}"/>
+		<loadproperties srcFile="build.number"/>
+		<replace casesensitive="true"
+  		file="${without_src}/about.htm"
+  	  	token="#build.number#"
+  		value="${build.number}"/>
+		<copy todir="${without_src}">
+			<fileset dir="config" includes="text*.properties"/>
+		</copy>
+		<copy todir="${without_src}/images">
+			<fileset dir="images/" includes="*"/>
+		</copy>
+    </target>
+
+
+    <target name="move-to-andami">
+		<move todir="${extensionDir}/${plugin}/">
+			<fileset dir="${without_src}" includes="**/**"/>
+		</move>
+    </target>
+
+	<target name="clean">
+		<delete dir="${dist}" failonerror="false"/>
+		<delete dir="${dist-src}" failonerror="false"/>
+	</target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="org.gvsig.scripting.AllTests"/>
+		</antcall>
+	</target>
+</project>
+
