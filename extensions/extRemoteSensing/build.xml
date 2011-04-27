@@ -1,0 +1,108 @@
+<project name="Generar extension en Andami" default="generate-without-source" basedir=".">
+    <description>
+        Instala la extension RemoteSensing en Andami.
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="bin"/>
+  <property name="dist"  location="dist"/>
+  <property name="lib"  location="lib"/>
+  <property name="plugin" value="org.gvsig.remotesensing"/>
+  <property name="extension-dir" location="../_fwAndami/gvSIG/extensiones"/>
+  <property name="andami-dir" location="../_fwAndami"/>
+  <property name="targetDir" location="../libFMap/lib" />
+
+  <import file="../binaries/ant/utilities.xml"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+    <mkdir dir="${dist}"/>
+	<mkdir dir="${dist}/lib"/>
+
+  	<!-- Creamos un fichero con el timeStamp para que lo lea el FPanelAbout -->
+  	<!--<buildnumber/>-->
+
+  </target>
+
+
+	<target name="batch-build"
+			description="compile the sources, create the jar file"
+			depends="init,compile,create-jar,copy-data-files,move-to-andami">
+	</target>
+
+	<target name="compile" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<antcall target="gvSIG-import-build-number"/>
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+	</target>
+
+
+
+  <target name="generate-without-source"
+	description="generate the distribution without the source file"
+	depends="init,create-jar,copy-data-files,move-to-andami"
+	/>
+
+  <target name="create-jar">
+
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/lib/${plugin}.jar" basedir="${build}"/>
+  </target>
+
+  <target name="copy-data-files">
+  	<copy file="config/config.xml" todir="${dist}"/>
+		<copy file="build.number" todir="${dist}"/>
+    <copy file="config/about.htm" todir="${dist}"/>
+    <loadproperties srcFile="build.number"/>
+    <replace casesensitive="true"
+    file="${dist}/about.htm"
+    token="#build.number#"
+    value="${build.number}"/> 
+    <copy todir="${dist}">
+  		<fileset dir="config" includes="text*.properties"/>
+  	</copy>
+  	<copy todir="${dist}/images">
+  		<fileset dir="images/" includes="*"/>
+  	</copy>
+  	<copy todir="${dist}/lib">
+  		<fileset dir="${lib}" includes="**/**"/>
+   	</copy>
+
+  </target>
+
+  <target name="move-to-andami">
+
+    <move todir="${extension-dir}/${plugin}/">
+    	<fileset dir="${dist}" includes="**/**"/>
+    </move>
+  </target>
+
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${dist}"/>
+    <delete dir="${build}"/>
+  </target>
+  
+  <target name="buildNumber">  
+    <propertyfile     file="build.number"
+        comment="Build Number for ANT. Do not edit!">
+      <entry key="build.number" default="0" type="int" operation="+" />
+    </propertyfile>
+    <property file="build.number" />
+  </target>
+
+  <target name="distribution"
+	 depends="buildNumber,generate-without-source"/>
+
+</project>
+
+
