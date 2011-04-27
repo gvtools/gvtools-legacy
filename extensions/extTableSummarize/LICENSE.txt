@@ -1,0 +1,21 @@
+This extension is copyright of:
+  IVER.T.I.
+  C/ LERIDA, 20
+  46009 VALENCIA (SPAIN)
+  http://www.iver.es
+
+It can be used under the terms of the GPL license, version 2
+(or any later version):
+http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+Source code can be obtained from gvSIG public SVN:
+http://subversion.gvsig.org/gvSIG/
+
+The following third-party libraries are used by this gvSIG extension:
+
+swingx: https://swingx.dev.java.net/
+License: LGPL
+
+swing-layout: https://swing-layout.dev.java.net/
+License: LGPL
+ 

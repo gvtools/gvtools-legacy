@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<plugin-config>
+	<depends plugin-name="com.iver.cit.gvsig"/>
+	<libraries library-dir="."/>
+	<resourceBundle name="text"/>
+	<extensions>
+		<extension class-name="org.gvsig.app.documents.table.summarize.TableSummarizeExtension"
+			description="Módulo para el cálculo de estadisticas sobre tablas DBF." 
+			active="true" 
+			priority="1">
+			<tool-bar name="Herramientas" position="12">
+				<action-tool icon="tableSummarize-statistics" tooltip="table_summarize" position="9"/>
+			</tool-bar>
+		</extension>
+	</extensions>		
+</plugin-config>
