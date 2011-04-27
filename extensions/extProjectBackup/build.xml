@@ -1,0 +1,145 @@
+	<project name="extProjectBackup" default="batch-build" basedir=".">
+
+		<description>
+	        Installs the plugin extProjectBackup in gvSIG.
+	    </description>
+
+		  <!-- set global properties for this build -->
+		  <property name="src" location="src"/>
+		  <property name="build" location="bin"/>
+		  <property name="dist"  location="dist"/>
+		  <property name="lib"  location="lib"/>
+		  <property name="plugin" value="org.gvsig.backup"/>
+		  <property name="andami-lib" value="../_fwAndami/lib"/>
+		  <property name="andami" value="../_fwAndami/"/>
+		  <property name="extension-dir" location="../_fwAndami/gvSIG/extensiones"/>
+		  <property name="validation-dir" location="../_fwAndami/lib"/>
+		  <property name="gvSIGlib-dir" location="${extension-dir}/com.iver.cit.gvsig/lib"/>
+		  <property name="model-dir" location="../_fwAndami/gvSIG/extensiones/"/>
+		  <property name="img-dir" location="../_fwAndami/src/images"/>
+		  <property name="theme-dir" location="../_fwAndami/theme"/>
+		  <property name="gvSIG-dir" location="${extension-dir}/com.iver.cit.gvsig/"/>
+		  <property name="jarName" value="org.gvsig.backup.jar"/>
+		<import file="../binaries/ant/utilities.xml"/>
+
+	 <target name="init">
+	    <!-- Create the time stamp -->
+	    <tstamp/>
+	    <!-- Create the build directory structure used by compile -->
+	    <mkdir dir="${build}"/>
+	    <mkdir dir="${dist}"/>
+	  	<!-- Creamos un fichero con el timeStamp para que lo lea el FPanelAbout -->
+	  	<!-- <buildnumber/> -->
+	  </target>
+
+	<target name="batch-build" depends="compile,generate-without-source,generate-validation-without-source, generate-model-without-source">
+	</target>
+
+	<target name="buildNumber">
+		<propertyfile
+			file="build.number"
+			comment="Build Number for ANT. Do not edit!">
+			<entry
+				key="build.number"
+				default="0"
+				type="int" operation="+"/>
+			</propertyfile>
+		<property file="build.number"/>
+	</target>
+
+
+	<target name="clean"
+		    description="cleans the build directories">
+		<delete dir="${build}" failonerror="no"/>
+		<delete dir="${dist}" failonerror="no"/>
+	</target>
+
+
+	<target name="distribution" depends="buildNumber,batch-build">
+	</target>
+
+
+	<target name="generate-without-source" description="generate the distribution without the source file" >
+	    <!-- Create the distribution directory -->
+	    <mkdir dir="${dist}"/>
+
+	    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+	    <jar jarfile="${dist}/${plugin}.jar" basedir="${build}"/>
+
+		<copy todir="${dist}">
+			<fileset dir="config/" includes="*"/>
+	    </copy>
+
+		<mkdir dir="${dist}/images"/>
+		<copy todir="${dist}/images">
+			<fileset dir="images" includes="*"/>
+		</copy>
+		<copy todir="${dist}">
+			<fileset dir="lib" includes="*"/>
+		</copy>
+
+	    <loadproperties srcFile="build.number"/>
+		<replace casesensitive="true"
+			file="${dist}/about.htm"
+			token="#build.number#"
+			value="${build.number}"/>
+	    <copy todir="${dist}">
+	    	<fileset dir="config" includes="text*.properties"/>
+	    </copy>
+
+    	<copy file="build.number" todir="${dist}"/>
+
+		<!-- <move file="${dist}/${plugin}.jar" todir="${gvSIGlib-dir}" />
+	    <move todir="${extension-dir}/${plugin}/">
+	    	<fileset dir="${dist}" includes="**/**" />
+	    </move> -->
+	</target>
+
+		<target name="compile" description="compile the source" >
+				<!-- Compile the Java code from ${src} to ${build} -->
+				<mkdir dir="${build}" />
+				<loadEclipseClasspath project="${basedir}"/>
+				<gvSIG-javac
+					classpath="${eclipseClasspath}"
+				/>
+
+				<!--<javac  srcdir="${src}"
+					destdir="${build}"
+					source="${JavaSourceVersion}"
+					target="${JavaTargetVersion}"
+					debug="${debug}"
+					debuglevel="${debuglevel}">
+			    	<classpath refid="libFMap.compile-classpath"/>
+				</javac>-->
+				<!-- copy data files -->
+				<copy todir="${build}">
+					<fileset
+						dir="src"
+						excludes="**/*.java"/>
+				</copy>
+		</target>
+
+		 <target name="generate-validation-without-source" description="generate the validation module distribution without the source file" >
+		    <!-- Create the distribution directory -->
+		    <mkdir dir="${dist}"/>
+		    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+
+		 	<!-- <copy todir="${build}/images">
+		 	    	<fileset dir="images/" includes="*"/>
+		 	</copy> -->
+		    <move todir="${extension-dir}/${plugin}/">
+		    	<fileset dir="${dist}"  includes="**/**"/>
+		    </move>
+
+		 </target>
+
+		 <target name="generate-model-without-source" description="generate the model module distribution without the source file" >
+		    <!-- Create the distribution directory -->
+		    <mkdir dir="${dist}"/>
+		    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+		    <move todir="${extension-dir}/${plugin}/">
+		    	<fileset dir="${dist}" includes="**/**"/>
+		    </move>
+
+		 </target>
+	</project>
