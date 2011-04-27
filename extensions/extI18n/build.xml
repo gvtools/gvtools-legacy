@@ -1,0 +1,104 @@
+<project name="extI18n" default="install" basedir=".">
+	<description>
+       Instala la extensión de administración de traducciones en Andami.
+   </description>
+	<!-- set global properties for this build -->
+	<property name="src" location="src" />
+	<property name="build" location="bin" />
+	<property name="dist" location="dist" />
+	<property name="plugin" value="org.gvsig.i18n" />
+	<property name="extension-dir" location="../_fwAndami/gvSIG/extensiones" />
+    <property name="without_src"  location="without_src"/>
+	
+	<import file="../binaries/ant/utilities.xml"/>
+
+	<target name="batch-build" depends="compile,install"/>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+
+		<property file="build.number" />
+
+		<!-- Creamos un fichero con el timeStamp para que lo lea el FPanelAbout -->
+		<!--buildnumber /-->
+
+	</target>
+
+	<target name="buildNumber">
+		<propertyfile file="build.number" comment="Build Number for ANT. Do not edit!">
+			<entry key="build.number" default="0" type="int" operation="+" />
+		</propertyfile>
+		<property file="build.number" />
+	</target>
+	
+	<target name="generate-without-source" description="generate the distribution without the source file">
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist}" />
+
+		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file --> 
+		<jar jarfile="${dist}/${plugin}.jar" basedir="${build}" />
+		<copy file="resources/config/config.xml" todir="${dist}" />
+		<copy todir="${dist}/images">
+			<fileset dir="resources/images/" includes="*" />
+		</copy>
+		<copy todir="${dist}">
+			<fileset dir="resources/locale" includes="text*.properties" />
+		</copy>
+		<copy file="build.number" todir="${dist}" />
+
+		<!-- AQUÍ SE HACE LA COPIA DEL about.htm A LA CARPETA TEMPORAL -->
+		<copy file="resources/about/about.htm" todir="${dist}" />
+		
+		<!-- AQUÍ SE HACE EL REMPLAZO DE #build.number# -->
+		<loadproperties srcFile="build.number" />
+		<replace casesensitive="true" file="${dist}/about.htm" token="#build.number#" value="${build.number}" />
+	</target>
+	
+	<target name="install" depends="generate-without-source" description="Install into gvSIG">
+		<move todir="${extension-dir}/${plugin}/">
+			<fileset dir="${dist}" includes="**/**" />
+		</move>
+		<!--copy file="lib/gvsig-i18n.jar" todir="${GVSIG_INSTALL_DIR}/bin/lib" /-->
+	</target>
+
+	<target name="compile" description="compile the source" >
+		<antcall target="gvSIG-import-build-number"/>
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+	</target>
+
+
+	<!-- TODO: revisar -->
+	<target name="copy-data-files">
+		<copy file="resources/config/config.xml" todir="${dist}" />
+		<copy file="build.number" todir="${dist}" />
+		<copy file="resources/about/about.htm" todir="${dist}" />
+		<!-- AQUÍ SE HACE LA COPIA DEL about.htm A LA CARPETA TEMPORAL -->
+		<loadproperties srcFile="build.number" />
+		<replace casesensitive="true" file="${dist}/about.htm" token="#build.number#" value="${build.number}" />
+		<!-- AQUÍ SE HACE EL REMPLAZO DE #build.number# -->
+		<copy todir="${dist}">
+			<fileset dir="resources/locale" includes="text*.properties" />
+		</copy>
+		<copy todir="${dist}/images">
+			<fileset dir="resources/images/" includes="*" />
+		</copy>
+	</target>
+	
+	<target name="distribution" depends="buildNumber, generate-without-source">
+	</target>
+	
+	<target name="clean">
+		<delete dir="${build}" failonerror="no"/>
+		<delete dir="${dist}" failonerror="no"/>
+	</target>
+
+</project>
