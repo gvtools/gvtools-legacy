@@ -1,0 +1,277 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       r.trim
+# AUTHOR(S):    Benjamin Ducke <benjamin.ducke AT oadigital.net>
+# PURPOSE:      Trims input data, removing extreme values and outliers.
+#
+# USAGE:	By default, the input data will be cut off below and above
+#		one standard deviation from the mean value. However, the number
+#		of deviations (or fractions thereof) can be freely chosen using
+#		the "m=" option. E.g. setting "m=0.5" will trim the output to 
+#		1/2 a standard deviation around the mean (central) value.
+#		Using the "tail=" option, it is also possible to choose to trim
+#		only the left, the right, or both (default) tails of the input
+#		data's distribution.
+#		
+#		Alternatively, the output range limits may be defined manually
+#		by passing the "min=" and "max=" options.
+#		One of the two may be skipped to trim only the lower or upper
+#		limit of the input range.
+#
+#		Finally, it is possible to trim the range to only the data
+#		within the 1st and 3rd quartiles of the distribution, simply
+#		by setting the "-q" (quartile) flag.
+#
+#		By default, all eliminated data will be represented as NULL
+#		("no data") cells in the result. Alternatively, they can be
+#		set to the value of the lower and upper limits of the cut-off
+#		Threshold via the -p ("preserve") flag, so that they will be
+#		preserved as extreme values in the output. Note, however, that 
+#		this will distort the original data distribution.
+#
+#		The result will have a simple, linearly scaled greyscale 
+#		for visualization.
+#		The greyscale can be inverted by passing the "-i" flag.
+#
+#		It is possible to preserve the original input data and keep
+#		only the greyscale in the output by passing the "-p" (preserve)
+#		flag.
+#
+# COPYRIGHT:    (C) 2010 by Benjamin Ducke
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+
+#%Module
+#% description: Trims input data, removing extreme values and outliers.
+#% keywords: raster, trimming, tails, outliers, geophysics, signals
+#%End
+
+#%Option
+#% key: input
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of input raster map
+#% gisprompt: old,cell,raster
+#%End
+
+#%Option
+#% key: output
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of output raster map (8-bit channel)
+#% gisprompt: new,cell,raster
+#%End
+
+#%Option
+#% key: m
+#% type: double
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% description: Number of standard deviations for output data range 
+#% answer: 1.0
+#%End
+
+#%Option
+#% key: min
+#% type: double
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% description: Minimum value to include in output range
+#%End
+
+#%Option
+#% key: max
+#% type: double
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% description: Maximum value to include in output range
+#%End
+
+#%Option
+#% key: tail
+#% type: string
+#% required: no
+#% multiple: no
+#% options: left,right,both
+#% description: Choice of distribution tail(s) to trim
+#% answer: both
+#%End
+
+#%Flag
+#%  key: q
+#%  description: Trim to data between 1st and 3rd quartile
+#%End
+
+#%Flag
+#%  key: p
+#%  description: Preserve eliminated values as extreme values
+#%End
+
+#%Flag
+#%  key: c
+#%  description: New greyscale only, keep original data
+#%End
+
+#%Flag
+#%  key: i
+#%  description: Invert greyscale
+#%End
+
+
+MODULE_NAME=r.trim
+
+
+if [ -z "$GISBASE" ] ; then
+	echo "ERROR: You must be in GRASS GIS to run this program." 1>&2
+	exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+	exec g.parser "$0" "$@"
+fi
+
+if [ -n "$GIS_OPT_MIN" ] || [ -n "$GIS_OPT_MAX" ] ; then
+	g.message -w "Trimming to user-defined range."
+	g.message -w "Ignoring all other trimming settings."
+fi
+
+if [ "$GIS_FLAG_Q" = "1" ] ; then
+	g.message -w "Trimming to within 1st and 3rd quartiles."
+	g.message -w "Ignoring all other trimming settings."
+fi
+
+# create temporary map names
+TMP="$MODULE_NAME.`echo $$`.0"
+
+# setup temporary file
+TMP_FILE="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMP_FILE" ] ; then
+    g.message -e "Unable to create temporary file for statistics. Aborting."
+    exit 1
+fi
+
+
+# get statistics
+g.message "Getting input data statistics..."
+
+if [ "$GIS_FLAG_Q" != "1" ] ; then
+	r.univar -g "$GIS_OPT_INPUT" > $TMP_FILE
+	MEAN=`cat "$TMP_FILE" | awk --field-separator="=" 'BEGIN { "grep \"mean=\"" | getline } BEGIN { print $2 }'`
+	STDDEV=`cat "$TMP_FILE" | awk --field-separator="=" 'BEGIN { "grep \"stddev=\"" | getline } BEGIN { print $2 }'`
+else
+	r.univar -ge "$GIS_OPT_INPUT" > $TMP_FILE
+	Q1=`cat "$TMP_FILE" | awk --field-separator="=" 'BEGIN { "grep \"first_quartile=\"" | getline } BEGIN { print $2 }'`
+	Q3=`cat "$TMP_FILE" | awk --field-separator="=" 'BEGIN { "grep \"third_quartile=\"" | getline } BEGIN { print $2 }'`
+fi
+
+# choose which value to use for representing eliminated cells
+# in the output (default = NULL)
+if [ -n "$GIS_OPT_MIN" ] || [ -n "$GIS_OPT_MAX" ] ; then
+	REPLACE_L="$GIS_OPT_MIN"
+	REPLACE_R="$GIS_OPT_MAX"
+else
+	REPLACE_L="$MEAN-$GIS_OPT_M*$STDDEV"
+	REPLACE_R="$MEAN+$GIS_OPT_M*$STDDEV"
+fi
+if [ "$GIS_FLAG_Q" = "1" ] ; then
+	REPLACE_L="$Q1"
+	REPLACE_R="$Q3"
+fi
+if [ "$GIS_FLAG_P" = "0" ] ; then
+	REPLACE_L="null()"
+	REPLACE_R="null()"
+fi
+
+# trim to between 1st and 3rd quartile
+if [ "$GIS_FLAG_Q" = "1" ] ; then
+	# user specified min and max
+	g.message "Trimming below Q1:"
+	r.mapcalc "$TMP=if($GIS_OPT_INPUT<$Q1,$REPLACE_L,$GIS_OPT_INPUT)"
+	g.message "Trimming above Q3:"
+	r.mapcalc "$GIS_OPT_OUTPUT=if($TMP>$Q3,$REPLACE_R,$TMP)"	
+fi
+
+# trim data by user-specified min/max
+if [ -n "$GIS_OPT_MIN" ] && [ -z "$GIS_OPT_MAX" ] && [ "$GIS_FLAG_Q" != "1" ] ; then
+	# user specified min
+	g.message "Trimming to lower limit:"
+	r.mapcalc "$GIS_OPT_OUTPUT=if($GIS_OPT_INPUT<$GIS_OPT_MIN,$REPLACE_L,$GIS_OPT_INPUT)"
+fi
+if [ -z "$GIS_OPT_MIN" ] && [ -n "$GIS_OPT_MAX" ] && [ "$GIS_FLAG_Q" != "1" ] ; then
+	# user specified max
+	g.message "Trimming to upper limit:"
+	r.mapcalc "$GIS_OPT_OUTPUT=if($GIS_OPT_INPUT>$GIS_OPT_MAX,$REPLACE_R,$GIS_OPT_INPUT)"
+fi
+if [ -n "$GIS_OPT_MIN" ] && [ -n "$GIS_OPT_MAX" ] && [ "$GIS_FLAG_Q" != "1" ] ; then
+	# user specified min and max
+	g.message "Trimming to lower limit:"
+	r.mapcalc "$TMP=if($GIS_OPT_INPUT<$GIS_OPT_MIN,$REPLACE_L,$GIS_OPT_INPUT)"
+	g.message "Trimming to upper limit:"
+	r.mapcalc "$GIS_OPT_OUTPUT=if($TMP>$GIS_OPT_MAX,$REPLACE_R,$TMP)"
+fi
+
+# trim data by mean +/- m*stddev
+if [ -z "$GIS_OPT_MIN" ] && [ -z "$GIS_OPT_MAX" ] && [ "$GIS_FLAG_Q" != "1" ] ; then	
+	if [ "$GIS_OPT_TAIL" = "left" ] ; then
+		g.message "Trimming left tail:"
+		r.mapcalc "$GIS_OPT_OUTPUT=if($GIS_OPT_INPUT<$MEAN-$GIS_OPT_M*$STDDEV,$REPLACE_L,$GIS_OPT_INPUT)"
+	fi
+	if [ "$GIS_OPT_TAIL" = "right" ] ; then
+		g.message "Trimming right tail:"
+		r.mapcalc "$GIS_OPT_OUTPUT=if($GIS_OPT_INPUT>$MEAN+$GIS_OPT_M*$STDDEV,$REPLACE_R,$GIS_OPT_INPUT)"
+	fi
+	if [ "$GIS_OPT_TAIL" = "both" ] ; then
+		g.message "Trimming left tail:"
+		r.mapcalc "$TMP=if($GIS_OPT_INPUT<$MEAN-$GIS_OPT_M*$STDDEV,$REPLACE_L,$GIS_OPT_INPUT)"
+		g.message "Trimming right tail:"
+		r.mapcalc "$GIS_OPT_OUTPUT=if($TMP>$MEAN+$GIS_OPT_M*$STDDEV,$REPLACE_R,$TMP)"
+	fi
+fi
+
+# assign simple, linear greyscale
+INVERT=""
+if [ "$GIS_FLAG_I" = "1" ] ; then
+	INVERT="-n"
+fi
+r.colors --quiet map="$GIS_OPT_OUTPUT" color=grey $INVERT
+
+# preserve colors only, but keep original data?
+if [ "$GIS_FLAG_C" = "1" ] ; then
+	g.message "Restoring original data..."
+	r.mapcalc "$GIS_OPT_OUTPUT=$GIS_OPT_INPUT"
+fi
+
+# Clean up
+g.message "Cleaning up..."
+if [ "$GIS_FLAG_Q" != "1" ] ; then
+	g.remove --quiet rast="$TMP"
+	g.message "Done."
+	exit 0
+fi
+if [ -n "$GIS_OPT_MIN" ] && [ -n "$GIS_OPT_MAX" ] ; then
+	g.remove --quiet rast="$TMP"
+fi
+if [ -z "$GIS_OPT_MIN" ] && [ -z "$GIS_OPT_MAX" ] ; then
+	if [ "$GIS_OPT_TAIL" = "both" ] ; then
+		g.remove --quiet rast="$TMP"
+	fi
+fi
+
+g.message "Done."
+
+exit 0
+

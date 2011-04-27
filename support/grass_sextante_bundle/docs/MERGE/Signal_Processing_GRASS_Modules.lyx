@@ -1,0 +1,1850 @@
+#LyX 2.0.0beta3 created this file. For more info see http://www.lyx.org/
+\lyxformat 410
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+[BEFORE DOING ANY OF THESE MODIFICATIONS, CHECK IF THEY ARE
+\end_layout
+
+\begin_layout Plain Layout
+ALREADY IN GRASS 6.5!]
+\end_layout
+
+\begin_layout Plain Layout
+For next meeting in Frankfurt:
+\end_layout
+
+\begin_layout Plain Layout
+1.
+ Implement:
+\end_layout
+
+\begin_layout Plain Layout
+r.despike
+\end_layout
+
+\begin_layout Plain Layout
+r.to.channel
+\end_layout
+
+\begin_layout Plain Layout
+(r.destripe)
+\end_layout
+
+\begin_layout Plain Layout
+r.normalize
+\end_layout
+
+\begin_layout Plain Layout
+r.standardize
+\end_layout
+
+\begin_layout Plain Layout
+r.footprint.(channels)
+\end_layout
+
+\begin_layout Plain Layout
+Kvamme's Rim/Ridge
+\end_layout
+
+\begin_layout Plain Layout
+All as scripts, so they can easily be added to an existing GRASS installation.
+\end_layout
+
+\begin_layout Plain Layout
+2.
+ Fix these bugs:
+\end_layout
+
+\begin_layout Plain Layout
+- Windows does not find binaries in MSYS path
+\end_layout
+
+\begin_layout Plain Layout
+- gvSIG raster file selector does not show .grd files (and some others)
+\end_layout
+
+\begin_layout Plain Layout
+3.
+ Show a geophysics workflow:
+\end_layout
+
+\begin_layout Plain Layout
+- import from Surfer grid
+\end_layout
+
+\begin_layout Plain Layout
+- use r.despike (always first module to use!)
+\end_layout
+
+\begin_layout Plain Layout
+- use r.destripe/low-pass filter (which order? probably first destripe?)
+\end_layout
+
+\begin_layout Plain Layout
+- create some metrics and convert them to RGB channels with r.to.channel
+\end_layout
+
+\begin_layout Plain Layout
+- make some RGB and HIS visualizations
+\end_layout
+
+\begin_layout Plain Layout
+- try some supervised classification on all channels with SEXTANTE
+\end_layout
+
+\begin_layout Plain Layout
+r.despike
+\end_layout
+
+\begin_layout Plain Layout
+Replace all cells above/below a max and/or min threshold with NULL.
+\end_layout
+
+\begin_layout Plain Layout
+Run rmfilter with -z flag to interpolate NULL cells.
+ Pass thru
+\end_layout
+
+\begin_layout Plain Layout
+window size and shape options.
+\end_layout
+
+\begin_layout Plain Layout
+Re-apply and NULL cells in the original input maps (i.e.
+ those that
+\end_layout
+
+\begin_layout Plain Layout
+were already NULL prior to the despiking).
+\end_layout
+
+\begin_layout Plain Layout
+r.destripe
+\end_layout
+
+\begin_layout Plain Layout
+Use a directional filter matrix.
+ User can choose angle and width
+\end_layout
+
+\begin_layout Plain Layout
+of stripes, e.g.
+ 45 deg., width 4:
+\end_layout
+
+\begin_layout Plain Layout
+*...
+\end_layout
+
+\begin_layout Plain Layout
+.*..
+\end_layout
+
+\begin_layout Plain Layout
+..*.
+\end_layout
+
+\begin_layout Plain Layout
+...*
+\end_layout
+
+\begin_layout Plain Layout
+Question: is width a necessary parameter?
+\end_layout
+
+\begin_layout Plain Layout
+--> can implement this using an r.mfilter custom filter.
+\end_layout
+
+\begin_layout Plain Layout
+--> test a few manual designs to see how well this works.
+\end_layout
+
+\begin_layout Plain Layout
+--> an angular approximation may be good enough.
+\end_layout
+
+\begin_layout Plain Layout
+Next steps
+\end_layout
+
+\begin_layout Plain Layout
+- look into efficient, smooth vectorization (needs nT raster
+\end_layout
+
+\begin_layout Plain Layout
+clumping, generalization etc.
+ modules first)
+\end_layout
+
+\begin_layout Plain Layout
+- look into better import of raw measurements
+\end_layout
+
+\begin_layout Plain Layout
+- provide nice, scalable nT color schemes
+\end_layout
+
+\begin_layout Plain Layout
+LIST OF GRASS MODULES TO DEVELOP
+\end_layout
+
+\begin_layout Plain Layout
+r.normalize/standardize
+\end_layout
+
+\begin_layout Plain Layout
+...
+\end_layout
+
+\begin_layout Plain Layout
+r.to.channel
+\end_layout
+
+\begin_layout Plain Layout
+A module that rescales the values in any input layer
+\end_layout
+
+\begin_layout Plain Layout
+to 0..255, so it can be used as an R/G/B/(a) or
+\end_layout
+
+\begin_layout Plain Layout
+H/I/S layer in visulaization.
+\end_layout
+
+\begin_layout Plain Layout
+r.mfilter
+\end_layout
+
+\begin_layout Plain Layout
+(can be used to run filters of arbitrary shape over a raster!
+\end_layout
+
+\begin_layout Plain Layout
+can be used to create new values ONLY FOR NULL CELLS! Perfect
+\end_layout
+
+\begin_layout Plain Layout
+for closing small data gaps! And for smoothing raster feature
+\end_layout
+
+\begin_layout Plain Layout
+edges!)
+\end_layout
+
+\begin_layout Plain Layout
+r.kappa
+\end_layout
+
+\begin_layout Plain Layout
+(can be used to assess accuracy of a classification raster)
+\end_layout
+
+\begin_layout Plain Layout
+enable r.le*, r.li* modules in interface, but only those
+\end_layout
+
+\begin_layout Plain Layout
+modules/parameters that do not require a sampling file to
+\end_layout
+
+\begin_layout Plain Layout
+be set up.
+\end_layout
+
+\begin_layout Plain Layout
+r.volume
+\end_layout
+
+\begin_layout Plain Layout
+(use this to transfer clump statistics to vector centroids)
+\end_layout
+
+\begin_layout Plain Layout
+r.topidx
+\end_layout
+
+\begin_layout Plain Layout
+(produces a topographic index)
+\end_layout
+
+\begin_layout Plain Layout
+r.texture
+\end_layout
+
+\begin_layout Plain Layout
+- can be used to generate footprints for input rasters
+\end_layout
+
+\begin_layout Plain Layout
+with not more than 255 classes
+\end_layout
+
+\begin_layout Plain Layout
+r.clump
+\end_layout
+
+\begin_layout Plain Layout
+- add a flag to store size of each clump in the output map
+\end_layout
+
+\begin_layout Plain Layout
+r.param.scale
+\end_layout
+
+\begin_layout Plain Layout
+- can use exponential distance weighting for morphometric
+\end_layout
+
+\begin_layout Plain Layout
+parameters, such as slope, aspect, etc.
+ !!
+\end_layout
+
+\begin_layout Plain Layout
+r.footprint.polygons (NEW)
+\end_layout
+
+\begin_layout Plain Layout
+- take a polygon map and a series of raster maps
+\end_layout
+
+\begin_layout Plain Layout
+- create temp, normalized versions of all raster input maps
+\end_layout
+
+\begin_layout Plain Layout
+- set resolution and extent to that of first input map
+\end_layout
+
+\begin_layout Plain Layout
+- rasterize polygons
+\end_layout
+
+\begin_layout Plain Layout
+- for each polygon raster patch: run r.average, r.median, r.coin, r.le.patch,
+ r.mode etc.
+\end_layout
+
+\begin_layout Plain Layout
+on all raster input maps and save the result back as an attribute
+\end_layout
+
+\begin_layout Plain Layout
+into the original polygon (use v.sample or r.volume; just combine centroid
+ output
+\end_layout
+
+\begin_layout Plain Layout
+of the latter and attributes with boundaries of original polygons; OR USE
+ v.sample
+\end_layout
+
+\begin_layout Plain Layout
+and just sample at the polygon centroids).
+\end_layout
+
+\begin_layout Plain Layout
+- do this at several different raster resolutions
+\end_layout
+
+\begin_layout Plain Layout
+r.footprint.channels
+\end_layout
+
+\begin_layout Plain Layout
+- same idea as above, but produce an output suitable for supervised classificati
+on:
+\end_layout
+
+\begin_layout Plain Layout
+- use nT data (despiked, destriped, etc.) and derive: slope, aspect, etc.
+\end_layout
+
+\begin_layout Plain Layout
+- produce metrics at a variety of resolutions, 
+\end_layout
+
+\begin_layout Plain Layout
+- switch back to base resolution (no interpolation) 
+\end_layout
+
+\begin_layout Plain Layout
+- convert all metrics to channels [0..255]
+\end_layout
+
+\begin_layout Plain Layout
+- use r.out.gdal to directly produce a multi-channel GeoTIFF (this can then
+ directly
+\end_layout
+
+\begin_layout Plain Layout
+be passed as output to the SEXTANTE interface) -> simply use i.group and
+ make a
+\end_layout
+
+\begin_layout Plain Layout
+temp group to be passed to r.out.gdal!
+\end_layout
+
+\begin_layout Plain Layout
+r.neighbors:
+\end_layout
+
+\begin_layout Plain Layout
+- add hybrid neighborhods
+\end_layout
+
+\begin_layout Plain Layout
+- add linear neighbourhoods with a user-definable angle and width (destriping!)
+\end_layout
+
+\begin_layout Plain Layout
+-> how do we move those across the raster? in direction of angle? NO! simply
+ along rows and cols of map!
+\end_layout
+
+\begin_layout Plain Layout
+- add Kvamme's rim (ridge?)
+\end_layout
+
+\begin_layout Plain Layout
+- add Squared Median
+\end_layout
+
+\begin_layout Plain Layout
+- add Gaussian smoothing with definable distribution parameters
+\end_layout
+
+\begin_layout Plain Layout
+- add majority filter, modelled on ArcGIS' tool
+\end_layout
+
+\begin_layout Plain Layout
+- add minority filter (?)
+\end_layout
+
+\begin_layout Plain Layout
+- add r3.neighbours to work in Voxel space
+\end_layout
+
+\begin_layout Plain Layout
+r.clean.patches (NEW)
+\end_layout
+
+\begin_layout Plain Layout
+(is there a GRASS module that finds contiguous patches and
+\end_layout
+
+\begin_layout Plain Layout
+writes their size into the output map --> extend r.clump (see above))
+\end_layout
+
+\begin_layout Plain Layout
+- eliminate small raster patches (fill with what?)
+\end_layout
+
+\begin_layout Plain Layout
+- close holes in raster patches
+\end_layout
+
+\begin_layout Plain Layout
+- boundary clean raster patches (like ArcGIS)
+\end_layout
+
+\begin_layout Plain Layout
+v.clean.patches (NEW)
+\end_layout
+
+\begin_layout Plain Layout
+- eliminate small vector polygons
+\end_layout
+
+\begin_layout Plain Layout
+- eliminate holes from polygone
+\end_layout
+
+\begin_layout Plain Layout
+- boundary clean small vector polygons (?)
+\end_layout
+
+\begin_layout Plain Layout
+DST tools:
+\end_layout
+
+\begin_layout Plain Layout
+- get rid of configuration file database, use regular files
+\end_layout
+
+\begin_layout Plain Layout
+- add uncertainy transfer from vector attributes
+\end_layout
+
+\begin_layout Plain Layout
+- normalize all raster and vector attribute input
+\end_layout
+
+\begin_layout Plain Layout
+- improve pooling of evidence (get rid of 2% margin, make safeguard test
+ optional)
+\end_layout
+
+\begin_layout Plain Layout
+- generate BPNs by Montecarlo testing
+\end_layout
+
+\begin_layout Plain Layout
+- add Kvamme's new metrics
+\end_layout
+
+\begin_layout Plain Layout
+v.in.ogr
+\end_layout
+
+\begin_layout Plain Layout
+- release attributes import handbrake
+\end_layout
+
+\begin_layout Plain Layout
+gvSIG
+\end_layout
+
+\begin_layout Plain Layout
+- add snakes to CAD editor: configuration page can go into editing properties
+\end_layout
+
+\begin_layout Plain Layout
+- fix vectorization tool
+\end_layout
+
+\begin_layout Plain Layout
+- update PROJ4 lib
+\end_layout
+
+\begin_layout Plain Layout
+- update GDAL lib
+\end_layout
+
+\begin_layout Plain Layout
+- add support for SQLITE3 (spatial)
+\end_layout
+
+\begin_layout Plain Layout
+- really test support for relative paths
+\end_layout
+
+\begin_layout Plain Layout
+- finish decision tree and map algebra tools in Remote Sensing Extension
+\end_layout
+
+\begin_layout Plain Layout
+***
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Processing geophysical data offers many unique advantages:
+\end_layout
+
+\begin_layout Itemize
+GIS (especially GRASS) are great at processing very large amounts of data.
+\end_layout
+
+\begin_layout Itemize
+Data can be imported and exported in a large variety of useful formats.
+\end_layout
+
+\begin_layout Itemize
+Map algebra can be used to process rasterized measurement with great efficiency
+ and flexibility.
+\end_layout
+
+\begin_layout Itemize
+It is easy to switch between different ground resolutions and thus level
+ of detail while processing.
+\end_layout
+
+\begin_layout Itemize
+Many common GIS tools, such geomorphometric analysis and remote sensing
+ can be readily applied to geophysical data and may offer completely new
+ perspectives on the processing of such data.
+\end_layout
+
+\begin_layout Itemize
+Spatial data from other sources can be overlaid with greatest accuracy for
+ visualization or data fusion.
+\end_layout
+
+\begin_layout Itemize
+Some GIS (most notably GRASS) offer 3D data models which can accomodate
+ 3D sensors such as ground penetrating radar.
+\end_layout
+
+\begin_layout Standard
+The field of signal values measured by a geophysical device may be considered
+ a topographic phenomenon.
+ E.g., like an elevation model, a geomagnetic field has pits and peak, channels
+ and ridges.
+ It is possible to derive typical topographic parameters such as the slope,
+ which characterizes signal flanks.
+ It is also possible to use many typical GIS tools for the analysis of such
+ data.
+ But whereas typical surface data processed in GIS has a natural, geomorphologic
+al smoothness, geophysical data is often characterized by the presence of
+ much noise, extreme values (spikes), and high-frequency distortions.
+ This is due to the fact that an entity such as a magnetic field, as it
+ gets picked up by a sensor, is actually the superficially measured, cumulative
+ result of many overlapping processes at different types -- of which the
+ measured signal may give only an imperfect reflection.
+ Therefore, some specialized signal filtering and smoothing tools are needed
+ which are not readily available in most GIS.
+\end_layout
+
+\begin_layout Standard
+Although it is possible to achieve almost everything done by the modules
+ presented here by using combinations of basic GIS tools and a lot of map
+ algebra, this is certainly not convenient for the user.
+ Geophysical data analysis often involves a lot of trial and error, data
+ manipulation and visualization which can only be carried out effectively
+ with some user-friendly, higher level tools.
+\end_layout
+
+\begin_layout Subsection
+Working Schedule
+\end_layout
+
+\begin_layout Standard
+Excellent documentation on image processing filters here: http://homepages.inf.ed.a
+c.uk/rbf/HIPR2/hipr_top.htm
+\end_layout
+
+\begin_layout Enumerate
+Decide on some common rules for when to produce a grey scale output, when
+ to copy the input color table and when to equalize it!
+\end_layout
+
+\begin_layout Enumerate
+Squared median [DONE]
+\end_layout
+
+\begin_layout Enumerate
+Sharpening (high-pass) filters: need some of those.
+ There is one in Neteler and Mitasova, but what is the general form? Unsharp
+ mask!
+\end_layout
+
+\begin_layout Enumerate
+r.smooth.gauss -> [DONE]
+\end_layout
+
+\begin_layout Enumerate
+r.cut
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+A simple way of cutting a raster to a defined region/resolution (and manipulatin
+g the color table?)
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+r.smooth.mean
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Implement input of an optional MASK raster.
+ All non-null cells in this raster will be set to NULL and smoothed.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+r.threshold
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Can r.prominence be used for adaptive thresholding?
+\end_layout
+
+\begin_layout Enumerate
+Simple and adaptive thresholding: http://homepages.inf.ed.ac.uk/rbf/HIPR2/adpthrsh.ht
+m
+\end_layout
+
+\begin_layout Enumerate
+and 
+\begin_inset Quotes eld
+\end_inset
+
+-i
+\begin_inset Quotes erd
+\end_inset
+
+ flag to invert the thresholding effect (
+\begin_inset Quotes eld
+\end_inset
+
+<=
+\begin_inset Quotes erd
+\end_inset
+
+ instead of 
+\begin_inset Quotes eld
+\end_inset
+
+>=
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+must be implemented in C to be efficient.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Edge detection
+\begin_inset Newline newline
+\end_inset
+
+-> Edge detection is very difficult in such noisy data, simple sobel does
+ not really work.
+ Check for better algorithms, or try gvSIG.
+\begin_inset Newline newline
+\end_inset
+
+If the gvSIG algorithms work better: look at how they are implemented!
+\begin_inset Newline newline
+\end_inset
+
+Algorithms here: http://en.wikipedia.org/wiki/Edge_detection
+\begin_inset Newline newline
+\end_inset
+
+TRY I.ZC !!!
+\begin_inset Newline newline
+\end_inset
+
+USE GAUSSIAN SMOOTHING before trying edge detection
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Evaluate potential for making features stand out better in smoothed images
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Take the input image and perform an edge detection.
+\end_layout
+
+\begin_layout Enumerate
+Convert the edges to an intensity channel-
+\end_layout
+
+\begin_layout Enumerate
+Make a HIS composition: use original data as H, edges as I, skip S.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Unsharp mask? Laplacian? (see here: http://homepages.inf.ed.ac.uk/rbf/HIPR2/log.htm,
+ http://homepages.inf.ed.ac.uk/rbf/HIPR2/unsharp.htm)
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+High frequency extraction:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Subtract smoothed result from original image: http://homepages.inf.ed.ac.uk/rbf/HIPR
+2/unsharp.htm
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+FFT masking
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+a module that takes a vector layer and a raster layer and runs the FFT masking
+ on it:
+\begin_inset Newline newline
+\end_inset
+
+Import vectors without polygon cleaning; Step through all polygons (and
+ only those!) in the input map; vectorize one by one (to avoid problems
+ with ovelaps)
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Noise generators
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Implement some generators for typical noise
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Optimal data import
+\end_layout
+
+\begin_layout Enumerate
+Classification modules
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Rim/ridge indices
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+SEXTANTE integration
+\end_layout
+
+\begin_layout Enumerate
+Improvements to gvSIG and the GRASS interface
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+r.external instead of r.in.gdal/r.out.gdal
+\end_layout
+
+\begin_layout Enumerate
+8 bit rasters as bands
+\end_layout
+
+\begin_layout Enumerate
+support i.* modules
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+User Guide
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Processing instructions
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Clean-up
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Check all keywords and descriptions
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Data Processing Plan
+\end_layout
+
+\begin_layout Subsection
+Data Import
+\end_layout
+
+\begin_layout Subsubsection
+Importing scattered points
+\end_layout
+
+\begin_layout Subsubsection
+Importing grids
+\end_layout
+
+\begin_layout Standard
+r.in.grid
+\end_layout
+
+\begin_layout Subsubsection
+Importing tracks
+\end_layout
+
+\begin_layout Standard
+r.in.track
+\end_layout
+
+\begin_layout Standard
+Use GPS data to correct wiggling -> eliminate offset problems at the source.
+ -> DLMGPS
+\end_layout
+
+\begin_layout Subsubsection
+From Surfer .grd file (e.g.
+ Magnetoarch)
+\end_layout
+
+\begin_layout Subsubsection
+From Geoplot ASCII Export File (Geoplot)
+\end_layout
+
+\begin_layout Standard
+Use v.in.geoplot.
+\end_layout
+
+\begin_layout Subsection
+Initial Exploration
+\end_layout
+
+\begin_layout Standard
+r.squared.median: use for immediate cleaning and improvement of color stretching.
+\end_layout
+
+\begin_layout Subsubsection
+r.histogram.eq
+\end_layout
+
+\begin_layout Subsubsection
+r.colors.stddev
+\end_layout
+
+\begin_layout Subsubsection
+r.trim
+\end_layout
+
+\begin_layout Standard
+Use only to produce temporary maps, as this changes the original data (unless
+ you specify -c)
+\end_layout
+
+\begin_layout Standard
+Histogram equalization does not work to well if the eliminated data is preserved
+ as extreme values.
+\end_layout
+
+\begin_layout Standard
+Try the different GRASS color schemes wit -e (equalization)
+\end_layout
+
+\begin_layout Subsubsection
+r.shaded.relief
+\end_layout
+
+\begin_layout Subsection
+Basic Filtering
+\end_layout
+
+\begin_layout Subsubsection
+Distribution tweaking
+\end_layout
+
+\begin_layout Standard
+r.center: Might be easier to center the data before despiking, if the original
+ mean is far from the interesting data.
+\end_layout
+
+\begin_layout Subsubsection
+Despiking
+\end_layout
+
+\begin_layout Subsubsection
+Noise reduction
+\end_layout
+
+\begin_layout Standard
+There are different types of noise and different filtering methods may yield
+ better results depending on the noise distribution and intensity.
+\end_layout
+
+\begin_layout Standard
+What is determined to be noise and what is not depends on the scale (size
+ of window) and strength of the signal.
+\end_layout
+
+\begin_layout Standard
+Larger window sizes will dramatically increase the effect of a window-based
+ filter.
+ In many cases, it is better to repeat the filtering with a smaller window
+ size instead, to preserve smaller details.
+\end_layout
+
+\begin_layout Description
+A
+\emph on
+
+\begin_inset space ~
+\end_inset
+
+mean
+\emph default
+
+\begin_inset space ~
+\end_inset
+
+(average)
+\begin_inset space ~
+\end_inset
+
+filter acts as a simple low-pass filter.
+ It is good at eliminating noise which does not stand out too much from
+ the background.
+ It is also computationally efficient, so large datasets can easily be processed.
+ This type of filter will not work very well for 
+\begin_inset Quotes eld
+\end_inset
+
+salt and pepper
+\begin_inset Quotes erd
+\end_inset
+
+ noise, i.e.
+ if the noise stands out very much (extreme values).
+ In such cases, try despiking first or use a median filter.
+\end_layout
+
+\begin_layout Description
+The
+\emph on
+
+\begin_inset space ~
+\end_inset
+
+median
+\emph default
+
+\begin_inset space ~
+\end_inset
+
+filter is more robust against outliers and therefore able to remove 
+\begin_inset Quotes eld
+\end_inset
+
+salt and pepper noise
+\begin_inset Quotes erd
+\end_inset
+
+ or any other noise without much loss to the signal quality.
+ It will often perform better than a mean filter.
+ It is does however, take longer to compute.
+ With large window sizes, the output data will become 
+\begin_inset Quotes eld
+\end_inset
+
+blotchy
+\begin_inset Quotes erd
+\end_inset
+
+, as the median values become predominant.
+\end_layout
+
+\begin_layout Description
+A_sum_filter with a large window size will greatly increase the spread in
+ difference between features and background.
+\end_layout
+
+\begin_layout Standard
+There is no point in running a noise reduction over the data if there is
+ no actual, fine grained noise.
+ This will only result in loss of detail at no gain.
+ For more complex signal distortion of a systematic or periodic nature,
+ more specific treatments exist (e.g.
+ destriping, destaggering).
+\end_layout
+
+\begin_layout Subsubsection
+Destriping
+\end_layout
+
+\begin_layout Standard
+The best way to treat this type of systematic error is at the source, i.e.
+ when importing and rasterizing the data.
+ If that cannot be done, there are several alternatives.
+\end_layout
+
+\begin_layout Standard
+r.denoise.diversity: for gentle treatment of stripes and other problems.
+\end_layout
+
+\begin_layout Standard
+r.destripe
+\end_layout
+
+\begin_layout Standard
+r.smooth.splines: heavy duty tool for removal of all sorts of systematic errors.
+\end_layout
+
+\begin_layout Standard
+r.smooth.fourier
+\end_layout
+
+\begin_layout Subsubsection
+Data normalization
+\end_layout
+
+\begin_layout Standard
+Use r.normalize (-s) to normalize/standardize data, so different datasets
+ (from different regions) may be compared with each other.
+\end_layout
+
+\begin_layout Subsection
+Image data
+\end_layout
+
+\begin_layout Standard
+Use r.to.channel to convert a raster dataset to an 8-bit (0..255) integer image
+ channel (band).
+ In this form, the data can be integrated in RGB or HIS color space for
+ visualization or subjected to a remote sensing analysis module (e.g.
+ the i.* modules in GRASS GIS).
+\end_layout
+
+\begin_layout Subsubsection
+Visualization
+\end_layout
+
+\begin_layout Standard
+Why does r.his not produce the desired results using channels?
+\end_layout
+
+\begin_layout Standard
+From the GRASS 6.4 manual page of r.his:
+\end_layout
+
+\begin_layout Quote
+The human brain automatically interprets the vast amount of visual information
+ available according to basic rules.
+ Color, or hue, is used to categorize objects.
+ Shading, or intensity, is interpreted as three-dimensional texturing.
+ Finally, the degree of haziness, or saturation, is associated with distance
+ or depth.
+ This program allows data from up to three raster map layers to be combined
+ into a color image (in the form of separate red, green and blue raster
+ map layers) which retains the original information in terms of hue, intensity,
+ and saturation.
+\end_layout
+
+\begin_layout Standard
+HIS Color Space:
+\end_layout
+
+\begin_layout Quote
+While any raster map layer can be used to represent the hue information,
+ map layers with a few very distinct colors work best.
+ Only raster map layers representing continuously varying data like elevation,
+ aspect, weights, intensities, or amounts can suitably be used to provide
+ intensity and saturation information.
+ 
+\end_layout
+
+\begin_layout Standard
+(H)ue layer decides what color to use I(ntensity) and (S)aturation layers
+ 
+\emph on
+must
+\emph default
+ be be grayscale.
+ All three need to be floating point, not classed layers.
+ Saturation will be less for darker greys in the S layer.
+\end_layout
+
+\begin_layout Standard
+The H layer needs to consists of an appropriate range of distinctive colors.
+ A good rule may be 
+\begin_inset Quotes eld
+\end_inset
+
+color=rainbow -e
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Need a simple one-liner module to create RGB images from HIS channels.
+\end_layout
+
+\begin_layout Standard
+H = t (nT)
+\end_layout
+
+\begin_layout Standard
+I = d (sttdev)
+\end_layout
+
+\begin_layout Standard
+S = s (slope)
+\end_layout
+
+\begin_layout Standard
+r.his h_map=t i_map=d s_map=s r_map=r g_map=g b_map=b --o
+\end_layout
+
+\begin_layout Standard
+r.composite red=r green=g blue=b levels=64 output=tmp --o
+\end_layout
+
+\begin_layout Subsubsection
+Characterization
+\end_layout
+
+\begin_layout Standard
+Run a stddev neighborhood filter with a relatively large windows size (say
+ 10 times the measurement resolution) and with a circular window shape (to
+ preserve detail).
+ This will be very useful for picking out the edges of actual objects.
+ Higher values represent clearly visible and bounded features.
+\end_layout
+
+\begin_layout Subsubsection
+Classification
+\end_layout
+
+\begin_layout Standard
+r.pca
+\end_layout
+
+\begin_layout Subsection
+Common problems and cures
+\end_layout
+
+\begin_layout Subsubsection
+Salt and pepper noise
+\end_layout
+
+\begin_layout Standard
+Caused e.g.
+ by a faulty instrument.
+ Use r.despike to remove.
+\end_layout
+
+\begin_layout Subsection
+Sample protocol
+\end_layout
+
+\begin_layout Standard
+Location: xy
+\end_layout
+
+\begin_layout Standard
+user: benni
+\end_layout
+
+\begin_layout Standard
+base raster: vrable
+\end_layout
+
+\begin_layout Standard
+clip: clip2
+\end_layout
+
+\begin_layout Standard
+extents: 
+\end_layout
+
+\begin_layout LyX-Code
+north: 374.5999969
+\end_layout
+
+\begin_layout LyX-Code
+south: 198.79999835
+\end_layout
+
+\begin_layout LyX-Code
+west: 387.39998881
+\end_layout
+
+\begin_layout LyX-Code
+east: 640.59998149
+\end_layout
+
+\begin_layout LyX-Code
+nsres: 0.2
+\end_layout
+
+\begin_layout LyX-Code
+ewres: 0.19999999
+\end_layout
+
+\begin_layout LyX-Code
+rows: 879
+\end_layout
+
+\begin_layout LyX-Code
+cols: 1266
+\end_layout
+
+\begin_layout LyX-Code
+cells: 1112814
+\end_layout
+
+\begin_layout Standard
+Original distribution (raster clip2):
+\end_layout
+
+\begin_layout LyX-Code
+n: 1112789
+\end_layout
+
+\begin_layout LyX-Code
+minimum: -870.361
+\end_layout
+
+\begin_layout LyX-Code
+maximum: 1681.26
+\end_layout
+
+\begin_layout LyX-Code
+range: 2551.63
+\end_layout
+
+\begin_layout LyX-Code
+mean: 0.28282
+\end_layout
+
+\begin_layout LyX-Code
+mean of absolute values: 2.99629
+\end_layout
+
+\begin_layout LyX-Code
+standard deviation: 9.3265
+\end_layout
+
+\begin_layout LyX-Code
+variance: 86.9837
+\end_layout
+
+\begin_layout LyX-Code
+variation coefficient: 3297.68 %
+\end_layout
+
+\begin_layout LyX-Code
+sum: 314718.7810567319
+\end_layout
+
+\begin_layout LyX-Code
+1st quartile: -1.83105
+\end_layout
+
+\begin_layout LyX-Code
+median (odd number of cells): -0.305176
+\end_layout
+
+\begin_layout LyX-Code
+3rd quartile: 1.83111
+\end_layout
+
+\begin_layout LyX-Code
+90th percentile: 4.27259
+\end_layout
+
+\begin_layout Standard
+Despike:
+\end_layout
+
+\begin_layout LyX-Code
+r.despike input=clip2 output=despike lower=-200 upper=200 --o
+\end_layout
+
+\begin_layout Standard
+Reduce noise:
+\end_layout
+
+\begin_layout Standard
+<seems unnecessary for this dataset>
+\end_layout
+
+\begin_layout Standard
+Smooth with splines:
+\end_layout
+
+\begin_layout LyX-Code
+r.smooth.spline input=despike output=smooth --o attraction=0.55 sampling=5
+ smoothing=2 threshold=0 repeat=1 
+\end_layout
+
+\begin_layout Standard
+< This takes care of all the little staggering effects, thin stripes, etc.
+ Although not perfectly >
+\end_layout
+
+\begin_layout Standard
+Produce signatures:
+\end_layout
+
+\begin_layout LyX-Code
+[commands to produce good nT values map 
+\begin_inset Quotes erd
+\end_inset
+
+despike
+\begin_inset Quotes erd
+\end_inset
+
+ go here]
+\end_layout
+
+\begin_layout LyX-Code
+r.neighbors input=despike output=stddev method=stddev size=21 -c --o
+\end_layout
+
+\begin_layout LyX-Code
+r.slope.aspect elevation=despike slope=slope --o
+\end_layout
+
+\begin_layout LyX-Code
+r.neighbors method=median input=slope output=slope.s size=5 --o 
+\end_layout
+
+\begin_layout Standard
+Visualization:
+\end_layout
+
+\begin_layout LyX-Code
+r.to.channel input=despike output=ch.nt m=3.0 --o
+\end_layout
+
+\begin_layout LyX-Code
+r.to.channel input=slope.s output=ch.slope m=3.0 --o
+\end_layout
+
+\begin_layout LyX-Code
+r.to.channel input=stddev output=ch.stddev m=3.0 --o
+\end_layout
+
+\begin_layout LyX-Code
+r.to.channel input=diversity output=ch.diversity m=4.0 -i --o
+\end_layout
+
+\begin_layout LyX-Code
+r.composite red=ch.stddev green=ch.nt blue=ch.slope output=img --o levels=64
+\end_layout
+
+\begin_layout Standard
+Export to gvSIG:
+\end_layout
+
+\begin_layout LyX-Code
+r.out.gdal input=ch.nt type=Int16 output=band01.tif 
+\end_layout
+
+\begin_layout LyX-Code
+r.out.gdal input=ch.slope type=Int16 output=band02.tif
+\end_layout
+
+\begin_layout LyX-Code
+r.out.gdal input=ch.stddev type=Int16 output=band03.tif
+\end_layout
+
+\begin_layout Standard
+(gvSIG OADE 2010 does currently not support Byte type layers for band combinatio
+ns)
+\end_layout
+
+\begin_layout Standard
+<relative measures work best.
+ absolute measures (e.g.
+ min, max) only make sense if the data is transformed into a well-known
+ range first>
+\end_layout
+
+\begin_layout Standard
+Visualization in gvSIG: load 
+\begin_inset Quotes eld
+\end_inset
+
+nt
+\begin_inset Quotes erd
+\end_inset
+
+ into green band, slope into red and stddev into blue.
+ Make the blue channel the alpha channel.
+ Use some enhancments: remove outliers and trim tails to 3%.
+ Then maximize the contrast --> diagnostic visualization.
+\end_layout
+
+\begin_layout Section
+Improvements to gvSIG
+\end_layout
+
+\begin_layout Standard
+Byte type rasters are read in as SHORT type and then not available for use
+ as bands anymore.
+ Maybe there should be a choice to read byte type rasters as Java type Byte
+ instead.
+ Or change the logics behind the 
+\begin_inset Quotes eld
+\end_inset
+
+Bands
+\begin_inset Quotes erd
+\end_inset
+
+ tab accordingly, so that it will accept Short layers if there are no negative
+ values.
+\end_layout
+
+\begin_layout Section
+List of New GRASS Modules
+\end_layout
+
+\begin_layout Standard
+Implement these as shell scripts in the first stage, so they can easily
+ be added to any existing GRASS installation.
+\end_layout
+
+\begin_layout Standard
+Some of the scripts may be implemented in C in the future for better performance
+, functionality or to fix some bugs that are hard to fix in sh.
+\end_layout
+
+\begin_layout Subsection
+m.gen.filter
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Develop this module into a GRASS module that outputs a range of neighborhood
+ filter matrices: gaussian, laplacian, uniform in different shapes and sizes.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+r.composite
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Offer a simple method to combine grids into a mosaic using only a reference
+ coordinate (0,0 by default) and a grid index.
+ The module takes a list of grids to combine.
+ If they have different extents, then the operation must be aborted.
+ The module should also allow to merge a new grid into an existing composite.
+ Extent mismatch can be detected by dividing the existing composite's extents
+ by that of the grid to be merged.
+ The user is responsible for georeferencing the data after processing was
+ completed.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+r.despike
+\end_layout
+
+\begin_layout Standard
+Replace all cells above/below a max and/or min threshold with NULL.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Details
+\end_layout
+
+\begin_layout Standard
+Runs r.mfilter with -z flag to interpolate NULL cells.
+ Passes through window size and shape options to r.mfilter.
+ Re-applies any NULL cells in the original input maps (i.e.
+ those that were already NULL prior to the despiking).
+\end_layout
+
+\begin_layout Subsubsection
+Usage
+\end_layout
+
+\begin_layout Standard
+Despiking should always be the first filter to run on a raw dataset, before
+ anything else (even a color scale assignment) is done.
+ This module assumes that spikes are relatively isolated, spatially small
+ occurences.
+ It is not intended for removal and smoothing of large areas with extreme
+ values.
+ Adjust the neighborhood size as needed.
+\end_layout
+
+\begin_layout Subsubsection
+Bugs
+\end_layout
+
+\begin_layout Standard
+Currently does not check to make sure that upper >= lower.
+\end_layout
+
+\begin_layout Subsection
+r.destagger
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+see how Ken implements it in IDRISI (IML), using a simple 0|1 matrix.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+r.detrend
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Look into producing more flexible trend surfaces (maybe by interpolation
+ from sparse sampling points of the original data?).
+ In any case, it should be possible to derive the trend model directly from
+ the data itself!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Remove a sloping trend from a raster map.
+ Need to take into account magnitude and direction of trend.
+\end_layout
+
+\begin_layout Subsubsection
+Details
+\end_layout
+
+\begin_layout Standard
+Use r.plane to model the trend.
+\end_layout
+
+\begin_layout Subsubsection
+Usage
+\end_layout
+
+\begin_layout Subsection
+r.footprint
+\end_layout
+
+\begin_layout Subsection
+r.fourier
+\end_layout
+
+\begin_layout Standard
+Use a fourier filter to remove cyclical phenomena, such as plow marks.
+\end_layout
+
+\begin_layout Subsection
+r.normalize
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Add per-traverse normalization (rows or columns)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+r.smooth.splines
+\end_layout
+
+\begin_layout Standard
+Strong, global smoothing with preservation of local detail in already smooth
+ areas can be achieved using splines:
+\end_layout
+
+\begin_layout Enumerate
+Sample the raster map to vector points at every (2nd, 3rd, etc.) cell.
+\end_layout
+
+\begin_layout Enumerate
+Shoot a stiff spline through the sample points.
+\end_layout
+
+\begin_layout Enumerate
+If the distance between the spline-interpolated cell and the original cell
+ exceeds a threshold: replace with the interpolated value (set to 
+\begin_inset Quotes eld
+\end_inset
+
+0
+\begin_inset Quotes erd
+\end_inset
+
+ to replace all).
+\end_layout
+
+\begin_layout Subsubsection
+Details
+\end_layout
+
+\begin_layout Standard
+Optionally preserve original NULL cells.
+\end_layout
+
+\begin_layout Standard
+Optionally only modify cells above and/or below a threshold.
+\end_layout
+
+\begin_layout Subsubsection
+Usage
+\end_layout
+
+\begin_layout Standard
+This process is CPU intense, but should be universally useful for destriping,
+ removing tile edges, spikes, etc.
+\end_layout
+
+\begin_layout Subsection
+r.to.channel
+\end_layout
+
+\begin_layout Subsubsection
+Usage
+\end_layout
+
+\begin_layout Standard
+Despike the data first, otherwise there will not be enough contrast in the
+ interesting ranges.
+\end_layout
+
+\begin_layout Subsection
+v.footprint
+\end_layout
+
+\begin_layout Section
+List of Modifications to Existing GRASS Modules
+\end_layout
+
+\begin_layout Section
+3D Support Plan
+\end_layout
+
+\begin_layout Standard
+Generally, all modules that use r.mapcalc are easy to convert for use in
+ Voxel space.
+\end_layout
+
+\begin_layout Subsection
+r3.colors
+\end_layout
+
+\begin_layout Standard
+Adapt r.colors to produce voxels.
+\end_layout
+
+\begin_layout Subsection
+r3.neighbors
+\end_layout
+
+\begin_layout Subsection
+r3.mfilter(.fp)
+\end_layout
+
+\begin_layout Subsection
+r3.what
+\end_layout
+
+\end_body
+\end_document

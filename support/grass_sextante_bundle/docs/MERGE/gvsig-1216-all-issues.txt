@@ -1,0 +1,350 @@
+8X issues total (build 1216).
+
+---
+
+REPLIES
+
+BUG: The "Symbol selector" is totally empty and comes with no symbols preinstalled. I assume this will change for the final release of gvSIG 2.0. However, it is also impossible to define new symbols. Pressing "New" just seems to modify the same, default symbol. I am not sure I understand how this is supposed to work. Also, I can "Save" a symbol to a file, but how can I load one?
+
+
+Hi Ben,
+
+> SYMBOLOGY: GENERAL
+>
+> BUG: The "Symbol selector" is totally empty and comes with no symbols preinstalled. I assume this will change for the final release of gvSIG 2.0. However, it is also impossible to define new symbols. Pressing "New" just seems to modify the same, default symbol. I am not sure I understand how this is supposed to work. Also, I can "Save" a symbol to a file, but how can I load one?
+
+I agree with you, it should be some default symbols included in gvSIG. I've opened a feature request about that.
+
+Regarding to define new symbols: yes, 'New' creates/modifies a default symbol (or a symbol that you've selected if you have any inside folder 'Symbols'), and then you can only 'Apply' or also 'Save' it there in order to use it in the future. So you have to save it inside Symbol folder, which is in 'home/userX/gvSIG/Symbols'. The same happens with Styles folder. If you do that, this symbol should appear then in your default Symbols.
+
+> LABELING
+>
+> BUG: Custom label styles: "Placement properties:Change location" brings up a "Label styles" dialog, but the window title is "Symbol selector". Also, why is there an Options panel with "Width" and "Height" settings? It seems to be meaningless in this context? The same problem as with the "Symbol editor" for map symbology: I could not find a way to add custom styles to the library. They would just disappear again after closing the dialog.
+>
+>   
+
+Same problem. Please check if it also happens after 'Save' the label style into the Styles path. 
+
+---
+
+TEST THE FOLLOWING (USING TIM'S DATA):
+
+WMS:
+
+use:
+http://mapbender.wheregroup.com/cgi-bin/mapserv?map=/data/umn/osm/osm_basic.map&VERSION=1.1.1&REQUEST=GetCapabilities&SERVICE=WMS
+
+MAP PRODUCTION: Insert two different View, change the projection for on of the Views: all sorts of things stop working properly!
+		Why don't images work? SVG? JPEG?
+		PS export: gives error message?
+		-> Test this part thoroughly!
+
+PROJECTION: Changing projection from EPSG: WGS84 2D lat/long to ESRI: WGS84 Plate Caree crashes gvSIG
+
+ODBC: do integer fields in Access queries come across as text fields?
+
+ODBC: join first one, then multiple ODBC tables (in one go) to a layer: does saving work now?
+
+DBF: multiple join operations (in one go): performance goes down a lot, hard to scroll in table [SEEMS FIXED]
+
+DBF: multiple join operations (in one go): cannot save unless attribute table is deleted from project first [SEEMS FIXED]
+
+GUI: getting access to the new raster tools requires at least one layer to be present. This makes no sense if the first
+thing the user wants to do is georeference a raw image file and add that as the project's first layer. Also, it's OK to
+add only vector layers and the raster tools will still be active!
+
+More gvSIG bugs (1.9 Alpha):
+- change layer symbology, e.g. to a dot density style; start editing: geometries do not get reset to their "raw" appearances!
+- layer names in TOC get mangled until resizing event occurs and layer is left-clicked on
+- 3D extension: when creating a new 3D view, the initial properties dialog pops up too big and is not resizable on small screens
+- 3D extension: after creating a new 3D view it kills proper dialog refresh: e.g. try to add layers: need to tab through all widgets to update 
+  and see them!
+
+---
+
+JAVA (1.6) ISSUES
+
+WISH: Only the "Plastic XP" look works really well on Linux. All other Java Looks produce empty spaces on the icon bar for inactive icons, wasting a lot of space (have not tried this on any other operating system). If this can be fixed, we can distribute gvSIG with Java 1.6.10 and the "Nimbus" look enabled by default, which will make it look a lot more modern and slick (would also look great with the new icons design). The Nimbus look currently has one more problem: it results in a Spanish error message every time I try to add a layer to a view (see screenshot). However, just clicking "OK" will bring up the "Add layer" dialog just fine.
+
+BUG: There are some errors (especially in the labeling part) that only occur when using Java 1.6 (actually, I used Java 1.6 update 10). I have marked those [Java 1.6 only]. I still think those should be fixed for several reasons: (1) Java 1.6 provides much better performance and a much more responsive GUI (2) on Mac OS X, the JRE cannot be bundled and the system might be running Java 1.6.
+
+BUG: LABELING: Opening the "Labeling" tab in the "Layer properties" always gives an error message: "PluginServices.Error grave de la aplicación.  
+ Es conveniente que salgas de la aplicación
+ ". On first opening. The same happens in other places (e.g. when switching the "Methods" option under "Classes" or clicking the little "?" in the preview window). [Java 1.6 only]
+
+BUG: LABELING: For polygon and line type layers, the same error message always pops up when clicking on "Placement". The resulting dialog is garbled (the dialog works fine for point layers). [Java 1.6 only]
+
+BUG: LABELING: Specifying a "Label expression" as "[fieldname]" results in a "sun.awt.geom.Curve.crossingsForPath(Ljava/awt/geom/PathIterator;DD)I" error message for each feature to be labelled. [Java 1.6 only]
+
+BUG: LABELING: Switching the "General" option between "Label attributes defined in table" and "User defined labels" switches between table view and map preview. However, this works only once. After the first switch, it gets stuck in the map preview mode. In addition, the "Visualization", "Placement" and "Properties" buttons go dead. [Java 1.6 only]
+
+
+GENERAL ISSUES
+
+BUG: Without any "gvSIG" folder and user settings present, gvSIG starts up in English by default on my system (an English Gentoo Linux with the LANG env var set). On second startup, gvSIG always starts in Spanish. I then have to go into the "Preferences" menu and set the language to "English" again.
+
+BUG: In the "Add layer" dialog, I can highlight more than one layer, but pressing "Delete" on the highlighted layers will just delete one of them. Also, "Up" and "Down" buttons should be disabled if more than one layer is highlighted, as they only work for one layer at a time.
+
+BUG: (tested with English version): Every layer has an additional, grayed-out "Proriedas" item in the context menu.
+
+WISH: Add layer: Add capability to add folders instead of just files, recursively adding all valid
+datasets inside them.
+
+ANNOYANCE: (tested on Ubuntu Linux only): the title of the main program window is correctly labeled ("gvSIG 2.0"), but the tab for it (e.g. on the GNOME panel) is labeled "Java".
+
+
+EDITING
+
+ANNOYANCE: The snapping options are spread out across to different screens in the "Editing properties" dialog. One part is in the default screen, the other under "Snapping". Would be better to have everything under "Snapping".
+
+BUG: New "Spline" tool: this creates closed splines in polygon layers just fine, but they display like line objects in editing mode. After saving the layer, however, they get displayed as area objects correctly.
+
+WISH: Urgently needed is a way for the user to open a text representation of a geometry and directly edit coordinates in there.
+
+ANNOYANCE: Cursor movement gets very, very slow when moving across a geometry with many vertices (e.g. one created using the Spline tool).
+
+WISH: Need a fast way to zoom and pan with the keyboard while creating geometries.
+
+BUG: "Start edition" removes all joined fields from the attribute table. Even if no changes are made and "Finish edition" is called immediately, without saving any changes. If dropping joined fields is really necessary, then the user needs at least to be warned about this before opening the layer in editing mode.
+
+ANNOYANCE: When drawing lines, the "Close" and "Terminate" options are both important, but for polygon layers, they have the same result. So maybe "Close" should be removed from the context menu in that case?
+
+WISH: There are some "Editing" settings (related to colors) in the main "Preferences" menu and there is an "Editing settings" menu in editing mode. That does not seem to make sense. All settings related to editing should be in one place.
+
+
+PROJECT MANAGER
+
+ANNOYANCE: There are two buttons labeled "Properties" on the panel. This regularly confuses our users. Please rename the Button on the bottom to "Edit...". This makes better sense, anyway, since the session properties are already visible in the panel.
+
+ANNOYANCE: The "Comments" text field in the Session properties always shows the whole comment as asingle line. This does not work well for longer comments. Better make the text wrap.
+
+ANNOYANCE: It is not immediately clear what the "Color" selection button in the Session properties is good for. A more verbose button label ("Color for ...") would help.
+
+
+GUI: LAYER LIST (TOC)
+
+[What is the layer list in the data view going to be called? Table of Contents (TOC)? Somehow, I fear that will result in trouble from a major GIS producer...]
+
+ANNOYANCE: Drag and drop in the layer list is currently a bit annoying (sorry) and too time-consuming, due to the following issues:
+
+1. The layer list does not automatically scroll when the mouse pointer hits its top or bottom end during a drag and drop operation. Thus, placing a layer in a very long TOC can be a lot of work.
+
+2. There is no visual indication of where a layer will be dropped (like a horizontal divider line). Thus, it always a bit of a "blind guess" operation.
+
+3. There is no way to completely disable screen refresh, which would make rearraning a lot of layers a much faster and smoother procedure.
+
+4. Dropping a layer into a group causes a long delay before the group is refreshed.
+
+5. If all layers in the TOC are in some group, then it is impossible to take any one layer in drag it outside all groups, into the top level of the TOC. There is no drop target for this operation: the layer will always end up in a group again! The only work around right now is to add a new layer temporarily to have a drop target outside any group. A convenient thing for the user may be to have an option "remove from group" in the context menu of a layer in a group (right underneath "bring to front"?).
+
+6. When adding new layers, there should be an option to place them into the currently active group instead of the top level. This would really speed up creating highly structured projects with many groups.
+
+
+GUI: GENERAL
+
+WISH: Please, please, please add a "recent projects" list to the File menu so user can quickly open the last project they worked on. This is the number one thing our users notice negatively. And it could be fixed so easily!
+
+ANNOYANCE: Generally, the fact that icons are hidden/shown depending on what window is active has the disadvantage that icons move around the screen and the icon bar gets resized all the time. This makes it very difficult to locate icons quickly.
+
+WISH: There should be more shortcuts to often needed functions in the layer context menu. "Show attribute table" would definitely be a candidate for me. Others are "Export to..." and "Select All"/"Select None" (wishes).
+
+ANNOYANCE: The "Help" menu is somewhere in the middle of the menu bar. It should always be at the very right end of it, separated by as much horizontal space as necessary from the rest of the menu items.
+
+ANNOYANCE: Clicking on the close [X] button of an inactive window results in the window being raised and activated instead of closed immediately.
+
+ANNOYANCE: The currently active tool changes when activating another windows. Example: the default tool for a window of type "View" seems to be the zoom tool. Let's say I want to use the "Identify" tool in ten different Views. I activate the tool in one View, identify some features, then activate the next View window. The tool changes to the default Zoom tool and I have to activate Identify again. I think the active tool should stay active when switching between windows of the same type.
+
+
+GUI: ICON TOOLBARS
+
+ANNOYANCE: Icon toolbars are currently a bit limited. It's good that they can be activated/deactivated using "Show->Toolbars". BUT:
+
+1. "Show->Toolbars" always shows all icons as active even if they are not visible. I think this conflicts with gvSIG's method of hiding icons and menu entries depending on which window is active. It is confusing. Might be better to grey out inactive icons but still display them if they are set active in "Show->Toolbars".
+
+2. Toolsbars can be dragged around and placed somewhere else on the screen, but there layout is always horizontal, they cannot be arranged into vertical bars at the screen edge.
+
+3. Upon program exit, all changes to toolbars get forgotten.
+
+
+VECTOR LAYERS
+
+WISH: View->Selection: urgently need function "Select All" and "Clear Selection"
+
+WISH: "Show attributes table" needs to go into context menu. Currently only "Start edition" is available via both the context menu and the "Layer" menu. This needs to be more stringent.
+
+BUG: "Selection by Layer" dialog does not show individual layers that are in groups, so it cannot be used with a layer in a group! [ALREADY REPORTED]
+
+
+TABLES
+
+BUG: Join dialog: the buttons become too small to read after pressing "Next" the first time. This whole procedure really needs a complete redesign and should be put into just one dialog.
+
+BUG: Fields that were joined to the attribute table are prefixed "link_" instead of "join_".
+
+BUG: Symbology does not work for joined fields. E.g. select "Categories:Unique values", select a joined attribute field, select "Add all", click on "Apply". Result is an error message:"java.lang.ArrayIndexOutOfBoundsException". Similar erorrs with all others symbology types.
+
+BUG: Selecting rows in the attribute table, then doing "View->Navigation->Zoom to selection" frequently pops up an empty error message.
+
+BUG: Linking tables via a common field does not work for me. The links simply do not show up in the attribute table I am trying to link to. Are there any special requirements for the two tables to be linked? Do the field names have to be identical in both tables? Does there have to be an exact 1:1 correspondence of rows in both tables (i.e. do they have to have the same number of rows?).
+
+BUG: Join several external DBFs to one attribute table and leave the attribute table open in the "Table" section. Save the project. All is OK. Close gvSIG and try to reload the project: an error is thrown involving the attribute table: "Error opening the document: Table of attributes: <name>.shp ProjectTable". The project file cannot be loaded!
+
+BUG: sometimes, external DBF tables in the project do not load on start-up
+
+ANNOYANCE: When a layer with joined fields is exported to a new Shapefile, the fieldnames have to be truncated to a maximum of 10 characters. This is OK, as it is required by the DBF standard. However, the user should at least be warned about this. Also, the field names are still prefixed "link_". This seems to be a waste of characters, since the join cannot be undone anymore after exporting to a new file. Thus, I recommend dropping the "link_" prefix for exported Shapefiles and using the full 10 characters to retain as much of the original fieldname as possible.
+
+ANNOYANCE: Dialog to add DBF (and CSV) tables from files allows to add multiple datasets, however, only one (the first one in the list) gets added to the project.
+
+ANNOYANCE: If a layer is opened in editing mode, the "Table" menu shows "Insert row". Clicking on it gives an error message, which is correct for an attribute table. However, to avoid confusion it would be better to gray out this option for attribute tables and make it inactive.
+
+WISH: better ODBC support (r/w)
+
+WISH: More flexible CSV import with user-definable field separators, skipping of header and comment lines, support for text values in "" brackets and an option to choose the data type of each imported field explicitely.
+
+WISH: The "Add events layer" dialog should label the coordinate fields "X (Easting)" and "Y (Northing)", as some people using engineering equimpment may be used to "X" and "Y" axis labels working exactly the other way around.
+
+
+EXPRESSION CALCULATOR FOR FIELDS
+
+BUG: "Calculate Expression" dialog: the list of "Commands" for Type "String" and "Date" has too much vertical space. It is possible to scroll down way past the last entry, which is annoying.
+
+ANNOYANCE: There is no proper text wrapping for the "Description" text in the "Information Field". This makes reading the description for a function hard
+
+ANNOYANCE: The "Calculate expression" dialog needs to be resizable.
+
+WISH: In many cases, it would be very useful to be able and set only empty (NULL) fields (both numeric and string) to a user-specified value. I have never been able to figure out how to do that with the built-in functions.
+
+WISH: Support for auto-generated field values to quickly fill fields with number series of predefined step size (like in Excel): if the users enters "0,10,20", then marks that sequence, the software should be able to figure out that it needs to continue with "30,40,50,...".
+
+
+RASTER LAYERS
+
+BUG: I cannot load any raster layers (tried several different JREs and none worked). I just get an "Error loading layer" message. Unfortunately, this means I have not been able to test any of the new raster functions yet.
+
+
+TOPOLOGY EXTENSION
+
+[I assume that this extension is in a very early development stage, but here is the protocol of my trials with it]
+
+ANNOYANCE: In the dialog to create a topology, the fields "Name", "Cluster tolerance" and "Max number of errors" are required to be filled in. However, the user is told so only at the end of the process. Would be better to prevent the user from leaving the first settings page without specifying all required options. All required options should have defaults (cluster tolerance=0 and maximum errors=0 ?).
+
+QUESTION: What does "Cluster tolerance" do?
+
+QUESTION: I created a topology for a single layer with lots of overlapping polygons. I added the rule "POLYGONMUSTNOTOVERLAP". I set cluster tolerance and maximum number of errors both to "0". I opened the properties for the new topology. Under "Reglas", I see that "Mayor que la tolerancia de cluster" has been added automatically. Is this OK?
+
+ANNOYANCE: I highlight the group with the faulty topology and run "evaluar topologia" on it. This correctly marks the topology as defective in the TOC. I now open "Errores topologicos". However, the list of rules is empty and neither "UPDATE" nor "BATCH_FIX" will do anything. Is there a way to actually select or highlight features with bad topology in the data view?
+
+BUG: Running "evaluar topologia" on the same topology again now results in "Validando topologia" being displayed in the "General" tab. However, nothing has changed with the geometries, they are still overlapping!
+
+ANNOYANCE: Topology tools should be registered in their own category "Topology" in the Geoprocessing toolbox (right now they are all in "Data conversion").
+
+BUG: The "Adjacent polygon" and "Split geometry" tools do not work (tested on a Shapefile with polygons): "Terminate" and "Internal Arc" both produce an error on the editor console ("Incorrect option"). Anyway, would it not be more useful to let the user select an overlapping polyon and then cut that so that all overlaps with other objects get removed from it? That way the user can use all the regular editing already available and there is no need to duplicate editing functionality in the Topology extension.
+
+WISH: Geometry info: useful addition, but it would be useful to have a "Copy" button to copy the WKT string to the system clipboard and a "Save" button to write it to a textfile.
+
+WISH: Since the "Generalization" factor only applies to tools in editing mode, it should go into the "Edition properties", instead of the global "Preferences" menu.
+
+QUESTION: what happens if I try to smooth or generalize a 3D Shapefile polygon? Do the Z coordinates remain untouched? If new vertices need to be added: what Z coordinates do they get? How do topological checks work for 3D features? Do they just pretend they are 2D?
+
+
+SYMBOLOGY: GENERAL
+
+ANNOYANCE: Applying a different type of symbology deletes all former settings. So if for example the user has created a nice symbology as "Category->Expressions", then decides to quickly try "Category->Unique values", all the work is lost! There shoule be at least a warning allowing the user to save the old symbology settings to a file first!
+
+BUG: Saving layers as SLD files works, but loading them into another layer (even if it is just a subset of geometries from the same layer, with identical attributes) just gives the error message: "the_legend_will_not_be_applied:-could_not_find_layer".
+
+
+SYMBOLOGY: TYPE "Categories->Unique values"
+
+QUESTION: Where are the colour schemes stored and how can the user create customized schemes? Would it make sense to unify the colour scheme management for both raster and vector layers? Currently, there are three different ways of choosing colour schemes for raster layers, vector:categories:unique values and vector:quantities:intervals!
+
+BUG: If a classification field of type "text" contains empty strings: "Add all" will add the empty field as a category and it can be modified, BUT it never shows up in the actual map (features with empty fields will simply not be mapped).
+
+BUG: Attempting to save the legend without adding at least one category first gives a "java.lang.ArrayIndexOutOfBoundsException: 0" error message.
+
+
+SYMBOLOGY: TYPE "Features->Unique symbols"
+
+BUG: Symbol levels: the settings get lost and reset to defaults every time I press the "Symbol levels" button (this applies for all other places, where symbol levels can be accessed, as well).
+
+
+SYMBOLOGY: TYPE "Categories->Expressions"
+
+BUG: I have a layer of railroads and each line segment has a floating point attribute "LENGTH". Using the expression
+
+[LENGTH] >= 500.00 
+
+works, but 
+
+[LENGTH] >= 500 
+
+does not (pressing "Verify" gives an error)!
+
+BUG: The "Default symbol" option is hard to understand. Apparently, it should allow the user to set a default symbol for all geometries that do not pass any of the filters? If so, then why does no "Default" entry get added to the symbols list when I activate that option?
+
+QUESTION: What happens if I specify overlapping filter conditions? Does every filter apply to the full data set or is there a cascading effect? If the latter is true, then the order of filters in the list matters and there should be a way for the user to change it.
+
+QUESTION: What happens if the features in the layer change (e.g. due to an editing operation): do the filters get refreshed automatically? If not, there needs to be a "refresh" function somewhere.
+
+BUG: Attempting to save the legend without adding at least one filter expression first gives an "com.iver.utiles.NotExistInXMLEntity" error message.
+
+
+SYMBOLOGY: TYPE "Multiple attribute:Quantity by category"
+
+BUG: Legend saving is not supported (but the button exists).
+
+
+ANNOYANCE: This type of symbology requires at least two numeric attributes. It is a bit confusing that the menu item "Multiple attribute" this shows up in the symbology list (but without any children, so unusable) for layers that do not support this style. Might be better to have an inactive child "not applicable" in those cases, so users understand that it would be available for different layers.
+
+
+SYMBOLOGY: TYPE "Quantities:Dot density"
+
+ANNOYANCE: The default dot size is "0.0". I don't think that is very useful. Better to default to "1.0".
+
+BUG: It is unclear what the "Border" symbol setting does, because the preview is not working.
+
+
+SYMBOLOGY: TYPE "Quantities:Graduated symbols"
+
+BUG: Attempting to save the legend before doing "Compute intervals" results in a "java.lang.ArrayIndexOutOfBoundsException: 0" error message.
+
+
+SYMBOLOGY: TYPE "Quantities:Intervals"
+
+BUG: Attempting to save the legend without adding at least one class first gives a "java.lang.ArrayIndexOutOfBoundsException: 0" error message.
+
+
+LABELING
+
+BUG: Custom label styles: "Placement properties:Change location" brings up a "Label styles" dialog, but the window title is "Symbol selector". Also, why is there an Options panel with "Width" and "Height" settings? It seems to be meaningless in this context? The same problem as with the "Symbol editor" for map symbology: I could not find a way to add custom styles to the library. They would just disappear again after closing the dialog.
+
+ANNOYANCE: "Edit style" dialog: one of the four "precedence" tools should be selected and active by default (maybe highest?). Currently the dialog requires the user to understand that a tool needs to be activated first. This would be more obvious with an active default tool. The symbols are a little cryptic. Maybe the buttons should be labelled "1", "2", "3" and "0" additionally?
+
+ANNOYANCE: "Fixed height" and "Fixed color" should be the default settings for mode "Label attributes defined in table". The option "Text height field" should be moved below "Fixed height". Height and "Units for labelling" should default to "8", "pixels", "in the paper" (also in the "Label class properties" dialog).
+
+ANNOYANCE: Dialog "Label class properties": "Label expression" is too hard to understand for the user. Having to specify a field name in [] brackets seems problematic. Better to let the user choose labelling field from a drop-down list.
+
+BUG: Specifying a "Label expression" as "[fieldname]" has no effect (tested this with a floating point attribute table field). Opening the labelling "Properties" againg shows that the expression field has been cleared.
+
+BUG: I tried the following string for a "Filtered feature": "[flt1] > 60.0" (flt1 is a floating point attribute field with a range of ca. 50.0 to 75.0) but it did not work. Apparently, no features passed the filtering. After switching back to "All features", the broken filter remains in effect and I can never get any labels to display again.
+
+ANNOYANCE: In general, when there is an error in a filter or expression field for the labels, then the corresponding error message is repeated for every single feature in the map. Thus, the user can either close thousands of error messages or close the whole project and restart gvSIG. Would be better if the error message appeared only once!
+
+BUG: Mode "User defined labels": I have not been able to get any label classes to work. I click "Add", then double click the new class entry in the list to set its labelling options, but I never see any labels, neither for constant text strings nor attribute fields (same problem as above with specifying field names).
+
+BUG: After switching from "Filtered features" to "All features", then saying "OK", the "Filter" field did not get cleared in the "Classes" list panel.
+
+
+PROJECTION SUPPORT
+
+WISH: For our projects, we sometimes need local coordinate systems. Those are simple cartesian systems for very small areas with a local 0/0/0 origin that do not need any datum or projection support. It would be useful to be able and define a "non-world" or "local X/Y/Z" type reference system without any projection, datum, central meridian etc. (all that would be needed would be units like "meters" or "feet").
+
+
+MAP PRODUCTION
+
+BUG: The Map Window has a tool "Map->Navigation->Panning". However, the corresponding icon in the toolbar has a tooltip text "Zoom Manager". It seems to share the string with "View->Navigation->Zoom Manager".
+
+
+MISC PROBLEMS
+
+ANNOYANCE: "Add event layer" does not have an icon (only a red square).

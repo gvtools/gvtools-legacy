@@ -1,0 +1,5259 @@
+#LyX 2.0.0beta3 created this file. For more info see http://www.lyx.org/
+\lyxformat 410
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Where to continue:
+\end_layout
+
+\begin_layout Plain Layout
+*** WINDOWS ***
+\end_layout
+
+\begin_layout Plain Layout
+1.
+ GDAL works.
+\end_layout
+
+\begin_layout Plain Layout
+-> report Makefile modifications to GDAL project
+\end_layout
+
+\begin_layout Plain Layout
+2.
+ JRE throws an unsatisfied link error from org.gvsig.crs.proj when reprojecting
+ a raster.
+\end_layout
+
+\begin_layout Plain Layout
+-> modify Makefiles or use dlltool for libgdal.dll and libproj.dll, so that
+ the output DLL files are named like gvSIG expects them to (gdal.dll and
+ proj.dll).
+ Then relink GDAL against proj.dll.
+\end_layout
+
+\begin_layout Plain Layout
+->Look into the DLL files that the Cmake for libjni-proj4 produces.
+ There should be one that's named CrsJniProj.dll
+\end_layout
+
+\begin_layout Plain Layout
+*** LINUX ***
+\end_layout
+
+\begin_layout Plain Layout
+Unify capabilities: rebuild GDAL with OGR support (and GRASS)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Eclipse notes
+\end_layout
+
+\begin_layout Subsection
+Automatic Compilation Failing
+\end_layout
+
+\begin_layout Standard
+Sometimes, automatic compilation ceases to work for some projects (e.g.
+ after an Eclipse crash).
+ When running an Ant build, the affected projects will display an error
+ message:
+\end_layout
+
+\begin_layout LyX-Code
+Building MANIFEST-only jar
+\end_layout
+
+\begin_layout Standard
+In such a case, it helps to clean the Eclipse cache by starting Eclipse
+ with:
+\end_layout
+
+\begin_layout LyX-Code
+eclipse -clean
+\end_layout
+
+\begin_layout Section
+gvSIG SVN
+\end_layout
+
+\begin_layout Subsection
+Eclipse project setup
+\end_layout
+
+\begin_layout Standard
+Mostly accurate description here: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://gvsig.org/web/docdev/building-from-svn/building-gvsig-from-svn/view?set_l
+anguage=en
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The following instructions all assume that the Eclipse workspace has been
+ set up in 
+\family typewriter
+$HOME/workspace
+\family default
+.
+\end_layout
+
+\begin_layout Subsection
+Compilation
+\end_layout
+
+\begin_layout Standard
+GvSIG consists of a large number of individual Extension and Library type
+ projects, plus 
+\emph on
+_fwAndami
+\emph default
+, which is the executable part.
+ None of the ext or lib projects has Ant files that are set up to actually
+ compile the source.
+ So make sure to enable Eclipse's autobuild feature.
+ With that turned on, you can:
+\end_layout
+
+\begin_layout Enumerate
+Make changes to the .java source files.
+ After saving, the source will be automatically compiled (open the Eclipse
+ Progress View to see what's going on).
+\end_layout
+
+\begin_layout Enumerate
+Run the project's Ant file to create the JAR and copy it to the executable
+ directory (within 
+\begin_inset Quotes eld
+\end_inset
+
+_fwAndami
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+Note: some projects do not copy the JARs where you'd expect them.
+ Watch the Eclipse Console output to be sure.
+\end_layout
+
+\begin_layout Standard
+Sometimes (especially right after importing a project folder from SVN),
+ it may be necessary to Clean the sources in a project and recompile that
+ project from scratch.
+ After cleaning, the automatic rebuild should start.
+\end_layout
+
+\begin_layout Standard
+To build all JAR files, for all extensions and libs, run 
+\family typewriter
+build.xml
+\family default
+ as 
+\begin_inset Quotes eld
+\end_inset
+
+Ant Build
+\begin_inset Quotes erd
+\end_inset
+
+ in the following projects:
+\end_layout
+
+\begin_layout LyX-Code
+appgvSIG
+\end_layout
+
+\begin_layout Standard
+To copy the system-dependent binaries into place, als run the build file
+ in 
+\begin_inset Quotes eld
+\end_inset
+
+binaries
+\begin_inset Quotes erd
+\end_inset
+
+ (but see separate notes in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Native-binaries"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection
+Notes
+\end_layout
+
+\begin_layout Subsubsection
+Installation
+\end_layout
+
+\begin_layout Subsubsection
+Usage
+\end_layout
+
+\begin_layout Standard
+Run gvSIG by selecting the 
+\begin_inset Quotes eld
+\end_inset
+
+_fwAndami
+\begin_inset Quotes erd
+\end_inset
+
+ project and then 
+\begin_inset Quotes eld
+\end_inset
+
+Run\SpecialChar \menuseparator
+Run
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+gvSIG dev notes
+\end_layout
+
+\begin_layout Subsubsection
+Icon resources
+\end_layout
+
+\begin_layout Standard
+Icons must be declared as named resources before they can be used by any
+ class.
+ E.g.
+ in RasterModule.java:
+\end_layout
+
+\begin_layout LyX-Code
+PluginServices.getIconTheme().registerDefault(
+\end_layout
+
+\begin_layout LyX-Code
+  "save-icon",
+\end_layout
+
+\begin_layout LyX-Code
+  this.getClass().getClassLoader().getResource("images/savefile.png")
+\end_layout
+
+\begin_layout LyX-Code
+);
+\end_layout
+
+\begin_layout Standard
+After that, icon can be, like this:
+\end_layout
+
+\begin_layout LyX-Code
+bSaveToXml.setIcon(RasterToolsUtil.getIcon("save-icon"));
+\end_layout
+
+\begin_layout Standard
+Note: there may be conflicts if different extensions declare different icons
+ with the same resource name.
+ In that case a class may pick up a wrong icon from a different extension.
+\end_layout
+
+\begin_layout Section
+Native binaries
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Native-binaries"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+GvSIG uses some external C/C++ object libraries which have to be compiled
+ separately for every supported platform.
+ In addition, to provide access from Java to those libraries, a Java Native
+ Interface (JNI) wrapper is needed (see 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://en.wikipedia.org/wiki/Java_Native_Interface
+\end_layout
+
+\end_inset
+
+).
+ Such interfaces need only be provided for those libraries which contain
+ functions that are directly called by the Java application.
+ Deeper dependencies do not have to be wrapped and can just be copied into
+ any location where the operating system will be able to find them.
+\end_layout
+
+\begin_layout Standard
+Currently, JNI wrappers are needed for the following libraries:
+\end_layout
+
+\begin_layout Itemize
+ECW
+\end_layout
+
+\begin_layout Itemize
+GDAL
+\end_layout
+
+\begin_layout Itemize
+MrSID
+\end_layout
+
+\begin_layout Itemize
+Potrace
+\end_layout
+
+\begin_layout Itemize
+PROJ.4
+\end_layout
+
+\begin_layout Standard
+In the following instructions, the libraries are compiled and installed
+ in order of dependency.
+\end_layout
+
+\begin_layout Standard
+To use them from gvSIG, a version of the original C-compiled binaries is
+ needed somewhere the applications search path, plus the compiled JNI wrappers,
+ plus the JNI JAR files.
+ It is necessary to keep all of those objects synchronized using the same
+ C source code base.
+ Also, the JNI wrappers may be very sensitive to version changes in the
+ wrapped C APIs.
+ Therefore, precise C code versions are listed as part of the following
+ instructions.
+\end_layout
+
+\begin_layout Standard
+All C code installation targets are set so that any library files and headers
+ generated will end up in:
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/lib
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/bin
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/share
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Standard
+Where they can later easily be identified and copied into the gvSIG distribution
+ directories.
+\end_layout
+
+\begin_layout Standard
+For building the Java interface libraries, the Ant tool is also required.
+\end_layout
+
+\begin_layout Standard
+Things to know about JNI bindings
+\end_layout
+
+\begin_layout Itemize
+The bindings are saved as platform specific C object libraries.
+\end_layout
+
+\begin_layout Itemize
+Some gvSIG extensions only store references to external libraries in the
+ JNI objects, other (libjni-proj4) directly store the function code there
+ -- like any other C library might.
+\end_layout
+
+\begin_layout Itemize
+To find the JNI bindings, the Java code has to contain a
+\end_layout
+
+\begin_layout LyX-Code
+System.load.library(
+\begin_inset Quotes eld
+\end_inset
+
+<libname>
+\begin_inset Quotes erd
+\end_inset
+
+) statement.
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\family roman
+This means, that the library name is hard-coded on the Java side and the
+ library has to exist under that name (plus any library prefixes/suffixes
+ that the operating system chooses).
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+If the JNI library is found, it is treated just like a JAR file and adds
+ all its function interfaces as Java classes.
+ This mechanism is completely platform independent, so the Java side code
+ that works with these JNI classes can be compiled on any platform.
+\end_layout
+
+\begin_layout Itemize
+If a JNI library is generated with references to another dynamic library
+ as a dependency (such as libjni-gdal), then the name of that library is
+ hard-coded into the JNI library.
+ The dependency library must then be deployed under that exact name, within
+ the system's dynamic library search path.
+\end_layout
+
+\begin_layout Paragraph
+Mac OS X Java notes
+\end_layout
+
+\begin_layout Standard
+The Framework with the JNI header files is located in 
+\family typewriter
+/System/Library/Frameworks/JavaVM.framework/
+\family default
+.
+\end_layout
+
+\begin_layout Subsection
+Eclipse project setup
+\end_layout
+
+\begin_layout Standard
+It seems that there is currently a lag in updates for the JNI wrappers in
+ SVN trunk.
+ More recent versions are available in 
+\begin_inset Quotes eld
+\end_inset
+
+branches/gvSIG_19_ext3D_osgVP_2_2_0
+\begin_inset Quotes erd
+\end_inset
+
+.
+ So the following projects were imported from that branch instead of 
+\begin_inset Quotes eld
+\end_inset
+
+trunk
+\begin_inset Quotes erd
+\end_inset
+
+:
+\end_layout
+
+\begin_layout LyX-Code
+branches/gvSIG_19_ext3D_osgVP_2_2_0/binaries
+\end_layout
+
+\begin_layout LyX-Code
+branches/gvSIG_19_ext3D_osgVP_2_2_0/libjni-ecw
+\end_layout
+
+\begin_layout LyX-Code
+branches/gvSIG_19_ext3D_osgVP_2_2_0/libjni-gdal
+\end_layout
+
+\begin_layout LyX-Code
+branches/gvSIG_19_ext3D_osgVP_2_2_0/libjni-mrsid
+\end_layout
+
+\begin_layout LyX-Code
+branches/gvSIG_19_ext3D_osgVP_2_2_0/libjni-potrace
+\end_layout
+
+\begin_layout LyX-Code
+branches/gvSIG_19_ext3D_osgVP_2_2_0/libjni-proj4
+\end_layout
+
+\begin_layout Standard
+Note: There are further JNI library projects in 
+\begin_inset Quotes eld
+\end_inset
+
+trunk
+\begin_inset Quotes erd
+\end_inset
+
+ but they seem to be of no significance.
+\end_layout
+
+\begin_layout Standard
+When checked out from the 3D extension branch, all libjni-* projects come
+ with 
+\family typewriter
+CMakeLists.txt
+\family default
+ setup files for CMake: 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+There is one such file in the main project directory plus, in some cases,
+ individual files for each supported platform in ???.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+sudo apt-get install cmake-curses-gui
+\end_layout
+
+\begin_layout Standard
+The macros necessary for generation of Makefiles with CMake are in 
+\end_layout
+
+\begin_layout LyX-Code
+branches/gvSIG_19_ext3D_osgVP_2_2_0/build
+\end_layout
+
+\begin_layout Standard
+That directory should not be checkout as a project in Eclipse (it isn't
+ one).
+ Better to simply export the folder directly to the Exlipse workspace folder.
+\end_layout
+
+\begin_layout Standard
+In any case, the result should be a folder 
+\family typewriter
+$HOME/workspace/build
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+It is possible to run the Ant buid files for all binary projects directly
+ from Eclipse, but in the following instructions, compilation will be done
+ manually on the command line.
+ This gives better control over the complex process and allows for some
+ fine-tuning.
+\end_layout
+
+\begin_layout Subsection
+CMake setup
+\end_layout
+
+\begin_layout Standard
+CMake 2.6 (latest patch level) is known to work with the current JNI bindings.
+ CMake 2.8 is untested.
+\end_layout
+
+\begin_layout Standard
+When installing for Mac OS X, make sure to have it install the links into
+ 
+\family typewriter
+/usr/bin
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+Attention: Make sure to import 
+\family typewriter
+$HOME/workspace/build
+\family default
+ as described above.
+ Otherwise some CMake macros will be missing and there will be error messages
+ about packages 
+\begin_inset Quotes eld
+\end_inset
+
+DepMan
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+GeneralMacros
+\begin_inset Quotes erd
+\end_inset
+
+ not being found! 
+\end_layout
+
+\begin_layout Subsection
+32/64 bit binaries
+\end_layout
+
+\begin_layout Standard
+The current Java bytecode binaries for gvSIG are 32 bit.
+ Apparently, it is possible for a 64 bit Java VM to run 32 bit class code,
+ but 32 bit JNI bindings will crash.
+\end_layout
+
+\begin_layout Standard
+As long as the Java VM binaries for gvSIG are 32 bit (which they currently
+ are), all the JNI bindings and C libraries also have to be compiled in
+ 32 bit mode.
+ On newer machines, notably Mac OS X Snow Leopard, the GCC will produce
+ 64 bit code by default.
+ To make it produce 32 bit code, export some compiler flags:
+\end_layout
+
+\begin_layout LyX-Code
+export CFLAGS=-m32
+\end_layout
+
+\begin_layout LyX-Code
+export CXXFLAGS=$CFLAGS
+\end_layout
+
+\begin_layout LyX-Code
+export LDFLAGS=$CFLAGS
+\end_layout
+
+\begin_layout Standard
+These are variables that get read by the configure script, so they have
+ to be exported before the configure script is run in order to take effect.
+\end_layout
+
+\begin_layout Standard
+Likewise, CMake will respect the variables, but they have to be present
+ before running cmake to create the configuration.
+\end_layout
+
+\begin_layout Standard
+You can check whether a generated binary is 32 bits:
+\end_layout
+
+\begin_layout LyX-Code
+file <binary-name>
+\end_layout
+
+\begin_layout Standard
+Should result in:
+\end_layout
+
+\begin_layout LyX-Code
+<binary-name>: Mach-O dynamically linked shared library i386
+\end_layout
+
+\begin_layout Standard
+The i386 architecture tag indicates that the file is 32 bits code.
+\end_layout
+
+\begin_layout Standard
+Startup script for gvSIG:
+\end_layout
+
+\begin_layout Standard
+On systems that now ship with a 64 bit JVM by default (such as Snow Leopard),
+ the 
+\family typewriter
+-d32
+\family default
+ option has to be appended to the 
+\family typewriter
+java
+\family default
+ command in order to switch to a 32 bit JVM!
+\end_layout
+
+\begin_layout Subsection
+PROJ.4 (4.5.0)
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:PROJ.4-(4.7.0)"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Project page: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://trac.osgeo.org/proj/
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Note: the most recent version of PROJ4 cannot be used, because for an unknown
+ reason datum shifts using grid files do not work in gvSIG with that version.
+\end_layout
+
+\begin_layout Standard
+Older releases can be found here: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://download.osgeo.org/proj/
+\end_layout
+
+\end_inset
+
+.
+ The most recent version found to work is 4.5.0.
+ Source code direct link: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://download.osgeo.org/proj/proj-4.5.0.tar.gz
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+libjni-proj4
+\family default
+ project is slightly more than just a JNI wrapper for the PROJ.4 C sources.
+ It contains a copy of the complete C and header files in 
+\family typewriter
+src
+\family default
+ and 
+\family typewriter
+include
+\family default
+ (presumably to make compilation easier).
+ Also some command line tools have been converted to library versions (that
+ is the 
+\emph on
+main()
+\emph default
+ function has been modified etc.).
+\end_layout
+
+\begin_layout Subsubsection
+C library
+\end_layout
+
+\begin_layout Standard
+Unpack the main library, download the additional datum shift grids (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://download.osgeo.org/proj/proj-datumgrid-1.5.zip
+\end_layout
+
+\end_inset
+
+) and unzip them into 
+\family typewriter
+proj-4.5.0/nad/
+\family default
+.
+ Then configure the sources:
+\end_layout
+
+\begin_layout LyX-Code
+tar -xzf proj4.5.0.tar.gz
+\end_layout
+
+\begin_layout LyX-Code
+unzip proj-datumgrid-1.5.zip -d proj-4.5.0/nad/
+\end_layout
+
+\begin_layout LyX-Code
+cd proj-4.5.0
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist --enable-static=no --enable-shared=yes
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Standard
+Note: Configuring and making with the extra datum shift grids in the source
+ tree will produce some extra data files that can be installed later to
+ support NAD27/NAD83 and NZGD49 datum conversion (see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Grid-shift-data"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+In addition, we will need the PROJ.4 external library later for GRASS raster
+ support (via the GDAL driver).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Windows notes
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+THIS ONLY APPLIES TO VERSION 4.7.0
+\end_layout
+
+\begin_layout Plain Layout
+MinGW compilation will fail with an error in 
+\family typewriter
+pj_mutex.c
+\family default
+.
+ To fix it, apply the patch posted here: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://trac.osgeo.org/proj/ticket/56
+\end_layout
+
+\end_inset
+
+.
+ This will add a new option 
+\emph on
+--enable-threads
+\emph default
+ to the 
+\family typewriter
+configure
+\family default
+ script.
+ Regenerate the configuration files:
+\end_layout
+
+\begin_layout LyX-Code
+make distclean
+\end_layout
+
+\begin_layout LyX-Code
+autoreconf
+\end_layout
+
+\begin_layout LyX-Code
+autoheader
+\end_layout
+
+\begin_layout LyX-Code
+autoconf
+\end_layout
+
+\begin_layout LyX-Code
+automake
+\end_layout
+
+\begin_layout Plain Layout
+Configure sources with Win32 threads support:
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist --enable-static=no --enable-shared=yes
+ --build=mingw32 --target=mingw32 --enable-threads=no
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The PROJ.4 configure script generates an outdated 
+\emph on
+libtool
+\emph default
+.
+ After the sources have been reconfigured, it needs to be replaced with
+ a current MSYS version:
+\end_layout
+
+\begin_layout LyX-Code
+cp /mingw/bin/libtool $HOME/src/proj4.5.0/
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+THIS ONLY APPLIES TO VERSION 4.7.0
+\end_layout
+
+\begin_layout Plain Layout
+Also copy 
+\family typewriter
+src/proj_config.h
+\family default
+ file into the 
+\family typewriter
+include
+\family default
+ folder and 
+\family typewriter
+src/pj_mutex.c
+\family default
+ into the 
+\family typewriter
+src
+\family default
+ folder of the 
+\emph on
+libjni-proj4
+\emph default
+ project, as this will make sure that sources get compiled without thread
+ support!
+\end_layout
+
+\end_inset
+
+Then build and install the binaries:
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+The linker does give a warning, but it sounds harmless: 
+\end_layout
+
+\begin_layout Quote
+mingw32/bin/ld.exe: warning: auto-importing has been activated without --enable-a
+uto-import specified on the command line.
+ This should work unless it involves constant data structures referencing
+ symbols from auto-imported DLLs.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The DLL library must be built manually:
+\end_layout
+
+\begin_layout LyX-Code
+cd src/.libs
+\end_layout
+
+\begin_layout LyX-Code
+gcc -shared -s -o libproj-0.dll -lm *.o
+\end_layout
+
+\begin_layout Standard
+Then install it:
+\end_layout
+
+\begin_layout LyX-Code
+cp libproj-0.dll $HOME/workspace/dist/bin
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+The DLL will be installed into 
+\family typewriter
+$HOME/workspace/dist/bin
+\family default
+.
+ It will be called 
+\family typewriter
+libproj-0.dll
+\family default
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+JNI wrapper
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+DON'T want to do this anymore, as we need to use an older version, anyhow.
+\end_layout
+
+\begin_layout Plain Layout
+Before compilation, copy the original C and header files into the 
+\family typewriter
+libjni-proj4
+\family default
+ tree to update the sources:
+\end_layout
+
+\begin_layout Plain Layout
+Copy all 
+\family typewriter
+.c
+\family default
+ files into 
+\family typewriter
+libjni-proj4/src/
+\family default
+, 
+\emph on
+except
+\emph default
+ sources for the command line tools:
+\end_layout
+
+\begin_layout LyX-Code
+cs2cs.c
+\end_layout
+
+\begin_layout LyX-Code
+geod.c
+\end_layout
+
+\begin_layout LyX-Code
+nad2bin.c
+\end_layout
+
+\begin_layout LyX-Code
+nad2nad.c
+\end_layout
+
+\begin_layout Plain Layout
+Copy all 
+\family typewriter
+.h
+\family default
+ files into 
+\family typewriter
+libjni-proj4/include
+\family default
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note: 
+\family typewriter
+libjni-proj4/
+\family default
+ contains 
+\family typewriter
+src/libcs2cs.c
+\family default
+ and 
+\family typewriter
+include/libcs2cs.h
+\family default
+ which is a version of the original 
+\family typewriter
+cs2cs.c
+\family default
+ that can be compiled as a library object.
+ At the time of writing, there were no significant differences between the
+ two versions, so nothing needed to be done.
+ 
+\end_layout
+
+\begin_layout Standard
+Edit 
+\family typewriter
+src/CMakeLists.txt
+\family default
+ 
+\family typewriter
+to add Java include paths:
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout LyX-Code
+FILE(GLOB SOURCES "*.c*")
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH /home/benni/jdk/jdk1.6/include)
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH2 /home/benni/jdk/jdk1.6/include/linux)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+include_directories(
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Standard
+Generate Makefile for target system using CMake:
+\end_layout
+
+\begin_layout LyX-Code
+cd $HOME/workspace/libjni-proj4
+\end_layout
+
+\begin_layout LyX-Code
+rm CMakeCache.txt
+\end_layout
+
+\begin_layout LyX-Code
+cmake .
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout Paragraph
+Mac OS X notes
+\end_layout
+
+\begin_layout Standard
+Remember to get the 32 bit settings right on systems which are set up with
+ a 64 bit GCC!
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+The Java include paths are hidden in a so-called Framework (i.e.
+ a folder with a fancy name):
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout LyX-Code
+FILE(GLOB SOURCES "*.c*")
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH /System/Library/Frameworks/JavaVM.framework/Headers)
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH2 /System/Library/Frameworks/JavaVM.framework/Headers)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+include_directories(
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Paragraph
+Windows notes
+\begin_inset CommandInset label
+LatexCommand label
+name "par:Windows-notes"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This requires a java JDK (conveniently with 
+\family typewriter
+java.exe
+\family default
+ within an MSYS executable path) and cmake, which can be downloaded as a
+ ZIP file with Win32 binaries that can be copied into the corresponding
+ directories of the MSYS environment.
+\end_layout
+
+\begin_layout Standard
+The Java JDK will always install into 
+\family typewriter
+C:
+\backslash
+Program Files.
+
+\family default
+ I simply took the 
+\family typewriter
+jdk-<version>
+\family default
+ folder and moved it into the folder 
+\family typewriter
+local
+\family default
+ within my MSYS installation.
+ I then added the JDKs 
+\family typewriter
+bin
+\family default
+ folder to the executable path.
+\end_layout
+
+\begin_layout Standard
+Note: the Java interfaces classes are platform-independent, so need to be
+ compiled only on one platform.
+ To compile the native binaries, first clean the source:
+\end_layout
+
+\begin_layout LyX-Code
+make clean
+\end_layout
+
+\begin_layout LyX-Code
+rm CMakeCache.txt
+\end_layout
+
+\begin_layout Standard
+Then zip the 
+\family typewriter
+lib-jni-proj4
+\family default
+ project folder and transfer it to the MSYS environment.
+ Unzip it and generate the Makefile for the target system using CMake:
+\end_layout
+
+\begin_layout LyX-Code
+cd $HOME/workspace/libjni-proj4
+\end_layout
+
+\begin_layout LyX-Code
+rm CMakeCache.txt
+\end_layout
+
+\begin_layout LyX-Code
+export LDFLAGS=
+\begin_inset Quotes erd
+\end_inset
+
+-Wl,--kill-at
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+cmake -G 
+\begin_inset Quotes eld
+\end_inset
+
+MSYS Makefiles
+\begin_inset Quotes erd
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Standard
+Note: remember to also transfer the 
+\family typewriter
+build
+\family default
+ project (part of the 3D Extension) to the MSYS environment, as it contains
+ a number of needed CMake macros.
+\end_layout
+
+\begin_layout Standard
+Edit 
+\family typewriter
+src/CMakeLists.txt
+\family default
+ 
+\family typewriter
+to add Java include paths:
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout LyX-Code
+FILE(GLOB SOURCES "*.c*")
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH /usr/local/java/include)
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH2 /usr/local/java/include/win32)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+include_directories(
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Standard
+Then compile:
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout Standard
+This should create the JNI library.
+ It will be stored in 
+\family typewriter
+bin/libcrsjniproj.dll
+\family default
+.
+ Copy and rename it manually:
+\end_layout
+
+\begin_layout LyX-Code
+cp bin/libcrsjniproj.dll $HOME/workspace/dist/bin/crsjniproj.dll
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Subsubsection
+Grid shift data files
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Grid-shift-data"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Copy all files in 
+\family typewriter
+$HOME/workspace/dist/share/proj
+\family default
+ to 
+\family typewriter
+extensiones/org.gvsig.crs/data
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+There are some more grid shift data files in .gsb file format that can be
+ downloaded from the PROJ.4 project page.
+ For distribution with gvSIG, they need to be copied into 
+\family typewriter
+extensiones/org.gvsig.crs/data
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+It is enough to generate these files once, on any platform.
+\end_layout
+
+\begin_layout Subsection
+GDAL (1.6.3)
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+What's with the JOGR library? It exists only in the Mac bin folder!
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:GDAL-(1.6.3)"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+GDAL data source access (raster data) in gvSIG works via the JGDAL wrapper
+ library.
+ There are currently experimental OGR vector driver bindings in 
+\begin_inset Quotes eld
+\end_inset
+
+test
+\begin_inset Quotes erd
+\end_inset
+
+, as well.
+\end_layout
+
+\begin_layout Standard
+It is important to compile GDAL with the same capabilities (i.e.
+ supported formats/drivers) on all platforms.
+ Otherwise, gvSIG projects created on one platform may not work with a gvSIG
+ version running on another platform, if it contains raster layers for which
+ that platform is lacking the drivers.
+\end_layout
+
+\begin_layout Standard
+If GDAL is compiled with any external dependencies, then the binaries for
+ those will also have to be included in the distribution later.
+\end_layout
+
+\begin_layout Subsubsection
+Expat (Dependency)
+\end_layout
+
+\begin_layout Standard
+This is an XML parser that's required by many GDAL/OGR drivers.
+\end_layout
+
+\begin_layout Standard
+Download from: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://expat.sourceforge.net/
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Paragraph
+Windows
+\end_layout
+
+\begin_layout Standard
+The DLL will be installed into 
+\family typewriter
+$HOME/workspace/dist/lib/.
+\end_layout
+
+\begin_layout Subsubsection
+C library
+\end_layout
+
+\begin_layout Standard
+This will compile a minimal version of GDAL which contains only the raster
+ drivers available on all platforms, no vector or DBMS drivers.
+ This reduces dependencies and gvSIG does not use GDAL for anything other
+ than raster data access, anyhow.
+ Also, wherever possible, GDAL-internal copies of support libraries are
+ used (LZW, TIFF, PNG,...).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+NOTE: ECW and JPEG2000 are handled by libecw-jni and libmrsid-jni.
+ No reason to have them in GDAL, too! In fact, GDAL seems to become crashy,
+ crashy with this closed source junk compiled in!
+\end_layout
+
+\begin_layout Plain Layout
+For the configure script to be able and find the ECW and MrSID binaries,
+ set the following environment variables:
+\end_layout
+
+\begin_layout LyX-Code
+export MRSID_DIR=<Geo_DSDK-7.0.0.2167>
+\end_layout
+
+\begin_layout LyX-Code
+export ECW_DIR=$HOME/workspace/dist
+\end_layout
+
+\begin_layout Plain Layout
+NOTE: In theory, it should be possible to configure GDAL --without-ogr.
+ However, the JNI bindings use some OGR interface functions and their compilatio
+n will fail on Windows/MinGW.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Unzip the source code archive, then (don't forget expat support!):
+\end_layout
+
+\begin_layout LyX-Code
+export LDFLAGS="$LDFLAGS -L$HOME/workspace/dist/lib -lexpat"
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Standard
+Note: you may want to remove the expat settings from LDFLAGS again after
+ making GDAL.
+\end_layout
+
+\begin_layout LyX-Code
+cd gdal-1.6.3
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist --enable-shared=yes --enable-static=no
+ --with-python=no --with-xerces=no --with-expat=yes --with-curl=no --with-sqlite
+3=no --with-odbc=no --with-mysql=no --with-oci=no --with-pg=no --with-geos=no
+ --with-libz=internal --with-png=internal --with-libtiff=internal --with-geotiff
+=internal --with-jpeg=internal --with-gif=internal --with-jasper=no --with-mrsid
+=no --with-ecw=no --with-pcraster=internal --with-expat-inc=$HOME/workspace/dist
+/include --with-expat-lib=$HOME/workspace/dist/lib
+\end_layout
+
+\begin_layout Standard
+The result should be:
+\end_layout
+
+\begin_layout LyX-Code
+GDAL is now configured for i686-pc-linux-gnu
+\end_layout
+
+\begin_layout LyX-Code
+  Installation directory:    /home/benni/workspace/dist
+\end_layout
+
+\begin_layout LyX-Code
+  C compiler:                gcc -g -O2
+\end_layout
+
+\begin_layout LyX-Code
+  C++ compiler:              g++ -g -O2
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  LIBTOOL support:           yes
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+no
+\begin_inset Quotes erd
+\end_inset
+
+ on Windows/MinGW!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  LIBZ support:              internal
+\end_layout
+
+\begin_layout LyX-Code
+  GRASS support:             no
+\end_layout
+
+\begin_layout LyX-Code
+  CFITSIO support:           no
+\end_layout
+
+\begin_layout LyX-Code
+  PCRaster support:          internal
+\end_layout
+
+\begin_layout LyX-Code
+  NetCDF support:            no
+\end_layout
+
+\begin_layout LyX-Code
+  LIBPNG support:            internal
+\end_layout
+
+\begin_layout LyX-Code
+  LIBTIFF support:           internal (BigTIFF=yes)
+\end_layout
+
+\begin_layout LyX-Code
+  LIBGEOTIFF support:        internal
+\end_layout
+
+\begin_layout LyX-Code
+  LIBJPEG support:           internal
+\end_layout
+
+\begin_layout LyX-Code
+  LIBGIF support:            internal
+\end_layout
+
+\begin_layout LyX-Code
+  OGDI support:              no
+\end_layout
+
+\begin_layout LyX-Code
+  HDF4 support:              no
+\end_layout
+
+\begin_layout LyX-Code
+  HDF5 support:              no
+\end_layout
+
+\begin_layout LyX-Code
+  Kakadu support:            no
+\end_layout
+
+\begin_layout LyX-Code
+  JasPer support:            no
+\end_layout
+
+\begin_layout LyX-Code
+  ECW support:               no
+\end_layout
+
+\begin_layout LyX-Code
+  MrSID support:             no
+\end_layout
+
+\begin_layout LyX-Code
+  MSG support:               no
+\end_layout
+
+\begin_layout LyX-Code
+  GRIB support:              yes
+\end_layout
+
+\begin_layout LyX-Code
+  cURL support (wms/wcs/...):no
+\end_layout
+
+\begin_layout LyX-Code
+  PostgreSQL support:        no
+\end_layout
+
+\begin_layout LyX-Code
+  MySQL support:             no
+\end_layout
+
+\begin_layout LyX-Code
+  Ingres support:            no
+\end_layout
+
+\begin_layout LyX-Code
+  Xerces-C support:          no
+\end_layout
+
+\begin_layout LyX-Code
+  NAS support:               no
+\end_layout
+
+\begin_layout LyX-Code
+  Expat support:             yes
+\end_layout
+
+\begin_layout LyX-Code
+  ODBC support:              no
+\end_layout
+
+\begin_layout LyX-Code
+  PGeo support:              no
+\end_layout
+
+\begin_layout LyX-Code
+  OCI support:               no
+\end_layout
+
+\begin_layout LyX-Code
+  GEORASTER support:         no
+\end_layout
+
+\begin_layout LyX-Code
+  SDE support:               no
+\end_layout
+
+\begin_layout LyX-Code
+  DODS support:              no
+\end_layout
+
+\begin_layout LyX-Code
+  SQLite support:            no
+\end_layout
+
+\begin_layout LyX-Code
+  DWGdirect support          no
+\end_layout
+
+\begin_layout LyX-Code
+  INFORMIX DataBlade support:no
+\end_layout
+
+\begin_layout LyX-Code
+  GEOS support:              no
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  Old-gen python          no
+\end_layout
+
+\begin_layout LyX-Code
+  SWIG Bindings:          no
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  Statically link PROJ.4:    no
+\end_layout
+
+\begin_layout LyX-Code
+  enable OGR building:       yes
+\end_layout
+
+\begin_layout LyX-Code
+  enable pthread support:    no
+\end_layout
+
+\begin_layout LyX-Code
+  hide internal symbols:     no
+\end_layout
+
+\begin_layout Standard
+Compile and install:
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Standard
+Note: you may want to remove the expat settings from LDFLAGS again after
+ making GDAL.
+\end_layout
+
+\begin_layout Standard
+Raster formats supported by the produced GDAL lib can be listed:
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/bin/gdal-config --formats
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+* En el archivo de configuración para la compilación de la librería gdal,
+ es necesario que se utilice la opción STDCALL.
+ También se tiene que deshabilitar el soporte para ODBC.
+ Comentar la linea ODBC_SUPPORTED=YES.
+ Importante, comentar la linea, no poner valor =NO.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Linux notes
+\end_layout
+
+\begin_layout Standard
+It seems that on older systems, configure must be run with 
+\end_layout
+
+\begin_layout LyX-Code
+--with-expat-lib=-L$HOME/workspace/dist/lib
+\end_layout
+
+\begin_layout Standard
+so that it will find expat.
+ For fixing the ensuing linking errors in the 
+\begin_inset Quotes eld
+\end_inset
+
+apps
+\begin_inset Quotes erd
+\end_inset
+
+ directory: see Windows notes.
+\end_layout
+
+\begin_layout Paragraph
+Windows notes
+\end_layout
+
+\begin_layout Standard
+Before running the configure script, patch it to find and link expat:
+\end_layout
+
+\begin_layout Standard
+When running the 
+\family typewriter
+configure
+\family default
+ script, add/change the following options:
+\end_layout
+
+\begin_layout LyX-Code
+--build=mingw32 --target=mingw32 --without-libtool --enable-fast-install
+ --with-expat-lib=-L$HOME/workspace/dist/lib
+\end_layout
+
+\begin_layout Standard
+(Note the 
+\begin_inset Quotes eld
+\end_inset
+
+-L
+\begin_inset Quotes erd
+\end_inset
+
+ switch for the --with-expat-lib option! This is required for MinGW configuratio
+n.)
+\end_layout
+
+\begin_layout Standard
+After configuration, the Makefiles must be adjusted.
+\end_layout
+
+\begin_layout Standard
+MinGW's compiler suite has problems with inputs consisting of too many object
+ files.
+ This will lead to 
+\begin_inset Quotes eld
+\end_inset
+
+Bad file number
+\begin_inset Quotes erd
+\end_inset
+
+ error messages in the linking stage.
+\end_layout
+
+\begin_layout Standard
+To get the linking process to work, edit 
+\family typewriter
+gdal-1.6.3/GNUmakefile
+\family default
+ after (!) configuration and rewrite the 
+\emph on
+$(GDAL_LIB)
+\emph default
+ and 
+\emph on
+$(GDAL_SLIB)
+\emph default
+ targets to read (remember: one tab indentation after first line!):
+\end_layout
+
+\begin_layout LyX-Code
+$(GDAL_LIB): $(GDAL_OBJ) GDALmake.opt
+\end_layout
+
+\begin_layout LyX-Code
+  rm -f libgdal.a
+\end_layout
+
+\begin_layout LyX-Code
+  echo $(GDAL_OBJ) | xargs --max-args=100 $(AR) r $(GDAL_LIB)
+\end_layout
+
+\begin_layout LyX-Code
+  $(RANLIB) $(GDAL_LIB)
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+$(GDAL_SLIB): $(GDAL_OBJ) $(GDAL_LIB)
+\end_layout
+
+\begin_layout LyX-Code
+  $(LD_SHARED) $(GDAL_SLIB_SONAME) -Wl,--whole-archive $(GDAL_LIBS) 
+\backslash
+ 
+\end_layout
+
+\begin_layout LyX-Code
+  -Wl,--no-whole-archive $(LDFLAGS) $(LIBS) -lexpat -o $(GDAL_SLIB)
+\end_layout
+
+\begin_layout Standard
+(Also the -lexpat that needs to be added!)
+\end_layout
+
+\begin_layout Standard
+In addition, libexpat does not get included correctly in the linker flags
+ for the command line tools (in the 
+\begin_inset Quotes eld
+\end_inset
+
+apps
+\begin_inset Quotes erd
+\end_inset
+
+) directory.
+\end_layout
+
+\begin_layout Standard
+Edit 
+\family typewriter
+gdal-1.6.3/apps/GNUmakefile 
+\family default
+and extent the ld flags to read:
+\end_layout
+
+\begin_layout LyX-Code
+...
+ $(CONFIG_LIBS) -L${HOME}/workspace/dist/lib -lexpat -o ...
+\end_layout
+
+\begin_layout Standard
+\SpecialChar \ldots{}
+ to all targets.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+This command can be be used to turn any static library into a DLL using
+ 
+\family typewriter
+gcc.exe
+\family default
+:
+\end_layout
+
+\begin_layout LyX-Code
+gcc -shared -o libgdal.dll -Wl,--out-implib=libgdal.dll -Wl,--add-stdcall-alias
+ -Wl,--enable-auto-import -Wl,--enable-runtime-pseudo-reloc -Wl,--whole-archive
+ libgdal.a -Wl,--no-whole-archive -L/mingw/lib/gcc/mingw32/4.4.0 -lstdc++
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then compile and install:
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Standard
+The DLL will be installed into 
+\family typewriter
+$HOME/workspace/dist/lib/.
+ 
+\family default
+Copy it: 
+\end_layout
+
+\begin_layout Verse
+cp $HOME/workspace/dist/lib/libgdal.dll $HOME/workspace/dist/bin/
+\end_layout
+
+\begin_layout Standard
+IMPORTANT: Due to linking stupidity on Windows, the GDAL CLI tools will
+ be linked to the static GDAL library (libgdal.a), making them HUGE.
+ To get small binaries, delete libgdal.a from the gdal source directory,
+ go into the 
+\begin_inset Quotes eld
+\end_inset
+
+apps
+\begin_inset Quotes erd
+\end_inset
+
+ directory, then do:
+\end_layout
+
+\begin_layout LyX-Code
+make clean
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+cp *.exe $HOME/workspace/dist/bin
+\end_layout
+
+\begin_layout Standard
+To replace the statically linked tools with the dynamically linked versions.
+\end_layout
+
+\begin_layout Subsubsection
+JNI wrapper
+\end_layout
+
+\begin_layout Standard
+Export the following environment variable to point to the directory where
+ the library and header files are installed (so that CMake will be able
+ find them):
+\end_layout
+
+\begin_layout LyX-Code
+export GDAL_DIR=$HOME/workspace/dist
+\end_layout
+
+\begin_layout Standard
+Edit 
+\family typewriter
+src/main/native/jgdal/CMakeLists.txt
+\family default
+ 
+\family typewriter
+to add Java include paths:
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout LyX-Code
+FILE(GLOB SOURCES "*.c*")
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH /home/benni/jdk/jdk1.6/include)
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH2 /home/benni/jdk/jdk1.6/include/linux)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+include_directories(
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Standard
+Generate Makefile for target system using CMake:
+\end_layout
+
+\begin_layout LyX-Code
+cd $HOME/workspace/libgdal-jni
+\end_layout
+
+\begin_layout LyX-Code
+rm CMakeCache.txt
+\end_layout
+
+\begin_layout LyX-Code
+cmake .
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+run twice if it reports an error.
+ It will be OK.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Paragraph
+Linux notes
+\end_layout
+
+\begin_layout Standard
+There is a problem with the Makefiles that generate the 
+\family typewriter
+libjgdal.so
+\family default
+: it is never linked to 
+\family typewriter
+libgdal.so
+\family default
+, which will result in the JRE complaining about undefined symbols.
+\end_layout
+
+\begin_layout Standard
+As a hot fix: add 
+\family typewriter
+<resolve $HOME!>/workspace/dist/lib/libgdal.so to the list of objects in
+ libjni-gdal/src/main/native/jgdal/CMakeFiles/jgdal.dir/link.txt
+\family default
+.
+ Then run 
+\emph on
+make
+\emph default
+ again.
+ Note that this fix has to applied every time after 
+\emph on
+cmake
+\emph default
+ has been run to generate Makefiles.
+\end_layout
+
+\begin_layout Standard
+To make sure that GDAL has been linked in, do: 
+\end_layout
+
+\begin_layout LyX-Code
+ldd -d lib/libjgdal.so
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+libgdal.so
+\emph default
+ should be listed (if it's reported as 
+\begin_inset Quotes eld
+\end_inset
+
+not found
+\begin_inset Quotes erd
+\end_inset
+
+: that's OK, it's just not in any linker path at the moment).
+\end_layout
+
+\begin_layout Paragraph
+Windows notes
+\end_layout
+
+\begin_layout Standard
+See notes for PROJ.4 about Java support.
+\end_layout
+
+\begin_layout Standard
+Edit 
+\family typewriter
+src/main/native/jgdal/CMakeLists.txt
+\family default
+ 
+\family typewriter
+to add Java include paths:
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout LyX-Code
+FILE(GLOB SOURCES "*.c*")
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH /usr/local/java/include)
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH2 /usr/local/java/include/win32)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+include_directories(
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+make
+\emph default
+ process works just like with PROJ.4.
+ Do not forget to export 
+\emph on
+GDAL_DIR
+\emph default
+ and set LD_FLAGS (see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Native-binaries"
+
+\end_inset
+
+)!
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Standard
+This should create the JNI library.
+ It will be saved in 
+\family typewriter
+libjni-gdal/DEPMAN_PATH-NOTTFOUND/bin
+\family default
+.
+ Copy and rename it:
+\end_layout
+
+\begin_layout LyX-Code
+cp 
+\family typewriter
+DEPMAN_PATH-NOTTFOUND/bin/libjgdal092.dll $HOME/workspace/dist/bin/jgdal092.dll
+\end_layout
+
+\begin_layout Subsubsection
+Java library
+\end_layout
+
+\begin_layout LyX-Code
+cd $HOME/workspace/libjni-gdal
+\end_layout
+
+\begin_layout LyX-Code
+ant
+\end_layout
+
+\begin_layout Standard
+The jar files will be moved to 
+\family typewriter
+$HOME/workspace/libjni-gdal/jar-dist
+\family default
+.
+\end_layout
+
+\begin_layout Subsection
+GRASS GIS (6.4.RC5) [Not working]
+\end_layout
+
+\begin_layout Standard
+At the moment, GRASS is primarily compiled to provide the binaries needed
+ for the GDAL GRASS raster data driver.
+ Therefore, a very minimal version without any external dependencies (except
+ GDAL) suffices.
+\end_layout
+
+\begin_layout Subsubsection
+Minimal GRASS GIS
+\end_layout
+
+\begin_layout Standard
+
+\color red
+GRASS access via GDAL is not working in Windows.
+ It seems the GRASS libraries cannot work outside of a full GRASS session.
+ This results in 
+\begin_inset Quotes eld
+\end_inset
+
+formato non valido
+\begin_inset Quotes erd
+\end_inset
+
+ errors from gvISG.
+ For the time being there will be no direct GRASS raster loading support
+ in gvSIG OADE.
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist --enable-largefile --with-proj-includes
+=/home/benni/workspace/dist/include --with-proj-libs=/home/benni/workspace/dist/
+lib --with-proj-share=/home/benni/workspace/dist/share/proj --with-gdal=/home/be
+nni/workspace/dist/bin/gdal-config --with-tcltk=no --with-x=no --with-opengl=no
+ --with-png=no --with-tiff=no --with-jpeg=no --with-fftw=no
+\end_layout
+
+\begin_layout Standard
+This should create a configuration where 
+\emph on
+only GDAL support, OGR support and Large File support
+\emph default
+ are marked as 
+\begin_inset Quotes eld
+\end_inset
+
+Yes
+\begin_inset Quotes erd
+\end_inset
+
+.
+ If the configure script picks up additional external dependencies, then
+ those should be disabled, too.
+\end_layout
+
+\begin_layout Standard
+Then compile:
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Standard
+Note: compilation will end with a lot of errors being reported for vector
+ modules and libraries, but since those are not needed for GDAL raster data
+ support, they can be ignored.
+\end_layout
+
+\begin_layout Standard
+Also, make sure that GRASS has been linked against the correct (minimal)
+ version of the GDAL libraries, not some other version installed in the
+ system's linker path:
+\end_layout
+
+\begin_layout LyX-Code
+ldd -d $HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_gis.so
+\end_layout
+
+\begin_layout Standard
+This should show only minimal external dependencies.
+\end_layout
+
+\begin_layout Paragraph
+Windows
+\end_layout
+
+\begin_layout Standard
+Download compiled support libs from here: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.stjohnspoint.co.uk/grass/wingrass-extralibs.tar.gz
+\end_layout
+
+\end_inset
+
+.
+ Unzip the following into the corresponding folders within $HOME/workspace/dist:
+\end_layout
+
+\begin_layout LyX-Code
+lib/libxdr.a
+\end_layout
+
+\begin_layout LyX-Code
+lib/libcurses.a
+\end_layout
+
+\begin_layout LyX-Code
+lib/libz.*
+\end_layout
+
+\begin_layout LyX-Code
+include/rpc
+\end_layout
+
+\begin_layout LyX-Code
+include/zconf.h
+\end_layout
+
+\begin_layout LyX-Code
+include/zlib.h
+\end_layout
+
+\begin_layout LyX-Code
+include/curses.h
+\end_layout
+
+\begin_layout Standard
+Part of the compilation process are some test routines that need to get
+ executed.
+ If you want to avoid an error message because of missing DLLs, copy them
+ to Windows' executable path:
+\end_layout
+
+\begin_layout LyX-Code
+cp $HOME/workspace/dist/lib/libz.dll.1.2.3 /mingw/bin
+\end_layout
+
+\begin_layout LyX-Code
+cp $HOME/workspace/dist/bin/libgdal.dll /mingw/bin
+\end_layout
+
+\begin_layout LyX-Code
+cp $HOME/workspace/dist/bin/libproj-0.dll /mingw/bin
+\end_layout
+
+\begin_layout Standard
+Also, the PROJ.4 tool 
+\family typewriter
+nad2bin.exe
+\family default
+ needs to be in PATH:
+\end_layout
+
+\begin_layout LyX-Code
+export PATH=$PATH:$HOME/workspace/dist/bin
+\end_layout
+
+\begin_layout Standard
+Before configuring, unset any unneded vars:
+\end_layout
+
+\begin_layout LyX-Code
+unset CPP_FLAGS
+\end_layout
+
+\begin_layout LyX-Code
+unset LDFLAGS
+\end_layout
+
+\begin_layout Standard
+Configure GRASS with added options:
+\end_layout
+
+\begin_layout LyX-Code
+--build=mingw32 --target=mingw32 --with-includes=$HOME/workspace/dist/include
+ --with-libs=$HOME/workspace/dist/lib
+\end_layout
+
+\begin_layout Standard
+Then compile and install the binaries:
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Subsubsection
+GDAL with GRASS raster support
+\end_layout
+
+\begin_layout Standard
+Now, GDAL needs to be compiled again with GRASS support enabled.
+ 
+\end_layout
+
+\begin_layout Standard
+Make sure the extra include files and libs GRASS needs are in scope, 
+\emph on
+before configuring
+\emph default
+:
+\end_layout
+
+\begin_layout LyX-Code
+export CPPFLAGS=
+\begin_inset Quotes erd
+\end_inset
+
+-I$HOME/workspace/dist/include
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+export LDFLAGS=
+\begin_inset Quotes erd
+\end_inset
+
+-L$HOME/workspace/dist/lib -L$HOME/workspace/dist/grass-6.4.0RC6/lib
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Configure as before, but add:
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+ --with-grass=/home/benni/workspace/dist/grass-6.4.0RC6
+\end_layout
+
+\begin_layout Standard
+There is a flaw in the GDAL Makefiles which causes it to always try to link
+ against some GRASS lib that may not exist in a minimal configuration.
+ Open 
+\family typewriter
+gdal-1.6.3/GDALmake.opt
+\family default
+ and find the line that defines LIBS:
+\end_layout
+
+\begin_layout LyX-Code
+LIBS	=	$(SDE_LIB) -L\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Standard
+Remove the token 
+\family typewriter
+-lgrass_vect
+\family default
+ from that line, then compile:
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout Standard
+Note: compilation may abort with an error anyway, when it reaches the GDAL
+ command line tools (
+\emph on
+gdalinfo
+\emph default
+), if it really wants to include some missing GRASS OGR libraries.
+ Since we don't need the command line tools anyway, this is not a problem.
+ Simply copy the GDAL libraries manually to complete the installation:
+\end_layout
+
+\begin_layout LyX-Code
+cp .libs/libgdal.* /home/benni/workspace/dist/lib
+\end_layout
+
+\begin_layout Standard
+Check, which libraries the new GDAL depends on:
+\end_layout
+
+\begin_layout LyX-Code
+ldd -d $HOME/workspace/dist/lib/libgdal.so
+\end_layout
+
+\begin_layout Standard
+This should show a number of 
+\emph on
+libgrass_*
+\emph default
+ libraries.
+ These libraries now need to be included in the distribution.
+ There should be no need to touch the JNI parts again.
+\end_layout
+
+\begin_layout Subsection
+ECW (3.3) [Skipped for Windows]
+\end_layout
+
+\begin_layout Standard
+
+\color red
+NOTE: ECW cannot be built with MinGW.
+ It's VC only.
+ Since the binaries are still up-to-date and the 3D extension supplies binaries
+ that run on Win7, we will skip ECW for Windows at this point.
+\end_layout
+
+\begin_layout Standard
+
+\color red
+NOTE: This junk does not compile on Snow Leopard, either, see Mac notes
+ below.
+\end_layout
+
+\begin_layout Standard
+Source code cannot directly be downloaded.
+ Register on 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.erdas.com
+\end_layout
+
+\end_inset
+
+ to download the source code (
+\begin_inset Quotes eld
+\end_inset
+
+Products -> ECW JPEG2000 Codec SDK 
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+See here: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://trac.osgeo.org/gdal/wiki/ECW
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+C library
+\end_layout
+
+\begin_layout Standard
+Unzip the source code archive, then:
+\end_layout
+
+\begin_layout LyX-Code
+cd libecwj2-3.3
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist --enable-shared=yes --enable-static=no
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+NOTE: This looks for libz, libjpeg and libtiff on configuration, but in
+ the end does not seem to link to any of those.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Standard
+The compilation process is messy, with many warnings.
+ That's 
+\begin_inset Quotes eld
+\end_inset
+
+normal
+\begin_inset Quotes erd
+\end_inset
+
+ (after all, this is not open source software\SpecialChar \ldots{}
+).
+\end_layout
+
+\begin_layout Paragraph
+Linux notes
+\end_layout
+
+\begin_layout Standard
+The shared libraries will be called 
+\family typewriter
+libNCS*.so(.*)
+\family default
+.
+\end_layout
+
+\begin_layout Paragraph
+Mac OS X notes
+\end_layout
+
+\begin_layout Standard
+Get the code and patch from here: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.kyngchaos.com/macosx/build/ecw
+\end_layout
+
+\end_inset
+
+.
+ Patch as instructed on that page, then compile and install like this:
+\end_layout
+
+\begin_layout LyX-Code
+export MACOSX_DEPLOYMENT_TARGET=10.5
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist --enable-shared=yes --enable-static=no
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Subsubsection
+JNI wrapper
+\end_layout
+
+\begin_layout Standard
+Edit 
+\family typewriter
+src/main/native/jecw/CMakeLists.txt
+\family default
+ 
+\family typewriter
+to add Java include paths:
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout LyX-Code
+FILE(GLOB SOURCES "*.c*")
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH /home/benni/jdk/jdk1.6/include)
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH2 /home/benni/jdk/jdk1.6/include/linux)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+include_directories(
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Standard
+For the CMake generator to find the ECW libraries and header files, set
+ the corresponding environment variable:
+\end_layout
+
+\begin_layout LyX-Code
+export ECW_DIR=$HOME/workspace/dist
+\end_layout
+
+\begin_layout Standard
+Generate Makefile for target system using CMake:
+\end_layout
+
+\begin_layout LyX-Code
+cd $HOME/workspace/libjni-ecw
+\end_layout
+
+\begin_layout LyX-Code
+rm CMakeCache.txt
+\end_layout
+
+\begin_layout LyX-Code
+cmake .
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout Standard
+This should create the JNI library (again, it will look messy: lots of warnings).
+\end_layout
+
+\begin_layout Subsubsection
+Java library
+\end_layout
+
+\begin_layout LyX-Code
+cd $HOME/workspace/libjni-ecw
+\end_layout
+
+\begin_layout LyX-Code
+ant
+\end_layout
+
+\begin_layout Standard
+The jar files will be moved to 
+\family typewriter
+$HOME/workspace/libjni-ecw/jar-dist
+\family default
+.
+\end_layout
+
+\begin_layout Subsection
+MrSID (7.0.0)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shaded
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+WARNING: There is a known incompatibility between the closed-source MrSID
+ SDK and GDAL 1.7.0 (actually libgeotiff >= 1.3.0, which is the same as internal
+ GDAL 1.7.0 geotiff).
+ See here: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://trac.osgeo.org/gdal/wiki/MrSID
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Register and download GeoExpress Raster DSDK 7.0.0 from here: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.lizardtech.com/developer
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+There are several versions for different platforms, 32 and 64 bit.
+\end_layout
+
+\begin_layout Standard
+Note: the binaries are static, so there will be no additional dependencies
+ to install.
+\end_layout
+
+\begin_layout Subsubsection
+Update SDK
+\end_layout
+
+\begin_layout Standard
+There is no source code, so nothing to compile.
+ But the SDK libraries and include files may need to be updated.
+ The SDK is stored in 
+\family typewriter
+jmrsid-src-0.0.0/sdk
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+Note: Alternatively, set the environment variable MRSID_DIR to the location
+ of the downloaded SDK if you want to avoid having to update the binaries
+\family typewriter
+ jmrsid-src-0.0.0/sdk
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+All that is needed are the library objects (for the respective platform)
+ and the header files.
+ The library files have to be copied from 
+\family typewriter
+lib/Release
+\family default
+ into 
+\family typewriter
+sdk/lib
+\family default
+.
+ The header files can all go into 
+\family typewriter
+sdk/include
+\family default
+.
+ Note: apparently, in previous versions (6.x.x) of MrSID, the headers where
+ stored in 8 different directories, whereas now they all come in one.
+ Just delete the existing directories and copy all headers into 
+\family typewriter
+sdk/include
+\family default
+.
+ For the CMake generator should to them, edit 
+\family typewriter
+jmrsid-src.0.0.0/CMakeModules/FindMRSID.cmake
+\family default
+ and change all lines that read:
+\end_layout
+
+\begin_layout LyX-Code
+    ${CMAKE_SOURCE_DIR}/sdk/include/
+\emph on
+<something>
+\end_layout
+
+\begin_layout LyX-Code
+${MRSID_DIR}/include/
+\emph on
+<something>
+\end_layout
+
+\begin_layout Standard
+to
+\end_layout
+
+\begin_layout LyX-Code
+    ${CMAKE_SOURCE_DIR}/sdk/include
+\end_layout
+
+\begin_layout LyX-Code
+${MRSID_DIR}/include
+\end_layout
+
+\begin_layout Subsubsection
+JNI wrapper
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shaded
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+NOTE: When checking out the 
+\emph on
+libjni-mrsid
+\emph default
+ directory, for some reason it will end up as project 
+\emph on
+jmrsid-src-0.0.0
+\emph default
+ in the Eclipse workspace.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Edit 
+\family typewriter
+src/main/native/jmrsid/CMakeLists.txt
+\family default
+ 
+\family typewriter
+to add Java include paths:
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout LyX-Code
+FILE(GLOB SOURCES "*.c*")
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH /home/benni/jdk/jdk1.6/include)
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH2 /home/benni/jdk/jdk1.6/include/linux)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+include_directories(
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Standard
+Generate Makefile for target system using CMake:
+\end_layout
+
+\begin_layout LyX-Code
+cd $HOME/workspace/jmrsid-src-0.0.0
+\end_layout
+
+\begin_layout LyX-Code
+rm CMakeCache.txt
+\end_layout
+
+\begin_layout LyX-Code
+cmake .
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout Standard
+This should create the JNI library.
+\end_layout
+
+\begin_layout Subsubsection
+Java library
+\end_layout
+
+\begin_layout LyX-Code
+cd $HOME/workspace/jmrsid-src-0.0.0
+\end_layout
+
+\begin_layout LyX-Code
+ant
+\end_layout
+
+\begin_layout Standard
+The jar files will be moved to 
+\family typewriter
+$HOME/workspace/
+\family default
+jmrsid-src-0.0.0
+\family typewriter
+/jar-dist
+\family default
+.
+\end_layout
+
+\begin_layout Subsection
+Potrace (1.8)
+\end_layout
+
+\begin_layout Standard
+This library is used by the Raster Tools Extension to vectorize raster datasets.
+\end_layout
+
+\begin_layout Standard
+Download: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://potrace.sourceforge.net/
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+However, there have been no updates since 2007 and there is a complete snapshot
+ of the 1.8 source code in the 
+\family typewriter
+libjni-potrace/src/main/native/jpotrace
+\family default
+ folder.
+ It is therefore not necessary to download the sources from the Potrace
+ project site and compile it manually.
+ Also, the version shipped with gvSIG has been turned into a C library.
+\end_layout
+
+\begin_layout Subsubsection
+JNI wrapper
+\end_layout
+
+\begin_layout Standard
+There are some problems with the source code that will result in a lot of
+ C compiler error messages like this:
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+src/main/native/jpotrace/potrace_raster.c:572: error: stray ‘
+\backslash
+’ in program
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Standard
+The reason are double quotes (
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+) within C string definitions.
+ These are quoted symbols, which are defined in 
+\family typewriter
+resources/potrace-1.8/CMakeLists.txt
+\family default
+, and 
+\emph on
+src/main/native/jpotrace/CMakeLists.txt
+\emph default
+ but they are not resolved correctly in the source code.
+ Apparently, this problem is specific to the Linux and Mac OS X Makefiles.
+\end_layout
+
+\begin_layout Standard
+To solve the problem, edit the two files above and directly insert the appropria
+te constant values, so they read:
+\end_layout
+
+\begin_layout LyX-Code
+ADD_DEFINITIONS(-DPOTRACE=potrace) 
+\end_layout
+
+\begin_layout LyX-Code
+ADD_DEFINITIONS(-DVERSION=1.8) 
+\end_layout
+
+\begin_layout LyX-Code
+ADD_DEFINITIONS(-DMKBITMAP=mkbitmap) 
+\end_layout
+
+\begin_layout Standard
+Then edit 
+\family typewriter
+src/main/native/jpotrace/CMakeLists.txt
+\family default
+ 
+\family typewriter
+to add Java include paths:
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout LyX-Code
+FILE(GLOB SOURCES "*.h*")
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH /home/benni/jdk/jdk1.6/include)
+\end_layout
+
+\begin_layout LyX-Code
+set (JAVA_INCLUDE_PATH2 /home/benni/jdk/jdk1.6/include/linux)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+include_directories(
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Standard
+Generate Makefile for target system using CMake:
+\end_layout
+
+\begin_layout LyX-Code
+cd $HOME/workspace/libjni-potrace
+\end_layout
+
+\begin_layout LyX-Code
+rm CMakeCache.txt
+\end_layout
+
+\begin_layout LyX-Code
+cmake .
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout Standard
+This should create the JNI library.
+\end_layout
+
+\begin_layout Standard
+If there are any compiler errors, they are likely formatting errors (such
+ as 
+\begin_inset Quotes eld
+\end_inset
+
+expected ')' before 'potrace'
+\begin_inset Quotes erd
+\end_inset
+
+, produced by bad string replacement.
+ Open the affected files and replace occurences of
+\end_layout
+
+\begin_layout LyX-Code
+\begin_inset Quotes eld
+\end_inset
+
+POTRACE
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+VERSION
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+MKBITMAP
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with their C string value:
+\end_layout
+
+\begin_layout LyX-Code
+potrace, 1.8, mkbitmap
+\end_layout
+
+\begin_layout Paragraph
+Mac OS X notes
+\end_layout
+
+\begin_layout Standard
+The resulting library file needs to be renamed:
+\end_layout
+
+\begin_layout LyX-Code
+mv libjpotrace001.jnilib libjpotrace.jnilib
+\end_layout
+
+\begin_layout Subsubsection
+Java library
+\end_layout
+
+\begin_layout LyX-Code
+cd $HOME/workspace/libjni-potrace
+\end_layout
+
+\begin_layout LyX-Code
+ant
+\end_layout
+
+\begin_layout Standard
+The jar files will be moved to 
+\family typewriter
+$HOME/workspace/libjni-potrace/jar-dist
+\family default
+.
+\end_layout
+
+\begin_layout Subsection
+Distributing
+\end_layout
+
+\begin_layout Standard
+For distribution, the native binaries and the Java interface classes in
+ their JAR files need to be copied into the right gvSIG subdirectories.
+\end_layout
+
+\begin_layout Paragraph
+Linux
+\end_layout
+
+\begin_layout Standard
+Copy the following files into 
+\family typewriter
+$GVSIG_DIR/libs
+\family default
+:
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/jmrsid-src-0.0.0/lib/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/libjni-ecw/lib/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/libjni-gdal/lib/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/libjni-potrace/lib/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/libjni-proj4/lib/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/lib/*.s*
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout LyX-Code
+(GRASS SUPPORT)
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_I*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_datetime*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_dbmibase*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_dbmiclient*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_dgl*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_dig2*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_gis*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_gmath*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_gproj*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_linkm*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_rtree*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_vask*
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+if it exists!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_vect*
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+System libs:
+\end_layout
+
+\begin_layout LyX-Code
+linux-gate.so.1
+\end_layout
+
+\begin_layout LyX-Code
+librt.so.1 => /lib/tls/i686/cmov/librt.so.1 (0x00ed5000)
+\end_layout
+
+\begin_layout LyX-Code
+libdl.so.2 => /lib/tls/i686/cmov/libdl.so.2 (0x006a1000)
+\end_layout
+
+\begin_layout LyX-Code
+libstdc++.so.6 => /usr/lib/libstdc++.so.6 (0x00110000)
+\end_layout
+
+\begin_layout LyX-Code
+libm.so.6 => /lib/tls/i686/cmov/libm.so.6 (0x00eeb000)
+\end_layout
+
+\begin_layout LyX-Code
+libc.so.6 => /lib/tls/i686/cmov/libc.so.6 (0x004c1000)
+\end_layout
+
+\begin_layout LyX-Code
+libgcc_s.so.1 => /lib/libgcc_s.so.1 (0x00fc3000)
+\end_layout
+
+\begin_layout LyX-Code
+libpthread.so.0 => /lib/tls/i686/cmov/libpthread.so.0 (0x00202000)
+\end_layout
+
+\begin_layout LyX-Code
+/lib/ld-linux.so.2 (0x00994000)
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Windows
+\end_layout
+
+\begin_layout Standard
+On this platform, we now deploy all necessary binaries directly inside the
+ JRE's 
+\begin_inset Quotes eld
+\end_inset
+
+bin
+\begin_inset Quotes erd
+\end_inset
+
+ folder, so they can be picked up by Windows exceedingly dumb DLL locating
+ mechanism.
+\end_layout
+
+\begin_layout Standard
+Copy the following files into 
+\family typewriter
+$GVSIG_DIR/
+\family default
+jre/bin:
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/jmrsid-src-0.0.0/bin/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/libjni-ecw/bin/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/libjni-gdal/bin/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/libjni-potrace/bin/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/libjni-proj4/bin/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/bin/*.dll
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/lib/libz.dll.1.2.3
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/lib/libgdal.dll
+\end_layout
+
+\begin_layout LyX-Code
+/c/MinGW/bin/libgcc_s_dw2-1.dll
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout LyX-Code
+(GRASS SUPPORT)
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_I*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_datetime*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_dbmibase*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_dbmiclient*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_dgl*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_dig2*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_gis*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_gmath*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_gproj*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_linkm*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_rtree*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_vask*
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+if it exists!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/grass-6.4.0RC5/lib/libgrass_vect*
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Standard
+Windows does not have a system library path.
+ It looks for DLLs in the folder of the main program executable or any folder
+ in 
+\emph on
+%PATH%
+\emph default
+.
+ In the case of gvSIG, that folder is the JRE's bin folder!
+\end_layout
+
+\begin_layout Paragraph
+All platforms
+\end_layout
+
+\begin_layout Standard
+Copy the following files into 
+\family typewriter
+$GVSIG_DIR/bin/gvSIG/extensiones/com.iver.cit.gvsig/lib
+\family default
+:
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/jmrsid-src-0.0.0/jar-dist/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/libjni-ecw/jar-dist/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/libjni-gdal/jar-dist/*
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/libjni-potrace/jar-dist/*
+\end_layout
+
+\begin_layout Standard
+Copy the following files into 
+\family typewriter
+$GVSIG_DIR/bin/gvSIG/extensiones/org.gvsig.crs/data:
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/share/proj/*
+\end_layout
+
+\begin_layout Standard
+Copy the following files into 
+\family typewriter
+$GVSIG_DIR/libs/gdal_data:
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/share/gdal/*
+\end_layout
+
+\begin_layout Subsection
+Troubleshooting
+\end_layout
+
+\begin_layout Standard
+Before installing any libraries into the Java distribution, make sure they
+ work.
+ If the library code crashes, it will take the whole JRE down with it! E.g.
+ GDAL can be tested by running:
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/bin/gdal-info 
+\emph on
+<sample-file>
+\end_layout
+
+\begin_layout Standard
+Some libraries, especially GDAL may be very complex, with many external
+ dependencies.
+ If Java complains about undefined symbols, check the C library to see where
+ that may come from, e.g.:
+\end_layout
+
+\begin_layout LyX-Code
+ldd -d lib/libjgdal.so
+\end_layout
+
+\begin_layout Standard
+Or, including symbol version information:
+\end_layout
+
+\begin_layout LyX-Code
+ldd -v -d lib/libjgdal.so
+\end_layout
+
+\begin_layout Standard
+And make sure that all dependencies are packaged in the gvSIG distribution.
+\end_layout
+
+\begin_layout Standard
+Sometimes, the Linux linker may pick up libraries from the system path instead
+ of the ones in 
+\family typewriter
+$HOME/workspace/dist
+\family default
+.
+ To avoid this, set 
+\emph on
+LD_LIBRARY_PATH
+\emph default
+ accordingly (also in g
+\family typewriter
+vSIG.sh
+\family default
+ startup script!).
+\end_layout
+
+\begin_layout Standard
+In many cases, I had problems with the system libs in 
+\family typewriter
+/usr/lib
+\family default
+ being linked instead of the ones in $
+\family typewriter
+HOME/workspace/lib
+\family default
+, probably due to defective Makefiles.
+ As a quick fix, move both 
+\family typewriter
+libgdal.*
+\family default
+ and 
+\family typewriter
+libproj.*
+\family default
+ into a temporary directory and out of the way before compiling the binary
+ projects.
+\end_layout
+
+\begin_layout Paragraph
+Windows
+\end_layout
+
+\begin_layout Standard
+Error message:
+\end_layout
+
+\begin_layout LyX-Code
+java.lang.UnsatisfiedLinkError: no <libname> in java.library.path
+\end_layout
+
+\begin_layout Standard
+This results from symbols in JNI binaries that are linked with mangled names:
+ 
+\emph on
+function@INT 
+\emph default
+instead of 
+\emph on
+function
+\emph default
+.
+ Java cannot handle those in MINGW generated libraries.
+ To prevent this from happening, export the required LD_FLAG:
+\end_layout
+
+\begin_layout LyX-Code
+export LDFLAGS=
+\begin_inset Quotes erd
+\end_inset
+
+-Wl,--kill-at
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Error message:
+\end_layout
+
+\begin_layout LyX-Code
+java.lang.UnsatisfiedLinkError: <classpath.method>
+\end_layout
+
+\begin_layout Standard
+MSYS' linker uses a Linux like naming scheme for libraries that does not
+ apply under plain Windows.
+ So JNI libraries like 
+\family typewriter
+libjgdal092.dll
+\family default
+ have to be renamed to 
+\family typewriter
+jgdal092.dll
+\family default
+ before the JRE will be able to find them.
+\end_layout
+
+\begin_layout Standard
+Under Windows, 
+\emph on
+Dependency Walker
+\emph default
+ does the same job as 
+\emph on
+ldd
+\emph default
+ under Linux.
+\end_layout
+
+\begin_layout Section
+SEXTANTE
+\end_layout
+
+\begin_layout Standard
+This shows hot to set up the SEXTANTE SVN sources in Eclipse and compile
+ them.
+\end_layout
+
+\begin_layout Subsection
+Eclipse project setup
+\end_layout
+
+\begin_layout Standard
+SVN address: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://svn.forge.osor.eu/svn/sextante
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Check out:
+\end_layout
+
+\begin_layout LyX-Code
+trunk/docs
+\end_layout
+
+\begin_layout LyX-Code
+trunk/soft/sextante_lib/*
+\end_layout
+
+\begin_layout LyX-Code
+trunk/soft/gvSIGSpecificAlgs
+\end_layout
+
+\begin_layout LyX-Code
+trunk/bindings/gvsig_1_9
+\end_layout
+
+\begin_layout Standard
+Make sure to check out into projects directly in workspace, no subfolgers,
+ e.g.
+ 
+\family typewriter
+trunk/soft/sextante_lib/fire
+\family default
+ needs to go into 
+\family typewriter
+$HOME/workspace/fire
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+Make sure that 
+\begin_inset Quotes eld
+\end_inset
+
+Project\SpecialChar \menuseparator
+Build Automatically
+\begin_inset Quotes erd
+\end_inset
+
+ is enabled.
+\end_layout
+
+\begin_layout Standard
+When everything is set up, select 
+\begin_inset Quotes eld
+\end_inset
+
+Project\SpecialChar \menuseparator
+Clean
+\begin_inset Quotes erd
+\end_inset
+
+ and clean all imported projects once before proceeding with the first compilati
+on.
+\end_layout
+
+\begin_layout Subsection
+Compilation
+\end_layout
+
+\begin_layout Standard
+In the project 
+\begin_inset Quotes eld
+\end_inset
+
+gvSIG_1_9
+\begin_inset Quotes erd
+\end_inset
+
+, run 
+\family typewriter
+build.xml
+\family default
+ as 
+\begin_inset Quotes eld
+\end_inset
+
+Ant Build
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Note that none of the Ant build files contain any actual compilation instruction
+s.
+ They rely on Eclipse's automatic building feature.
+ Therefore, if code gets changed in a Java source file and needs to be recompile
+d, then the corresponding project needs to be cleaned before running the
+ build file, so that the new code will compile automatically.
+\end_layout
+
+\begin_layout Subsection
+Documentation
+\end_layout
+
+\begin_layout Standard
+The manual pages and programming manuals for the documentation are in the
+ separate 
+\begin_inset Quotes eld
+\end_inset
+
+docs
+\begin_inset Quotes erd
+\end_inset
+
+ project, which has no build file.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Manual pages
+\end_layout
+
+\begin_layout Standard
+Copy the contents of 
+\family typewriter
+docs/xml
+\family default
+ to 
+\family typewriter
+.../extensiones/es.unex.sextante/sextante_help
+\family default
+.
+\end_layout
+
+\begin_layout Subsubsection
+Programmer's manual
+\end_layout
+
+\begin_layout Standard
+Run 
+\family typewriter
+LaTex/create_html_from_tex.sh
+\family default
+ to generate the pages.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Note: needs work.
+ Need to install html2latex command, plus some TeX packages: graphicx, hyperref,
+ maybe more\SpecialChar \ldots{}
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Installation (gvSIG)
+\end_layout
+
+\begin_layout Subsection
+Usage Notes
+\end_layout
+
+\begin_layout Subsection
+Minimal GRASS
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+ATTENTION! The SEXTANTE Ant build file will clean the 
+\family typewriter
+$HOME/workspace/dist
+\family default
+ directory and delete anything in there when it's run, so make sure to move
+ the GRASS installation to another permanent folder before (re)building
+ SEXTANTE!!!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+How to compile a minimal GRASS version to bundle with SEXTANTE.
+ The aim is to create a version of GRASS that has all the modules that are
+ useful under SEXTANTE and at the same time only minimal external dependencies.
+ Those dependencies that are left should be completely self-contained for
+ the binary distribution.
+\end_layout
+
+\begin_layout Standard
+Make sure to compile and install a stand-alone GDAL distribution as described
+ here: 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:GDAL-(1.6.3)"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+You also need PROJ4 completely compiled and installed as described here:
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:PROJ.4-(4.7.0)"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The following will assume that GDAL has been installed into 
+\family typewriter
+$HOME/dist/
+\family default
+.
+ These instructions are based on the latest 
+\begin_inset Quotes eld
+\end_inset
+
+stable
+\begin_inset Quotes erd
+\end_inset
+
+ GRASS release 6.4.RC6.
+\end_layout
+
+\begin_layout Subsubsection
+Minimal Dependencies
+\end_layout
+
+\begin_layout Standard
+Apart from GDAL and PROJ4, GRASS depends on a small number of system libraries
+ which should be part of every Linux and Max OS X system, but will need
+ to be included on Windows.
+\end_layout
+
+\begin_layout Paragraph
+GNU gettext
+\end_layout
+
+\begin_layout Standard
+Required on Max OS X.
+ Should be installed along with MinGW on Win32.
+\end_layout
+
+\begin_layout Standard
+Download from here: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.gnu.org/software/gettext/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Configure, make and install:
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Paragraph
+\begin_inset Note Note
+status open
+
+\begin_layout Paragraph
+PCRE
+\end_layout
+
+\begin_layout Plain Layout
+This is the regular expressions library, necessary for modules such as g.mremove.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+PROJ4
+\end_layout
+
+\begin_layout Standard
+If the library has not been installed up to this point, then it has to be
+ done now:
+\end_layout
+
+\begin_layout Standard
+Download from: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://trac.osgeo.org/proj/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Configure, make and install:
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Paragraph
+Zlib
+\end_layout
+
+\begin_layout Standard
+Needed for data compression within GRASS (e.g.
+ raster data).
+\end_layout
+
+\begin_layout Standard
+Download from: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.zlib.net/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Configure, make and install:
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Paragraph
+Curses
+\end_layout
+
+\begin_layout Standard
+This is needed for some interactive modules.
+ We will include it with this minimal GRASS, so users can log into GRASS
+ mapsets via the console and create new mapsets using the interactive GRASS
+ tools.
+\end_layout
+
+\begin_layout Standard
+Download this cross-platform version: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://pdcurses.sourceforge.net/
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist
+\end_layout
+
+\begin_layout Standard
+Note: on Linux systems, most likely the system installation of Curses will
+ get picked up.
+ This is fine.
+ On Mac OS X, this should also work.
+\end_layout
+
+\begin_layout Subsubsection
+Minimal Makefile
+\end_layout
+
+\begin_layout Standard
+Edit 
+\family typewriter
+Makefile
+\family default
+ in the main GRASS source directory and reduce the list of make targets
+ to the minimum:
+\end_layout
+
+\begin_layout Standard
+Note: currently, the SEXTANTE GRASS interface only supports r.* and v.* commands,
+ but this may change in the future and then the 
+\family typewriter
+imagery, ps
+\family default
+ and 
+\family typewriter
+voxel
+\family default
+ make targets may have to be included, as well.
+\end_layout
+
+\begin_layout LyX-Code
+DIRS = 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+	lib 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+	db 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+	doc 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+	display 
+\backslash
+
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Leave in for now, so GRASS can be used externally
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+	general 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+	imagery 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+    misc 
+\backslash
+
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+m.cogo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+	raster 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+	raster3d 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+	scripts 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+	tools 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+	vector 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+	man 
+\backslash
+
+\end_layout
+
+\begin_layout LyX-Code
+	macosx
+\end_layout
+
+\begin_layout Subsubsection
+Additional modules
+\end_layout
+
+\begin_layout Standard
+So far included:
+\end_layout
+
+\begin_layout LyX-Code
+r.cva
+\end_layout
+
+\begin_layout LyX-Code
+r.prominence
+\end_layout
+
+\begin_layout LyX-Code
+v.crossbones
+\end_layout
+
+\begin_layout LyX-Code
+v.in.geoplot
+\end_layout
+
+\begin_layout Subsubsection
+Minimal Configuration
+\end_layout
+
+\begin_layout Standard
+For configure to succeed, the PROJ4 binary 
+\begin_inset Quotes eld
+\end_inset
+
+nad2bin
+\begin_inset Quotes erd
+\end_inset
+
+ has to be in the path, so first do:
+\end_layout
+
+\begin_layout LyX-Code
+export PATH=$PATH:$HOME/workspace/dist/bin
+\end_layout
+
+\begin_layout Standard
+Then configure:
+\end_layout
+
+\begin_layout LyX-Code
+./configure --prefix=$HOME/workspace/dist --with-tcltk=no --with-opengl=no
+ --with-fftw=no --with-freetype=no --with-gdal=$HOME/workspace/dist/bin/gdal-con
+fig --with-includes=$HOME/workspace/dist/include --with-libs=$HOME/workspace/dis
+t/lib --with-x=no --with-cxx --enable-largefile --with-nls --with-zlib-includes=
+$HOME/workspace/dist/include --with-zlib-libs=$HOME/workspace/dist/lib --with-pr
+oj-includes=$HOME/workspace/dist/include --with-proj-libs=$HOME/workspace/dist/l
+ib --with-proj-share=$HOME/workspace/dist/share/proj --with-jpeg=no --with-png=n
+o --with-tiff=no
+\end_layout
+
+\begin_layout Standard
+This should result in:
+\end_layout
+
+\begin_layout LyX-Code
+GRASS is now configured for:  <architecture>
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  Source directory:            <location of GRASS source code>
+\end_layout
+
+\begin_layout LyX-Code
+  Build directory:             <location of GRASS source code>
+\end_layout
+
+\begin_layout LyX-Code
+  Installation directory:      ${prefix}/grass-6.4.0RC6
+\end_layout
+
+\begin_layout LyX-Code
+  Startup script in directory: ${exec_prefix}/bin
+\end_layout
+
+\begin_layout LyX-Code
+  C compiler:                  gcc -g -O2 
+\end_layout
+
+\begin_layout LyX-Code
+  C++ compiler:                c++ -g -O2
+\end_layout
+
+\begin_layout LyX-Code
+  Building shared libraries:   yes
+\end_layout
+
+\begin_layout LyX-Code
+  64bit support:               no
+\end_layout
+
+\begin_layout LyX-Code
+  OpenGL platform:             none
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+  MacOSX application:         no
+\end_layout
+
+\begin_layout LyX-Code
+  MacOSX architectures:       
+\end_layout
+
+\begin_layout LyX-Code
+  MacOSX SDK:                
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  NVIZ:                       no
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+  BLAS support:               no
+\end_layout
+
+\begin_layout LyX-Code
+  C++ support:                yes
+\end_layout
+
+\begin_layout LyX-Code
+  Cairo support:              no
+\end_layout
+
+\begin_layout LyX-Code
+  DWG support:                no
+\end_layout
+
+\begin_layout LyX-Code
+  FFMPEG support:             no
+\end_layout
+
+\begin_layout LyX-Code
+  FFTW support:               no
+\end_layout
+
+\begin_layout LyX-Code
+  FreeType support:           no
+\end_layout
+
+\begin_layout LyX-Code
+  GDAL support:               yes
+\end_layout
+
+\begin_layout LyX-Code
+  GLw support:                no
+\end_layout
+
+\begin_layout LyX-Code
+  JPEG support:               no
+\end_layout
+
+\begin_layout LyX-Code
+  LAPACK support:             no
+\end_layout
+
+\begin_layout LyX-Code
+  Large File support (LFS):   yes
+\end_layout
+
+\begin_layout LyX-Code
+  Motif support:              no
+\end_layout
+
+\begin_layout LyX-Code
+  MySQL support:              no
+\end_layout
+
+\begin_layout LyX-Code
+  NLS support:                yes
+\end_layout
+
+\begin_layout LyX-Code
+  ODBC support:               no
+\end_layout
+
+\begin_layout LyX-Code
+  OGR support:                yes
+\end_layout
+
+\begin_layout LyX-Code
+  OpenGL support:             no
+\end_layout
+
+\begin_layout LyX-Code
+  PNG support:                no
+\end_layout
+
+\begin_layout LyX-Code
+  PostgreSQL support:         no
+\end_layout
+
+\begin_layout LyX-Code
+  Python support:             no
+\end_layout
+
+\begin_layout LyX-Code
+  Readline support:           no
+\end_layout
+
+\begin_layout LyX-Code
+  SQLite support:             no
+\end_layout
+
+\begin_layout LyX-Code
+  Tcl/Tk support:             no
+\end_layout
+
+\begin_layout LyX-Code
+  wxWidgets support:          no
+\end_layout
+
+\begin_layout LyX-Code
+  TIFF support:               no
+\end_layout
+
+\begin_layout LyX-Code
+  X11 support:                no
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+A simple configuration on the dev system:
+\end_layout
+
+\begin_layout LyX-Code
+./configure --with-tcltk=no --with-fftw=no --with-cxx --enable-largefile
+ --with-nls --with-readline --without-freetype 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Mac OS X
+\end_layout
+
+\begin_layout LyX-Code
+./configure --with-machosx-archs=[archs]
+\end_layout
+
+\begin_layout Paragraph
+Windows
+\end_layout
+
+\begin_layout Standard
+Each GRASS module will be run once after compilation, to produce the HTML
+ documentation.
+\end_layout
+
+\begin_layout Standard
+In order for this to work, the necessary DLLs have to be in a place, where
+ (even) Windows can find them:
+\end_layout
+
+\begin_layout LyX-Code
+cp $HOME/workspace/dist/lib/libgdal.dll /bin/
+\end_layout
+
+\begin_layout LyX-Code
+cp $HOME/workspace/dist/bin/libproj-0.dll /bin/
+\end_layout
+
+\begin_layout Standard
+This will lead to Windows complaining about not being able to find several
+ GRASS DLLs for every single GRASS module.
+\end_layout
+
+\begin_layout Paragraph
+64-Bit support
+\end_layout
+
+\begin_layout LyX-Code
+./configure --enable-64bit
+\end_layout
+
+\begin_layout Subsubsection
+Compilation
+\end_layout
+
+\begin_layout Standard
+In order to produce the HTML manual pages, each Module will be run once
+ with the --interface-description switch.
+ In order for this to succeed, all library dependencies not be resolved
+ at compilation time:
+\end_layout
+
+\begin_layout LyX-Code
+ export LD_LIBRARY_PATH=$HOME/workspace/dist/lib
+\end_layout
+
+\begin_layout Standard
+Then make and install:
+\end_layout
+
+\begin_layout LyX-Code
+make
+\end_layout
+
+\begin_layout Subsubsection
+Installation
+\end_layout
+
+\begin_layout LyX-Code
+make install
+\end_layout
+
+\begin_layout Standard
+Copy the library dependencies into the GRASS libraries folder:
+\end_layout
+
+\begin_layout LyX-Code
+cp $HOME/workspace/dist/lib/libgdal.* $HOME/workspace/dist/grass-6.4.0RC6/lib/
+\end_layout
+
+\begin_layout LyX-Code
+cp $HOME/workspace/dist/lib/libproj.* $HOME/workspace/dist/grass-6.4.0RC6/lib/
+\end_layout
+
+\begin_layout LyX-Code
+cp $HOME/workspace/dist/lib/libz.* $HOME/workspace/dist/grass-6.4.0RC6/lib/
+\end_layout
+
+\begin_layout LyX-Code
+cp $HOME/workspace/dist/lib/libexpat.* $HOME/workspace/dist/grass-6.4.0RC6/lib/
+\end_layout
+
+\begin_layout LyX-Code
+cp $HOME/workspace/dist/lib/lib*urses.* $HOME/workspace/dist/grass-6.4.0RC6/lib
+\end_layout
+
+\begin_layout Standard
+Run a quick test:
+\end_layout
+
+\begin_layout LyX-Code
+$HOME/workspace/dist/bin/grass64
+\end_layout
+
+\begin_layout Standard
+If it works, then you have a minimal self-contained version of GRASS GIS.
+ Its size on disk should be around 100 MB.
+\end_layout
+
+\begin_layout Standard
+This should now be move to a permanent location (e.g.
+ folder 
+\family typewriter
+grass
+\family default
+) for bundling inside the SEXTANTE folder.
+\end_layout
+
+\begin_layout Standard
+You can then test it like this:
+\end_layout
+
+\begin_layout LyX-Code
+export GISBASE=<sextante_folder>/grass
+\end_layout
+
+\begin_layout LyX-Code
+<sextante_folder>/grass/etc/Init.sh
+\end_layout
+
+\begin_layout Standard
+Note: GRASS6 will try and start up with the Tcl/Tk GUI by default.
+ For this to work, Tcl/Tk needs to be installed and wish(.exe) must be in
+ the executable path.
+ To start in text mode instead, run:
+\end_layout
+
+\begin_layout LyX-Code
+grass64 -text
+\end_layout
+
+\begin_layout Standard
+After this, text mode will be written as default mode into .grass6rc.
+\end_layout
+
+\begin_layout Standard
+Note that some GRASS modules also require command line tools from PROJ4
+ (cs2cs) and GDAL/OGR.
+ On Linux systems, these may frequently be available, but not necessarily
+ in a matching version.
+ On other systems, they need to be bundled.
+ 
+\end_layout
+
+\begin_layout Standard
+Therefore copy all CLI tools that are part of PROJ4 and GDAL into the GRASS
+ 
+\begin_inset Quotes eld
+\end_inset
+
+bin
+\begin_inset Quotes erd
+\end_inset
+
+ folder:
+\end_layout
+
+\begin_layout Paragraph
+Windows
+\end_layout
+
+\begin_layout Standard
+Copy the following DLLs into $HOME/workspace/dist/grass-<version>/lib:
+\end_layout
+
+\begin_layout LyX-Code
+c:
+\backslash
+MinGW
+\backslash
+bin
+\backslash
+libgcc_s_dw2-1.dll
+\end_layout
+
+\begin_layout LyX-Code
+c:
+\backslash
+MinGW
+\backslash
+bin
+\backslash
+libintl3.dll
+\end_layout
+
+\begin_layout LyX-Code
+c:
+\backslash
+MinGW
+\backslash
+bin
+\backslash
+libiconv2.dll
+\end_layout
+
+\begin_layout LyX-Code
+c:
+\backslash
+MinGW
+\backslash
+bin
+\backslash
+libz.*
+\end_layout
+
+\begin_layout LyX-Code
+c:
+\backslash
+msys
+\backslash
+1.0
+\backslash
+$HOME
+\backslash
+workspace
+\backslash
+dist
+\backslash
+bin
+\backslash
+libexpat-1.dll
+\end_layout
+
+\begin_layout LyX-Code
+c:
+\backslash
+msys
+\backslash
+1.0
+\backslash
+$HOME
+\backslash
+workspace
+\backslash
+dist
+\backslash
+lib
+\backslash
+libgdal.dll
+\end_layout
+
+\begin_layout LyX-Code
+c:
+\backslash
+msys
+\backslash
+1.0
+\backslash
+$HOME
+\backslash
+workspace
+\backslash
+dist
+\backslash
+bin
+\backslash
+libgproj-0.dll
+\end_layout
+
+\begin_layout Standard
+Copy the PROJ4/GDAL CLI tools into $HOME/workspace/dist/grass-<version>/bin:
+\end_layout
+
+\begin_layout LyX-Code
+c:
+\backslash
+msys
+\backslash
+1.0
+\backslash
+$HOME
+\backslash
+workspace
+\backslash
+dist
+\backslash
+bin
+\backslash
+*.exe
+\end_layout
+
+\begin_layout Standard
+It should now be possible to start GRASS from plain cmd.exe.
+\end_layout
+
+\begin_layout Standard
+There are some modules that still do not work under Windows:
+\end_layout
+
+\begin_layout LyX-Code
+raster/simwe/*
+\end_layout
+
+\end_body
+\end_document

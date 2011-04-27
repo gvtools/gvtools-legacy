@@ -1,0 +1,134 @@
+[x]Georeferencing tool: Clicking "X" (in the "Register:" control bar) deletes all
+control points without warning. This is unacceptable, as the icon is right next
+to the "delete single point" icon and easy to mix up. This will inevitably cause
+users to delete all of their control points accidentally.
+
+[x]Table tools: add progress display to Statistics tool.
+I have found that calculating statistics for a table field
+can take very long. So long that the application almost
+feels like it crashed. Apart from the obvious request to
+speed up these calculations, I would like to see some sort
+of progress indicator with a "Cancel" button here.
+
+[x]Table tools: add sampling option to Statistics tool.
+For attribute tables with very many entries, the user
+should have an option to compute table statistics using
+only a random sample of n% or n rows of the table.
+That would greatly speed things up,.
+
+[x]CAD Editor: improve panning and zooming support while digitizing.
+I have found zooming with the mouse wheel to work while digitizing,
+but could find no way to pan.
+For example, the cursor keys would work perfectly well for that purpose.
+Actually, for every tool in the CAD editor, it should be possible to
+use the standard Zoom and Pan tools in the main icon toolbar.
+E.g. when digitizing a line, I might like to use the Pan tool,
+then zoom out, then click on the line tool again to continue
+digitizing the line. I have found that this works for the polygon
+tool, but it did not work for the line, arc and rectangle tools
+(those were the only ones I tried).
+
+[x]CAD Editor: option to visualize all vertices.
+The CAD Editor currently visualizes the vertices of selected
+objects. For some digitizing tasks it can be very helpful
+to see the vertices of all objects (e.g. when trying to
+construct perfectly overlapping or adjacent, non-overlapping
+shapes).
+
+[x]Table->Join: Make the "Source Table" the currently active table.
+The table displayed on the first page of the "Table join"
+dialogue should be the table that is currently active.
+udeful for projects with a long lists of tables and
+repetitive joining tasks.
+
+[x]Table-Join:
+Use font color or style to mark joined fields.
+The current implementation gives the user a choice to
+use a field prefix for marking joined fields. This is
+very useful but in some cases users may want to use no
+field prefixes in order to keep field names short.
+How about using color or text style attribtues (bold,
+italics,...) to mark names of joined fields in the
+attribute table list(s)? Or maybe a different background
+for the field name box?
+
+[x]Table->Join:
+Put "Join" and "Remove joins" into layer context menu.
+Currently, getting to the Join function from a View
+requires to many mouse actions. It would be faster to have
+access to the Join function from the right-click context
+menu of a vector layer's TOC entry in the View. 
+Ideally, the Join source table should then be automatically
+set to the table of that layer.
+
+[x]Table-Join.
+Add a "Rejoin" item to layer context menu.
+There are cases, such as editing a vector layer, when an
+existing Join needs to be dropped. Re-executing the Join
+function can be time-consuming. Therefore, it would be
+great to have a "Rejoin" item for vector layer's that had
+external tables joined to them. This function should
+simply re-run the last join, using the exact same options
+the user had orginally specified.
+
+[x]Add a "Recent projects" list to "File" menu.
+GvSIG should really keep a list with the last 10 or so
+recently opened project files, so the user will have
+a quicker of loading a previously opened project.
+
+{x]Quick Info Tool: Needs a better way to turn it off. 
+It is not easy for the user to understand that hitting "Clear selection",
+then "Cancel" actually deactivates the tool. This can lead to serious
+frustration for the user.
+The icon in the main icon bar should be a two-state icon: show quick info
+setup window and set icon to indicate active state at first click.
+Deactivate quick info tool on second click. Likewise, please indicate
+Alternatively: add "Deactivate" button to the setup window. 
+Actually, just removing the "Cancel button" and renaming "Clear selection"
+to "Deactivate" may make also do the job of improving user interface logics.
+Likewise, the menu entry in "View->Query" should have some status
+indication.
+
+[x]Georeferencing tool: The "Move image" and "Zoom selecting area" in the
+a "Georeferencing view" windows are missing a specific cursor shape.
+Thus, there is no visual feedback for the user to understand that
+either tool is active. I suggest using the same cursor shapes as in
+the main gvSIG tools for panning (the little hand) and zooming (the
+magnifying glass).
+
+[x]Symbology->Categories->Expressions: hidden features stay active.
+If I hide some feature using the "Expression" type symbology, they
+will stay active in the data View. This gives misleading results
+when using the "Info" tool, as attribute table data for hidden feature
+will still be displayed. The same is true for the "Quick Info" tool.
+
+[x]CAD Editor: allow to undo vertices wben drawing a polygon.
+This is the no. 1 feature I get asked about by all new gvSIG users
+when they first use the CAD editor for drawing a polyline/polygon.
+Ideally, there should be an option "Undo last" in the context menu
+for the Polyline tool. This should allow the user to delete the most
+recently placed vertex (and then, if needed, the one before that etc.
+until the first vertex is reached).
+
+[x]Georeferencing tool: allow to use it even if no other layer has been
+added to the view
+Currently, the Raster Tools menu icon is not available for a blank
+View without any layers. Unfortunately, this also means that the
+georeferencer is not available. The georeferencer would actually
+work perfectly well as a stand-alone tool, without the need to
+load any other data into the project first.
+
+A quicker way to exit the georeferencing tool.
+Currently, exiting the tool requires answering two questions
+(1st whether to really quit, 2nd whether to save the georeferencing).
+This is not only time-wasting but may also be confusing for the unwary user.
+I think it would be better to have just one dialog that says:
+"Do you want to exit now and save the georeferencing?"
+|Yes|  |No|   |Cancel|
+
+
+
+
+
+
+

@@ -1,0 +1,213 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.crossbones</em>
+<p>
+A GRASS GIS implementation of Leif Isaksen's <a href="https://launchpad.net/crossbones">Crossbones</a> Java tool. Generates rapid 3D models of
+skeletal assemblages from a sparse set of 3D surveying points.  
+<P>
+
+<h2>BACKGROUND</h2>
+
+Crossbones is a program for use with the X-Bones recording system. X-Bones is a 
+way of recording skeletal data in a systematic fashion so that it can be 
+reconstructed spatially in 3D. The premise is very simple. Points are recorded 
+on each skeleton (e.g. using a total station) according to the following schema:
+<p>
+<i>[skeletonId].[skeletalPoint]</i>
+<p>
+where <i>skeletonId</i> is a unique integer id and <i>skeletalPoint</i> identifies a
+specified terminal point of each element of the skeleton. Although the schema 
+may vary from site to site it will generally take a form along the lines of:
+<p>
+
+<em>Skeletal point and description</em><br>
+01				top of skull<br>
+02				base of skull<br>
+03				top of spine<br>
+04				base of spine<br>
+<br>
+05				top of left humerus<br>
+06				end of left humerus<br>
+07				top of left radius/ulna<br>
+08				end of left radius/ulna<br>
+09				start of left hand bones<br>
+10				end of left hand bones<br>
+11				top of left side of pelvis<br>
+12				base of left side of pelvis<br>
+13				top of left femur<br>
+14				end of left femur<br>
+15				top of left tibia/fibula<br>
+16				end of left tibia/fibula<br>
+17				start of left foot bones<br>
+18				end of left foot bones<br>
+<br>
+19				top of right humerus<br>
+20				end of right humerus<br>
+21				top of right radius/ulna<br>
+22				end of right radius/ulna<br>
+23				start of left hand bones<br>
+24				end of left hand bones<br>
+25				top of right side of pelvis<br>
+26				base of right side of pelvis<br>
+27				top of right femur<br>
+28				end of right femur<br>
+29				top of right tibia/fibula<br>
+30				end of right tibia/fibula<br>
+31				start of left foot bones<br>
+32				end of left foot bones<br>
+<br>
+33				top of unsided humerus<br>
+34				end of unsided humerus<br>
+35				top of unsided radius/ulna<br>
+36				end of unsided radius/ulna<br>
+37				start of unsided hand bones<br>
+38				end of unsided hand bones<br>
+39				top of unsided femur<br>
+40				end of unsided femur<br>
+41				top of unsided tibia/fibula<br>
+42				end of unsided tibia/fibula<br>
+43				start of unsided foot bones<br>
+44				end of unsided foot bones<br>
+<p>
+... although this can be extended to incorporate, e.g. pelvis, hands, feet and even
+individual fingers and toes.
+<p>
+Note, however, that the top (start) measurement along a bone must always be identified
+by an odd number and the bottom (end) measurement must be that number + "1". IDs can
+never be negative!
+<p>
+The data should then be exported as an ASCII value list with no header and one record per line as follows:
+<p>
+<i>[code],[x],[y],[z]</i>
+<p>
+e.g.<br>
+<div class="code"><pre>
+1518.23,1422.626,4939.8659,21.6342
+1518.24,1422.5786,4939.4662,21.6342
+...
+</pre></div>
+<p>
+The ASCII file can then be read by <em>v.crossbones</em> in order to create a 3D GRASS vector map.
+<p>
+<em>v.crossbones</em> assumes the fields to be in the order as above by default, but you can use the <em>idcolumn=</em>,
+<em>xcolumn=</em>, <em>ycolumn=</em> and <em>zcolumn=</em> options to specify any other.
+You can also specify a different field delimiter using the <em>delimiter=</em> option.
+<p>
+Be careful if exporting from a spreadsheet to ensure that the ID field value is not
+treated as a decimal number! To do this you will need to ensure that the cells are
+formatted as "text".
+<p>
+In general, <em>v.crossbones</em> is quite robust against malformed ASCII input. Empty lines and
+lines with missing fields or incorrect or excess fields will simply be skipped. It is also OK to have field contents
+exported as text and enclosed in quotation marks. Likewise, some extra whitespace, e.g. before or after
+field delimiters, will be ignored. Any line starting with a <em>#</em> will be considered a comment line and also skipped.
+<p>
+<em>Each time a warning gets issued about an incorrect line or input point, that point will be deleted and
+not show in the result map!</em>
+
+<h2>USAGE</h2>
+
+Use the <em>input=</em> option to select the ASCII text file with the point data.
+Use the <em>mode=</em> option to choose the output type:
+	
+<dl>
+<dt>Pyramids</dt>
+<dd>3D solids centred on the terminal points. Useful for 3D environments (default).</dd>
+
+<dt>Points</dt>
+<dd>The original measurement points.</dd>
+
+<dt>Lines</dt>
+<dd>A line will be drawn between terminal points. Useful if you want to see exactly which points are connected.</dd>
+	
+<dt>Planes (H)</dt>
+<dd>>A triangle will be drawn with its maximal extent parallel to the horizontal plane. Useful for plan views.</dd>
+	
+<dt>Planes (V)</dt>
+<dd>A triangle will be drawn with its maximal extent parallel to the horizontal plane - Useful for section views.</dd>
+	
+<dt>Darts</dt>
+<dd>A combination of the above.</dd>
+</dl>	
+	
+<em>v.crossbones</em> will write the GRASS output vector map and report any errors on the console.
+The output map will contain a category ID (<em>cat</em>) for each geometry. An attribute data table will be created with values for each
+geometry. 
+<p>
+The original skeleton ID will be contained in the <em>skel_id</em> field. 
+<p>
+The <em>unit_id</em> field will have an ID number that starts at "1" for the
+first skeletonID and gets incremented by "1" automatically for each new skeleton ID.
+The purpose of this is to identify skeletal "units" that have been marked with
+the same skeleton ID, i.e. belong(ed) to the same individual. This makes it much easier 
+to visualize data in viewers that support only continuous colour schemes.
+<p>
+The <em>bone_ID</em> field will have the "bone ID", which is a
+sort of "bone class", allowing you e.g. to colour visualizations by bone
+class (all skulls in one colour, etc.). The bone ID is <em>not</em> the same as the terminal points in the ASCII input file. It
+refers to the skeleton member as a whole. Effectively it is mapped by dividing the 
+base point of the member's code by "2". You can use this to e.g. filter out all
+skull bones or spine bones from the dataset, or colour the data view by bone class.
+<p>
+e.g.<br>
+base of skull code = 2<br>
+skull code = 1<br>
+<br>
+base of spine code = 4<br>
+spine code = 2<br>
+<br>
+etc.<br>
+
+In this way, the bone codes will be dependent, but different from, the original 
+schema. This is important to bear in mind when designing your project database.
+<p>
+The output map's attribute table will also have two RGB colour fields, <em>GRASSRGB</em> and <em>BONERGB</em>. 
+Both contain alternating colours from a 32 count internal colour scheme. The former is GRASS' standard 
+RGB column name for vector maps. It is used to colour bones by "unit", i.e. body parts that belong to
+one individual. The latter can be used to colour the map by bone type.
+<p>
+For all representations based on triangles (e.g. "pyramids"), a ratio can be set to make certain bone types
+appear wider than others. This is done using the <em>ratios=</em> option, which assigns the "length" part of
+a width:length ratio to a bone ID. 
+Assuming the schema listed at the top of this document, the default will e.g. result in wider skull bones, making 
+the heads stand out more clearly. The default width:length ratio for all bones is 1:12.
+
+<h2>EXAMPLE</h2>
+
+Create a 3D model using pyramidal bone representations and default order of fields
+in ASCII input file:
+<div class="code"><pre>
+v.crossbones input=points.csv output=bones_pyramids
+</pre></div>
+<p>
+Display the bones coloured by unit and bone type:
+<div class="code"><pre>
+d.vect bones_pyramids -a
+d.vect bones_pyramids -a rgb_column=BONERGB
+</pre></div>
+
+
+<h2>KNOWN ISSUES</h2>
+
+The algorithm <em>v.crossbones</em> uses to generate the triangles cannot deal with 
+points that are <em>exactly</em> above one another on the z-axis. This is unlikely to 
+happen but if so try tweaking the data in the ASCI input file as a workaround.
+<p>
+In any real situation, point coordinates that are <em>exactly</em> "0.0" will not occur. When
+reading the ASCII input file and extracting point coordinates, "0.0" values are taken as an
+indication of faulty data or a problem with the conversion to a floating point value. Such
+points will be deleted from the input data set. Be aware of this in case you wish to produce
+synthetic data for testing purposes.
+<p>
+If duplicate points occur (i.e. points with the same skeletal ID skeletal point), <em>all</em> occurences
+of that point will be deleted from the input data set. This is done because <em>v.crossbones</em> can neither
+guess the reason for the duplication nor which point is the "good" one.
+</p>
+
+<h2>AUTHORS</h2>
+Leif Isaksen (original Crossbones and X-Bones method), for Oxford Archaeology<br>
+Benjamin Ducke (GRASS GIS conversion), Oxford Archaeology, benjamin.ducke AT oadigital.net
+<p>
+<i>Last changed: $Date: Thu Apr 16 18:28:55 CEST 2009$</i>
+</p>
+

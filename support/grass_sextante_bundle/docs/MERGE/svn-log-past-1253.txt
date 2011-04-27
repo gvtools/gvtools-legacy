@@ -1,0 +1,115 @@
+
+
+
+------------------------------------------------------------------------
+r31745 | jvhigon | 2009-11-30 18:37:45 +0100 (Mon, 30 Nov 2009) | 1 line
+Changed paths:
+   M /trunk/install/instalador-gvSIG-deb/resources/with-jre/DEBIAN/control
+   M /trunk/install/instalador-gvSIG-deb/resources/without-jre/DEBIAN/control
+
+quitando la dependencia con grass, otra vez
+
+------------------------------------------------------------------------
+r31744 | jvhigon | 2009-11-30 18:19:46 +0100 (Mon, 30 Nov 2009) | 1 line
+Changed paths:
+   M /trunk/install/instalador-gvSIG-deb/build.xml
+   M /trunk/install/instalador-gvSIG-deb/resources/with-jre/DEBIAN/control
+   M /trunk/install/instalador-gvSIG-deb/resources/without-jre/DEBIAN/control
+
+quitando la dependencia con grass
+
+------------------------------------------------------------------------
+r31725 | yhijazi | 2009-11-25 16:15:52 +0100 (Wed, 25 Nov 2009) | 1 line
+Changed paths:
+   M /trunk/extensions/extGraph/build.number
+
+build 1235
+
+------------------------------------------------------------------------
+r31602 | jvhigon | 2009-11-12 08:57:26 +0100 (Thu, 12 Nov 2009) | 1 line
+Changed paths:
+   M /trunk/install/instalador-gvSIG-deb/build.xml
+
+no-ecw-mrsid option
+------------------------------------------------------------------------
+r31601 | jvhigon | 2009-11-12 08:56:32 +0100 (Thu, 12 Nov 2009) | 1 line
+Changed paths:
+   A /trunk/install/instalador-gvSIG-deb/resources/no-ecw-mrsid (from /trunk/install/instalador-gvSIG-deb/resources/default:31225)
+   R /trunk/install/instalador-gvSIG-deb/resources/no-ecw-mrsid/DEBIAN/control (from /trunk/install/instalador-gvSIG-deb/resources/default/DEBIAN/control:31598)
+   R /trunk/install/instalador-gvSIG-deb/resources/no-ecw-mrsid/DEBIAN/postinst (from /trunk/install/instalador-gvSIG-deb/resources/default/DEBIAN/postinst:31598)
+   R /trunk/install/instalador-gvSIG-deb/resources/no-ecw-mrsid/gvSIG.sh (from /trunk/install/instalador-gvSIG-deb/resources/default/gvSIG.sh:31598)
+
+no-ecw-mrsid option
+------------------------------------------------------------------------
+r31600 | jvhigon | 2009-11-12 08:54:16 +0100 (Thu, 12 Nov 2009) | 1 line
+Changed paths:
+   D /trunk/install/instalador-gvSIG-deb/resources/default
+
+cleaning
+------------------------------------------------------------------------
+r31598 | jvhigon | 2009-11-12 08:30:19 +0100 (Thu, 12 Nov 2009) | 1 line
+Changed paths:
+   M /trunk/install/instalador-gvSIG-deb/README.txt
+   M /trunk/install/instalador-gvSIG-deb/build.xml
+   M /trunk/install/instalador-gvSIG-deb/resources/default/DEBIAN/control
+   M /trunk/install/instalador-gvSIG-deb/resources/default/DEBIAN/postinst
+   M /trunk/install/instalador-gvSIG-deb/resources/default/gvSIG.sh
+   D /trunk/install/instalador-gvSIG-deb/resources/ecw-mrsid
+   D /trunk/install/instalador-gvSIG-deb/resources/grass
+   D /trunk/install/instalador-gvSIG-deb/resources/jre-ecw-mrsid
+   M /trunk/install/instalador-gvSIG-deb/resources/usr/share/applications/gvsig.desktop
+   A /trunk/install/instalador-gvSIG-deb/resources/with-jre (from /trunk/install/instalador-gvSIG-deb/resources/jre-ecw-mrsid:31225)
+   M /trunk/install/instalador-gvSIG-deb/resources/with-jre/DEBIAN/control
+   M /trunk/install/instalador-gvSIG-deb/resources/with-jre/DEBIAN/postinst
+   M /trunk/install/instalador-gvSIG-deb/resources/with-jre/DEBIAN/postrm
+   A /trunk/install/instalador-gvSIG-deb/resources/with-jre/DEBIAN/preinst
+   M /trunk/install/instalador-gvSIG-deb/resources/with-jre/gvSIG.sh
+   A /trunk/install/instalador-gvSIG-deb/resources/without-jre (from /trunk/install/instalador-gvSIG-deb/resources/grass:31225)
+   M /trunk/install/instalador-gvSIG-deb/resources/without-jre/DEBIAN/control
+   M /trunk/install/instalador-gvSIG-deb/resources/without-jre/DEBIAN/postinst
+   M /trunk/install/instalador-gvSIG-deb/resources/without-jre/DEBIAN/postrm
+   M /trunk/install/instalador-gvSIG-deb/resources/without-jre/gvSIG.sh
+
+changes on the debian installer in order to get a version with an without JRE
+
+------------------------------------------------------------------------
+r31572 | nbrodin | 2009-11-10 18:17:52 +0100 (Tue, 10 Nov 2009) | 1 line
+Changed paths:
+   M /trunk/extensions/extProjectBackup/build.number
+
+v1_9_Build_1253
+------------------------------------------------------------------------
+r31571 | nbrodin | 2009-11-10 18:17:29 +0100 (Tue, 10 Nov 2009) | 1 line
+Changed paths:
+   M /trunk/applications/appCatalogAndGazetteerClient/build.number
+   M /trunk/applications/appgvSIG/build.number
+   M /trunk/extensions/extAddEventTheme/build.number
+   M /trunk/extensions/extAnnotations/build.number
+   M /trunk/extensions/extArcims/build.number
+   M /trunk/extensions/extCAD/build.number
+   M /trunk/extensions/extCenterViewToPoint/build.number
+   M /trunk/extensions/extDataLocator/build.number
+   M /trunk/extensions/extExpressionField/build.number
+   M /trunk/extensions/extGPE-gvSIG/build.number
+   M /trunk/extensions/extGeoProcessing/build.number
+   M /trunk/extensions/extGeoprocessingExtensions/build.number
+   M /trunk/extensions/extGeoreferencing/build.number
+   M /trunk/extensions/extHyperlink/build.number
+   M /trunk/extensions/extI18n/build.number
+   M /trunk/extensions/extIconThemeBase/build.number
+   M /trunk/extensions/extJCRS/build.number
+   M /trunk/extensions/extJDBC/build.number
+   M /trunk/extensions/extLayerLoadingOrder/build.number
+   M /trunk/extensions/extOracleSpatial/build.number
+   M /trunk/extensions/extQuickPrint/build.number
+   M /trunk/extensions/extRasterTools-SE/build.number
+   M /trunk/extensions/extSDE/build.number
+   M /trunk/extensions/extScripting/build.number
+   M /trunk/extensions/extSymbology/build.number
+   M /trunk/extensions/extTableExport/build.number
+   M /trunk/extensions/extTableImport/build.number
+   M /trunk/extensions/extTableSummarize/build.number
+   M /trunk/extensions/extWCS/build.number
+   M /trunk/extensions/extWMS/build.number
+   M /trunk/libraries/libCorePlugin/build.number
+

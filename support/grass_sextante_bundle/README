@@ -1,0 +1,88 @@
+Sat. Jan 15th 2011
+
+
+*******************************************
+* THE INTEGRATED GRASS DISTRIBUTION (IGD) *
+*******************************************
+
+
+*** WHAT'S THIS? ***
+
+This directory contains additional GRASS modules which
+are not part of the current stable GRASS distribution,
+but are found in various add-on repositories.
+Such modules are included if they provide significant
+functionality gain and are deemed stable enough for general
+usage.
+
+It also contains some improved versions of official distribution
+modules that provide some significant benefits to users but
+are officially still in testing stage.
+Such modules are included here if the value of their improvements
+is deemed higher than the risk of them being unstable.
+
+These modules are meant to work with the latest stable GRASS GIS
+release. At the time of writing, that was GRASS 6.4.
+
+
+*** HOW DO I COMPILE THIS? ***
+
+Only the source code for the individual modules is here,
+not a complete GRASS source tree and no configuration system.
+
+To compile these modules and integrate them into a GRASS
+binary distribution, you first need to download the source code
+for the latest stable GRASS release from here:
+
+  http://grass.fbk.eu/
+
+Next, extract the source code to a directory on your system
+and run the script included in this directory with the path
+to that directory as only parameter:
+
+  make_links.sh <path_to_grass_sources>
+
+These instructions should work on any Linux or "POSIX-like"
+system, including Mac OS X, and also the MinGW/MSYS environment
+on Windows.
+
+This will create links to all modules into the GRASS source code
+tree. You can then configure the GRASS sources normally, compile
+and install. The result should contain all the extra modules.
+(But see warning below!)
+
+Read the comments at the beginning of make_links.sh for further
+information.
+
+
+*** HOW DOES THIS WORK WITH MS VISUAL C ON WINDOWS? ***
+
+No idea. If I were to help Microsoft to spread and sell 
+their software, they'd have to pay me, first.
+
+************
+* WARNING! *
+************
+
+Some of the modules in this directory may be replacements for
+existing GRASS modules. In these cases, the existing GRASS
+sources will be deleted and the ones here linked in, instead.
+
+Do not run make_links.sh on a GRASS source code tree with code
+that you actively work on or that's connected to an SVN
+repository. It will mess up your code!!!
+
+
+*** LICENSE ***
+
+All modules in this directory are licensed under the GNU GPL
+or a similar open source license. Look into the individual
+module directories. If not otherwise stated in there, then
+the license that applies is GNU GPL version 2 or later (at
+your option). The terms can be found in the file GPL.TXT which
+accompanies this source code. If the file is missing, you can
+find them here: http://www.gnu.org/licenses/gpl.html
+
+Benjamin Ducke
+benjamin.ducke AT oadigital.net
+

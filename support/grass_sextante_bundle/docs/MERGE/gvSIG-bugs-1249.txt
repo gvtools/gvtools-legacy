@@ -1,0 +1,98 @@
+[x]Table joins: empty "Field prefix" is turned into "_".
+I joined a DBF file to a Shapefile attribute table.
+I set the "Field prefix" option for both tables to an
+empty value. Still, in the joined result I got all attribute
+table fields prefixed with a single "_".
+
+[x]Symbology->Categories->Expressions: joined fields are missing
+from "Fields" list in "Expression creator" dialogue.
+
+[x]Symbology->Categories->Expressions: specifying an invalid (unknown)
+field name throws an ugly error.
+Try a bogus expression, like:
+[THIS_FIELD_IS_A_FAKE] > 10.0
+or just:
+abcdefg < 100.0
+Then click "Verify".
+The result will be an ugly Java error:
+java.lang.NumberFormatException: For input string: "..."
+There should really be a message saying that the field name is
+unknown/invalid.
+The same is true for any field name not written in "[]" brackets,
+even if it is a valid field. The error message should also remind
+users that field names need to be specified in square brackets.
+
+[x]Georeferencing tool: Clicking the "center_locator" icon in a "Georeferencing view" 
+window does not update the corresponding "Zoom control" window.
+
+[x]Georefencing tool: Activating "Zoom selecting area" straight after creating a new
+point (and before placing it somewhere) results in bad behaviour. When disabling
+the zoom tool again, then left-clicking into the image ("Georeferencing view"), 
+I have experienced first no reaction at all, then a "java.lang.NullPointerException". 
+Clicking into the "Zoom control" window will work as expected and place the point,
+however.
+
+[x]Georeferencing tool: "Tabulator" key does not work as expected in the control
+points list widget. Hitting tab gives the focus to the next field, but it does
+not mark the contents for overwrite. this means that before entering a coordinate,
+the user must first delete the old field contents (e.g. "0.0" for defaults), which
+results in unnecessary typting work. Also before clicking into the field with the
+mouse, the input cursor remains invisible.
+
+[x]Georeferencing tool: Placing control point in "Zoom control window" does not work
+right after moving the zoom marker in the "Georeferencing view". 
+This only seems to affect newly created points: Create a new point, then, before
+doing anything else, move the zoom marker (red rectangle) in the "Georeferencing
+view". Then, click into the "Zoom control" to place the new point:
+Left mouse clicks are ignored until the point marker is placed in the "Georeferencing view". 
+After that, placing it in the "Zoom control" window will also work again as expected.
+
+[x]Georeferencing tool: Cannot test affine transformation with 3 control points.
+Clicking "Test georeferencing" on an image with 3 control points give me an
+error that 21 points are needed? Is that correct? Should for the most simple
+affine transformation 2 points not be enough?
+
+[x]Georeferencing tool: Testing georeferencing crashes for an image with 3 control points
+and a 1st degree polynomial transformation. I set the algorithm to polynomial, 1st order
+and nearest neighbour interpolation. After placing 3 control points and clicking
+"Test georeferencing", the program works hard for a while, then throws an error:
+"java.lang.NullPointerException".
+
+[x]Map layout tool: Undo icon is missing.
+Actually, the icon is there but it's just a big red square.
+
+[x]CAD Editor: Editing a layer with symbology on joined fields
+throws an error.
+I joined some fields from a DBF file to a shapefile. I created
+an "intervals" type symbology on one of the joined fields.
+I then started editing the layer. It advised me that the joined
+fields will have to be dropped. I accepted and then got an error
+message:
+java.lang.ArrayIndexOutOfBoundsException: -1
+I closed the error message window. The CAD editor was functional,
+but the layer's TOC entry still showed the old symbology legend
+which actually should have been deleted.
+
+[x]CAD Editor: crashes when editing a layer with "Expression" type symbology.
+I used the "Expression" type symbology to hide some features in
+a shapefile layer (no joined fields). I then started to edit it.
+It was a polygon type layer, so I drew a new polygon. After finishin
+the polygon, I hit "Esc" to get back into selection mode. The result
+was an empty error console. I tried closing it by hitting "Accept",
+but it kept popping up again after a second, forcing me to shut-down
+gvSIG completely.
+
+[x]Add Layer does not release .RMF file handle properly (Windows XP)
+I created a new View, then I chose "Add layer". I clicked "Add", selected
+a raster file (a .TIF image) and clicked "Open" to add it to the list
+of layers to load. I then changed my mind and clicked "Cancel" to close
+the "Add layer" window without loading anything. Next, I tried to delete
+the file by dragging it to the Windows XP trashcan. I got an error message
+from Windows XP telling me that the file was still in use. I had to quit
+gvSIG before I could delete the file even though I had never actually
+loaded it into the View.
+
+[x]Prevent zoom cursor in Georeferencing view from being dragged to Nirvana
+Georeferencing view: the zoom cursor can be dragged to outside the limits of
+the window. If that happens, there is no way to get it back!?
+

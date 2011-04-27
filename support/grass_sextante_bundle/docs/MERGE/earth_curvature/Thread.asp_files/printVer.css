@@ -1,0 +1,330 @@
+/* stylesheet for print output */
+
+body{
+	background-color: #FFFFFF;
+	font-family: verdana, arial, helvetica;
+	color: #000000;
+	font-size: 78%;
+	margin: 0;
+	padding: 12pt 20pt;
+	}
+
+form input{
+	font-family: courier, monospace;
+	}
+
+a, a:link{
+	color: #3B855E;
+	text-decoration: underline;
+	}
+a:visited{
+	color: #21B17D;
+	}
+a:hover{
+	color:  #000000; /*#E2A884;*/
+	}
+
+.col1{ /*leftmost column*/
+	display: none;
+	}	
+
+.LSItemHead{
+	display: none;
+	}	
+	
+.LSItem{
+	display: none;
+	}
+	
+.LSItem div.divider{
+	display: none;
+	}
+
+div.latestItems{
+	color: #999999;
+	font-size: 0.9em;
+	}	
+
+.LSItem p{
+	margin-top: .25em;
+	}
+
+.holder{
+	margin-top: 32px;
+	width: 100%;
+	background-color: #FFFFFF;
+	}
+
+.content{
+	z-index: 5;
+	vertical-align: top;
+	width: 594px;
+	line-height: 1.5em;
+	text-align: left;
+	padding: 10px 0px 0px 20px;
+	}
+	
+.crumbs{
+	display: none;
+	}
+	
+h1{
+	font-size: 1.4em;
+	color: #000;
+	border-bottom: 1px solid #000;
+}	
+	
+.content h1{ /*homepage header only */
+	font-size: 1.4em;
+	color: #C4845D;
+	margin-top: 20px;
+	text-align: left;
+	}
+
+.content h2{ /*gateway header */
+	font-size: 1.4em;
+	color: #000000;
+	padding-bottom: 4px;
+	background-image: url(/common/style/graphics/dottedLine.gif);
+	background-position: bottom left;
+	background-repeat: repeat-x;
+	margin-bottom: 30px;
+	margin-top: 10px;
+	}
+
+.content h3{ /* latest items header */
+	font-size: 1.2em;
+	color: #000000;
+	border-bottom: 1px solid #000000;
+	margin: 0px 0px;
+	clear: right;
+	}
+	
+.content h4{ /*sub page header */
+	font-size: 1em;
+	color: #000000;
+	margin: 2px 0px;
+	}
+
+.content p{
+	margin-top: 0px;
+	font-size: 1em;
+	}
+
+.version{
+	color: #545050;
+	font-size: x-small;
+	font-weight: bold;	
+	float: right;
+	vertical-align: middle;
+	}
+	
+.featuredTech{
+	display: none;
+	}
+
+.header{
+	width: 100%;
+	}
+	
+.format{
+ 	display: none;
+	}
+
+.nonStandard{
+	display: none;
+	}
+
+.footer{
+	display: none;
+	}
+	
+.footer1{
+	font-size: .9em;
+	color: #ccc;
+	padding-left: 15px;
+	}
+	
+.col3{
+	display: none;
+	}
+
+div.col3 div.announcement{
+	display: none;
+	}
+
+div.feature{
+	display: none;
+	}
+
+div.feature img{
+	display: none;
+	}
+
+div.feature div{
+	display: none;
+}	
+.techProfile div{
+	display: none;
+}
+
+div.col3 div.announcement h1{
+	display: none;
+	}	
+
+div.content div.subColumn{
+	float: left;
+	width: 200px;
+	}
+
+div.content div.subColumn ul{
+	margin-top: .25em;
+	margin-left: 0em;
+	margin-right: 10px;
+	padding-left: 1.5em;
+	}
+	
+div.content div.mainAnnouncement{
+	color: #000000;
+	font-size: 0.9em;
+	margin: 15px 0;
+	}
+
+ table.matrix{
+	border-collapse: collapse;
+	width: 100%;
+	text-align: center;
+	}
+
+table.matrix th.left{
+	text-align: left;
+	}	
+	
+table.matrix tr{
+	background-image: url(/common/style/graphics/tableNoShade.gif);
+	}
+
+table.matrix tr.shade{
+	background-image: url(/common/style/graphics/tableShade.gif);
+	}
+
+table.matrix td,
+table.matrix th{
+	padding: .25em;
+	}
+
+table.form td{
+	padding: .25em;
+	vertical-align: middle;
+}	
+	
+table.form td.label{
+	text-align: right;
+}
+.detail{
+	font-size: .8em;
+	color: #96A0A9;
+}
+.required{
+	color: #B6652A;
+}
+div.group{
+	background-color: #F2F8F5;
+	border: 1px solid #96A0A9;
+	padding: 1em;
+	margin: 4px 0 4px 20px;
+	width: 100%;
+	}
+	
+div.group h4{
+	color: #96A0A9;
+}		
+
+/* ========[ navigation tabs ]========*/
+.navBar{
+	display: none;
+}
+
+div.utility{
+	display: none;
+}
+
+#banner{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
+}
+
+.featuredTech{
+	display: none;
+	}
+.feature{
+	display: none;
+	}
+	
+.getStarted{
+	display: none;
+	}
+	
+.content{ 
+	background-image: none;
+	background-color: #FFFFFF;
+	padding: 0;
+	margin: 0;
+	}
+
+.content2{ 
+	background-image: none;
+	background-color: #FFFFFF;
+	padding: 0;
+	margin: 0;
+	}
+
+	
+.content3{
+	font-size: 1em;
+	vertical-align: top;
+	text-align: left;
+	padding: 0;
+	margin: 0;
+}
+
+.content4{ /* articles*/
+	font-size: 1em;
+	vertical-align: top;
+	text-align: left;
+	padding: 1em;
+	width:809px; /* box-model hack for ie5 & ie5.5*/
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	width:604px; /* here's the real width */
+	min-height: 600px;
+	} 
+
+.iconBar{
+	display: none;
+}
+
+div.content2{
+	padding: 10px 0px 15px 15px;
+	margin: 5px 10px 0 0px;
+	background: transparent none no-repeat;
+	/*min-height: auto;*/
+	width: 680px;
+	}
+	
+.newSearchUI{
+	display: none;
+}
+
+#welcome{
+	display: none;
+}
+#tierName{
+	display: none;
+}
+
+#header {
+	background: url(/common/style/graphics/banner9.jpg) no-repeat 0px 0px;
+}

@@ -1,0 +1,545 @@
+One of the great advantages of processing geophysics data in GIS is that you
+can use that platform's great data management and visualization facilities to 
+handle multiple copies and versions of your datasets in the form of layers and
+compare them against each other. 
+
+Another is the ability to use map algebra, which, especially in the case of
+GRASS, adds almost unlimited flexibility to the data processing.
+
+Geoplot 3 functions and GRASS equivalents:
+
+absolute	=	r.mapcalculator
+add		=	r.mapcalculator
+clip		=	r.trim, r.threshold (TO BE IMPLEMENTED)
+compress	=	r.compress (TO BE IMPLEMENTED)
+cut and combine	=	r.mapcalculator
+deslope		=	r.detrend (TO BE IMPLEMENTED)
+despike		=	r.despike
+destagger	=	r.destagger (TO BE IMPLEMENTED)
+edge match	=	r.edge.match (TO BE IMPLEMENTED), r.smooth.splines
+high pass filer =	r.sharpen (TO BE IMPLEMENTED), r.high.pass (TO BE IMPLEMENTED)
+interpolate	=	r.surf.idw, r.surf.rst, r.resample, r.resamp.interp
+low pass filter =	r.smooth.mean, r.neighbors, r.mfilter, r.mfilter.fp
+median filter 	=	r.neighbors
+multiply	=	r.mapcalculator
+periodic def. 	=	i.fft, iifft (BETTER FRONT-END TO BE IMPLEMENTED: r.denoise.fft)
+power		=	r.mapcalculator (HOWEVER: see Geoplot 3 docs on "Power" for dealing with sign!)
+randomise	=	r.surf.random, r.surf.gauss
+search and rep.	=	r.mapcalculator
+spectrum	=	i.fft + AMPLITUDE/PHASE + GIS visualization capabilities
+standard dev/var=	r.neighbors
+statistics	=	r.statistics (FOCAL STATS?)
+zero mean grid	=	r.center, r.normalize
+zero mean trav	=	r.center, r.normalize (TRAVERSE PROCESSING TO BE IMPLEMENTED)
+
+In many cases, there is more than one alternative to the Geoplot tools.
+The GRASS modules are generally more flexible than their Geoplot equivalents.
+In addition, the GRASS Geoprocessing Tools offer many more 
+advanced functions for data filtering, cleaning, visualization and classification.
+
+
+*** Sensor type specifics for data processing
+
+Gradiometer:
+Produces data that is already high-pass filter and centered around zero.
+Data is bipolar.
+Archaeological features are characterized by a small data range against a noisy, diversified background.
+Removing distortions such as plow marks can be very challenging if there signatures are in a range
+similar to the features of interest.
+Extreme spikes are frequent and caused by metal objects.
+
+Gradiometer arrays:
+
+Magnetometer:
+Data has single polarity.
+Archaeological features are characterized by a small data range against a large background.
+
+Differential magnetometer:
+Usually two datasets, one for the mobile sensor, and one for the base station.
+Combining the two requires special processing tools.
+
+Resistivity arrays:
+
+Electromagnets (metal detectors?):
+
+Ground penetrating radar:
+
+Laser scanners:
+
+Spectronometers:
+
+
+*** Principal types of data:
+
+Directionally aligned (gridded) data: this is data which has been captured in regular,
+non-overlapping traverses. Such data can be aligned with the x|y axes of the
+working SRS and some unique filtering and cleaning functions may be applied to it.
+Once the data has been affinely transformed into its real geographic location and location, 
+resampling effects make operations such as destaggering or removal of offsets between lines
+much more complicated.
+
+Track data:
+
+Sparse points data:
+
+
+*** Principal types of noise and defects:
+
+Spikes:
+How to deal with spikes? This depends largely on whether they can be regarded
+noise (such as in the case of resistivity data) or features (such as iron objects
+picked up by a gradiometer). In the former case, just use r.despike to get rid
+of them. In the latter case, you may want to isolate them and transfer them to a
+separate dataset (layer) before despiking. This is because after despiking, there
+may, depending on the spike radius, be artefacts remaining that can look misleadingly
+like features. By overlaying the separate spikes layer, you can avoid wrong interpretations.
+The alternative is to just leave the spikes in the data, but be aware that this will
+distort any statistics (and thus all processing tools that rely on statistical properties
+of the data, such as edge matching) and may cause problems with classification algorithms. At the
+very least, you will need to use a narrowed color or greyscale to be able to see anything
+in the data in the presence of spikes.
+
+Salt and pepper noise:
+These are very localized, but extreme range effects caused by random error, such as
+defective instruments. The best cure is r.(?).
+
+Staggering:
+Can only be removed for traverses aligned with X or Y axes of SRS.
+In that case, removal is a simple case of shifting traverses to line them up.
+
+Stripes:
+Can be a challenge.
+One approach is masking in the frequency spectrum.
+
+Other types of noise or defects:
+If none of the above, specific methods, works well, you will need to try a generic approach
+to noise removal. Try r.denoise first. If the effect is not strong enough, a median filter 
+might help (but will sacrifice some detail). Finally, r.smooth.spline can be used to deal
+with many types of noise or defects, but will take substantial tweaking for optimal results.
+
+Adding noise:
+(Read the Geoplot 3 manual on "Noise" filter for how and when to do this)
+
+*** Filtering
+
+High-pass and low-pass filtering are very broad concepts. A number of different variations
+exist for each.
+
+Low-pass filtering essentially "averages out" high-frequency parts of the signal. It can
+be used to "calm" the image by suppressing "flimsy" parts and preserving larger, broader ones.
+A simple low-pass filter is provided by r.smooth.mean. In most cases, a Gaussian filter with
+a circular shape will preserve edges of objects better than a uniform filter with a rectangular
+shape. If the low-pass filtering is done specifically to eliminate small noise, a median filter
+may be a better choice. 
+
+High-pass filters accentuate small details in the signal image. In this property, they are
+related to sharpening filters.
+
+In any case, if the aim of the filtering is to preserve a known frequency range and eliminate
+all others, filtering in the frequency domain via a Fourier transformation is an elegant solution. 
+
+
+*** Visualization modes:
+
+- greyscale
+- color
+- contour lines
+- shading
+- transparency
+- HIS and RGB composites
+- 3D plots
+
+
+*** Advanced visualization/exploration
+
+i.pca			Use with n>3 signatures, then map first three components to HIS model
+i.cluster		Unsupervised classification, to check if object can be separated nicely
+i.his.rgb/i.his.rgb	(still useful?)
+
+
+*** Classification
+
+i.cluster		Unsupervised classifier: can be used as a starting point for class identification
+i.cca			Used to check how well the different signature factor can be separated for each class (??)
+i.gensig/i.maxlike	Classic Maximum Likelihood classifier
+i.gensigset/i.smap	Alternative SMAP classifier
+(DST tools)		Alternative: use Belief values to classify the data (How to establish good BPAs!?)
+r.to.vect		Convert classified rasters to polygons
+
+*************
+ALL MODULES
+*************
+
+- separate out the color management functions, or at least come
+up with a clear scheme about which tools should provide which
+sort of color output modes! Then maybe write a helper shell script
+to unify the color table handling.
+
+- add the ability to specify a raster MASK to the SEXTANTE interface!
+
+
+******************
+ADAPTIVE SMOOTHING
+******************
+
+- in R: http://www.jstatsoft.org/v19/i01
+- Bayesian approach: http://www.jstatsoft.org/v19/i02
+
+
+*************
+r.interpolate
+*************
+
+- fill only NULL cells by one of several interpolation methods:
+- spline-based (existing r.fill.nulls is too slow and complex)
+- idw
+- smoothing by average
+- ...
+
+*******
+r.clean
+*******
+
+- a tool for heavy duty cleaning work
+- input raster map and vector polygon map
+- rasterize polygons
+- set cells of rasterized polygons to NULL
+- run r.mfilter.fp or spline interpolation to fill in rasterized NULL cells
+- restore original NULL cells
+- how to make sure that masking polygons do not suffer from bad topology?
+	-> extract only boundaries, no attributes, to a new map, one boundary at a time (use "cat")
+	-> rasterize one boundary at a time, incrementally build NULL cells map 
+	-> advise user that holes in polygons will be lost!
+
+***************
+r.clean.fourier
+***************
+- the Fourier transformation transforms data from the spatial or time domain into the
+  simpler frequency domain (frequency spectrum)
+  Common Names: Fourier Transform, Spectral Analysis, Frequency Analysis
+  In the Fourier domain image, each point represents a particular frequency contained in the spatial domain image.
+  Masking out pixels in the Fourier domain suppresses the corresponding pixels in the spatial domain after inverse
+  transformation.
+In most implementations the Fourier image is shifted in such a way that the DC-value (i.e. the image mean) F(0,0) is displayed in the center of the image. The further away from the center an image point is, the higher is its corresponding frequency. 
+  More information here:
+  http://homepages.inf.ed.ac.uk/rbf/HIPR2/fourier.htm
+  Also: review Neteler on production of amplitude and phase images!
+A Fourier-Transformed image can be used for frequency filtering. A simple example is illustrated with the above image. If we multiply the (complex) Fourier image obtained above with an image containing a circle (of r = 32 pixels), we can set all frequencies larger than Eqn:eqnfourb to zero as shown in the logarithmic transformed image 
+- in this case, we use a discrete Fast Fourier Transform
+- we can achieve low-pass and high-pass filtering of defined frequencies using circular masks!
+- more complex filtering can be achieved using arbitrarily shaped masks (polygons)
+  : same type of polygon masking as above, but work on fourier representation of input data
+--> CHECK GEOPLOT 3 MANUAL: How do they use Fourier transformations?
+
+***********
+r.signature
+***********
+
+Module to create (spectral) signatures for delineated objects.
+[Can we use categories? What type of data is suitable?]
+
+- optionally create multi-scale signatures (specify number of times to half and
+  double resolution)
+- can we provide a way to let the user choose individual modules to run for
+  creating signatures? Maybe it would be enough to know the name of the module,
+  parameters and the raster output option name?
+- create signatures as z-scores or in the 0..255 domain? Need to preserve NULL cells!
+
+***********
+r.threshold
+***********
+
+- add a binary output mode
+(maybe also for r.trim?)
+
+****************
+r.squared.median
+****************
+
+(see Geoplot 3 docs on "Power" for dealing with sign!)
+
+*************
+r.denoise.fft
+*************
+
+Read the Geoplot Manual on the "Periodic Filter". All of this should
+be easy to implement, with the added advantage that we can do Fourier
+filtering (masking) using vector polygons.
+
+HOWEVER: Check how to derive amplitude and phase spectrums from input
+data, as those are needed for visual inspection!
+
+NOTE: i.fft will not work well in the presence of a raster mask!
+
+*************
+r.low.pass
+*************
+
+- make a "shell link" to r.smooth.mean (B: or rename r.smooth.mean?)
+- this module is only needed so that people easily find the low-pass
+  filter
+
+NO! Low-pass (and high-pass) filtering is too broad a concept. Better
+provide references (and keywords) for the specific implementations of
+these ideas in the individual modules.
+
+
+*************
+r.smooth.mean
+*************
+
+- replace hard-coded filters with dynamically produced
+filter file (should be easy enough to do with FOR loops in sh)!
+
+- add an option to use a Gaussian instead of a Uniform weighting
+(and adjust all modules that rely on r.smooth.mean to use Gaussian
+by default: OR BETTER: decouple the smoothing wherever possible???)
+
+*********
+r.despike
+*********
+
+- add a mode whereby the spikes are replaced by the threshold value (as opposed to smoothed
+mean or NULL, as already implemented)
+
+************
+r.edge.match
+************
+
+Sounds simply enough from the Geoplot description:
+1. calculates the of mean of two rows/cols of data in a reference grid (A) and the neighbouring (edge) two
+rows/cols in a grid (B), to be matched to the ref. grid.
+2. calculate the difference in the mean between A and B (M_ab)
+3. subtract M_ab from B.
+
+May be used iteratively.
+
+Will not work well in the presence of spikes near the edges!
+
+***********
+r.high.pass
+***********
+
+This is how it works, according to the Geoplot 3 docs:
+
+Move a gaussian or uniformly weighted window over the data, subtract the weighted average
+from the focus cell.
+
+Implementation:
+May require a more flexible fork of r.mfilter.fp, which can do the subtraction.
+But may also be possible to express as a regular mfilter file, e.g. using an inverted Gaussian.
+
+
+**********
+r.compress
+**********
+
+Implement the Geoplot tool, with two different methods:
+
+arctangent = S * ARCTAN (data * P)
+logarithmic = S * LOGe (data * P)
+
+S = Scaling
+P = Contrast
+
+Defaults:
+arctan: S = 1, P = 1
+log: S = 1, P = 100
+
+
+***********
+r.destagger
+***********
+
+This is easy to implement: 
+
+Repeat N times:
+  if mod(current x|y) == 0, then replace current value with neighbor in x|y direction
+  if last value: replace with two neighbors on x|y axis
+
+A stronger effect can be achieved by setting N > 1
+
+User should be able to choose row/col mode and shifting direction, and whether to shift
+every even or odd numbered traverse.
+
+
+***********
+r.normalize
+***********
+
+ADD a mode to r.normalize, where the region is set to only one row or col at at time
+and then the normalization done row or col wise (or should this rather be only in
+r.center?).
+
+Implementation:
+Set the working region to only one col/row at a time. We can work with integers here, 
+so this should be doable as a sh script. Get the raster stats for only that one row/col at a time.
+Next, use r.mapcalc within only that one row/col to transform the data.
+
+For directionally aligned data only.
+
+This is the same as r.normalize, but normalize only one row or column of the input raster at a time.
+Method is used in Geoplot to correct for offset between walked traverses. Not usable with data that
+is rotated against the SRS axes.
+
+
+*********
+r.despike
+*********
+
+- add an option to save spikes to a separate output layer
+
+*********
+r.trim
+*********
+
+- add "i" flag to preserve the values above and below the trimming range instead
+
+
+*********
+r.in.grid
+*********
+
+For directionally aligned data only.
+
+SYNOPSIS:
+r.in.grid input=<file> [raster=<rasterized_output>] mode=<parallel|zigzag> start=<ul|ur|lr|ll> [null=] [xcol=1] [ycol=2] [mcol=3] separator=<any|tab|semicolon|comma|space|user> [usersep=<string>] [rows=] [cols=] [xres=] [yres=] -a (analyse only) -n (no null cells) [skip=integer] [comment=<string>] -s (single value mode) datapos="center|ul|ur|lr|ll" [decimalpoint="."] [decformatter=","]
+
+DESCRIPTION:
+This is a flexible input routine for regularly gridded measurement data with multiple types
+of formatting.
+It takes an ASCII import file and directly rasterizes the data. In this respect,
+it works similar to r.in.xyz, but is a more flexible.
+In addition, it caters for the data structure of typical grid-based surveys, such
+as single sensor gradiometer surveys, by providing:
+(a) a virtual grid coordinates option to merge input data into composite grids, and
+(b) an option to specify the starting point, traversal direction and mode (parallel or zig-zag),
+in which the data is organized.
+
+The basic grid definition (rows, cols, resolution, null encoding) can be user-specified or will
+be auto-guessed if not given. In the latter case, the null encoding will be guessed to be either
+the minimum or maximum value present in the data, depending on which one is more frequent.
+If the -n flag is specified, no value will be treated as "no data" and all values be read as
+if they were valid measurements. If the "-a" (analyse) flag is given, only these guessed
+option values and some statistical information about the input data will be found and displayed.
+
+In addition, the first n lines may be skipped, as well as any that start with (a) comment character(s).
+
+If "-s" is given, then every value in the file is assumed to be a measurement (i.e. no x/y coordinates).
+In that case, the user must specify the number of rows and columns.
+
+It is assumed that the input data refers to the centers of cells. But this assumption can be changed
+using "datapos=".
+
+USAGE HINTS
+After importing a number of grids, they can be combined into a composite grid using r.compose.grid.
+Post-processing may be done on individual grids or the composite grid, as needed. Finally, any type
+of grid may be affinely transformed into a geographic reference system using r.transform (or any other
+means, such as an interactive georeferencer application).
+
+FUTURE
+Also create a v.in.grid and r3.in.grid from the same basic parsing code.
+
+**************
+r.compose.grid
+**************
+
+For directionally aligned data only.
+
+SYNOPSIS:
+r.compose rasters=<raster,raster,...> with=<raster> at=<x,y;x,y;...>
+
+"at=" gives virtual grid coordinates, the actual data gets merged at (x+1)*xres, (y+1)*yres.
+The composite raster map will grow in size as needed. This is done by first setting the GRASS
+region to the data extents of the existing raster "with=", then padding the region to accomodate
+the input raster(s), then overlaying the input rasters using a simple map algebra expression.
+Virtual grid coordinates may also be negative, so the composite grid can be extended in any direction.
+
+CAVEATS:
+User must take care that all rasters have same extent and resolution!
+
+***********
+r.transform
+***********
+
+Affinely transforms a raster given the coordinates of at least two corner points.
+
+r.transform input=raster output=raster [ul=x,y ur=x,y ll=x,y lr=x,y]
+
+- use whatever GRASS has (g.transform? i.rectify?) to transfrom input raster
+(if user does not supply enough points, more can be added automatically, because
+with at least two points, plus the data extent, all four corner points can be reconstructed).
+
+
+********
+r.mirror
+********
+
+For directionally aligned data only.
+
+Can be implemented using r.mapcalc and the min/max col row index.
+
+********
+r.rotate
+********
+
+For directionally aligned data only.
+
+********
+r.center
+********
+
+Should it have a threshold option, just like the Geoplot filter Zero Mean Grid?
+
+Implement row/col processing only, just like for r.normalize (maybe it's not really
+needed in r.normalize, actually?)
+
+************
+r.mfilter.fp
+************
+
+Comments:
+- can handle FP cells, r.mfilter cannot!
+- can run repeat filters (also more than one in a file), before writing final cell
+- -p = use original input map values to compute neighborhood
+- -s = use the result of previous filtering operations to compute neighborhood
+
+****************************************************
+Improvement to GRASS interface
+****************************************************
+
+- use r.external, instead of r.in.gdal
+- for every module that takes a raster input map, and
+  is not on a mask blacklist:
+	add a virtual option to the GRASS algorithm,
+	that allows specification of a raster MASK
+
+
+
+****************************************************
+Useful SEXTANTE tools
+****************************************************
+
+Image Processing (for visualization)
+	Calibrate
+	Calibrate (Regression)
+	Contrast Stretching
+	Equalize
+Pattern Analysis (for 2nd level, site analysis, after classification)
+	Diversity
+	Dominance
+	Fragmentation
+	Number of diff. classes
+Profiles (visualization)
+	[..]
+Raster categories analysis
+	Aggregation (for 2nd level, site analysis, after classification)
+	Class statistics (for evaluating a non-supervised classification)
+	Filter clumps (clean-up of classification, discard smallest features)
+	Lacunarity (for evaluating a non-supervised classification)
+Statistical methods
+	Check if the signatures follow a given distribution
+Tools for polygon layers
+	Geometric properties of polygons (check if vectorized classes make sense in terms of shape)
+	
+	

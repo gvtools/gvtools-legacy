@@ -1,0 +1,274 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       r.denoise
+# AUTHOR(S):    Benjamin Ducke <benjamin.ducke AT oadigital.net>
+# PURPOSE:      Cleans noisy data by smoothing areas with high local diversity.
+#
+# USAGE:	Many systematic errors, such as striping, are characterized
+#		by "artificially" low or high data diversity, which makes them stand
+#		out from the natural background. This module first computes
+#		the diversity of the input data, then removes those cells
+#		with high (or low) diversity and replaces them with a smoothed 
+#		average	of neighboring cells. 
+#
+#		This is a relatively "gentle" filtering method. Heavy noise and
+#		stripes etc. may require different treatment, such as provided
+#		by r.smooth.splines.
+#
+#		Elimination of noise cells is controlled by the "size="
+#		and "threshold=" options. The former controls the scale of
+#		the noise to eliminate. By default, high diversity noise, i,e.
+#		cells with diversity above the threshold will be removed.
+#		Note that "size" must be >= 3 and an odd number. Refer to the
+#		manual page of r.neighbors for more information on calculating
+#		diversity.
+#
+#		The default operation mode is to compute statistical diversity,
+#		which is simply the number of different values within the neighborhood.
+#		but as an alternative, interspersion may be computed as the percentage
+#		of cells containing values which differ from the values assigned 
+#		to the center cell in the neighborhood, plus 1 (see manual page
+#		of r.neighbors). This is controlled by the "method=" option.
+#
+#		It is possible to revert the operation by passing the "-i"
+#		flag. In that case, cells of low diversity will be eliminated.
+#
+#		The smoothing effect size can be controlled via the "smoothing="
+#		option. The larger "smoothing=", the stronger the smoothing and
+#		longer the processing time. Smoothing can be turned off by setting 
+#		"size=0". In that case, all noise cells will be represented as NULL 
+#		("no data") in the output.
+#
+#		The actual smoothing is done by the module r.smooth.mean.
+#		See that module's description for an explanation of the
+#		"repeat=" option and the "-p" flag.
+#
+#		To reduce fine-grained noise, a circular filter shape
+#		can be used by passing the "-c" flag. This makes the
+#		filtering more precise.
+#
+#		For destriping, use a small "size=" setting and the default
+#		(quadratic) filter shape. Try increasing the "threshold"
+#		value if the effect is not strong enough.
+#
+#		Note that diversity as calculated in this module is an
+#		integer metric. Thus, there is reduced sensitivity for
+#		the "threshold" setting and fine adjustment may not yield
+#		any effect.
+#
+#		Finding a good combination of diversity options "size=" and
+#		"threshold=" may take some experimenting. Increasing the
+#		size greatly increases processing time, but it will give more
+#		sensitivity for the threshold option. To get started, it may
+#		be a good idea to set size to a medium value (e.g. 9 or 11) and
+#		then start testing high threshold values (e.g. from 0.75).
+#		Testing can be done with "smoothing=0" which will return all
+#		cells that would be eliminated as NULL cells, which allows for
+#		easy visual inspection of the result before applying any smoothing.
+#		If results are not satisfactory, try reversing the operation with
+#		"-i" and inspect the lower end threshold values.
+#		Smoothing options can then be tested separately, once the noise
+#		settings have resulted in a good detection result. Generally,
+#		high smoothing settings will not give good results for small
+#		noise and vice versa.
+#
+# CAVEATS	Filtering does not work well towards the
+#		edges of the raster.
+#
+# COPYRIGHT:    (C) 2010 by Benjamin Ducke
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#% description: Cleans noisy data by smoothing areas with high local diversity.
+#% keywords: raster, noise, diversity, geophysics, signals
+#%End
+
+#%Option
+#% key: input
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of input raster map
+#% gisprompt: old,cell,raster
+#%End
+
+#%Option
+#% key: output
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of (denoised) output raster map
+#% gisprompt: new,cell,raster
+#%End
+
+#%Option
+#% key: threshold
+#% type: double
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% options: 0.0-1.0
+#% description: Noise removal threshold (% maximum)
+#% answer: 0.67
+#%End
+
+#%Option
+#% key: size
+#% type: integer
+#% required: no
+#% multiple: no
+#% description: Size of diversity window (>=3)
+#% answer: 3
+#%End
+
+#%Option
+#% key: method
+#% type: string
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% options: diversity,interspersion
+#% description: Type of diversity measure to use
+#% answer: diversity
+#%End
+
+#%Option
+#% key: smoothing
+#% type: string
+#% required: no
+#% multiple: no
+#% options: 0,3,5,7,9,11,13,15,17,19,21,23,25,27,29
+#% description: Neighborhood size for smoothing
+#% answer: 3
+#%End
+
+#%Option
+#% key: repeat
+#% type: integer
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% options: 1-100
+#% description: Number of times to repeat smoothing
+#% answer: 1
+#%End
+
+#%Flag
+#%  key: i
+#%  description: Invert threshold criterion
+#%End
+
+#%Flag
+#%  key: c
+#%  description: Use circular diversity window
+#%End
+
+#%Flag
+#%  key: p
+#%  description: Use a parallel filter for smoothing
+#%End
+
+MODULE_NAME=r.denoise
+
+
+if [ -z "$GISBASE" ] ; then
+	echo "ERROR: You must be in GRASS GIS to run this program." 1>&2
+	exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+	exec g.parser "$0" "$@"
+fi
+
+
+# setup temporary file
+TMP_FILE="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMP_FILE" ] ; then
+    g.message -e "Unable to create temporary file for filter. Aborting."
+    exit 1
+fi
+
+# create temporary map names
+TMP_DIV="$MODULE_NAME.`echo $$`.0"
+TMP_SMOOTH="$MODULE_NAME.`echo $$`.1"
+TMP_EDGE="$MODULE_NAME.`echo $$`.2"
+
+# set filter shape
+if [ "$GIS_FLAG_C" = "1" ] ; then
+	SHAPE="-c"
+else
+	SHAPE=
+fi
+
+# compute diversity map
+g.message "Computing $GIS_OPT_METHOD..."
+r.neighbors input="$GIS_OPT_INPUT" output="$TMP_DIV" method="$GIS_OPT_METHOD" size="$GIS_OPT_SIZE" $SHAPE --o
+
+# get diversity statistics
+g.message "Getting $GIS_OPT_METHOD statistics..."
+r.univar -g "$TMP_DIV" > "$TMP_FILE"
+MAX=`cat "$TMP_FILE" | awk --field-separator="=" 'BEGIN { "grep \"max=\"" | getline } BEGIN { print $2 }'`
+
+# replace all values beyond the threshold(s) with NULL
+g.message "Removing noise:"
+if [ "$GIS_OPT_SMOOTHING" != "0" ] ; then
+	if [ "$GIS_FLAG_I" = "1" ] ; then
+		# inverted threshold
+		r.mapcalc "$TMP_SMOOTH=if($TMP_DIV/$MAX>$GIS_OPT_THRESHOLD,$GIS_OPT_INPUT,null())"
+	else		
+		r.mapcalc "$TMP_SMOOTH=if($TMP_DIV/$MAX>$GIS_OPT_THRESHOLD,null(),$GIS_OPT_INPUT)"
+	fi
+else
+	if [ "$GIS_FLAG_I" = "1" ] ; then
+		# inverted threshold
+		r.mapcalc "$GIS_OPT_OUTPUT=if($TMP_DIV/$MAX>$GIS_OPT_THRESHOLD,$GIS_OPT_INPUT,null())"
+	else		
+		r.mapcalc "$GIS_OPT_OUTPUT=if($TMP_DIV/$MAX>$GIS_OPT_THRESHOLD,null(),$GIS_OPT_INPUT)"		
+	fi
+fi
+
+# remove temporary map
+g.message "Cleaning up..."
+g.remove --quiet rast="$TMP_DIV"
+
+# apply smoothing of noise?
+if [ "$GIS_OPT_SMOOTHING" != "0" ] ; then
+	
+	# choose parallel or serial filter
+	if [ "$GIS_FLAG_P" = "1" ] ; then
+		FILTER_TYPE="-p"
+	else
+		FILTER_TYPE=""
+	fi
+	# Smooth areas of eliminated noise
+	r.smooth.mean size="$GIS_OPT_SMOOTHING" input="$TMP_SMOOTH" output="$TMP_EDGE" repeat="$GIS_OPT_REPEAT" $FILTER_TYPE --o
+	# remove temporary map
+	g.message "Cleaning up..."
+	g.remove --quiet rast="$TMP_SMOOTH"
+
+	# eliminate spurious NULL cells at region edges
+	g.message "Cleaning edges..."
+	r.smooth.mean size=3 input="$TMP_EDGE" output="$GIS_OPT_OUTPUT" repeat="$GIS_OPT_REPEAT" $FILTER_TYPE --o	
+
+	# copy back original null values (if any) from input map
+	g.message "Restoring original NULL cells:"
+	r.mapcalc "$GIS_OPT_OUTPUT=if(isnull($GIS_OPT_INPUT),null(),$GIS_OPT_OUTPUT)"
+
+	# remove temporary map
+	g.message "Cleaning up..."
+	g.remove --quiet rast="$TMP_EDGE"
+fi
+
+g.message "Done."
+
+exit 0
+

@@ -1,0 +1,347 @@
+
+/*********************************************/
+/* Forums/includes/Forums.css		 */
+/*********************************************/
+
+img{
+	border-width:0px;
+	}
+.content h2 {font-size:1.4em;}
+table.form{
+	font-size: .98em;
+	}
+table.forum{
+	width: 99%;
+	background-color: #FFFFFF;
+	border: 1px solid #96A0A9;
+	border-collapse: collapse;
+	font-size: x-small; 
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	font-size: .95em;
+	margin: 4px;
+	}
+table.forum td{
+	padding: .5em;
+	vertical-align: top;
+	text-align: left;
+	}
+table.forum td.postvalue{width: 90%;}
+table.forum th{
+	width: 10%;
+	padding: .5em;
+	vertical-align: top;
+	text-align: right;
+	border-right: 1px solid #A7BDAE;
+	}
+table.forum td.toolBar{
+	border-bottom: 1px dotted #A7BDAE;
+	}
+table.forum td.signature{
+	font-style: italic;
+	}	
+table.postings{
+	border-collapse: collapse;
+	width: 100%;
+	text-align: left;
+	font-size: 1em;
+	}
+table.postings td.toolBar{
+	border-bottom: 1px dotted #A7BDAE;
+	}
+table.postings tr.light, td.light{
+	background-color: #FFFFFF;	/*white*/
+	border-bottom: solid 1px #A7BDAE;
+	}
+table.postings tr.shade, td.shade{
+	background-color: #E8F2ED;	/*light green*/
+	border-bottom: solid 1px #A7BDAE;
+	}
+table.postings td.shadeboth{
+	background-color: #E8F2ED;	/*light green*/
+	border-bottom: solid 1px #A7BDAE;
+	border-top: solid 1px #A7BDAE;
+	}
+table.postings tr.darkshade, td.darkshade{
+	background-color: #229F72;	/*dark green*/
+	border-bottom: solid 1px #A7BDAE;
+	}
+table.postings tr.darkthread, td.darkthread{
+	background-color: #E7DFC7;	/*dark tan*/
+	border-bottom: solid 1px #A7BDAE;
+	}
+table.postings tr.mediumthread, td.mediumthread{
+	background-color: #F2EBDB;	/*medium tan*/
+	border-bottom: solid 1px #A7BDAE;
+	}
+table.postings tr.lighthread, td.lighthread{
+	background-color: #F9F6EB;	/*light tan*/
+	border-bottom: solid 1px #A7BDAE;
+	}
+table.postings td,
+table.postings th{
+	vertical-align: top;
+	/*font-size: .8em; 5.27.2003	aasencio	removed to resolve font issue*/
+	line-height: 1em;
+	padding-top: .4em;
+	padding-bottom: .4em;
+	}
+/* 5.29.2003	aasencio	increase size to display font correctly */
+pre{
+	font-size:1.2em;
+	}
+/*
+td.shade{
+	background-color: #E8F2ED;
+	border-bottom: solid 1px #96A0A9;
+	}
+td.light{
+	background-color: #FFFFFF;
+	border-bottom: solid 1px #96A0A9;
+	}*/
+td.header{
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: right;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: #229F72;
+	}
+table.shade{
+	border-collapse: collapse;
+	background-color: #E8F2ED;
+	width: 100%;
+	text-align: left;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	}
+.threadDivider{
+	border-bottom: solid 1px #A7BDAE;
+	}
+div.col3 div.announcement{
+	width: 230px;
+	}
+div.indent{
+	margin-left: 2em;
+	}
+.section{
+	font-size: 1.2em;
+	color: #B66532;
+	}
+.subsection{
+	color: #B66532;
+	}
+.name{
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #B66532;
+	}
+.title{
+	font-size: 1em;
+	color: #777777;
+	font-weight: bold;
+	}
+.postheader{
+	font-size: 1em;
+	font-weight: bold;
+	color: #FFFFFF;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: #66AE8C;
+	/*background-color: #1E9162;*/
+	}
+.postheader a:link, .postheader a:link:visited, .postheader a{
+	color:White;
+	}
+.postheader a:hover{
+	color:Black;
+	}
+.postheader1{
+	font-size: 1em;
+	font-weight: bold;
+	color: #FFFFFF;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: #E8F2ED;	
+	}
+.subtopic{
+	font-size: 1em;
+	font-weight: bold;
+	text-align: center;
+	color: #FFFFFF;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: #B66532;
+	}
+/*
+.postheader1 th, .postheader1 td{
+	border-bottom:solid 1px #000000;
+	}
+*/
+.subheader1{
+	/*font-size: .95em; 5.29.2003	aasencio	removed to resolve font issue*/
+	font-weight: bold;
+	color: #000000;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: #ffffff;
+	/*background-color: #73B997;*/
+	}
+/* do not allow the headers to wrap*/
+.subheader1 td, .subheader1 th{
+	white-space:nowrap;
+	}
+.subheader{
+	font-size: 1.2em;
+	font-weight: bold;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	/*background-color: #E7DFC7;	dark tan*/
+	}
+.sideheader, .sideheader th{
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #000000;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	/*background-color: #F2EBDB;	medium tan*/
+	}
+.threadSummary{
+/*	font-size: 1em; 6.17.2003	mvillacres	removed to resolve font issue*/
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: #E8F2ED;
+	/*background-color: #F9F6EB;	light tan*/
+	}
+.thread{
+	font-size: 1.em;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	/*background-color: #E8F2ED; light green*/
+	/*background-color: #F9F6EB;	light tan*/
+	}
+/* smaller navigation links on forums header*/
+.headerLink{
+	/*	font-size:.95em; */ /*5.29.2003	aasencio	removed to resolve small unreadable font issue **/
+	font-weight:lighter;
+	}
+.crumbs{
+	font-size:1em;
+	} /* 5.27.2003	aasencio	added to resolve small unreadable font issue */
+/* styles to make header links standout on different backgrounds */
+.headerLink a:link{
+	color:Black;
+	}
+.postheader1 .headerLink a:link:hover{
+	color:#999999;
+	}
+.postheader1 td, .postheader1 th{
+	border-bottom: 1px #A7BDAE solid;
+	border-top: 1px #A7BDAE solid;
+	}
+.postheader .headerLink a:link:hover{
+	color:Black;
+	}
+.postheader .headerLink a:link:visited:hover{
+	color:White;
+	}
+/* style for forums legend */
+#legend{
+	background-color: #FFFFFF;
+	font-size:.9em; /* 5.27.2003	aasencio	increased size to resolve small unreadable font issue */
+	border: 1px solid #A7BDAE;
+	/*margin: 4px 0 12px 0;*/
+	}
+#legend .subheader{
+	font-size:.85em;
+	font-weight:bold;
+	color:black;
+	}
+#legend .sideheader{
+	background-color:#E8F2ED;
+	}
+#legend th{
+	color:#B56533;
+	font-size:.75em;
+	font-weight:normal;
+	}
+#legend .text{
+	text-align:left;
+	}
+#legend .image{
+	text-align:right;
+	}
+.active{
+	font-size: 1em;
+	font-weight: bold;
+	color: #777777;
+	margin-bottom: 0px;
+	}
+.toview{
+	font-size: 1em;
+	font-weight: bold;
+	color: #229F72;	/*dark green*/
+	margin-bottom: 0px;
+	}
+.navigation{	/* used for navigation */
+	float: right;  
+	text-align: right;
+	}
+.textPlain{
+	font-family: verdana, arial, helvetica;
+	}
+.content, div.content{ /* uses full area with no left column */
+	background-color: #FFFFFF;
+	font-size: inherit;
+	vertical-align: top;
+	text-align: left;
+	padding: 10px 0px 15px 20px;
+	width:770px; 
+	voice-family: "\"}\""; 
+	voice-family:inherit;
+	min-height: 600px;
+	}
+
+/* ========[ navigation tabs - correct issues inherited from OSC ]========*/
+
+.navBar{
+	top: 68px;
+	}
+	
+html>body .navBar{	/* for Netscape */
+	top: 73px;
+	}
+	
+div.navBar a:link,
+div.navBar a:visited{
+	height: 21px;
+	}
+
+div.navBar a:hover{
+	height: 21px;
+	}
+
+div.navBar a:link.selected,
+div.navBar a:visited.selected{
+	top: 1px;
+	height: 21px;
+	}
+
+html>body div.navBar a:link.selected,
+div.navBar a:visited.selected{		/* for Netscape */
+	top: 0px;
+	height: 21px;
+	}
+	
+html>body{
+	background: #fff url(/images/topTile9.gif) repeat-x;  /* topTile145.gif is too long*/
+	}
+	
+body{
+	background: #fff url(/images/topTile9.gif) repeat-x;  /* topTile145.gif is too long*/
+	}
+	
+.holder{
+	margin-top: 37px;
+	}

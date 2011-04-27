@@ -1,0 +1,7 @@
+Instructions taken from here:
+
+http://www.casa.arizona.edu/MPP/topo_promo/index.html
+
+The exposure index is an algorithm designed by Kvamme to aid in the identification of cliff dwellings in the American southwest. Based on his description of the index (Kvamme calls it the Rim Index), the author wrote an AML that passed an imaginary cylinder over the DEM. The radius of the cylinder was variable but the height was set at 20 meters above the target cell. The measured volume of the cylinder provided a relative index for shelter (Kvamme 1988: 335-336, Kvamme 1990: 12, Kvamme 1992a: 26-27). For example, a site located on an exposed hilltop will increase the height of the cylinder, and in turn its volume, while a site located in a valley will decrease the height of the cylinder and its volume providing a relative index for exposure in the region (Figure 5).
+
+Changing the size of the neighborhood by increasing the radius of the cylinder had a profound effect on the exposure index. In experiments with different neighborhood sizes, the radius was increased in steps from a single cell to 15 cells (Figure 6). With each increase in the radius there were visible changes in the index. Smaller neighborhoods tend to lend importance to individual cells while larger neighborhoods increase the importance of areas. This phenomenon is best illustrated in Figure 7, a closeup of two surfaces, one using a radius of 1 and the other of 5 meters. In this figure, the circle on both surfaces surrounds the main excavation site of Tall al-Umayri.

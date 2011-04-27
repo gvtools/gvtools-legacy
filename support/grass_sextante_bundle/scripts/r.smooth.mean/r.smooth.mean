@@ -1,0 +1,464 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       r.smooth.mean
+# AUTHOR(S):    Benjamin Ducke <benjamin.ducke AT oadigital.net>
+# PURPOSE:      Smoothes data using a mean (average) neighborhood filter.
+#
+# USAGE:	This is a low-level module used by other modules such as
+#		r.despike to smooth data. It is not very useful on its
+#		own, save as a convenient way of calling r.mfilter.fp,
+#		and for eliminating spurious NULL cells.
+#
+#		But in most cases, r.neighbors will be the better, more
+#		flexible tool for direct usage.
+#
+#		If "repeat=1", then the filter will only be applied once,
+#		and it will only work on cells that are NULL ("no data").
+#		For repeat > 1, every 2nd, 3rd,... etc. run will also
+#		work on data cells.
+#
+#		The "-p" (parallel) flag switches to a parallel smoothing
+#		filter which works on all cells within the neighborhood
+#		at once, instead of one-by-one (as the default serial mode
+#		does). This gives greater fidelity, but will only work well
+#		if the spike radii are relatively small and the smoothing
+#		neighborhood size is large by comparison. In most cases,
+#		the default (serial) filter will give better results.
+#
+#		In some cases, single cells will be missed by filter and
+#		remain null() after the first run. For this reason, a second
+#		pass is made to average out isolate null() cells (only those
+#		not present in the input data!) with a 3x3 neighborhood.
+##
+# COPYRIGHT:    (C) 2010 by Benjamin Ducke
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#% description: Smoothes data using a mean (average) neighborhood filter.
+#% keywords: raster, smooth, mean, average, geophysics, signals, filter
+#%End
+
+#%Option
+#% key: input
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of input raster map
+#% gisprompt: old,cell,raster
+#%End
+
+#%Option
+#% key: output
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of (smoothed) output raster map
+#% gisprompt: new,cell,raster
+#%End
+
+#%Option
+#% key: size
+#% type: string
+#% required: no
+#% multiple: no
+#% options: 3,5,7,9,11,13,15,17,19,21,23,25,27,29
+#% description: Neighborhood size for smoothing
+#% answer: 3
+#%End
+
+#%Option
+#% key: repeat
+#% type: integer
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% options: 1-100
+#% description: Number of times to repeat smoothing
+#% answer: 1
+#%End
+
+#%Flag
+#%  key: p
+#%  description: Use a parallel filter for smoothing
+#%End
+
+MODULE_NAME=r.smooth.mean
+
+
+if [ -z "$GISBASE" ] ; then
+	echo "ERROR: You must be in GRASS GIS to run this program." 1>&2
+	exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+	exec g.parser "$0" "$@"
+fi
+
+
+# setup temporary files for filter
+TMP_FILE="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMP_FILE" ] ; then
+    g.message -e "Unable to create temporary file for filter. Aborting."
+    exit 1
+fi
+
+# choose parallel or serial filter
+if [ "$GIS_FLAG_P" = "1" ] ; then
+	FILTER_TYPE="TYPE    P"
+else
+	FILTER_TYPE="TYPE    S"
+fi
+
+if [ "$GIS_OPT_SIZE" = "3" ] ; then
+# create filter descriptions
+echo "TITLE     3x3 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    3" >> $TMP_FILE
+echo "1 1 1" >> $TMP_FILE
+echo "1 1 1" >> $TMP_FILE
+echo "1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "5" ] ; then
+echo "TITLE     5x5 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    5" >> $TMP_FILE
+echo "1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "7" ] ; then
+echo "TITLE     7x7 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    7" >> $TMP_FILE
+echo "1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "9" ] ; then
+echo "TITLE     9x9 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    9" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "11" ] ; then
+echo "TITLE     11x11 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    11" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "13" ] ; then
+echo "TITLE     13x13 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    13" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "15" ] ; then
+echo "TITLE     15x15 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    15" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "17" ] ; then
+echo "TITLE     17x17 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    17" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "19" ] ; then
+echo "TITLE     19x19 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    19" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "21" ] ; then
+echo "TITLE     21x21 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    21" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "23" ] ; then
+echo "TITLE     23x23 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    23" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "25" ] ; then
+echo "TITLE     25x25 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    25" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "27" ] ; then
+echo "TITLE     27x27 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    27" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+if [ "$GIS_OPT_SIZE" = "29" ] ; then
+echo "TITLE     29x29 average, non-zero data only" > $TMP_FILE
+echo "MATRIX    29" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1" >> $TMP_FILE
+echo "DIVISOR   0 " >> $TMP_FILE
+echo "$FILTER_TYPE" >> $TMP_FILE
+fi
+
+# replace cells with average of neighbouring cells
+g.message "Smoothing by neighborhood average:"
+
+# Smooth areas that are not NULL?
+if [ "$GIS_OPT_REPEAT" = "1" ] ; then
+	NULL_ONLY="-z"
+else
+	NULL_ONLY=""
+fi
+r.mfilter.fp input="$GIS_OPT_INPUT" output="$GIS_OPT_OUTPUT" filter="$TMP_FILE" repeat="$GIS_OPT_REPEAT" $NULL_ONLY --o
+
+# clean any cells the smoothing filter has not picked up
+g.message "Cleaning isolated cells:"
+A="$GIS_OPT_INPUT"
+B="$GIS_OPT_OUTPUT"
+r.mapcalc "$B=if((isnull($B) && isnull($A)),($A[-1,0]+$A[1,0]+$A[0,-1]+$A[0,1]+$A[-1,-1]+$A[1,-1]+$A[-1,1]+$A[1,1])/8,$B)"
+
+g.message "Done."
+
+exit 0
+

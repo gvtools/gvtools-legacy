@@ -1,0 +1,170 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       r.despike
+# AUTHOR(S):    Benjamin Ducke <benjamin.ducke AT oadigital.net>
+# PURPOSE:      Removes spikes (extreme values, outliers) from input raster
+#		map. 
+#
+# USAGE:	The user can define a minimum and/or maximum cut-off value.
+#		Removed spike cells will be filled with smoothed average of
+#		neighboring cells or represented as NULL ("no data").
+#
+#		The neighborhood size can be controlled via the "size=" option.
+#		The larger "size=", the stronger the smoothing effect and
+#		longer the processing time.
+#		For spikes that have large radii (which frequenly happens
+#		with generous min/max settings), larger settings are
+#		required to achieve good, noiseless smoothing.
+#
+#		Smoothing can be turned off by setting "size=0". In that case,
+#		all spike cells will be represented as NULL ("no data") in
+#		the output.
+#
+#		The actual smoothing is done by the module r.smooth.mean.
+#		See that module's description for an explanation of the
+#		"repeat=" option and the "-p" flag.
+#
+#		Despiking (with smoothing) may also be useful to remove 
+#		"salt and pepper" type noise, as produced e.g. by faulty 
+#		instruments.
+#
+# CAVEATS	Larger neighborhood sizes do not work well towards the
+#		edges of the raster.
+#		Smoothing may be necessary after despiking to eliminate
+#		isolated spike artefacts ("ridges").
+#
+# COPYRIGHT:    (C) 2010 by Benjamin Ducke
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#% description: Removes spikes (extreme values, outliers) from input raster map.
+#% keywords: raster, spikes, outliers, despiking, geophysics, signals
+#%End
+
+#%Option
+#% key: input
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of input raster map
+#% gisprompt: old,cell,raster
+#%End
+
+#%Option
+#% key: output
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of (despiked) output raster map
+#% gisprompt: new,cell,raster
+#%End
+
+#%Option
+#% key: lower
+#% type: double
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% description: Lower threshold for spike removal
+#%End
+
+#%Option
+#% key: upper
+#% type: double
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% description: Upper threshold for spike removal
+#%End
+
+#%Option
+#% key: size
+#% type: string
+#% required: no
+#% multiple: no
+#% options: 0,3,5,7,9,11,13,15,17,19,21,23,25,27,29
+#% description: Neighborhood size for smoothing
+#% answer: 9
+#%End
+
+#%Option
+#% key: repeat
+#% type: integer
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% options: 1-100
+#% description: Number of times to repeat smoothing
+#% answer: 1
+#%End
+
+#%Flag
+#%  key: p
+#%  description: Use a parallel filter for smoothing
+#%End
+
+MODULE_NAME=r.despike
+
+
+if [ -z "$GISBASE" ] ; then
+	echo "ERROR: You must be in GRASS GIS to run this program." 1>&2
+	exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+	exec g.parser "$0" "$@"
+fi
+
+if [ -z "$GIS_OPT_LOWER" ] && [ -z "$GIS_OPT_UPPER" ] ; then
+	g.message -e "Please specify a lower threshold, an upper threshold, or both."
+	exit 1
+fi
+
+
+# create a temporary map name
+TMP="$MODULE_NAME.`echo $$`.0"
+
+# replace all values beyond the threshold(s) with NULL
+g.message "Removing spikes:"
+if [ "$GIS_OPT_SIZE" != "0" ] ; then
+	r.mapcalc "$TMP=if($GIS_OPT_INPUT<$GIS_OPT_LOWER||$GIS_OPT_INPUT>$GIS_OPT_UPPER,null(),$GIS_OPT_INPUT)"
+else
+	r.mapcalc "$GIS_OPT_OUTPUT=if($GIS_OPT_INPUT<$GIS_OPT_LOWER||$GIS_OPT_INPUT>$GIS_OPT_UPPER,null(),$GIS_OPT_INPUT)"
+fi
+
+# apply smoothing of spikes?
+if [ "$GIS_OPT_SIZE" != "0" ] ; then
+
+	# choose parallel or serial filter
+	if [ "$GIS_FLAG_P" = "1" ] ; then
+		FILTER_TYPE="-p"
+	else
+		FILTER_TYPE=""
+	fi
+
+	# replace removed spike cells with average of neighbouring cells
+	g.message "Replacing spikes with neighborhood average:"
+	r.smooth.mean size="$GIS_OPT_SIZE" input="$TMP" output="$GIS_OPT_OUTPUT" repeat="$GIS_OPT_REPEAT" $FILTER_TYPE --o
+
+	# copy back original null values (if any) from input map
+	g.message "Restoring original NULL cells:"
+	r.mapcalc "$GIS_OPT_OUTPUT=if(isnull($GIS_OPT_INPUT),null(),$GIS_OPT_OUTPUT)"
+
+	# remove temporary map
+	g.message "Cleaning up..."
+	g.remove --quiet rast="$TMP"
+fi
+
+g.message "Done."
+
+exit 0
+

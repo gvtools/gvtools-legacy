@@ -1,0 +1,72 @@
+Eclipse and the SVN plugin have been used to checkout:
+
+  http://subversion.gvsig.org/gvSIG/tags/v1_9_Build_1253
+
+It contains Andami, the main gvSIG app and all extensions and libraries.
+This is a _tag_ which represents a dead code tree.
+
+Current development (bug fixing etc.) for 1.9 is going on in:
+
+  http://subversion.gvsig.org/gvSIG/trunk
+
+So, the Eclipse project needs to be kept up-to-date by merging bug
+fixes from trunk into it, but without destroying the OA modifications
+done to our own build 1253!
+
+Recent changes and affected files can be viewed from the Eclipse SVN
+plugin, using "History" from the "trunk" folder context menu.
+
+A list of all SVN changes can be retrieved from trunk using:
+
+  svn log http://subversion.gvsig.org/gvSIG/trunk --verbose > svn-log.txt
+
+This will store a _very_ long and complete log in svn-log.txt.
+To cut it down to only the recent changes (i.e. after build 1253), look
+for this entry:
+
+"v1_9_Build_1253"
+
+... and delete all lines below that entry.
+
+A list of all OA-modified files is kept in "src". That directory has been
+added to the workspace as project "_0A changes".
+
+Single changed files can be extracted from SVN by using the "Export"
+function in the context menu and saving the file to the corresponding
+folder in the local workspace tree.
+
+The most important bug fixes of a specific build can be queried in Trac
+by using a custom query statement like:
+
+  resolve build number [contains] [1254]
+
+---
+
+Extensions that were never modified should simply be deleted from 
+workspace and re-imported from trunk (do a fresh "Checkout").
+
+[DONE] for:
+binaries
+extGraph
+extI18n
+extPublish
+extSymbology
+extTopology
+libDwg
+libGeocoding
+
+These projects can be synchronized with SVN by using
+"Team->Update to HEAD" from the context menu.
+
+---
+
+The file svn-log-past-1253.txt contains only those changes that have
+NOT been imported into the OA build yet, for diverse reasons.
+
+Last merged SVN entry:
+
+r33025 07/06/10 2:34 PM
+
+Recompile:
+
+

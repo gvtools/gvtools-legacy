@@ -1,0 +1,778 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<!-- doctype declaration -->
+
+
+
+	<title>Calculating Earth curvature for viewshed </title>
+        <meta name="taxonomy" content="Resource Center/Community/Forum">
+    <meta name="last-modified" content="2008-01-31">
+
+
+<!-- link and import stylesheets -->
+
+	<!-- Meta tag for Google Webmaster Tool -->
+	<meta name="verify-v1" content="ZtnC29596Qlb185pIUzlbNs+Z65N1+Gd+noFsSe1fPM=">
+		
+	<!-- load stylesheets -->
+	
+	<script language="javascript" type="text/javascript">
+		if(document.getElementById){
+		    document.write('<link rel="stylesheet" href="http://forums.esri.com/includes/compliant.css" type="text/css" media="screen">');
+		    document.write('<link rel="stylesheet" href="http://forums.esri.com/includes/printVer.css" type="text/css" media="print">');
+		}
+		if(document.layers){
+		    document.write('<link rel="stylesheet" href="http://forums.esri.com/includes/limitedNN47.css" type="text/css">');
+		}
+	</script><link rel="stylesheet" href="Thread.asp_files/compliant.css" type="text/css" media="screen"><link rel="stylesheet" href="Thread.asp_files/printVer.css" type="text/css" media="print">
+
+	<!-- Forum styles -->
+	<link rel="stylesheet" href="Thread.asp_files/Forums.css" type="text/css">
+
+
+<script language="javascript" src="Thread.asp_files/main.js"></script>
+
+<script language="javascript">
+<!--
+	function fnSubmit() {
+		document.forms[0].submit();
+		}
+//-->
+</script>
+
+</head><body>
+
+<!-- header and navigation -->
+
+
+<!-- banner graphic -->
+
+<div class="header">
+
+	<div class="banner">
+		<map name="bannerMap">
+		<area alt="Visit the main ESRI website" coords="8,6,67,64" href="http://www.esri.com/">
+		</map>
+<img src="Thread.asp_files/banner9.jpg" alt="ESRI Support Center: your online technical resource" usemap="#bannerMap" height="88" width="789" border="0">
+	</div>
+	
+	<!-- utility navigation -->
+	<!-- globalTemplates/header/dsp_navUtility.asp -->
+
+<div class="utility">&nbsp;
+	<a href="http://resources.arcgis.com/">Resource Center</a> | 
+	<a href="http://support.esri.com/">Support</a> |
+	<a href="http://support.esri.com/feedback/">Feedback</a>
+</div>
+<!--- globalTemplates/header/dsp_techNav.asp-->
+
+<div class="featuredTech">
+	<!--
+	FEATURED AREAS: 
+	<img src="http://support.esri.com/common/style/graphics/icons/dataModels.gif" height="14" width="14" alt="featured tech">
+	<a href="http://edn.esri.com" title="ESRI Developer Network">EDN</a>
+	<img src="http://support.esri.com/common/style/graphics/icons/dataModels.gif" height="14" width="14" alt="featured tech">
+	<a href="http://webhelp.esri.com/arcgisdesktop/9.1" title="ArcGIS Desktop Help">ArcGIS Desktop Help</a>
+	<img src="http://support.esri.com/common/style/graphics/icons/dataModels.gif" height="14" width="14" alt="featured tech">
+	<a href="http://support.esri.com/index.cfm?fa=downloads.geoprocessing.gateway" title="Geoprocessing">Geoprocessing</a>
+	<img src="http://support.esri.com/common/style/graphics/icons/dataModels.gif" height="14" width="14" alt="featured tech">
+	<a href="http://support.esri.com/index.cfm?fa=downloads.dataModels.gateway" title="Data Models">Data Models</a>
+	-->
+</div>
+
+	
+</div>
+
+
+<!--- content area -->
+<div class="holder">
+	<div class="content">
+	
+	
+<script language="javascript">
+<!--
+	function fnGrabThread() {
+		document.location.href="/Thread.asp?c=3&f=40&t=161962&g=1"
+		}
+//-->
+</script>
+
+<!--- Crumbtrail and Forums Navigation -->
+<div class="crumbs">
+	<!-- Google Analytics Script - MV 09.03.08 -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="Thread.asp_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-215788-27");
+pageTracker._trackPageview();
+</script>
+
+You are here:  &gt;  <a href="http://forums.esri.com/">ESRI Forums</a> &gt;  <a href="http://forums.esri.com/Forums.asp?c=3">arcview 3.x users discussion forums</a> &gt;  Thread Replies
+	<div class="navigation">
+		<a href="http://webaccounts.esri.com/CAS/index.cfm?fuseaction=Login.ShowForm&amp;ReturnURL=http://forums.esri.com/Thread.asp%3ft%3D161962%26c%3D3%26f%3D40&amp;FailUrl=">Login</a> | <a href="http://forums.esri.com/help/mailhelp.asp?c=3">Feedback</a> | <a href="http://forums.esri.com/help/help.asp?c=3">Help</a>
+	</div>
+</div>
+
+<h2>ArcView 3.x Users Discussion Forums</h2>
+
+<form>
+	<div style="width: 100%;">
+	
+	</div>
+
+	<h4>ArcView Spatial Analyst forum</h4>
+	<div class="group" style="padding: 0pt;">
+
+	<div style="text-align: right; border-bottom: 1px dotted rgb(167, 189, 174); padding: 4px;">
+	
+		
+	</div>
+		
+	<table class="form" style="width: 100%;">
+<tbody><tr>
+<td style="padding-left: 10px;">
+<a href="#474350">Calculating Earth curvature for viewshed</a>
+&nbsp;</td>
+<td nowrap="nowrap">phil blondin</td>
+<td nowrap="nowrap">Jun 28, 2005</td>
+</tr>
+<tr>
+<td style="padding-left: 20px;">
+<a href="#474529">Re: Calculating Earth curvature for viewshe...</a>
+&nbsp;</td>
+<td nowrap="nowrap">Dan Patterson</td>
+<td nowrap="nowrap">Jun 28, 2005</td>
+</tr>
+<tr>
+<td style="padding-left: 30px;">
+<a href="#474778">Re: Calculating Earth curvature for viewshe...</a>
+&nbsp;</td>
+<td nowrap="nowrap">William Huber</td>
+<td nowrap="nowrap">Jun 29, 2005</td>
+</tr>
+<tr>
+<td style="padding-left: 40px;">
+<a href="#474823">Re: Calculating Earth curvature for viewshe...</a>
+&nbsp;</td>
+<td nowrap="nowrap">Dan Patterson</td>
+<td nowrap="nowrap">Jun 29, 2005</td>
+</tr>
+<tr>
+<td style="padding-left: 40px;">
+<a href="#474922">Re: Calculating Earth curvature for viewshe...</a>
+&nbsp;</td>
+<td nowrap="nowrap">phil blondin</td>
+<td nowrap="nowrap">Jun 29, 2005</td>
+</tr>
+<tr>
+<td style="padding-left: 40px;">
+<a href="#747221">Adjusting the Coefficient for the Refaction...</a>
+&nbsp;</td>
+<td nowrap="nowrap">Erik Marsh</td>
+<td nowrap="nowrap">Jan 27, 2008</td>
+</tr>
+<tr>
+<td style="padding-left: 50px;">
+<a href="#747339">Re: Adjusting the Coefficient for the Refac...</a>
+&nbsp;</td>
+<td nowrap="nowrap">William Huber</td>
+<td nowrap="nowrap">Jan 28, 2008</td>
+</tr>
+<tr>
+<td style="padding-left: 60px;">
+<a href="#748355">Should the Refractivity Coefficient be 0.32...</a>
+&nbsp;</td>
+<td nowrap="nowrap">Erik Marsh</td>
+<td nowrap="nowrap">Jan 30, 2008</td>
+</tr>
+<tr>
+<td style="padding-left: 60px;">
+<a href="#748356">Should the Refractivity Coefficient be 0.32...</a>
+&nbsp;</td>
+<td nowrap="nowrap">Erik Marsh</td>
+<td nowrap="nowrap">Jan 30, 2008</td>
+</tr>
+<tr>
+<td style="padding-left: 70px;">
+<a href="#748504">Re: Should the Refractivity Coefficient be...</a>
+&nbsp;</td>
+<td nowrap="nowrap">William Huber</td>
+<td nowrap="nowrap">Jan 31, 2008</td>
+</tr>
+</tbody></table>
+<table class="forum">
+<tbody><tr>
+<td colspan="2" class="toolBar"><a name="474350"></a><img valign="bottom" src="Thread.asp_files/img_alert_sm.gif"> <a style="color: orange;" href="http://forums.esri.com/AlertModerator.asp?c=3&amp;f=40&amp;t=161962&amp;m=474350">Report Inappropriate Content</a>
+&#8226;&nbsp;<a href="#top">Top</a>&nbsp;&#8226;&nbsp;<a href="http://forums.esri.com/MsgPrint.asp?c=3&amp;f=40&amp;t=161962&amp;m=474350">Print</a>
+&#8226;&nbsp;<em>This Forum is closed for replies.</em>
+&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<th>Subject</th>
+<td class="postvalue">Calculating Earth curvature for viewshed&nbsp;</td>
+</tr>
+<tr>
+<th>Author</th>
+<td class="postvalue">phil blondin&nbsp;</td>
+</tr>
+<tr>
+<th>Date</th>
+<td class="postvalue">Jun 28, 2005&nbsp;</td>
+</tr>
+<tr>
+<th>Message</th>
+<td class="postvalue">Just wondering if anyone can tell me how to account for the earth's curvature when running a view shed analysis.
+<br>
+<br>Thanks Phil&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td>
+&nbsp;</td>
+</tr>
+</tbody></table>
+<table class="forum">
+<tbody><tr>
+<td colspan="2" class="toolBar"><a name="474529"></a><img valign="bottom" src="Thread.asp_files/img_alert_sm.gif"> <a style="color: orange;" href="http://forums.esri.com/AlertModerator.asp?c=3&amp;f=40&amp;t=161962&amp;m=474529">Report Inappropriate Content</a>
+&#8226;&nbsp;<a href="#top">Top</a>&nbsp;&#8226;&nbsp;<a href="http://forums.esri.com/MsgPrint.asp?c=3&amp;f=40&amp;t=161962&amp;m=474529">Print</a>
+&#8226;&nbsp;<em>This Forum is closed for replies.</em>
+&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<th>Subject</th>
+<td class="postvalue">Re: Calculating Earth curvature for viewshed&nbsp;</td>
+</tr>
+<tr>
+<th>Author</th>
+<td class="postvalue">Dan Patterson&nbsp;</td>
+</tr>
+<tr>
+<th>Date</th>
+<td class="postvalue">Jun 28, 2005&nbsp;</td>
+</tr>
+<tr>
+<th>Message</th>
+<td class="postvalue">Phil, see
+<br><a href="http://arcscripts.esri.com/details.asp?dbid=11268" target="_new">http://arcscripts.esri.com/details.asp?dbid=11268</a>&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td class="signature">Geomatics, Carleton University, Ottawa, Canada&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td>
+&nbsp;</td>
+</tr>
+</tbody></table>
+<table class="forum">
+<tbody><tr>
+<td colspan="2" class="toolBar"><a name="474778"></a><img valign="bottom" src="Thread.asp_files/img_alert_sm.gif"> <a style="color: orange;" href="http://forums.esri.com/AlertModerator.asp?c=3&amp;f=40&amp;t=161962&amp;m=474778">Report Inappropriate Content</a>
+&#8226;&nbsp;<a href="#top">Top</a>&nbsp;&#8226;&nbsp;<a href="http://forums.esri.com/MsgPrint.asp?c=3&amp;f=40&amp;t=161962&amp;m=474778">Print</a>
+&#8226;&nbsp;<em>This Forum is closed for replies.</em>
+&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<th>Subject</th>
+<td class="postvalue">Re: Calculating Earth curvature for viewshed&nbsp;</td>
+</tr>
+<tr>
+<th>Author</th>
+<td class="postvalue">William Huber&nbsp;</td>
+</tr>
+<tr>
+<th>Date</th>
+<td class="postvalue">Jun 29, 2005&nbsp;</td>
+</tr>
+<tr>
+<th>Message</th>
+<td class="postvalue">Thanks Dan--I didn't know about that one.  
+However, it might or might not obtain the correct answers, so let me 
+explain what the procedure is, so that anybody reading this can use the 
+extension intelligently and correctly.  (You might also choose to do the
+ procedure yourself, as shown below: it's not hard.)
+<br>
+<br>The trick is to modify the elevations of the DEM, then carry out the
+ visibility computation on the adjusted DEM.  In effect, this causes the
+ DEM's values to be misinterpreted as heights relative to a fixed plane 
+rather than heights relative to the surface of the spheroid.  So long as
+ the DEM does not cover too much of the earth, these heights are about 
+the same.  However, once the DEM covers more than a few degrees, the 
+distortions can get pretty great and the trick produces unreliable 
+results.  Fortunately, it makes no sense to compute visibility for DEMs 
+that are larger than this, so usually we're ok.
+<br>
+<br>Due to inaccuracies that will become evident below, it suffices to 
+adopt a spherical earth model with a sphere of radius about R = 6371 km.
+  Select a point of origin "O".  Choose a reference plane parallel to 
+the sphere's surface at O, passing through the center of the earth.  The
+ height of the sphere at O therefore is R.  By definition of the cosine,
+ the apparent height of any point on the sphere at a distance 'd' from O
+ is R times the cosine of d, provided we measure d as an angle.
+<br>
+<br>Often we don't bother to compute the cosine but instead use its Maclaurin series approximation,
+<br>
+<br>cos(d) = 1 - d^2/2 + ...
+<br>
+<br>for small values of d (expressed in radians).  This is the approach 
+taken by the extension.  The error that is made is no greater than 
+d^4/24.  For a visibility calculation made out to, say, 200 miles, d 
+would be about three degrees or around 0.05 radians.  Here, d^4/24 = 
+0.05^4/24 = about 0.26 parts per million.  Multiplying by the earth's 
+radius gives an error no greater than 1.6 meters, which should be just 
+fine.  This justifies the approximation.
+<br>
+<br>There are two complications.  One is to convert radians to your 
+preferred units of distance and elevation.  The other is to account for 
+atmospheric refraction effects, which cause light rays to curve.
+<br>
+<br>Let's deal with the distance units.  Subtract the  apparent height, 
+R*cos(d), from the DEM's height, R + DEM value = R + z, say.  This gives
+ the adjusted height of R + z - R*cos(d), which--using the 
+approximation--simplifies to
+<br>
+<br>Adjusted height z' = z - R*d^2/2.
+<br>
+<br>If, for instance, you are measuring heights in feet, then you *must*
+ measure distances in feet as well.  By definition, one radian is the 
+earth radius R.  In feet it's 20.91 million.  Divide by this value to 
+convert d from radians to feet.
+<br>
+<br>In general, if you express the earth radius R in your elevation 
+units (such as feet or meters), and you measure distances in the same 
+units, then the adjustment formula is
+<br>
+<br>z' = z - d^2 / (2*R).
+<br>
+<br>The value used in the extension for 2*R is 12740000.  I presume 
+that's meters.  It corresponds to an assumed earth radius of 6370 km, 
+which is ok: but you need to know that ***for the extension to work, 
+your distance units and your elevation units MUST be in meters***.  (It 
+makes no effort to identify the units or correct for non-metric units.)
+<br>
+<br>To give you a sense of the magnitude of this adjustment, it equals 
+7.848 centimeters in one kilometer--not worth worrying about.  It 
+increases quadratically with distance though, so at ten kilometers it's 
+7.848 meters and at 100 km it's 784.8 meters.  (See equation 9a at <a href="http://geomechanics.geol.pdx.edu/Courses/G485/TotalStation/JGE%20Paper%201%20-%20Introduction.pdf" target="_new">http://geomechanics.geol.pdx.edu/Courses/G485/TotalStation/JGE%20Paper%201%20-%20Introduction.pdf</a> ).
+<br>
+<br>Atmospheric refraction is essentially in the vertical direction.  
+Changes in air density curve the light downward.  (Light passes faster 
+through the thinner air at the top, causing its waves to curl down.)  
+This causes you to see further; equivalently, the earth appears less 
+curved than it really is.  The magnitude of the effect varies with 
+atmospheric conditions.  A standard rule of thumb is that refraction of 
+visible light reduces the apparent curvature of the earth by 
+one-seventh.  We therefore subtract only six-sevenths of the amount 
+suggested by the geometric adjustment.  This gives a combined 
+curvature-refraction adjustment of the form
+<br>
+<br>z' = z - (6/7) * d^2 / (2*R).
+<br>
+<br>The extension uses a value of 0.87 for 6/7, which may be close 
+enough: 6/7 = 0.857.  The link provided above gives a value of 0.86 
+(this is equivalent to its equation 9c, since 0.0675/0.07848 = 0.860).  
+Take your pick.  If you're doing visibility calculations for radio 
+transmission or other non-visible wavelengths, you will need to choose a
+ different correction factor.
+<br>
+<br>These considerations lead to a relatively simple Map Calculator procedure.  Here's the recipe:
+<br>
+<br>(1) Make sure your elevation units and distance units are identical.
+  Make them so by converting the elevation units in the Map Calculator, 
+if necessary.
+<br>
+<br>(2) Compute the radius of the earth, 'R', in terms of your elevation units.
+<br>
+<br>(3)  Choose a value for the refraction correction, 'k'.  Use a value around 6/7 for visible light.
+<br>
+<br>(4)  Compute the Euclidean Distance grid relative to any point near the center of your DEM.  Call this grid theme "d".
+<br>
+<br>(5)  Let "z" be the name of the DEM theme.  In the Map Calculator, compute an adjusted DEM as
+<br>
+<br>[z] - ([d]^2 * (6/7 / (2*R))).
+<br>
+<br>If you want to neglect all refraction effects, then leave out the "6/7" term.
+<br>
+<br>(6)  Perform all visibility calculations on the adjusted DEM.
+<br>
+<br>I actually prefer to go though these steps each time, rather than 
+apply some "black box" extension, because I can be confident in 
+obtaining the correct answer and they don't really take any more time to
+ execute.&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td class="signature">--Bill Huber
+<br>Quantitative Decisions (<a href="http://www.quantdec.com/" target="_new">http://www.quantdec.com</a> )&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td>
+&nbsp;</td>
+</tr>
+</tbody></table>
+<table class="forum">
+<tbody><tr>
+<td colspan="2" class="toolBar"><a name="474823"></a><img valign="bottom" src="Thread.asp_files/img_alert_sm.gif"> <a style="color: orange;" href="http://forums.esri.com/AlertModerator.asp?c=3&amp;f=40&amp;t=161962&amp;m=474823">Report Inappropriate Content</a>
+&#8226;&nbsp;<a href="#top">Top</a>&nbsp;&#8226;&nbsp;<a href="http://forums.esri.com/MsgPrint.asp?c=3&amp;f=40&amp;t=161962&amp;m=474823">Print</a>
+&#8226;&nbsp;<em>This Forum is closed for replies.</em>
+&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<th>Subject</th>
+<td class="postvalue">Re: Calculating Earth curvature for viewshed&nbsp;</td>
+</tr>
+<tr>
+<th>Author</th>
+<td class="postvalue">Dan Patterson&nbsp;</td>
+</tr>
+<tr>
+<th>Date</th>
+<td class="postvalue">Jun 29, 2005&nbsp;</td>
+</tr>
+<tr>
+<th>Message</th>
+<td class="postvalue">An excellent resource as usual, I will have to examine this in more detail.  Thanks Bill&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td class="signature">Geomatics, Carleton University, Ottawa, Canada&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td>
+&nbsp;</td>
+</tr>
+</tbody></table>
+<table class="forum">
+<tbody><tr>
+<td colspan="2" class="toolBar"><a name="474922"></a><img valign="bottom" src="Thread.asp_files/img_alert_sm.gif"> <a style="color: orange;" href="http://forums.esri.com/AlertModerator.asp?c=3&amp;f=40&amp;t=161962&amp;m=474922">Report Inappropriate Content</a>
+&#8226;&nbsp;<a href="#top">Top</a>&nbsp;&#8226;&nbsp;<a href="http://forums.esri.com/MsgPrint.asp?c=3&amp;f=40&amp;t=161962&amp;m=474922">Print</a>
+&#8226;&nbsp;<em>This Forum is closed for replies.</em>
+&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<th>Subject</th>
+<td class="postvalue">Re: Calculating Earth curvature for viewshed&nbsp;</td>
+</tr>
+<tr>
+<th>Author</th>
+<td class="postvalue">phil blondin&nbsp;</td>
+</tr>
+<tr>
+<th>Date</th>
+<td class="postvalue">Jun 29, 2005&nbsp;</td>
+</tr>
+<tr>
+<th>Message</th>
+<td class="postvalue">I used both ways and Mr. Huber's way gave me the 
+same results that come from using the calculate viewshed on the original
+ DEM, unless I did something wrong.
+<br>
+<br>The extension renedered a smaller area of view while using the 
+calculate viewshed on the orginal dem and using Mr. Huber's way and 
+calculating the viewshed on the surface made by the formula gave a 
+larger area of view.
+<br>
+<br>Again though I may have done something wrong.&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td>
+&nbsp;</td>
+</tr>
+</tbody></table>
+<table class="forum">
+<tbody><tr>
+<td colspan="2" class="toolBar"><a name="747221"></a><img valign="bottom" src="Thread.asp_files/img_alert_sm.gif"> <a style="color: orange;" href="http://forums.esri.com/AlertModerator.asp?c=3&amp;f=40&amp;t=161962&amp;m=747221">Report Inappropriate Content</a>
+&#8226;&nbsp;<a href="#top">Top</a>&nbsp;&#8226;&nbsp;<a href="http://forums.esri.com/MsgPrint.asp?c=3&amp;f=40&amp;t=161962&amp;m=747221">Print</a>
+&#8226;&nbsp;<em>This Forum is closed for replies.</em>
+&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<th>Subject</th>
+<td class="postvalue">Adjusting the Coefficient for the Refaction of Light in the Atmosphere&nbsp;</td>
+</tr>
+<tr>
+<th>Author</th>
+<td class="postvalue">Erik Marsh&nbsp;</td>
+</tr>
+<tr>
+<th>Date</th>
+<td class="postvalue">Jan 27, 2008&nbsp;</td>
+</tr>
+<tr>
+<th>Message</th>
+<td class="postvalue">Bill-
+<br>
+<br>As usual, your post was full of useful detail. It's too bad it was 
+buried under discussion of ArcView 3.x ... I spent a long time trying to
+ figure out where ESRI got the magical "0.13" as the default coefficient
+ for the refraction of light in the air.
+<br>
+<br>My question is simple: How would I calculate a different coefficient for a high altitude region?
+<br>
+<br>Generally, this is a small variable, but high altitude does have a 
+big impact on visibility. Not to mention moisture in the air and other 
+factors.
+<br>
+<br>Thank you!
+<br>
+<br>-Erik Marsh&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td>
+&nbsp;</td>
+</tr>
+</tbody></table>
+<table class="forum">
+<tbody><tr>
+<td colspan="2" class="toolBar"><a name="747339"></a><img valign="bottom" src="Thread.asp_files/img_alert_sm.gif"> <a style="color: orange;" href="http://forums.esri.com/AlertModerator.asp?c=3&amp;f=40&amp;t=161962&amp;m=747339">Report Inappropriate Content</a>
+&#8226;&nbsp;<a href="#top">Top</a>&nbsp;&#8226;&nbsp;<a href="http://forums.esri.com/MsgPrint.asp?c=3&amp;f=40&amp;t=161962&amp;m=747339">Print</a>
+&#8226;&nbsp;<em>This Forum is closed for replies.</em>
+&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<th>Subject</th>
+<td class="postvalue">Re: Adjusting the Coefficient for the Refaction of Light in the Atmosphere&nbsp;</td>
+</tr>
+<tr>
+<th>Author</th>
+<td class="postvalue">William Huber&nbsp;</td>
+</tr>
+<tr>
+<th>Date</th>
+<td class="postvalue">Jan 28, 2008&nbsp;</td>
+</tr>
+<tr>
+<th>Message</th>
+<td class="postvalue">Erik,
+<br>
+<br>This is a complicated subject.  The NIST posts a thorough discussion
+ of the Edlen and Ciddor equations for the index of refraction 'n' at <a href="http://emtoolbox.nist.gov/Wavelength/Documentation.asp" target="_new">http://emtoolbox.nist.gov/Wavelength/Documentation.asp</a> .  A detailed tutorial on applications to radio wave propagation complements this material at <a href="http://www.mike-willis.com/Tutorial/refraction.htm" target="_new">http://www.mike-willis.com/Tutorial/refraction.htm</a>
+ .  By combining equations for 'n' with equation (4) in the tutorial 
+(relating the change of n with height to the radius of curvature of the 
+light), you can derive coefficients for higher altitudes.  You will need
+ to make assumptions about pressure, temperature, humidity, and 
+wavelength of the light.
+<br>
+<br>(I found these sites by Google searches on "index refraction density
+ air" and "index refraction density air curvature sight".)&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td class="signature">--Bill Huber
+<br>Quantitative Decisions (<a href="http://www.quantdec.com/" target="_new">http://www.quantdec.com</a> )&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td>
+&nbsp;</td>
+</tr>
+</tbody></table>
+<table class="forum">
+<tbody><tr>
+<td colspan="2" class="toolBar"><a name="748355"></a><img valign="bottom" src="Thread.asp_files/img_alert_sm.gif"> <a style="color: orange;" href="http://forums.esri.com/AlertModerator.asp?c=3&amp;f=40&amp;t=161962&amp;m=748355">Report Inappropriate Content</a>
+&#8226;&nbsp;<a href="#top">Top</a>&nbsp;&#8226;&nbsp;<a href="http://forums.esri.com/MsgPrint.asp?c=3&amp;f=40&amp;t=161962&amp;m=748355">Print</a>
+&#8226;&nbsp;<em>This Forum is closed for replies.</em>
+&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<th>Subject</th>
+<td class="postvalue">Should the Refractivity Coefficient be 0.325, and not 0.13?&nbsp;</td>
+</tr>
+<tr>
+<th>Author</th>
+<td class="postvalue">Erik Marsh&nbsp;</td>
+</tr>
+<tr>
+<th>Date</th>
+<td class="postvalue">Jan 30, 2008&nbsp;</td>
+</tr>
+<tr>
+<th>Message</th>
+<td class="postvalue">Hi Bill-
+<br>
+<br>It is a complicated topic. I found the same websites you mentioned. 
+Ultimately, refraction has little effect on (short distance) viewsheds. I
+ wanted to understand how Arc computed it. What I finally figured out 
+was that the coefficient Arc uses is a ratio (I kept expecting it to be a
+ variable).
+<br>
+<br>The harder part to calculate was based a refraction index of n, what is the change z over distance?
+<br>
+<br>Last spring I worked through the physics of it, and came up with the
+ attached Excel spreadsheet. A very helpful site, especially for the bit
+ about change in z: <a href="http://www.icogitate.com/%7Eergosum/essays/vtth/viewtothehorizon.htm" target="_new">http://www.icogitate.com/~ergosum/essays/vtth/viewtothehorizon.htm</a>
+<br>
+<br>The problem is that my calculations, and the example on this site, 
+don't get 0.13. Playing with the altitude, air pressure, temperature, 
+and light wavelength, I consistently get a ratio of 0.325. Varying all 
+of these by extremes (anything on earth), the ratio stays at 0.325.
+<br>
+<br>In the example from the above website, he looked at power plants 
+stacks across the bay. The earth's curvature lowered them by 59 m, and 
+the atmosphere raised them by 19 m.
+<br>
+<br>In that and other examples, the change in z from light seems to be almost a full 1/3 of the z from the earth's curvature.
+<br>
+<br>Hence my search goes on as to where this 0.13 comes from. Why isn't 
+it 0.32?? On the upside, I am convinced that in a wide variety of 
+conditions (and altitudes), the change in z based on light is very 
+similar.
+<br>
+<br>An object 10 km away looks 7.85 m higher based on curvature. Arc 
+says it the atmoshpere lowers it by 1.12 m (1/7 of 7.85). My calculation
+ say it's 2.55 m lower (nearly 1/3 of 7.85). I don't know anyone who 
+could check the math I've done, and that from the website I mentioned.
+<br>
+<br>Should the default coefficient be 0.325?
+<br>Do you you know who defined 0.13 as the standard everyone uses?
+<br>
+<br>thanks for your help,
+<br>Erik&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td>
+&nbsp;</td>
+</tr>
+</tbody></table>
+<table class="forum">
+<tbody><tr>
+<td colspan="2" class="toolBar"><a name="748356"></a><img valign="bottom" src="Thread.asp_files/img_alert_sm.gif"> <a style="color: orange;" href="http://forums.esri.com/AlertModerator.asp?c=3&amp;f=40&amp;t=161962&amp;m=748356">Report Inappropriate Content</a>
+&#8226;&nbsp;<a href="#top">Top</a>&nbsp;&#8226;&nbsp;<a href="http://forums.esri.com/MsgPrint.asp?c=3&amp;f=40&amp;t=161962&amp;m=748356">Print</a>
+&#8226;&nbsp;<em>This Forum is closed for replies.</em>
+&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<th>Subject</th>
+<td class="postvalue">Should the Refractivity Coefficient be 0.325, and not 0.13?&nbsp;</td>
+</tr>
+<tr>
+<th>Author</th>
+<td class="postvalue">Erik Marsh&nbsp;</td>
+</tr>
+<tr>
+<th>Date</th>
+<td class="postvalue">Jan 30, 2008&nbsp;</td>
+</tr>
+<tr>
+<th>Message</th>
+<td class="postvalue">Hi Bill-
+<br>
+<br>It is a complicated topic. I found the same websites you mentioned. 
+Ultimately, refraction has little effect on (short distance) viewsheds. I
+ wanted to understand how Arc computed it. What I finally figured out 
+was that the coefficient Arc uses is a ratio (I kept expecting it to be a
+ variable).
+<br>
+<br>The harder part to calculate was based a refraction index of n, what is the change z over distance?
+<br>
+<br>Last spring I worked through the physics of it, and came up with the
+ attached Excel spreadsheet. A very helpful site, especially for the bit
+ about change in z: <a href="http://www.icogitate.com/%7Eergosum/essays/vtth/viewtothehorizon.htm" target="_new">http://www.icogitate.com/~ergosum/essays/vtth/viewtothehorizon.htm</a>
+<br>
+<br>The problem is that my calculations, and the example on this site, 
+don't get 0.13. Playing with the altitude, air pressure, temperature, 
+and light wavelength, I consistently get a ratio of 0.325. Varying all 
+of these by extremes (anything on earth), the ratio stays at 0.325.
+<br>
+<br>In the example from the above website, he looked at power plants 
+stacks across the bay. The earth's curvature lowered them by 59 m, and 
+the atmosphere raised them by 19 m.
+<br>
+<br>In that and other examples, the change in z from light seems to be almost a full 1/3 of the z from the earth's curvature.
+<br>
+<br>Hence my search goes on as to where this 0.13 comes from. Why isn't 
+it 0.32?? On the upside, I am convinced that in a wide variety of 
+conditions (and altitudes), the change in z based on light is very 
+similar.
+<br>
+<br>An object 10 km away looks 7.85 m higher based on curvature. Arc 
+says it the atmoshpere lowers it by 1.12 m (1/7 of 7.85). My calculation
+ say it's 2.55 m lower (nearly 1/3 of 7.85). I don't know anyone who 
+could check the math I've done, and that from the website I mentioned.
+<br>
+<br>Should the default coefficient be 0.325?
+<br>Do you you know who defined 0.13 as the standard everyone uses?
+<br>
+<br>thanks for your help,
+<br>Erik&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td>
+<a href="http://forums.esri.com/Attachments/28891.xls" target="_new">Refraction Correction Equations v2.xls</a> <i>(opens in new window)</i><br>
+&nbsp;</td>
+</tr>
+</tbody></table>
+<table class="forum">
+<tbody><tr>
+<td colspan="2" class="toolBar"><a name="748504"></a><img valign="bottom" src="Thread.asp_files/img_alert_sm.gif"> <a style="color: orange;" href="http://forums.esri.com/AlertModerator.asp?c=3&amp;f=40&amp;t=161962&amp;m=748504">Report Inappropriate Content</a>
+&#8226;&nbsp;<a href="#top">Top</a>&nbsp;&#8226;&nbsp;<a href="http://forums.esri.com/MsgPrint.asp?c=3&amp;f=40&amp;t=161962&amp;m=748504">Print</a>
+&#8226;&nbsp;<em>This Forum is closed for replies.</em>
+&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<th>Subject</th>
+<td class="postvalue">Re: Should the Refractivity Coefficient be 0.325, and not 0.13?&nbsp;</td>
+</tr>
+<tr>
+<th>Author</th>
+<td class="postvalue">William Huber&nbsp;</td>
+</tr>
+<tr>
+<th>Date</th>
+<td class="postvalue">Jan 31, 2008&nbsp;</td>
+</tr>
+<tr>
+<th>Message</th>
+<td class="postvalue">Erik,
+<br>
+<br>I don't have time to look at this now, but I had understood that the
+ values near 0.3 correspond to radio frequencies, not visible 
+frequencies.  (The variation of 'n' with frequency is substantial: it is
+ responsible for prismatic separation of colors and helps explain the 
+rainbow.)&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td class="signature">--Bill Huber
+<br>Quantitative Decisions (<a href="http://www.quantdec.com/" target="_new">http://www.quantdec.com</a> )&nbsp;</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td>
+&nbsp;</td>
+</tr>
+</tbody></table>
+
+	
+	</div>
+</form>
+
+<!-- TimeToLoad: 0.578125-->
+	</div>
+</div>
+
+
+
+<div class="footer">
+
+	<br>
+	<a href="http://www.esri.com/legal/index.html">Legal</a> | 
+	<a href="http://www.esri.com/company/privacy.html">Privacy</a> | 
+	<a href="http://www.esri.com/careers">Careers</a> | 
+	<a href="http://www.esri.com/company/copyright.html">Copyright © ESRI</a>
+	<br>
+	
+</div>
+
+
+</body></html>

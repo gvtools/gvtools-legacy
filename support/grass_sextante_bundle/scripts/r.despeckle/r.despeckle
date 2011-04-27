@@ -1,0 +1,277 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       r.despeckle
+# AUTHOR(S):    Benjamin Ducke <benjamin.ducke AT oadigital.net>
+# PURPOSE:      Removes high frequency noise from input data (despeckling).
+#
+# USAGE:	Speckles are a form of high frequency noise characterized by
+#		isolated cells whose values differ signifcantly from those
+#		in their neighborhood. This module removes such noise by
+#		detecting speckles and replacing their cell value with the
+#		average value of neighboring cells.
+#
+#		The single most important option for this to succeed is
+#		"threshold=" which determines how great the (absolute) 
+#		difference between an isolated cell and its neighborhood
+#		must be for it to be identified as a speckle cell.
+#
+#		By default (i.e. if "threshold=0"), this will be set to
+#		the input data variance, which tends to work well but does
+#		not necessarily remove all speckles. If after the first run any
+#		remain, r.despeckle should be run again to remove the missed
+#		ones. 
+#		
+#		The options "size=", "repeat=" and the "-p" flag refer to
+#		the replacement of speckle cells with their average (smoothed)
+#		neighbors' values. See the manual page for r.smooth.mean about
+#		their meaning. The defaults should work well in most cases.
+#
+#		This module is intended to remove small areas of noise (speckles)
+#		from the data. It is not suitable for things like destriping.
+#		If the speckles are big, the smoothing options above may have
+#		to be adjusted for good results.
+#
+# COPYRIGHT:    (C) 2010 by Benjamin Ducke
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+
+#%Module
+#% description: Removes high frequency noise from input data (despeckling).
+#% keywords: raster, despeckling, noise, cleaning, filters, geophysics, signals
+#%End
+
+#%Option
+#% key: input
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of input raster map
+#% gisprompt: old,cell,raster
+#%End
+
+#%Option
+#% key: output
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of (despeckled) output raster map
+#% gisprompt: new,cell,raster
+#%End
+
+#%Option
+#% key: method
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% options: crimmins
+#% description: Despeckling method to use
+#% answer: crimmins
+#%End
+
+#%Option
+#% key: threshold
+#% type: double
+#% required: yes
+#% multiple: no
+#% key_desc: value
+#% description: Removal threshold (0 = input variance)
+#% answer: 0
+#%End
+
+#%Option
+#% key: size
+#% type: string
+#% required: no
+#% multiple: no
+#% options: 0,3,5,7,9,11,13,15,17,19,21,23,25,27,29
+#% description: Neighborhood size for smoothing
+#% answer: 9
+#%End
+
+#%Option
+#% key: repeat
+#% type: integer
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% options: 1-100
+#% description: Number of times to repeat smoothing
+#% answer: 1
+#%End
+
+#%Flag
+#%  key: p
+#%  description: Use a parallel filter for smoothing
+#%End
+
+
+MODULE_NAME=r.despeckle
+
+
+if [ -z "$GISBASE" ] ; then
+	echo "ERROR: You must be in GRASS GIS to run this program." 1>&2
+	exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+	exec g.parser "$0" "$@"
+fi
+
+
+# setup temporary file
+TMP_FILE="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMP_FILE" ] ; then
+    g.message -e "Unable to create temporary file for statistics. Aborting."
+    exit 1
+fi
+
+# create a temporary map name
+TMP="$MODULE_NAME.`echo $$`.0"
+
+IN="$GIS_OPT_INPUT"
+# apply smoothing of removed pixels?
+if [ "$GIS_OPT_SIZE" != "0" ] ; then
+	OUT="$TMP"
+else 
+	OUT="$GIS_OPT_OUTPUT"
+fi
+
+
+# Run chosen despeckling method
+if [ "$GIS_OPT_METHOD" = "crimmins" ] ; then
+#	REPLACE_DARK="$IN+$GIS_OPT_STRENGTH*$IN"
+#	REPLACE_LIGHT="$IN-$GIS_OPT_STRENGTH*$IN"
+
+	REPLACE_DARK="null()"
+	REPLACE_LIGHT="null()"
+
+	if [ "$GIS_OPT_THRESHOLD" = "0" ] ; then
+		# get statistics
+		g.message "Getting input data statistics..."
+		r.univar -g "$GIS_OPT_INPUT" > $TMP_FILE
+		VAR=`cat "$TMP_FILE" | awk --field-separator="=" 'BEGIN { "grep \"variance=\"" | getline } BEGIN { print $2 }'`
+		GIS_OPT_THRESHOLD="$VAR"
+	fi
+
+	# Finding negative speckles: N-S
+	A="$IN[-1,0]"; B="$IN"; C="$IN[1,0]"
+	echo "Finding negative speckles (1/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& $A >= ($B+$GIS_OPT_THRESHOLD), $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (2/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $A > $B &&& $B <= $C, $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (3/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $C > $B &&& $B <= $A, $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (4/16):"
+	r.mapcalc "$OUT=if(!isnull($C) &&& !isnull ($B) &&& $C >= ($B+$GIS_OPT_THRESHOLD), $REPLACE_DARK, $B)"
+	# Finding negative speckles: E-W
+	echo "Finding negative speckles (5/16):"
+	A="$IN[0,1]"; B="$IN"; C="$IN[0,-1]"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& $A >= ($B+$GIS_OPT_THRESHOLD), $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (6/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $A > $B &&& $B <= $C, $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (7/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $C > $B &&& $B <= $A, $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (8/16):"
+	r.mapcalc "$OUT=if(!isnull($C) &&& !isnull ($B) &&& $C >= ($B+$GIS_OPT_THRESHOLD), $REPLACE_DARK, $B)"
+	# Finding negative speckles: NW-SE
+	A="$IN[-1,-1]"; B="$IN"; C="$IN[1,1]"
+	echo "Finding negative speckles (9/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& $A >= ($B+$GIS_OPT_THRESHOLD), $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (10/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $A > $B &&& $B <= $C, $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (11/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $C > $B &&& $B <= $A, $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (12/16):"
+	r.mapcalc "$OUT=if(!isnull($C) &&& !isnull ($B) &&& $C >= ($B+$GIS_OPT_THRESHOLD), $REPLACE_DARK, $B)"
+	# Finding negative speckles: NE-SW
+	A="$IN[-1,1]"; B="$IN"; C="$IN[1,-1]"
+	echo "Finding negative speckles (13/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& $A >= ($B+$GIS_OPT_THRESHOLD), $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (14/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $A > $B &&& $B <= $C, $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (15/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $C > $B &&& $B <= $A, $REPLACE_DARK, $B)"
+	echo "Finding negative speckles (16/16):"
+	r.mapcalc "$OUT=if(!isnull($C) &&& !isnull ($B) &&& $C >= ($B+$GIS_OPT_THRESHOLD), $REPLACE_DARK, $B)"
+	# Finding positive speckles: N-S
+	A="$IN[-1,0]"; B="$IN"; C="$IN[1,0]"
+	echo "Finding positive speckles (1/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& $A <= ($B-$GIS_OPT_THRESHOLD), $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (2/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $A < $B &&& $B >= $C, $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (3/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $C < $B &&& $B >= $A, $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (4/16):"
+	r.mapcalc "$OUT=if(!isnull($C) &&& !isnull ($B) &&& $C <= ($B-$GIS_OPT_THRESHOLD), $REPLACE_LIGHT, $B)"
+	# Finding positive speckles: E-W
+	A="$IN[0,1]"; B="$IN"; C="$IN[0,-1]"
+	echo "Finding positive speckles (5/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& $A <= ($B-$GIS_OPT_THRESHOLD), $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (6/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& ($A < $B &&& $B >= $C), $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (7/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& ($C < $B &&& $B >= $A), $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (8/16):"
+	r.mapcalc "$OUT=if(!isnull($C) &&& !isnull ($B) &&& $C <= ($B-$GIS_OPT_THRESHOLD), $REPLACE_LIGHT, $B)"
+	# Finding positive speckles: NW-SE
+	A="$IN[-1,-1]"; B="$IN"; C="$IN[1,1]"
+	echo "Finding positive speckles (9/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& $A <= ($B-$GIS_OPT_THRESHOLD), $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (10/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $A < $B &&& $B >= $C, $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (11/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $C < $B &&& $B >= $A, $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (12/16):"
+	r.mapcalc "$OUT=if(!isnull($C) &&& !isnull ($B) &&& $C <= ($B-$GIS_OPT_THRESHOLD), $REPLACE_LIGHT, $B)"
+	# Finding positive speckles: NE-SW
+	A="$IN[-1,1]"; B="$IN"; C="$IN[1,-1]"
+	echo "Finding positive speckles (13/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& $A <= ($B-$GIS_OPT_THRESHOLD), $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (14/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $A < $B &&& $B >= $C, $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (15/16):"
+	r.mapcalc "$OUT=if(!isnull($A) &&& !isnull ($B) &&& !isnull ($C) &&& $C < $B &&& $B >= $A, $REPLACE_LIGHT, $B)"
+	echo "Finding positive speckles (16/16):"
+	r.mapcalc "$OUT=if(!isnull($C) &&& !isnull ($B) &&& $C <= ($B-$GIS_OPT_THRESHOLD), $REPLACE_LIGHT, $B)"
+fi
+
+# apply smoothing of removed pixels?
+if [ "$GIS_OPT_SIZE" != "0" ] ; then
+
+	# choose parallel or serial filter
+	if [ "$GIS_FLAG_P" = "1" ] ; then
+		FILTER_TYPE="-p"
+	else
+		FILTER_TYPE=""
+	fi
+
+	# replace removed spike cells with average of neighbouring cells
+	g.message "Replacing speckle cells with neighborhood average:"
+	r.smooth.mean size="$GIS_OPT_SIZE" input="$TMP" output="$GIS_OPT_OUTPUT" repeat="$GIS_OPT_REPEAT" $FILTER_TYPE --o
+
+	# copy back original null values (if any) from input map
+	g.message "Restoring original NULL cells:"
+	r.mapcalc "$GIS_OPT_OUTPUT=if(isnull($GIS_OPT_INPUT),null(),$GIS_OPT_OUTPUT)"
+
+	# remove temporary map
+	g.message "Cleaning up..."
+	g.remove --quiet rast="$TMP"
+fi
+
+# copy color table from input map
+r.colors --quiet map="$GIS_OPT_OUTPUT" raster="$GIS_OPT_INPUT"
+
+g.message "Done."
+
+exit 0
+

@@ -1,0 +1,18 @@
+The topic "r.walk default" is what I am going to discuss, though I am not sure if a new topic might be more appropriate. Sorry, I am new to this forum...
+
+(1) In my view, the default values (c and d) for gentle downhill and steep downhill walking must be swapped to get consistent results. Otherwise steep downhill movement is considered less time consuming than walking down gentle slopes.
+
+(2) The slope-dependent cost function is not continuous. Applying the corrected (swap c and d) default formula suggested in r.walk, walking down 1 km on a gradient of 21% requires 6 minutes whereas the estimate for descending the same distance at a slightly steeper slope of 21.5% is 19.2 minutes.
+To avoid this problem, the constant c should be set to 0 or, alternatively, c and d should be identical. In the former case, the minimum of the cost curve is the range of slope values between 0% and the downhill slope value threshold. The minimum of the cost curve in the latter case is at a single slope value, 0%.
+Whichever set of parameters is chosen, the formula cannot be adjusted so that the cost function is (i) continuous and (ii) its minimum is at about –10%, with significantly lower costs than walking on flat terrain. But -10% is considered the slope of minimum energy expenditure in many physiological publications.
+
+(3) A minor issue: Using four digits after the decimal separator for constants c and d creates the impression that the formula is very exact, but it is only a rule of thumb! I think that Langmuir meant 2 and -2 respectively (yes, I have the book, 2004 edition).
+
+So the question is: Why use this cost function which is not based on sound physiological experiments and produces counter-intuitive results?
+
+Sorry, but I have serious doubts that any result created with the default values of the r.walk cost function  reflects true least-cost paths.
+
+Hope this helps to improve r.walk - though lambda is yet another issue....
+
+Best wishes
+Irmela 

@@ -1,0 +1,248 @@
+gvSIG Community Edition (CE)
+
+
+*****************************
+*  W O R K  P A C K A G E S *
+*****************************
+
+*** GRASS ***
+- contour polygons: modify r.surf.contour: fill in-between contours using higher
+  value only; improve "no data" handling
+- trend surfaces
+- ortho rectification
+- v.rast.stats: allow user to also save shape metrics into the attribute table
+
+
+*** TEMPORARY LAYERS ***
+- check which ones are temp layers (easy: just check their paths):
+    - use different icon
+    - offer "Make permanent":
+        - allow user to specify a new path and (base) file name
+
+
+*** RASTER LAYERS ***
+- should we issue a warning, if a .rmf file's creation date is older than its 
+  associated raster file? Would that work on Windows file systems?
+
+
+*** General UI ***
+- configurable MDI background
+
+
+*** SEXTANTE TOOLS ***
+- add more metrics to "Grid statistics in polygon"
+- allow KDE to run without a count field
+
+
+*** SEXTANTE/GRASS Interface ***
+- allow user to link (2D) vectors instead of importing them
+- switch to r.external, unless user explicitely selects not to
+
+
+*** BUGS: WINDOWS ***
+- cannot call GRASS shell scripts from within GRASS shell scripts
+- modules get blocked forever on vector import ops (seen on 64 bit Win XP and 7)
+  Maybe a problem with Data Execution Prevention?
+  To disable DEP by modifying the Boot.ini file, change the /noexecute policy level to alwaysoff.
+  /NoExecute=AlwaysOff</ul> 
+- SEXTANTE: lang translation files do not get applied (seen on 64 bit Win XP)
+- file handles for deletes layers are not released
+
+
+*** BUGS: Mac OS X ***
+- Raster "Save As" results in NULL pointer error
+- trouble with Java widgets (drop-down lists)
+
+
+*** BUGS: ALL ***
+- Raster layers lose contrast/get painted in one colour whenever the data
+  view exceeds a certain size (projects with multiple views only?) 
+
+
+*** BINARIES ***
+- GDAL 1.7
+- 64 bit binaries
+- update PROJ4
+
+
+*** SEXTANTE INTERFACE ***
+- Toolbox should not be an MDI window
+
+
+*** SEXTANTE R INTEGRATION ***
+- wrap R scripts with XML descriptor files, just like GRASS modules
+- could write pseudo GRASS modules that actually pass options and flags to an R script 
+- provide a basic R setup script to be run be each one of the modules, use custom
+  R code afer that; provide another unified output script
+- this would even work from within GRASS! (R.* modules)
+- in SEXTANTE, we could easily sort this scripts into their own hierarchy in the
+  tree, but they would still need installed GRASS support (minimal)
+- cool thing would be that via the GRASS extension we would have all input/output
+  stuff covered
+- in SEXTANTE, we can convert vector map inputs to table inputs for all those R
+  modules that do not require spatial input (tables include attribute tables)
+
+
+*** VECTOR FORMATS ***
+- support direct loading of:
+  - MapInfo
+  - E00
+  - ... (?)
+  
+
+*** RASTER FORMATS ***
+- support more GDAL extensions for loading
+- fix problem with large CORINE raster loading (INT vs LONG mem allocation problem?)
+- support previews for IMAGINE output
+
+
+*** BUGS ***
+- Crash when reprojecting raster from/to non-EPSG system
+- Project file write error when trying to "Save as" a raster to a Windows network drive
+
+
+*** TRANSLATION ***
+- Rename: "Print layout" = "Screen/paper space"
+- find all remaining hard-coded strings
+
+
+*** ERROR HANDLING ***
+- find all error conditions that are not caught properly
+
+
+*** SQLITE/SPATIALITE SUPPORT ***
+- tabular data and spatial
+
+
+*** POSTGIS ***
+- integrate those collaborative editing tools (see QGIS implementation).
+- integrate PostGIS WKT raster extension
+- integrate PostGIS layer settings extension
+
+
+*** CAD EDITOR ***
+- 3D coordinates input and ortho views
+- fix centering of data view with console open
+- textual geometry editing
+- visualize nodes and label them with coords
+- multi-part features working?
+- Snakes
+- Copy & Paste (incl. 3D)
+
+
+*** TABLES ***
+- Look-up lists (being worked on)
+- Improv ODBC connections dialog
+- Better CSV import ((multiple)delimiters, row skipping, comments, encoding, text delims, ...)
+- Better editing/navigation in tables
+- Working import of DBF IV tables exported from Access
+
+
+*** POINTS FROM TABLE ***
+- Prevent project tables from being deleted by the "Points from table" tool
+  (happens, when the virtual points layer is deleted)
+- support lat/lon notation in deg
+- support Z and M fields
+- directly create Shapefiles instead of vitual layer
+
+
+*** NORMALIZATION EXT ***
+- text encoding setting
+- more accurate preview (filter out text delimiters, set decimal symbols correctly)
+- fix bug with fields reshuffling when adding a new definition in the middle of the list
+- why does it create a 0 bytes DBF file? What should it really create? A DBF? A database table
+  in an existing connection?
+
+
+*** VECTOR SYMBOLOGY ***
+- Set default scaling to "Print layout"
+- Faster initial display of symbol libraries
+- Global settings for all classes for transparency,fill,outline, etc.
+
+
+*** COLOR TABLES ***
+- Alphabetical sorting of color tables
+- Display of table names in vector layer color tables selector
+- NULL cells should not have any color in preview
+
+
+*** TOC ***
+- Standard keyboard shortcuts for Cut, Copy & Paste
+- Proper drag'n'drop indicator
+- fix problem with truncated layer names
+- fix spurious opening of symbol lists and groups
+
+
+*** PROJECT MANAGER ***
+- Make dialog properly resizable
+- Allow reordering list items
+- Decrease size of object type icons, pick better ones
+- Rename "Map" object to "Layout"
+
+
+*** GENERAL GUI ***
+- better and bigger toolbar icons
+- stop "icon jumping"
+- make toolbars freely positionable horiz/vert (add handles)
+- check keyboard shortcuts
+- unify dialog behavior and resizing (ooph!)
+- native file selectors (?)
+- make sure that ONLY data windows are MDI windows
+- make sure all functions available via context menus are also available via the menu bar
+- Maximization mode for MDI windows: hide windows title bar and put window management icons into gvSIG menu bar
+
+
+*** FIELD CALCULATOR ***
+- Z coordinate operations
+- op for replacing string values with numerical codes
+- better dialog behavior and resizing
+
+
+*** LABELS ***
+- Set default scaling to "Print layout"
+- Fix label preview
+- Test and fix remaining problems with advanced labels
+- Halos
+- Break-out labels (interactive)
+- Text search in labels
+
+
+*** GEO REFERENCER ***
+- clean-up and bug fixes (needs many)
+- Helmert transformation
+- two-point transformation
+- GDAL warping transformation
+
+
+*** DATA VIEW ***
+- configurable coordinate display precision
+- introduce a neutral default tool
+
+
+*** MAP LAYOUT ***
+- better scale bars
+- ID->Label legend style (print IDs for labels, display texts in legend)
+- more configurable graticules
+- fix problems with graying out and ATI gfx card drivers' 2D accel settings
+- ortho data views and other stuff to support technical drawings
+- export to SVG
+
+
+*** (RE)PROJECTIONS ***
+- support for vector affine world files
+- support for unprojected, local coordinate systems (x/y non-world)
+
+
+*** REMOTE SENSING ***
+- get ALL the tools working!
+
+
+*** RASTER TOOLS ***
+- Cropping: Take extents from current view
+- Add a simple raster cell editor
+
+
+*** DATA MANAGEMENT ***
+- implement a "Move data" and "Copy data" function
+  This can be used to e.g. make temp layers permanent
+  (under a new name)

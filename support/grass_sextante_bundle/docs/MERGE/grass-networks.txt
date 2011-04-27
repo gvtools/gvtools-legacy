@@ -1,0 +1,62 @@
+http://svn.osgeo.org/grass/grass-addons/vector/net.analyze/
+
+http://grass.osgeo.org/wiki/GSoC_Network_Analysis
+
+---
+
+Hello everyone,
+
+during the past few months I worked on a Google Summer of Code project
+to extend GRASS network functionality. I sent a final summary report
+to OSGeo GSoC mailing list. Since there are people not subscribed to
+that mailing list who might be interested in the project, I was asked
+to sent the report to this list and stress the paragraph on inclusion
+into the main GRASS....
+
+
+
+
+The goal of my project, which I have successfully accomplished, was to
+implement modules for network analysis. This includes basic methods
+such as: strongly and weakly connected components, minimum spanning
+trees, bridges and articulation points as well as more complicated and
+advanced tools for calculating maximum flow, minimum cut or
+k-connectivity in a network. There is also a bunch of modules finding
+shortest paths in a network. One module computes all-pairs shortest
+paths, another finds the shortest paths between nodes and a given set
+of features and, finally, there is a module that finds fastest paths
+using timetables.
+All module follow standard GRASS conventions. This holds both for the
+code and user interface. I also tried to make the modules as flexible
+as possible -- each of them accepts a wide range of parameters, which
+can alter the behaviour. Moreover, the algorithms are separated from
+the modules and stored in a library. An effect of this is that the
+modules are mostly straightforward (only exception is v.net.timetable)
+and consist only of reading the input, calling a few library functions
+and writing an appropriate output. Another advantage of this approach
+is that the \u201ccore functionality\u201d can be reused in other modules. Much
+more about the modules (a lot of pictures and link to code) can be
+found at mi wiki: http://grass.osgeo.org/wiki/GSoC_Network_Analysis.
+
+I have learnt a lot about GRASS and its vector architecture however
+this was my second summer working on vector modules. This was the
+first time I really had to work with attributes data and so I have
+learnt a lot about the data management. At the beginning, I found the
+system with many layers and multiple categories a bit complicated but
+in the process of developing the modules I have discovered its
+expressiveness and enormous power.
+
+At the moment, my code is stored in add-ons repository. I already know
+about several people using the modules for their work and I hope that
+the modules will eventually be integrated into the main distribution
+and bring eternal joy to all GRASS users.
+
+Finally, I want to thank my mentor (Wolf Bergenheim), OSGEO project
+coordinator (Wolf Bergenheim) and the whole GRASS, OSGeo and Google
+Summer of Code community for support, T-shirts and for doing a
+wonderful job! Thanks!
+Daniel
+_______________________________________________
+grass-dev mailing list
+grass-dev@lists.osgeo.org
+http://lists.osgeo.org/mailman/listinfo/grass-dev

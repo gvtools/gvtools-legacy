@@ -1,0 +1,1280 @@
+#LyX 2.0.0beta3 created this file. For more info see http://www.lyx.org/
+\lyxformat 410
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family sfdefault
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2.5cm
+\rightmargin 1.5cm
+\bottommargin 1.5cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+The Integrated GRASS Distribution
+\begin_inset Newline newline
+\end_inset
+
+Technical Documentation
+\end_layout
+
+\begin_layout Author
+Benjamin Ducke
+\begin_inset Newline newline
+\end_inset
+
+benjamin.ducke@oadigital.net
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+The Integrated GRASS Distribution (IGD) is a customized version of GRASS
+ GIS (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://grass.fbk.eu
+\end_layout
+
+\end_inset
+
+).
+ It is being developed with the aim of providing a flexible geo-processing
+ environment from within an interactive GIS.
+ Nowadays, several open source GIS have support for running GRASS GIS modules
+ from within an easy-to-use GUI environment.
+ Among them are QGIS (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.qgis.org
+\end_layout
+
+\end_inset
+
+), and (via the SEXTANTE GRASS interface) several Java-based GIS desktop
+ clients, such as gvSIG, uDIG and OpenJUMP.
+ But other 
+\begin_inset Quotes eld
+\end_inset
+
+shells
+\begin_inset Quotes erd
+\end_inset
+
+, such as web-based geoprocessing services, may also be able to make good
+ use of the IGD.
+ In any case, a GIS client using GRASS as a processing backend needs to
+ push geodata to the backend and retrieve the results, as well as provide
+ some transparent handling of the GRASS database and processing region settings.
+\end_layout
+
+\begin_layout Standard
+To facilitate the use easy of GRASS GIS from within a such a host interface,
+ the following development aims have been defined:
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Provide a set of tested and stable binaries
+\series default
+ for the most popular operating systems: Linux, Mac OS X and Windows.
+ All platforms should enjoy the same level of support and functionality.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Strip the distribution down
+\series default
+ to only the processing modules and those parts that are really necessary
+ for running GRASS modules.
+ Also exclude any that achieve no purpose outside the GRASS environment
+ itself, such as management of the GRASS database elements and the old display
+ module for X11-based display as well as the native GRASS GUI.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Include all those useful modules
+\series default
+ in the distribution that users must otherwise download from separate web
+ pages and compile and install manually.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Provide a central repository
+\series default
+ for the development and curation of new GRASS modules that are useful but
+ will probably never find their way into the official GRASS distribution.
+\end_layout
+
+\begin_layout Standard
+The IDG is always based on the latest stable version of GRASS GIS.
+ But some enhancements from development versions may find their way in,
+ provided they carry no great risk of breaking things and add value in the
+ form of significant functionality, usability or perfomance enhancements.
+\end_layout
+
+\begin_layout Section
+GRASS Configuration and Compilation Notes
+\end_layout
+
+\begin_layout Section
+GRASS Add-on Modules
+\end_layout
+
+\begin_layout Standard
+This section describes the modules of the IGD in detail.
+\end_layout
+
+\begin_layout Subsection
+Data Management
+\end_layout
+
+\begin_layout Subsection
+Dempster-Shafer Theory
+\end_layout
+
+\begin_layout Standard
+These modules allow the user to build and process mathematical decision
+ support models that utilize the Dempster-Shafer Theory of Uncertainty (DST).
+ The DST is a flexible framework for modeling scenarios and evaluating them
+ using a set of working hypotheses and evidence that support them in the
+ form of spatial data sets.
+ This software was originally developed for use in spatial predictive models,
+ but can be almost universally applied to make spatial decisions in the
+ face of many possible outcomes, incomplete information and uncertainty.
+ One may also describe this as another form of multi-criteria analysis.
+\end_layout
+
+\begin_layout Standard
+The DST modules have not seen major updates since 2007, so them real work
+ is needed for all of them to become useful in a GRASS geoprocessing backend.
+\end_layout
+
+\begin_layout Standard
+Note that the DST modules introduce two additional, external library dependencie
+s: libXML2 (for managing knowledge bases in XML files) and the GNU Scientific
+ Library (GSL; for running statistical tests).
+\end_layout
+
+\begin_layout Subsubsection
+Background
+\end_layout
+
+\begin_layout Standard
+Any DST analysis is based on a well-defined framework that consists of the
+ following components:
+\end_layout
+
+\begin_layout Enumerate
+A set of user-supplied hypotheses and all their possible combinations (
+\emph on
+frame of discernment
+\emph default
+, 
+\begin_inset Quotes eld
+\end_inset
+
+FoD
+\begin_inset Quotes erd
+\end_inset
+
+).
+ The user can freely define any number of hypotheses/outcomes.
+ These should be mutually exclusive and ideally exhaustive.
+ The FoD will automatically be expanded to include all possible combinations
+ of them, too.
+\end_layout
+
+\begin_layout Enumerate
+Evidence data (short: evidence) to support one ore more of the above hypotheses,
+ supplied in the form of GIS datasets.
+ These are raster, voxel or vector maps that have cell or attribute values
+ in the range [0..1].
+ Each cell or attribute value is called a 
+\emph on
+basic probability number
+\emph default
+ (BPN), because it is a very similar thing to a probability value in mathematica
+l probability theory.
+ So evidences are GIS datasets that store BPNs.
+\end_layout
+
+\begin_layout Enumerate
+Grouping information (
+\emph on
+sources of evidence
+\emph default
+, 
+\begin_inset Quotes eld
+\end_inset
+
+SoE
+\begin_inset Quotes erd
+\end_inset
+
+).
+ This is used to bring together all BPAs for one type of evidence.
+ E.g.
+ all GRASS raster maps that each represent the spatial distribution of exactly
+ one BPA will be grouped together to provide a distribution over all hypotheses
+ that they relate to.
+ These BPN distributions are called 
+\emph on
+basic probability assignments
+\emph default
+ (BPA).
+ The SoE level of structuring is needed in the DST analysis setup, because
+ in a GIS there is no way to explictely state which BPN datasets must go
+ together to form a BPA.
+ (actually, one could use things such as layer groups or GRASS mapsets,
+ but those vary between GIS and there would be no easy, standard way that
+ would with all of them).
+ So a SoE is a group of GIS datasets that together constitute a BPA.
+\end_layout
+
+\begin_layout Standard
+With this information, the DST software is able to identify the GIS datasets
+ that constitute sources of evidence, build the BPAs for all supported hypothese
+s (
+\emph on
+pooling
+\emph default
+) and combine them mathematically, to find out out how well each hypothesis
+ is supported by all the available evidence.
+\end_layout
+
+\begin_layout Standard
+The results are so-called belief values (BEL).
+ They are akin to mathematical probabilities (P), but do not follow all
+ of the same axioms.
+ Essentially, BEL is a more 
+\begin_inset Quotes eld
+\end_inset
+
+relaxed
+\begin_inset Quotes erd
+\end_inset
+
+ way of expressing (P).
+ The advantage of this is that it is much easier to quantify the factos
+ of an analysis in terms of BEL than in terms of P, making DST a universally
+ useful framework.
+ The disadvantage is that the relative lack of mathematical rigorosity can
+ lead to counter-intutive results in some extreme cases.
+\end_layout
+
+\begin_layout Paragraph
+Workflow
+\end_layout
+
+\begin_layout Standard
+The GIS workflow as implemented by the GRASS DST tools is as follows:
+\end_layout
+
+\begin_layout Enumerate
+Decide on an FoD and build an initial knowledge base file (KBF) with all
+ the hypotheses using the DST management modules (m.dst.*).
+\end_layout
+
+\begin_layout Enumerate
+Identify evidence to support the alternative hypotheses in the FoD.
+\end_layout
+
+\begin_layout Enumerate
+Find a way to express that evidence as BPNs in the range [0..1] and encode
+ it in GIS datasets.
+\end_layout
+
+\begin_layout Enumerate
+Attach each evidence (GIS dataset) to exactly one hypothesis which supports.
+\end_layout
+
+\begin_layout Enumerate
+Assign each evidence to exactly one unique source of evidence (group) to
+ build the BPAs.
+\end_layout
+
+\begin_layout Enumerate
+Combine the BPAs for all hypothesis to produce belief values.
+\end_layout
+
+\begin_layout Subsubsection
+DST Management Modules
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:DST-Management-Modules"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+m.dst.create, m.dst.view, m.dst.update and m.dst.source
+\end_layout
+
+\begin_layout Standard
+Purpose: Create and manage so-called 
+\begin_inset Quotes eld
+\end_inset
+
+knowledge base files
+\begin_inset Quotes erd
+\end_inset
+
+ (KBF) that describe the setup of a DST-based analysis.
+\end_layout
+
+\begin_layout Standard
+Status: 
+\emph on
+Major revision needed.
+\end_layout
+
+\begin_layout Standard
+The m.dst.* modules were designed to create and managed 
+\emph on
+knowledge base files
+\emph default
+ (KBF), which represent all the conceptual components of a DST analysis
+ and their links to the GIS datasets in an XML structured text file.
+\end_layout
+
+\begin_layout Standard
+The current design has some major flaws:
+\end_layout
+
+\begin_layout Enumerate
+It is not possible to link in external GIS datasets (such as GeoTIFF images
+ or Shapefiles).
+\end_layout
+
+\begin_layout Enumerate
+The names of evidences are the same as the names of their associated datasets.
+ This can mean a lot of typing for the user if those datasets have long
+ names (filenames!).
+\end_layout
+
+\begin_layout Enumerate
+There is no support for voxel type evidence.
+\end_layout
+
+\begin_layout Enumerate
+The idea of 
+\begin_inset Quotes eld
+\end_inset
+
+const
+\begin_inset Quotes erd
+\end_inset
+
+ type evidence is unintuitive and not very useful.
+\end_layout
+
+\begin_layout Enumerate
+There are too many ways of cleaning or pruning information from the database
+ and their usage is not always straight-forward.
+\end_layout
+
+\begin_layout Enumerate
+Management of the FoD and SoEs is done via two separate modules, which is
+ OK, but the operations the user has to perform are partly redundant.
+\end_layout
+
+\begin_layout Enumerate
+The names of the modules are semantically overlapping, as well as as the
+ jobs they do.
+\end_layout
+
+\begin_layout Standard
+Suggested solutions:
+\end_layout
+
+\begin_layout Enumerate
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Enumerate
+Introduce a generic tag <evidence> with sub-tags <name>,<type> and <data>.
+\end_layout
+
+\begin_layout Enumerate
+Add evidence type 
+\begin_inset Quotes eld
+\end_inset
+
+voxel
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Remove support for evidence type 
+\begin_inset Quotes eld
+\end_inset
+
+const
+\begin_inset Quotes erd
+\end_inset
+
+ from all modules.
+\end_layout
+
+\begin_layout Enumerate
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Enumerate
+One module should only manage the FoD, the other should allow the user to
+ add evidence, associate it with hypotheses in the FoD and group it into
+ sources.
+\end_layout
+
+\begin_layout Enumerate
+New modules: m.dst.frame, m.dst.source and m.dst.evidence to exactly mirror the
+ three steps of the DST analysis shown above.
+ Using them in this sequence allows the user to go from the most abstract
+ to the most concrete stage of the analysis setup.
+\end_layout
+
+\begin_layout Standard
+The new modules are:
+\end_layout
+
+\begin_layout LyX-Code
+m.dst.frame
+\end_layout
+
+\begin_layout LyX-Code
+  file=<filename>
+\end_layout
+
+\begin_layout LyX-Code
+  new=<name>
+\end_layout
+
+\begin_layout LyX-Code
+  delete=<name>
+\end_layout
+
+\begin_layout LyX-Code
+  rename=<name,name>
+\end_layout
+
+\begin_layout LyX-Code
+  
+\end_layout
+
+\begin_layout LyX-Code
+m.dst.source
+\end_layout
+
+\begin_layout LyX-Code
+  file=<filename>
+\end_layout
+
+\begin_layout LyX-Code
+  new=<name>
+\end_layout
+
+\begin_layout LyX-Code
+  delete=<name>
+\end_layout
+
+\begin_layout LyX-Code
+  rename=<name,name>
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+m.dst.evidence
+\end_layout
+
+\begin_layout LyX-Code
+  file=<filename>
+\end_layout
+
+\begin_layout LyX-Code
+  rast=
+\end_layout
+
+\begin_layout LyX-Code
+  vect=
+\end_layout
+
+\begin_layout LyX-Code
+  voxel=
+\end_layout
+
+\begin_layout LyX-Code
+  file=
+\end_layout
+
+\begin_layout LyX-Code
+  hypothesis=<hypothesis>
+\end_layout
+
+\begin_layout LyX-Code
+  unlink=<hypothesis>
+\end_layout
+
+\begin_layout LyX-Code
+  delete=<name>
+\end_layout
+
+\begin_layout LyX-Code
+  rename=<name,name>  
+\end_layout
+
+\begin_layout Standard
+All of these three modules have to be redesigned to use some common code
+ to access the XML file (model on the 
+\begin_inset Quotes eld
+\end_inset
+
+management
+\begin_inset Quotes erd
+\end_inset
+
+ folder in 
+\begin_inset Quotes eld
+\end_inset
+
+raster
+\begin_inset Quotes erd
+\end_inset
+
+).
+ The current code is inefficient and probably also buggy, because it attempts
+ to parse the XML file and modify it in place for every operation.
+ It would be much easier to read the whole XML file into one C struct on
+ startup of a module, then modify the data as needed, then write a new XML
+ file back when the module exits.
+\end_layout
+
+\begin_layout Standard
+The structure of an XML knowledge base file (version 2!) is:
+\end_layout
+
+\begin_layout LyX-Code
+<?xml version="1.0"?>
+\end_layout
+
+\begin_layout LyX-Code
+  <dst-kb 
+\color red
+VERSION=
+\begin_inset Quotes erd
+\end_inset
+
+2.0
+\begin_inset Quotes erd
+\end_inset
+
+
+\color inherit
+ N_SINGLETONS="2" N_HYPOTHESES="4" N_GROUPS="0"
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+get rid of static counters!
+\end_layout
+
+\end_inset
+
+>
+\end_layout
+
+\begin_layout LyX-Code
+    <-- Frome of Discernment (hypotheses created with m.dst.frame) -->
+\end_layout
+
+\begin_layout LyX-Code
+    <fod>
+\end_layout
+
+\begin_layout LyX-Code
+      <hyp TYPE="NULL">NULL</hyp>
+\end_layout
+
+\begin_layout LyX-Code
+      <hyp TYPE="USER">HypA</hyp>
+\end_layout
+
+\begin_layout LyX-Code
+      <hyp TYPE="USER">HypB</hyp>
+\end_layout
+
+\begin_layout LyX-Code
+      <hyp TYPE="AUTO">HypA,HypB</hyp>
+\end_layout
+
+\begin_layout LyX-Code
+    </fod>
+\end_layout
+
+\begin_layout LyX-Code
+    <-- Sources of Evidence (created with m.dst.source) -->
+\end_layout
+
+\begin_layout LyX-Code
+    <soe>
+\end_layout
+
+\begin_layout LyX-Code
+      <src>elevation</src>
+\end_layout
+
+\begin_layout LyX-Code
+      <src>soil</src>
+\end_layout
+
+\begin_layout LyX-Code
+    </soe<
+\end_layout
+
+\begin_layout LyX-Code
+    <-- Evidence data created with m.dst.evidence -->
+\end_layout
+
+\begin_layout LyX-Code
+    <evidence TYPE=
+\begin_inset Quotes erd
+\end_inset
+
+RAST-FILE
+\begin_inset Quotes erd
+\end_inset
+
+ DATA=
+\begin_inset Quotes erd
+\end_inset
+
+/home/user/geotiff_01.tiff
+\begin_inset Quotes erd
+\end_inset
+
+>1</evidence>
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Evidences and links (below) are referenced by simple numbers.
+ We may want to let the user optionally reference them by full name, also.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+    <evidence TYPE=
+\begin_inset Quotes erd
+\end_inset
+
+RAST-FILE
+\begin_inset Quotes erd
+\end_inset
+
+ DATA=
+\begin_inset Quotes erd
+\end_inset
+
+/home/user/geotiff_02.tiff
+\begin_inset Quotes erd
+\end_inset
+
+>2</evidence>
+\end_layout
+
+\begin_layout LyX-Code
+    <-- Links between evidence data, hypotheses and sources (created with
+ m.dst.evidence) -->
+\end_layout
+
+\begin_layout LyX-Code
+    <link EVIDENCE=
+\begin_inset Quotes erd
+\end_inset
+
+1
+\begin_inset Quotes erd
+\end_inset
+
+ SOURCE=
+\begin_inset Quotes erd
+\end_inset
+
+elevation
+\begin_inset Quotes erd
+\end_inset
+
+ HYPOTHESIS=
+\begin_inset Quotes erd
+\end_inset
+
+HypA
+\begin_inset Quotes erd
+\end_inset
+
+>1</link>
+\end_layout
+
+\begin_layout LyX-Code
+</dst-kb>
+\end_layout
+
+\begin_layout Standard
+Except for the 
+\begin_inset Quotes eld
+\end_inset
+
+NULL
+\begin_inset Quotes erd
+\end_inset
+
+ hypothesis, all hypothesis names are handled case-sensitive.
+\end_layout
+
+\begin_layout Paragraph
+Consistency Rules
+\end_layout
+
+\begin_layout Standard
+Every SoE can only have evidence of one type (rast,vect,voxel).
+ The first evidence linked to an SoE determines its type.
+ If there is no evidence linked to the SoE than its type is undefined.
+\end_layout
+
+\begin_layout Standard
+Every evidence linked to an SoE must support exactly one hypothesis (but
+ these may be combination hypotheses).
+\end_layout
+
+\begin_layout Standard
+Overwriting existing stuff in the KBF will only succeed with the --o flag.
+\end_layout
+
+\begin_layout Subsubsection
+m.dst.frame
+\end_layout
+
+\begin_layout Standard
+Purpose: Create and manage hypotheses (FoD) in a KB file.
+\end_layout
+
+\begin_layout Standard
+Status: 
+\emph on
+To be developed.
+\end_layout
+
+\begin_layout Subsubsection
+m.dst.source
+\end_layout
+
+\begin_layout Standard
+Purpose: Create and manage (abstract) sources of evidence (SoE) in a KB
+ file.
+\end_layout
+
+\begin_layout Standard
+Status: 
+\emph on
+To be developed.
+\end_layout
+
+\begin_layout Paragraph
+Usage
+\end_layout
+
+\begin_layout Paragraph
+Details
+\end_layout
+
+\begin_layout Standard
+Restrictions: 
+\end_layout
+
+\begin_layout Standard
+A source of evidence cannot be removed if it is referenced by an existing
+ hypothesis.
+\end_layout
+
+\begin_layout Subsubsection
+m.dst.evidence
+\end_layout
+
+\begin_layout Standard
+Purpose: Attach or remove evidence in the form of GIS datasets to a hypothesis.
+\end_layout
+
+\begin_layout Standard
+Status: 
+\emph on
+To be developed.
+\end_layout
+
+\begin_layout Subsubsection
+r.dst.combine
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:r.dst.combine"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Purpose: Combine evidence from raster data sources (SoE) to produce belief
+ values for the hypotheses of a FoD.
+\end_layout
+
+\begin_layout Standard
+Status: 
+\emph on
+Revision needed.
+\end_layout
+
+\begin_layout Paragraph
+Notes
+\end_layout
+
+\begin_layout Standard
+This module is basically functional, but it is too comprehensive in its
+ current form.
+ It was derived from the original 
+\emph on
+dst.combine
+\emph default
+, which was designed to be able to handle any sort of evidence (raster,
+ vector, and 
+\begin_inset Quotes eld
+\end_inset
+
+constant
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsubsection
+r3.dst.combine
+\end_layout
+
+\begin_layout Standard
+Purpose: Combine evidence from voxel data sources (SoE) to produce belief
+ values for the hypotheses of a FoD.
+\end_layout
+
+\begin_layout Standard
+Status: 
+\emph on
+Planned.
+\end_layout
+
+\begin_layout Standard
+See notes on r.dst.combine (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:r.dst.combine"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsubsection
+v.dst.combine
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:v.dst.combine"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Purpose: Combine evidence from vector data sources (SoE) to produce belief
+ values for the hypotheses of a FoD.
+\end_layout
+
+\begin_layout Standard
+Status: 
+\emph on
+Planned.
+\end_layout
+
+\begin_layout Standard
+See notes on r.dst.combine (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:r.dst.combine"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Paragraph
+Notes
+\end_layout
+
+\begin_layout Standard
+The actual evidence values are stored in attribute table fields.
+ If the user needs to combine evidence with spatial criteria (e.g.
+ only pool the evidence in places where features overlap, etc.), then the
+ vector maps must be preprocessed manually first.
+\end_layout
+
+\begin_layout Subsubsection
+v.report.hist
+\end_layout
+
+\begin_layout Standard
+Purpose: Report statistics for a predictive model result.
+\end_layout
+
+\begin_layout Standard
+Status: 
+\emph on
+Major enhancements needed.
+\end_layout
+
+\begin_layout Paragraph
+Notes
+\end_layout
+
+\begin_layout Standard
+Currently reports Kvamme's gain only.
+ Need to provide some better metrics.
+\end_layout
+
+\begin_layout Subsubsection
+Further Notes
+\end_layout
+
+\begin_layout Itemize
+Add a module to combine vector-based evidence (v.dst.combine) 
+\end_layout
+
+\begin_layout Itemize
+Add a module to check a DST knowledge base file for correctness (m.dst.check)
+ -> this functionality may already be present in one of the existing modules
+ 
+\end_layout
+
+\begin_layout Itemize
+Add ability to process vector site evidence to r.dst.predict.bpn 
+\end_layout
+
+\begin_layout Itemize
+Get rid of the uncertainty margin in r.dst.predict.bpn (function dst_calc())
+ 
+\end_layout
+
+\begin_layout Itemize
+Add Monte Carlo testing as a general method to produce BPNs from floating
+ point raster maps and vector points.
+ 
+\end_layout
+
+\begin_layout Itemize
+Update HTML documentation.
+ Heavy updates needed everywhere to reflect all the recent changes.
+\end_layout
+
+\begin_layout Itemize
+Use consistent terminology: 
+\begin_inset Quotes eld
+\end_inset
+
+Dempster-Shafer Theory
+\begin_inset Quotes erd
+\end_inset
+
+ (not Dempster Shafer Theory).
+ BPN for single values, BPA for all BPN in a data source.
+\end_layout
+
+\begin_layout Subsection
+Signal Processing (Geophysics)
+\end_layout
+
+\begin_layout Standard
+This is a collection of modules that are being developed for geophyiscal
+ data processing, mostly with an eye on magnetic gradiometer data.
+ But the implemented methods are very broadly applicable for just about
+ any kind of signal processing, including elevation and image (greyscale
+ channels, not RGB) data.
+\end_layout
+
+\begin_layout Standard
+Most of the modules are scripts that do not need to be compiled, but some
+ complex computations are done in more efficient C code.
+\end_layout
+
+\begin_layout Subsection
+Territorial Analysis
+\end_layout
+
+\begin_layout Subsubsection
+r.burn.frict (script)
+\end_layout
+
+\begin_layout Standard
+Purpose: Preprocess rasterized vector lines to smooth out diagonal gaps
+ between cells (to prepare data for fusion with a cost or friction surface).
+\end_layout
+
+\begin_layout Standard
+Status: 
+\emph on
+Done.
+\end_layout
+
+\begin_layout Subsubsection
+r.xtent
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:r.xtent"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Purpose: Calculate the Xtent model.
+\end_layout
+
+\begin_layout Standard
+Status: 
+\emph on
+Small modifications needed.
+\end_layout
+
+\begin_layout Paragraph
+Notes
+\end_layout
+
+\begin_layout Standard
+The module compiles cleanly and runs very well, but needs to be slightly
+ enhanced:
+\end_layout
+
+\begin_layout Itemize
+User needs to be able to use external raster datasets as cost surface models
+ for distance calculations.
+ The paths for these have to be stored in the attribute table of the input
+ vector points (centers).
+ Two options here: (a) try to guess automatically whether the attribute
+ record for a center has a reference to an external dataset or a GRASS map;
+ (b) provide a flag that allows the user to toggle between the two explicitely
+ (an external GUI front-end could set this flag implicitely).
+\end_layout
+
+\begin_layout Itemize
+It should be made very clear in the documentation that the weight attribute
+ must be normalized and in the range [0..1].
+ The user should take care to do this.
+ If not, a very simple normalization will be performed automatically (division
+ by maximum weight), which may not always give ideal results (it is unclear
+ where 
+\begin_inset Quotes eld
+\end_inset
+
+0
+\begin_inset Quotes erd
+\end_inset
+
+ should be).
+ Negative weights must not be allowed.
+\end_layout
+
+\begin_layout Itemize
+main.c lists a number of further enhancements.
+\end_layout
+
+\begin_layout Subsection
+Visibility Analysis
+\end_layout
+
+\begin_layout Subsection
+Voxel modeling and 3D
+\end_layout
+
+\begin_layout Subsubsection
+r.vol.dem
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:r.vol.dem"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Purpose: Create volumetric model from raster surface sequences.
+\end_layout
+
+\begin_layout Standard
+Status: 
+\emph on
+Major revision needed.
+\end_layout
+
+\begin_layout Paragraph
+Notes
+\end_layout
+
+\begin_layout Standard
+It is currently unclear whether this module still works at all.
+ In any case, it pushes potentially huge ASCII files back and forth and
+ calls other GRASS modules to do all the hard work.
+ That needs to be changed.
+\end_layout
+
+\begin_layout Itemize
+Add a manual page.
+\end_layout
+
+\begin_layout Itemize
+Rewrite for direct voxel access, so much bigger models can be calculated.
+\end_layout
+
+\begin_layout Subsection
+Miscellaneous
+\end_layout
+
+\begin_layout Section
+\start_of_appendix
+List of Modules in Distribution
+\end_layout
+
+\begin_layout Description
+m.dst.* -- Manage Dempster-Shafer Theory knowledge base files (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:r.xtent"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Description
+r.xtent -- Calculate the Xtent model (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:r.xtent"
+
+\end_inset
+
+)
+\end_layout
+
+\end_body
+\end_document

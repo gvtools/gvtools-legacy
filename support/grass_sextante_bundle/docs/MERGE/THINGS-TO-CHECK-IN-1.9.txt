@@ -1,0 +1,1251 @@
+FILE SELECTOR STRINGS
+
+	http://gvsig.org/trac/bugtracking/ticket/2707#comment:9		
+			
+LANGUAGE
+	
+	- still some cancelar and acceptar around
+	
+	- messages in splash screen
+
+GENERAL
+	- gvSIG remembers the last active tool for each view, so clicking
+	  into a new view may activate a different tool!
+	
+	- the editor selection tools and the common selection tools
+	  are not exactly the same. Some editor operations will only
+ 	  work on objects selected using the CAD editor's tool (e.g.
+	  merging features)!
+	  
+	- need to delete gvSIG user folder before upgrading 1.1.2->1.9
+
+	- .gvp files have to be passed with fully qualified name.
+	The following will not work:
+	  ./gvSIG.sh test.gvp
+	But this will:
+	  ./gvSIG.sh /home/benni/test.gvp
+
+ADD DERIVATIVE GEOMETRIES:
+	- only visible layers are available in the selection list
+	- specifying a custom field name does work (default name will be used)
+	  unless the user also clicks the little "disk" icon. Ugly!
+	- for a TIN (triangular polygons only), calculated areas were negative!
+	- explanation (interesting!): 
+		one of the libraries used by gvSIG (JTS) has a function called signedArea(). From their doc: 
+		"public static double signedArea(Coordinate[] ring)
+		Returns the signed area for a ring.
+		The area is positive if the ring is oriented clockwise." 
+		It's not easy to check if this is the cause, because gvSIG changes the orientation when you add a counter-clockwise polygon in editing mode.
+		I understand Wolfgang is using polygons which were not previously edited with gvSIG, so maybe they are originally counter-clockwise?
+		I'm not sure this is a bug. You can get the area with "abs(area())" and the orientation with "area() > 0". Maybe the orientation is useful in some context...
+
+PROJECTION DATA FILES:
+
+	Juan Lucas,
+
+	Do you know I have a range of programs that just don't like odd names or paths, especially those with spaces, so I name all project directories and files so there are no spaces present at all. Avoids problems.
+
+	On receipt of your email it dawned on me that gvSIG may be one of those programs. Since I avoid spaces myself I would not have encountered this problem except in getting a file from a third party (I was unclear whether gsb files could be renamed, so left the file as is). 
+
+	I reran the tutorial you provided after renaming the gsb file "A66National" and guess what, it worked. Add a space in the grid file name and it does not work. Remove all spaces at it works again. Funnily enough, the program did not care about '(' or ')' or '.', just spaces. Go figure...
+
+	In regards to seeing "NT v2 Grids..." I reloaded gvSIG+Sextante on a new machine and this was not in the new install, "Grids" appeared in the drop down box the same as seen in your video. 
+
+	So case closed. This whole episode boiled down to a glitch in the file opening routine. On further investigation I found that gvSIG tolerates spaces in directory names but not in filenames. So the lesson I have learnt here, apart from "gvSIG works with the Australia Tranformation Grid", is that "gvSIG requires all data files to have names WITHOUT any spaces".
+
+	Again, thanks for you help. I really appreciate it.
+
+
+
+Cheers Simon 
+
+
+TOC layer dnd behaviour:
+	- improved?
+	- dnd with all layers in groups?
+
+CAD complex selection tool:
+	- test with Christina Robinson's troublesome Shapefile. Does it make gvSIG crash?
+	--> NO, but it seems to send it into an endless loop: tested with Groups_poly.shp
+            from cad-selection-test.zip
+	    SAME result with POLYS_CUTS.shp, even for non-overlapping polygons
+	Jo Cook's email on the problem:
+
+	> In one of the files, I didn't actually make a change at all, I simply
+	> chose "select features for editing", highlighted a polygon, and then
+	> pressed the "commit changes" button. That was enough. In the second,
+	> it wasn't, so I then moved a vertex a tiny bit (and back again), then
+	> committed the changes. I can't remember which polygons, and my gut
+	> feeling is that the uDIG editing process seems to validate the
+	> shapefile in some way, and maybe fix errors. It does seem to create
+	> some additional binary files (.bld and .fix) related to each
+	> shapefile, but not consistently and presumably only for it's own use.
+	> You should be able to reproduce this, and if my gut feeling is
+	> correct it shouldn't matter what you actually edit...
+
+Project file relocation
+	- across drives, directories and operating systems
+	
+Java Virtual Machine
+	- switch to open JDK
+	- 6u14 and try G1
+	- themes?
+	- package some additional look and feels?
+		http://www.javootoo.com/plaf/fh/index.html
+		https://substance.dev.java.net/
+		->copy new l&f jar into jre/lib/ext
+		->enter startup class into gvSIG/andami-config.xml
+		->or add switch to jave invocation: -	
+		Dswing.defaultlaf=org.jvnet.substance.skin.SubstanceBusinessLookAndFeel	
+		-> Andami config overwrites this, though!
+		- icons based on the same sets as GRASS/QGIS ?
+
+Projection
+	- does it honour .prj ESRI style files now?
+
+GUI look and feel
+	- does it still keep activating the default tool without indicating in the
+	icon bar?
+	- are there still any widgets that do not resize properly?
+
+
+Extensions
+	- 3D
+	- Metadata
+	- NavTable
+	- SEXTANTE
+	- LiDAR
+	- Network Analysis
+	- Map Server Config File Exporter (???)
+	- (GPS tools) ...
+	- Normalization Extension
+	
+	
+Additions for OADE release
+	- more colour scheme XML files (adapt from GRASS)
+	- more/updated sample data
+
+
+
+
+=====================================================
+
+BUGS in 1.9B (1236)
+
+=====================================================
+
+* = reported
+(*) = partially reported
+[x] = could not be verified on Java 1.5/Windows, Build 1236
+
+
+General
+	- for all labels that end with a "y", the "y" is sometimes not
+	displayed correctly.
+	See e.g.: Preferences->Raster->Use "no data" value for 
+	transparency; or Extensions->(select one)->Priority label
+	Cut-off too far to the left, may also happen with
+	other characters, such as "X".
+	
+	- window title: first document name, then " - ", then
+	program name: "project.gvp - gvSIG 1.9"
+	
+	- either add a "Close" button to all child windows
+	or remove it from all of them (would favour the latter).
+	
+	- tooltips should always start with a capitalized word
+	but have no "." at the end of the sentence.
+	
+	- some dialogues, such as the program Preferences live
+	in their own top-level window and can be moved outside
+	the gvSIG main program window, others not. What are the
+	criteria to decide which can and which cannot?
+	E.g. the Geodata search tool also has a top-level window.
+	
+	- for all dialogues that are non-blocking and allow changes
+	to be applied, the buttons should be: "Cancel" "Apply" "Ok"
+	int that order!
+	
+	- in numeric input fields, numbers automatically get formatted
+	like this: "2000" -> "2,000", but only for user input, existing
+	values stay unformatted, which looks confusing!
+	E.g.: the "Options" tab in the WFS layer properties.
+
+	SOME GUI ELEMENTS KEEP CHANGING POSITIONS.
+	Noticeably, the icons in the main icon bar, the tool entries
+	in the Raster Tools menu, ... (?)
+	
+	
+CONFLICTS WITH USER INTERFACE GUIDELINES
+
+	- Buttons in dialogues do not have marked shortcut keys
+	
+	- Erratic handling of ":" after button labels.
+	  Sometimes, the label does not have them and they get
+	  added automatically, sometimes they are part of the label.
+	  E.g. I cannot translate "Campo_de_classificacion" as
+	  "Classification field:", because then I get double "::"
+	  in the "Unique values" symbology tab
+	  
+	- Too many label strings are shared by button labels, window
+	  titles, widget group frame titles and tool-tips.
+	  This can be a problem, because buttons and menu entries need
+	  to have a "..." edded wherever they do not result in immediate
+	  action but open another dialogue (e.g. "Save as...").
+	
+Start-up Screen
+
+	- this has a working progress bar on Windows, but not on Linux (!?)
+
+
+* Program Preferences Dialogue
+	- Starts up with an empty tab labelled "General".
+	This does not, however, open the actual "General" tab in the
+	dialogue's list of configuration pages
+	
+	- General options should always appear as top item in list
+	
+	- Cartography page lacks an icon to be displayed left of the title
+	
+	- Extensions configuration: Priority setting box needs to be
+	  one line below and to the right of the label
+	  
+	- Screen updates configuration page lacks an icon
+	  
+	- View preferences: lists for unit selection contain all unit names
+	four times!
+	
+	View->Layer loading order
+		lacks a proper icon
+	
+Shalom extension
+	
+	- should not have its own main menu entry (only one function!)
+	  Should really be "File"->"Set DBF encoding..."
+	  
+	 - setting default encoding to "UNKNOWN" in preferences, then
+	 clicking Accept gives: "Bad charsetName" Message.
+	
+
+(*) Raster tools (tested with Thebes ECW file):
+	Analysis View
+		* - there are some zoom levels at which not all pixels are square!
+		* - the cross-hair in the zoomed view does not snap to cell centres
+		- after starting the analysis view, the zoomed view is not immediately updated
+
+	Image profile
+		- dialogue is not resizeable (this is important, because it contains a list!)
+
+	Decision tree
+		Expression editor
+			- dialogue resizing is jumpy and sometimes gives bad widget dimensions
+			- output options: widget sizes don't make good use of space, especially parameter fields
+			- weird floating point display in Cell size field
+			
+* Add layer dialogue
+	Switch to "File" and add some layers to the list of layer to be loaded.
+	Now switch to e.g. Annotation.
+	The "Ok" button gets deactivated.
+	Switch back to "File": it stays deactivated!
+	
+	The same is true for the "Add table" dialogue.
+	
+* Configure locator
+	Adds "..." to all button texts and dialogue, which is not correct for 
+	"Remove layer"
+	
+	"Properties..." button opens layer properties in background, then blocks
+	the locator dialogue. The layer properties dialogue should also be opened
+	straight on the "Symbology" tab, instead of the "General" tab, as the
+	symbology settings are most likely what people will want to configure
+	at this point.
+	
+	When no layers are selected, then both "Remove layer" and "Properties"
+	buttons need to be inactived.
+	
+Table->Filter dialouge
+	- needs to be resizable
+	- does not have a Close buttton
+	- but to for "New", "Add to" and "Subtract from" selection
+	  should be arranged underneath the expression text field to
+	  increase horizontal typing space.
+	  
+[x] Table->Import fields
+	- finishing the operation on an attribute table results in:
+	
+	Can't find file: /home/[...]/features.shp
+ 	 in a driver: gvSIG shp driver
+	 	
+* Table->Manage fields
+	- Buttons "Rename" and "Delete" should be inactive if no field
+	has been selected.
+	
+	- There needs to be some vertical space between the buttons.
+	It's not good to have Rename and Delete that close together!
+	
+	IMPORTANT BUG! The dialogue has no "Cancel" button and
+	"Undo" does not work for field changes. So if a user accidentally
+	deletes a field, there is no obvious way to restore it. Also, the
+	"Accept" button is meaningless, as all field modifications get
+	applied immediately. It suggest a safeguard that simply does not
+	exist and should really be labelled simply "Close".
+	
+	Of course, the user can still stop editing the current layer or
+	table and choose not to save changes. But that is not as good, as
+	it will also discard possibly valid modifications.
+	
+	In any case, there is a bug: if the user selects to discard changes,
+	the table view does not get refreshed and it appears as if the
+	changes are permanent! The only way to refresh the table seems to be
+	to start editing it again. If the table is not an attribute table,
+	then the problem is even worse. In that case, it needs to be removed
+	from the project, then added again!	
+	
+	The ideal solution here would really be the standard, "Accept", "Cancel"
+	and "Apply" buttons with functions as expected (+ proper table refresh!).
+
+Project Manager
+	- There are two "Properties" buttons on the same panel, which is confusing.
+	The lower one should be labelled "Configure..." or similar, especially
+	since there is alrady a frame label "Session properties".
+	
+	- in the Table section, the "New" button should really be an "Add..."
+	button, as this does not create a new table but adds one to the project
+	from an existing file or database connection.
+
+Derrivative geometries extension
+	- menu entry should be inactive if the currently selected layer is not
+	a vector layer
+
+	- the default for the Source layer should be the currently selected
+	vector layer
+	
+Add geometry info extension
+	- menu entry should be inactive if the currently selected layer is not
+	a vector layer
+
+	- the default for the layer to work on should be the currently selected
+	vector layer
+
+* Raster extension
+	- the only way to call all the useful new tools is via the little icon
+	in the icon bar which can be hard to use on high-resolution screens as
+	the user needs to point and click very precisely on the little
+	triangles to open the menu lists. There should be "normal" menu entries
+	in the "Layer" menu for all the tools.
+	
+Symbology
+	- The text in the explanation field widget (on top of the settings page
+	for each symbology mode) puts line breaks in the middle of words, making
+	longer texts hard to read.
+	
+	-  some changes still get lost when switching between symbolology modes
+	(e.g.: computed intervals and "From", "To" settings in mode "Graduated symbols")
+	There should be a warning message that the user is about to lose changes!
+
+Symbology->Filter expression
+	- dialogue resizes in a useless way.
+	
+	(x) - expressions always crash (also verifying them)
+	
+	- the "Syntax" help fields underneath the lists are too small,
+	  especially for operators (unreadable)
+	
+	- the "Add field" and "Add operator" buttons should be put
+	  right underneath the respective list widgets. As it is, they
+	  waste too much vertical space and leave little space for field
+	  and operator names
+	  
+	->Single style
+		- there is an option to add a label to the TOC.
+		This option exists only for this symbology mode, but
+		it still gets overwritten by other modes!
+		E.g. if I change the mode to "Dot densities", then
+		change back to "Single style", the field will have
+		the value:
+		
+		"DotDensitySymbolin layer: 'features.shp'"
+		
+		automatically assigned to it!
+		
+	-> Intervals
+		Colour ramp widget area: Labels for first and last
+		colour are reversed!
+		
+	-> Proportional symbols
+		Default values for "From" and "To" are the same (10.0).
+	  
+Layer properties
+	(x) ->Labelling
+		- "rotation field": selection list has an unneeded, empty entry at the bottom
+	
+		- "colour field": selection list has an unneeded, empty entry at the bottom
+	
+	->Hyperlink: "Remove action" does not allow user to choose wich action
+		to remove. It always removes the last one add. Does that make sense?
+
+Symbol properties
+	- picture fills and picture lines: the user should at least be warned if a very
+	high resolution image is about to be loaded, as this can consume a lot of CPU time
+	and memory!
+	
+	(x) - simple fill: outline settings not shown until opacity is adjusted
+	
+Symbol selection window
+
+	(x) - clicking "Reset", then "Cancel" still resets the symbol settings
+	permanently.
+
+
+Project file saving
+	- gvSIG always asks for saving resources, even if they were saved
+	and no changes done since the last save
+	
+Advanced labelling
+	- Method selection box: all entries have an unneeded "." appended
+	
+	(x) - Preview not working: always throws java.lang.NullPointerException
+	
+	(x) - Placement ... no preview shown
+
+	(x) - labelling expressions
+		- verify: java.lang.NullPointerException (any expression)
+		
+	
+Raster loading problems on Linux:
+
+	- no jpeg, no tiff, no ecw
+
+	- GDAL 1.4.0, no ECW support, but gtiff, gif, jpeg, png support
+
+* Context menus
+	(layers and TOC symbols)
+	- why is the font smaller for these?
+	
+Editing settings
+	- makes no sense to have snapping settings under "Editing" and then more
+	snapping settings under "Snapping"
+	
+	- "Snapping" settings page: "Properties" buttons are always inactive (?)
+	
+(*) CAD editor
+	* - "Stop editing" -> "Would you like to save" needs a "Cancel" button!!!
+	- too much whitespace after label (" : ")
+	
+	
+(*) Map Layout
+
+	* Context menus have smaller font size
+
+	* File->Import Web Map Context
+		- label of drop-down selection list for view should be hidden if "Create new view" 
+		is selected
+		
+		- view selection box is empty, even if a view exists in the project (??)
+
+	Border settings
+		- "Map units" label is in a strange place
+		
+	Graphics -> "Size and position"
+		- menu entry should only be active if an object is selected in the layout
+		
+		- page size is displayed "H x W". Usual is W x H
+		
+	(*) Legend editing	
+		- ungroup legend
+			-> select one of the graphical toc elements on its own, choose
+			"Properties" from context menu: "User error"
+			
+	Text properties	
+		- colour selection widgets are all cut off at the bottom -> need more vertical space
+		
+	Scale bar properties
+		- widget group frame labels are dark black instead of grey
+		
+		- colour selection widgets are all cut off at the bottom -> need more vertical space
+		
+(*) SRS Definition
+	
+	Dialogues are not resizable.
+
+
+	- user-defined SRS dialogue
+		- On the first tab, make selection and click "Next".
+		The second tab will be missing a "Next" button.
+		Switch to the first tab, then to the second again, using
+		the tab widgets at the top of the dialogue: voila, the button
+		appears!
+		
+		- Datum definition page:
+		Bogus "..." appended to labels of entry fields for semi-major axis,
+		inverse flattening and semi-minor axis (should be ":" instead).
+		
+		* SRS search dialogue: switching between search criteria (e.g. "By name"
+		and "By code" deletes any input that is already in the search text field.
+		This is annoying, as it often happens that one has already entered e.g.
+		a place name and forgot to switch to "By area". 
+		
+		*  switching the Type, e.g. from EPSG to ESRI recalls earlier entries.
+		So if e.g. I search for "Germany" in the ESRI DB, then switch to "EPSG"
+		and search for "Britain", then switch back to ESRI, the search field is
+		reset to "Germany". However, I think these settings should be consistent
+		for search strings, not database types, so switching back to ESRI in the 
+		example should restore "Britain" in the search text field.
+		
+	- Layer transformation from NTv2 format grid file dialogue:
+		- The elements tree widget is far too small vertically. It is almost
+		impossible to read tree list entries.
+		
+* Raster tools (general):
+
+	- WMS layers interaction: 
+		- previews cannot be generated. The preview panel complains that the
+		layer does not exist.
+		- applying operations (e.g. filters) to the view works, but creating
+		a new layer in memory or as a file crashes the tool
+
+(*) Raster tools: ROI Editor in Scatterplot tool
+	
+	* - choosing "Export" on an empty ROI list results in a crash.
+	
+	* - it's unclear what "Export" does and where it stores the output.
+	
+	* - call Scatterplot, open the ROI editor. Click "Export". Close all dialogs. 
+	Select ROI from the raster menu -> gvSIG totally freezes, with 100% CPU usage.
+	NOT A FREEZE, just takes awfully long to process
+	
+	* - selecting an ROI in an image using the polygon tool takes a _very_ long time
+	and consume much CPU power, even for small areas. As there is no status display 
+	or other busy message, it may seem to the user that the application has frozen.
+
+	* - loading ROIs from a Shapefile takes a _very_ long time and consume much CPU power.
+	As there is no status display or other busy message, it may seem to the user that the 
+	application has frozen.
+		
+	- regions of interest are not saved along with the project file. There is
+	also no warning about them being discarded when the user exits the application!
+	
+	- the dialog has to very differently styled and sized icons for loading and
+	saving ROIs as Shapefiles
+	
+	
+	
+(*) Raster tools: Scatterplot
+	* - launching the tool before the user has zoomed at least once to the
+	selected raster layer's extents results in a crash
+	
+	- why does it have an "Accept" and "Cancel" button? There are not actions
+	these would relate to.
+	
+Raster tools: Image profile
+	- reading values for a profile line takes a _very_ long time and consumes
+	much CPU power. As there is no status display 
+	or other busy message, it may seem to the user that the application has frozen.
+	
+Raster tools: Histogram
+	- the "Save as DBF" button opens a file dialogue that is defective:
+		- title is hardcoded as "guardar tabla"
+		- "Files of Type" is set to "All Files" instead of "DBase files (.dbf)".
+		- There is an "Open" button instead of a "Save" button.
+		
+	- the window has a "Close button" which is not necessary, most (all?) gvSIG
+	child windows simply use the "X" window frame button for closing.
+			
+(*) Raster tools: Decision tree
+	- has a "Close" button. Instead, it should be labelled "Cancel".
+		
+	* - bizarre cell size display on "Output options" page (1.6451833775763694E-4)
+	
+	* - on resizing, the Parameters fields on the "Output options" page should resize
+	horizontally, so that long coordinate ranges are easier to read. The default
+	should also be larger text fields to increase readability.
+	
+	- if "Save to file" is selected as layer output option, the file selector
+	has an "Open" instead of a "Save" button.
+		
+Raster tools: Multispectral transformation
+
+	- if "Save to file" is selected as layer output option, the file selector
+	has an "Open" instead of a "Save" button.
+
+(*) Raster tools: Raster calculator
+	
+	- window is not resizable
+	
+	(x) outputting to JP2 file format completely crashes gvSIG (perhaps my system has no JP2 support)
+	
+	- outputting to JP2 file format throws an "ECW Exception"
+
+	x - outputting to a PNG file format gives: "error_writer", then "error_carga" capa, then an exception
+	(same for JPG and other formats)
+
+	- if "Save to file" is selected as layer output option, the file selector
+	has an "Open" instead of a "Save" button.
+
+* Raster tools: Save as
+
+	- Selecting "Save as.." from the the context menu of a raster layer, then selecting an output
+	file results in a write error message.
+	
+(*) Raster tools: Classification
+
+	* - cancelling a process does not work. Clicking "Yes" when asked to cancel is simply ignored
+ 	(I think this may be true for all Raster Tools progress windows)
+	 	
+	* - when selecting to save output to a file: pressing "Cancel" in the file dialog still runs
+	the processing!
+	
+	- if "Save to file" is selected as layer output option, the file selector
+	has an "Open" instead of a "Save" button.
+
+(*) Raster tools: Vectorization
+
+	- widget frame labels are set in a smaller font
+	
+	* - First page: region selection: setting from view works, but Pixel and World
+	  Coordinates are not updated
+
+(*) Raster tools: Image fusion
+	
+	- outputting to memory or other formats results in "error_writer_notsupported_extension" error
+	
+	- btw: why do all the raster tools offer different output formats -- some PNG, other
+	TIFFs, others a whole range of formats?
+	
+	* - Parameter input slider for Brovey and IHS has no widget label. What's the names of
+	the parameters?
+	
+(*) Raster tools: Georeferencing tool
+
+	- Polynomial transformation option: selection list for "Degree: n" is bogus. Better
+	us a slider for values between 1 to 5 and label it "Degrees:".
+	
+	- selection list for interpolation method is missing a label
+	
+	- pixel size defaults are X=0 and Y=0. Is that correct?
+	
+	- icons in GCP control panel:
+		- save and load to XML file have different icon styles and sizes
+		
+	* - clicking on "Stop test" icon without running a georeferncing test first
+	results in: java.lang.NullPointerException
+	
+	* - RMS field is editable! When exiting, the field is reset to "0"!
+	
+	* - individual RMS fields in GCP list are also editable!
+	
+	* - No. field in GCP list is editable!
+	
+	* - all panels can be closed. But how is the user supposed to get them back?
+	
+	* - if the GCP control panel is closed, then there should be a warning in case
+	the georeferencing data has not been written and the views and zoomed views
+	should be closed automatically
+	
+	- the georeferencing views need an option to zoom to selected layers in the
+	view. Otherwise, if the view has data in only a few places but a large extent,
+	zooming and panning in the georeferencing views can be hard.
+	
+	- the zoomed view windows have a fixed aspect ratio but the zoom selection in the
+	georeferencing view does not. Thus, they do not maintain a 1:1 correspondence
+	
+	- zoomed view windows are not resizable
+	
+	- why are GCPs counter from "0" instead of "1"?
+	
+
+* Raster Tools: Geolocation tool:
+
+	Bad default value "0" for Pixel size
+
+Raster Tools: Save view as raster tool:
+	
+	Dialogue has an "Apply" and a "Close" button. It should only have an "Ok"
+	button.
+	
+	Properties dialogue for GeoTIFF settings: have an "Ok" and a "Cancel" button. 
+	button.
+	
+	Metres/pixel input box: after making a change, then pressing Enter or Tab key,
+	the field contents get reset to "0"!
+	
+	Width and Height input boxes: after making a change, then pressing Enter or Tab key,
+	the field contents get reset to "0"! Also, there is no way of fixing the ratio
+	between width and height.
+	
+	The Apply button always stays inactive, so the file can never be saved.
+
+	
+Raster Tools: Raster clipping tool:
+
+	If the "Coordinates" tab has not been filled with a valid extent yet, then
+	changing settings in "Spatial resolution" gives bogus results. That tab
+	should probably be switched inactive until a valid coordinates selection
+	has been made.
+	
+	Setting the cell size resets the (inactive) Width and Height values to "0".
+	User needs to press "Restore" to reset them to their defaults.
+	
+	Pressing "Apply" or "Accepts" results in: 
+	"No se ha podido obtener el writer. Extension no soportada".
+	
+Raster Tools: Filters
+
+	It is possible to change the settings for a filter that has not been
+	added to the list of active filters. However, such changes have no 
+	visible effect on the preview image, which is confusing for the user.
+	Only after adding the filter will the preview react to changes.
+	
+	Also, the "Active" switch for a filter really has no meaning before
+	it is added and should in that case be inactive (or even hidden).
+	
+	Adjust colours -> HSL balance: it's called HSL, but the the settings
+	are displayed in order "Hue", "Luminosity", "Saturation" (=HLS).
+	
+	
+* Raster Tools: Filters
+
+	The tool's dialogue starts with the Filter list opened and "Brightness" filter
+	selected. Hoever, clicking on the "Add" icon does not add the selected filter
+	(double-clicking works). It seems to be an input focus problem: if I e.g. select
+	another filter (even the same) in the list first, then the Add icon does its job.
+	
+Raster Tools: Move/scale/rotate ("Geolocalization)
+	
+	The tool has an "Apply" button but that is unnecessary, as all changes
+	to field values get applied immediately.
+
+Layer properties dialogue
+	
+	Has "Close" "Apply" "Ok" buttons. Should be: "Cancel" "Apply" "Ok".
+
+Add layer dialogue
+
+	Is not resizable.
+
+	
+(*) Annotation layers	
+	
+	Export as annotation layer
+
+	On the first page, the "Field to use for labelling" contains an empty
+	default. The empty entry remains in the list. Instead, the default should
+	be the first field in the attribute table and there should be no empty
+	list entry.
+
+	Drop-down lists for Rotation field, Colour field, etc. Contain all field
+	names twice.
+	
+	*"Annotation" tab in "Layer properties": 
+	Any changes made to the toggle options: if deactivated
+	and then activated again, the label points are not redrawn with the
+	new option settings. That takes setting the layer to "invisible" and
+	then "visible" again.
+	
+	Editing tool (accessible from icon bar or Layer->Modify annotation" when
+	in editing mode): has "Ok" and "Cancel" buttons. Should have: "Cancel" "Apply" "Ok".
+	
+	
+(*) Add layer(s) from WMS 
+	
+	"Layers" tab: 
+		* there seems to be a fixed field length for layer names.
+		If "Show layer names" is activated, then the names will be abbreviated
+		to the length of the string in the raster layers list that was there
+		before, even though there is more than enough space for longer names.
+		
+		Layers can be added more than once. Is that wanted behaviour?
+		
+		Out of a sizable sample of WMS servers, not a single one actually
+		produced any data in the view.
+
+		
+Add layer(s) from WFS
+
+	Tested with this server: http://geoserver.thehumanjourney.net/geoserver/ows?
+	
+	-> reprojected into an EPSG 4326 view
+
+	"Layers" tab:
+		"Geometry type" column is only filled with data after clicking on
+		a row. Is that intended behaviour?
+		
+	"Options": setting the maximum number of features for above service to "30000" 
+	leads to a crash.
+	
+	
+Geodata Search Tool:
+	
+	[TEST URL: http://delta.icc.es/indicio/csw  ; CSW/ISO]
+	
+	connection window:
+	
+		Protocol properties ("P" button, available e.g. for CSW/ISO 19115):
+		"Cancel" and "Accept" buttons are cut off at the top (not enough
+		vertical space for the widgets).
+		
+		"Search" button is not necessary.
+
+		The "Close" button should be a "Cancel" button	
+		
+	Main tool window: 
+	
+		Pressing the "Search" button does nothing (not even returning
+		a message about an empty result).
+		
+		The "Cancel" button does not work.
+		
+		The "Previous button" is unnecessary, as the connection dialogue has no "Next" button
+		and anyway, there are only to dialogues to switch between.
+		
+		The "Close" button is not necessary.
+				
+	
+
+Find by Gazetteer Tool:
+
+	connection window:
+	
+		Set address of server to:
+			http://www.geonames.org:80
+		and "protocols" to:
+			ADL
+		Click Connect -> java.lang.NullPointerException
+		
+		The "Search" button is not necessary here (see below)
+		
+		The "Close" button should be a "Cancel" button
+	
+	Main tool window: 
+	
+		Locations that are drawn in the current view do not have an associated layer.
+		Thus, they cannot be manipulated using the normal editing tools.
+	
+		"Cancel" button has no effect.
+	
+		"View options": Deselecting "Remove old searches" has no effect: previous
+		points get deleted from the view, anyway.
+	
+		There is no obvious way to remove the last search result from the view: the "Remove
+		old searches" tool in the icon bar has no effect. The only way is to deselect "Draw
+		result", select "Remove old searches" and then search for a different place. Not really
+		easy to figure out for the user.
+	
+		The "Previous button" is unnecessary, as the connection dialogue has no "Next" button
+		and anyway, there are only to dialogues to switch between.
+		
+		The "Close" button is not necessary.
+		
+* CAD selection tool
+
+	Start editing a layer that is not the top layer in the TOC.
+	Make a layer above the edited layer visible that covers the features
+	in the edited layer. Make it invisible again.
+	Make some selection using the CAD selection tool in the layer under
+	editing. The selection markings will flash, then disappear.
+		
+* Vector Layer->Show attribute table... into context menu
+		
+		
+Table->Join
+	
+	---	
+	
+	It's a little hard to understand why there have to be two separate
+	dialogues. It would be quicker to just have all options in a single
+	window, with "OK" and "Cancel" buttons.
+	
+	Also, for added speed (joining is a tedious operation, that often
+	has to be performed multiple times for a layer), the TARGET layer
+	should automatically be set to the active layer. IDEALLY, there
+	should be "Join..." entry in the layers context menu for this purpose.
+	It should also be possible to perform a Join on a layer that is not
+	currently open in the CAD editor.
+	
+* Table->Link
+	This still has the old, very flaky Join dialogue.
+		
+* Symbology->Basic
+
+	"Symbol levels...": It's not quite clear what can be achieved
+	with symbol levels in Single Symbol mode, but anyway, all changes
+	done in the dialogue will always be discarded, even after closing
+	the dialogue with "Ok".
+	
+* Info Tool
+	The regular feature information tool is currently dysfunctional.
+	Clicking on a feature returns only the value of the last field
+	in the attribute table and no field name at all.
+	
+* CAD Editor->Start editing on a joined table
+	The user gets to say "No" if there are joined fields, but if
+	he does so, the editing console is opened and the CAD selection
+	cursor tool started, anyway! Clicking into the view then gives
+	a: "java.util.EmptyStackException" error message.
+	Also, the editor console does not close anymore and stays in
+	the view. The only way to get rid of it is to remove the joined
+	fields from the table manually, then start and stop the editor
+	on the layer once more.
+	
+* CAD Editor->Start editing on a hidden layer
+	In case the user starts CAD editing on a hidden layer, there should
+	be a warning that editing will have no visible effects unless
+	the layers in switched to visible first.
+	
+* Project file paths update tool
+
+	Add a Shapefile to a View and open its attribute table
+	so that it gets added to the Table section of the project.
+	
+	Now save the project to a .gvp file.
+	
+	Exit gvSIG and move the Shapefile to a different folder.
+	
+	Now open gvSIF again and open the .gvp file.
+	It will complain about invalid paths and let you update
+	the path specifications. This is all great.
+	
+	However, after updating the path(s) and loading the project,
+	you will get an error message about the attribute table
+	in the "Table" section being invalid and its name will be
+	changed to an internal string.
+	
+	A click on properties for the item will result in an error
+	message that cannot be terminated, because the properties 
+	window which signals the error has no "x" close button in the 
+	title bar.
+	
+	This problem only affects Shapefiles with attribute tables
+	open in the "Tables" section.
+	
+	
+* Layers and groups in TOC
+
+	The interaction with the mouse is still very poor.
+	
+	There is no visual indication where a layer will be dropped
+	when dragging layers, so aiming is difficult.
+	
+	Also, when ALL layers of the TOC are in some group, there
+	is no way to drag any layer outside of any group, to the TOC
+	root, because there is no "drop target" for that action.
+	The only work-around is to add another layer (e.g. from a file),
+	just to provide a frop target outside any group, then do the
+	dragging, then delete that dummy layer again. Not exactly elegant ...
+	
+* Scatterplot
+	
+	The colours settings have no effect on the diagram.
+
+	The canvas context menu has an entry "New class" which should really
+	be labelled "New ROI". Currently it's hard for the user to guess what
+	the function does.
+
+* Temporary layers
+	
+	Add a warning if the user wants to close the project and one of
+	the following was not saved:
+		ROIs
+		Temporary raster layers
+		Temporary vector layers
+
+
+	
+	
+=====================================================
+
+BUGS in 1.9B (1238)
+
+=====================================================
+
+* = reported
+(*) = partially reported
+[x] = could not be verified on Java 1.5/Windows, Build 1236
+
+
+
+
+3D Extension: 
+	- When using the "JDialogSkin", there will be two menus
+	  titled "Window" in the main menu bar
+	
+	- There is a warning that pops up on startup if none of
+	  the skins supported by the 3D Extension is active.
+	  It would be more useful to also have this warning when
+	  the wrong skin is active and the user tries to add or open
+	  a 3D View (as users are prone to ignore or forget warnings
+	  that only show once on start-up).
+	  
+	- When attempting to open a 3D view (no matter what skin is
+	  active), the following error pops up (tested on Gentoo Linux):
+	  
+	  PluginServices.Error grave de la aplicación. 
+	   Es conveniente que salgas de la aplicación 
+	  --------------------------------------------
+	  java.lang.UnsatisfiedLinkError: native_createPlanetViewer     
+	  org.gvsig.osgvp.planets.PlanetViewer.native_createPlanetViewer(Native Method)     
+	  org.gvsig.osgvp.planets.PlanetViewer. (PlanetViewer.java:96)     
+	  org.gvsig.gvsig3dgui.ProjectView3D.getOrCreateCanvas3D(ProjectView3D.java:273)     
+	  org.gvsig.gvsig3dgui.ProjectView3D.getOrCreateView(ProjectView3D.java:496)     
+	  org.gvsig.gvsig3dgui.ProjectView3D.createWindow(ProjectView3D.java:516)
+	  [...]
+
+
+3D Extension - Animation
+	- choose "Animacion de fecha" from context menu of a layer -> Java.lang.NullPointerException
+	(first encountered on a layer which was part of a topology group, but seems
+	to be the same for all layers)
+	
+	
+
+Topology Extension (0.1.0-1.232):
+
+	- Toolbar icon canvas is too high.
+
+	- Load Topology: quitting the file selector with "Cancel" results in an error
+	  message "Debes seleccionar un fichero de topologia."
+	  
+	- Topology rule "La geometria debe ser cerrada": description is missing an icon
+	
+	- Add rule window: layout issues
+	
+		- The window for adding a topology rule has bad horizonal resizing behaviour.
+		The canvas on the right which displays an HTML help text and image stays too small,
+		so the user has to scroll around to view the full image (e.g. try rule "No puede
+		haber huecos entre poligonos").
+	
+		- Add rule dialogue: some rule descriptions can get rather long, in which
+		case the drop-down box will get too wide and overlap with the HTML help text
+		canvase. The box should get as much horizontal space as the longes rule entry
+		needs.
+	 
+	- Choose "Guardar topologia" -> close file selector by clicking "Cancel" -> User error
+	
+	- "Guardar topologia" function has different icons in "View" menu and main icon bar
+	
+	- topology check for overlapping polygons crashes with Northampton polygons.
+	That data is very dirty, but the extension should handle it better.
+	Right now, the validation just never terminates.
+	
+	- Topology properties: last page ("Errores topologicos") which has a table of errors
+	and exceptions after validating a topology: the table does not resize when the the
+	window is resized. This can make it very hard to read the results.
+	
+	- When batch fixing errors: the status dialog does not get focused, so clicking
+	on "Cancel" to cancel the processing won't work. The user first has to close the
+	Topology Properties window, then the processing can be stopped.
+	
+	- Topology group layers corrupt project files: create a new topology, save the
+	project file (I tested this with just two vector layers in one View of the
+	project, putting both into a new topology group). Restart gvSIG and load the
+	project file. You will get an error message:
+	"Error opening document: <View name> - <View number> ProjectView"
+	After clicking OK, you will get an empty View.
+	
+	Apparently, the Topology Extension writes a lot of data into the project
+	file. But all that is useless, as the topology group gets lost when
+	restarting gvSIG.
+	
+	- Topology error layers corrupt project files: create a simple topology.
+	Run a topology validation to create a new layer with erroneous geometries.
+	Ungroup the layers of the topology group. Save the project file.
+	Restart gvSIG and load the project file. There will be an error message
+	relating to the topological errors layer:
+	
+	"Layer access error. The following layers will be deleted from the project :
+	 <error_layer_name>"
+	 
+	 Clicking OK will remove the layer from the View. I guess this is correct
+	 behaviour, as the errors layer is temporary, but shouldn't the user at
+	 least be warned when closing a project that temporary error layers will
+	 be lost? And wouldn't it also be more elegant to discard all objects that
+	 will be lost when exiting gvSIG instead of when starting it the next time?
+	 I believe the best way would be to extend the "Save resources" dialogue
+	 with a list of resources that cannot be saved and will for sure be lost
+	 and drop them from the project if the user chooses "OK".
+	 
+	
+	- Rule names always appear in Spanish, independent of application language
+	settings. This affects rule names displayed in the progress dialogue after
+	clicking "Evaluar topologia", as well as the names of error layers in the TOC.
+
+		
+CAD Editor/Topology Extension:
+	- open the Properties for a vector layer that is part of a Topology Group:
+	Java.lang.NullPointerException
+			
+			
+Symbology
+	- Double-click the TOC point marker entry for a point vector layer
+	to open the symbol selection window. Now click "Properties". You
+	will get an error message:
+	
+	"Failed to install symbol editor. com.iver.ai2.gvsig3d.legend.symbols.Object3DMarker"
+	
+	(tested with installed 3D extension, my points layer is of type "2D Points", however).
+	
+	But the symbol editor opens fine, anyway. This problem does not exist for line or
+	polygon layers. It also does not happen with a multi-geometry type DXF layer.
+	
+	[Does not happen if 3D extension is not installed]
+	
+	
+Network Pilot
+
+	- General:
+		Most of the tools are missing a progress display dialogue. Since they
+		can be computationally very expensive, they should all have one.
+		
+	- Create network topology assistant: 
+		- The introductory text on pseudo-nodes is in
+		Spanish and cannot be changed (strings not exported to .properties file).
+		
+		- "Field configuration": the field labels for the last two input
+		fields ("digitized direction" and "inverse of digitized direction" need
+		to be grayed out if no "Direction" field is selected. Otherwise, users
+		may  think they can fill in these fields and might wonder about their
+		purpose.
+		
+		- Fuzzy tolerance field: any value > 100 gets discarded and replaced
+		with the last valid value entered (or any mutilation of it, I have not
+		been able to see the system). You can verify this by changing the value,
+		clicking "Next", then "Back" again. If this limit is intentional, then
+		a warning message needs to be displayed before it gets changed!
+		
+		- the folder to save the network in defaults to the systems's temporary
+		folder (/tmp on my Linux system). Maybe better to default to the user's
+		home directory?
+		
+	
+	- The file selector for loading a .net file does not work! It does not display
+	any directories! (tested on Linux with bundled Java 1.5.12)
+	
+	- Manage routes: 
+		- loading stops from a point layer: a stop that is located off
+		the network will produce a very ugly error message on the "Information console",
+		all in Spanish and with no way to translate the message text. There should be
+		a proper message dialogue with the option to discard invalid stops or turn them
+		off. Also, the error message text needs to be translatable.
+				
+	- Service area:
+		- pressing cancel in the dialogue for maximum cost input does not work:
+		The system starts computing for a long time, anyway (I had to kill gvSIG,
+		eventually).
+		
+	- Minimum spanning tree:
+		- pressing "Cancel" on the dialogue results in a "User error".
+		
+	- Closest facility:
+		It is possible to generate events from the same Shapefile as
+		the facilities. In that case, there will be a route of cost "0"
+		for each event to itself. That is OK; but if I then then click on
+		"Instructions", "Draw route", or "Zoom to" for that zero cose route,
+		I get a "java.lang.ArrayIndexOutOfBoundsException: -1" error. 
+		Would be better to have a more appropriate warning message.
+	
+	
+	- Delete -> "Delete all barriers" is always active, even when there are no barriers
+	
+SEXTANTE
+	
+	- The .properties files for the translation strings are currently in the individual JAR
+	files. The I18N extension cannot reach them there and translations will be hard to maintain.
+			
+		
+		
+=====================================================
+
+BUGS in 1.9RC1
+
+=====================================================
+
+* = reported
+(*) = partially reported
+[x] = could not be verified on Java 1.5/Windows, Build 1236
+		
+Symbology and joined fields
+	-> In general, it is regretable that symbology cannot be built on joined fields
+	-> Some of the symbology tools still show joined fields: "Expressions", "Dot densities",
+	"Quantities by category"; however, applying those styles to a joined field will simply
+	do nothing: clicks on "Ok" just get ignored and the Symbology dialogue page stays open.
+	
+Labelling and joined fields
+	-> this works well, except: if a join is removed then the Properties page of a vector
+	layer that is using one of the joined fields for labelling no longer gets displayed.
+	There is not even an error message, it just does not open up any more. After re-joining,
+	everything works fine again. The same problem also persists if labelling is disabled for
+	the layer first and then the join removed.
+	
+Translation strings
+	the string "back" has the Spanish translation "El de imagen posterior"
+	
+Link dialogue
+	- this still is the old JOIN dialogue with all its bugs:
+		- after the second page, buttons shrink and become unusable
+		- it does not work with the files I tried [include]: join 
+		contexts.dbf to features.shp using integer fields CONTEXTID and CTXTNO
+		- four clicks required to complete a simple link operation
+		-> could this be replaced with the same dialogue the Join tool uses now?
+
+TOC:
+	- right-clicking on a layer that is not active
+	 Will produce a tiny little square on the screen which looks
+	 like it wants to be a context menu :)
+
+CAD Editor
+	"Editing settings": the page "Snapping" has a Spanish labelled
+	option "Referencia a Objetos Activada" which does not export its
+	string to th translation system, so I cannot translate it into
+	English. The same page also has a "Properties" field in the
+	snapping objects list which displays "Properties" buttons that seem 
+	to do nothing at all	
+
+Export layer:
+	The status dialogue has a button labelled "cancelar". Label is not
+	exported to the internationalization extension and cannot be
+	translated.
+	
+PostGIS DBMS layers:
+	GvSIG keeps a table lock on any PostGIS table that was added as a layer.
+	After removing the layer from the project, the table remains locked until
+	the Geodatabase is disconnected. I think if a PostGIS layer is not part
+	of the project anymore, the lock should be released.
+	
+	Table with capital letters in their names cannot be used, because
+	they cannot be enclosed in "" marks.
+	
+=====================================================
+
+FEATURE REQUESTS for 1.9
+
+=====================================================
+
+Basic feature information tool:
+	- fields get listed in random order. Better to sort them in the same order as
+	they are in the attribute table by default and add an option to sort them by name
+	alphabetically
+	
+Optionally use system's native file browser dialogue instead of that useless Java built-in one.
+
+
+CAD Editor	
+	In editing mode, "Zoom to layer" does not fit the entire layer into
+	the currently visible window. Part of it is is obstructed by the CAD
+	console. The layer should be zoomed to fit into the part of the view
+	that is actually visible when the console is open.
+
+
+=====================================================
+
+QUESTIONS for 1.9
+
+=====================================================
+
+Splash Window:
+	This has translatable strings "SplashWindow.*". It did translate those
+	and imported via the internationalization extension, but the translations don't show up.
+	Where do the strings have to be stored so 
+	
+	
+	  
+

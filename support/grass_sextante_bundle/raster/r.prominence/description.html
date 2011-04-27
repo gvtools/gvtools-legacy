@@ -1,0 +1,89 @@
+<TITLE>r.prominence</TITLE>
+
+<body bgcolor="white">
+
+<H2>NAME</H2>
+<em><b>r.prominence</b></em>  - calculates local prominence statistic.
+<BR>
+<EM>(GRASS Raster Program)</EM>
+
+<A NAME = "description"><H2>DESCRIPTION</H2></A>
+
+<EM>r.prominence</EM> computes a local neighborhood statistic that indicates
+by how much a cell differs from the <EM>n</EM> cells surrounding it. In the
+case of an elevation raster, this can be taken as the "prominence" of a location
+in relation to its neighborhood. There is a growing body of literature on
+the topic of topographic prominence in fields such as physical geography
+and archaology. The statistic implemented in <EM>r.prominence</EM> is relatively
+simple. The prominence "P" for a cell "i" is calculated as:
+<p>
+<em>P=value(i)/avg</em>
+</p>
+Where <em>avg</em> is the average value of the cells in the neighborhood of <em>i</em>.
+<p>
+There are different ways of expressing prominence within a neighborhood.
+Please take a look at the description of the flags below to make sure that the
+output fits your purpose.
+
+<H2>USAGE DETAILS</H2>
+
+<H3>Flags:</H3>
+<DL>
+
+<DT><B>-a</B>
+<DD> Calculates "absolute" prominence. This leads to features with great negative
+difference from their surroundings (such as a deep canyon) to be marked as "positively prominent".
+If this flag is given, then the normalization modes (see below) will produce output
+in the range of "0" to "1" only. All output cell values will be positive.
+
+<DT><B>-g</B>
+<DD> Normalizes output data to the range "-1" (minimal) to "1" (maximal) across
+the whole input raster. This makes it possible to compare different locations with each
+other, based on how prominent they are over the entire study region.
+
+<DT><B>-l</B>
+<DD> Normalizes output data to the range "-1" (minimal) to "1" (maximal) within
+a neighborhood. This makes it possible to compare different locations with each
+other, based on how prominent they are within their local environment.
+
+<DT><B>-r</B>
+<DD> Use a square instead of a circular neighborhood approximation. This will
+result in faster computation but will be a less realistic assumption in many
+scenarios (such as when using topographic prominence as a proxy for "visibility").
+
+<DT><B>-q</B>	
+<DD> Disable progress display.
+
+
+<A NAME = "parameters"><H3>Parameters:</H3></A>
+
+<DT><B>input=</B><EM>name</EM>
+<DD>Name of a raster map layer containing elevation
+data, used as program input.
+
+<DT><B>radius=</B><EM>value</EM> <DD>Radius of neighborhood to use for computation,
+expressed as number of cells. The larger, the more processing time will be needed. 
+This parameter represents the scale-dependency of the statistic: Larger radii will 
+accentuate features that are prominent over a larger area, whereas smaller radii will 
+also accentuate those features that only stick out in their immediate neighborhood.
+
+
+<A NAME = "notes"><H2>NOTES</H2></A>
+Computation of the prominence statistic can be time-consuming, especially for
+raster maps with many cells and for large neighborhoods. Local normalization takes much
+longer than global normalization.
+<p>
+The prominence statistic is fully subject to the "modifiable areal unit" (MAU) effect.
+Towards the edges of the input raster, results will get unreliable. Therefore, make sure to allow
+for sufficient buffer space (the size of <em>radius=</em>) in the input raster around all locations of interest.
+
+<H2>SEE ALSO</H2>
+Wikipedia article: <EM><A HREF="http://en.wikipedia.org/wiki/Topographic_prominence">Topographic prominence</A></EM>
+<P>
+Llobera, M. 2001. Building Past Landscape Perception With GIS: Understanding Topographic
+Prominence. Journal of Archaeological Science 28:1005-1014.
+
+<H2>AUTHOR</H2>
+
+Benjamin Ducke, for Oxford Archaeology (<EM><A HREF="http://oadigital.net">http://oadigital.net</A></EM>)
+

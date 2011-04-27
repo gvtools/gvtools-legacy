@@ -1,0 +1,137 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       r.detrend
+# AUTHOR(S):    Benjamin Ducke <benjamin.ducke AT oadigital.net>
+# PURPOSE:      Removes background trend from input data.
+#
+# USAGE NOTES:  For basic usage, define a trend direction and inclination.
+#		(options "dip=" and "azimuth=").
+#		More complex trend surfaces can be supplied in the form
+#		of existing raster maps using the "trend=" option.
+#		
+#		The strength of the removal effect may be choosen using
+#		the "strength=" option. The default is maximum ("1.0").
+#
+# COPYRIGHT:    (C) 2010 by Benjamin Ducke
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#% description: Removes a background trend from raster data.
+#% keywords: raster, trend, background, geophysics, signals
+#%End
+
+#%Option
+#% key: input
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of input raster map
+#% gisprompt: old,cell,raster
+#%End
+
+#%Option
+#% key: output
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of (detrended) output raster map
+#% gisprompt: new,cell,raster
+#%End
+
+#% key: dip
+#% type: double
+#% required: no
+#% multiple: no
+#% description: Dip of trend (-90 to 90 deg)
+#% answer: 0.0
+#% gisprompt: -90-90
+#%End
+
+#%Option
+#% key: azimuth
+#% type: double
+#% required: no
+#% multiple: no
+#% description: Direction of trend (0 to 360 deg; 0=N, 45=NW, 90=W, ..)
+#% answer: 0.0
+#% gisprompt: 0-360
+#%End
+
+#% key: strength
+#% type: double
+#% required: no
+#% multiple: no
+#% description: Strength of removal (0 to 1)
+#% answer: 1.0
+#% gisprompt: 0.0-1.0
+#%End
+
+#%Option
+#% key: trend
+#% type: string
+#% required: no
+#% multiple: no
+#% key_desc: name
+#% description: Name of existing raster to use as trend model
+#% gisprompt: old,cell,raster
+#%End
+
+MODULE_NAME=r.detrend
+DEBUG=
+# uncomment to run in debug mode (print commands only, no execution)
+DEBUG=echo
+
+
+if [ -z "$GISBASE" ] ; then
+	echo "ERROR: You must be in GRASS GIS to run this program." 1>&2
+	exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+	exec g.parser "$0" "$@"
+fi
+
+if [ -n "$GIS_OPT_TREND" ] ; then
+	g.message -w "Using existing raster map as trend model."
+	g.message -w "All other options will be ignored."
+elif
+	if [ -z "$GIS_OPT_DIP" ] ; then
+		g.message -e "Must supply trend 'dip=' option."
+		g.message -e "Aborting."
+		exit 1		
+	fi
+	if [ -z "$GIS_OPT_AZIMUTH" ] ; then
+		g.message -e "Must supply trend 'azimuth=' option."
+		g.message -e "Aborting."
+		exit 1
+	fi
+fi
+
+# create temporary map names
+TMP_PLANE="${MODULE_NAME}.`echo $$`.0"
+
+# create simple trend model
+if [ -z "$GIS_OPT_TREND" ] ; then
+	g.message "Creating trend model:"
+	$DEBUG r.plane name=$TMP_PLANE type=double [CONTINUE HERE WITH ALL PARAMS]
+fi
+
+if [ -z "$GIS_OPT_TREND" ] ; then
+	# remove temporary elements
+	g.message "Cleaning up:"
+	$DEBUG g.remove rast=$TMP_PLANE
+fi
+
+g.message "Done."
+
+exit 0
+

@@ -1,0 +1,65 @@
+http://grass.osgeo.org/wiki/Help_with_3D
+http://download.osgeo.org/grass/grass6_progman/Vector_Library.html#vlib_topology_management
+http://trac.osgeo.org/grass/wiki/Grass7/VectorLib
+
+---
+
+GRASS vector lib has full 3D coordinate support, but only 2D topology.
+
+GRASS core enhancements:
+
+Terminology: primitives and composites (areas, edges, volumes)
+
+Need to implement:
+	Edges (=3D areas) ???
+	Kernel (=3D centroid for both edges and volumes)
+	Volumes (=closed 3D meshes)
+	
+-> include/vect/dig_structs.h has all the primitive and composite
+types (what does n_edges in struct Plus_head refer to?).
+The version in GRASS 7 is already more elaborate (see Plus_head)
+
+Topology management for volumes: holes and kernels, testing for kernel
+in volume; v.build must be able to recognize closed meshes (volumes) around
+kernels and do mesh -> volume (otherwise, how to import volume data? no
+other GIS seems to have that primitive).
+
+Topology management
+
+
+---
+
+3D module enhancements:
+
+v.buffer: create 3D volume buffers
+v.hull: create a 3D volume as a result, not faces
+v.kernel: output voxel density map
+
+---
+
+ NEW 3D modules:
+ 
+ v.in.ply/v.out.ply
+ -> http://www.tecgraf.puc-rio.br/~diego/professional/rply/ !!!
+
+----
+
+Eventually, it would be nice to make VTK processing
+available for GRASS vector maps (maybe expose the
+algorithm via a module):
+
+http://www-pool.math.tu-berlin.de/~soeren/grass/files/vtkGRASSBridge/doc/html/index.html
+
+
+VTK Triangulation: decompose complex polygons into simple triangles
+VTK Delaunay 3D (see ParaView 3.6)
+
+----
+
+CGAL library for computational geometry
+
+---
+
+Nearest Neighbour in N Dimensionen (C++, but has CLI tool):
+
+http://www.cs.umd.edu/~mount/ANN/

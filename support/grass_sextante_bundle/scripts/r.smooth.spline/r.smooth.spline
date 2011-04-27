@@ -1,0 +1,293 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       r.smooth.spline
+# AUTHOR(S):    Benjamin Ducke <benjamin.ducke AT oadigital.net>
+# PURPOSE:      Spline-based smoothing for raster maps.
+#
+# USAGE NOTES:  This module is a "Swiss Army Knife" tool for data smoothing.
+#		Given the right set of options, it should be possible to cure
+#		almost any distortions, such as stripes, staggering effects,
+#		local trends, etc. Compared to a median or mean (low-pass) filter,
+#		the output may lose some contrast, but it will also be much
+#		more clean of distortion effects.
+#
+#		Use the "smoothing" option to control the global smoothness
+#		of splines. Smaller settings will give less smoothing.
+#		Use the "attraction" option to control how strongly
+#		the original data points get drawn towards the spline-interpolated,
+#		smoothed points (between "0" and "1"). The "threshold" setting can be 
+#		used to set the absolute size of the difference between original and 
+#		smoothed points which must be reached before any effect sets in. Use 
+#		this to preserve details with small differences.
+#
+#		Setting "threshold=0.0" and "attraction=0.0" will set the new
+#		data points to be exactly the spline-smoothed points. Setting
+#		"threshold=0.0" and "attraction=0.5" will set the new data points
+#		to lie exactly halfway between the original and the spline-smoothed
+#		data. How smooth the splines are is controlled by the "smoothing" option.
+#		
+#		Another important setting is the sample spacing, which is the interval
+#		size that directly controls the number of control points used to build
+#		the smoothing splines. The "sampling=" option is to be interpreted as
+#		"take every n-th pixel in x and y direction". Increasing the setting
+#		will increase the space between spline control points, resulting in
+#		stronger generalization.
+#
+#		To avoid the splines being distorted by extreme values, it is possible
+#		to limit the control point sample to include only cell values which are not
+#		above/below a defined sampling range. Note however, that splines are
+#		not locally exact and outliers can still be produced by over or undershoots.
+#
+#		It is also possible to repeat the smoothing n times (option "repeat=").
+#		Successive smoothing runs will continue to pull the original data
+#		towards the spline-smoothed data. This can be used to eliminate
+#		all large differences ("peaks" and "pits").
+#
+#		Finally, if none of the options above gives satisfactory results, the user may
+#		opt to provide a pre-computed smoothing model in the form of an existing raster
+#		map. In that case, the raster map passed using "surface=" will take the role
+#		of the spline smoothing model and all other options discussed above will be ignored.		
+#
+#		Balancing the different options against each other to get a perfect
+#		result may require some experimentation. But given the right set of parameters,
+#		it should be possible to remove almost any kind of unwanted noise, peaks,
+#		or cyclical effects from the data. The following are some rough guidelines:
+#		1. Do not attempt smoothing before eliminating the largest spikes
+#		(r.despike) and trimming the data to a range of interest (r.trim).
+#		Also, try to assign a good grey scale range to the input data, so you can see
+#		the problems clearly (e.g. use r.histogram.eq).
+#		This module will copy the color table from the unsmoothed to the smoothed
+#		map, so you can directly compare the two.
+#		2. The sample spacing is the most important parameter for controlling
+#		the global level of detail (option "sampling="). 
+#		The higher this setting, the more generalized the output will be.
+#		This should be the first option to experiment with in order to get rid
+#		of obvious distortions, such as spikes and stripes. Eliminating distortions
+#		that happen at a data range very close to that of the features of interest
+#		can be a very challenging task.
+#		3. The spline smoothness has a strong effect on small noise. If your image
+#		suffers from effects such as "staggering" or thin stripes, try increasing
+#		the smoothing (e.g. set "smoothing=2.0")	
+#		4. The local strength of effect of the above two options is controlled by
+#		the "attraction" option. Increase this if the smoothing appears to weak, decrease
+#		it in the other case.
+#		5. If there are too many "peaks" and "pits" in the output, try using
+#		the "repeat=" option.
+#		6. The sampling range options ("samplemin" and "samplemax") can be used as a last
+#		resort, if the result still shows data above or below acceptable thresholds.
+#
+#		The default settings will give rather weak smoothing but are a good starting
+#		point for experiments.
+##		
+# NOTES:	The splines are generated via the module v.surf.bspline. Consult that
+#		module's documentation for more information.
+#
+# COPYRIGHT:    (C) 2010 by Benjamin Ducke
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#% description: Smoothes a raster map using splines or a user-supplied surface.
+#% keywords: raster, smoothing, splines, geophysics, signals
+#%End
+
+#%Option
+#% key: input
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of input raster map
+#% gisprompt: old,cell,raster
+#%End
+
+#%Option
+#% key: output
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of (smoothed) output raster map
+#% gisprompt: new,cell,raster
+#%End
+
+#%Option
+#% key: sampling
+#% type: integer
+#% required: yes
+#% multiple: no
+#% key_desc: value
+#% options: 2-1000
+#% description: Cell sampling frequency (take every n-th)
+#% answer: 4
+#%End
+
+#%Option
+#% key: smoothing
+#% type: double
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% description: Global spline smoothing (Tykhonov regularization)
+#% answer: 1
+#%End
+
+#%Option
+#% key: attraction
+#% type: double
+#% required: no
+#% multiple: no
+#% options: 0.0-1.0
+#% key_desc: value
+#% description: Local strength of smoothing effect
+#% answer: 0.5
+#%End
+
+#%Option
+#% key: repeat
+#% type: integer
+#% required: yes
+#% multiple: no
+#% key_desc: value
+#% options: 1-100
+#% description: Number of times to repeat smoothing
+#% answer: 1
+#%End
+
+#%Option
+#% key: threshold
+#% type: double
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% description: Threshold for replacing original with smoothed data
+#% answer: 0.0
+#%End
+
+#%Option
+#% key: samplemin
+#% type: double
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% description: Data sampling range minimum
+#%End
+
+#%Option
+#% key: samplemax
+#% type: double
+#% required: no
+#% multiple: no
+#% key_desc: value
+#% description: Data sampling range maximum
+#%End
+
+#%Option
+#% key: surface
+#% type: string
+#% required: no
+#% multiple: no
+#% key_desc: name
+#% description: Name of existing raster to use for smoothing
+#% gisprompt: old,cell,raster
+#%End
+
+MODULE_NAME=r.smooth.spline
+
+# set MATH alias to work like this:
+# set width = 10
+# set height = 10
+# MATH area = $width * $height
+# echo $area 
+# 100
+# alias MATH 'set \!:1 = `echo "\!:3-$" | bc -l`' 
+
+DEBUG=echo
+
+
+if [ -z "$GISBASE" ] ; then
+	echo "ERROR: You must be in GRASS GIS to run this program." 1>&2
+	exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+	exec g.parser "$0" "$@"
+fi
+
+if [ -n "$GIS_OPT_SURFACE" ] ; then
+	g.message -w "Using existing raster map for smoothing."
+	g.message -w "All other options will be ignored."
+fi
+
+# create temporary map names
+TMP_SAMP="$MODULE_NAME.`echo $$`.0"
+TMP_POINTS="r_smooth_spline_`echo $$`_1"
+TMP_SMOOTHED="$MODULE_NAME.`echo $$`.3"
+
+# all of the following can be skipped, if the user supplies
+# the name of an existing raster to use as a smoothing surface
+if [ -z "$GIS_OPT_SURFACE" ] ; then
+	
+	# create a resampled version of the input map
+	g.message "Sampling input raster at every $GIS_OPT_SAMPLING th cell:"
+	r.mapcalc "$TMP_SAMP=if(col()%$GIS_OPT_SAMPLING<1&&row()%$GIS_OPT_SAMPLING<1,$GIS_OPT_INPUT,null())"
+
+	# set all sampled cells outside the sampling range to NULL
+	if [ -n "$GIS_OPT_SAMPLEMIN" ] || [ -n "$GIS_OPT_SAMPLEMAX" ] ; then
+		g.message "Adjusting data sampling range:"
+	fi
+	if [ -n "$GIS_OPT_SAMPLEMIN" ] ; then
+		r.mapcalc $TMP_SAMP="if($TMP_SAMP<$GIS_OPT_SAMPLEMIN,null(),$TMP_SAMP)"
+	fi
+	if [ -n "$GIS_OPT_SAMPLEMAX" ] ; then
+		r.mapcalc $TMP_SAMP="if($TMP_SAMP>$GIS_OPT_SAMPLEMAX,null(),$TMP_SAMP)"
+	fi
+
+	# convert each cell of resampled map into a vector point
+	g.message "Sampling input data:"
+	r.to.vect -zb feature=point input="$TMP_SAMP" output="$TMP_POINTS" --o
+
+	# remove temporary elements
+	g.message "Cleaning up:"
+	g.remove --quiet rast="$TMP_SAMP"
+
+	# reinterpolate data from sampled points using b-splines
+	g.message "Interpolating spline-based model:"
+	v.surf.bspline layer=0 lambda_i="$GIS_OPT_SMOOTHING" input="$TMP_POINTS" raster="$TMP_SMOOTHED"
+
+	# remove temporary elements
+	g.message "Cleaning up:"
+	g.remove --quiet vect="$TMP_POINTS"
+fi
+
+# replace original data with smoothed data if difference exeeds threshold
+A=$GIS_OPT_INPUT
+B=$TMP_SMOOTHED
+if [ -n "$GIS_OPT_SURFACE" ] ; then
+	B=$GIS_OPT_SURFACE
+fi
+for i in `seq 1 $GIS_OPT_REPEAT`; do
+	g.message "Smoothing data (pass $i):"
+	r.mapcalc "$GIS_OPT_OUTPUT=if(abs($A-$B)>$GIS_OPT_THRESHOLD,$A-(($A-$B)*$GIS_OPT_ATTRACTION),$A)"
+	A=$GIS_OPT_OUTPUT
+done
+
+if [ -z "$GIS_OPT_SURFACE" ] ; then
+	# remove temporary elements
+	g.message "Cleaning up:"
+	g.remove --quiet rast="$TMP_SMOOTHED"
+fi
+
+# copy colors from input map
+r.colors --quiet map="$GIS_OPT_OUTPUT" raster="$GIS_OPT_INPUT"
+
+g.message "Done."
+
+exit 0
+

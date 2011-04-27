@@ -1,0 +1,101 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       r.squared.median
+# AUTHOR(S):    Benjamin Ducke <benjamin.ducke AT oadigital.net>
+# PURPOSE:      Computes squared median of input data
+#
+# USAGE:	This is a convenience function which runs a median filter
+#		over the input and then multiplies each cell's value with
+#		its absolute value.
+#		
+#		The purpose of this is to rescale the input data for better 
+#		visualization by amplifying the difference in the spectra
+#		of objects of interest. While this may make things like
+#		trimming, thresholding or despeckling easier, it will change
+#		the absolute values of the input data, not however, the overall
+#		distribution. Consider this an explorative technique.
+#		
+#		The multiplication has the effect that extreme values move further
+#		away from the central (potential more interesting) data of
+#		the distribution. When stretching a linear color scale over
+#		the data, this will result in more contrast for the values
+#		of interest. The overall distribution of data remains intact.
+#		The input raster map's color scale is copied over to the output
+#		raster, allowing immediate comparison.
+#
+#		The same can be achieved by running r.neighbors and r.mapcalc
+#		manually.
+#
+# COPYRIGHT:    (C) 2010 by Benjamin Ducke
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+
+#%Module
+#% description: Computes squared median of input data.
+#% keywords: raster, squared median, contrast, filter, geophysics, signals
+#%End
+
+#%Option
+#% key: input
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of input raster map
+#% gisprompt: old,cell,raster
+#%End
+
+#%Option
+#% key: output
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of output raster map
+#% gisprompt: new,cell,raster
+#%End
+
+#%Option
+#% key: size
+#% type: string
+#% required: no
+#% multiple: no
+#% description: Neighborhood size for median filter
+#% answer: 3
+#%End
+
+MODULE_NAME=r.squared.median
+
+
+if [ -z "$GISBASE" ] ; then
+	echo "ERROR: You must be in GRASS GIS to run this program." 1>&2
+	exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+	exec g.parser "$0" "$@"
+fi
+
+
+# Compute median filter
+g.message "Running median filter:"
+r.neighbors input="$GIS_OPT_INPUT" output="$GIS_OPT_OUTPUT" size="$GIS_OPT_SIZE" method=median
+
+# Square date
+g.message "Computing squares:"
+r.mapcalc "$GIS_OPT_OUTPUT=$GIS_OPT_OUTPUT*abs($GIS_OPT_OUTPUT)"
+
+# copy color table from input map
+r.colors --quiet map="$GIS_OPT_OUTPUT" raster="$GIS_OPT_INPUT"
+
+g.message "Done."
+
+exit 0
+

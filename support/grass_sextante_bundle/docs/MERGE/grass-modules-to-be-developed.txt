@@ -1,0 +1,179 @@
+LIST OF MODULES TO BE DEVELOPED AND CHANGES TO BE APPLIED TO EXISTING
+GRASS MODULES
+
+********************
+* Analysis support *
+********************
+
+v.diversity
+-----------
+
+Implement a number of diversity measure calculations
+on attribute tables (e.g. Simpson's D).
+
+
+******************
+* Survey modules *
+******************
+
+v.survey.map
+------------
+
+Import an ASCII file with point measurements and a point ID.
+The point ID will be interpreted as a geometry type code (e.g. Polygon, polyline, point, multipoint).
+
+A program that reads a list of survey points with point codes to construct a GRASS
+vector map. It looks for special point codes to understand what sort of geometries
+are being parsed and creates higher-level representations such as polygons from the
+basic point measurements.
+
+For speed, we will use start and stop codes, rather then expecting every single point
+to carry a meaningful code. Some of these codes are attached to pseudo measurements, whose
+coordinates (and all other attributes) will be discarded on import.
+
+Point codes:
+
+New Label [PSEUDO]
+  Every imported geometry has a text attribute "label" (="default" at start).
+  This can be used to extract geometries that belong to a surveying unit from
+  the complete result map.
+
+Start Polygon/End Polygon
+
+Start Line/End Line
+
+Single Point
+
+Start Point Cloud/End Point Cloud
+
+Geometries are imported into multi-type geometry maps in GRASS. The user can then
+just extract point clouds etc. using the appropriate GRASS modules.
+
+GRASS' topological cleaning tools can be used to make sure that overlaps, etc. are
+cured upon import and good quality data is produced.
+
+QUESTION: how to use the point ID as geometry code and at the same time preserve any other function it may have?
+QUESTION: as an alternative, does it make sense to interpret certain target measurements (well out-of range
+of the surveyed objects) as geometry type switches?
+QUESTION: how do we preserve continuous point labelling and avoid people having to key in new codes all the time
+in any scenario?
+
+
+v.survey.geoimg
+---------------
+
+Import a directory full of images. Extract geotags from EXIF data of each image.
+If present: create a vector point and write absolute path of image into attribute table. 
+Also write other useful info as atts: timestamp, aperture, etc.
+Create a line vector layer that indicates viewing direction. This can be used for visulazation in the GIS data view.
+QUESTION: how to determine the length of viewing lines? It will be scale-dependent!
+SOLUTION: instead of using lines, generate point data with compass angle and field of vision geometry. This can
+	be used by the GIS front-end for visualiazion (e.g. QGIS supports rotating point symbols based on an attribute).
+
+
+
+(all GRASS vector export modules)
+---------------------------------
+
+Need to have an option to prevent them from carrying the "cat" column
+over to the output. Either add a flag to every single one or introduce
+a new GRASS env var and make them listen to it.
+
+
+v.edit
+---------
+
+Add support for 3D rotations, translations etc.
+
+
+
+v.distance
+----------
+
+(extend existing GRASS tool)
+
+A proximity analysis tool which creates proximity colour schemes
+and also visual line connectors between closest objects in a separate
+vector layer.
+
+Instead of just 1:1, add a mode where all objects within a given
+distance from each observer point are recorded (may be posssible
+to make use of GRASS' multi attribute tables capabilities -- layers --
+for this).
+
+
+v.ogr.schema
+------------
+
+Return only a list of attribute table fields for an OGR source.
+(there already is db.in.ogr -- maybe just use/extend that)
+
+
+v.points.to.glyph3d
+-------------------
+
+Create 3D glyphs (pyramids, crosses, spheres, boxes, ...) from
+3D vector points for visualization with 3D viewers.
+
+Also add an option to scale relatively or absolutely using an
+attribute table field. This will compensate for many viewers'
+lack in capability.
+
+
+v.powercrust
+------------
+
+Power Crust can read vertices from STDIN. It produces a very
+simply ASCII file (should be possible to change the source
+code to read from a GRASS vector map and dump directly
+into one, as well). It is heavy on memory consumption.
+
+Apparently, the source code also implements a weighted
+Voronoi diagraom in 3D (from CGAL).
+
+It is C++.
+
+
+
+v.labels.3d
+-----------
+
+Export text field values to 3D (polygon) text objects.
+
+
+v.extract.unique
+----------------
+
+Extract all geometries with a unique value for an attribute table
+field into separate maps.
+Provide an automatic naming scheme.
+
+
+v.db.time ???
+---------
+
+Create a module that can handle time attributes using different
+distributions similar as detailed in "TGIS - User Guide.pdf", but
+more generic and mathematically correct.
+
+
+r3.kernel
+---------
+
+A KDE module that uses a 3D kernel and produces a voxel output map.
+There is a 3D KDE function in R to learn from:
+
+http://tolstoy.newcastle.edu.au/R/help/02b/4740.html
+
+
+v.randomize.points
+------------------
+Randomize point measurements so they can be used with continuous point pattern
+methods. Assing random coordinates within a (3D?) area/polyon.
+
+
+v.to.rast
+---------
+Implement a user-choosable threshold for the decision when to rasterize a cell (lines and boundaries).
+Anti-aliasing.
+

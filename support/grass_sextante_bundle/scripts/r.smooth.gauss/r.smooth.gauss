@@ -1,0 +1,137 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       r.smooth.gauss
+# AUTHOR(S):    Benjamin Ducke <benjamin.ducke AT oadigital.net>
+# PURPOSE:      Performs smoothing using a Gaussian weighted neighborhood
+#		filter.
+#
+# USAGE:	Smoothing is done by moving a stepwise approximation of a
+#		2D quadratic Gaussian kernel over the input data cells.
+#		The kernel steepness is defined by the "sigma=" option.
+#		Larger values produce broader, less steep kernels.
+#
+#		The number of approximation steps refers to the center of the distribution
+#		and works in both directions. The default settings produce this 5x5 matrix:
+#
+#		0.018	0.082	0.135	0.082	0.018	
+#		0.082	0.368	0.607	0.368	0.082	
+#		0.135	0.607	1.000	0.607	0.135	
+#		0.082	0.368	0.607	0.368	0.082	
+#		0.018	0.082	0.135	0.082	0.018	
+#
+#		Different kernel sizes can be produced by adjusting the "steps="
+#		option.
+#
+#		Larger sigma settings require more steps for an accurate approximation.
+#		On the other hand, very steep kernels (small sigma) make no sense with
+#		many approximation steps (edge cells will all be '0.0').
+#
+#		The precision of approximation is three decimal places.
+#		To speed up computations for large datasets and kernel sizes,
+#		the -i (integer) flag may be used to produce a rounded integer
+#		approximation instead.
+#
+#		A Gaussian filter provides gentler smoothing and preserves 
+#		edges better than a mean filter of the same size.
+#
+# CAVEATS	This module uses gaussgen to generate the Gaussian filter
+#		description. The gaussgen program needs to be available
+#		in a directory in the executable path.
+#
+# COPYRIGHT:    (C) 2010 by Benjamin Ducke
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#% description: Smoothes data using a Gaussian weighted neighborhood filter
+#% keywords: raster, denoise, smooth, gaussian, geophysics, signals, filter
+#%End
+
+#%Option
+#% key: input
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of input raster map
+#% gisprompt: old,cell,raster
+#%End
+
+#%Option
+#% key: output
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of (smoothed) output raster map
+#% gisprompt: new,cell,raster
+#%End
+
+#%Option
+#% key: steps
+#% type: integer
+#% required: no
+#% multiple: no
+#% description: Approximation steps for Gauss distribution
+#% answer: 2
+#%End
+
+#%Option
+#% key: sigma
+#% type: double
+#% required: no
+#% multiple: no
+#% description: Gauss distribution sigma
+#% answer: 1.0
+#%End
+
+#%Flag
+#%  key: i
+#%  description: Produce integer approximation
+#%End
+
+MODULE_NAME=r.smooth.gauss
+
+
+if [ -z "$GISBASE" ] ; then
+	echo "ERROR: You must be in GRASS GIS to run this program." 1>&2
+	exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+	exec g.parser "$0" "$@"
+fi
+
+
+# setup temporary files for filter
+TMP_FILE="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMP_FILE" ] ; then
+    g.message -e "Unable to create temporary file for filter. Aborting."
+    exit 1
+fi
+
+# generate the filter description file
+if [ "$GIS_FLAG_I" = "1" ] ; then
+	INTEGER="-i"
+else
+	INTEGER=
+fi
+gaussgen --nsteps="$GIS_OPT_STEPS" --sigma="$GIS_OPT_SIGMA" -m $INTEGER > "$TMP_FILE"
+
+# replace cells with average of neighbouring cells
+g.message "Applying Gaussian smoothing:"
+r.mfilter.fp input="$GIS_OPT_INPUT" output="$GIS_OPT_OUTPUT" filter="$TMP_FILE" --o
+
+# set output map to greyscale
+r.colors --quiet map="$GIS_OPT_OUTPUT" raster="$GIS_OPT_INPUT"
+
+g.message "Done."
+
+exit 0
+

@@ -1,0 +1,492 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/">
+<title>Building gvSIG from SVN repository</title>
+<meta name="author" content="Jorge Sanz"><style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head><body>
+<div class="document" id="building-gvsig-from-svn-repository">
+<h1 class="title">Building gvSIG from SVN repository</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name">
+<col class="docinfo-content">
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>Jorge Sanz</td></tr>
+<tr class="field"><th class="docinfo-name">sate:</th><td class="field-body">29/09/08</td>
+</tr>
+<tr><th class="docinfo-name">Status:</th>
+<td>draft</td></tr>
+</tbody>
+</table>
+<div class="section" id="introduction">
+<h1>Introduction</h1>
+<p>This short article shows how to set up a development environment with
+<a class="reference external" href="http://www.eclipse.org/">Eclipse</a> IDE 3.3 (Europa release) with the sources from the gvSIG SVN repository. In order to build a more or
+less stable version we will connect to a specific tag of the repository instead
+of the trunk. Later, if you feel brave, you can change to the trunk version and
+see what happens.</p>
+<p>This article assumes that you:</p>
+<ul class="simple">
+<li>Have experience with Eclipse</li>
+<li>Have experience developing with gvSIG</li>
+</ul>
+<p>If you have never worked with gvSIG as a developer, I encourage you to first
+work with the version available on the <a class="reference external" href="http://www.gvsig.gva.es/index.php?id=gvsig11&amp;L=2&amp;K=0%27%20and%20char%28124%29%2Buser%2Bchar%28124%29%3D0%20and%20%27%27%3D%27">official gvSIG web page</a>. When you
+get familiar with gvSIG's peculiarities you are ready to start working
+directly with the SVN. <strong>You've been warned</strong></p>
+</div>
+<div class="section" id="prepare-your-workspace">
+<h1>Prepare your workspace</h1>
+<p>Create a new workspace with Eclipse and set the text file encoding to
+ISO-8859-1.</p>
+<div class="figure">
+<img alt="Creating a new workspace" src="svn_files/screenshot08092902.png">
+<p class="caption">Creating a new workspace.</p>
+</div>
+<div class="figure">
+<img alt="Setting the enconding" src="svn_files/screenshot08100104.png">
+<p class="caption">Setting the text enconding.</p>
+</div>
+<p>Now you should make sure that your active Java runtime is a Java 1.5 SDK with
+Java JAI and Java JAI I/O in its classpath. The best way is to install JAI in
+that Java virtual machine but you can have it in an external location if you want.</p>
+<div class="figure">
+<img alt="Selecting a VM with JAI and JAI I/O" src="svn_files/screenshot08092906.png">
+<p class="caption">Selecting a Java VM with JAI and JAI I/O.</p>
+</div>
+</div>
+<div class="section" id="connecting-to-the-svn">
+<h1>Connecting to the SVN</h1>
+<p>For connecting to the gvSIG SVN repository, I assume you're using the <a class="reference external" href="http://subclipse.tigris.org/">Subclipse</a> client.
+Go to the <em>SVN Repository Exploring</em> perspective and add a new repository with
+the URL <a class="reference external" href="http://subversion.gvsig.org/gvSIG">http://subversion.gvsig.org/gvSIG</a>.</p>
+<div class="figure">
+<img alt="Adding gvSIG SVN repo to Eclipse" src="svn_files/screenshot08092909.png">
+<p class="caption">Adding the gvSIG SVN repository to Eclipse.</p>
+</div>
+</div>
+<div class="section" id="the-gvsig-repository-structure">
+<h1>The gvSIG repository structure</h1>
+<p>Like any SVN repository, you will see the typical <em>trunk/branches/tags</em> structure.
+We will use the latest tag for the gvSIG 2.0 release prior to the data access
+refactoring. We're not going to work with the latest development version of gvSIG.
+Our tag is the one with the <strong>1211</strong> build of the gvSIG Desktop GIS.</p>
+<div class="figure">
+<img alt="gvSIG repo main folder" src="svn_files/screenshot08092911.png">
+<p class="caption">GvSIG repository main folder.</p>
+</div>
+<div class="figure">
+<img alt="gvSIG 1211 tag" src="svn_files/screenshot08092913.png">
+<p class="caption">GvSIG 1211 tag.</p>
+</div>
+<p>The tag folders (as in trunk or any branch of the project) are folders that
+store several (sometimes dozens) Eclipse projects. The main folders where we
+will get our projects are:</p>
+<ul class="simple">
+<li>applications (gvSIG app on top of Andami)</li>
+<li>binaries (.dll or .so)</li>
+<li>extensions (all the extensions of Andami)</li>
+<li>frameworks (Andami itself)</li>
+<li>libraries (all the libraries used by extensions, Andami and appgvSIG)</li>
+</ul>
+</div>
+<div class="section" id="getting-the-source-code-for-a-minimalistic-gvsig">
+<h1>Getting the source code for a minimal gvSIG</h1>
+<p>OK, now you have the source code repository configured and chosen the tag you're going
+to work with, it's time to download the eclipse project files. At this point I
+suggest to download and try to execute a really basic gvSIG build with the minimum set
+of features and then download more libraries and extensions.</p>
+<p>So, first of all deactivate the automatic building property in order to first
+download all the code and then build it.</p>
+<div class="figure">
+<img alt="Deactivate Build Automatically" src="svn_files/screenshot08093001.png">
+<p class="caption">Deactivating automatic building.</p>
+</div>
+<p>These are the 6 minimum projects you need to run gvSIG:</p>
+<dl class="docutils">
+<dt>_fwAndami:</dt>
+<dd>The framework used by gvSIG for the MDI user interface.</dd>
+<dt>appgvSIG:</dt>
+<dd>The application on top of Andami that adds the <em>geo</em> stuff.</dd>
+<dt>binaries:</dt>
+<dd>The JNI and system libraries for your operating system, needed by several
+gvSIG components.</dd>
+<dt>libCorePlugin:</dt>
+<dd>The skin for Andami that implements the GUI look and feel.</dd>
+<dt>libExceptions:</dt>
+<dd>Common library of exceptions for gvSIG sources.</dd>
+<dt>libFMap:</dt>
+<dd>Main library of gvSIG. It deals with geodata, rendering, etc.</dd>
+</dl>
+<div class="figure">
+<img alt="gvSIG minimalistic set of projects" src="svn_files/screenshot08092915.png">
+<p class="caption">Minimal set of projects for gvSIG.</p>
+</div>
+<div class="figure">
+<img alt="Downloading Andami" src="svn_files/screenshot08092914.png">
+<p class="caption">Downloading Andami.</p>
+</div>
+<p>After downloading every project into your workspace you can switch on the <em>Build
+Automatically</em> setting. If everything works fine, you should not see any red
+crosses on your projects and you can start your first build.</p>
+<p><strong>NOTE</strong>: Sometimes Eclipse <em>forgets</em> some referenced libraries, so if you get
+missing classes or jars in a project, try to remove any jar of the referenced
+libraries set and add it again.</p>
+<p>There is a main ant task in <strong>appgvSIG</strong> called <strong>install-all</strong> that runs every
+ant of the different gvSIG extensions and libraries in the correct order and
+places everything under Andami. You should also run the ant task of the
+<strong>binaries</strong> project to copy the proper native libraries into that folder.</p>
+</div>
+<div class="section" id="configure-the-run-dialog">
+<h1>Configuring the run dialog</h1>
+<p>Now you can configure the run dialog to launch gvSIG. If you
+have a workspace for gvSIG 1.1.2 the configuration is the same and you can copy
+the arguments and environment variables to this new workspace.</p>
+<p>The different screens of the <em>New Java Application</em> that should be configured are
+printed here for your convenience.</p>
+<div class="figure">
+<img alt="Main tab: the launching class and package" src="svn_files/screenshot08092917.png">
+<p class="caption">Main tab: the launching class and package.</p>
+</div>
+<div class="figure">
+<img alt="Arguments tab for gvSIG and the JVM" src="svn_files/screenshot08092918.png">
+<p class="caption">Arguments tab for gvSIG and the JVM.</p>
+</div>
+<div class="figure">
+<img alt="Environment variables" src="svn_files/screenshot08092919.png">
+<p class="caption">Environment variables.</p>
+</div>
+<p>These screenshots show the configuration for a Windows box but Linux or Mac
+should be pretty similar.</p>
+<p>With that configuration you should be able to run gvSIG, open shapefiles, use
+the new symbology support, and the basic gvSIG features. For a more complete
+gvSIG version with editing capabilities, WMS access, new icon design, raster
+access and projection features you will need to add more projects to your
+workspace.</p>
+</div>
+<div class="section" id="a-more-powerful-version-of-gvsig">
+<h1>A more powerful version of gvSIG</h1>
+<p>Now that you have a running gvSIG, let's upgrade your workspace a bit
+with more extensions and libraries.</p>
+<div class="figure">
+<img alt="A more complete gvSIG workspace" src="svn_files/screenshot08092916.png">
+<p class="caption">A more complete gvSIG workspace.</p>
+</div>
+<p>Now you can repeat the process described above to get these extensions and
+libraries.</p>
+<p><strong>IMPORTANT</strong>: Take car to rename <em>libJCRS</em> when you download it from the SVN
+repository as it tries to get another name, something like <em>crsgdal</em>.</p>
+<p><strong>IMPORTANT</strong>: You need to rebuild the <em>libUIComponent</em> for
+<em>extRasterTools-SE</em> to compile because the Andami <tt class="docutils literal"><span class="pre">org.gvsig.ui.jar</span></tt> is outdated.</p>
+<p>If you build any component or rebuild with the main <em>appgvSIG</em> ant, you should
+get a more powerful gvSIG running. From here, it's up to you to download more
+extensions. A sensible recommendation is to download the component you want to
+check and take a look at its dependencies. If you don't have them, download them from the
+repository.</p>
+<div class="figure">
+<img alt="gvSIG 2.0 build 1211 running" src="svn_files/screenshot08093003.png">
+<p class="caption">GvSIG 2.0 build 1211 running.</p>
+</div>
+</div>
+<div class="section" id="jump-to-the-trunk">
+<h1>Jump to the trunk</h1>
+<p>If you want to have the most recent code you can jump to the trunk of the
+repository. With Eclipse this is pretty easily done by selecting the <em>Switch to another
+Branch/Tag...</em> option and browsing to the trunk version of every project.</p>
+<div class="figure">
+<img alt="Switching to another Branch or Tag" src="svn_files/screenshot08093004.png">
+<p class="caption">Switching to another branch or tag.</p>
+</div>
+</div>
+<div class="section" id="the-near-future">
+<h1>The near future</h1>
+<p>Maybe you've noticed that every project has a <tt class="docutils literal"><span class="pre">pom.xml</span></tt> file. If you're
+familiar with <a class="reference external" href="http://maven.apache.org/">Maven</a>, you'll be happy to find that gvSIG is adopting this building and
+deploying framework. This will make it a lot easier to deploy the
+development environment and hopefully make this document unnecessary ;).</p>
+<p>Another important issue to note is the refactoring that is being done at
+this moment by the gvSIG team. This means that in the near future <em>libFMap's</em>
+classic <em>driver</em> approach will be changed to a <em>datastore</em> one.</p>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,91 @@
+Bearbeitungsschritte:
+
+	- Messungen verweben
+	- Datennachbearbeitung
+	- Objekterkennung (Interpretation)
+
+Objekterkennung ist im Prinzip eine Ziehung von Grenzen, um Objekte vom
+Hintergrund zu trennen. Das Ergebnis ist besser, wenn die Trennschärfe
+höher ist.
+
+Ein flacher Merkmalsraum ist ein Problem, da hier nur zweidimensionale
+Trennlinien gezogen werden können. Die zweidimensionale Darstellung
+der dreidimensionalen Realität reduziert unsere Fähigkeit zu trennen
+grundsätzlich.
+
+Ein größerer (mehrdimensionaler) Merkmalsraum erlaubt Regressionsebenen mit
+größerer Trennschärfe. Um den Merkmalsraum zu vergrößern, gibt es 
+mehrere Ansätze (MULTIDIMENSIONALE PIXEL):
+
+1. Integration von Daten anderer Sensoren
+2. Ableitung von Merkmalen zweiter Ordnung aus den Basismerkmalen
+
+Zu 1.: GPS-Sensor existiert bereits. In Zukunft können auch weitere
+Sensoren, auch solche, die eine ganz andere räumliche Auflösung besitzen,
+hinzugezogen werden: Geoelektrik, Bodenradar, Satellitenbilder, ...
+
+Zu 2.: Um eine zu starke Korrelation von Basismerkmalen und abgeleiteten
+Merkmalen zu vermeiden, ist es reizvoll, die Merkmale auf unterschiedlichen
+Maßstäben zu berechnen und jedes Ergebnis unabhängig in die Regression
+(z.B. über ein neuronales Netzwerk) einfließen zu lassen. Zum Wechseln des
+Maßstabes genügt es, die Pixelauflösung zu vergröbern.
+Außerdem: Diskretisierung von kontinuierlichen Daten (Vektorisierung).
+
+Zu 2.: TOPOGRAPHISCHE MERKMALE
+Das magnetische Feld ist im Prinzip eine topographische Entität. Man
+könnte es wie ein Höhenfeld betrachten und GIS-Funktionen wie z.B.
+slope/aspect darüber laufen lassen, um interessante Eigenschaften
+zu extrahieren. PLUS: die Topographie kann invertiert werden! Dann
+werden "Gipfel" zu "Senken" und hydrologische Tools können angwendet
+werden, z.B. um zusammenhängende Objekte ("abflusslose Senken") zu
+finden" (1)
+
+Es wäre nützlich, für jedes Pixel nicht nur zur Speichern, ob und
+in welchem Maße er ein bestimmtes Merkmal enthält, sondern dies
+auf unterschiedlichen Maßstäben zu tun und für jeden Maßstab
+einzeln zu speichern.
+
+Wie können die Signale auf unterschiedlichen Maßstäben getrennt werden?
+Größere Strukturen dominieren das Signal gegenüber kleineren, egal ob
+sie darüber oder darunter liegen. 
+
+Weiteres Problem:
+Strukturen weiter oben dominieren gegenüber Strukturen weiter unten.
+
+Weiteres Problem:
+Stark magnetische Strukturen dominieren gegenüber schwach magnetischen.
+
+
+--- UMSETZUNG ---
+
+JAI kann Stacks mit > Wert/Pixel verarbeiten:
+
+http://www.builderau.com.au/program/java/soa/Process-images-in-Java-with-JAI/0,339024620,339285970,00.htm
+
+
+--- REFERENZEN ---
+
+(1)
+Some friends and I had a similar problem once. We had to find hilltops
+because, according to brazilian environmental legislation, they are
+environmental preserves. (Top 1/3 of the mountain / hill has to be
+preserved)
+
+The way it was done to solve this was to define watersheds on an
+__inverted__ DEM
+
+Basically, once we invert the DEM, the sinks will be your peak. The
+watershed area will be your mountain / hill "influence zone". The
+highest and lowest elevation inside each watershed, are the hill top
+and bottom elevation. The preserved area in each mountain was
+everything above the 2/3 limit (top - (top-bottom)/3).
+
+There were some other things we considered, like maximum slope but,
+the basic idea was to just invert the DEM and work with watersheds...
+
+Cheers
+Daniel
+PS - The entire procedure was done in another commercial GIS software
+but I'm sure it can easily be done in Grass 
+
+
