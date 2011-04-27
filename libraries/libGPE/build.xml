@@ -1,0 +1,71 @@
+<project name="libGPE" default="create-jar" basedir=".">
+  	<!-- set global properties for this build -->
+	<property name="src"  location="src"/>
+	<property name="build"  location="bin"/>
+	<property name="targetDir" location="dist"/>
+	<property name="gpeLibs" location="lib" />
+	<property name="schemaJarName" value="org.gvsig.xmlschema"/>
+	<property name="resources" location="../resources/jars" />
+	<property name="gpeJarName" value="org.gvsig.gpe"/>
+	<import file="../binaries/ant/utilities.xml"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+  	<echo>
+		Compiling ${ant.project.name}...</echo>
+  </target>
+
+	<target name="batch-build"
+				description="compile the sources, create the jar file"
+				depends="init,compile,create-jar">
+	</target>
+
+	<target name="compile" description="compile the source">
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+	</target>
+
+	<target name="create-jar" description="Crea el jar de la aplicacion">
+		<mkdir dir="${targetDir}" />
+		<jar jarfile="${targetDir}/${gpeJarName}.jar" basedir="${build}" includes="org/gvsig/gpe/**"/>
+		<jar jarfile="${targetDir}/${gpeJarName}.jar" basedir="." includes="build.number" update="true"/>
+	  	<jar jarfile="${targetDir}/${schemaJarName}.jar" basedir="${build}" includes="org/gvsig/xmlschema/**"/>
+	 	<jar jarfile="${targetDir}/${schemaJarName}.jar" basedir="${build}" includes="javax/xml/namespace/**" update="true"/>
+		<jar jarfile="${targetDir}/${schemaJarName}.jar" basedir="." includes="build.number" update="true"/>
+		<move todir="${gpeLibs}">
+			<fileset dir="${targetDir}" includes="*.jar" />
+		</move>
+		<delete dir="${targetDir}"/>
+	</target>
+
+	<target name="create-mobile-jar" description="Crea el jar de la aplicacion">
+		<mkdir dir="${targetDir}" />
+		<jar jarfile="${targetDir}/${gpeJarName}.jar" basedir="${build}" includes="org/gvsig/gpe/**"/>
+		<jar jarfile="${targetDir}/${gpeJarName}.jar" basedir="." includes="build.number" update="true"/>
+		<jar jarfile="${targetDir}/${schemaJarName}.jar" basedir="${build}" includes="org/gvsig/xmlschema/**"/>
+		<jar jarfile="${targetDir}/${schemaJarName}.jar" basedir="." includes="build.number" update="true"/>
+		<move todir="${gpeLibs}">
+			<fileset dir="${targetDir}" includes="*.jar" />
+		</move>
+		<copy todir="${resources}/libGPE" file="${gpeLibs}/org.gvsig.gpe.jar"/>
+		<copy todir="${resources}/libGPE" file="${gpeLibs}/org.gvsig.xmlschema.jar"/>
+		<delete dir="${targetDir}"/>
+	</target>
+
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+		<delete dir="${targetDir}" />
+	</target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<!-- <antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="com.iver.utiles.AllTests"/>
+		</antcall> -->
+	</target>
+</project>
