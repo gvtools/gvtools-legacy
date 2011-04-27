@@ -1,0 +1,32 @@
+<project name="libGeocoding" default="build_norm" basedir=".">
+	<description>
+        Build file for the geocoding library
+    </description>
+
+	<!-- set global properties for this build -->
+	<property name="src" location="src" />
+	<property name="build" location="bin" />
+	<property name="dist" location="dist" />
+	<property name="lib" location="lib" />
+	<!-- Normalization properties -->
+	<property name="normjar" location="lib/org.gvsig.geocoding.normalization.jar" />
+	<property name="targetNormDir" location="../extNormalization/lib" />
+	<!-- Geocoding properties -->
+	<property name="geocojar" location="lib/org.gvsig.geocoding.geocoding.jar" />
+	<property name="targetGeocoDir" location="../extGeocoding/lib" />
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<echo>Compiling ${ant.project.name}...</echo>
+	</target>
+
+	<target name="build_norm" depends="init" description="Create jar of tools and up to extNormalization">
+
+		<echo>Creating normalization tools jar file...</echo>
+		<mkdir dir="${lib}" />
+		<jar jarfile="${normjar}" basedir="${build}" />
+		<echo>Copy jar to extNormalization...</echo>
+		<copy file="${normjar}" todir="${targetNormDir}" />
+	</target>
+</project>
