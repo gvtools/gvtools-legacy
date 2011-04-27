@@ -1,0 +1,65 @@
+	<project name="libjni-ecw" default="main" basedir=".">
+	<description>
+		Compila la librería jecw
+	</description>
+		
+	<property name="src-java" location="src/main/java" />
+	<property name="src-tet-java" location="src/test/java" />
+	<property name="jar-dist" location="jar-dist" />
+	<property name="build" location="bin/" />
+	<property name="cmake_build" location="BMCMake/" />
+	<property environment="env"/>
+	<condition property="jecw_version" value="0.0.7">
+		<os family="unix"/>
+	</condition>
+	<condition property="jecw_version" value="007">
+		<os family="windows"/>
+	</condition>
+	<property name="jecw-jar" location="jecw-0.0.7.jar" />
+	<condition property="cmake_generator" value="'Unix Makefiles'">
+		<os family="unix"/>
+	</condition>
+	<condition property="cmake_generator" value="'NMake Makefiles'">
+		<os family="windows"/>
+	</condition>		
+
+	<target name="main" description="compile java code, make jars, prepare and compile natives" depends="clean,jar,prepare-natives,compile-natives">
+	</target>
+
+	<target name="jar" description="makes jar file">
+		<mkdir dir="${build}" />
+		<javac srcdir="${src-java}" destdir="${build}" debug="true"/>
+		<mkdir dir="${jar-dist}" />
+		<jar jarfile="${jecw-jar}" basedir="${build}" includes="com/ermapper/**,es/gva/cit/jecwcompress/**" />
+		<move file="${jecw-jar}" todir="${jar-dist}" />
+	</target>
+
+	<target name="prepare-natives" description="prepares the natives to be compiled">
+		<mkdir dir="${cmake_build}"/>
+		<delete file="${cmake_build}/CMakeCache.txt"/>
+		<exec dir="${cmake_build}" executable="cmake">
+			<arg line=".." />
+			<arg line="-G${cmake_generator}" />
+			<arg line="-DCMAKE_BUILD_TYPE=Release" />
+			<arg line="-DJECW_VERSION=${jecw_version}" />
+		</exec>
+	</target>
+
+	<target name="compile-natives" description="compiles natives">
+		<exec dir="${cmake_build}" executable="make" os="Linux">
+			<arg line="install" />
+		</exec>
+		<exec dir="${cmake_build}" executable="nmake" os="Windows 98,Windows 2000,Windows XP,Windows NT (Unknown)">
+			<arg line="install" />
+		</exec>
+	</target>
+
+		
+	<target name="clean" description="clean distribution">
+		<delete dir="jar-dist"/>
+		<delete dir="lib-dist"/>
+		<delete dir="BMCMake"/>
+		<delete dir="bin"/>
+	</target>
+
+</project>
