@@ -1,0 +1,23 @@
+Geoprocessing Plugin for gvSIG. Version history
+
+This document lists the Change History of release versions of the Geoprocessing Plugin
+for gvSIG
+
+
+Version 0.1
+Release Date: XX-XX-20XX
+
+- Baseline version
+
+
+Version 0.2
+Release Date: XX-XX-20XX
+
+- Soporte multilenguaje
+
+- Implementación con capas raster
+
+- Diálogos adaptados a Windows y a Linux
+
+- Corrección de bugs
+

@@ -1,0 +1,5 @@
+Plugin de Geoprocesamiento. Instrucciones de instalación
+
+- Copiar el contenido de la carpeta bin/ en:
+  gvSIG/extensiones/
+
