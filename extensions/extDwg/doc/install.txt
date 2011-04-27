@@ -1,0 +1,19 @@
+gvSIG DWG Plugin v0.2 Installation Instructions
+
+Install
+
+1- The Java Library for reading DWG files jdwglib.jar must be in
+   gvSIG/extensiones/com/iver/cit/gvsig/lib
+
+2- Copy the folder dwg containing dwg.jar to the gvSIG folder
+   gvSIG/extensiones/com/iver/cit/gvsig/drivers
+
+
+Uninstall
+
+1- Delete jdwflib.jar in
+   gvSIG/extensiones/com/iver/cit/gvsig/lib
+
+2- Delete the folder dwg in
+   gvSIG/extensiones/com/iver/cit/gvsig/drivers
+

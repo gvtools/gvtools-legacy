@@ -1,0 +1,161 @@
+<project name="extDwgPlugin" default="generate-without-source" basedir=".">
+    <description>
+        Carga en gvSIG el driver de DWG y genera una distribución
+    </description>
+	<!-- set global properties for this build -->
+	<property name="src" location="src"/>
+	<property name="build" location="bin"/>
+	<property name="src-test" location="src-test"/>
+	<property name="build-test" location="bin-test"/>
+	<property name="doc"  location="doc"/>
+	<property name="lib"  location="lib"/>
+	<property name="dist"  location="dist"/>
+	<property name="jarName" value="dwg"/>
+	<property name="fmapLibs" location="../libFMap/lib"/>
+	<property name="andami" location="../_fwAndami"/>
+	<property name="andamiJar" location="${andami}/andami.jar" />
+	<property name="andamiLibs" location="${andami}/lib"/>
+	<property name="mainPlugin" location="${andami}/gvSIG/extensiones/com.iver.cit.gvsig" />
+	<property name="drivers-dir" location="${mainPlugin}/drivers" />
+	<property name="lib-dir" description="The main plugin's library dir" location="${mainPlugin}/lib" />
+	<property name="translationsTargetDir" location="${build}/com/iver/cit/gvsig/drivers/dwg/resources/translations" />
+	<property name="fmapJar" location="${lib-dir}/fmap.jar"/>
+
+	 <property name="plugin" value="com.iver.cit.gvsig.dwg"/>
+	 <property name="extension-dir" location="../_fwAndami/gvSIG/extensiones"/>
+	  <property name="mainPlugin" value="com.iver.cit.gvsig" />
+	<import file="../binaries/ant/utilities.xml"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+	<echo>
+		Compiling ${ant.project.name}...</echo>
+  </target>
+
+
+	<target name="clean-orig" depends="generate-with-source"
+			description="clean dist directory" >
+
+		<delete dir="${dist}/src"/>
+		<delete dir="${dist}/doc"/>
+		<delete dir="${dist}/bin"/>
+		<delete dir="${dist}/lib"/>
+	</target>
+
+
+	<target name="generate-without-source" depends="init,copy-data-files,create-jar,move-to-andami"
+		description="Carga el driver de DWG en Andami">
+	</target>
+
+  <target name="generate-with-source" depends="generate-without-source"
+	description="generate the distribution" >
+    <!-- Remove previous distribution directory -->
+    <delete dir="${dist}"/>
+    <!-- Create the distribution directory structure -->
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${dist}/src"/>
+    <mkdir dir="${dist}/doc"/>
+    <mkdir dir="${dist}/lib"/>
+    <mkdir dir="${dist}/bin"/>
+    <!-- Copy necessary distribution files to dist dir -->
+    <copy todir="${dist}/src">
+      <fileset dir="${src}"/>
+    </copy>
+    <copy todir="${dist}/doc">
+      <fileset dir="${doc}"/>
+    </copy>
+    <copy todir="${dist}/lib">
+      <fileset dir="${lib}"/>
+    </copy>
+  	<mkdir dir="${translationsTargetDir}" />
+  	 <copy todir="${translationsTargetDir}">
+  	    <fileset dir="config" includes="*" />
+  	</copy>
+    <mkdir dir="${dist}/bin/dwg" />
+  	<jar jarfile="${dist}/bin/dwg/${jarName}.jar" basedir="${build}"  />
+
+
+  	<!-- Zip distribution -->
+    <zip destfile="${dist}/gvSIGDwgPlugin.zip"
+         basedir="${dist}"
+         update="true"
+    />
+  </target>
+
+	<target name="batch-build"
+			description="compile the sources, create the jar file"
+			depends="init,compile,copy-data-files,create-jar,move-to-andami">
+	</target>
+
+
+	<target name="copy-data-files">
+	  			<mkdir dir="config"/>
+	  	        <copy todir="${translationsTargetDir}">
+	  	                <fileset dir="config" includes="*" />
+	  	        </copy>
+	  	</target>
+	<target name="compile" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+	</target>
+
+	<target name="create-jar"
+			description="Creates the plugin jar">
+		<mkdir dir="${dist}"/>
+		<copy file="config/config.xml" todir="${dist}"/>
+	    <copy todir="${dist}">
+	      <fileset dir="config/" includes="text*.properties"/>
+	    </copy>
+		<copy todir="${dist}/images">
+			<fileset dir="images/" includes="*"/>
+		</copy>
+
+		<jar jarfile="${dist}/${jarName}.jar"
+			basedir="${build}"  excludes="com/iver/cit/gvsig/drivers/dwg/debug/** " />
+
+		<jar jarfile="${dist}/${plugin}.jar"
+					basedir="${build}"
+					excludes="com/**/DwgMemoryDriver** com/iver/cit/gvsig/drivers/dwg/fmapconverters/**" />
+
+	</target>
+
+	<target name="move-to-andami">
+		<copy todir="${drivers-dir}/dwg/" file="${dist}/${jarName}.jar"/>
+
+		<!-- necessary to copy jdwglib.jar -->
+		<copy todir="${lib-dir}">
+			<fileset dir="${lib}"/>
+		</copy>
+
+		<copy todir="${extension-dir}/${plugin}/">
+		      <fileset dir="${dist}">
+		      	<exclude name="**/**.jar"/>
+		      	<include name="**/**"/>
+			  </fileset>
+		</copy>
+		<!--
+		Movemos el jar al main-plugin
+		-->
+		<copy todir="${extension-dir}/${plugin}/"
+			file="${dist}/${plugin}.jar"/>
+
+	</target>
+
+	<target name="clean"
+			description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="com.iver.cit.jdwglib.AllTests"/>
+		</antcall>
+	</target>
+</project>
