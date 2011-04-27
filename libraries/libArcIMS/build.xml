@@ -1,0 +1,83 @@
+<project name="RemoteClient" default="dist" basedir=".">
+	<description> Genera el jar con RemoteClient y sus dependencias </description>
+	<!-- set global properties for this build -->
+	<property name="src" location="src"/>
+	<property name="build" location="bin"/>
+	<property name="dist" location="dist"/>
+	<property name="lib" location="lib"/>
+	<property name="jar" value="remote-clients-arcims"/>
+	<property name="targetDir" location="."/>
+	<property name="targetDir2" location="../extArcims/lib"/>
+	<property name="fmap" location="../libFMap"/>
+	<property name="andami" location="../_fwAndami"/>
+
+	<!-- to move the lib directly to andami without having to run extArcims build.xml-->
+	<property name="extensionDir" location="${andami}/gvSIG/extensiones"/>
+	<property name="mainplugin" value="com.iver.cit.gvsig"/>
+	<property name="targetDir3" location="${extensionDir}/${mainplugin}/lib"/>
+
+	<import file="../binaries/ant/utilities.xml"/>
+
+	<target name="init">
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}"/>
+		<mkdir dir="${dist}"/>
+
+	</target>
+
+	<target name="compile" depends="init" description="compile the source">
+		<!-- Compile the Java code from ${src} to ${bin} -->
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"/>
+	</target>
+
+	<target name="batch-build"
+			description="compile the sources, create the jar file"
+			depends="compile,create-jar,copy-files">
+	</target>
+
+	<target name="dist" depends="init,create-jar,copy-files" description="generate the distribution">
+
+		<!--   <move todir="${targetDir}/">
+		<fileset dir="${dist}" includes="**/**"/>
+		</move>-->
+	</target>
+
+	<target name="copy-files">
+		<!-- Put everything in ${build} into the cms-${DSTAMP}.jar file -->
+
+		<copy todir="${targetDir3}">
+			<fileset dir="${dist}" includes="${jar}.jar"/>
+		</copy>
+
+		<move todir="${targetDir2}/">
+			<fileset dir="${dist}" includes="**/**"/>
+		</move>
+		<copy todir="${targetDir2}/">
+			<fileset dir="${lib}" includes="*.jar"/>
+		</copy>
+
+	</target>
+
+	<target name="create-jar"
+			description="Creates the library jars">
+		<jar jarfile="${dist}/${jar}.jar" basedir="${build}"/>
+		<jar jarfile="${dist}/${jar}.jar" basedir="." includes="images/*.gif"
+			update="true"/>
+
+	</target>
+
+
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete includeemptydirs="true" failonerror="no">
+			<fileset dir="${build}" includes="**/*"/>
+		</delete>
+		<delete includeemptydirs="true" failonerror="no">
+			<fileset dir="${dist}" includes="**/*"/>
+		</delete>
+	</target>
+</project>
+
+
