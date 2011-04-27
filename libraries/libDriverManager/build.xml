@@ -1,0 +1,62 @@
+<project name="Driver Manager" default="dist" basedir=".">
+	<description>
+        Instala el plugin
+    </description>
+	<!-- set global properties for this build
+	<property name="drivers-dir" location="../Andami/gvSIG/extensiones/com.iver.cit.gvsig/drivers" />-->
+	<property name="src" value="src"/>
+	<property name="build" value="bin"/>
+	<property name="src-test" value="src-test"/>
+	<property name="build-test" value="bin-test"/>
+	<property name="dist" location="dist"/>
+	<property name="jarName" value="driver-manager-1.1"/>
+	<property name="targetDir" value="../libFMap/lib"/>
+	<import file="../binaries/ant/utilities.xml"/>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<echo>
+			Compiling ${ant.project.name}...</echo>
+	</target>
+
+    <target name="batch-build"
+    	    description="compile the sources, create the jar file"
+    	    depends="init,compile,create-jar,move-to-fmap">
+    </target>
+
+	<target name="dist"
+			description="create the jar file, copy it to libFMap"
+			depends="init,create-jar,move-to-fmap">
+	</target>
+    <target name="compile" description="compile the source" >
+        <!-- Compile the Java code from ${src} to ${build} -->
+    	<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+	</target>
+
+	<target name="create-jar" description="Crea el jar de la aplicacion">
+		<mkdir dir="${dist}"/>
+		<jar jarfile="${dist}/${jarName}.jar" basedir="${build}"/>
+	</target>
+
+	<target name="move-to-fmap" description="Move the jar file to the libFMap lib-dir">
+		<move file="${dist}/${jarName}.jar" todir="${targetDir}"/>
+	</target>
+
+	<target name="clean" description="clean up" >
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+		<delete file="${jarName}.jar" />
+	</target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="com.hardcode.driverManager.AllTests"/>
+		</antcall>
+	</target>
+</project>
