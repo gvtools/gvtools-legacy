@@ -1,0 +1,133 @@
+/*
+ * Created on 10-abr-2006
+ *
+ * gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+ *
+ * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ *
+ * For more information, contact:
+ *
+ *  Generalitat Valenciana
+ *   Conselleria d'Infraestructures i Transport
+ *   Av. Blasco Ibáñez, 50
+ *   46010 VALENCIA
+ *   SPAIN
+ *
+ *      +34 963862235
+ *   gvsig@gva.es
+ *      www.gvsig.gva.es
+ *
+ *    or
+ *
+ *   IVER T.I. S.A
+ *   Salamanca 50
+ *   46005 Valencia
+ *   Spain
+ *
+ *   +34 963163400
+ *   dac@iver.es
+ */
+/* CVS MESSAGES:
+*
+* $Id: 
+* $Log: 
+*/
+package com.iver.cit.gvsig.cad;
+
+import org.gvsig.topology.Topology;
+
+import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
+import com.iver.andami.PluginServices;
+import com.iver.andami.messages.NotificationManager;
+import com.iver.andami.plugins.Extension;
+import com.iver.cit.gvsig.CADExtension;
+import com.iver.cit.gvsig.EditionUtilities;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.layers.FLayers;
+import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.project.documents.view.gui.View;
+
+/**
+ * CAD Extension that edits a vertex, moving the same vertex in all the 
+ * layers of a topology that shares it.
+ * 
+ * @author Alvaro Zabala
+ *
+ */
+public class TopologicalEditVertexExtension extends Extension {
+
+	private View view;
+	private MapControl mapControl;
+	private TopologicalEditVertexCADTool cadTool;
+	
+	
+	public void execute(String actionCommand) {
+		CADExtension.initFocus();
+		if (actionCommand.equals(TopologicalEditVertexCADTool.COMMAND_STRING)) {
+        	CADExtension.setCADTool(TopologicalEditVertexCADTool.COMMAND_STRING, true);
+        }
+		CADExtension.getEditionManager().setMapControl(mapControl);
+		CADExtension.getCADToolAdapter().configureMenu();
+	}
+
+	public void initialize() {
+		cadTool = new TopologicalEditVertexCADTool();
+		CADExtension.addCADTool(TopologicalEditVertexCADTool.COMMAND_STRING, cadTool);
+		registerIcons();
+	}
+	
+	private void registerIcons(){
+		PluginServices.getIconTheme().registerDefault("topological-edit-vertex",
+													   this.getClass().
+													   getClassLoader().
+													   getResource("images/topology_edit.png")
+		);
+	}
+
+	public boolean isEnabled() {
+		try {
+			if (EditionUtilities.getEditionStatus() == 
+				EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE) {
+					this.view = (View) PluginServices.getMDIManager().getActiveWindow();
+					mapControl = view.getMapControl();
+					if (CADExtension.getEditionManager().getActiveLayerEdited() == null)
+						return false;
+					FLyrVect lv = (FLyrVect) CADExtension.
+											getEditionManager().
+											getActiveLayerEdited().
+											getLayer();
+					if (! cadTool.isApplicable(lv.getShapeType())){
+						return false;
+					}
+					
+					FLayers parentLyr = lv.getParentLayer();
+					if(!(parentLyr instanceof Topology))
+						return false;
+			}
+		} catch (ReadDriverException e) {
+			NotificationManager.addError(e.getMessage(),e);
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isVisible() {
+		if (EditionUtilities.getEditionStatus() == EditionUtilities.EDITION_STATUS_ONE_VECTORIAL_LAYER_ACTIVE_AND_EDITABLE)
+			return true;
+		return false;
+	}
+}

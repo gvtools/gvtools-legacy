@@ -1,0 +1,182 @@
+
+%{
+/**
+ Finite state machine, generated with fsm tool
+ (http://smc.sourceforge.net)
+ @author Alvaro Zabala
+*/
+%}
+
+%start TopologicalEdition::FirstPoint
+%class TopologicalEditVertexCADTool
+%package com.iver.cit.gvsig.cad.sm
+%import com.iver.cit.gvsig.cad.TopologicalEditVertexCADTool
+%import java.awt.event.InputEvent
+%import com.iver.andami.PluginServices
+
+
+%map TopologicalEdition
+%%
+
+
+
+FirstPoint
+
+  Entry {
+    setQuestion(PluginServices.getText(this,"insert_point_selection"));
+    setDescription(new String[]{"cancel"});
+  }
+  
+  Exit{
+  }
+  
+  {
+  
+  addPoint( pointX:double,pointY:double,event:InputEvent)
+  [ctxt.getType().equals(PluginServices.getText(this,"simple")) && 
+   ctxt.selectFeatures(pointX,pointY, event) && 
+   ctxt.getNextState().equals("TopologicalEdition.SecondPoint")]
+      SecondPoint{
+        setQuestion(PluginServices.getText(this,"insert_second_point"));
+        setDescription(new String[]{"cancel"});
+        addPoint( pointX,pointY,event);
+       }
+
+  addPoint( pointX:double,pointY:double,event:InputEvent)
+  [ctxt.getType().equals(PluginServices.getText(this,"simple")) &&  
+   ctxt.getNextState().equals("TopologicalEdition.WithSelectedFeatures")]
+	  WithSelectedFeatures {
+	    	setQuestion(PluginServices.getText(this,"select_handlers"));
+	    	setDescription(new String[]{"cancel"});
+	    	//Ver si lo borramos
+	    	addPoint( pointX,pointY,event);
+	    	end();
+	  }
+	  
+	   addPoint( pointX:double,pointY:double,event:InputEvent)
+  [ctxt.getType().equals(PluginServices.getText(this,"simple")) &&  
+   ctxt.getNextState().equals("TopologicalEdition.WithHandlers")]
+	  WithHandlers {
+	    	setQuestion(PluginServices.getText(this,"select_handlers"));
+	    	setDescription(new String[]{"cancel"});
+	    	//Ver si lo borramos
+        	addPoint( pointX,pointY,event);
+        	refresh();
+	  }
+}
+
+	  
+WithSelectedFeatures{
+  // Si hemos pinchado encima de un handler
+  addPoint( pointX:double,pointY:double,event:InputEvent)
+  [ctxt.selectHandlers(pointX, pointY, event)>0]
+      WithHandlers {
+        setQuestion(PluginServices.getText(this,"insert_destination_point"));
+        setDescription(new String[]{"cancel"});
+        addPoint( pointX,pointY,event);
+        // refresh();
+        refresh();
+        }
+
+
+  // Si no hemos cogido un handler, probamos a seleccionar
+  // otra entidad
+  addPoint( pointX:double,pointY:double,event:InputEvent)
+    [ctxt.selectFeatures(pointX,pointY, event) && ctxt.getNextState().equals("TopologicalEdition.WithSelectedFeatures")]
+      WithSelectedFeatures {
+        setQuestion(PluginServices.getText(this,"select_handlers"));
+        setDescription(new String[]{"cancel"});
+        addPoint( pointX,pointY,event);
+        }
+
+
+  // Cualquier otro caso (hemos pinchado en algo vacio), volvemos al estado inicial
+  addPoint( pointX:double,pointY:double,event:InputEvent)
+      FirstPoint {
+        setQuestion(PluginServices.getText(this,"insert_point_selection"));
+        setDescription(new String[]{"cancel"});
+        addPoint( pointX,pointY,event);
+        // refresh();
+        }
+	 addOption(s:String)
+      FirstPoint{
+        setQuestion(PluginServices.getText(this,"insert_point_selection"));
+        setDescription(new String[]{"cancel"});
+        setType(s);
+        }
+}
+
+
+SecondPoint{
+  // Si hemos conseguido seleccionar algo
+  addPoint( pointX:double,pointY:double,event:InputEvent)
+      [ctxt.selectWithSecondPoint(pointX,pointY, event) > 0]
+      WithSelectedFeatures {
+        setQuestion(PluginServices.getText(this,"select_handlers"));
+        setDescription(new String[]{"cancel"});
+        addPoint( pointX,pointY,event);
+        end();
+        }
+  // Si no lo hemos conseguido
+  addPoint( pointX:double,pointY:double,event:InputEvent)
+      FirstPoint {
+        setQuestion(PluginServices.getText(this,"insert_point_selection"));
+        setDescription(new String[]{"cancel"});
+        addPoint(pointX,pointY,event);
+        }
+  addOption(s:String)
+      FirstPoint{
+        setQuestion(PluginServices.getText(this,"insert_point_selection"));
+        setDescription(new String[]{"cancel"});
+        setType(s);
+        }
+
+}
+
+WithHandlers{
+  addPoint( pointX:double,pointY:double,event:InputEvent)
+      	FirstPoint{
+      	//WithSelectedFeatures {
+        setQuestion(PluginServices.getText(this,"select_handlers"));
+        setDescription(new String[]{"cancel"});
+        addPoint( pointX,pointY,event);
+        refresh();
+        }
+}
+
+
+
+
+Default
+{
+	addOption(s:String)
+      [s.equals("")]
+      FirstPoint{
+        restorePreviousTool();
+        setQuestion(PluginServices.getText(this,"insert_point_selection"));
+        setDescription(new String[]{"cancel"});
+        end();
+        }
+        
+  addOption(s:String)
+    [s.equals(PluginServices.getText(this,"cancel"))]
+    FirstPoint{
+      end();
+      }
+      
+    addOption(s:String)
+		FirstPoint{
+			throwOptionException(PluginServices.getText(this,"incorrect_option"),s);
+			}
+			
+	addValue(d:double)
+		FirstPoint{
+			throwValueException(PluginServices.getText(this,"incorrect_value"),d);
+			}
+			
+	addPoint(pointX:double,pointY:double,event:InputEvent)
+		FirstPoint{
+			throwPointException(PluginServices.getText(this,"incorrect_point"),pointX,pointY);
+			}
+}
+%%

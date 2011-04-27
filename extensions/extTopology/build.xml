@@ -1,0 +1,208 @@
+<!--REHACERLO PARA QUE SE COPIEN BIEN LAS LIBRERIAS-->
+
+<project name="Topology" default="generate-without-source" basedir=".">
+    <description>
+        Instala el plugin de Topologia en Andami.
+    </description>
+  
+   <property name="src" location="src"/>
+   <property name="build" location="bin"/>
+   <property name="src-test" location="src-test"/>
+   <property name="build-test" location="bin-test"/>
+   <property name="doc"  location="doc"/>
+   <property name="dist"  location="dist"/>
+   <property name="without_src"  location="without_src"/>
+   <property name="plugin" value="org.gvsig.topology"/>
+
+
+	<property name="lib" value="lib"/>
+	<property name="andami" value="../_fwAndami"/>
+	<property name="jarName" value="${plugin}.jar"/>
+	<property name="extensionsDir" location="${andami}/gvSIG/extensiones"/>
+	<property name="docsGeoprocessDir" location="${extensionsDir}/${plugin}/docs"/>
+	<property name="andamiJar" location="${andami}/andami.jar"/>
+	<property name="gvsigJar" location="${extensionsDir}/com.iver.cit.gvsig/lib/com.iver.cit.gvsig.jar"/>
+	<property name="andamiLibs" location="${andami}/lib"/>
+	<property name="fmapLibs" location="../libFMap/lib" />
+	<property name="fmapJar" location="../libFMap/dist/lib/fmap.jar"/>
+	<import file="../binaries/ant/utilities.xml"/>
+
+  	<target name="init">
+    	<!-- Create the time stamp -->
+    	<tstamp/>
+		<echo>
+		Compiling ${ant.project.name}...</echo>
+  	</target>
+	
+  <target name="dist" depends="init"
+	description="generate the distribution" >
+    <!-- Remove previous distribution directory -->
+    <delete dir="${dist}"/>
+    <!-- Create the distribution directory structure -->
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${dist}/bin"/>
+    <mkdir dir="${dist}/bin/org"/>
+    <mkdir dir="${dist}/bin/org/gvsig"/>
+    <mkdir dir="${dist}/bin/org/gvsig/topology"/>
+    <mkdir dir="${dist}/bin/org/gvsig/topology/images"/>
+    <mkdir dir="${dist}/images"/>
+    <mkdir dir="${dist}/config"/>
+  	<mkdir dir="${dist}/config/docs"/>
+    <mkdir dir="${dist}/lib"/>
+    <!-- Copy necessary distribution files to dist dir -->
+    <copy todir="${dist}/images">
+      <fileset dir="images"/>
+    </copy>
+     <copy todir="${dist}/lib">
+    	<fileset dir="lib" includes="*.*"/>
+    </copy>
+    <copy file="config/config.xml" todir="${dist}/config"/>
+  	<copy file="build.number" todir="${dist}"/>
+    <copy file="build.xml" todir="${dist}"/>
+    <copy todir="${dist}">
+    	<fileset dir="config" includes="text*.properties"/>
+    </copy>
+    <jar jarfile="${dist}/bin/org/gvsig/topology/${plugin}.jar" basedir="${build}"/>
+    <copy file="config/config.xml" todir="${dist}/bin/org/gvsig/topology"/>
+  	<copy file="build.number" todir="${dist}/bin/org/gvsig/topology"/>
+    <copy todir="${dist}/bin/org/gvsig/topology/images">
+      <fileset dir="images"/>
+    </copy>
+	<copy todir="${dist}/docs">
+			  	<fileset dir="config/docs" includes="**/*.*"/>
+	</copy>
+  </target>
+
+  <target name="clean-orig"
+		description="clean dist directory" >
+    <!-- Clean the distribution directory -->
+    <delete dir="${dist}" />
+  </target>
+
+  <target name="generate-without-source" 
+  		  depends="clean-orig" 
+  		  description="generate the distribution without the source file" >
+    	
+	  	<!-- Create the distribution directory -->
+	    <mkdir dir="${without_src}"/>
+	    <mkdir dir="${without_src}/lib"/>
+  	    <mkdir dir="${without_src}/docs"/>
+    	<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    	<jar jarfile="${without_src}/lib/${plugin}.jar" basedir="${build}"/>
+	    <copy file="config/config.xml" todir="${without_src}"/>
+	  	<copy file="build.number" todir="${without_src}"/>
+  	
+		<copy file="config/about.htm" todir="${without_src}"/>
+	  	<loadproperties srcFile="build.number"/>
+	  	<replace casesensitive="true"
+	  		  file="${without_src}/about.htm"
+	  		  token="#build.number#"
+	  		  value="${build.number}"/>
+
+	    
+  		<copy todir="${without_src}">
+	    	<fileset dir="config" includes="text*.properties"/>
+	    </copy>
+  	
+  	
+		<copy todir="${without_src}/docs">
+		  	<fileset dir="config/docs" includes="**/*.*"/>
+	    </copy>
+	
+  	<!--	
+	  	<copy todir="${without_src}/lib">
+	  	    	<fileset dir="lib" includes="*.*"/>
+	  	 </copy>
+  	-->
+	    <copy todir="${without_src}/images">
+	    	<fileset dir="images/" includes="*"/>
+	    </copy>
+  	
+	    <move todir="${extensionsDir}/${plugin}/">
+	    	<fileset dir="${without_src}" includes="**/**"/>
+	    </move>
+  </target>
+	
+
+	<target name="batch-build"
+			description="compile the sources, create the jar file"
+			depends="init,compile,create-jar,copy-data-files,copy-libs,move-to-andami">
+	</target>
+
+	<target name="compile" description="compile the source" >
+		<!-- <antcall target="gvSIG-import-build-number"/> -->
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+
+		<copy todir="${build}">
+			<fileset dir="${src}" excludes="**/*.java" casesensitive="false"/>
+		</copy>
+	</target>
+
+	<target name="create-jar"
+			description="Creates the plugin jar">
+		<mkdir dir="${dist}/lib"/>
+	    <jar jarfile="${dist}/lib/${jarName}" basedir="${build}"/>
+	</target>
+
+	<target name="copy-data-files">
+	    <copy file="config/config.xml" todir="${dist}"/>
+		<copy file="build.number" todir="${dist}"/>
+  	<copy file="config/about.htm" todir="${dist}"/>
+  	<loadproperties srcFile="build.number"/>
+  		<replace casesensitive="true"
+  		  	file="${dist}/about.htm"
+  		  	token="#build.number#"
+  		  	value="${build.number}"/>
+		<copy todir="${dist}">
+			<fileset dir="config" includes="text*.properties"/>
+		</copy>
+		<copy todir="${dist}/images">
+			<fileset dir="images/" includes="*"/>
+		</copy>
+		<copy todir="${dist}/docs">
+		  	<fileset dir="config/docs" includes="**/*.*"/>
+	    </copy>
+	</target>
+
+	<target name="copy-libs">
+	  	<copy todir="${dist}/lib">
+	  	    	<fileset dir="lib" includes="*.*"/>
+	  	</copy>
+	</target>
+
+	<target name="move-to-andami">
+	    <move todir="${extensionsDir}/${plugin}/">
+	    	<fileset dir="${dist}" includes="**/**"/>
+    	</move>
+	</target>
+
+	<target name="clean"
+	        description="clean up" >
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+
+	<target name="run-tests" depends="batch-build,compile-tests">
+		<antcall target="generic-run-tests">
+			<param name="TestSuite.Name" value="com.iver.cit.gvsig.geoprocess.AllTests"/>
+		</antcall>
+	</target>
+
+  <target name="buildNumber">  
+    <propertyfile     file="build.number"
+        comment="Build Number for ANT. Do not edit!">
+      <entry key="build.number" default="0" type="int" operation="+" pattern="0"/>
+    </propertyfile>
+    <property file="build.number" />
+  </target>
+
+  <target name="distribution"
+	 depends="buildNumber,generate-without-source"/>
+
+</project>
+
