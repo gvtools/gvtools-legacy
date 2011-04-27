@@ -1,0 +1,125 @@
+<project name="extArcims" default="generate-without-source" basedir=".">
+	<description>
+			Instala el plugin en Andami
+		</description>
+	<!-- set global properties for this build -->
+	<import file="../binaries/ant/utilities.xml"/>
+	<property name="src" location="src"/>
+	<property name="build" location="bin"/>
+	<property name="dist" location="dist"/>
+	<property name="mainplugin" value="com.iver.cit.gvsig"/>
+	<property name="plugin" value="es.prodevelop.cit.gvsig.arcims"/>
+	<property name="andami" location="../_fwAndami"/>
+	<property name="fmapjar" value="fmap-arcims"/>
+	<property name="driverjar" value="arcims"/>
+	<property name="extensionDir" location="${andami}/gvSIG/extensiones"/>
+	<property name="drivers-dir" location="${extensionDir}/${mainplugin}/drivers"/>
+	<property name="lib-dir" location="${extensionDir}/${mainplugin}/lib"/>
+	<property name="fmap" location="../libFMap"/>
+	<property name="entrega" location="../dist"/>
+	<property name="zip-src" location="../gvSIG-ArcIMS-Client-src"/>
+	<property name="zip-bin" location="../gvSIG-ArcIMS-Client-bin"/>
+
+	<property name="andamiLibs" location="${andami}/lib"/>
+	<property name="fmapLibs" location="${fmap}/lib"/>
+	<!--<property name="compile-classpath" value="${andami}/andami.jar:${andamiLibs}/iver-utiles.jar:${fmapLibs}/fmap.jar:${fmapLibs}/driver-manager-1.1.jar:${fmapLibs}/gdbms-0.8-SNAPSHOT.jar:${fmapLibs}/cms.jar:${andamiLibs}/kxml2.jar:${andamiLibs}/log4j-1.2.8.jar:lib/junit.jar:${andami}/lib/tempFileManager.jar:${fmapLibs}/remote-clients.jar:lib/remote-clients-arcims.jar:${andami}/gvSIG/extensiones/com.iver.cit.gvsig/lib/com.iver.cit.gvsig.jar"/>
+	<property name="compile-classpath-original" value="${andami}/lib/log4j-1.2.8.jar:${andami}/andami.jar:${andami}/gvSIG/extensiones/es.prodevelop.cit.gvsig/lib/es.prodevelop.cit.gvsig.jar:${fmap}/lib/fmap.jar:${fmap}/lib/remote-clients.jar:${fmap}/lib/cms.jar:${fmap}/lib/driver-manager-1.0.jar:${andami}/lib/tempFileManager.jar:${andami}/lib/iver-utiles.jar:${andami}/gvSIG/extensiones/com.iver.cit.gvsig/lib/com.iver.cit.gvsig.jar"/>-->
+
+
+
+	<target name="init">
+		<echo>
+		            Compiling ${ant.project.name}...</echo>
+		<!-- Create the time stamp -->
+		<!--<tstamp/>-->
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}"/>
+		<mkdir dir="${dist}"/>
+	</target>
+	<target name="compile" description="compile the source">
+		<antcall target="gvSIG-import-build-number"/>
+		<!-- Compile the Java code from ${src} to ${bin} -->
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"/>
+
+		<!--<javac
+            srcdir="${src}"
+            destdir="${build}"
+            source="${JavaSourceVersion}"
+            target="${JavaTargetVersion}"
+            debug="${debug}"
+            debuglevel="${debuglevel}"
+            classpath="${compile-classpath}"/>-->
+	</target>
+
+    <target name="batch-build" depends="init,compile,generate-without-source">
+    </target>
+	<target name="generate-without-source" description="generate the distribution without the source file">
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist}"/>
+		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+		<jar jarfile="${dist}/${plugin}.jar" basedir="${build}" includes="es/prodevelop/cit/gvsig/arcims/**" excludes="es/prodevelop/cit/gvsig/arcims/fmap/**"/>
+		<jar jarfile="${dist}/${fmapjar}.jar" basedir="${build}" includes="es/prodevelop/cit/gvsig/arcims/fmap/**"/>
+		<copy todir="${dist}">
+			<fileset dir="config" includes="*"/>
+		</copy>
+		<copy todir="${dist}/images">
+			<fileset dir="images" includes="*"/>
+		</copy>
+		<copy todir="${dist}/about">
+			<fileset dir="about" includes="*"/>
+		</copy>
+		<copy todir="${lib-dir}">
+			<fileset dir="./lib" includes="*.jar,*.zip"/>
+			<fileset dir="." includes=".keystore"/>
+		</copy>
+		<move todir="${extensionDir}/${mainplugin}/lib">
+			<fileset dir="${dist}" includes="${fmapjar}.jar"/>
+		</move>
+		<move todir="${extensionDir}/${plugin}/">
+			<fileset dir="${dist}" includes="**/**"/>
+		</move>
+	</target>
+	<target name="entrega-bin" depends="generate-without-source" description="Generates an almost
+		  distributable extension directory">
+		<buildnumber file="Cliente-ArcIMS.number"/>
+		<!--<delete file="${zip-bin}"/>	-->
+		<mkdir dir="${entrega}"/>
+		<copy todir="${entrega}/${mainplugin}/lib">
+			<fileset dir="./lib" includes="*.jar,*.zip"/>
+			<fileset dir="." includes=".keystore"/>
+			<fileset dir="${extensionDir}/${mainplugin}/lib" includes="${gvsiglibjar}.jar"/>
+			<fileset dir="${extensionDir}/${mainplugin}/lib" includes="${fmapjar}.jar"/>
+			<fileset dir="${extensionDir}/${mainplugin}/lib" includes="${remoteclientjar}.jar"/>
+		</copy>
+		<copy todir="${entrega}/${plugin}/">
+			<fileset dir="${extensionDir}/${plugin}/" includes="**/**"/>
+		</copy>
+		<zip destfile="${zip-bin}-BN${build.number}.zip" basedir="${entrega}" includes="**/**"/>
+		<delete dir="${entrega}"/>
+	</target>
+	<target name="entrega-src" depends="entrega-bin" description="Zips clean source">
+		<!--<delete file="${zip-src}"/>-->
+		<mkdir dir="${entrega}"/>
+		<copy todir="${entrega}/extArcims">
+			<fileset dir=".">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		<copy todir="${entrega}/libArcIMS">
+			<fileset dir="../libArcIMS">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		<zip destfile="${zip-src}-BN${build.number}.zip" basedir="${entrega}" includes="**/**"/>
+		<delete dir="${entrega}"/>
+	</target>
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${dist}"/>
+		<delete includeemptydirs="true" failonerror="no">
+			<fileset dir="${build}" includes="**/*"/>
+		</delete>
+	</target>
+</project>

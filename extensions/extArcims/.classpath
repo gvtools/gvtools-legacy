@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/libArcIMS"/>
+	<classpathentry kind="src" path="/appgvSIG"/>
+	<classpathentry kind="lib" path="/libFMap/lib/remote-clients.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.8.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
+	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/kxml2.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.gvsig.raster.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/Utiles/src"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.gvsig.fmap.raster.jar" sourcepath="/extRasterTools-SE"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.gvsig.raster.gui.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar" sourcepath="/libUIComponent/src"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.9.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
