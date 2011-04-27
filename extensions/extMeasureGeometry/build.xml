@@ -1,0 +1,41 @@
+<project name="Generar extension en Andami" default="generate-without-source" basedir=".">
+    <description>
+        Instala el plugin de Centrar la Vista sobre un punto en Andami.
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="bin" location="bin"/>
+  <property name="doc"  location="doc"/>
+  <property name="dist"  location="dist"/>
+  <property name="without_src"  location="without_src"/>
+  <property name="plugin" value="com.iver.gvsig.extMeasureGeometry"/>
+	 <property name="mainplugin" value="com.iver.cit.gvsig"/>
+	<property name="extensionDir" location="../_fwAndami/gvSIG/extensiones"/>
+  <property name="drivers-dir" location="${extensionDir}/${mainplugin}/drivers" />
+
+	<property name="build" location="bin"/>
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+  </target>
+
+  <target name="generate-without-source" description="generate the distribution without the source file" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${without_src}"/>
+
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${without_src}/${plugin}.jar" basedir="${bin}"/>
+    <copy file="config/config.xml" todir="${without_src}"/>
+    <copy todir="${without_src}">
+    	<fileset dir="." includes="text*.properties"/>
+    </copy>
+    <copy todir="${without_src}/images">
+    	<fileset dir="images/" includes="*"/>
+    </copy>
+    <move todir="${extensionDir}/${plugin}/">
+    	<fileset dir="${without_src}" includes="**/**"/>
+    </move>
+  </target>
+
+</project>
+

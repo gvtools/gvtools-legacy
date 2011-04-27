@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
+	<classpathentry sourcepath="/libDriverManager" kind="lib" path="/libFMap/lib/driver-manager-1.1.jar"/>
+	<classpathentry sourcepath="/libGDBMS" kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar"/>
+	<classpathentry sourcepath="D:/eclipse_3_1/workspace_pruebas/jts/src" kind="lib" path="/libFMap/lib/jts-1.7.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

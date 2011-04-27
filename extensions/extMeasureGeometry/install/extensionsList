@@ -1,0 +1,6 @@
+#Para añadir una nueva extension al instalador incrementar EXT_N y agregar el nombre al vector EXTENSIONS
+# Esto lo necesitamos porque no queremos coger todas las extensiones que haya, solo las que elijamos
+EXT_N=1
+EXTENSIONS=(
+com.iver.gvsig.extMeasureGeometry
+)
