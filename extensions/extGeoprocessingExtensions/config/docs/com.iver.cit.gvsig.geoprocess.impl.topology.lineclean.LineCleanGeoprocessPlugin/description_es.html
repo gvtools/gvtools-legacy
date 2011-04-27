@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Clean</TITLE>
+</HEAD>
+<BODY LANG="es-ES" DIR="LTR">
+<P><FONT COLOR="#800000"><B>Clean</B></FONT>
+</P>
+<P>Este geoproceso corrige topológicamente las geometrías de una capa de líneas,
+de forma que esta capa pase a tener una topología de líneas correcta.
+</P>
+<P>
+Por "topología correcta de líneas", entendemos que las geometrías lineales de
+esta capa no se autointersecten, y que solamente intersecten con otras geometrías
+de líneas por sus puntos extremos (nodos).
+</P>
+<P>
+<IMG SRC="cleandesc.png" NAME="Imagen1" ALIGN=LEFT BORDER=0>
+</P>
+<P>
+Si durante la ejecución del mismo se detecta que dos líneas intersectan en un
+punto que no es nodo (pseudonodo), se fragmentará estas geometrías originando
+cuatro nuevas líneas que sí intersectarán en sus extremos.
+</P>
+</BODY>
+</HTML>
