@@ -1,0 +1,150 @@
+<project name="Generar extension en Andami" default="generate-without-source" basedir=".">
+    <description>
+        Instala el plugin de ejemplo en Andami.
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="bin"/>
+  <property name="dist"  location="dist"/>
+  <property name="plugin" value="org.gvsig.graph"/>
+  <property name="plugin-fmap-gvsig" value="org.gvsig.graph-fmap-gvsig"/>
+  <property name="extension-dir" location="../_fwAndami/gvSIG/extensiones"/>
+  <property name="mainPlugin" value="com.iver.cit.gvsig" />
+  <property name="fmapLibs"  location="../libFMap/lib"/>
+  <import file="../binaries/ant/utilities.xml"/>
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${dist}/lib"/>
+
+    <!-- Creamos un fichero con el timeStamp para que lo lea el FPanelAbout -->
+    <!--<buildnumber/>-->
+
+  </target>
+
+  <target name="compile" description="compile the source">
+
+		<!--antcall target="gvSIG-import-build-number"/ -->
+    
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+  </target>
+
+
+  <target name="generate-jars">
+    <jar jarfile="${dist}/lib/${plugin}.jar" basedir="${build}" includes="org/gvsig/**"/>
+  	<jar jarfile="${extension-dir}/${mainPlugin}/lib/${mainPlugin}.jar"
+  			basedir="${build}"
+  			includes="com/iver/cit/gvsig/project/documents/view/legend/gui/**"
+  			update="yes" />
+
+  </target>
+	
+  <target name="generate independent library">
+    <jar jarfile="fmap-graph.jar"
+      	basedir="${build}"
+      	includes="org/gvsig/graph/core/** org/gvsig/graph/solvers/**"
+    	update="true"
+    />  	
+
+   </target>
+
+  <target name="copy-data-files">
+    <copy file="config/config.xml" todir="${dist}"/>
+  	
+  	<copy file="build.number" todir="${dist}"/>
+  	<copy file="config/about.htm" todir="${dist}"/>
+  	<loadproperties srcFile="build.number"/>
+  		<replace casesensitive="true"
+  		  	file="${dist}/about.htm"
+  		  	token="#build.number#"
+  		  	value="${build.number}"/>
+
+    <copy todir="${dist}">
+      <fileset dir="config/" includes="text*.properties"/>
+    </copy>
+    <copy todir="${dist}/lib">
+      <fileset dir="lib" includes="*"/>
+    </copy>
+    <copy todir="${dist}/images">
+      <fileset dir="images/" includes="*"/>
+    </copy>
+    <copy todir="${dist}/symbols">
+      <fileset dir="symbols/" includes="**/**"/>
+    </copy>
+  </target>
+
+  <target name="copy-to-andami">
+    <copy todir="${extension-dir}/${plugin}/">
+      <!--<fileset dir="${dist}" includes="**/**"/>-->
+      <fileset dir="${dist}">
+      	<exclude name="**/${plugin-fmap-gvsig}.jar"/>
+      	<include name="**/**"/>
+	  </fileset>
+    </copy>
+  	<!-- <copy todir="${extension-dir}/${mainPlugin}/lib/">
+  	  		<fileset dir="${dist}/lib" includes="**/${plugin-fmap-gvsig}.jar"/>
+  	</copy> -->
+ 	<delete dir="${dist}"/>
+  </target>
+
+  <target name="batch-build"
+	 depends="init,compile,generate-jars,copy-data-files,copy-to-andami"/>
+
+  <target name="generate-without-source" description="generate the distribution without the source file"
+	 depends="init,generate-jars,copy-data-files,copy-to-andami">
+    <!-- Create the distribution directory -->
+
+    <!--<jar jarfile="${fmapLibs}/jts-1.7.jar" basedir="${build}" update="yes" includes="com/vividsolutions/**"/>-->
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+  	<!-- These files have been moved to FMap
+
+    <jar jarfile="${dist}/lib/${plugin-fmap-gvsig}.jar" basedir="${build}" includes="com/iver/cit/fmap/**,com/iver/cit/gvsig/**,com/iver/cit/project/**"
+     excludes="com/iver/cit/gvsig/project/documents/view/legend/gui/**" />
+     -->
+
+
+  <!--${extension-dir}/${mainPlugin}/lib/${mainPlugin}.jar	<copy todir="${fmapLibs}">
+  		<fileset dir="${dist}/lib" includes="**/${plugin-fmap-gvsig}.jar"/>
+  	</copy> -->
+
+    </target>
+
+    <target name="save-gvsig-jar-to-install-dir" description="Save the gvsig.jar to installdir" >
+  	<!-- ******************************* -->
+
+  	<copy todir="./install">
+  		<fileset dir="${extension-dir}/com.iver.cit.gvsig/lib/">
+  			<include name="com.iver.cit.gvsig.jar"/>
+		</fileset>
+  	</copy>
+  	<!-- ******************************* -->
+
+  </target>
+
+	<target name="clean"
+	        description="clean up" >
+		<delete dir="${build}" failonerror="no"/>
+		<delete dir="${dist}" failonerror="no"/>
+	</target>
+  
+  <target name="buildNumber">  
+    <propertyfile     file="build.number"
+        comment="Build Number for ANT. Do not edit!">
+      <entry key="build.number" default="0" type="int" operation="+" pattern="0"/>
+    </propertyfile>
+    <property file="build.number" />
+  </target>
+
+  <target name="distribution"
+	 depends="buildNumber,generate-without-source"/>
+
+</project>
+

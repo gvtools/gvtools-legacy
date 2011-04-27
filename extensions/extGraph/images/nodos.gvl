@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xml-tag xmlns="http://www.gvsig.gva.es">
+    <property key="className" value="com.iver.cit.gvsig.fmap.rendering.VectorialIntervalLegend"/>
+    <property key="useDefaultSymbolB" value="false"/>
+    <property key="useDefaultSymbol" value="1"/>
+    <property key="fieldName" value="ORDER"/>
+    <property key="index" value="0"/>
+    <property key="intervalType" value="1"/>
+    <property key="numKeys" value="3"/>
+    <property key="tipoValueKeys" value="com.iver.cit.gvsig.fmap.rendering.FInterval"/>
+    <property key="keys" value="1.0-1.0 ,2.0-2.0 ,3.0-9.0"/>
+    <property key="shapeType" value="1"/>
+    <property key="startColor" value="255,0,0,255"/>
+    <property key="endColor" value="0,0,255,255"/>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="128,128,128,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="4.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="0"/>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc" value="1"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="255,0,0,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="11.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="0"/>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc" value="2"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="170,0,85,255"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="4.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="0"/>
+    </xml-tag>
+    <xml-tag>
+        <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleMarkerSymbol"/>
+        <property key="desc" value="> 2"/>
+        <property key="isShapeVisible" value="true"/>
+        <property key="color" value="128,128,128,114"/>
+        <property key="rotation" value="0.0"/>
+        <property key="offsetX" value="0.0"/>
+        <property key="offsetY" value="0.0"/>
+        <property key="size" value="4.0"/>
+        <property key="outline" value="false"/>
+        <property key="unit" value="-1"/>
+        <property key="referenceSystem" value="0"/>
+        <property key="markerStyle" value="0"/>
+    </xml-tag>
+</xml-tag>
