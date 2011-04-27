@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/libIverUtiles"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
+	<classpathentry kind="lib" path="/libFMap/lib/batik-awt-util.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGDBMS"/>
+	<classpathentry kind="lib" path="/appgvSIG/lib/JimiProClasses.zip"/>
+	<classpathentry kind="lib" path="lib/jpedalSTD-3.47b25.jar"/>
+	<classpathentry kind="lib" path="lib/bcprov-jdk15-139.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar" sourcepath="/libDriverManager"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar" sourcepath="/libUIComponent/src"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar" sourcepath="/extJCRS/src/org/gvsig/crs"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/extRasterTools-SE"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar" sourcepath="/libExceptions/src"/>
+	<classpathentry kind="lib" path="/libFMap/lib/batik-bridge.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/batik-script.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/batik-gvt.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/xml-apis-ext.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/batik-util.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libRaster"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
