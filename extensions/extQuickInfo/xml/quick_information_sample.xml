@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<root bgColor="#F6CEE3" numChildren="2" numGeom="2">
+	<layer name="Sample layer" fontColor="#0000FF" fontStyle="BOLD" fontSyze="3" fontType="Arial" />
+	<geometry name="GID1" fontColor="#0404B4" fontStyle="BOLD_AND_ITALIC" fontSyze="3" fontType="Arial" numChildren="5">
+		<geomInfo name="Campo1" value="texto 1" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Times" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+		<geomInfo name="Campo2" value="texto 2" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Arial" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+		<geomInfo name="Campo3" value="texto 3" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Arial" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+		<geomInfo name="CampoOp1" value="texto 7" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Arial" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+		<geomInfo name="CampoOp2" value="texto 8" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Arial" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+	</geometry>
+	<geometry name="GID2" fontColor="#0404B4" fontStyle="BOLD_AND_ITALIC" fontSyze="3" fontType="Arial" numChildren="5">
+		<geomInfo name="Campo1" value="texto 4" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Arial" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+		<geomInfo name="Campo2" value="texto 5" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Arial" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+		<geomInfo name="Campo3" value="texto 6" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Arial" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+		<geomInfo name="CampoOp1" value="texto 9" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Arial" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+		<geomInfo name="CampoOp2" value="texto 10" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Arial" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+	</geometry>
+</root>

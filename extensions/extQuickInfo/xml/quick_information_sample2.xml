@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<root bgColor="#F6CEE3" numChildren="3" numGeom="1">
+	<layer name="Sample layer" fontColor="#0000FF" fontStyle="BOLD" fontSyze="3" fontType="Arial" />
+	<geomInfo name="AREA" value="5.422038E8" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Times" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+	<geomInfo name="PERIMETER" value="95617.96" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Times" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+	<geomInfo name="NOMBRE" value="Murcia" n_fontColor="#0000FF" n_fontSyze="3" n_fontStyle="PLAIN" n_fontType="Times" v_fontColor="#000000" v_fontSyze="3" v_fontStyle="BOLD" v_fontType="Arial" numChildren="0"/>
+</root>
