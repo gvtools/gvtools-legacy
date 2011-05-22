@@ -1,0 +1,99 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.ecurv.comp</em>
+Processes an input digital elevation model (raster) to compensate for earth curvature and light refraction.
+This is useful to obtain more accurate results from viewshed analysis computations.
+
+<h2>BACKGROUND</h2>
+
+For accurate modeling of visibility (e.g. using <em><a href="r.los.html">r.los</a></em>) and other
+line-of-sight related processes,
+such as the propagation of radio waves, the effects of earth curvature 
+and atmospheric refraction must be taken into account.
+<p>
+While the former is by far the stronger effect, the latter works in the opposite direction.
+Thus, correcting for earth curvature but not for atmospheric refraction leads to a small
+degree of over-compensation.
+<p>
+Earth's curvature causes objects to "disappear" behind the horizon. Levelled readings of
+an object's height will be higher than the object actually is. The strength of this effect
+may be negligible at short distances, but it grows quadratically with distance.
+<em><a href="http://de.wikipedia.org/wiki/Erdkr%C3%BCmmung">Wikipedia</a></em>
+lists the following (rough) estimates of its strength:
+<pre>
+        0.8 mm at 100 m
+        20 mm at 500 m
+        79 mm at 1000 m
+        1.96 m at 5000 m
+        7.9 m at 10,000 m
+</pre>
+
+Thus, beyond a few kilometers, it will be significant for most applications, and
+should be corrected for.
+
+<h3>Method</h3>
+The idea behind <em>r.ecurv.comp</em> is to modify the digital elevation data before
+running any line-of-sight related analyses on it. 
+
+Using the output of <em>r.ecurv.comp</em> instead of the original elevation data will 
+ensure that earth curvature and atmospheric refraction (optional) are compensated for, 
+even if the software used has no means of its own to correct for these effects.
+<p>
+Some GIS tools for visibility analysis already include internal earth curvature correction.
+However, they may use different correction methods and may lack the refraction
+compensation.
+<p>
+Using <em>r.ecurv.comp</em> to pre-process the analysis region's elevation raster model, and
+then performing the visibility analysis on the new elevation model <em>without</em> turning
+on any built-in correction methods will ensure that the corrections are transparent and the
+results comparable.
+
+<h3>Computational Details</h3>
+
+The trick used here is to modify the elevation data in such a way that they 
+appear to refer to a fixed plane instead of the curved earth surface:
+
+<ol>
+<li> Compute the euclidean distance raster <em>d</em> (using <em><a href="r.grow.distance.html">r.grow.distance</a></em>) relative
+to the center cell of the current GRASS region.
+<p>
+<li> Compute the modified elevation raster <em>output</em>, based on the input
+raster <em>map</em>:
+<p>
+<pre>  output=map-(d^2*(k/(2*r)))</pre>
+</ol>
+(see below for descriptions of <em>k</em> and <em>r</em>)
+
+<h2>USAGE NOTES</h2>
+
+This method will only work as long as the extent of the analysis region does not
+cover more than a few geodetic degrees. Beyond that, results will become unreliable.
+<p>
+In addition, the following prerequisites must be observed:
+<ol>
+	<li> Elevation units and 2D distance units must be identical. 
+	If, e.g., distances on the ground are in meters and elevation measured
+	in feet, then the elevations must be converted to meters, first.
+<p>
+	<li>The radius of the Earth, <em>r</em>, must be set using these same elevation units.
+	The default assumes meters.
+<p>	
+	<li>A value for the refraction correction <em>k</em> may be choosen. 
+	A value around 6/7 works for visible light. The default of <em>0.87</em> is slightly 
+	different from this, but identical to that of ArcGIS(tm).
+</ol>
+
+<h2>SEE ALSO</h2>
+Credits for this method go to Bill Huber of Quantitative Decisions, 
+who made the details of the computations available via the
+<em><a href="http://forums.esri.com/Thread.asp?c=3&f=40&t=161962#474778">user forums</a></em> of a well-known GIS producer.
+<p>
+<em><a href="r.grow.distance.html">r.grow.distance</a></em>,
+<em><a href="r.los.html">r.los</a></em>
+
+<h2>AUTHOR</h2>
+Benjamin Ducke, benjamin.ducke AT oadigital.net<br>
+<p>
+<i>Last changed: Mon May 23 2011</i>
+</p>
+
