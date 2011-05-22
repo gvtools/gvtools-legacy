@@ -155,7 +155,7 @@ if [ "$GIS_FLAG_Q" = "1" ] ; then
 fi
 
 # create temporary map names
-TMP="$MODULE_NAME.`echo $$`.0"
+TMP_MOD="$MODULE_NAME.`echo $$`.0"
 
 # setup temporary file
 TMP_FILE="`g.tempfile pid=$$`"
@@ -200,9 +200,9 @@ fi
 if [ "$GIS_FLAG_Q" = "1" ] ; then
 	# user specified min and max
 	g.message "Trimming below Q1:"
-	r.mapcalc "$TMP=if($GIS_OPT_INPUT<$Q1,$REPLACE_L,$GIS_OPT_INPUT)"
+	r.mapcalc "$TMP_MOD=if($GIS_OPT_INPUT<$Q1,$REPLACE_L,$GIS_OPT_INPUT)"
 	g.message "Trimming above Q3:"
-	r.mapcalc "$GIS_OPT_OUTPUT=if($TMP>$Q3,$REPLACE_R,$TMP)"	
+	r.mapcalc "$GIS_OPT_OUTPUT=if($TMP_MOD>$Q3,$REPLACE_R,$TMP_MOD)"	
 fi
 
 # trim data by user-specified min/max
@@ -219,9 +219,9 @@ fi
 if [ -n "$GIS_OPT_MIN" ] && [ -n "$GIS_OPT_MAX" ] && [ "$GIS_FLAG_Q" != "1" ] ; then
 	# user specified min and max
 	g.message "Trimming to lower limit:"
-	r.mapcalc "$TMP=if($GIS_OPT_INPUT<$GIS_OPT_MIN,$REPLACE_L,$GIS_OPT_INPUT)"
+	r.mapcalc "$TMP_MOD=if($GIS_OPT_INPUT<$GIS_OPT_MIN,$REPLACE_L,$GIS_OPT_INPUT)"
 	g.message "Trimming to upper limit:"
-	r.mapcalc "$GIS_OPT_OUTPUT=if($TMP>$GIS_OPT_MAX,$REPLACE_R,$TMP)"
+	r.mapcalc "$GIS_OPT_OUTPUT=if($TMP_MOD>$GIS_OPT_MAX,$REPLACE_R,$TMP_MOD)"
 fi
 
 # trim data by mean +/- m*stddev
@@ -236,9 +236,9 @@ if [ -z "$GIS_OPT_MIN" ] && [ -z "$GIS_OPT_MAX" ] && [ "$GIS_FLAG_Q" != "1" ] ; 
 	fi
 	if [ "$GIS_OPT_TAIL" = "both" ] ; then
 		g.message "Trimming left tail:"
-		r.mapcalc "$TMP=if($GIS_OPT_INPUT<$MEAN-$GIS_OPT_M*$STDDEV,$REPLACE_L,$GIS_OPT_INPUT)"
+		r.mapcalc "$TMP_MOD=if($GIS_OPT_INPUT<$MEAN-$GIS_OPT_M*$STDDEV,$REPLACE_L,$GIS_OPT_INPUT)"
 		g.message "Trimming right tail:"
-		r.mapcalc "$GIS_OPT_OUTPUT=if($TMP>$MEAN+$GIS_OPT_M*$STDDEV,$REPLACE_R,$TMP)"
+		r.mapcalc "$GIS_OPT_OUTPUT=if($TMP_MOD>$MEAN+$GIS_OPT_M*$STDDEV,$REPLACE_R,$TMP_MOD)"
 	fi
 fi
 
@@ -258,16 +258,16 @@ fi
 # Clean up
 g.message "Cleaning up..."
 if [ "$GIS_FLAG_Q" != "1" ] ; then
-	g.remove --quiet rast="$TMP"
+	g.remove --quiet rast="$TMP_MOD"
 	g.message "Done."
 	exit 0
 fi
 if [ -n "$GIS_OPT_MIN" ] && [ -n "$GIS_OPT_MAX" ] ; then
-	g.remove --quiet rast="$TMP"
+	g.remove --quiet rast="$TMP_MOD"
 fi
 if [ -z "$GIS_OPT_MIN" ] && [ -z "$GIS_OPT_MAX" ] ; then
 	if [ "$GIS_OPT_TAIL" = "both" ] ; then
-		g.remove --quiet rast="$TMP"
+		g.remove --quiet rast="$TMP_MOD"
 	fi
 fi
 

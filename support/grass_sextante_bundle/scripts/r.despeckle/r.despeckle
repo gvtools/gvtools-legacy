@@ -141,7 +141,7 @@ TMP="$MODULE_NAME.`echo $$`.0"
 IN="$GIS_OPT_INPUT"
 # apply smoothing of removed pixels?
 if [ "$GIS_OPT_SIZE" != "0" ] ; then
-	OUT="$TMP"
+	OUT="$TMP_OUT"
 else 
 	OUT="$GIS_OPT_OUTPUT"
 fi
@@ -257,7 +257,7 @@ if [ "$GIS_OPT_SIZE" != "0" ] ; then
 
 	# replace removed spike cells with average of neighbouring cells
 	g.message "Replacing speckle cells with neighborhood average:"
-	r.smooth.mean size="$GIS_OPT_SIZE" input="$TMP" output="$GIS_OPT_OUTPUT" repeat="$GIS_OPT_REPEAT" $FILTER_TYPE --o
+	r.smooth.mean size="$GIS_OPT_SIZE" input="$TMP_OUT" output="$GIS_OPT_OUTPUT" repeat="$GIS_OPT_REPEAT" $FILTER_TYPE --o
 
 	# copy back original null values (if any) from input map
 	g.message "Restoring original NULL cells:"
@@ -265,7 +265,7 @@ if [ "$GIS_OPT_SIZE" != "0" ] ; then
 
 	# remove temporary map
 	g.message "Cleaning up..."
-	g.remove --quiet rast="$TMP"
+	g.remove --quiet rast="$TMP_OUT"
 fi
 
 # copy color table from input map
