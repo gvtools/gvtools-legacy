@@ -91,15 +91,18 @@ if [ "$1" != "@ARGS_PARSED@" ] ; then
 fi
 
 # Get center point of current region and rasterize it
+g.message "Rasterizing region boundary..."
 v.in.region output=${region} --quiet --o
 v.extract input=${region} output=${centroid} type=centroid --quiet --o
 v.type input=${centroid} output=${center_point} type=centroid,point --quiet --o
 v.to.rast input=${center_point} output=${mask} use=val value=1 --quiet --o
 
 # Compute the Euclidean Distance grid relative to region's center point
+g.message "Computing euclidean distance raster..."
 r.grow.distance input=${mask} distance=${d} metric="euclidean" --quiet --o
 
 # Compute corrected raster output
+g.message "Computing new DEM..."
 if [ $GIS_FLAG_N -ne 1 ] ; then
   # Light refraction correction ON
   r.mapcalc ${GIS_OPT_OUTPUT}="${GIS_OPT_MAP}-(pow(${d},2)*(${GIS_OPT_K}/(2*${GIS_OPT_R})))"
@@ -109,10 +112,13 @@ else
 fi
 
 # clean up
+g.message "Cleaning up..."
 g.remove vect=${region},${centroid},${center_point} --quiet
 g.remove rast=${d},${mask} --quiet
 
 # write cmd history:
 r.support ${GIS_OPT_OUTPUT} history="${CMDLINE}" --quiet
+
+g.message "Done."
 
 exit 0
