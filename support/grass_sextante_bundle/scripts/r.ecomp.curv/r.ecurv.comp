@@ -1,0 +1,118 @@
+#!/bin/sh
+
+# Processes an input digital elevation model to compensate for
+# earth curvature and light refraction.
+# Useful to obtain more accurate results from viewshed analysis computations,
+# if the software used does not have a built-in correction method.
+
+# (c) 2011 of this implementation Benjamin Ducke for Oxford Archaeolgy Digital
+# (http://oadigital.net)
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Details can be found here:
+#   http://www.gnu.org/licenses/gpl.html
+#
+# Credits for this method must go to Bill Huber of Quantitative Decisions
+# (www.quantdec.com), who made the details available to the ESRI users forums.
+
+# USAGE NOTES:
+# (1) Make sure your elevation units and 2D distance units are identical.
+#     If e.g. you have distances on the ground in meters and elevation measured
+#     in feet, then convert the elevations to meters, first.
+# (2) Set the radius of the earth, 'r', in terms of your elevation units.
+#     The default assumes meters. Change if e.g. you want to work in feet.
+# (3) Choose a value for the refraction correction, 'k'. Use a value around 6/7
+#     for visible light. The default of 0.87 is slightly different from this,
+#     but makes output more comparable with that of ArcGIS(tm). 
+
+#% Module
+#%  description: Compensates for earth curvature and light refraction.
+#%  keywords: raster, earth curvature, refraction, elevation, viewshed, visibility
+#% End
+#% option
+#%  key: map
+#%  type: string
+#%  gisprompt: old,cell,raster
+#%  description: Input elevation map
+#%  required : yes
+#% end
+#% option
+#%  key: output
+#%  type: string
+#%  gisprompt: new,cell,raster
+#%  description: Output compensated elevation map name
+#%  required : yes
+#% end
+#% option
+#%  key: r
+#%  type: double
+#%  description: Earth radius in working units (default: meters)
+#%  required : no
+#%  answer: 6371000
+#% end
+#% option
+#%  key: k
+#%  type: double
+#%  description: Refraction correction (ca. 6/7 for visible light)
+#%  required : no
+#%  answer: 0.87
+#% end
+#% flag
+#%  key: n
+#%  description: Do not correct for refraction
+#%  answer: no
+#% end
+
+# Temporary map names
+# create a temporary map name
+TMP_MAP="r_ecurv_comp.`echo $$`.0"
+d="{$TMP_MAP}_d"
+region="{$TMP_MAP}_region"
+centroid="{$TMP_MAP}_centroid"
+center_point="{$TMP_MAP}_cp"
+mask="{$TMP_MAP}_mask"
+
+# Shorten option names to improve legibility
+z="$MAP"
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename "$0"`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+# Get center point of current region and rasterize it
+v.in.region output=${region} --quiet --o
+v.extract input=${region} output=${centroid} type=centroid --quiet --o
+v.type input=${centroid} output=${center_point} type=centroid,point --quiet --o
+v.to.rast input=${center_point} output=${mask} use=val value=1 --quiet --o
+
+# Compute the Euclidean Distance grid relative to region's center point
+r.grow.distance input=${mask} distance=${d} metric="euclidean" --quiet --o
+
+# Compute corrected raster output
+if [ $GIS_FLAG_N -ne 1 ] ; then
+  # Light refraction correction ON
+  r.mapcalc ${GIS_OPT_OUTPUT}="${GIS_OPT_MAP}-(pow(${d},2)*(${GIS_OPT_K}/(2*${GIS_OPT_R})))"
+else
+  # Light refraction correction OFF
+  r.mapcalc ${GIS_OPT_OUTPUT}="${GIS_OPT_MAP}-(pow(${d},2)/(2*${GIS_OPT_R}))"
+fi
+
+# clean up
+g.remove vect=${region},${centroid},${center_point} --quiet
+g.remove rast=${d},${mask} --quiet
+
+# write cmd history:
+r.support ${GIS_OPT_OUTPUT} history="${CMDLINE}" --quiet
+
+exit 0
