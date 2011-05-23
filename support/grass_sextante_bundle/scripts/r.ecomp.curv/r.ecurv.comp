@@ -8,9 +8,10 @@
 # (c) 2011 of this implementation Benjamin Ducke for Oxford Archaeolgy Digital
 # (http://oadigital.net)
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Details can be found here:
-#   http://www.gnu.org/licenses/gpl.html
+# This program is free software under the GNU General Public
+# License (>=v2). Details can be found here:
+# 
+#  http://www.gnu.org/licenses/gpl.html
 #
 # Credits for this method must go to Bill Huber of Quantitative Decisions
 # (www.quantdec.com), who made the details available to the ESRI users forums.
@@ -55,6 +56,7 @@
 #%  type: double
 #%  description: Refraction correction (ca. 6/7 for visible light)
 #%  required : no
+#%  options: 0.0-1.0
 #%  answer: 0.87
 #% end
 #% flag
@@ -65,12 +67,12 @@
 
 # Temporary map names
 # create a temporary map name
-TMP_MAP="r_ecurv_comp.`echo $$`.0"
-d="{$TMP_MAP}_d"
-region="{$TMP_MAP}_region"
-centroid="{$TMP_MAP}_centroid"
-center_point="{$TMP_MAP}_cp"
-mask="{$TMP_MAP}_mask"
+TMP_MAP="r_ecurv_comp_`echo $$`_0"
+d="${TMP_MAP}_d"
+region="${TMP_MAP}_region"
+centroid="${TMP_MAP}_centroid"
+center_point="${TMP_MAP}_cp"
+mask="${TMP_MAP}_mask"
 
 # Shorten option names to improve legibility
 z="$MAP"

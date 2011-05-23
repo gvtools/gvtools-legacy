@@ -19,7 +19,7 @@ Earth's curvature causes objects to "disappear" behind the horizon. Levelled rea
 an object's height will be higher than the object actually is. The strength of this effect
 may be negligible at short distances, but it grows quadratically with distance.
 <em><a href="http://de.wikipedia.org/wiki/Erdkr%C3%BCmmung">Wikipedia</a></em>
-lists the following (rough) estimates of its strength:
+lists the following (rough) estimates:
 <pre>
         0.8 mm at 100 m
         20 mm at 500 m
@@ -29,15 +29,23 @@ lists the following (rough) estimates of its strength:
 </pre>
 
 Thus, beyond a few kilometers, it will be significant for most applications, and
-should be corrected for.
+should be corrected for. Without correction, line-of-sight algorithms will over-estimate
+visibility.
 
 <h3>Method</h3>
 The idea behind <em>r.ecurv.comp</em> is to modify the digital elevation data before
-running any line-of-sight related analyses on it. 
-
+running any line-of-sight related analyses on it.
+<p>
+The elevation data will be modified by subtracting a value from each cell that depends on
+the distance of that cell from the center of the current GRASS working region. The effect
+of this is that cells which are further apart from each other will differ by a larger
+value, whereas closer cells will differ by a smaller compensational amount.
+<p>
 Using the output of <em>r.ecurv.comp</em> instead of the original elevation data will 
 ensure that earth curvature and atmospheric refraction (optional) are compensated for, 
 even if the software used has no means of its own to correct for these effects.
+Any line-of-sight computation that works on the modified surface will be "tricked" into
+operating on a perfectly planar surface instead of a naturally curved one.
 <p>
 Some GIS tools for visibility analysis already include internal earth curvature correction.
 However, they may use different correction methods and may lack the refraction
@@ -50,7 +58,7 @@ results comparable.
 
 <h3>Computational Details</h3>
 
-The trick used here is to modify the elevation data in such a way that they 
+The "trick" used here is to modify the elevation data in such a way that they 
 appear to refer to a fixed plane instead of the curved earth surface:
 
 <ol>
@@ -67,7 +75,8 @@ raster <em>map</em>:
 <h2>USAGE NOTES</h2>
 
 This method will only work as long as the extent of the analysis region does not
-cover more than a few geodetic degrees. Beyond that, results will become unreliable.
+cover more than a few geodetic degrees (i.e. a few hundred kilometers). 
+Beyond that, results will become unreliable.
 <p>
 In addition, the following prerequisites must be observed:
 <ol>
