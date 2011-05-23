@@ -1,0 +1,137 @@
+#!/bin/sh
+
+# r.add.vect:
+# Add vector objects to a raster map at defined offset.
+# Useful for e.g. adding buildings or vegetation blocks to a DEM.
+# Alternatively, objects can be "stamped" into the raster using a given value.
+# This module will process all input vector objects in layer "1".
+# Only objects of type "point", "line" or "area" will be processed.
+
+# (c) 2011 of this implementation Benjamin Ducke for Oxford Archaeolgy Digital
+# (http://oadigital.net)
+#
+# This program is free software under the GNU General Public
+# License (>=v2). Details can be found here:
+#
+#   http://www.gnu.org/licenses/gpl.html
+#
+# Credits for this method must go to Bill Huber of Quantitative Decisions
+# (www.quantdec.com), who made the details available to the ESRI users forums.
+
+#% Module
+#%  description: Adds vector objects to a raster map at a defined offset
+#%  keywords: raster, DEM, objects, add, offset, stamp
+#% End
+#% option
+#%  key: raster
+#%  type: string
+#%  gisprompt: old,cell,raster
+#%  description: Input raster map
+#%  required : yes
+#% end
+#% option
+#%  key: vector
+#%  type: string
+#%  gisprompt: old,vector
+#%  description: Vector map with objects to add
+#%  required : yes
+#% end
+#% option
+#%  key: output
+#%  type: string
+#%  gisprompt: new,cell,raster
+#%  description: Output raster map
+#%  required : yes
+#% end
+#% option
+#%  key: use
+#%  type: string
+#%  description: Source of offset values
+#%  required : yes
+#%  options: attr,val
+#%  answer: attr
+#% end
+#% option
+#%  key: column
+#%  type: string
+#%  description: Name of attribute table column (field) with offset value
+#%  required : no
+#% end
+#% option
+#%  key: value
+#%  type: double
+#%  description: Constant offset value
+#%  required : no
+#% end
+#%Flag
+#%  key: s
+#%  description: "Stamp" objects into raster instead
+#%End
+
+
+# Temporary map names
+# create a temporary map name
+TMP_MAP="r_ecurv_comp_`echo $$`_0"
+
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename "$0"`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+# check options for correctness
+if [ "$GIS_OPT_USE" = "attr" ] && [ -z "$GIS_OPT_COLUMN" ] ; then
+	g.message -w "Please specify an attribute table field using the 'column' option."
+	exit 1
+fi
+
+if [ "$GIS_OPT_USE" = "val" ] && [ -z "$GIS_OPT_VALUE" ] ; then
+	g.message -w "Please specify a constant offset value using the 'value' option."
+	exit 1
+fi
+
+# Rasterize input vector map
+g.message "Rasterizing vector objects..."
+
+if [ "$GIS_OPT_USE" = "attr" ] ; then
+	v.to.rast input="$GIS_OPT_VECTOR" output="$TMP_MAP" use=attr type=point,line,area column="$GIS_OPT_COLUMN" --o
+fi
+if [ "$GIS_OPT_USE" = "val" ] ; then
+	v.to.rast input="$GIS_OPT_VECTOR" output="$TMP_MAP" use=val type=point,line,area value="$GIS_OPT_VALUE" --o
+fi
+
+if [ "$GIS_FLAG_S" -ne 1 ] ; then
+	# add to raster with offset
+	g.message "Adding to raster with offset..."
+	r.mapcalc ${GIS_OPT_OUTPUT}="if(!isnull(${TMP_MAP}),${GIS_OPT_RASTER}+${TMP_MAP},${GIS_OPT_RASTER})"
+else
+	# stamp into raster
+	g.message "Stamping into raster..."
+	r.mapcalc ${GIS_OPT_OUTPUT}="if(!isnull(${TMP_MAP}),${TMP_MAP},${GIS_OPT_RASTER})"
+fi
+
+# clean up
+g.message "Cleaning up..."
+g.remove rast=${TMP_MAP} --quiet
+
+# write cmd history:
+r.support ${GIS_OPT_OUTPUT} history="${CMDLINE}" --quiet
+
+g.message "Done."
+
+exit 0

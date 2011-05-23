@@ -1,0 +1,35 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.add.vect</em> adds or overlays ("stamps") vector objects into a raster map using a constant or attribute field value.
+This is useful for adding buildings or vegetation blocks to a DEM and similar operations.
+
+<h2>USAGE NOTES</h2>
+
+The default mode of operation is to read a value from a user-specified attribute table field of the input vector map.
+
+The objects in the vector map are then rasterized using the current GRASS region's extent and resolution and the values of the attribute table field as cell values.
+
+Finally, the rasterized objects are added to the cells in the existing raster input map to produce the new raster output.
+
+<p>
+
+Set <em>"use=attr"</em> (default) and provide an attribute field name in <em>"column="</em> for the default mode of operation.
+
+Alternatively, rasterize all objects with a constant value by setting <em>"use=val"</em> and providing the constant value in <em>"value="</em>
+
+<p>
+
+It is also possible to "stamp" the rasterize objects into the existing raster maps, by setting all cells that fall into a rasterized object to that object's (or a constant) raster value, instead of adding them to the existing cell values.
+
+<p>
+
+This module will process all input vector objects in layer "1".
+
+Only objects of type "point", "line" or "area" will be processed.
+
+<h2>AUTHOR</h2>
+Benjamin Ducke, benjamin.ducke AT oadigital.net<br>
+<p>
+<i>Last changed: Mon May 23 2011</i>
+</p>
+
