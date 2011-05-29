@@ -1,0 +1,151 @@
+#!/bin/sh
+
+# Performs principle components analysis of raster layers.
+
+# This script provides a convenient wrapper around i.pca, so that the user
+# does not need to worry about grouping input layers. The output will be
+# a multi-band GeoTIFF file (instead of multiple GRASS raster maps). 
+
+# (c) 2011 of this implementation Benjamin Ducke for:
+# Romano-Germanic Commission of the German Archaeological Institute 
+# (http://www.dainst.de)
+#
+# This program is free software under the GNU General Public
+# License (>=v2). Details can be found here:
+# 
+#  http://www.gnu.org/licenses/gpl.html
+#
+
+# TODO: 
+# DOCS:
+# - output is a GeoTIFF file with n bands
+# - minimum input is two rasters
+# - provide a list of components to extract. NOTE: components will end up in
+#   GeoTIFF output in the same order as provided on option line!
+# - rescaling works best for R/G/B by default (0..255). Set to "0,0" to disable.
+
+#%Module
+#%  description: Performs principle components analysis of raster layers.
+#%  keywords: raster, principle components analysis, pca, multivariate statistics
+#%End
+
+#%Option
+#%  key: input
+#%  type: string
+#%  gisprompt: old,cell,raster
+#%  description: Input raster maps (two or more)
+#%  required: yes
+#%  multiple: yes
+#%End
+
+#%Option
+#%  key: output
+#%  type: string
+#%  description: Output GeoTIFF file name
+#%  gisprompt: new_file,file,output
+#%  required: yes
+#%End
+
+#%option
+#%  key: components
+#%  type: integer
+#%  description: List of components to extract as raster bands
+#%  required: yes
+#%  multiple: yes
+#%  answer: 1,2
+#%end
+
+#%Option
+#% key: rescale
+#% type: integer
+#% required: no
+#% multiple: no
+#% key_desc: min,max
+#% description: Rescaling range for output maps ("0,0" for none)
+#% answer: 0,255
+#%End
+
+#%Flag
+#%  key: w
+#%  description: Write GeoTIFF world file (.tfw)
+#%End
+
+MODULE_NAME=r.pca
+
+# Run GRASS parser omn options and flags
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+	exec g.parser "$0" "$@"
+fi
+
+# Create a prefix for temporary maps
+PREFIX="$MODULE_NAME.tmp_`echo $$`_"
+
+# Check options: minimum of two raster maps given, list of components
+# within input range?
+IFS=,
+NUM_INPUTS=0
+for map in $GIS_OPT_INPUT ; do
+	NUM_INPUTS=`expr $NUM_INPUTS + 1`
+done
+if [ $NUM_INPUTS -lt 2 ] ; then
+	g.message -e "Need at least two input raster maps."
+	exit 1
+fi
+
+IFS=,
+NUM_COMPS=0
+for comp in $GIS_OPT_COMPONENTS ; do
+	if [ $comp -lt 1 ] ; then
+		g.message -e "Illegal component listed ($comp)."
+		g.message -e "Component must be larger than \"0\"."
+		exit 1
+	fi
+	if [ $comp -gt $NUM_INPUTS ] ; then
+		g.message -e "Illegal component listed ($comp)."
+		g.message -e "Component cannot be greater than number of inputs ($NUM_INPUTS)."
+		exit 1
+	fi
+	NUM_COMPS=`expr $NUM_COMPS + 1`	
+done
+if [ $NUM_COMPS -lt 1 ] ; then
+	g.message -e "Number of components cannot be smaller than \"1\"."
+	exit 1
+fi
+
+# run i.pca on input
+i.pca input="$GIS_OPT_INPUT" output_prefix="$PREFIX" rescale="$GIS_OPT_RESCALE"
+
+# create temporary group for i.pca output
+IFS=,
+RASTERS=
+for comp in $GIS_OPT_COMPONENTS ; do
+	RASTERS=$RASTERS","$PREFIX.$comp
+done
+i.group group="$PREFIX.group" input="$RASTERS" --quiet
+
+# export GeoTIFF file
+GEOTIFF="$GIS_OPT_OUTPUT"
+if [ "$GIS_FLAG_W" = "1" ] ; then
+	r.out.gdal input="$PREFIX.group" output="$GEOTIFF" createopt="TFW=YES,COMPRESS=LZW" -c --quiet
+else
+	r.out.gdal input="$PREFIX.group" output="$GEOTIFF" createopt="COMPRESS=LZW" -c --quiet
+fi
+
+# delete temporary i.pca output rasters
+COUNT=0
+for map in $GIS_OPT_INPUT ; do
+	COUNT=`expr $COUNT + 1`
+	g.remove rast=$PREFIX"."$COUNT --quiet
+done
+
+# delete temporary i.pca group
+g.remove group="$PREFIX.group" --quiet
+
+g.message "Done."
+
+exit 0
