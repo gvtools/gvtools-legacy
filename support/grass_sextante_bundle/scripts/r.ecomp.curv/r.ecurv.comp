@@ -22,8 +22,8 @@
 #     in feet, then convert the elevations to meters, first.
 # (2) Set the radius of the earth, 'r', in terms of your elevation units.
 #     The default assumes meters. Change if e.g. you want to work in feet.
-# (3) Choose a value for the refraction correction, 'k'. Use a value around 6/7
-#     for visible light. The default of 0.87 is slightly different from this,
+# (3) Choose a value for the refraction correction, 'k'. Use a value around 1/7
+#     for visible light. The default of 0.13 is slightly different from this,
 #     but makes output more comparable with that of ArcGIS(tm). 
 
 #% Module
