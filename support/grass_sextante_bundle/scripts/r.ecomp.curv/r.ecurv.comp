@@ -54,10 +54,10 @@
 #% option
 #%  key: k
 #%  type: double
-#%  description: Refraction correction (ca. 6/7 for visible light)
+#%  description: Refraction correction (ca. 1/7 for visible light)
 #%  required : no
 #%  options: 0.0-1.0
-#%  answer: 0.87
+#%  answer: 0.13
 #% end
 #% flag
 #%  key: n
@@ -107,7 +107,7 @@ r.grow.distance input=${mask} distance=${d} metric="euclidean" --quiet --o
 g.message "Computing new DEM..."
 if [ $GIS_FLAG_N -ne 1 ] ; then
   # Light refraction correction ON
-  r.mapcalc ${GIS_OPT_OUTPUT}="${GIS_OPT_MAP}-(pow(${d},2)*(${GIS_OPT_K}/(2*${GIS_OPT_R})))"
+  r.mapcalc ${GIS_OPT_OUTPUT}="${GIS_OPT_MAP}-(pow(${d},2)*((1-${GIS_OPT_K})/(2*${GIS_OPT_R})))"
 else
   # Light refraction correction OFF
   r.mapcalc ${GIS_OPT_OUTPUT}="${GIS_OPT_MAP}-(pow(${d},2)/(2*${GIS_OPT_R}))"

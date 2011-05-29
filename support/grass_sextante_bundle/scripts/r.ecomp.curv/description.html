@@ -68,7 +68,7 @@ to the center cell of the current GRASS region.
 <li> Compute the modified elevation raster <em>output</em>, based on the input
 raster <em>map</em>:
 <p>
-<pre>  output=map-(d^2*(k/(2*r)))</pre>
+<pre>  output=map-(d^2*((1-k)/(2*r)))</pre>
 </ol>
 (see below for descriptions of <em>k</em> and <em>r</em>)
 
@@ -88,7 +88,7 @@ In addition, the following prerequisites must be observed:
 	The default assumes meters.
 <p>	
 	<li>A value for the refraction correction <em>k</em> may be choosen. 
-	A value around 6/7 works for visible light. The default of <em>0.87</em> is slightly 
+	A value around 1/7 works for visible light. The default of <em>0.13</em> is slightly 
 	different from this, but identical to that of ArcGIS(tm).
 </ol>
 
