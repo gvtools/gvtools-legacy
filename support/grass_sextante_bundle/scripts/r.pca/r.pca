@@ -16,6 +16,14 @@
 #  http://www.gnu.org/licenses/gpl.html
 #
 
+# CAVEATS:
+# - g.parser mangles Windows pathnames, because it cuts out all the "\"
+#   so, an output path of "C:\Documents\File.tif" becomes: "C:DocumentsFile.tif"
+#   ... and this will likely produce a file permission error message
+#   until this bug is fixed in Windows, users will only be able to 
+#   save to the root folder of a device (e.g. c:output.tif)
+#   the bug is documented here: http://trac.osgeo.org/grass/ticket/1280
+
 # TODO: 
 # DOCS:
 # - output is a GeoTIFF file with n bands
@@ -118,7 +126,9 @@ if [ $NUM_COMPS -lt 1 ] ; then
 fi
 
 # run i.pca on input
-i.pca input="$GIS_OPT_INPUT" output_prefix="$PREFIX" rescale="$GIS_OPT_RESCALE"
+# DO NOT user "output_prefix" as option name, as in earlier versions
+# of GRASS, it's just "output"! 
+i.pca input="$GIS_OPT_INPUT" output="$PREFIX" rescale="$GIS_OPT_RESCALE"
 
 # create temporary group for i.pca output
 IFS=,
