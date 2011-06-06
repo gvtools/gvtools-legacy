@@ -1,0 +1,64 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.pca</em>
+performs Principal Components Analysis (PCA) on a series of input raster maps.
+Its intention is to provide a convenient way for running <em><a href="i.pca.html">i.pca</a></em>
+and producing a multi-band GeoTIFF result file. Such files are suitable for visualization
+of multi-dimensional datasets in many GIS. GRASS, however, is not very well-suited for handling
+multi-band raster datasets. Thus, for PCA inside a GRASS session, the original <em><a href="i.pca.html">i.pca</a></em>
+should be used.
+    
+<h2>USAGE NOTES</h2>
+
+At least two input maps are required to compute the first two principal components of
+the data. In most cases, components higher than "3" will contain very little useful
+information. The <em>components=</em> option controls which ones to preserve
+and embed as bands into the GeoTIFF output file. Note that the order of components
+(bands) in the file will be as specified in this option. Note also that all possible
+components (as many as there are input maps) are always computed even if not all of
+them will be preserved. So the (temporary) disk space required for their computation will exceed
+that required for storing the actual result file.  
+
+<p>
+
+It is possible to use input raster maps of different extents and resolutions.
+The result will always be computed within the current GRASS region settings (see <em><a href="g.region.html">g.region</a></em>).
+However, in such cases it may be advisable to explicitly transform all input raster
+maps to a common cell resolution first and in a well-controlled fashion, e.g.
+by using <em><a href="r.resamp.interp.html">r.resamp.interp</a></em>.
+
+<p>
+
+If the aim is to produce visualizations by assigning differents bands to R/G/B or H/I/S channels,
+then it makes sense to rescale the output data to the integer range of [0..255], supported by
+common PC graphics hardware (default). If the raw data is required for analytical purposes, scaling can be
+turned off by setting <em>scaling=0,0</em>.
+
+<p>
+
+The GeoTIFF output file will be compressed using the LZW method. Optionally, a world file
+(.tfw) may be produced to accompany the GeoTIFF dataset. 
+
+<p>    
+
+Please refer to the original manual page of <em><a href="i.pca.html">i.pca</a></em> for further
+details on the data processing approach.
+
+<h2>CAVEATS</h2>
+
+<b>Windows Users:</b> Due to a bug in <em><a href="g.parser.html">g.parser</a></em>, known
+to exist in GRASS versions up to 6.4.1, it is necessary to provide the output path and file
+name in double quotes ("). E.g.: <em>output="C:\Documents\output_file.tif"</em>. 
+
+<h2>SEE ALSO</h2>
+<em><a href="g.region.html">g.region</a></em>,
+<em><a href="i.pca.html">i.pca</a></em>,  
+<em><a href="r.resamp.interp.html">r.resamp.interp</a></em>
+
+<h2>AUTHOR</h2>
+Benjamin Ducke (benjamin.ducke AT oadigital.net) <br> 
+for the Romano-Germanic Commission of the <a href="http://www.dainst.de">German Archaeological Institute</a><br>
+<p>
+<i>Last changed: Mon May 23 2011</i>
+</p>
+

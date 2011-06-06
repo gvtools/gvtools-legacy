@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.ecurv.comp</em>
-Processes an input digital elevation model (raster) to compensate for earth curvature and light refraction.
+processes an input digital elevation model (raster) to compensate for earth curvature and light refraction.
 This is useful to obtain more accurate results from viewshed analysis computations.
 
 <h2>BACKGROUND</h2>
@@ -91,6 +91,13 @@ In addition, the following prerequisites must be observed:
 	A value around 1/7 works for visible light. The default of <em>0.13</em> is slightly 
 	different from this, but identical to that of ArcGIS(tm).
 </ol>
+
+<p>
+
+Note that the output of this module can differ quite significantly from the original
+elevation data for large study areas. It does not represent a valid (i.e. realistic) digital
+elevation model. Thus for any purpose other than visibility analysis, the original elevation
+data have to be used.
 
 <h2>SEE ALSO</h2>
 Credits for this method go to Bill Huber of Quantitative Decisions, 

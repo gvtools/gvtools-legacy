@@ -15,8 +15,6 @@
 #
 #   http://www.gnu.org/licenses/gpl.html
 #
-# Credits for this method must go to Bill Huber of Quantitative Decisions
-# (www.quantdec.com), who made the details available to the ESRI users forums.
 
 #% Module
 #%  description: Adds vector objects to a raster map at a defined offset

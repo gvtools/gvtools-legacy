@@ -16,16 +16,15 @@
 #  http://www.gnu.org/licenses/gpl.html
 #
 
-# CAVEATS:
+# BUGS:
 # - g.parser mangles Windows pathnames, because it cuts out all the "\"
-#   so, an output path of "C:\Documents\File.tif" becomes: "C:DocumentsFile.tif"
-#   ... and this will likely produce a file permission error message
-#   until this bug is fixed in Windows, users will only be able to 
-#   save to the root folder of a device (e.g. c:output.tif)
+#   so an output path like C:\Documents\File.tif becomes: C:DocumentsFile.tif
+#   ... and this will likely produce a file permission error message.
+#   Until this bug is fixed in WinGRASS, users should put the output
+#   path in double quotes, like so: output="C:\Documents\File.tif"
 #   the bug is documented here: http://trac.osgeo.org/grass/ticket/1280
 
-# TODO: 
-# DOCS:
+# Usage:
 # - output is a GeoTIFF file with n bands
 # - minimum input is two rasters
 # - provide a list of components to extract. NOTE: components will end up in
