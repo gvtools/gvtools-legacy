@@ -6,16 +6,22 @@ HOW TO USE
 This logo has been created using the software available at http://www.inscape.org.
 The original vectorial artwork is contained in the two Inkscape SVG files.
 
-For rasterized versions, it is recommended to use the flat design in "logo-2d.svg" for sizes between 8 and 64 pixels.
+For rasterized versions, it is recommended to use the flat design in 
+"logo-2d.svg" for sizes between 8 and 64 pixels.
 
 From 64 pixels upward, the more stylish "logo-3d.svg" will look good.
+
+There are also two versions of the logo that include a "gvSIG CE"
+text. One (the full name) is intended for title slides, pages, etc.,
+the other (abbreviated C.E.) for places where one-line high graphics
+fit nicely, such as webpage or slide footers.
 
 LICENSE TERMS
 
 This logo is licensed under the Creative Commons Attribution CC BY license.
 
-You are free to share and modify this artwork and use it in your own work, as long as you give credit to
-the original creators.
+You are free to share and modify this artwork and use it in your own work, 
+as long as you give credit to the original creators.
 
 See http://creativecommons.org/licenses/by/3.0/ for details.
 
