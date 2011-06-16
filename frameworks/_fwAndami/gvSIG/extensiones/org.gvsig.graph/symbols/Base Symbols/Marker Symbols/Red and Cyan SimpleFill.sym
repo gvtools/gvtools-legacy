@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<xml-tag xmlns="http://www.gvsig.gva.es">
-    <property key="className" value="com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol"/>
-    <property key="color" value="122,255,200,255"/>
-    <property key="outline" value="255,0,0,255"/>
-    <property key="desc" value="Red and Cyan SympleFill"/>
-    <property key="isShapeVisible" value="true"/>
-</xml-tag>
