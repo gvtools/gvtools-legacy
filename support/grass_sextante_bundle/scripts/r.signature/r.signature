@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Computes multi-raster signatures for vector objects.
+
+# IDEAS
+# - use r.param.scale instead of r.slope.aspect for more robust estimates of slope, aspect, etc.
+#   (can use this with varying window sizes: more accurate than changing raster resolution)
+# - store means of raster metrics as attribute table fields
+# - take formulas for vector shape metrics from SEXTANTE's tool
+# - use short and simple, abbreviated attribute field names to store the signatures

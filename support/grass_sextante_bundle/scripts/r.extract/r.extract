@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Extracts cells from an input raster maps if the fall into (a) user-specified range(s)
+
+# Input: raster map and list of ranges (unordered): ranges=0,20-30,1-20
+# Ranges may overlap
+#
+# Selectable mode for extraction:
+#
+# Min <= x <= Max
+# Min < x < Max 
+#
+# Just a convenient wrapper around r.mapcalc, really
+

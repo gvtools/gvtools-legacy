@@ -1,0 +1,70 @@
+#!/bin/sh
+
+###########################################################################################################################################
+#
+# MODULE:       r.lrm
+# AUTHOR(S):    Rebecca Bennett, rabennett@ymail.com
+# PURPOSE:      Calculates local relief model from a GRASS rasterterrain map in GRASS 6.4 using the method developed by Hesse 2010 "LiDAR-derived Local Relief Models - a new tool for archaeological prospection" Archaeological Prospection 18.2
+# COPYRIGHT:    (C) 2011 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#		
+#		If you use this script for published work please respect the right of the author to be cited appropriately.
+##########################################################################################################################################
+
+Echo "Check region settings and database connection (sqlite)"
+
+g.ask type=old prompt="enter DTM" elem=cell_misc unixfile=/home/becca/LRM/settings
+. /home/becca/LRM/settings
+if [ ! "$file" ]
+    then
+        exit
+fi
+
+DTM=${fullname}
+
+LIST="*.asc"
+echo "Available filters:"
+echo $LIST
+
+echo -n "Enter file name from list: "
+read USERFILE
+
+#make copy of DTM
+g.copy rast=${DTM},ground
+
+#first stage of LRM
+#lowpass filter
+echo "Stage 1 - performing low pass filter"
+r.mfilter.fp --overwrite input=ground@PERMANENT output=LRM_lowpass filter=$USERFILE
+
+#subtract lowpass from DTM
+echo "Stage 2 - subtracting lowpass from DTM"
+r.mapcalc 'LP_subtract=ground@PERMANENT-LRM_lowpass@PERMANENT'
+
+echo "Stage 3 - extracting zero contours"
+#extract contours
+r.contour input=LP_subtract@PERMANENT output=LP_contour@PERMANENT minlevel=0 maxlevel=0 step=10
+#make points from lines
+v.to.points input=LP_contour@PERMANENT llayer=1 type=line output=LP_contours_points dmax=10
+#extract raster values for points
+v.what.rast vector=LP_contours_points@PERMANENT raster=ground@PERMANENT layer=2 column=along
+ 
+#interpolate from points
+echo "Stage 4 - interpolating purged DTM"
+v.surf.bspline input="LP_contours_points@PERMANENT" raster="LP_purged" sie=4 sin=4 method="bilinear" lambda_i=1 layer=2 column="along"
+r.mapcalc 'LRM_spline=ground@PERMANENT-LP_purged_4@PERMANENT'
+
+#subtract interpolated from original
+echo "Stage 5 - subtracting purged DTM from original"
+r.mapcalc 'LRM=ground@PERMANENT-LP_purged@PERMANENT'
+
+#recolour to grey
+r.colors map=LRM@PERMANENT color=grey
+
+echo "---------------LRM Complete---------------"
+exit
+

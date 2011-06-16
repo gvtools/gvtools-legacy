@@ -1,0 +1,56 @@
+From: http://osgeo-org.1803224.n2.nabble.com/GRASSLIST-5240-Local-density-analysis-script-for-GRASS-5-7-td1872117.html
+
+Here is something I've wanted to do for awhile.
+
+This script calculates Ian Johnson's Local Density Analysis for vector
+points. It is used in archaeology to examine the degree of clustering at
+varying neighborhood radii of sites or artifacts or the degree of clustering
+of one artifact class in the vicinity of another artifact class. It is a
+nice routine, but rarely available.
+
+I've been futzing with this for awhile in GRASS and finally worked out how
+to do it. The problem was determining the number of points within a given
+radius of a point. This should not be difficult in a GIS like GRASS, but it
+is surprisingly tricky. R.neighbors doesn't have a count option and hacking
+it by giving all relevant cells a cat of one and doing a sum doesn't give a
+correct answer. Buffering also doesn't give the same answer as summing the
+count of point around each point as the latter can count some points twice
+(correctly), whereas buffering only will count them once. V.neighbors
+produces an output that is NOT a count of points around each point but
+something quite different. Anyway, I was able to use v.distance with the -a
+and -p flags to get this. This method may be useful for other kinds of
+similar clustering or neighborhood analyses.
+
+For simply looking at the degree of clustering in a points file, use the
+same file for the base and analysis files. For looking at the degree of
+clustering for points of type 2 in the neighborhood of points of type 1, use
+type 1 for the base file and type 2 for the analysis file.
+
+You can select minimum and maximum neighborhood radii, along with a value to
+increment the neighborhood radius from minimum to maximum.
+
+The main output is in a text file, to which you can append a series of
+analyses. For a single analysis, you can also have a line graph of the
+results displayed.
+
+I've used this kind LDA with an algorithm described by Ian Johnson for
+MapInfo and in Keith Kintigh's archaeological analysis program. The results
+look correct here. But I'd appreciate it if anyone cares to test it and let
+me know what they think.
+
+I'll post this on my website in the script exchange area.
+
+Cheers and Happy New Year
+Michael Barton
+____________________
+C. Michael Barton, Professor of Anthropology
+School of Human Evolution and Social Change
+PO Box 872402
+Arizona State University
+Tempe, AZ  85287-2402
+USA
+
+Phone: 480-965-6262
+Fax: 480-965-7671
+www: <www.public.asu.edu/~cmbarton>
+

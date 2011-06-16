@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Replaces values of cells that match a user-defined condition
+
+# (achieves something similar to ArcGIS' Cond tool)
+#
+# Input:
+# (a) a raster map
+# (b) a condition
+# (c) choice for "true" case: raster, constant, null, nothing
+# (d) choice for "false" case: raster, constant, null, nothing
+# (e) raster map(s) to user for true or false case if "raster" is
+#     selected as replacement mode for either
+#
+

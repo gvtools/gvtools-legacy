@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# model elevation data error/uncertainty by adding
+# (a) a random offset within a specified range to every cell.
+# (b) a random offset within an attribute-table specified range to
+# every cell that is overlaid by a vector object (e.g. canopies)
+
