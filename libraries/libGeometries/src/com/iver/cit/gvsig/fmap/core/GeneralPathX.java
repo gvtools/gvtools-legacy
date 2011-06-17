@@ -635,7 +635,7 @@ public class GeneralPathX implements Shape, Cloneable, Serializable {
 	if (numTypes < 2) {
 	    return false;
 	}
-	int cross = Curve.crossingsForPath(getPathIterator(null), x, y);
+	int cross = Curve.pointCrossingsForPath(getPathIterator(null), x, y);
 	if (windingRule == WIND_NON_ZERO) {
 	    return (cross != 0);
 	} else {
