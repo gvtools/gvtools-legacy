@@ -12,7 +12,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/libIverUtiles"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar"/>
-	<classpathentry kind="lib" path="/_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/lib/gdbms-0.8-SNAPSHOT.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extGeoProcessing"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
@@ -25,5 +24,6 @@
 	<classpathentry kind="lib" path="/libFMap/lib/gt2-main.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/vecmath-1.3.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.11.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
