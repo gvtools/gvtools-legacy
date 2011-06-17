@@ -253,7 +253,7 @@ public class SnappingOverlayOperation extends OverlayOp {
 		
 		
 		//TODO Todos los builders deberán usar los metodos snap de locator
-		SnapPolygonBuilder polyBuilder = new SnapPolygonBuilder(geomFact, cga);
+		SnapPolygonBuilder polyBuilder = new SnapPolygonBuilder(geomFact);
 		polyBuilder.add(graph);
 		resultPolyList = polyBuilder.getPolygons();
 

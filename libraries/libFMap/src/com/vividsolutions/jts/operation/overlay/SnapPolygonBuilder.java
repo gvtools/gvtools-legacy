@@ -80,17 +80,14 @@ import com.vividsolutions.jts.util.Assert;
 public class SnapPolygonBuilder extends PolygonBuilder {
 
 	 private GeometryFactory geometryFactory;
-	  private CGAlgorithms cga;
 	  //private List dirEdgeList;
 	  //private NodeMap nodes;
 	  private List shellList        = new ArrayList();
 
-	  public SnapPolygonBuilder(GeometryFactory geometryFactory, 
-			  CGAlgorithms cga)
+	  public SnapPolygonBuilder(GeometryFactory geometryFactory)
 	  {
-		super(geometryFactory, cga);
+		super(geometryFactory);
 	    this.geometryFactory = geometryFactory;
-	    this.cga = cga;
 	  }
 
 	  /**
@@ -136,7 +133,7 @@ public class SnapPolygonBuilder extends PolygonBuilder {
 	      if (de.isInResult() && de.getLabel().isArea() ) {
 	        // if this edge has not yet been processed
 	        if (de.getEdgeRing() == null) {
-	          MaximalEdgeRing er = new MaximalEdgeRing(de, geometryFactory, cga);
+	          MaximalEdgeRing er = new MaximalEdgeRing(de, geometryFactory);
 	          maxEdgeRings.add(er);
 	          er.setInResult();
 //	System.out.println("max node degree = " + er.getMaxDegree());
