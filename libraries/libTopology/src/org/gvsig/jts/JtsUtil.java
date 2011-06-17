@@ -410,7 +410,7 @@ public class JtsUtil {
 //	
 //	
 	public static LineString reverse(LineString lineString){
-		LineString solution = lineString.reverse();
+		LineString solution = (LineString) lineString.reverse();
 		if(lineString instanceof LinearRing)
 			solution = toLinearRing(lineString);
 		return solution;
