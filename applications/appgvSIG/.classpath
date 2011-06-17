@@ -34,10 +34,10 @@
 	<classpathentry kind="lib" path="/libFMap/lib/xml-apis-ext.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry kind="lib" path="/libFMap/lib/jts-1.9.jar"/>
 	<classpathentry kind="lib" path="lib/org.gvsig.printing.cups-support.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libCorePlugin"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

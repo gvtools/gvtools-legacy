@@ -15,7 +15,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
 	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar"/>
-	<classpathentry kind="lib" path="/libFMap/lib/jts-1.9.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/geoutils.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
