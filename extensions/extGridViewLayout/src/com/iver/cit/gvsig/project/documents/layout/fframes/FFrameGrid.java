@@ -42,7 +42,7 @@ public class FFrameGrid extends FFrame implements IFFrameViewDependence{
 	private int sizeFont=8;
 	private int dependenceIndex;
 
-	public void draw(Graphics2D g, AffineTransform at, Rectangle2D rv, BufferedImage imgBase) throws ReadDriverException {
+	public void draw(Graphics2D g, AffineTransform at, Rectangle2D rv, BufferedImage imgBase) {
 		FontRenderContext frc = g.getFontRenderContext();
 		double myScale = at.getScaleX() * 0.0234; //FLayoutUtilities.fromSheetDistance(folio.getAncho(),at)/rv.getWidth();
         int scaledFontSize = (int) (myScale * sizeFont);
@@ -197,7 +197,7 @@ public class FFrameGrid extends FFrame implements IFFrameViewDependence{
                 r.y + (r.height / 2));
 	}
 
-	public void print(Graphics2D g, AffineTransform at, FShape shape,PrintRequestAttributeSet properties) throws ReadDriverException {
+	public void print(Graphics2D g, AffineTransform at, FShape shape,PrintRequestAttributeSet properties) {
 		draw(g,at,null,null);
 	}
 
