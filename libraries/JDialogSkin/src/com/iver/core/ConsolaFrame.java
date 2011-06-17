@@ -286,5 +286,11 @@ public class ConsolaFrame extends JPanel implements IWindow, SingletonWindow,Not
 		return info;
 	}
 
+	@Override
+	public Object getWindowProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

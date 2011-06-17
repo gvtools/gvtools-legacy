@@ -66,6 +66,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JMenuBar;
 import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
@@ -1099,6 +1100,12 @@ public class NewSkin extends Extension implements MDIManager{
 		}
       }
     }
+
+	@Override
+	public void addJMenuBarToWindow(IWindow w, JMenuBar menuBar) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }

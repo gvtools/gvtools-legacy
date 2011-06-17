@@ -788,4 +788,10 @@ public class ConfigPlugins extends JPanel implements IWindow {
 		//hay que refrescar la aplicación
 		///((App)App.instance).run();
 	}
+
+	@Override
+	public Object getWindowProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 } //  @jve:decl-index=0:visual-constraint="10,10"

@@ -270,4 +270,10 @@ public class NotificationDialog extends JPanel implements IWindow, SingletonWind
 
         return pScrollDescription;
     }
+
+	@Override
+	public Object getWindowProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 } //  @jve:decl-index=0:visual-constraint="10,10"
