@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<plugin-config>
+	<libraries library-dir="."/>
+	<depends plugin-name="com.iver.cit.gvsig" />
+	<resourceBundle name="text"/>
+	<extensions>
+		<extension class-name="com.iver.cit.gvsig.jdbc_spatial.ExtJDBC_Spatial"
+			description="Support to access JDBC spatial databases PostgreSQL and mySQL"
+			active="true"
+			priority="1">
+		</extension>	
+		<!--	
+		<extension class-name="com.iver.cit.gvsig.jdbc_spatial.ImportLayer"
+			description="Writes active layer to PostGIS"
+			active="true"
+			priority="2">
+			
+			<menu text="Capa/import_layer" action-command="IMPORT_LAYER" icon="images/editpaste.png"/>			
+		</extension>		
+		-->
+		
+	</extensions>
+</plugin-config>
