@@ -37,5 +37,51 @@
     </move>
   </target>
 
+	<target name="batch-build"
+			description="compile the sources, create the jar file"
+			depends="compile,create-jar,copy-data-files">
+	</target>
+
+	<target name="compile" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<echo>${compile-classpath}</echo>
+		<javac  srcdir="${src}"
+			destdir="${build}"
+			source="1.4"
+			target="1.4"
+			debug="${debug}"
+			debuglevel="${debuglevel}"
+			classpath="${compile-classpath}"/>
+	</target>
+
+	<target name="create-jar"
+			description="Creates the plugin jar">
+		<mkdir dir="${dist}/lib"/>
+	    <jar jarfile="${dist}/${plugin}.jar" basedir="${build}" includes="com/iver/cit/gvsig/**"
+	    	excludes="com/iver/cit/gvsig/fmap/**"
+	    />
+	  	<jar jarfile="${dist}/${fmapjar}.jar" basedir="${build}"
+	  	  		includes="com/iver/cit/gvsig/fmap/**" />
+	</target>
+
+	<target name="copy-data-files">
+	    <copy file="config/config.xml" todir="${dist}"/>
+		<copy todir="${dist}">
+			<fileset dir="config" includes="text*.properties"/>
+		</copy>
+		<copy todir="${dist}/images">
+			<fileset dir="images/" includes="*"/>
+		</copy>
+	</target>
+
+
+	<target name="clean"
+	        description="clean up" >
+	    <!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${dist}"/>
+		<delete dir="${build}"/>
+	</target>
+
 </project>
 

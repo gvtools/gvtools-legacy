@@ -69,6 +69,8 @@
 		extGeoProcessing,
 		extGeoprocessingExtensions,
 		extGeoreferencing,
+		extGridViewLayout,
+		extMeasureGeometry,
 		extTopology,
 		extOracleSpatial,
 		extSDE,

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<plugin-config>
+	<libraries library-dir="."/>
+	<depends plugin-name="com.iver.cit.gvsig"/>
+		<resourceBundle name="text"/>
+	<extensions>
+		<extension class-name="com.iver.gvsig.AreaExtension"
+			description="Extension that measures the area of all the polygonos they selected."
+			active="true">
+			<menu text="Vista/area" tooltip="area"
+				action-command="AREA"
+				icon="images/area.png" />
+			<tool-bar name="area">
+				<action-tool icon="images/area.png"
+					action-command="AREA" tooltip="area"
+					enable-text="debería de estar activada" last="true"/>
+			</tool-bar>
+		</extension>
+		<extension class-name="com.iver.gvsig.PerimeterExtension"
+			description="Extension that measures the perimeter of all the lines they selected."
+			active="true">
+			<menu text="Vista/perimeter" tooltip="perimeter"
+				action-command="PERIMETER"
+				icon="images/perimeter.png" />
+			<tool-bar name="perimeter">
+				<action-tool icon="images/perimeter.png"
+					action-command="PERIMETER" tooltip="perimeter"
+					enable-text="debería de estar activada" last="true"/>
+			</tool-bar>
+		</extension>
+		<extension class-name="com.iver.gvsig.AddXYPointThemeExtension"
+			description="Extension that add the coordinates x and y."
+			active="true">
+			<menu text="Vista/add_x_y" tooltip="add_x_y"
+				action-command="ADDXYPOINT"
+				icon="images/xypoint.png" />
+			<tool-bar name="add_x_y">
+				<action-tool icon="images/xypoint.png"
+					action-command="ADDXYPOINT" tooltip="add_x_y"
+					enable-text="debería de estar activada" last="true"/>
+			</tool-bar>
+		</extension>
+	</extensions>
+</plugin-config>
