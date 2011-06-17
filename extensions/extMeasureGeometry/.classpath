@@ -8,5 +8,7 @@
 	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar" sourcepath="/libDriverManager"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.11.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar" sourcepath="/extJCRS/src/org/gvsig/crs"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

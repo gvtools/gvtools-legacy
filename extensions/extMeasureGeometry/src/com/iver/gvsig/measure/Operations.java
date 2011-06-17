@@ -3,7 +3,7 @@ package com.iver.gvsig.measure;
 import java.awt.Shape;
 import java.sql.Types;
 
-import com.iver.cit.gvsig.fmap.DriverException;
+import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -167,9 +167,10 @@ public class Operations {
      * @throws com.iver.cit.gvsig.fmap.DriverException
 	 * @throws com.hardcode.gdbms.engine.data.driver.DriverException
      */
-    public static SHPLayerDefinition createLayerDefinition(FLyrVect layer) throws DriverException, com.hardcode.gdbms.engine.data.driver.DriverException{
+    public static SHPLayerDefinition createLayerDefinition(FLyrVect layer) throws com.hardcode.gdbms.engine.data.driver.DriverException{
         SHPLayerDefinition solution = new SHPLayerDefinition();
         solution.setName(layer.getName());
+        try {
         solution.setShapeType(layer.getShapeType());
         SelectableDataSource datasource = layer.getRecordset();
         int numFields = datasource.getFieldCount();
@@ -187,6 +188,9 @@ public class Operations {
             fields[i] = fieldDesc;
         }
         solution.setFieldsDesc(fields);
+        } catch (ReadDriverException e) {
+        	e.printStackTrace();
+        }
         return solution;
     }
     /**
@@ -223,7 +227,7 @@ public class Operations {
      * @throws DriverException
      * @throws com.hardcode.gdbms.engine.data.driver.DriverException
      */
-    public FieldDescription[] getXYFields(SHPLayerDefinition lyrDef) throws DriverException, com.hardcode.gdbms.engine.data.driver.DriverException {
+    public FieldDescription[] getXYFields(SHPLayerDefinition lyrDef) throws com.hardcode.gdbms.engine.data.driver.DriverException {
 
 		int type=Types.DOUBLE;
 		FieldDescription[] fD=lyrDef.getFieldsDesc();

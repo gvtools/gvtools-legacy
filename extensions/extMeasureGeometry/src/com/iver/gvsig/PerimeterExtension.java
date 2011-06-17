@@ -3,11 +3,15 @@ package com.iver.gvsig;
 import java.io.File;
 import java.io.IOException;
 
+import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
+import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
-import com.iver.cit.gvsig.fmap.DriverException;
+import com.iver.cit.gvsig.exceptions.visitors.ProcessWriterVisitorException;
+import com.iver.cit.gvsig.exceptions.visitors.StartWriterVisitorException;
+import com.iver.cit.gvsig.exceptions.visitors.StopWriterVisitorException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.DefaultFeature;
@@ -20,7 +24,6 @@ import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.edition.DefaultRowEdited;
-import com.iver.cit.gvsig.fmap.edition.EditionException;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.fmap.edition.writers.shp.ShpWriter;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -105,15 +108,17 @@ public class PerimeterExtension extends Extension {
 			lv.setRecordset(newAdapter.getRecordset());
 
 
-		} catch (EditionException e) {
-			e.printStackTrace();
-		} catch (DriverException e1) {
-			e1.printStackTrace();
 		} catch (com.hardcode.gdbms.engine.data.driver.DriverException e1) {
 			e1.printStackTrace();
-		} catch (DriverIOException e) {
+		} catch (ReadDriverException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (InitializeWriterException e) {
+			e.printStackTrace();
+		} catch (StartWriterVisitorException e) {
+			e.printStackTrace();
+		} catch (StopWriterVisitorException e) {
+			e.printStackTrace();
+		} catch (ProcessWriterVisitorException e) {
 			e.printStackTrace();
 		}
 	}
@@ -150,7 +155,7 @@ public class PerimeterExtension extends Extension {
 						if (FShape.ARC == type || FShape.LINE == type) {
 							return true;
 						}
-					} catch (DriverException e) {
+					} catch (ReadDriverException e) {
 						return false;
 					}
 				}
