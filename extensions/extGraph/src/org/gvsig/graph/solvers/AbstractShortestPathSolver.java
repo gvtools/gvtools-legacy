@@ -223,7 +223,7 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 			line = NetworkUtils.getPartialLineString(line, pctMin, 0);
 
 			if (bFlipearShape)
-				line = line.reverse();
+				line = (LineString) line.reverse();
 
 			IGeometry geom = FConverter.jts_to_igeometry(line);
 			// TODO: Calcular bien el length de este arco,
@@ -320,11 +320,11 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 			IGeometry geom = null;
 			if (aux == null) {
 				if (infoShp.bFlip)
-					line = line.reverse();
+					line = (MultiLineString) line.reverse();
 				geom = FConverter.jts_to_igeometry(line);
 			} else {
 				if (infoShp.bFlip)
-					aux = aux.reverse();
+					aux = (LineString) aux.reverse();
 				geom = FConverter.jts_to_igeometry(aux);
 			}
 
