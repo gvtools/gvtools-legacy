@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# A simple wrapper around v.kernel which allows using it from SEXTANTE
+# (changes the ambiguous output= option to be of type raster).
+#
+# This produces only the raster output of v.kernel.
+# For network kernel estimation, use v.kde.network.
+
+
+

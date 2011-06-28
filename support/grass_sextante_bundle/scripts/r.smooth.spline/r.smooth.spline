@@ -88,7 +88,16 @@
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+#       		for details.
+#        
+# TODO: - set sie/sin to sampling density
+#		- use -c flag to optimize regularization (using a n=100 sample),
+#         instead of having user set this parameter (??)
+#       - "method=bicubic" gives a much more seamless, smooth result.
+#         This plus automatic estimation of lambda_i is probably preferable
+#         to having the user manually set the smoothing (too much interaction
+#         with sample spacing and attraction parameter) 
+#
 #
 #############################################################################
 

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# A simple wrapper around v.kernel which allows using it from SEXTANTE
+# (changes the ambiguous output= option to be of type vector).
+#
+# This produces only the network (vector) output of v.kernel.
+# For continuous (raster) kernel estimation, use v.kde.
