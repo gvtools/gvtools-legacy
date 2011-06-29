@@ -9,6 +9,7 @@ Lastly, some of the assumptions need to be checked.
 In particular, the "blind, good-faith" use of v.surf.bspline needs
 to be rethought:
   - bicubic interpolation instead of bilinear + automatic estimation of lambda_i?
+       -> use v.random.sample (part of former DST tools)
   - how to choose sie/sin?
   - is this really the best interpolator for LiDAR data?
 
