@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# A simplified interface to v.surf.bspline:
+
+# - Always use bicubic splines
+# - use -e and -c to estimate critical parameters (on a n=100 subset of input points)
+#   -> use v.random.sample (part of former DST tools)
+# - use -z to indicate layer=0 (interpolate from Z coords), otherwise assume layer=1
+
+
