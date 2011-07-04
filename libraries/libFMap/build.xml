@@ -142,8 +142,8 @@
 	<target name="create-jar"
 	   description="Creates the plugin jar">
 	     <jar jarfile="${dist}/lib/${jarName}" basedir="${build}" excludes="com/vividsolutions/**"/>
-	  <rename dest="${dist}/lib/jts-1.9_gvSIG.jar" src="${dist}/lib/jts-1.9.jar"/>
-	  <jar jarfile="${dist}/lib/jts-1.9_gvSIG.jar" basedir="${build}" update="yes" includes="com/vividsolutions/**"/>
+	  <rename dest="${dist}/lib/jts-1.12_gvSIG.jar" src="${dist}/lib/jts-1.12.jar"/>
+	  <jar jarfile="${dist}/lib/jts-1.12_gvSIG.jar" basedir="${build}" update="yes" includes="com/vividsolutions/**"/>
 	 </target>
 
 	<target name="copy-libs" description="copy libs to dist">
