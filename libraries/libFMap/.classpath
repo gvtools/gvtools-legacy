@@ -36,6 +36,6 @@
 	<classpathentry kind="lib" path="lib/org.gvsig.raster.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
 	<classpathentry kind="lib" path="lib/geoutils.jar"/>
-	<classpathentry kind="lib" path="lib/jts-1.11.jar"/>
+	<classpathentry kind="lib" path="/home/benni/workspace-gvsig/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
