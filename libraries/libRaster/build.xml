@@ -19,7 +19,6 @@
 	<property name="andamiJar" location="${andami}/andami.jar"/>
 	<property name="fmapLibs" location="../libFMap/lib" />
 	<property name="gvsigJar" location="${extensionsDir}/${mainplugin}/lib/${mainplugin}.jar"/>
-	<!--<property name="compile-classpath" value="${andamiJar}:${gvsigJar}:${andamiLibs}/beans.jar:${andamiLibs}/castor-0.9.5.3-xml.jar:${fmapLibs}/driver-manager-1.1.jar:${fmapLibs}/fmap.jar:${fmapLibs}/gdbms-0.8-SNAPSHOT.jar:${lib}/gt2-wms.jar:${andamiLibs}/iver-utiles.jar:${fmapLibs}/jts-1.7.jar:${fmapLibs}/kxml2.jar:${fmapLibs}/libproj.jar:${andamiLibs}/log4j-1.2.8.jar:${fmapLibs}/remote-clients.jar:${andamiLibs}/tempFileManager.jar" />-->
 	<import file="../binaries/ant/utilities.xml"/>
 
   <target name="init">
