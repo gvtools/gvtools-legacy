@@ -17,6 +17,6 @@
 	<classpathentry kind="lib" path="/libInternationalization/lib/gvsig-i18n.jar" sourcepath="/libInternationalization/src"/>
 	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar" sourcepath="/extJCRS/src/org/gvsig/crs"/>
 	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar" sourcepath="/libDriverManager"/>
-	<classpathentry kind="lib" path="/libFMap/lib/jts-1.11.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

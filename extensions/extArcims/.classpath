@@ -18,6 +18,6 @@
 	<classpathentry kind="lib" path="/libFMap/lib/org.gvsig.fmap.raster.jar" sourcepath="/extRasterTools-SE"/>
 	<classpathentry kind="lib" path="/libFMap/lib/org.gvsig.raster.gui.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar" sourcepath="/libUIComponent/src"/>
-	<classpathentry kind="lib" path="/libFMap/lib/jts-1.11.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

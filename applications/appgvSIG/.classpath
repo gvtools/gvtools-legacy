@@ -38,6 +38,6 @@
 	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libCorePlugin"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
-	<classpathentry kind="lib" path="/libFMap/lib/jts-1.11.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

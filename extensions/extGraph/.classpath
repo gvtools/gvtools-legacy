@@ -27,6 +27,6 @@
 	<classpathentry kind="lib" path="lib/AbsoluteLayout.jar"/>
 	<classpathentry kind="lib" path="lib/swing-layout-1.0.3.jar"/>
 	<classpathentry kind="lib" path="/appgvSIG/lib/org.gvsig.printing.cups-support.jar"/>
-	<classpathentry kind="lib" path="/libFMap/lib/jts-1.11.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
