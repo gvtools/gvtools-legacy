@@ -240,8 +240,10 @@
     <notes></notes>
 		<path>./bin/gvSIG/extensiones/com.iver.cit.gvsig/lib/</path>
 		<files>
-			<file>jts-1.7.jar</file>
+			<file>jts-1.12.jar</file>
+			<!-- 
 			<file>jtsio-1.7.jar</file>
+			 -->
 		</files>
 	</library>
   <library>
