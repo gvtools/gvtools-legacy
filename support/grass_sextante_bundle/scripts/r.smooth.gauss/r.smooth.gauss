@@ -7,7 +7,12 @@
 # PURPOSE:      Performs smoothing using a Gaussian weighted neighborhood
 #		filter.
 #
-# USAGE:	Smoothing is done by moving a stepwise approximation of a
+# USAGE:	Smoothing is a way to reduce high frequency noise in an
+# 		input dataset. Mathematically speaking, the noise is unwanted
+#		variation and this variation can be reduced by "pulling"
+#		data values towards their neighborhood average.
+#		
+#		Smoothing is done by moving a stepwise approximation of a
 #		2D quadratic Gaussian kernel over the input data cells.
 #		The kernel steepness is defined by the "sigma=" option.
 #		Larger values produce broader, less steep kernels.
@@ -34,7 +39,8 @@
 #		approximation instead.
 #
 #		A Gaussian filter provides gentler smoothing and preserves 
-#		edges better than a mean filter of the same size.
+#		edges better than a mean filter of the same size. It reduces noise
+#		less, but takes away less detail, as well.
 #
 # CAVEATS	This module uses gaussgen to generate the Gaussian filter
 #		description. The gaussgen program needs to be available
