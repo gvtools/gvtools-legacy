@@ -1,0 +1,24 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       r.sharpen
+# AUTHOR(S):    Benjamin Ducke <benjamin.ducke AT oadigital.net>
+# PURPOSE:      Performs smoothing using a Gaussian weighted neighborhood
+#		filter.
+#
+# USAGE:	Sharpening is used to accentuate the difference between
+#		neighboring cells. 
+#
+#		Example kernel:
+#			-1	-1	-1
+#			-1	9	-1
+#			-1	-1	-1
+#
+#		If the central cell has a greater value than its neighbors,
+#		it will be replaced with a larger value (accentuated).
+#
+#		Because sharpening will also accentuate noise, it is a
+#		good idea to reduce any noise in the dataset first, even
+#		with a simple tool such as r.smooth.gauss.
+#
