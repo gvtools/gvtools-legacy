@@ -1,0 +1,11 @@
+<project name="gvSIG 3D Plugin Build System" default="work" basedir=".">
+
+	<import file="../../build.xml" />
+
+	<target name="work" description="prepares system to begin working with eclipse" depends="prepare-eclipse-workspace" />
+	<!--
+	TODO: This target should call mvn install phase in a temporary dir, and afterwards call izPack to do the distribution of this plugin.
+	target name="distribution" description="creates the final distribution of the plugin" depends="mvn-install,build-installer" /
+	-->
+</project>
+

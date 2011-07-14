@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gvsig</groupId>
+	<artifactId>gvsig-plugin-NAME</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>gvsig-plugin-NAME</name>
+	<description>
+		GvSIG plugin NAME. This pom builds all the NAME extension plugin for
+		GvSIG
+	</description>
+	<inceptionYear>2008</inceptionYear>
+	
+	<developers>
+		<developer>
+			<name>Developer 1</name>
+			<id>id-developer1</id>
+			<email>id-developer1@dot.com</email>
+			<roles>
+				<role>Project Lead</role>
+			</roles>
+			<organization>ORGANIZATION</organization>
+		</developer>
+		<developer>
+			<name>Developer2</name>
+			<id>id-developer2</id>
+			<email>id-developer2@dot.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<organization>ORGANIZATION</organization>
+		</developer>
+	</developers>
+
+	<modules>
+		<module>PATH TO THE INVOLVED PROJECTS ../../libMylibrary</module>
+		<module>PATH TO THE INVOLVED PROJECTS ../../libMyExtension</module>
+	</modules>
+</project>
+

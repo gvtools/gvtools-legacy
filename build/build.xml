@@ -1,0 +1,117 @@
+<project name="Complete_build_system" basedir="." default="prepare-eclipse-workspace">
+	<description>
+		Builds and prepare folders to work with eclipse using maven.
+		Also is able to generate a release of all system with binaries distribution
+		and sources distribution.
+	</description>
+	<!-- set global properties for this build -->
+	<dirname file="${ant.file.Complete_build_system}" property="ant.file.Complete_build_system.dir"/>
+	<property name="mavendir" location="${ant.file.Complete_build_system.dir}/maven" />
+	<property environment="environment"/>
+
+	<condition property="mvn.executable" value="${mavendir}/bin/mvn.bat" else="${mavendir}/bin/mvn">
+		<os family="windows" />
+	</condition>
+
+	<condition property="isLinux">
+		<and>
+			<os family="unix" />
+			<not>
+				<os family="mac" />
+			</not>
+		</and>
+	</condition>
+	<condition property="isWindows">
+		<or>
+			<os family="windows" />
+			<os family="win9x" />
+			<os name="Windows Vista" />
+		</or>
+	</condition>
+	<condition property="isMac">
+		<os family="mac" />
+	</condition>
+
+	<condition property="gvsig.os" value="w32">
+		<os family="windows" />
+	</condition>
+	<condition property="gvsig.os" value="linux">
+		<and>
+			<os family="unix" />
+			<not>
+				<os family="mac" />
+			</not>
+		</and>
+	</condition>
+	<condition property="gvsig.os" value="mac">
+		<os family="mac" />
+	</condition>
+
+	<property name="native-binaries-dir" value="../binaries" />
+
+	<presetdef name="maven">
+		<exec executable="${mvn.executable}">
+			<env key="JAVA_HOME" value="${java.home}"/>
+		</exec>
+	</presetdef>
+
+	<target name="prepare-eclipse-workspace" depends="mvn-clean,mvn-install-without-tests">
+		<maven>
+			<arg value="-Declipse.workspace=../" />
+			<arg value="eclipse:add-maven-repo" />
+		</maven>
+		<maven>
+			<arg value="eclipse:eclipse" />
+		</maven>
+
+	</target>
+	<target name="mvn-clean">
+		<maven>
+			<arg value="clean" />
+		</maven>
+	</target>
+	<target name="mvn-install-without-tests">
+		<maven>
+			<arg value="install" />
+			<arg value="-Dmaven.test.skip=true" />
+		</maven>
+	</target>
+
+	<target name="install-gvsig-base" depends="mvn-clean,mvn-install-extensions,mvn-eclipse-clean">
+		<maven>
+			<arg value="eclipse:eclipse" />
+		</maven>
+	</target>
+
+	<target name="mvn-install-extensions">
+		<maven>
+			<arg value="install" />
+			<arg value="-Dmaven.test.skip=true" />
+			<arg value="-Dinstall-extension" />
+		</maven>
+	</target>
+
+	<target name="mvn-install">
+		<maven>
+			<arg value="install" />
+		</maven>
+	</target>
+
+	<target name="mvn-eclipse-clean">
+		<maven>
+			<arg value="eclipse:clean" />
+		</maven>
+	</target>
+
+	<target name="mvn-eclipse-eclipse">
+		<maven>
+			<arg value="eclipse:eclipse" />
+		</maven>
+	</target>
+
+	<!-- TODO: Target for make complete building of gvSIG, calling all enabled projects by default -->
+
+	<!-- target name="work" description="prepares system to begin working with eclipse" depends="prepare-eclipse-workspace" / -->
+
+</project>
+

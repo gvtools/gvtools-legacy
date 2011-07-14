@@ -1,0 +1,156 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gvsig</groupId>
+	<artifactId>gvsig-basepoms</artifactId>
+	<packaging>pom</packaging>
+	<version>1.9-SNAPSHOT</version>
+	<name>gvsig-base-pom</name>
+	<description>Base POM for all GvSIG projects</description>
+	<scm>
+		<connection>
+			scm:svn:http://svn.forge.osor.eu/svn/gvSIG/trunk
+		</connection>
+		<developerConnection>
+			scm:svn:https://svn.forge.osor.eu/svn/gvSIG/trunk
+		</developerConnection>
+		<url>http://www.osor.eu/projects/gvsig-desktop</url>
+	</scm>
+	<organization>
+		<name>CIT/IVER/AI2</name>
+		<url>http://www.osor.eu/projects/gvsig-desktop</url>
+	</organization>
+	<!-- Put here the global properties who use all the projects of GvSIG -->
+	<properties>
+		<gvsig-path><!-- Name property -->
+			../build/product
+		</gvsig-path>
+		<gvsig-lib-dir>${gvsig-path}/lib</gvsig-lib-dir>
+		<extension-dir>${gvsig-path}/gvSIG/extensiones
+		</extension-dir>
+		<build-dir>${basedir}</build-dir>
+	</properties>
+	<repositories>
+		<!-- repository> <id>gvSIG-Repo</id> <url>https://gvsig.org/plugins/downloads/gvsig-repo</url> 
+			</repository -->
+		<!-- repository> <id>gvsig-ftp-repository</id> <name>gvSIG maven FTP repository</name> 
+			<url>ftp://downloads.gvsig.org:20001/user/maven </url> </repository -->
+		<repository>
+			<name>osgvp</name>	
+			<id>osgvp-repository</id>
+			<url>http://osgvp.forge.osor.eu/maven-repository</url>
+
+		</repository>
+
+		<repository>
+			<id>gvSIG-1.9</id>
+			<name>gvSIG maven http repository</name>
+			<url>http://gvsig-desktop.forge.osor.eu/downloads/pub/projects/gvSIG-desktop/maven-repository-1.9/
+			</url>
+		</repository>	
+		<repository>
+			<id>maven2</id>
+			<name>Refractions Research Maven 2 Repository</name>
+			<url>http://mirrors.ibiblio.org/pub/mirrors/maven2
+			</url>
+		</repository>
+		<repository>
+			<id>refractions</id>
+			<name>Refractions Research Maven 2 Repository</name>
+			<url>http://lists.refractions.net/m2
+			</url>
+		</repository>
+		<repository>
+			<id>geotools</id>
+			<url>http://maven.geotools.fr/repository
+			</url>
+		</repository>
+		<!-- <repository> -->
+		<!-- <id>OSGVP</id> -->
+		<!-- <url>http://josgplanets.ai2.upv.es/maven/repository -->
+		<!-- </url> -->
+		<!-- </repository> -->
+	</repositories>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</reporting>
+	<distributionManagement>
+	 <repository>
+                        <uniqueVersion>false</uniqueVersion>
+                        <id>gvSIG-1.9</id>
+                        <name>gvSIG maven repository</name>
+                        <url>scp://shell.forge.osor.eu/home/groups/gvsig-desktop/www/downloads/pub/projects/gvSIG-desktop/maven-repository-1.9</url>
+                </repository>
+                <snapshotRepository>
+                        <uniqueVersion>false</uniqueVersion>
+                        <id>gvSIG-1.9</id>
+                        <name>gvSIG maven repository</name>
+                        <url>scp://shell.forge.osor.eu/home/groups/gvsig-desktop/www/downloads/pub/projects/gvSIG-desktop/maven-repository-1.9</url>
+           
+		</snapshotRepository>
+	</distributionManagement>
+	<build>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav</artifactId>
+				<version>1.0-beta-2</version>
+			</extension>
+			<!--extension>
+				<groupId>org.gvsig.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>0.2</version>
+			</extension-->
+		</extensions>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+					<!-- put your configurations here -->
+					<encoding>ISO-8859-1</encoding>
+					<!-- <failOnError>false</failOnError> -->
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>release</id>
+			<activation>
+				<property>
+					<name>withSources</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins
+						</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<modules>
+		<module>libraries-pom</module>
+		<module>extension-pom</module>
+	</modules>
+</project>

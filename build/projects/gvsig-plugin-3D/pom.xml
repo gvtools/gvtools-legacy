@@ -1,0 +1,147 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gvsig</groupId>
+	<artifactId>gvsig-plugin-3D</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>gvsig-plugin-3d</name>
+	<description> GvSIG plugin 3D. This pom mades all the 3D extension
+		plugin for GvSIG</description>
+	<inceptionYear>2007</inceptionYear>
+	<developers>
+		<developer>
+			<name>Rafael Gaitán</name>
+			<id>rgaitan</id>
+			<email>rgaitan@ai2.upv.es</email>
+			<roles>
+				<role>Project Lead</role>
+			</roles>
+			<organization>AI2</organization>
+		</developer>
+		<developer>
+			<name>Maria Ten</name>
+			<id>mten</id>
+			<email>mten@ai2.upv.es</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<organization>AI2</organization>
+		</developer>
+		<developer>
+			<name>Jordi Torres</name>
+			<id>jtorres</id>
+			<email>jtorres@ai2.upv.es</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<organization>AI2</organization>
+		</developer>
+		<developer>
+			<name>Jesus Zarzoso</name>
+			<id>jzarzoso</id>
+			<email>jzarzoso@ai2.upv.es</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<organization>AI2</organization>
+		</developer>
+		<developer>
+			<name>Javier Lluch</name>
+			<id>jlluch</id>
+			<email>jlluch@dsic.upv.es</email>
+			<roles>
+				<role>Manager</role>
+			</roles>
+			<organization>AI2</organization>
+		</developer>
+		<developer>
+			<name>Salvador Bayarri</name>
+			<id>sbayarri</id>
+			<email>salvador.bayarri@iver.es</email>
+			<roles>
+				<role>Manager</role>
+			</roles>
+			<organization>IVER</organization>
+		</developer>
+		<developer>
+			<name>Julio Campos</name>
+			<id>jcampos</id>
+			<email>julio.campos@iver.es</email>
+			<roles>
+				<role>Project Lead</role>
+			</roles>
+			<organization>IVER</organization>
+		</developer>
+		<developer>
+			<name>Angel Fraile</name>
+			<id>afraile</id>
+			<email>angel.fraile@iver.es</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<organization>IVER</organization>
+		</developer>
+	</developers>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.13</version>
+		</dependency>
+	</dependencies>
+	
+	<repositories>
+	<repository>
+         <id>osgvp-repository</id>
+          <url>http://osgvp.forge.osor.eu/maven-repository</url>
+     </repository>
+	</repositories>
+	<distributionManagement> 	
+	 <repository>
+                        <uniqueVersion>false</uniqueVersion>
+                        <id>gvSIG-1.9</id>
+                        <name>gvSIG maven repository</name>
+                        <url>scp://shell.forge.osor.eu/home/groups/gvsig-desktop/www/downloads/pub/projects/gvSIG-desktop/maven-repository-1.9</url>
+                </repository>
+                <snapshotRepository>
+                        <uniqueVersion>false</uniqueVersion>
+                        <id>gvSIG-1.9</id>
+                        <name>gvSIG maven repository</name>
+                        <url>scp://shell.forge.osor.eu/home/groups/gvsig-desktop/www/downloads/pub/projects/gvSIG-desktop/maven-repository-1.9</url>
+                </snapshotRepository>
+	
+	</distributionManagement>
+	<modules>
+		<module>../../../libCacheService</module>
+		<module>../../../extDockingSkin</module>
+		<module>../../../lib3DMap-share</module>
+		<module>../../../libGeometries3D</module>
+		<module>../../../libGPE-OSG</module>
+		<module>../../../lib3DMap</module>
+		<module>../../../ext3Dgui</module>
+		<!--
+		<module>../../../libjni-gdal</module>
+		<module>../../../libjni-ecw</module>
+		<module>../../../libjni-mrsid</module>
+		<module>../../../libjni-potrace</module>
+		<module>../../../libjni-proj4</module>
+		-->
+	</modules>
+	<profiles>
+        <profile>
+            <id>build-all</id>
+			<modules>
+				<module>../gvsig-plugin-animation</module>
+				<module>../../../osgvp</module>
+			</modules>
+  		</profile>
+	</profiles>
+</project>

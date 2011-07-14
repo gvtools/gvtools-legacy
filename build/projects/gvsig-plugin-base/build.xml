@@ -1,0 +1,52 @@
+<project name="gvSIG 3D Plugin Build System" default="work" basedir=".">
+
+	<import file="../../build.xml" />
+	<property name="dst-distri" location="../../../_fwAndami"/>
+	
+	<!--
+	TODO: This target should call mvn install phase in a temporary dir, and afterwards call izPack to do the distribution of this plugin.
+	target name="distribution" description="creates the final distribution of the plugin" depends="mvn-install,build-installer" /
+	-->
+
+	<target name="work" description="prepares system to begin working with eclipse" depends="install-gvsig-base" />
+	<target name="eclipse" depends="mvn-clean,mvn-eclipse-clean,mvn-eclipse-eclipse" />
+
+	<target name="install-gvsig-base" depends="mvn-clean,mvn-install-extensions"/>
+
+
+	<target name="mvn-install-extensions">
+		<maven>
+			<arg value="install" />
+			<arg value="-Dmaven.test.skip=true" />
+			<arg value="-Dinstall-extension" />
+		</maven>
+		<mkdir dir="${dst-distri}/gvSIG"/>
+		<copy todir="${dst-distri}/gvSIG">
+			<fileset dir="../../product/gvSIG/" includes="**"/>
+		</copy>
+		<copy todir="${dst-distri}">
+			<fileset dir="../../product/" includes="*.jar"/>
+		</copy>
+	</target>
+
+	<target name="mvn-install">
+		<maven>
+			<arg value="install" />
+		</maven>
+	</target>
+
+	<target name="mvn-eclipse-clean">
+		<maven>
+			<arg value="eclipse:clean" />
+		</maven>
+	</target>
+
+
+	<target name="mvn-eclipse-eclipse">
+		<maven>
+			<arg value="eclipse:eclipse" />
+		</maven>
+	</target>
+
+</project>
+
