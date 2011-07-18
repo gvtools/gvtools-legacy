@@ -105,4 +105,4 @@ JNIEXPORT void JNICALL Java_es_gva_cit_jmrsid_LTIPixel_FreeLTIPixelNat
   		delete pixel;
   	}
   	
-  } 
+  }

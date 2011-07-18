@@ -153,4 +153,4 @@ JNIEXPORT void JNICALL Java_es_gva_cit_jmrsid_LTIImageStage_FreeLTIImageStageNat
 		stage->release();
   	}
   	
-  } 
+  }

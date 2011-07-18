@@ -168,8 +168,6 @@ JNIEXPORT jint JNICALL Java_es_gva_cit_jmrsid_LTIMetadataRecord_getDataTypeNat
 	   		case LTI_METADATA_DATATYPE_SINT16:
 		    case LTI_METADATA_DATATYPE_UINT32:
 		    case LTI_METADATA_DATATYPE_SINT32:
-		    case LTI_METADATA_DATATYPE_UINT64:
-		    case LTI_METADATA_DATATYPE_SINT64:return 0;break;
 		    case LTI_METADATA_DATATYPE_FLOAT32:
 		    case LTI_METADATA_DATATYPE_FLOAT64:return 1;break;
     		case LTI_METADATA_DATATYPE_ASCII:return 2;break;
@@ -211,12 +209,6 @@ JNIEXPORT jstring JNICALL Java_es_gva_cit_jmrsid_LTIMetadataRecord_getScalarData
 			      break;
 			    case LTI_METADATA_DATATYPE_SINT32:
 			      sprintf(dato, "%d", ((lt_int32*)data)[0]);
-			      break;
-			    case LTI_METADATA_DATATYPE_UINT64:
-			      sprintf(dato, "%I64u", ((lt_uint64*)data)[0]);
-			      break;
-			    case LTI_METADATA_DATATYPE_SINT64:
-			      sprintf(dato, "%I64d", ((lt_int64*)data)[0]);
 			      break;
 			    case LTI_METADATA_DATATYPE_FLOAT32:
 			      sprintf(dato, "%f", ((float*)data)[0]);
@@ -293,12 +285,6 @@ JNIEXPORT jobject JNICALL Java_es_gva_cit_jmrsid_LTIMetadataRecord_getVectorData
 			      break;
 			    case LTI_METADATA_DATATYPE_SINT32:
 			      sprintf(dato, "%d", ((lt_int32*)data)[i]);
-			      break;
-			    case LTI_METADATA_DATATYPE_UINT64:
-			      sprintf(dato, "%I64u", ((lt_uint64*)data)[i]);
-			      break;
-			    case LTI_METADATA_DATATYPE_SINT64:
-			      sprintf(dato, "%I64d", ((lt_int64*)data)[i]);
 			      break;
 			    case LTI_METADATA_DATATYPE_FLOAT32:
 			      sprintf(dato, "%f", ((float*)data)[i]);
@@ -382,12 +368,6 @@ JNIEXPORT jobject JNICALL Java_es_gva_cit_jmrsid_LTIMetadataRecord_getArrayDataN
 				    case LTI_METADATA_DATATYPE_SINT32:
 				      sprintf(dato, "%d", ((lt_int32*)data)[i]);
 				      break;
-				    case LTI_METADATA_DATATYPE_UINT64:
-				      sprintf(dato, "%I64u", ((lt_uint64*)data)[i]);
-				      break;
-				    case LTI_METADATA_DATATYPE_SINT64:
-				      sprintf(dato, "%I64d", ((lt_int64*)data)[i]);
-				      break;
 				    case LTI_METADATA_DATATYPE_FLOAT32:
 				      sprintf(dato, "%f", ((float*)data)[i]);
 				      break;
@@ -464,4 +444,4 @@ JNIEXPORT void JNICALL Java_es_gva_cit_jmrsid_LTIMetadataRecord_FreeLTIMetadataR
   		delete record;
   	}
   	
-  } 
+  }

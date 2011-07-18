@@ -106,5 +106,4 @@ JNIEXPORT void JNICALL Java_es_gva_cit_jmrsid_LTIScene_FreeLTISceneNat
   		delete scene;
   	}
   	
-  }  
- 
+  }

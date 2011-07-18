@@ -127,4 +127,4 @@ JNIEXPORT void JNICALL Java_es_gva_cit_jmrsid_LTIMetadataDatabase_FreeLTIMetadat
   		delete metadata;
   	}
   	
-  } 
+  }
