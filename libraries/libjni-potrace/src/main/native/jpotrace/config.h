@@ -7,4 +7,4 @@
 	#define HAVE_STRING_H 1
 #endif
 
-#endif CONFIG_H
+#endif

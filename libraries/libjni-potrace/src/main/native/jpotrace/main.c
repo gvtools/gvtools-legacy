@@ -1,8 +1,8 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2010 Peter Selinger.
    This file is part of Potrace. It is free software and it is covered
    by the GNU General Public License. See the file COPYING for details. */
 
-/* $Id: main.c 147 2007-04-09 00:44:09Z selinger $ */
+/* $Id: main.c 247 2010-12-21 14:54:10Z selinger $ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,6 +24,7 @@
 #include "bitmap.h"
 #include "platform.h"
 #include "auxiliary.h"
+#include "progress_bar.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,77 +38,6 @@
 #define INFTY ((double)(1e30))   /* a value to represent +infinity */
 
 struct info_s info;
-
-#define COL0 "\033[G"  /* reset cursor to column 0 */
-
-/* ---------------------------------------------------------------------- */
-/* callback function for progress bar */
-
-struct simple_progress_s {
-  char name[22];          /* filename for status bar */
-  double dnext;           /* threshold value for next tick */
-};
-typedef struct simple_progress_s simple_progress_t;
-
-/* print a simple progress bar. This is a callback function that is
-   potentially called often; thus, it has been optimized for the
-   typical case, which is when the progress bar does not need updating. */
-static void simple_progress(double d, void *data) {
-  simple_progress_t *p = (simple_progress_t *)data;
-  static char b[] = "========================================";
-  int tick;    /* number of visible tickmarks, 0..40 */
-  int perc;    /* visible percentage, 0..100 */
-
-  /* note: the 0.01 and 0.025 ensure that we always end on 40
-     tickmarks and 100%, despite any rounding errors. The 0.995
-     ensures that tick always increases when d >= p->dnext. */
-  if (d >= p->dnext) {
-    tick = (int) floor(d*40+0.01);
-    perc = (int) floor(d*100+0.025);
-    fprintf(stderr, "%-21s |%-40s| %d%% "COL0"", p->name, b+40-tick, perc);
-    p->dnext = (tick+0.995) / 40.0;
-  }
-}
-
-/* Initialize parameters for simple progress bar. The caller passes an
-   allocated simple_progress_t structure to avoid having to malloc it
-   here and free it later. */
-static inline void init_progress(potrace_progress_t *prog, simple_progress_t *p, const char *filename, int count) {
-  const char *q, *s;
-  int len;
-
-  /* initialize callback function's data */
-  p->dnext = 0;
-
-  if (count != 0) {
-    sprintf(p->name, " (p.%d):", count+1);
-  } else {
-    s = filename;
-    if ((q = strrchr(s, '/')) != NULL) {
-      s = q+1;
-    }
-    len = strlen(s);
-    strncpy(p->name, s, 21);
-    p->name[20] = 0;
-    if (len > 20) {
-      p->name[17] = '.';
-      p->name[18] = '.';
-      p->name[19] = '.';
-    }
-    strcat(p->name, ":");
-  }
-
-  /* initialize progress parameters */
-  prog->callback = &simple_progress;
-  prog->data = (void *)p;
-  prog->min = 0.0;
-  prog->max = 1.0;
-  prog->epsilon = 0.0;
-  
-  /* draw first progress bar */
-  simple_progress(0.0, prog->data);
-  return;
-}
 
 /* ---------------------------------------------------------------------- */
 /* some data structures for option processing */
@@ -169,14 +99,15 @@ struct backend_s {
 typedef struct backend_s backend_t;  
 
 static backend_t backend[] = {
-  {"eps",        ".eps",      0, 0, 0, NULL,    page_eps,   NULL,     1},
-  {"postscript", ".ps",       1, 0, 1, init_ps, page_ps,    term_ps,  1},
-  {"ps",         ".ps",       1, 0, 1, init_ps, page_ps,    term_ps,  1},
-  {"pdf",        ".pdf",      0, 0, 1, init_pdf,page_pdf,   term_pdf, 1},
-  {"svg",        ".svg",      0, 0, 0, NULL,    page_svg,   NULL,     1},
-  {"pgm",        ".pgm",      0, 1, 1, NULL,    page_pgm,   NULL,     1},
-  {"gimppath",   ".gimppath", 0, 1, 0, NULL,    page_gimp,  NULL,     1},
-  {"xfig",       ".fig",      1, 0, 0, NULL,    page_xfig,  NULL,     0},
+  {"eps",        ".eps",      0, 0, 0, NULL,    page_eps,     NULL,     1},
+  {"postscript", ".ps",       1, 0, 1, init_ps, page_ps,      term_ps,  1},
+  {"ps",         ".ps",       1, 0, 1, init_ps, page_ps,      term_ps,  1},
+  {"pdf",        ".pdf",      0, 0, 1, init_pdf,page_pdf,     term_pdf, 1},
+  {"pdfpage",    ".pdf",      1, 0, 1, init_pdf,page_pdfpage, term_pdf, 1},
+  {"svg",        ".svg",      0, 0, 0, NULL,    page_svg,     NULL,     1},
+  {"pgm",        ".pgm",      0, 1, 1, NULL,    page_pgm,     NULL,     1},
+  {"gimppath",   ".gimppath", 0, 1, 0, NULL,    page_gimp,    NULL,     1},
+  {"xfig",       ".fig",      1, 0, 0, NULL,    page_xfig,    NULL,     0},
   {NULL, NULL, 0, 0, 0, NULL, NULL, NULL},
 };
 
@@ -250,7 +181,6 @@ static void license(FILE *f) {
 }
 
 static void show_defaults(FILE *f) {
-  fprintf(f, "This version of Potrace was compiled with the following defaults:\n");
   fprintf(f, "Default unit: "DEFAULT_DIM_NAME"\n");
   fprintf(f, "Default page size: "DEFAULT_PAPERFORMAT"\n");
 }
@@ -258,15 +188,15 @@ static void show_defaults(FILE *f) {
 static void usage(FILE *f) {
   int j;
 
-  fprintf(f, "Usage: "POTRACE" [options] [file...]\n");
+  fprintf(f, "Usage: "POTRACE" [options] [filename...]\n");
   fprintf(f, "General options:\n");
   fprintf(f, " -h, --help                 - print this help message and exit\n");
   fprintf(f, " -v, --version              - print version info and exit\n");
   fprintf(f, " -l, --license              - print license info and exit\n");
-  fprintf(f, " -V, --show-defaults        - print compiled-in defaults and exit\n");
-  fprintf(f, " --progress                 - show progress bar\n");
-  fprintf(f, "Input/output options:\n");
-  fprintf(f, " -o, --output <file>        - output to file\n");
+  fprintf(f, "File selection:\n");
+  fprintf(f, " <filename>                 - an input file\n");
+  fprintf(f, " -o, --output <filename>    - write all output to this file\n");
+  fprintf(f, " --                         - end of options; 0 or more input filenames follow\n");
   fprintf(f, "Backend selection:\n");
   fprintf(f, " -e, --eps                  - EPS backend (encapsulated postscript) (default)\n");
   fprintf(f, " -p, --postscript           - Postscript backend\n");
@@ -298,7 +228,7 @@ static void usage(FILE *f) {
   fprintf(f, " --fillcolor #rrggbb        - set fill color (default transparent)\n");
   fprintf(f, " --opaque                   - make white shapes opaque\n");
   fprintf(f, " --group                    - group related paths together\n");
-  fprintf(f, "Postscript/EPS options:\n");
+  fprintf(f, "Postscript/EPS/PDF options:\n");
   fprintf(f, " -P, --pagesize <format>    - page size (default is "DEFAULT_PAPERFORMAT")\n");
   fprintf(f, " -c, --cleartext            - do not compress the output\n");
   fprintf(f, " -2, --level2               - use postscript level 2 compression (default)\n");
@@ -311,12 +241,15 @@ static void usage(FILE *f) {
   fprintf(f, "Frontend options:\n");
   fprintf(f, " -k, --blacklevel <n>       - black/white cutoff in input file (default 0.5)\n");
   fprintf(f, " -i, --invert               - invert bitmap\n");
+  fprintf(f, "Progress bar options:\n");
+  fprintf(f, " --progress                 - show progress bar\n");
+  fprintf(f, " --tty <mode>               - progress bar rendering: vt100 or dumb\n");
   fprintf(f, "\n");
   fprintf(f, "Dimensions can have optional units, e.g. 6.5in, 15cm, 100pt.\n");
   fprintf(f, "Default is "DEFAULT_DIM_NAME" (or pixels for pgm and gimppath backends).\n");
   fprintf(f, "Possible input file formats are: pnm (pbm, pgm, ppm), bmp.\n");
   j = fprintf(f, "Backends are: ");
-  backend_list(f, j, 70);
+  backend_list(f, j, 78);
   fprintf(f, ".\n");
 }
 
@@ -430,13 +363,13 @@ static int parse_color(char *s) {
 #define OPT_OPAQUE    301
 #define OPT_FILLCOLOR 302
 #define OPT_PROGRESS  303
+#define OPT_TTY       304
 
 static struct option longopts[] = {
   {"help",          0, 0, 'h'},
   {"version",       0, 0, 'v'},
+  {"show-defaults", 0, 0, 'V'}, /* undocumented option for compatibility */
   {"license",       0, 0, 'l'},
-  {"show-defaults", 0, 0, 'V'},
-  {"progress",      0, 0, OPT_PROGRESS},
   {"width",         1, 0, 'W'},
   {"height",        1, 0, 'H'},
   {"resolution",    1, 0, 'r'},
@@ -473,11 +406,13 @@ static struct option longopts[] = {
   {"invert",        0, 0, 'i'},
   {"opaque",        0, 0, OPT_OPAQUE},
   {"group",         0, 0, OPT_GROUP},
+  {"progress",      0, 0, OPT_PROGRESS},
+  {"tty",           1, 0, OPT_TTY},
 
   {0, 0, 0, 0}
 };
 
-static char *shortopts = "hvlVW:H:r:x:S:M:L:R:T:B:A:P:t:u:c23epsgb:d:C:z:G:nqa:O:o:k:i";
+static char *shortopts = "hvVlW:H:r:x:S:M:L:R:T:B:A:P:t:u:c23epsgb:d:C:z:G:nqa:O:o:k:i";
 
 static void dopts(int ac, char *av[]) {
   int c;
@@ -521,6 +456,7 @@ static void dopts(int ac, char *av[]) {
   info.group = 0;
   info.fillcolor = 0xffffff;
   info.progress = 0;
+  info.progress_bar = DEFAULT_PROGRESS_BAR;
 
   while ((c = getopt_long(ac, av, shortopts, longopts, NULL)) != -1) {
     switch (c) {
@@ -530,22 +466,16 @@ static void dopts(int ac, char *av[]) {
       exit(0);
       break;
     case 'v':
-      fprintf(stdout, ""POTRACE" "VERSION". Copyright (C) 2001-2007 Peter Selinger.\n");
-      fprintf(stdout, "Library version: %s\n", potrace_version());
-      exit(0);
-      break;
-    case 'l':
-      fprintf(stdout, ""POTRACE" "VERSION". Copyright (C) 2001-2007 Peter Selinger.\n\n");
-      license(stdout);
-      exit(0);
-      break;
     case 'V':
-      fprintf(stdout, ""POTRACE" "VERSION". Copyright (C) 2001-2007 Peter Selinger.\n");
+      fprintf(stdout, ""POTRACE" "VERSION". Copyright (C) 2001-2010 Peter Selinger.\n");
+      fprintf(stdout, "Library version: %s\n", potrace_version());
       show_defaults(stdout);
       exit(0);
       break;
-    case OPT_PROGRESS:
-      info.progress = 1;
+    case 'l':
+      fprintf(stdout, ""POTRACE" "VERSION". Copyright (C) 2001-2010 Peter Selinger.\n\n");
+      license(stdout);
+      exit(0);
       break;
     case 'W':
       info.width_d = parse_dimension(optarg, &p);
@@ -704,6 +634,7 @@ static void dopts(int ac, char *av[]) {
       info.compress = 1;
 #else
       fprintf(stderr, ""POTRACE": option -3 not supported, using -2 instead.\n");
+      fflush(stderr);
       info.pslevel = 2;
       info.compress = 1;
 #endif
@@ -811,6 +742,10 @@ static void dopts(int ac, char *av[]) {
     case 'o':
       free(info.outfile);
       info.outfile = strdup(optarg);
+      if (!info.outfile) {
+	fprintf(stderr, ""POTRACE": %s\n", strerror(errno));
+        exit(2);
+      }
       break;
     case 'k':
       info.blacklevel = strtod(optarg, &p);
@@ -828,6 +763,19 @@ static void dopts(int ac, char *av[]) {
     case OPT_GROUP:
       info.group = 1;
       break;
+    case OPT_PROGRESS:
+      info.progress = 1;
+      break;
+    case OPT_TTY:
+      if (strcmp(optarg, "dumb") == 0) {
+	info.progress_bar = progress_bar_simplified;
+      } else if (strcmp(optarg, "vt100") == 0) {
+	info.progress_bar = progress_bar_vt100;
+      } else {
+	fprintf(stderr, ""POTRACE": invalid tty mode -- %s. Try --help for more info\n", optarg);
+	exit(1);
+      }
+      break;
     case '?':
       fprintf(stderr, "Try --help for more info\n");
       exit(1);
@@ -839,6 +787,13 @@ static void dopts(int ac, char *av[]) {
   }
   info.infiles = &av[optind];
   info.infilecount = ac-optind;
+  info.some_infiles = info.infilecount ? 1 : 0;
+
+  /* if "--" was used, even an empty list of filenames is considered
+     "some" filenames. */
+  if (strcmp(av[optind-1], "--") == 0) {
+    info.some_infiles = 1;
+  }
 }
 
 /* ---------------------------------------------------------------------- */
@@ -1079,7 +1034,6 @@ static void process_file(backend_t *b, const char *infile, const char *outfile, 
   int eof_flag = 0;  /* to indicate premature eof */
   int count;         /* number of bitmaps successfully processed, this file */
   potrace_state_t *st;
-  simple_progress_t progress_data;
 
   for (count=0; ; count++) {
     /* read a bitmap */
@@ -1113,7 +1067,11 @@ static void process_file(backend_t *b, const char *infile, const char *outfile, 
 
     /* prepare progress bar, if requested */
     if (info.progress) {
-      init_progress(&info.param->progress, &progress_data, infile, count);
+      r = info.progress_bar->init(&info.param->progress, infile, count);
+      if (r) {
+	fprintf(stderr, ""POTRACE": %s\n", strerror(errno));
+	exit(2);
+      }
     } else {
       info.param->progress.callback = NULL;
     }
@@ -1145,7 +1103,7 @@ static void process_file(backend_t *b, const char *infile, const char *outfile, 
     potrace_state_free(st);
 
     if (info.progress) {
-      fprintf(stderr, "\n");
+      info.progress_bar->term(&info.param->progress);
     }
 
     if (eof_flag || !b->multi) {
@@ -1195,7 +1153,7 @@ int main(int ac, char *av[]) {
      more complete bitmaps.
   */
 
-  if (info.infilecount == 0) {                 /* read from stdin */
+  if (!info.some_infiles) {                 /* read from stdin */
 
     fout = my_fopen_write(info.outfile);
     if (!fout) {
@@ -1210,6 +1168,8 @@ int main(int ac, char *av[]) {
       TRY(b->term_f(fout));
     }
     my_fclose(fout, info.outfile);
+    free(info.outfile);
+    potrace_param_free(info.param);
     return 0;
 
   } else if (!info.outfile) {                /* infiles -> multiple outfiles */
@@ -1241,12 +1201,17 @@ int main(int ac, char *av[]) {
       my_fclose(fout, outfile);
       free(outfile);
     }
+    potrace_param_free(info.param);
     return 0; 
 
-  } else {                                   /* infiles to outfile */
+  } else {                                   /* infiles to single outfile */
 
     if (!b->multi && info.infilecount >= 2) {
       fprintf(stderr, ""POTRACE": cannot use multiple input files with -o in %s mode\n", b->name);
+      exit(1);
+    }
+    if (info.infilecount == 0) {
+      fprintf(stderr, ""POTRACE": cannot use empty list of input files with -o\n");
       exit(1);
     }
     
@@ -1271,6 +1236,8 @@ int main(int ac, char *av[]) {
       TRY(b->term_f(fout));
     }
     my_fclose(fout, info.outfile);
+    free(info.outfile);
+    potrace_param_free(info.param);
     return 0;
 
   }

@@ -1,8 +1,8 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2010 Peter Selinger.
    This file is part of Potrace. It is free software and it is covered
    by the GNU General Public License. See the file COPYING for details. */
 
-/* $Id: backend_eps.c 147 2007-04-09 00:44:09Z selinger $ */
+/* $Id: backend_eps.c 227 2010-12-16 05:47:19Z selinger $ */
 
 /* The Postscript backend of Potrace. This can produce "ps" or "eps"
    output, and different kinds of graphical debugging
@@ -685,7 +685,7 @@ static int eps_init(imginfo_t *imginfo) {
   char *c0, *c1;
 
   shipcom("%%!PS-Adobe-3.0 EPSF-3.0\n");
-  shipcom("%%%%Creator: "POTRACE" "VERSION", written by Peter Selinger 2001-2007\n");
+  shipcom("%%%%Creator: potrace 1.9, written by Peter Selinger 2001-2010\n");
   shipcom("%%%%LanguageLevel: %d\n", info.pslevel);
   shipcom("%%%%BoundingBox: 0 0 %d %d\n", 
 	  (int)ceil(imginfo->trans.bb[0]+imginfo->lmar+imginfo->rmar),
@@ -694,9 +694,15 @@ static int eps_init(imginfo_t *imginfo) {
   shipcom("%%%%EndComments\n");
   
   shipcom("%%%%Page: 1 1\n");
+  ship("save\n");
   if (!info.longcoding) {
     c0 = strdup(eps_colorstring(info.color));
     c1 = strdup(eps_colorstring(info.fillcolor));
+    if (!c0 || !c1) {
+      free(c0);
+      free(c1);
+      return 1;
+    }
     ship(optimacros, c0, c1);
     free(c0);
     free(c1);
@@ -704,7 +710,6 @@ static int eps_init(imginfo_t *imginfo) {
   if (info.debug) {
     ship(debugmacros, info.unit);
   }
-  ship("gsave\n");
   if (origx != 0 || origy != 0) {
     ship("%.0f %.0f translate\n", origx, origy);
   }
@@ -717,7 +722,7 @@ static int eps_init(imginfo_t *imginfo) {
 }
 
 static int eps_term(void) {
-  ship("grestore\n");
+  ship("restore\n");
   shipcom("%%%%EOF\n");
   return 0;
 }
@@ -752,7 +757,7 @@ int init_ps(FILE *fout) {
   eps_callbacks(fout);
 
   shipcom("%%!PS-Adobe-3.0\n");
-  shipcom("%%%%Creator: "POTRACE" "VERSION", written by Peter Selinger 2001-2007\n");
+  shipcom("%%%%Creator: potrace 1.9, written by Peter Selinger 2001-2010\n");
   shipcom("%%%%LanguageLevel: %d\n", info.pslevel);
   shipcom("%%%%BoundingBox: 0 0 %d %d\n", info.paperwidth, info.paperheight);
   shipcom("%%%%Pages: (atend)\n");
@@ -762,6 +767,11 @@ int init_ps(FILE *fout) {
     if (!info.longcoding) {
       c0 = strdup(eps_colorstring(info.color));
       c1 = strdup(eps_colorstring(info.fillcolor));
+      if (!c0 || !c1) {
+	free(c0);
+	free(c1);
+	return 1;
+      }
       ship(optimacros, c0, c1);
       free(c0);
       free(c1);
@@ -798,7 +808,7 @@ static void eps_pageinit_ps(imginfo_t *imginfo) {
   eps_width = -1;
 
   shipcom("%%%%Page: %d %d\n", eps_pagenumber, eps_pagenumber);
-  ship("gsave\n");
+  ship("save\n");
   if (origx != 0 || origy != 0) {
     ship("%.0f %.0f translate\n", origx, origy);
   }
@@ -809,7 +819,7 @@ static void eps_pageinit_ps(imginfo_t *imginfo) {
 }
 
 static void eps_pageterm_ps(void) {
-  ship("grestore\n");
+  ship("restore\n");
   ship("showpage\n");
 }
 

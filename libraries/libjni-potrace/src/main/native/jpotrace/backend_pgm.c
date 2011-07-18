@@ -1,8 +1,8 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2010 Peter Selinger.
    This file is part of Potrace. It is free software and it is covered
    by the GNU General Public License. See the file COPYING for details. */
 
-/* $Id: backend_pgm.c 147 2007-04-09 00:44:09Z selinger $ */
+/* $Id: backend_pgm.c 227 2010-12-16 05:47:19Z selinger $ */
 
 /* The PGM backend of Potrace. Here we custom-render a set of Bezier
    curves and output the result as a greymap. This is merely a
@@ -80,7 +80,7 @@ int page_pgm(FILE *fout, potrace_path_t *plist, imginfo_t *imginfo) {
   double si, co;
   trans_t t;
   int mode;
-  char *comment = "created by "POTRACE" "VERSION", written by Peter Selinger 2001-2007";
+  char *comment = "created by potrace 1.9, written by Peter Selinger 2001-2010";
 
   si = sin(info.angle/180*M_PI);
   co = cos(info.angle/180*M_PI);

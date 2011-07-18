@@ -1,8 +1,8 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2010 Peter Selinger.
    This file is part of Potrace. It is free software and it is covered
    by the GNU General Public License. See the file COPYING for details. */
 
-/* $Id: backend_pdf.c 147 2007-04-09 00:44:09Z selinger $ */
+/* $Id: backend_pdf.c 227 2010-12-16 05:47:19Z selinger $ */
 
 /* The PDF backend of Potrace. Stream compression is optionally
 	supplied via the functions in flate.c. */
@@ -23,11 +23,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifndef M_PI
-	#define M_PI 3.14159265358979323846
-#endif
-
 
 typedef int color_t;
 
@@ -295,7 +290,7 @@ int init_pdf(FILE *fout)
 	intarray_set(&xref, nxref++, outcount);
 	shipclear("2 0 obj\n"
 		"<</Creator"
-		"("POTRACE" "VERSION", written by Peter Selinger 2001-2007)>>\n"
+		"(potrace 1.9, written by Peter Selinger 2001-2010)>>\n"
 		"endobj\n");
 
 	/* delay obj #3 (pages) until end */
@@ -335,7 +330,8 @@ int term_pdf(FILE *fout)
 	return 0;
 }
 
-static void pdf_pageinit(imginfo_t *imginfo)
+/* if largebbox is set, set bounding box to pagesize. */
+static void pdf_pageinit(imginfo_t *imginfo, int largebbox)
 {
 	double s, c;
 
@@ -343,8 +339,11 @@ static void pdf_pageinit(imginfo_t *imginfo)
 	double origy = imginfo->trans.orig[1] + imginfo->bmar;
 	double scalex = imginfo->width / imginfo->pixwidth / info.unit;
 	double scaley = imginfo->height / imginfo->pixheight / info.unit;
-	int pagew = (int)ceil(imginfo->trans.bb[0]+imginfo->lmar+imginfo->rmar);
-	int pageh = (int)ceil(imginfo->trans.bb[1]+imginfo->tmar+imginfo->bmar);
+	int pagew;
+	int pageh;
+
+	pagew = (int)ceil(imginfo->trans.bb[0]+imginfo->lmar+imginfo->rmar);
+	pageh = (int)ceil(imginfo->trans.bb[1]+imginfo->tmar+imginfo->bmar);
 
 	pdf_color = -1;
 	pdf_width = -1;
@@ -352,7 +351,11 @@ static void pdf_pageinit(imginfo_t *imginfo)
 	intarray_set(&xref, nxref++, outcount);
 	shipclear("%d 0 obj\n", nxref);
 	shipclear("<</Type/Page/Parent 3 0 R/Resources<</ProcSet[/PDF]>>");
-	shipclear("/MediaBox[0 0 %d %d]", pagew, pageh);
+	if (largebbox) {
+	  shipclear("/MediaBox[0 0 %d %d]", info.paperwidth, info.paperheight);
+	} else {
+	  shipclear("/MediaBox[0 0 %d %d]", pagew, pageh);
+	}
 	shipclear("/Contents %d 0 R>>\n", nxref + 1);
 	shipclear("endobj\n");
 
@@ -393,7 +396,27 @@ int page_pdf(FILE *fout, potrace_path_t *plist, imginfo_t *imginfo)
 
   pdf_callbacks(fout);
 
-  pdf_pageinit(imginfo);
+  pdf_pageinit(imginfo, 0);
+
+  r = pdf_render(plist);
+  if (r) {
+    return r;
+  }
+
+  pdf_pageterm();
+
+  fflush(fout);
+
+  return 0;
+}
+
+int page_pdfpage(FILE *fout, potrace_path_t *plist, imginfo_t *imginfo)
+{
+  int r;
+
+  pdf_callbacks(fout);
+
+  pdf_pageinit(imginfo, 1);
 
   r = pdf_render(plist);
   if (r) {

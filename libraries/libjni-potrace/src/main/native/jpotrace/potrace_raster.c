@@ -549,7 +549,7 @@ static void dopts(int ac, char *av[]) {
 	info.gamma = 2.2;
 	info.param = potrace_param_default();
 	if (!info.param) {
-		fprintf(stderr, ""POTRACE": %s\n", strerror(errno));
+		fprintf(stderr, "POTRACE: %s\n", strerror(errno));
 		exit(1);
 	}
 	info.longcoding = 0;
@@ -569,14 +569,14 @@ static void dopts(int ac, char *av[]) {
 			case 'W':
 				info.width_d = parse_dimension(optarg, &p);
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid dimension -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid dimension -- %s\n", optarg);
 					exit(1);
 				}
 				break;
 			case 'H':
 				info.height_d = parse_dimension(optarg, &p);
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid dimension -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid dimension -- %s\n", optarg);
 					exit(1);
 				}
 				break;
@@ -592,7 +592,7 @@ static void dopts(int ac, char *av[]) {
 					info.rx = info.ry = dim.x;
 					break;
 				}
-				fprintf(stderr, ""POTRACE": invalid resolution -- %s\n", optarg);
+				fprintf(stderr, "POTRACE: invalid resolution -- %s\n", optarg);
 				exit(1);
 				break;
 			case 'x':
@@ -607,7 +607,7 @@ static void dopts(int ac, char *av[]) {
 					info.sx = info.sy = dim.x;
 					break;
 				}
-				fprintf(stderr, ""POTRACE": invalid scaling factor -- %s\n", optarg);
+				fprintf(stderr, "POTRACE: invalid scaling factor -- %s\n", optarg);
 				exit(1);
 				break;
 			case 'S':
@@ -616,7 +616,7 @@ static void dopts(int ac, char *av[]) {
 			case 'M':
 				info.lmar_d = parse_dimension(optarg, &p);
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid dimension -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid dimension -- %s\n", optarg);
 					exit(1);
 				}
 				info.rmar_d = info.tmar_d = info.bmar_d = info.lmar_d;
@@ -624,35 +624,35 @@ static void dopts(int ac, char *av[]) {
 			case 'L':
 				info.lmar_d = parse_dimension(optarg, &p);
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid dimension -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid dimension -- %s\n", optarg);
 					exit(1);
 				}
 				break;
 			case 'R':
 				info.rmar_d = parse_dimension(optarg, &p);
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid dimension -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid dimension -- %s\n", optarg);
 					exit(1);
 				}
 				break;
 			case 'T':
 				info.tmar_d = parse_dimension(optarg, &p);
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid dimension -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid dimension -- %s\n", optarg);
 					exit(1);
 				}
 				break;
 			case 'B':
 				info.bmar_d = parse_dimension(optarg, &p);
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid dimension -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid dimension -- %s\n", optarg);
 					exit(1);
 				}
 				break;
 			case 'A':
 				info.angle = strtod(optarg, &p);
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid angle -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid angle -- %s\n", optarg);
 					exit(1);
 				}
 				break;
@@ -684,9 +684,9 @@ static void dopts(int ac, char *av[]) {
 					break;
 				}
 				if (matches == 0) {
-					fprintf(stderr, ""POTRACE": unrecognized page format -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: unrecognized page format -- %s\n", optarg);
 				} else {
-					fprintf(stderr, ""POTRACE": ambiguous page format -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: ambiguous page format -- %s\n", optarg);
 				}
 				j = fprintf(stderr, "Use one of: ");
 				for (i=0; pageformat[i].name!=NULL; i++) {
@@ -705,7 +705,7 @@ static void dopts(int ac, char *av[]) {
 			case 'u':
 				info.unit = strtod(optarg, &p);
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid unit -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid unit -- %s\n", optarg);
 					exit(1);
 				}
 				break;
@@ -722,7 +722,7 @@ static void dopts(int ac, char *av[]) {
 				info.pslevel = 3;
 				info.compress = 1;
 #else
-				fprintf(stderr, ""POTRACE": option -3 not supported, using -2 instead.\n");
+				fprintf(stderr, "POTRACE: option -3 not supported, using -2 instead.\n");
 				info.pslevel = 2;
 				info.compress = 1;
 #endif
@@ -748,9 +748,9 @@ static void dopts(int ac, char *av[]) {
 					break;
 				}
 				if (matches == 0) {
-					fprintf(stderr, ""POTRACE": unrecognized turnpolicy -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: unrecognized turnpolicy -- %s\n", optarg);
 				} else {
-					fprintf(stderr, ""POTRACE": ambiguous turnpolicy -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: ambiguous turnpolicy -- %s\n", optarg);
 				}
 				j = fprintf(stderr, "Use one of: ");
 				for (i=0; turnpolicy[i].name!=NULL; i++) {
@@ -776,14 +776,14 @@ static void dopts(int ac, char *av[]) {
 				info.param->alphamax = strtod(optarg, &p);
 
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid alphamax -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid alphamax -- %s\n", optarg);
 					exit(1);
 				}
 				break;
 			case 'O':
 				info.param->opttolerance = strtod(optarg, &p);
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid opttolerance -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid opttolerance -- %s\n", optarg);
 					exit(1);
 				}
 				break;
@@ -794,7 +794,7 @@ static void dopts(int ac, char *av[]) {
 			case 'k':
 				info.blacklevel = strtod(optarg, &p);
 				if (*p) {
-					fprintf(stderr, ""POTRACE": invalid blacklevel -- %s\n", optarg);
+					fprintf(stderr, "POTRACE: invalid blacklevel -- %s\n", optarg);
 					exit(1);
 				}
 				break;
@@ -812,7 +812,7 @@ static void dopts(int ac, char *av[]) {
 				exit(1);
 				break;
 			default:
-				fprintf(stderr, ""POTRACE": Unimplemented option -- %c\n", c);
+				fprintf(stderr, "POTRACE: Unimplemented option -- %c\n", c);
 				exit(1);
 		}
 	}
@@ -931,7 +931,7 @@ static double* process_buffer(const long *inbuffer, int width, int height) {
 
 	st = potrace_trace(info.param, bm);
 	if (!st || st->status != POTRACE_STATUS_OK) {
-		fprintf(stderr, ""POTRACE": %s\n", strerror(errno));
+		fprintf(stderr, "POTRACE: %s\n", strerror(errno));
 		exit(2);
 	}
 	/* calculate image dimensions */

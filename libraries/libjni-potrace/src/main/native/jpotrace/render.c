@@ -1,8 +1,8 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2010 Peter Selinger.
    This file is part of Potrace. It is free software and it is covered
    by the GNU General Public License. See the file COPYING for details. */
 
-/* $Id: render.c 147 2007-04-09 00:44:09Z selinger $ */
+/* $Id: render.c 227 2010-12-16 05:47:19Z selinger $ */
 
 #include <stdio.h>
 #include <stdlib.h>

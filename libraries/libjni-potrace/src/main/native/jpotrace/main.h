@@ -1,8 +1,8 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2010 Peter Selinger.
    This file is part of Potrace. It is free software and it is covered
    by the GNU General Public License. See the file COPYING for details. */
 
-/* $Id: main.h 147 2007-04-09 00:44:09Z selinger $ */
+/* $Id: main.h 237 2010-12-20 05:16:20Z selinger $ */
 
 #ifndef MAIN_H
 #define MAIN_H
@@ -12,6 +12,7 @@
 #endif
 
 #include "potracelib.h"
+#include "progress_bar.h"
 
 /* structure to hold a tilted rectangle */
 struct rect_s {
@@ -32,7 +33,7 @@ typedef struct dim_s dim_t;
 #define DIM_MM (72 / 25.4)
 #define DIM_PT (1)
 
-/* set some regional defaults */
+/* set some configurable defaults */
 
 #ifdef USE_METRIC
 #define DEFAULT_DIM DIM_CM
@@ -51,6 +52,14 @@ typedef struct dim_s dim_t;
 #define DEFAULT_PAPERHEIGHT 792
 #define DEFAULT_PAPERFORMAT "letter"
 #endif
+
+#ifdef DUMB_TTY
+#define DEFAULT_PROGRESS_BAR progress_bar_simplified
+#else
+#define DEFAULT_PROGRESS_BAR progress_bar_vt100
+#endif
+
+
 
 struct backend_s;
 
@@ -79,11 +88,13 @@ struct info_s {
   char *outfile;     /* output filename, if given */
   char **infiles;    /* array of input filenames */
   int infilecount;   /* number of input filenames */
+  int some_infiles;  /* do we process a list of input filenames? */
   double blacklevel; /* 0 to 1: black/white cutoff in input file */
   int invert;        /* invert bitmap? */
   int opaque;        /* paint white shapes opaquely? */
   int group;         /* group paths together? */
   int progress;      /* should we display a progress bar? */
+  progress_bar_t *progress_bar;  /* which progress bar to use */
 };
 typedef struct info_s info_t;
 

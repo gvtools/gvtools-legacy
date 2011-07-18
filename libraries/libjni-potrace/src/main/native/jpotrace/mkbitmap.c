@@ -1,10 +1,11 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2010 Peter Selinger.
    This file is part of Potrace. It is free software and it is covered
    by the GNU General Public License. See the file COPYING for details. */
 
 /* mkbitmap.c: a standalone program for converting greymaps to bitmaps
    while optionally applying the following enhancements: highpass
-   filter, interpolated scaling, inversion. */
+   filter (evening out background gradients), lowpass filter
+   (smoothing foreground details), interpolated scaling, inversion. */
 
 #include <stdio.h>
 #include <errno.h>
@@ -32,6 +33,8 @@ struct info_s {
   int invert;        /* invert input? */
   int highpass;      /* use highpass filter? */
   double lambda;     /* highpass filter radius */
+  int lowpass;       /* use lowpass filter? */
+  double lambda1;    /* lowpass filter radius */
   int scale;         /* scaling factor */
   int linear;        /* linear scaling? */
   int bilevel;       /* convert to bilevel? */
@@ -42,25 +45,17 @@ typedef struct info_s info_t;
 
 static info_t info;
 
-/* apply highpass filter to greymap. Return 0 on success, 1 on error
-   with errno set. */
-static int highpass(greymap_t *gm, double lambda) {
-  greymap_t *gm1;
+/* apply lowpass filter (an approximate Gaussian blur) to greymap.
+   Lambda is the standard deviation of the kernel of the filter (i.e.,
+   the approximate filter radius). */
+static void lowpass(greymap_t *gm, double lambda) {
   double f, g;
   double c, d;
   double B;
   int x, y;
 
-  /* we obtain a highpass filter by subtracting a lowpass filter from
-     the identity */
-  /* create scrap greymap */
-  gm1 = gm_new(gm->w, gm->h);
-  if (!gm1) {
-    return 1;
-  }
-
   /* calculate filter coefficients from given lambda */
-  B =  1+2/(lambda*lambda);
+  B = 1+2/(lambda*lambda);
   c = B-sqrt(B*B-1);
   d = 1-c;
 
@@ -69,16 +64,16 @@ static int highpass(greymap_t *gm, double lambda) {
     /* left-to-right */
     f = g = 0;
     for (x=0; x<gm->w; x++) {
-      f = f*c + GM_GET(gm, x, y)*d;
+      f = f*c + GM_UGET(gm, x, y)*d;
       g = g*c + f*d;
-      GM_UPUT(gm1, x, y, g);
+      GM_UPUT(gm, x, y, g);
     }
 
     /* right-to-left */
     for (x=gm->w-1; x>=0; x--) {
-      f = f*c + GM_GET(gm1, x, y)*d;
+      f = f*c + GM_UGET(gm, x, y)*d;
       g = g*c + f*d;
-      GM_UPUT(gm1, x, y, g);
+      GM_UPUT(gm, x, y, g);
     }
 
     /* left-to-right mop-up */
@@ -88,7 +83,7 @@ static int highpass(greymap_t *gm, double lambda) {
       if (f+g < 1/255.0) {
 	break;
       }
-      GM_UPUT(gm1, x, y, GM_GET(gm1, x, y)+g);
+      GM_UPUT(gm, x, y, GM_UGET(gm, x, y)+g);
     }
   }
 
@@ -97,16 +92,16 @@ static int highpass(greymap_t *gm, double lambda) {
     /* bottom-to-top */
     f = g = 0;
     for (y=0; y<gm->h; y++) {
-      f = f*c + GM_GET(gm1, x, y)*d;
+      f = f*c + GM_UGET(gm, x, y)*d;
       g = g*c + f*d;
-      GM_UPUT(gm1, x, y, g);
+      GM_UPUT(gm, x, y, g);
     }
 
     /* top-to-bottom */
     for (y=gm->h-1; y>=0; y--) {
-      f = f*c + GM_GET(gm1, x, y)*d;
+      f = f*c + GM_UGET(gm, x, y)*d;
       g = g*c + f*d;
-      GM_UPUT(gm1, x, y, g);
+      GM_UPUT(gm, x, y, g);
     }
 
     /* bottom-to-top mop-up */
@@ -116,21 +111,68 @@ static int highpass(greymap_t *gm, double lambda) {
       if (f+g < 1/255.0) {
 	break;
       }
-      GM_UPUT(gm1, x, y, GM_GET(gm1, x, y)+g);
+      GM_UPUT(gm, x, y, GM_UGET(gm, x, y)+g);
     }
   }
+}
 
-  /* original - lo-pass = hi-pass */
+/* apply highpass filter to greymap. Return 0 on success, 1 on error
+   with errno set. */
+static int highpass(greymap_t *gm, double lambda) {
+  greymap_t *gm1;
+  double f;
+  int x, y;
+
+  /* create a copy */
+  gm1 = gm_dup(gm);
+  if (!gm1) {
+    return 1;
+  }
+
+  /* apply lowpass filter to the copy */
+  lowpass(gm1, lambda);
+
+  /* subtract copy from original */
   for (y=0; y<gm->h; y++) {
     for (x=0; x<gm->w; x++) {
-      f = GM_GET(gm, x, y);
-      f -= GM_GET(gm1, x, y);
+      f = GM_UGET(gm, x, y);
+      f -= GM_UGET(gm1, x, y);
       f += 128;    /* normalize! */
-      GM_PUT(gm, x, y, f);
+      GM_UPUT(gm, x, y, f);
     }
   }
   gm_free(gm1);
   return 0;
+}
+
+/* Convert greymap to bitmap by using cutoff threshold c (0=black,
+   1=white). On error, return NULL with errno set. */
+static potrace_bitmap_t *threshold(greymap_t *gm, double c) {
+  int w, h;
+  potrace_bitmap_t *bm_out = NULL;
+  double c1;
+  int x, y;
+  double p;
+
+  w = gm->w;
+  h = gm->h;
+
+  /* allocate output bitmap */
+  bm_out = bm_new(w, h);
+  if (!bm_out) {
+    return NULL;
+  }
+
+  /* thresholding */
+  c1 = c * 255;
+
+  for (y=0; y<h; y++) {
+    for (x=0; x<w; x++) {
+      p = GM_UGET(gm, x, y);
+      BM_UPUT(bm_out, x, y, p < c1);
+    }
+  }
+  return bm_out;
 }
 
 /* scale greymap by factor s, using linear interpolation. If
@@ -142,7 +184,7 @@ static void *interpolate_linear(greymap_t *gm, int s, int bilevel, double c) {
   int p00, p01, p10, p11;
   int i, j, x, y;
   double xx, yy, av;
-  int c1 = 0;
+  double c1 = 0;
   int w, h;
   double p0, p1;
   greymap_t *gm_out = NULL;
@@ -158,7 +200,7 @@ static void *interpolate_linear(greymap_t *gm, int s, int bilevel, double c) {
       return NULL;
     }
     bm_clear(bm_out, 0);
-    c1 = (int)(c*255);
+    c1 = c * 255;
   } else {
     gm_out = gm_new(w*s, h*s);
     if (!gm_out) {
@@ -169,17 +211,17 @@ static void *interpolate_linear(greymap_t *gm, int s, int bilevel, double c) {
   /* interpolate */
   for (i=0; i<w; i++) {
     for (j=0; j<h; j++) {
-      p00 = GM_GET(gm, i, j);
-      p01 = GM_GET(gm, i, j+1);
-      p10 = GM_GET(gm, i+1, j);
-      p11 = GM_GET(gm, i+1, j+1);
+      p00 = GM_BGET(gm, i, j);
+      p01 = GM_BGET(gm, i, j+1);
+      p10 = GM_BGET(gm, i+1, j);
+      p11 = GM_BGET(gm, i+1, j+1);
       
       if (bilevel) {
 	/* treat two special cases which are very common */
 	if (p00 < c1 && p01 < c1 && p10 < c1 && p11 < c1) {
 	  for (x=0; x<s; x++) {
 	    for (y=0; y<s; y++) {
-	      BM_PUT(bm_out, i*s+x, j*s+y, 1);
+	      BM_UPUT(bm_out, i*s+x, j*s+y, 1);
 	    }
 	  }
 	  continue;
@@ -198,9 +240,9 @@ static void *interpolate_linear(greymap_t *gm, int s, int bilevel, double c) {
 	  yy = y/(double)s;
 	  av = p0*(1-yy) + p1*yy;
 	  if (bilevel) {
-	    BM_PUT(bm_out, i*s+x, j*s+y, av < c1);
+	    BM_UPUT(bm_out, i*s+x, j*s+y, av < c1);
 	  } else {
-	    GM_PUT(gm_out, i*s+x, j*s+y, av);
+	    GM_UPUT(gm_out, i*s+x, j*s+y, av);
 	  }
 	}
       }
@@ -282,9 +324,9 @@ static void *interpolate_cubic(greymap_t *gm, int s, int bilevel, double c) {
 	    v += window[k][i] * poly[l][i];
 	  }
 	  if (bilevel) {
-	    BM_PUT(bm_out, x*s+l, y*s+k, v < c1);
+	    BM_UPUT(bm_out, x*s+l, y*s+k, v < c1);
 	  } else {
-	    GM_PUT(gm_out, x*s+l, y*s+k, v);
+	    GM_UPUT(gm_out, x*s+l, y*s+k, v);
 	  }	    
 	}
       }
@@ -382,17 +424,27 @@ static void process_file(FILE *fin, FILE *fout, char *infile, char *outfile) {
 	exit(2);
       }
     }
+
+    if (info.lowpass) {
+      lowpass(gm, info.lambda1);
+    }
     
-    if (info.linear) {
+    if (info.scale == 1 && info.bilevel) {  /* no interpolation necessary */
+      sm = threshold(gm, info.level);
+      gm_free(gm);
+    } else if (info.scale == 1) {
+      sm = gm;
+    } else if (info.linear) {  /* linear interpolation */
       sm = interpolate_linear(gm, info.scale, info.bilevel, info.level);
-    } else {
+      gm_free(gm);
+    } else {  /* cubic interpolation */
       sm = interpolate_cubic(gm, info.scale, info.bilevel, info.level);
-    }      
+      gm_free(gm);
+    }
     if (!sm) {
       fprintf(stderr, ""MKBITMAP": %s: %s\n", infile, strerror(errno));
       exit(2);
     }
-    gm_free(gm);
     
     if (info.bilevel) {
       bm = (potrace_bitmap_t *)sm;
@@ -402,7 +454,7 @@ static void process_file(FILE *fin, FILE *fout, char *infile, char *outfile) {
       gm = (greymap_t *)sm;
       gm_writepgm(fout, gm, NULL, 1, GM_MODE_POSITIVE, 1.0);
       gm_free(gm);
-    }    
+    }
   }
 }
 
@@ -441,6 +493,7 @@ static int usage(FILE *f) {
   fprintf(f, "Highpass filtering:\n");
   fprintf(f, " -f, --filter <n>     - apply highpass filter with radius n (default 4)\n");
   fprintf(f, " -n, --nofilter       - no highpass filtering\n");
+  fprintf(f, " -b, --blur <n>       - apply lowpass filter with radius n (default: none)\n");
   fprintf(f, "Scaling:\n");
   fprintf(f, " -s, --scale <n>      - scale by integer factor n (default 2)\n");
   fprintf(f, " -1, --linear         - use linear interpolation\n");
@@ -465,6 +518,7 @@ static struct option longopts[] = {
   {"invert",        0, 0, 'i'},
   {"filter",        1, 0, 'f'},
   {"nofilter",      0, 0, 'n'},
+  {"blur",          1, 0, 'b'},
   {"scale",         1, 0, 's'},
   {"linear",        0, 0, '1'},
   {"cubic",         0, 0, '3'},
@@ -473,7 +527,7 @@ static struct option longopts[] = {
   {0, 0, 0, 0}
 };
 
-static char *shortopts = "hvlo:xif:ns:13gt:";
+static char *shortopts = "hvlo:xif:nb:s:13gt:";
 
 /* process options. On error, print error message to stderr and exit
    with code 1 */
@@ -488,6 +542,8 @@ static void dopts(int ac, char *av[]) {
   info.invert = 0;        /* invert input? */
   info.highpass = 1;      /* use highpass filter? */
   info.lambda = 4;        /* highpass filter radius */
+  info.lowpass = 0;       /* use lowpass filter? */
+  info.lambda1 = 0;       /* lowpass filter radius */
   info.scale = 2;         /* scaling factor */
   info.linear = 0;        /* linear scaling? */
   info.bilevel = 1;       /* convert to bilevel? */
@@ -502,17 +558,21 @@ static void dopts(int ac, char *av[]) {
       exit(0);
       break;
     case 'v':
-      fprintf(stdout, ""MKBITMAP" "VERSION". Copyright (C) 2001-2007 Peter Selinger.\n");
+      fprintf(stdout, ""MKBITMAP" "VERSION". Copyright (C) 2001-2010 Peter Selinger.\n");
       exit(0);
       break;
     case 'l':
-      fprintf(stdout, ""MKBITMAP" "VERSION". Copyright (C) 2001-2007 Peter Selinger.\n\n");
+      fprintf(stdout, ""MKBITMAP" "VERSION". Copyright (C) 2001-2010 Peter Selinger.\n\n");
       license(stdout);
       exit(0);
       break;
     case 'o':
       free(info.outfile);
       info.outfile = strdup(optarg);
+      if (!info.outfile) {
+        fprintf(stderr, ""MKBITMAP": %s\n", strerror(errno));
+        exit(2);
+      }
       break;
     case 'x':
       info.invert = 0;
@@ -534,6 +594,14 @@ static void dopts(int ac, char *av[]) {
       break;
     case 'n':
       info.highpass = 0;
+      break;
+    case 'b':
+      info.lowpass = 1;
+      info.lambda1 = strtod(optarg, &p);
+      if (*p || info.lambda1<0) {
+	fprintf(stderr, ""MKBITMAP": invalid filter radius -- %s\n", optarg);
+        exit(1);
+      }
       break;
     case 's':
       info.scale = strtol(optarg, &p, 0);
@@ -666,6 +734,7 @@ int main(int ac, char *av[]) {
     }
     process_file(stdin, fout, "stdin", info.outfile);
     my_fclose(fout, info.outfile);
+    free(info.outfile);
     return 0;
 
   } else if (info.outfile == NULL) {       /* infiles -> multiple outfiles */
@@ -710,11 +779,10 @@ int main(int ac, char *av[]) {
       my_fclose(fin, info.infiles[i]);
     }
     my_fclose(fout, info.outfile);
+    free(info.outfile);
     return 0;
 
   }      
 
   /* not reached */
 }
-
-

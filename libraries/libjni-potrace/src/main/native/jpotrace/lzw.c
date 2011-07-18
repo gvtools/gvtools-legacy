@@ -1,8 +1,8 @@
-/* Copyright (C) 2001-2007 Peter Selinger.
+/* Copyright (C) 2001-2010 Peter Selinger.
    This file is part of Potrace. It is free software and it is covered
    by the GNU General Public License. See the file COPYING for details. */
 
-/* $Id: lzw.c 147 2007-04-09 00:44:09Z selinger $ */
+/* $Id: lzw.c 247 2010-12-21 14:54:10Z selinger $ */
 
 /* code for adaptive LZW compression, as used in PostScript. */
 
@@ -23,8 +23,8 @@
    is a string of input symbols, d is a dictionary, which is a
    function from strings to output symbols, and n is the dictionary
    size, or equivalently, the next unused output symbol. There are
-   also special states init and stop. (emit.c[b]ode) is a function
-   which emits the code code as a b-bit value into the output
+   also special states init and stop. emit[b, code] is a function
+   which emits the code 'code' as a b-bit value into the output
    bitstream. hibit(n) returns the least number of binary digits
    required to represent n.
 
@@ -35,29 +35,28 @@
      output symbols 256 and 257, so that the next available one is
      258). Note: hibit(258)=9.
 
-   {[], d, n} (input c) ---> (emit[hibit(n)] 256) {c, d, n}
+   {[], d, n} (input c) ---> (emit[hibit(n), 256]) {c, d, n}
 
    {s,d,n} (input c) ---> {s*c,d,n}
 
      if s!=[], s*c is in the domain of d. Here s*c is the strings s
      extended by the character c.
 
-   {s,d,n} (input c) ---> (emit.c[hibit(n)]ode) {c,d',n+1}
+   {s,d,n} (input c) ---> (emit[hibit(n), d(s)]) {c,d',n+1}
 
      if s!=[], s*c is not in the domain of d, and hibit(n+2) <= 12.
-     Here, d(s)=code, and d'=d+{s*c->n}.
+     Here d'=d+{s*c->n}.
 
    {s,d,n} (input c) ---> 
-           (emit.c[hibit(n)]ode) (emit[hibit(n+1)] 256) {c, newdict, 258}
+           (emit[hibit(n), d(s)]) (emit[hibit(n+1), 256]) {c, newdict, 258}
 
      if s!=[], s*c is not in the domain of d, and hibit(n+2) > 12.
-     Here, d(s)=code, and d'=d+{s*c->n}.
 
-   {s,d,n} (input EOD) ---> (emit.c[hibit(n)]ode) (emit[hibit(n+1)] 257) stop
+   {s,d,n} (input EOD) ---> (emit[hibit(n), d(s)]) (emit[hibit(n+1), 257]) stop
 
-     where s != [], code = d(s). Here, EOD stands for end-of-data.
+     where s != []. Here, EOD stands for end-of-data.
 
-   {[],d,n} (input EOD) ---> (emit[hibit(n)] 256) (emit[hibit(258)] 257) stop
+   {[],d,n} (input EOD) ---> (emit[hibit(n), 256]) (emit[hibit(n), 257]) stop
 
    Notes: 
 
@@ -180,7 +179,7 @@ static int lzw_encode_char(lzw_state_t *st, char c) {
 
   /* st = {s,d,n}. hibit(n+1)<=12. */
 
-  /* {[], d, n} (input c) ---> (emit[hibit(n)] 256) {c, d, n} */
+  /* {[], d, n} (input c) ---> (emit[hibit(n), 256]) {c, d, n} */
   if (st->s == NULL) {
     lzw_emit(256, st);
     goto singleton;  /* enter singleton state c */
@@ -194,12 +193,12 @@ static int lzw_encode_char(lzw_state_t *st, char c) {
     return 0;
   }
 
-  /* {s,d,n} (input c) ---> (emit.c[hibit(n)]ode) {c,d',n+1} */
+  /* {s,d,n} (input c) ---> (emit[hibit(n), d(s)]) {c,d',n+1} */
   /* {s,d,n} (input c) --->
-	     (emit.c[hibit(n)]ode) (emit[hibit(n+1)] 256) {c, newdict, 258} */
+	    (emit[hibit(n), d(s)]) (emit[hibit(n+1), 256]) {c, newdict, 258} */
 
   lzw_emit(st->s->code, st); /* 9-12 bits */
-  if (st->n >= 4094) {   /* hibit(n+2) > 12 */  /* ### was: 4093 */
+  if (st->n >= 4094) {   /* hibit(n+2) > 12 */
     st->n++;
     lzw_emit(256, st);
     goto dictfull;    /* reset dictionary and enter singleton state c */
@@ -247,7 +246,7 @@ static int lzw_encode_char(lzw_state_t *st, char c) {
 static void lzw_encode_eod(lzw_state_t *st) {
 
   /* {[],d,n} (input EOD) ---> 
-              (emit[hibit(n)] 256) (emit[hibit(n+1)] 257) stop */
+              (emit[hibit(n), 256]) (emit[hibit(n), 257]) stop */
   if (st->s == NULL) {
     lzw_emit(256, st);  /* 9 bits */
     st->n=258;
@@ -256,7 +255,7 @@ static void lzw_encode_eod(lzw_state_t *st) {
   } 
 
   /* {s,d,n} (input EOD) ---> 
-             (emit.c[hibit(n)]ode) (emit[hibit(n+1)] 257) stop */
+             (emit[hibit(n), code]) (emit[hibit(n+1), 257]) stop */
 
   lzw_emit(st->s->code, st); /* 9-12 bits */
   st->n++;
