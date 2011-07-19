@@ -2,6 +2,9 @@ set(LIB_NAME jgdal)
 
 FILE(GLOB SOURCES "*.c*")
 
+set (JAVA_INCLUDE_PATH $ENV{JDK_DIR}/include)
+set (JAVA_INCLUDE_PATH2 $ENV{JDK_DIR}/include/linux)
+
 include_directories(
 	${CMAKE_SOURCE_DIR}/include
 	${JAVA_INCLUDE_PATH}

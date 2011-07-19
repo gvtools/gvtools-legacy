@@ -49,7 +49,7 @@
 */
 
 
-#include <jni.h>h"
+#include <jni.h>
 #include "ogr_api.h"
 #include "ogrsf_frmts.h"
 

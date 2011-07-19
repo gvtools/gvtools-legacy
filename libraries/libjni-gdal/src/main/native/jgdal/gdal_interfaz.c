@@ -126,7 +126,7 @@ JNIEXPORT jlong JNICALL Java_es_gva_cit_jgdal_Gdal_openArrayNat
   		
 	pszFilename[longitud] = '\0';
 	
-	fich = fopen( pszFilename, "r" );
+	fich = fopen( (char*) pszFilename, "r" );
 	if( fich )
 		fclose(fich);
 	else		
@@ -511,7 +511,7 @@ JNIEXPORT jstring JNICALL Java_es_gva_cit_jgdal_Gdal_getColorInterpretationNameN
    	 jstring 			typeName = NULL;
 	 
 	 dt = *(GDALDatasetH **)&cPtr;
-	 name = GDALGetColorInterpretationName(ci);  	 
+	 name = (char*) GDALGetColorInterpretationName(ci);  	 
 	 typeName = (*env)->NewStringUTF(env, name); 
 	 return typeName;
   }

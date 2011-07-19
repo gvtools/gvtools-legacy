@@ -127,7 +127,7 @@ JNIEXPORT jint JNICALL Java_org_gvsig_jogr_OGRSpatialReference_importFromWktNat
 
     hSRS = *(OGRSpatialReferenceH **)&cPtr;
     if(hSRS!=NULL){
-		char *cad = (*env)->GetStringUTFChars(env, cs, 0);
+		char *cad = (char*) (*env)->GetStringUTFChars(env, cs, 0);
     	err = OSRImportFromWkt( *hSRS,&cad);
     	return err;
     }
@@ -278,7 +278,7 @@ JNIEXPORT jint JNICALL Java_org_gvsig_jogr_OGRSpatialReference_importFromESRINat
 
     hSRS = *(OGRSpatialReferenceH **)&cPtr;
     if(hSRS!=NULL){
-		char *cad = (*env)->GetStringUTFChars(env, cs, 0);
+		char *cad = (char*) (*env)->GetStringUTFChars(env, cs, 0);
     	err = OSRImportFromWkt( *hSRS,&cad);
     	return err;
     }
@@ -349,9 +349,9 @@ JNIEXPORT jstring JNICALL Java_org_gvsig_jogr_OGRSpatialReference_getAuthorityCo
     hSRS = *(OGRSpatialReferenceH **)&cPtr;
     if(hSRS != NULL) {
     	if(cs != NULL) {
-			cad = (*env)->GetStringUTFChars(env, cs, 0);
+			cad = (char*) (*env)->GetStringUTFChars(env, cs, 0);
 		}
-		authority_code = OSRGetAuthorityCode( *hSRS, cad);
+		authority_code = (char*) OSRGetAuthorityCode( *hSRS, cad);
     	authority_codeUTF = (*env)->NewStringUTF(env, authority_code);
     	return authority_codeUTF;
     }
@@ -375,9 +375,9 @@ JNIEXPORT jstring JNICALL Java_org_gvsig_jogr_OGRSpatialReference_getAuthorityNa
     hSRS = *(OGRSpatialReferenceH **)&cPtr;
     if(hSRS != NULL) {
 	    if(cs != NULL) {
-			cad = (*env)->GetStringUTFChars(env, cs, 0);
+			cad = (char*) (*env)->GetStringUTFChars(env, cs, 0);
 		}
-    	authority_name = OSRGetAuthorityName( *hSRS, cad);
+    	authority_name = (char*) OSRGetAuthorityName( *hSRS, cad);
     	authority_nameUTF = (*env)->NewStringUTF(env, authority_name);
     	return authority_nameUTF;
     }
@@ -460,7 +460,7 @@ JNIEXPORT jint JNICALL Java_org_gvsig_crs_ogr_JNIBaseCRS_importFromWktNat
 
     hSRS = *(OGRSpatialReferenceH **)&cPtr;
     if(hSRS!=NULL){
-		char *cad = (*env)->GetStringUTFChars(env, cs, 0);
+		char *cad = (char*) (*env)->GetStringUTFChars(env, cs, 0);
     	err = OSRImportFromWkt( *hSRS,&cad);
     	return err;
     }
@@ -610,7 +610,7 @@ JNIEXPORT jint JNICALL Java_org_gvsig_crs_ogr_JNIBaseCRS_importFromESRINat
 
     hSRS = *(OGRSpatialReferenceH **)&cPtr;
     if(hSRS!=NULL){
-		char *cad = (*env)->GetStringUTFChars(env, cs, 0);
+		char *cad = (char*) (*env)->GetStringUTFChars(env, cs, 0);
     	err = OSRImportFromWkt( *hSRS,&cad);
     	return err;
     }

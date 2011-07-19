@@ -92,6 +92,7 @@
 #include "cpl_string.h"
 #include "ogr_spatialref.h"
 #include "gdal.h"
+#include "gdal_alg.h"
 //#include "../include/gdalwarp_interfaz.h"
 
 CPL_CVSID("$Id: gdalwarp.cpp,v 1.27 2006/09/27 13:06:13 dron Exp $");
