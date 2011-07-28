@@ -1,5 +1,9 @@
 #!/bin/sh
 
+#TODO:
+# - add a GRASS GIS interface
+# - turn this into a universally useful module for cost neighborhood filtering
+
 # Create loop using START and END variables
 START=1
 END=21
