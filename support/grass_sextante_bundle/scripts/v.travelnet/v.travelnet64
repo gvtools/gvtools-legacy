@@ -1,0 +1,345 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:       	v.travelnet64
+#       	       	version 28 July 2010
+# AUTHOR(S):		Andrew Bevan, University College London 
+# 			(a.bevan@ucl.ac.uk)
+# PURPOSE:		Creates an anisotropic distance matrix of travel times 
+#                       to and from each site in a vector point dataset, and 
+#                       optionally also a vector network of least cost paths. 
+# ACKNOWLEDGEMENTS:	Benjamin Ducke and Mark Lake. 
+# COPYRIGHT:		(C) 2010 by Andrew Bevan
+#			This program is free software under the GNU General 
+#			Public License (>=v2). Read the file COPYING that 
+#			comes with GRASS for details.
+#
+#############################################################################
+# 
+# Description:
+# v.travelnet creates a path network and full matrix of travel times to and from each site 
+# in a vector point dataset, using anisotropic cost surfaces.
+# 
+# Notes:
+# This script uses SQL statements that do not work with the GRASS dbf 
+# database driver. The best thing to do is to switch to sqlite at the point of 
+# setting up the mapset and prior to creating or importing any vector data. 
+# This can be done through db.connect. It also requires versions of r.walk 
+# and r.drain that support back-link rasters and hence proper path delineation. 
+# These are available as patches for GRASS 6.4 
+# (see http://trac.osgeo.org/grass/ticket/399).
+
+
+# TODO:
+# - This script needs a version of r.walk that can generate the
+#   back-links output. This feature is in GRASS 6.5, but has not been
+#   backported to 6.4 yet ().
+#   The new option is this:
+#
+#    opt15 = G_define_option();
+#    opt15->key = "outdir";
+#    opt15->type = TYPE_STRING;
+#    opt15->required = NO;
+#    opt15->gisprompt = "new,cell,raster";
+#    opt15->description =
+#	_("Name of output raster map to contain movement directions"); 
+#
+#   See the patches here: http://trac.osgeo.org/grass/ticket/399
+#
+
+#%Module
+#%  description: Calculates anistropic distances between points and an optional network of least cost paths
+#%End
+
+#%option
+#% guisection: Required
+#% key: vect
+#% type: string
+#% gisprompt: old,vector,vector
+#% description: Name of input vector dataset with nodes (forwarded to r.walk)
+#% required : yes
+#%END
+
+#%option
+#% guisection: Required
+#% key: PID
+#% type: integer
+#% description: Name of column in attribute table with node IDs
+#% required : yes
+#%END
+
+#%option
+#% guisection: Required
+#% key: nodes
+#% type: string
+#% gisprompt: new,vector,vector
+#% description: Name for output vector dataset of (recentred) nodes
+#% required : yes
+#%END
+
+#%option
+#% guisection: Required
+#% key: elev
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Input elevation map for anisotropic costs (forwarded to r.walk)
+#% required : no
+#%END
+
+#%option
+#% guisection: Required
+#% key: frict
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Name of map with additional friction costs (forwarded to r.walk)
+#% required : no
+#%END
+
+#%option
+#% guisection: Required
+#% key: a
+#% type: double
+#% description: Base travel cost on flat ground (default is ca.5km/hr; forwarded to r.walk)
+#% answer: 0.72
+#% required : yes
+#%END
+
+#%option
+#% guisection: Required
+#% key: b
+#% type: double
+#% description: Extra time required for uphill movement (forwarded to r.walk)
+#% answer: 6.0
+#% required : yes
+#%END
+
+#%option
+#% guisection: Required
+#% key: c
+#% type: double
+#% description: Time saved for moderate downhill movement (forwarded to r.walk)
+#% answer: 1.9998
+#% required : yes
+#%END
+
+#%option
+#% guisection: Required
+#% key: d
+#% type: double
+#% description: Extra time required for steep downhill movement (forwarded to r.walk)
+#% answer: -1.9998
+#% required : yes
+#%END
+
+#%option
+#% guisection: Required
+#% key: lambda
+#% type: double
+#% description: Coefficient for combining anisotropic and isotropic costs (lambda; forwarded to r.walk)
+#% answer: 1
+#% required : no
+#%END
+
+#%option
+#% guisection: Required
+#% key: slope_factor
+#% type: double
+#% description: Threshold for shift in downhill slope costs (forwarded to r.walk)
+#% answer: -0.2125
+#% required : yes
+#%END
+
+#%flag
+#% key: k
+#% description: -k Use knight's case search (forwarded to r.walk)
+#%end
+
+#%flag
+#% key: e
+#% description: -e Output network edges as vector lines
+#%end
+
+#%flag
+#% key: m
+#% description: -m Output travel time matrix to text file.
+#%end
+
+#%option
+#% key: edges
+#% type: string
+#% gisprompt: new,vector,vector
+#% description: Name for output vector dataset of edges (requires -e flag)
+#% required : no
+#%END
+
+#%option
+#% key: distmat
+#% type: string
+#% description: Name for output text file with travel time matrix (requires -m flag) 
+#% required : no
+#%END
+
+if [ -z $GISBASE ] ; then
+    echo "You have to be within a GRASS session to use this module." 1>&2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec $GISBASE/bin/g.parser "$0" "$@"
+fi
+
+GRASS_VERBOSE=0
+export GRASS_VERBOSE
+
+
+###### General Set-up ######
+
+echo ""
+echo "**Full Cost Matrix and Path Network**"
+
+# Create a new site dataset to protect input and to adjust locations to centres of raster cells, for perfect matching with the end and start nodes of paths.
+g.remove vect=$GIS_OPT_NODES,$GIS_OPT_EDGES
+v.to.rast input=$GIS_OPT_VECT output=$GIS_OPT_NODES use=attr column=$GIS_OPT_PID
+r.to.vect input=$GIS_OPT_NODES output=$GIS_OPT_NODES feature=point --overwrite
+v.db.addcol map=$GIS_OPT_NODES columns="$GIS_OPT_PID int"
+v.what.rast vector=$GIS_OPT_NODES raster=$GIS_OPT_NODES column=$GIS_OPT_PID
+v.db.dropcol map=$GIS_OPT_NODES column=value
+v.db.dropcol map=$GIS_OPT_NODES column=label
+g.remove rast=$GIS_OPT_NODES
+
+# Create an empty vector line dataset for later use for combining paths  
+v.edit map=$GIS_OPT_EDGES type=line tool=create
+v.db.addtable map=$GIS_OPT_EDGES
+v.db.addcol map=$GIS_OPT_EDGES columns="fromsite int, tosite int, path varchar(25), seconds int, nrank int"
+
+###### Main ######
+
+###### Start of Outer Loop ######
+
+#Create a first, outside loop using a list of node IDs.
+
+v.db.select -c map=$GIS_OPT_NODES column=$GIS_OPT_PID fs=" " >pids.txt
+for S in `cat pids.txt`
+do
+
+echo ""
+echo "*Cost surface from node ${S}*" 
+
+
+# Extract one point on its own from the point(s) dataset
+v.extract input=$GIS_OPT_NODES output=site${S} layer=1 where="$GIS_OPT_PID = ${S}" --overwrite
+
+# Run r.walk with the above site as a starting point
+
+# Now if -e flag is set, add a network of least cost paths via a second, inner loop, using a list of node IDs that excludes the departure point.
+
+if [ "$GIS_FLAG_k" -eq 1 ]; then
+r.walk2 -k elevation=$GIS_OPT_ELEV friction=$GIS_OPT_FRICT start_points=site${S} output=aniso${S} outdir=anisodir${S} lambda=$GIS_OPT_LAMBDA slope_factor=$GIS_OPT_SLOPE_FACTOR nseg=4 walk_coeff=$GIS_OPT_A,$GIS_OPT_B,$GIS_OPT_C,$GIS_OPT_D --overwrite
+else
+r.walk2 elevation=$GIS_OPT_ELEV friction=$GIS_OPT_FRICT start_points=site${S} output=aniso${S} outdir=anisodir${S} lambda=$GIS_OPT_LAMBDA slope_factor=$GIS_OPT_SLOPE_FACTOR nseg=4 walk_coeff=$GIS_OPT_A,$GIS_OPT_B,$GIS_OPT_C,$GIS_OPT_D --overwrite
+fi
+
+# Add a new column to the vector points dataset in which to put the travel time information
+v.db.addcol map=$GIS_OPT_NODES layer=1 columns="from${S} double precision"
+
+# Attach the travel times from the above the raster map to the corresponding points in the vector dataset under the column "from...":
+v.what.rast vector=$GIS_OPT_NODES raster=aniso${S} column=from${S}
+
+#Create a rank order column in the nodes dataset
+echo "SELECT $GIS_OPT_PID,from${S} FROM $GIS_OPT_NODES ORDER BY from${S}" | db.select -c >norder.csv
+sed -i 's/|/,/g' norder.csv
+sed -i '1d' norder.csv
+sed -i '1i tmpPID,fromsite' norder.csv
+db.in.ogr dsn=norder.csv output=nordertmp key=rank
+v.db.join map=$GIS_OPT_NODES column=$GIS_OPT_PID otable=nordertmp ocolumn=tmpPID
+v.db.dropcol map=$GIS_OPT_NODES column=tmpPID
+v.db.dropcol map=$GIS_OPT_NODES column=fromsite
+
+##############Start of Inner Loop################## 
+
+# Now if -e flag is set, add a network of least cost paths via a second, inner loop, using a list of node IDs that excludes the departure point.
+
+if [ "$GIS_FLAG_e" -eq 1 ]; then
+v.db.select -c map=$GIS_OPT_NODES column=$GIS_OPT_PID where="$GIS_OPT_PID <> ${S}" fs=" " >links.txt
+for L in `cat links.txt`
+do 
+echo "Path to node \c" 
+echo "${L}...\c" 
+
+# Create a least cost path from the departure point to this destination
+v.extract input=$GIS_OPT_NODES output=site${L} layer=1 where="$GIS_OPT_PID = ${L}" --overwrite
+r.drain2 -c -d indir=anisodir${S} input=aniso${S} vector_points=site${L} output=from${S}to${L} --overwrite
+
+# The path is potentially discontinuous if knight's case search has been used in r.walk, so vectorise the raster path as points
+r.to.vect input=from${S}to${L} output=from${S}to${L} feature=point --overwrite
+
+# Begin process of converting this into a vector line, by adding columns for x and y coordinates to the attribute table and updating these from the vector geometry
+v.db.addcol from${S}to${L} columns="x double precision,y double precision"
+v.to.db map=from${S}to${L} option=coor col=x,y
+
+# Output these coordinates to a space delimited text file with no column headings 
+echo "SELECT x,y FROM from${S}to${L} ORDER BY value" | db.select -c fs=" " >points.txt
+
+# Query the text file for the number of records and assign this to a variable 
+linecount=`wc -l "points.txt" | awk '{print $1'}`
+
+# Generate and append basic header information that indicates line data and cat number, using GRASS standard format
+echo "L $linecount 1" >standardformat.txt
+cat points.txt >> standardformat.txt
+echo "1 1" >> standardformat.txt
+
+# Finish the process of converting this into a vector line
+v.in.ascii -n --o input=standardformat.txt output=from${S}to${L} format=standard 2>/dev/null
+
+# Query for travel time to current site and temporarily save to text file.
+echo "SELECT from${S} FROM $GIS_OPT_NODES WHERE $GIS_OPT_PID=${L}" | db.select -c >time.txt
+echo "SELECT rank FROM $GIS_OPT_NODES WHERE $GIS_OPT_PID=${L}" | db.select -c >rank.txt
+
+# Add table and columns for from-site, to-site, path name, and total travel time.
+v.db.addtable map=from${S}to${L} 
+v.db.addcol map=from${S}to${L} columns="fromsite int, tosite int, path varchar(25), seconds int, nrank int"
+v.db.update map=from${S}to${L} column=fromsite value=${S} 
+v.db.update map=from${S}to${L} column=tosite value=${L}
+v.db.update map=from${S}to${L} column=path value=from${S}to${L}
+v.db.update map=from${S}to${L} column=seconds value=`cat time.txt`
+v.db.update map=from${S}to${L} column=nrank value=`cat rank.txt`
+
+# Append least cost path to pre-existing edges.
+v.patch -a -e input=from${S}to${L} output=$GIS_OPT_EDGES --overwrite
+
+# Remove temporary files
+g.remove vect=site${L},from${S}to${L} rast=from${S}to${L}
+
+done 
+fi
+echo "" 
+
+###### End of Inner Loop ######
+
+# Remove further temporary files and columns
+g.remove rast=aniso${S},anisodir${S} vect=site${S}
+
+# Remove rank column from nodes data
+v.db.dropcol map=$GIS_OPT_NODES column=rank
+echo "DROP TABLE nordertmp" | db.execute
+
+done
+
+# Once the entire matrix has been generated, export the results from the vector points dataset to a pipe separated text file.
+if [ "$GIS_FLAG_m" -eq 1 ]; then
+echo "Exporting distance matrix as text file..." 1>&2
+v.report map=$GIS_OPT_NODES layer=1 option=coor units=me >$GIS_OPT_DISTMAT 
+fi 
+
+###### End of Outer Loop ######
+
+rm time.txt standardformat.txt points.txt rank.txt norder.csv pids.txt
+
+echo "" 
+echo "**Done**"
+echo ""
+
+exit 0 
+
+##########################################################################

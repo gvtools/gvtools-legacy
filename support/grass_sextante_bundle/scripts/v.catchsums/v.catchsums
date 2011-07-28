@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# Create loop using START and END variables
+START=1
+END=21
+
+S=$START 
+while [ $S -le $END ] 
+do 
+echo "" 
+echo "**** Processing sample ${S} ****" 
+
+v.extract input=villages output=v${S} layer=1 where="cat = ${S}" --overwrite
+r.walk -k elevation=dem friction=dem output=v${S}cs start_points=v${S} max_cost=14400 lambda=0 --overwrite
+#Calculate summary with weighting function
+r.mapcalc "v${S}csw= 1 * exp(-((v${S}cs/3600)^2)/8)"
+r.mapcalc "v${S}vals= v${S}csw * ndvi"
+r.sum rast=v${S}vals > catchval.txt
+sed -e 's/SUM = //' catchval.txt > catchval1.txt
+#v.db.addcol map=villages columns="ndviscore double precision"
+v.db.update map=villages column=ndviscore value=`cat catchval1.txt` where="cat = ${S}"
+#Clean-up
+rm catchval.txt
+rm catchval1.txt
+g.remove vect=v${S} rast=v${S}cs,v${S}csw,v${S}vals
+
+S=$((S+1))
+
+done 
+
+exit 0
