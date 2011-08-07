@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# v.in.wkt
+#
+# Purpose: Parse a geometry description in WKT and produce a GRASS geometry
+# 
+# - user can either specify on WKT string as input, or a file which
+#   is assumed to contain one such string per line (or commented or empty lines)
+# - create a temporary CSV from input and use OGR's CSV driver to import the string(s)
+# - allow user to also specify attribute table structure and values (?)
+# - also provide a v.out.vtk?
+# - add new geometries to a new or existing map
