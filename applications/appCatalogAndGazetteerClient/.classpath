@@ -34,6 +34,6 @@
 	<classpathentry kind="lib" path="/extGPE-gvSIG/lib/org.gvsig.gpe.xml.jar"/>
 	<classpathentry kind="lib" path="lib/geonames-1.0-java5.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="/home/benni/workspace-gvsig/libFMap/lib/jts-1.12.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
