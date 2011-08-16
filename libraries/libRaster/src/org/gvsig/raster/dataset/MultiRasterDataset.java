@@ -602,6 +602,17 @@ public class MultiRasterDataset implements IRasterDataSource {
 		Point2D p1 = worldToRaster(new Point2D.Double(ulx, uly));
 		Point2D p2 = worldToRaster(new Point2D.Double(lrx, lry));
 		p2.setLocation(p2.getX() - 1, p2.getY() - 1);
+		
+		if(p1.getX() > p2.getX())
+			p1.setLocation(p1.getX() - 1, p1.getY());
+		else
+			p2.setLocation(p2.getX() - 1, p2.getY());
+		
+		if(p1.getY() > p2.getY())
+			p1.setLocation(p1.getX(), p1.getY() - 1);
+		else
+			p2.setLocation(p2.getX(), p2.getY() - 1);		
+		
 		if(	((int)p1.getX()) < 0 || ((int)p2.getX()) > getWidth() ||
 				((int)p2.getY()) > getHeight() || ((int)p2.getY()) < 0)
 				throw new InvalidSetViewException("");

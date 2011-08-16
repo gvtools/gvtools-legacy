@@ -309,7 +309,7 @@ public class GdalDriver extends RasterDataset {
 	public IBuffer getWindowRaster(double ulx, double uly, double lrx, double lry, BandList bandList, IBuffer rasterBuf) throws InterruptedException, RasterDriverException {
 		Extent selectedExtent = new Extent(ulx, uly, lrx, lry);
 		setView(selectedExtent);
-			
+				
 		try {
 			file.readWindow(rasterBuf, bandList, viewRequest.getULX(), viewRequest.getULY(), viewRequest.getLRX(), viewRequest.getLRY(), rasterBuf.getWidth(), rasterBuf.getHeight(), true);
 		} catch (GdalException e) {
@@ -361,7 +361,17 @@ public class GdalDriver extends RasterDataset {
 		Point2D lr = new Point2D.Double(viewRequest.getLRX(), viewRequest.getLRY());
 		ul = worldToRaster(ul);
 		lr = worldToRaster(lr);
-		lr.setLocation(lr.getX() - 1, lr.getY() - 1);
+		
+		if(ul.getX() > lr.getX())
+			ul.setLocation(ul.getX() - 1, ul.getY());
+		else
+			lr.setLocation(lr.getX() - 1, lr.getY());
+		
+		if(ul.getY() > lr.getY())
+			ul.setLocation(ul.getX(), ul.getY() - 1);
+		else
+			lr.setLocation(lr.getX(), lr.getY() - 1);
+		
 		adjustPoints(ul, lr);
 		
 		width = Math.abs(((int)lr.getX()) - ((int)ul.getX())) + 1;

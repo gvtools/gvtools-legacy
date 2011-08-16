@@ -115,10 +115,8 @@ public class GdalNative extends Gdal {
 		width = getRasterXSize();
 		height = getRasterYSize();
 		int[] dt = new int[getRasterCount()];
-		for (int i = 0; i < getRasterCount(); i++) {
+		for (int i = 0; i < getRasterCount(); i++)
 			dt[i] = this.getRasterBand(i + 1).getRasterDataType();
-		}
-			
 		setDataType(dt);
 		shortName = getDriverShortName();
 		fileTransparency = new Transparency();
@@ -717,7 +715,16 @@ public class GdalNative extends Gdal {
 		setView(ulx, uly, lrx, lry, nWidth, nHeight);
 		Point2D tl = worldToRaster(new Point2D.Double(ulx, uly));
 		Point2D br = worldToRaster(new Point2D.Double(lrx, lry));
-		br.setLocation(br.getX() - 1, br.getY() - 1);
+		
+		if(tl.getX() > br.getX())
+			tl.setLocation(tl.getX() - 1, tl.getY());
+		else
+			br.setLocation(br.getX() - 1, br.getY());
+		
+		if(tl.getY() > br.getY())
+			tl.setLocation(tl.getX(), tl.getY() - 1);
+		else
+			br.setLocation(br.getX(), br.getY() - 1);
 		
 		if(gdalBands.length == 0)
 			return;
@@ -726,7 +733,7 @@ public class GdalNative extends Gdal {
 
 		int x = (int) Math.round(Math.min(tl.getX(), br.getX()));
 		int y = (int) Math.round(Math.min(tl.getY(), br.getY()));
-		
+
 		int[] stpBuffer = new int[]{0, 0 , buf.getWidth(), buf.getHeight()};
 		//Si el buffer no se ajusta al extent entonces calculamos en que posición comienza a escribirse dentro del buffer
 		//ya que lo que cae fuera serán valores NoData
@@ -736,14 +743,11 @@ public class GdalNative extends Gdal {
 				x  = 0;
 			if(y < 0)
 				y  = 0;
-		
 			readData(buf, bandList, x, y, wh[0], wh[1], wh[0], wh[1], 0, 0, stpBuffer);
-						
 			return;
 		}
-				
+
 		readData(buf, bandList, x, y, nWidth, nHeight, nWidth, nHeight, 0, 0, stpBuffer);
-		
 	}
 			
 	/**
@@ -777,7 +781,17 @@ public class GdalNative extends Gdal {
 		setView(ulx, uly, lrx, lry, bufWidth, bufHeight);
 		Point2D tl = worldToRaster(new Point2D.Double(ulx, uly));
 		Point2D br = worldToRaster(new Point2D.Double(lrx, lry));
-		br.setLocation(br.getX() - 1, br.getY() - 1);
+		
+		if(tl.getX() > br.getX())
+			tl.setLocation(tl.getX() - 1, tl.getY());
+		else
+			br.setLocation(br.getX() - 1, br.getY());
+		
+		if(tl.getY() > br.getY())
+			tl.setLocation(tl.getX(), tl.getY() - 1);
+		else
+			br.setLocation(br.getX(), br.getY() - 1);
+		
 		adjustPoints(tl, br);
 		
 		if(gdalBands.length == 0)
@@ -915,9 +929,8 @@ public class GdalNative extends Gdal {
 	private void assignDataTypeFromGdalRasterBands(GdalRasterBand[] gdalBands) throws GdalException {
 		int[] dt = new int[gdalBands.length];
 		for (int i = 0; i < gdalBands.length; i++) {
-			if(gdalBands[i] != null) {
+			if(gdalBands[i] != null)
 				dt[i] = gdalBands[i].getRasterDataType();
-			}
 		}
 		setDataType(dt);
 	}
