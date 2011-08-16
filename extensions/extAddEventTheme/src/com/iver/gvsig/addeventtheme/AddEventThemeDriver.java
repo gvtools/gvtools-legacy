@@ -49,6 +49,8 @@ package com.iver.gvsig.addeventtheme;
 
 import java.awt.geom.Rectangle2D;
 
+import org.gvsig.tools.file.PathGenerator;
+
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReloadDriverException;
@@ -307,7 +309,7 @@ public class AddEventThemeDriver implements VectorialDriver, ObjectDriver, Bound
 		if (xml.getStringProperty("type").equals("otherDriverFile")) {
 			LayerFactory.getDataSourceFactory().addFileDataSource(xml.getStringProperty(
 					"driverName"), xml.getStringProperty("gdbmsname"),
-				xml.getStringProperty("file"));
+				PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("file")));
 		} else if (xml.getStringProperty("type").equals("sameDriverFile")) {
 		} else if (xml.getStringProperty("type").equals("db")) {
 			LayerFactory.getDataSourceFactory().addDBDataSourceByTable(xml.getStringProperty(
