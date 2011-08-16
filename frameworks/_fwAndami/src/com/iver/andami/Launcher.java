@@ -163,7 +163,7 @@ import com.iver.utiles.xmlEntity.generate.XmlTag;
  *
  *
  * @author $author$
- * @version $Revision: 33213 $
+ * @version $Revision: 33214 $
  */
 public class Launcher {
 	private static Logger logger = Logger.getLogger(Launcher.class.getName());
@@ -252,22 +252,16 @@ public class Launcher {
 
     		// END OF CARTOLAB CHANGE
     		
-    		
-    		
     		// Configurar el log4j
     		Launcher.class.getClassLoader()
 			.getResource(".");
     		PropertyConfigurator.configure("log4j.properties");
 
     		PatternLayout l = new PatternLayout("%p %t %C - %m%n");
-
-    		// CONTRIBUCIÓN FROM CARTOLAB
-    		RollingFileAppender fa = new RollingFileAppender(l,
-    				System.getProperty("user.dir") + File.separator + args[0] + ".log", false);
     		
-//    		RollingFileAppender fa = new RollingFileAppender(l,
-//    				appHomeDir + args[0] + ".log", false);
-    		// END CONTRIBUTION FROM CARTOLAB (PABLO XANXIAO)
+    		RollingFileAppender fa = new RollingFileAppender(l,
+    				appHomeDir + args[0] + ".log", false);
+
     		fa.setMaxFileSize("512KB");
     		fa.setMaxBackupIndex(3);
     		Logger.getRootLogger().addAppender(fa);
@@ -1936,7 +1930,7 @@ public class Launcher {
 	 * 'position' attribute), the priority of the extensions where the tool is defined.</li></ul>
 	 *
 	 * @author cesar
-	 * @version $Revision: 33213 $
+	 * @version $Revision: 33214 $
 	 */
 	private static class ToolComparator implements Comparator {
 		private static ToolBarComparator toolBarComp = new ToolBarComparator();
