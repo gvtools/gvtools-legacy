@@ -56,22 +56,21 @@ public class FieldDescription {
 
 	public static int stringToType(String strType) {
 		int type = -1;
-		if (strType.equals("String"))
+		if (strType.equalsIgnoreCase("String") || strType.equalsIgnoreCase("Varchar"))
 			type = Types.VARCHAR;
-		if (strType.equals("Double"))
+		if (strType.equalsIgnoreCase("Double"))
 			type = Types.DOUBLE;
-		if (strType.equals("Integer"))
+		if (strType.equalsIgnoreCase("Integer"))
 			type = Types.INTEGER;
-		if (strType.equals("Boolean"))
+		if (strType.equalsIgnoreCase("Boolean"))
 			type = Types.BOOLEAN;
-		if (strType.equals("Date"))
+		if (strType.equalsIgnoreCase("Date"))
 			type = Types.DATE;
 
 		if (type == -1) {
 			throw new RuntimeException("Type not recognized: " + strType);
 		}
 		return type;
-
 	}
 
 	public static String typeToString(int sqlType) {
