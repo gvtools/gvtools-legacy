@@ -8,6 +8,8 @@ import java.util.Hashtable;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import org.gvsig.tools.file.PathGenerator;
+
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
@@ -23,6 +25,7 @@ import com.iver.cit.gvsig.fmap.edition.EditableAdapter;
 import com.iver.cit.gvsig.fmap.edition.IEditableSource;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
+import com.iver.cit.gvsig.fmap.layers.VectorialFileAdapter;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.ProjectFactory;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
@@ -44,7 +47,7 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
  */
 public class ProjectTableFactory extends ProjectDocumentFactory {
     public static String registerName = "ProjectTable";
-
+    
     static {
   		// A�adimos nuestra extension para el tratamiento de la apertura de ficheros
   		// dentro de gvSIG

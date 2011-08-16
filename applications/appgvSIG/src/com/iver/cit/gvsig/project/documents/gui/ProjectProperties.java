@@ -48,12 +48,15 @@ import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
 import org.gvsig.gui.beans.AcceptCancelPanel;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.project.Project;
+import java.awt.Dimension;
+import javax.swing.JRadioButton;
 
 
 /**
@@ -84,6 +87,7 @@ public class ProjectProperties extends JPanel implements IWindow {
     private javax.swing.JButton btnColor = null;
     private javax.swing.JScrollPane jScrollPane = null;
     private WindowInfo m_viewinfo = null;
+	private JRadioButton rbAbsolutePath = null;
     /**
      * This is the default constructor
      *
@@ -117,7 +121,8 @@ public class ProjectProperties extends JPanel implements IWindow {
         getTxtComments().setText(project.getComments());
         getTxtCreationDate().setText(project.getCreationDate());
         getTxtModificationDate().setText(project.getModificationDate());
-
+        getRbAbsolutePath().setSelected(project.isAbsolutePath());
+        
         getLblColor().setBackground(project.getSelectionColor());
     }
 
@@ -139,6 +144,7 @@ public class ProjectProperties extends JPanel implements IWindow {
             jPanel.add(getTxtModificationDate(), null);
             jPanel.add(getJLabel4(), null);
             jPanel.add(getTxtOwner(), null);
+            jPanel.add(getRbAbsolutePath(), null);
             jPanel.add(getJLabel5(), null);
             jPanel.add(getJScrollPane(), null);
             jPanel.add(getJLabel6(), null);
@@ -150,6 +156,9 @@ public class ProjectProperties extends JPanel implements IWindow {
                     project.setOwner(txtOwner.getText());
                     project.setComments(txtComments.getText());
                     project.setSelectionColor(lblColor.getBackground());
+                    project.setIsAbsolutePath(rbAbsolutePath.isSelected());
+                    PathGenerator pg = PathGenerator.getInstance();
+                    pg.setIsAbsolutePath(rbAbsolutePath.isSelected());
                     PluginServices.getMDIManager().closeWindow(ProjectProperties.this);
                 }
             }, cancelAction = new java.awt.event.ActionListener() {
@@ -158,7 +167,8 @@ public class ProjectProperties extends JPanel implements IWindow {
                 }
             };
             jPanel.add(new AcceptCancelPanel(okAction, cancelAction));
-            jPanel.setPreferredSize(new java.awt.Dimension(250, 10));
+            jPanel.setPreferredSize(new Dimension(500, 600));
+            
         }
 
         return jPanel;
@@ -474,7 +484,7 @@ public class ProjectProperties extends JPanel implements IWindow {
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo=new WindowInfo(WindowInfo.MODALDIALOG);
    		m_viewinfo.setWidth(450);
-   		m_viewinfo.setHeight(250);
+   		m_viewinfo.setHeight(300);
    		m_viewinfo.setTitle(PluginServices.getText(this, "propiedades_sesion"));
 		return m_viewinfo;
 	}
@@ -487,6 +497,20 @@ public class ProjectProperties extends JPanel implements IWindow {
 
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
+	}
+
+	/**
+	 * This method initializes rbAbsolutePath
+	 *
+	 * @return javax.swing.JRadioButton
+	 */
+	private JRadioButton getRbAbsolutePath() {
+		if (rbAbsolutePath == null) {
+			rbAbsolutePath = new JRadioButton();
+			rbAbsolutePath.setText(PluginServices.getText(this,"save_absolute_path"));
+			rbAbsolutePath.setPreferredSize(new Dimension(420, 20));
+		}
+		return rbAbsolutePath;
 	}
 }
 

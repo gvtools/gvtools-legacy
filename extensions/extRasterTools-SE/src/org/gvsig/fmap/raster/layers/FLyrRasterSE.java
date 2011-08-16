@@ -87,6 +87,7 @@ import org.gvsig.raster.util.ColorConversion;
 import org.gvsig.raster.util.Historical;
 import org.gvsig.raster.util.MathUtils;
 import org.gvsig.raster.util.RasterToolsUtil;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
@@ -167,6 +168,8 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 	
 	protected String              readingData           = null;
 
+	private static PathGenerator pathGenerator=PathGenerator.getInstance();
+	
 	static {
 		 RasterLibrary.wakeUp();
 		 //TODO: Problema de dependencia entre appgvSIG y libFMap. La resolución de errores en la ruta de las capas debería ser un mecanismo general.
@@ -971,7 +974,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 	public XMLEntity getXMLEntityWithoutChecks() throws XMLException {
 		XMLEntity xml = super.getXMLEntity();
 		if(getFile() != null)
-			xml.putProperty("file", getFile());
+			xml.putProperty("file", pathGenerator.getPath(getFile().getAbsolutePath()));
 		xml.putProperty("driverName", "gvSIG Raster Driver");
 
 		// Si no hay ningín Status aplicamos el StatusLayerRaster que se usa por defecto
@@ -1001,7 +1004,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 		loadingFromProject = true;
 		
 		try {
-			params = new File(xml.getStringProperty("file"));
+			params = new File(pathGenerator.getAbsolutePath(xml.getStringProperty("file")));
 
 			if(params != null && getName() != null && getName().compareTo("") != 0) {
 				try {

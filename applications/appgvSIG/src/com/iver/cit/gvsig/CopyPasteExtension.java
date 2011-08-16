@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.ValidationException;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
@@ -1148,7 +1149,7 @@ Pegar mapa.
 						LayerFactory.getDataSourceFactory().addFileDataSource(
 								child.getStringProperty("driverName"),
 								name,
-								child.getStringProperty("file")
+								PathGenerator.getInstance().getAbsolutePath(child.getStringProperty("file"))
 						);
 
 

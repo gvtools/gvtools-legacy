@@ -67,6 +67,7 @@ import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.ValidationException;
 import org.gvsig.gui.beans.swing.JFileChooser;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.iver.andami.Launcher;
 import com.iver.andami.PluginServices;
@@ -123,6 +124,8 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	private WindowInfo seedProjectWindow;
 	public static final String LAYOUT_TEMPLATE_FILECHOOSER_ID = "LAYOUT_TEMPLATE_FILECHOOSER_ID";
 	public static final String PROJECT_FILE_CHOOSER_ID = "PROJECT_FILECHOOSER_ID";
+	
+	private static PathGenerator pathGenerator=PathGenerator.getInstance();
 	/**
 	 * Use UTF-8 for encoding, as it can represent characters from
 	 * any language.
@@ -475,6 +478,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	 * @param askConfirmation boolean
 	 */
 	public boolean writeProject(File file, Project p, boolean askConfirmation) {
+		pathGenerator.setBasePath(file.getParent());
 		if( askConfirmation && file.exists()){
 			int resp = JOptionPane.showConfirmDialog(
 					(Component) PluginServices.getMainFrame(),PluginServices.getText(this,"fichero_ya_existe_seguro_desea_guardarlo"),
@@ -515,6 +519,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	}
 
 	public Project readProject(String path) {
+		pathGenerator.setBasePath(new File(path).getParent());
 		BufferedReader reader =null;
 		try {
 		URL url=null;
@@ -580,6 +585,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	 *
 	 */
 	public Project readProject(File file) {
+		pathGenerator.setBasePath(file.getParent());
 		File xmlFile = new File(file.getAbsolutePath());
 		try {
 			String encoding = XMLEncodingUtils.getEncoding(new FileInputStream(xmlFile));

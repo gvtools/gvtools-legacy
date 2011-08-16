@@ -47,6 +47,7 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -56,6 +57,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import org.apache.batik.ext.awt.geom.PathLength;
 import org.apache.log4j.Logger;
 import org.gvsig.symbology.fmap.styles.BackgroundFileStyle;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.iver.cit.gvsig.fmap.Messages;
 import com.iver.cit.gvsig.fmap.ViewPort;
@@ -90,6 +92,8 @@ public class PictureLineSymbol extends AbstractLineSymbol  {
 	private BackgroundFileStyle bgImage;
 	private BackgroundFileStyle bgSelImage;
 	private PrintRequestAttributeSet properties;
+	private PathGenerator pathGenerator=PathGenerator.getInstance();
+
 	/**
 	 * Constructor method
 	 *
@@ -256,8 +260,8 @@ public class PictureLineSymbol extends AbstractLineSymbol  {
 		xml.putProperty("className", getClassName());
 		xml.putProperty("isShapeVisible", isShapeVisible());
 		xml.putProperty("desc", getDescription());
-		xml.putProperty("imagePath", imagePath);
-		xml.putProperty("selImagePath", selImagePath);
+		xml.putProperty("imagePath", pathGenerator.getPath(imagePath));
+		xml.putProperty("selImagePath", pathGenerator.getPath(selImagePath));
 		xml.putProperty("lineWidth", getLineWidth());
 		xml.putProperty("xScale", getXScale());
 		xml.putProperty("yScale", getYScale());
@@ -276,8 +280,8 @@ public class PictureLineSymbol extends AbstractLineSymbol  {
 		System.out.println(this.getClass().getClassLoader());
 		setDescription(xml.getStringProperty("desc"));
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
-		imagePath = xml.getStringProperty("imagePath");
-		selImagePath = xml.getStringProperty("selImagePath");
+		imagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("imagePath"));
+		selImagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("selImagePath"));
 		setLineWidth(xml.getDoubleProperty("lineWidth"));
 		setXScale(xml.getDoubleProperty("xScale"));
 		setYScale(xml.getDoubleProperty("yScale"));

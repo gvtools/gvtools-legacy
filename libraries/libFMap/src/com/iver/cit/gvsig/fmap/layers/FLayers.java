@@ -62,6 +62,7 @@ import javax.swing.ImageIcon;
 import org.apache.log4j.Logger;
 import org.cresques.cts.ICoordTrans;
 import org.cresques.cts.IProjection;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -162,7 +163,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 	//		setParentLayer(parent);
 	//		this.fmap = fmap;
 	//	}
-
+	private static PathGenerator pathGenerator=PathGenerator.getInstance();
 	/*
 	 * (non-Javadoc)
 	 * @see com.iver.cit.gvsig.fmap.layers.layerOperations.LayerCollection#addLayerCollectionListener(com.iver.cit.gvsig.fmap.layers.LayerCollectionListener)
@@ -1258,9 +1259,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 					IProjection proj = null;
 					if (xml.contains("proj")) {
 						proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
-					}
-					else
-					{
+					} else {
 						proj = this.getMapContext().getViewPort().getProjection();
 					}
 					if (xml.contains("file")) {
@@ -1271,8 +1270,9 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 							throw new DriverLayerException(name,e1);
 						}
 						layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
-								new File(xml.getStringProperty("file")),
+								new File(pathGenerator.getAbsolutePath((String)xml.getStringProperty("file"))),
 								proj);
+
 
 
 					}

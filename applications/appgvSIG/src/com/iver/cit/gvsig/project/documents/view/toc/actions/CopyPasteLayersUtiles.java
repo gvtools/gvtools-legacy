@@ -1,6 +1,9 @@
 package com.iver.cit.gvsig.project.documents.view.toc.actions;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
@@ -153,7 +156,7 @@ public class CopyPasteLayersUtiles {
 						LayerFactory.getDataSourceFactory().addFileDataSource(
 								child.getStringProperty("driverName"),
 								name,
-								child.getStringProperty("file")
+								PathGenerator.getInstance().getAbsolutePath(child.getStringProperty("file"))
 						);
 
 

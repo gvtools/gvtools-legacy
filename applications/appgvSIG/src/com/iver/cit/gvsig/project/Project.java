@@ -44,6 +44,7 @@ import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -55,9 +56,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.swing.JInternalFrame;
-
 import org.cresques.cts.IProjection;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -158,6 +158,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	private String comments = "";
 
 	private Color selectionColor = null;
+	
+	private boolean isAbsolutePath = true;
 
 	// private ArrayList views = new ArrayList();
 	// private ArrayList tables = new ArrayList();
@@ -182,6 +184,8 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * each containing a XML version of a WindowInfo object.
 	 */
 	private Iterator initialWindowProperties = null;
+	
+	private static PathGenerator pathGenerator=PathGenerator.getInstance();
 
 	private TreeMap<ProjectDocument,Integer> sortedDocuments = new TreeMap<ProjectDocument,Integer>(new Comparator() {
 		public int compare(Object o1, Object o2) {
@@ -662,7 +666,8 @@ public class Project implements Serializable, PropertyChangeListener {
 		xml.putProperty("VERSION", VERSION);
 		xml.putProperty("comments", getComments());
 		xml.putProperty("creationDate", creationDate);
-
+		xml.putProperty("isAbsolutePath", isAbsolutePath);
+		
 		int numExtents = extents.size();
 		xml.putProperty("numExtents", numExtents);
 
@@ -999,9 +1004,9 @@ public class Project implements Serializable, PropertyChangeListener {
 						if (win == null){
 							continue;
 						}
-						PluginServices.getMDIManager().addWindow(win);						
+						PluginServices.getMDIManager().addWindow(win);
 						PluginServices.getMDIManager().changeWindowInfo(win,
-									windowProps);
+								windowProps);
 					}
 				} else if (child.contains("className") // restore the position
 						// of the project
@@ -1130,6 +1135,13 @@ public class Project implements Serializable, PropertyChangeListener {
 		try {
 			p.comments = xml.getStringProperty("comments");
 			p.creationDate = xml.getStringProperty("creationDate");
+			PathGenerator pg=PathGenerator.getInstance();
+			if (xml.contains("isAbsolutePath")){
+				p.isAbsolutePath=xml.getBooleanProperty("isAbsolutePath");
+				pg.setIsAbsolutePath(p.isAbsolutePath);
+			}else{
+				pg.setIsAbsolutePath(true);
+			}
 			int numExtents = xml.getIntProperty("numExtents");
 
 			for (int i = 0; i < numExtents; i++) {
@@ -1706,7 +1718,7 @@ public class Project implements Serializable, PropertyChangeListener {
 			FileSourceInfo vfdi = (FileSourceInfo) di;
 			child.putProperty("type", "otherDriverFile");
 			child.putProperty("gdbmsname", vfdi.name);
-			child.putProperty("file", vfdi.file);
+			child.putProperty("file", pathGenerator.getPath(vfdi.file));
 			child.putProperty("driverName", vfdi.driverName);
 		} else if (di instanceof DBSourceInfo) {
 			DBTableSourceInfo dbdi = (DBTableSourceInfo) di;
@@ -2129,7 +2141,7 @@ public class Project implements Serializable, PropertyChangeListener {
 					"otherDriverFile")) {
 				LayerFactory.getDataSourceFactory().addFileDataSource(
 						xmlDataSource.getStringProperty("driverName"), name,
-						xmlDataSource.getStringProperty("file"));
+						pathGenerator.getAbsolutePath(xmlDataSource.getStringProperty("file")));
 
 			} else if (xmlDataSource.getStringProperty("type").equals(
 					"sameDriverFile")) {
@@ -2207,5 +2219,13 @@ public class Project implements Serializable, PropertyChangeListener {
 
 	public void setSignature(long hash) {
 		signatureAtStartup = hash;
+	}
+
+	public boolean isAbsolutePath() {
+		return isAbsolutePath;
+	}
+
+	public void setIsAbsolutePath(boolean selected) {
+		isAbsolutePath=selected;
 	}
 }

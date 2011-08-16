@@ -56,6 +56,7 @@ import javax.print.attribute.standard.PrintQuality;
 import org.apache.log4j.Logger;
 import org.cresques.cts.ICoordTrans;
 import org.gvsig.exceptions.BaseException;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
@@ -179,7 +180,8 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     private FLyrVectLinkProperties linkProperties=new FLyrVectLinkProperties();
     //private ArrayList linkProperties=null;
     private boolean waitTodraw=false;
-
+    private static PathGenerator pathGenerator=PathGenerator.getInstance();
+    
     public boolean isWaitTodraw() {
 		return waitTodraw;
 	}
@@ -1199,8 +1201,8 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
         }
         if (source instanceof VectorialFileAdapter) {
             xml.putProperty("type", "vectorial");
-            xml.putProperty("file", ((VectorialFileAdapter) source)
-                    .getFile());
+            xml.putProperty("file", pathGenerator.getPath(((VectorialFileAdapter) source)
+                    .getFile().getAbsolutePath()));
             try {
                 xml.putProperty("recordset-name", source.getRecordset()
                         .getName());

@@ -49,6 +49,7 @@ import java.awt.RenderingHints;
 import java.awt.TexturePaint;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -58,6 +59,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import org.apache.log4j.Logger;
 import org.gvsig.symbology.fmap.styles.BackgroundFileStyle;
 import org.gvsig.symbology.fmap.styles.SimpleMarkerFillPropertiesStyle;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.iver.cit.gvsig.fmap.Messages;
 import com.iver.cit.gvsig.fmap.ViewPort;
@@ -91,7 +93,7 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 	private BackgroundFileStyle bgImage;
 	private BackgroundFileStyle bgSelImage;
 	private PrintRequestAttributeSet properties;
-
+	private PathGenerator pathGenerator=PathGenerator.getInstance();
 
 	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
  		Color fillColor = getFillColor();
@@ -238,8 +240,8 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 		xml.putProperty("angle", angle);
 		xml.putProperty("scaleX", xScale);
 		xml.putProperty("scaleY", yScale);
-		xml.putProperty("imagePath", imagePath);
-		xml.putProperty("selImagePath", selImagePath);
+		xml.putProperty("imagePath", pathGenerator.getPath(imagePath));
+		xml.putProperty("selImagePath", pathGenerator.getPath(selImagePath));
 		if (getFillColor()!=null)
 			xml.putProperty("fillColor", StringUtilities.color2String(getFillColor()));
 
@@ -258,8 +260,8 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 
 	public void setXMLEntity(XMLEntity xml) {
 
-		imagePath = xml.getStringProperty("imagePath");
-		selImagePath = xml.getStringProperty("selImagePath");
+		imagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("imagePath"));
+		selImagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("selImagePath"));
 		setDescription(xml.getStringProperty("desc"));
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
 		setAngle(xml.getDoubleProperty("angle"));

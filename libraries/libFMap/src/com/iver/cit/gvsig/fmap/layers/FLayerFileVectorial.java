@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.cresques.cts.IProjection;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -27,7 +28,8 @@ public class FLayerFileVectorial extends FLyrVect{
 	private boolean loaded = false;
 	private File dataFile = null;
 	private VectorialFileDriver fileDriver = null;
-
+	private static PathGenerator pathGenerator=PathGenerator.getInstance();
+	
 	public FLayerFileVectorial() {
 		super();
 	}
@@ -59,22 +61,24 @@ public class FLayerFileVectorial extends FLyrVect{
 			//TODO: que excepcion lanzar???
 			return;
 		}
-		File file = new File(filePath);
+		String path=pathGenerator.getPath(filePath);
+		File file = new File(path);
 		if (!file.exists()) {
-			throw new FileNotFoundException(filePath);
+			throw new FileNotFoundException(path);
 		}
 		this.dataFile = file;
 	}
 
 	public void setFile(File file) throws FileNotFoundException {
+		String path = pathGenerator.getPath(file.getAbsolutePath());
 		if (dataFile != null) {
 			//TODO: que excepcion lanzar???
 			return;
 		}
 		if (!file.exists()) {
-			throw new FileNotFoundException(file.getAbsolutePath());
+			throw new FileNotFoundException(path);
 		}
-		this.dataFile = new File(file.getAbsolutePath());
+		this.dataFile = new File(path);
 	}
 
 	public String getFileName() {

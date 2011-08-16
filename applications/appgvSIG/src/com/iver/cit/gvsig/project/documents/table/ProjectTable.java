@@ -47,6 +47,8 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
+import org.gvsig.tools.file.PathGenerator;
+
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
@@ -120,6 +122,8 @@ public class ProjectTable extends ProjectDocument {
 
 	private XMLEntity backupXMLEntity = null;
 
+	
+	
 	/**
 	 * Establece a true el bit index-ésimo del bitmap de campos visibles. Los
 	 * campos cuyos bits estén a true se considerarán visibles y viceversa

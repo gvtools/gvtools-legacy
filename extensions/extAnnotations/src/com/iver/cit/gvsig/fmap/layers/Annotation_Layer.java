@@ -58,6 +58,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 
 import org.cresques.cts.ICoordTrans;
 import org.cresques.cts.IProjection;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -501,7 +502,7 @@ public class Annotation_Layer extends FLyrVect {
 
 			FLyrVect lv = (FLyrVect) LayerFactory.createLayer(xml.getName(),
 					(VectorialFileDriver) d,
-					new File(xml.getStringProperty("file")), proj);
+					new File(PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("file"))), proj);
 
 			try {
 				this.setSource(lv.getSource());

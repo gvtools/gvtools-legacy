@@ -118,6 +118,7 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.gvsig.symbology.fmap.styles.BackgroundFileStyle;
+import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.Messages;
@@ -147,6 +148,7 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 
 	private BackgroundFileStyle bgImage;
 	private BackgroundFileStyle bgSelImage;
+	private PathGenerator pathGenerator=PathGenerator.getInstance();
 
 	/**
 	 * Constructor method
@@ -237,8 +239,8 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 		xml.putProperty("className", getClassName());
 		xml.putProperty("isShapeVisible", isShapeVisible());
 		xml.putProperty("desc", getDescription());
-		xml.putProperty("imagePath", imagePath);
-		xml.putProperty("selImagePath", selImagePath);
+		xml.putProperty("imagePath", pathGenerator.getPath(imagePath));
+		xml.putProperty("selImagePath", pathGenerator.getPath(selImagePath));
 		xml.putProperty("size", getSize());
 		xml.putProperty("offsetX", getOffset().getX());
 		xml.putProperty("offsetY", getOffset().getY());
@@ -260,8 +262,8 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 	public void setXMLEntity(XMLEntity xml) {
 		setDescription(xml.getStringProperty("desc"));
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
-		imagePath = xml.getStringProperty("imagePath");
-		selImagePath = xml.getStringProperty("selImagePath");
+		imagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("imagePath"));
+		selImagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("selImagePath"));
 		setSize(xml.getDoubleProperty("size"));
 		double offsetX = 0.0;
 		double offsetY = 0.0;
