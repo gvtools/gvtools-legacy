@@ -43,28 +43,28 @@ public class DatasetStatistics implements IStatistics {
 	 * tener unas estadísticas calculadas a partir de una petición con subsampleo. Hay que tener en
 	 * cuenta que el raster puede ser muy grande y este calculo muy costoso.
 	 */
-	protected boolean       complete       = false;
-	protected double[]      max            = null;
-	protected double[]      min            = null;
-	protected double[]      secondMax      = null;
-	protected double[]      secondMin      = null;
+	protected boolean       complete                = false;
+	protected double[]      max                     = null;
+	protected double[]      min                     = null;
+	protected double[]      secondMax               = null;
+	protected double[]      secondMin               = null;
 
-	protected double[]      maxRGB         = null;
-	protected double[]      minRGB         = null;
-	protected double[]      secondMaxRGB   = null;
-	protected double[]      secondMinRGB   = null;
+	protected double[]      maxByteUnsigned         = null;
+	protected double[]      minByteUnsigned         = null;
+	protected double[]      secondMaxByteUnsigned   = null;
+	protected double[]      secondMinByteUnsigned   = null;
 
-	protected double[]      mean           = null;
-	protected double[]      variance       = null;
+	protected double[]      mean                    = null;
+	protected double[]      variance                = null;
 
-	protected String        fName          = null;
-	protected RasterDataset dataset        = null;
-	protected boolean       calculated     = false;
-	protected Hashtable     tailTrim       = new Hashtable();
-	protected ArrayList     tailTrimValues = new ArrayList();
-	private int             bandCount      = 0;
-	private int             percent        = 0;
-	private boolean         forceToRecalc  = false;
+	protected String        fName                   = null;
+	protected RasterDataset dataset                 = null;
+	protected boolean       calculated              = false;
+	protected Hashtable     tailTrim                = new Hashtable();
+	protected ArrayList     tailTrimValues          = new ArrayList();
+	private int             bandCount               = 0;
+	private int             percent                 = 0;
+	private boolean         forceToRecalc           = false;
 	
 	/**
 	 * Constructor. Asigna el fichero asociado.
@@ -104,7 +104,7 @@ public class DatasetStatistics implements IStatistics {
 	 * @return Valor máximo
 	 */
 	public void setMaxRGB(double[] max) {
-		this.maxRGB = max;
+		this.maxByteUnsigned = max;
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class DatasetStatistics implements IStatistics {
 	 * @return Valor del segundo máximo
 	 */
 	public void setSecondMaxRGB(double[] smax) {
-		this.secondMaxRGB = smax;
+		this.secondMaxByteUnsigned = smax;
 	}
 	
 	/**
@@ -144,7 +144,7 @@ public class DatasetStatistics implements IStatistics {
 	 * @return Valor mínimo
 	 */
 	public void setMinRGB(double[] min) {
-		this.minRGB = min;
+		this.minByteUnsigned = min;
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class DatasetStatistics implements IStatistics {
 	 * @return Valor del segundo mínimo
 	 */
 	public void setSecondMinRGB(double[] smin) {
-		this.secondMinRGB = smin;
+		this.secondMinByteUnsigned = smin;
 	}
 	
 	/**
@@ -199,32 +199,32 @@ public class DatasetStatistics implements IStatistics {
 	 * (non-Javadoc)
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMinRGB()
 	 */
-	public double[] getMinRGB() {
-		return minRGB;
+	public double[] getMinByteUnsigned() {
+		return minByteUnsigned;
 	}
 	
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMaxRGB()
 	 */
-	public double[] getMaxRGB() {
-		return maxRGB;
+	public double[] getMaxByteUnsigned() {
+		return maxByteUnsigned;
 	}
 	
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getSecondMaxRGB()
 	 */
-	public double[] getSecondMaxRGB() {
-		return secondMaxRGB;
+	public double[] getSecondMaxByteUnsigned() {
+		return secondMaxByteUnsigned;
 	}
 	
 	/*
 	 * (non-Javadoc)
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getSecondMinRGB()
 	 */
-	public double[] getSecondMinRGB() {
-		return secondMinRGB;
+	public double[] getSecondMinByteUnsigned() {
+		return secondMinByteUnsigned;
 	}
 	
 	/*
@@ -253,10 +253,10 @@ public class DatasetStatistics implements IStatistics {
 	 * (non-Javadoc)
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMaximunRGB()
 	 */
-	public double getMaximunRGB() {
+	public double getMaximunByteUnsigned() {
 		double m = Double.NEGATIVE_INFINITY;
-		for (int i = 0; i < maxRGB.length; i++)
-			m = Math.max(m, maxRGB[i]);
+		for (int i = 0; i < maxByteUnsigned.length; i++)
+			m = Math.max(m, maxByteUnsigned[i]);
 		return m;
 	}
 
@@ -264,10 +264,10 @@ public class DatasetStatistics implements IStatistics {
 	 * (non-Javadoc)
 	 * @see org.gvsig.raster.hierarchy.IStatistics#getMinimunRGB()
 	 */
-	public double getMinimunRGB() {
+	public double getMinimunByteUnsigned() {
 		double m = Double.MAX_VALUE;
-		for (int i = 0; i < minRGB.length; i++)
-			m = Math.min(m, minRGB[i]);
+		for (int i = 0; i < minByteUnsigned.length; i++)
+			m = Math.min(m, minByteUnsigned[i]);
 		return m;
 	}
 
@@ -333,10 +333,10 @@ public class DatasetStatistics implements IStatistics {
 		min = new double[bandCount];
 		secondMax = new double[bandCount];
 		secondMin = new double[bandCount];
-		maxRGB = new double[bandCount];
-		minRGB = new double[bandCount];
-		secondMaxRGB = new double[bandCount];
-		secondMinRGB = new double[bandCount];
+		maxByteUnsigned = new double[bandCount];
+		minByteUnsigned = new double[bandCount];
+		secondMaxByteUnsigned = new double[bandCount];
+		secondMinByteUnsigned = new double[bandCount];
 		mean = new double[bandCount];
 		variance = new double[bandCount];
 
@@ -357,10 +357,10 @@ public class DatasetStatistics implements IStatistics {
 			min[iBand] = Double.POSITIVE_INFINITY;
 			secondMax[iBand] = Double.NEGATIVE_INFINITY;
 			secondMin[iBand] = Double.POSITIVE_INFINITY;
-			maxRGB[iBand] = 0;
-			minRGB[iBand] = 255;
-			secondMaxRGB[iBand] = 0;
-			secondMinRGB[iBand] = 255;
+			maxByteUnsigned[iBand] = 0;
+			minByteUnsigned[iBand] = 255;
+			secondMaxByteUnsigned[iBand] = 0;
+			secondMinByteUnsigned[iBand] = 255;
 			initializedBand[iBand] = false;
 			type[iBand] = dataset.getDataType()[iBand];
 		}
@@ -399,10 +399,17 @@ public class DatasetStatistics implements IStatistics {
 						if (Double.isNaN(z))
 							continue;
 
-						rgb = (b != null) ? ((byte) z) & 0xff : 0;
-
-						mean[iBand] += z;
-						variance[iBand] += z * z;
+						rgb = 0;
+						if(b != null) {
+							rgb = ((byte) z) & 0xff;
+							mean[iBand] += rgb;
+							variance[iBand] += rgb * rgb;
+						} else {
+							//rgb = (b != null) ? ((byte) z) & 0xff : 0;
+							mean[iBand] += z;
+							variance[iBand] += z * z;
+						}
+						
 						iValues[iBand]++;
 
 						if (!initializedBand[iBand]) {
@@ -410,10 +417,10 @@ public class DatasetStatistics implements IStatistics {
 							secondMax[iBand] = max[iBand];
 							min[iBand] = z;
 							max[iBand] = z;
-							secondMinRGB[iBand] = minRGB[iBand];
-							secondMaxRGB[iBand] = maxRGB[iBand];
-							minRGB[iBand] = rgb;
-							maxRGB[iBand] = rgb;
+							secondMinByteUnsigned[iBand] = minByteUnsigned[iBand];
+							secondMaxByteUnsigned[iBand] = maxByteUnsigned[iBand];
+							minByteUnsigned[iBand] = rgb;
+							maxByteUnsigned[iBand] = rgb;
 							initializedBand[iBand] = true;
 							continue;
 						}
@@ -438,23 +445,23 @@ public class DatasetStatistics implements IStatistics {
 							}
 						}
 
-						if (rgb < secondMinRGB[iBand]) {
-							if (rgb < minRGB[iBand]) {
-								secondMinRGB[iBand] = minRGB[iBand];
-								minRGB[iBand] = rgb;
+						if (rgb < secondMinByteUnsigned[iBand]) {
+							if (rgb < minByteUnsigned[iBand]) {
+								secondMinByteUnsigned[iBand] = minByteUnsigned[iBand];
+								minByteUnsigned[iBand] = rgb;
 							} else {
-								if (rgb > minRGB[iBand])
-									secondMinRGB[iBand] = rgb;
+								if (rgb > minByteUnsigned[iBand])
+									secondMinByteUnsigned[iBand] = rgb;
 							}
 						}
 
-						if (rgb > secondMaxRGB[iBand]) {
-							if (rgb > maxRGB[iBand]) {
-								secondMaxRGB[iBand] = maxRGB[iBand];
-								maxRGB[iBand] = rgb;
+						if (rgb > secondMaxByteUnsigned[iBand]) {
+							if (rgb > maxByteUnsigned[iBand]) {
+								secondMaxByteUnsigned[iBand] = maxByteUnsigned[iBand];
+								maxByteUnsigned[iBand] = rgb;
 							} else {
-								if (rgb < maxRGB[iBand])
-									secondMaxRGB[iBand] = rgb;
+								if (rgb < maxByteUnsigned[iBand])
+									secondMaxByteUnsigned[iBand] = rgb;
 							}
 						}
 					}

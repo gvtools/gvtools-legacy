@@ -117,28 +117,28 @@ public class TestStatistics extends BaseTestCase {
 	}
 	
 	private void dataTestB1(DatasetStatistics stats){
-		assertEquals(new Double(stats.getMaxRGB()[0]), new Double(255.0));
-		assertEquals(new Double(stats.getMinRGB()[0]), new Double(0.0));
-		assertEquals(new Double(stats.getSecondMaxRGB()[0]), new Double(254.0));
-		assertEquals(new Double(stats.getSecondMinRGB()[0]), new Double(1.0));
+		assertEquals(new Double(stats.getMaxByteUnsigned()[0]), new Double(255.0));
+		assertEquals(new Double(stats.getMinByteUnsigned()[0]), new Double(0.0));
+		assertEquals(new Double(stats.getSecondMaxByteUnsigned()[0]), new Double(254.0));
+		assertEquals(new Double(stats.getSecondMinByteUnsigned()[0]), new Double(1.0));
 		assertEquals((int)stats.getMean()[0], -8);
 		assertEquals((int)stats.getVariance()[0], 5353);
 	}
 	
 	private void dataTestB2(DatasetStatistics stats){
-		assertEquals(new Double(stats.getMaxRGB()[1]), new Double(255.0));
-		assertEquals(new Double(stats.getMinRGB()[1]), new Double(0.0));
-		assertEquals(new Double(stats.getSecondMaxRGB()[1]), new Double(254.0));
-		assertEquals(new Double(stats.getSecondMinRGB()[1]), new Double(1.0));
+		assertEquals(new Double(stats.getMaxByteUnsigned()[1]), new Double(255.0));
+		assertEquals(new Double(stats.getMinByteUnsigned()[1]), new Double(0.0));
+		assertEquals(new Double(stats.getSecondMaxByteUnsigned()[1]), new Double(254.0));
+		assertEquals(new Double(stats.getSecondMinByteUnsigned()[1]), new Double(1.0));
 		assertEquals((int)stats.getMean()[1], -16);
 		assertEquals((int)stats.getVariance()[1], 6012);
 	}
 	
 	private void dataTestB3(DatasetStatistics stats){
-		assertEquals(new Double(stats.getMaxRGB()[2]), new Double(255.0));
-		assertEquals(new Double(stats.getMinRGB()[2]), new Double(0.0));
-		assertEquals(new Double(stats.getSecondMaxRGB()[2]), new Double(254.0));
-		assertEquals(new Double(stats.getSecondMinRGB()[2]), new Double(1.0));
+		assertEquals(new Double(stats.getMaxByteUnsigned()[2]), new Double(255.0));
+		assertEquals(new Double(stats.getMinByteUnsigned()[2]), new Double(0.0));
+		assertEquals(new Double(stats.getSecondMaxByteUnsigned()[2]), new Double(254.0));
+		assertEquals(new Double(stats.getSecondMinByteUnsigned()[2]), new Double(1.0));
 		assertEquals((int)stats.getMean()[2], -1);
 		assertEquals((int)stats.getVariance()[2], 5861);
 	}

@@ -212,10 +212,10 @@ public class TestRmfRead extends BaseTestCase {
 
 	public void testStatistics(DatasetStatistics ds) {
 		int bandCount = ds.getBandCount();
-		double[] max = ds.getMaxRGB();
-		double[] min = ds.getMinRGB();
-		double[] secondMax = ds.getSecondMaxRGB();
-		double[] secondMin = ds.getSecondMinRGB();
+		double[] max = ds.getMaxByteUnsigned();
+		double[] min = ds.getMinByteUnsigned();
+		double[] secondMax = ds.getSecondMaxByteUnsigned();
+		double[] secondMin = ds.getSecondMinByteUnsigned();
 		double[] mean = ds.getMean();
 		double[] variance = ds.getVariance();
 

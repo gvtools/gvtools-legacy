@@ -404,8 +404,8 @@ public class ColorTableGlobalPanel extends BasePanel implements ActionListener, 
 			if (	((FLyrRasterSE) fLayer).getDataType()[0] == IBuffer.TYPE_BYTE &&
 					((byte) statistics.getMinimun() == (double) statistics.getMinimun()) &&
 					((byte) statistics.getMaximun() == (double) statistics.getMaximun())) {
-				setLimitMaxim(statistics.getMaximunRGB());
-				setLimitMinim(statistics.getMinimunRGB());
+				setLimitMaxim(statistics.getMaximunByteUnsigned());
+				setLimitMinim(statistics.getMinimunByteUnsigned());
 			} else {
 				setLimitMaxim(statistics.getMaximun());
 				setLimitMinim(statistics.getMinimun());

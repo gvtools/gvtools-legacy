@@ -64,13 +64,13 @@ public interface IStatistics {
 	 * Devuelve el máximo valor RGB de todos los máximos de las bandas
 	 * @return Máximo
 	 */
-	public double getMaximunRGB();
+	public double getMaximunByteUnsigned();
 	
 	/**
 	 * Devuelve el mínimo valor RGB de todos los mínimos de las bandas
 	 * @return Máximo
 	 */
-	public double getMinimunRGB();
+	public double getMinimunByteUnsigned();
 
 	/**
 	 * Obtiene el valor médio
@@ -88,25 +88,25 @@ public interface IStatistics {
 	 * Obtiene el mínimo cuando el raster es de typo byte RGB
 	 * @return
 	 */
-	public double[] getMinRGB();
+	public double[] getMinByteUnsigned();
 	
 	/**
 	 * Obtiene el máximo cuando el raster es de typo byte RGB
 	 * @return
 	 */
-	public double[] getMaxRGB();
+	public double[] getMaxByteUnsigned();
 	
 	/**
 	 * Obtiene el segundo máximo cuando el raster es de typo byte RGB
 	 * @return
 	 */
-	public double[] getSecondMaxRGB();
+	public double[] getSecondMaxByteUnsigned();
 
 	/**
 	 * Obtiene el segundo mínimo cuando el raster es de typo byte RGB
 	 * @return
 	 */
-	public double[] getSecondMinRGB();
+	public double[] getSecondMinByteUnsigned();
 
 	/**
 	 * Obtiene la varianza

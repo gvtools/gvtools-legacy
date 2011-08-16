@@ -306,14 +306,14 @@ public class StatisticsRmfSerializer extends ClassSerializer {
 				putProperty(b, SNDMAX, getDatasetStatistics().getSecondMax()[i], 2);
 			if (getDatasetStatistics().getSecondMin() != null)
 				putProperty(b, SNDMIN, getDatasetStatistics().getSecondMin()[i], 2);
-			if (getDatasetStatistics().getMaxRGB() != null)
-				putProperty(b, MAXRGB, getDatasetStatistics().getMaxRGB()[i], 2);
-			if (getDatasetStatistics().getMinRGB() != null)
-				putProperty(b, MINRGB, getDatasetStatistics().getMinRGB()[i], 2);
-			if (getDatasetStatistics().getSecondMaxRGB() != null)
-				putProperty(b, SNDMAXRGB, getDatasetStatistics().getSecondMaxRGB()[i], 2);
-			if (getDatasetStatistics().getSecondMinRGB() != null)
-				putProperty(b, SNDMINRGB, getDatasetStatistics().getSecondMinRGB()[i], 2);
+			if (getDatasetStatistics().getMaxByteUnsigned() != null)
+				putProperty(b, MAXRGB, getDatasetStatistics().getMaxByteUnsigned()[i], 2);
+			if (getDatasetStatistics().getMinByteUnsigned() != null)
+				putProperty(b, MINRGB, getDatasetStatistics().getMinByteUnsigned()[i], 2);
+			if (getDatasetStatistics().getSecondMaxByteUnsigned() != null)
+				putProperty(b, SNDMAXRGB, getDatasetStatistics().getSecondMaxByteUnsigned()[i], 2);
+			if (getDatasetStatistics().getSecondMinByteUnsigned() != null)
+				putProperty(b, SNDMINRGB, getDatasetStatistics().getSecondMinByteUnsigned()[i], 2);
 			if (getDatasetStatistics().getMean() != null)
 				putProperty(b, MEAN, getDatasetStatistics().getMean()[i], 2);
 			if (getDatasetStatistics().getVariance() != null)

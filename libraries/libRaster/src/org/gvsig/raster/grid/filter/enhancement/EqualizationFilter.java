@@ -113,8 +113,8 @@ public class EqualizationFilter extends RasterFilter {
 		}
 
 		if(raster.getDataType() == IBuffer.TYPE_BYTE) {
-			minBandValue = stats.getMinRGB();
-			maxBandValue = stats.getMaxRGB();
+			minBandValue = stats.getMinByteUnsigned();
+			maxBandValue = stats.getMaxByteUnsigned();
 		} 
 		if((minBandValue == null || maxBandValue == null) || (minBandValue[0] == 0 && maxBandValue[0] == 0)) {
 			minBandValue = new double[raster.getBandCount()];

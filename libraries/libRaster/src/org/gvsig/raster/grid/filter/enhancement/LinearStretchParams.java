@@ -175,10 +175,10 @@ public class LinearStretchParams {
 		public void setMaxMin(DatasetListStatistics stats, int band, boolean rgb) {
 			try {
 				if (rgb) {
-					if (stats.getMinRGB() != null)
-						minValue = stats.getMinRGB()[band];
-					if (stats.getMaxRGB() != null)
-						maxValue = stats.getMaxRGB()[band];
+					if (stats.getMinByteUnsigned() != null)
+						minValue = stats.getMinByteUnsigned()[band];
+					if (stats.getMaxByteUnsigned() != null)
+						maxValue = stats.getMaxByteUnsigned()[band];
 				} else {
 					if (stats.getMin() != null) {
 						minValue = stats.getMin()[band];
@@ -206,10 +206,10 @@ public class LinearStretchParams {
 				return;
 			try {
 				if(rgb) {
-					if(stats.getSecondMinRGB() != null)
-						stretchIn[0] = minValue = stats.getSecondMinRGB()[band];
-					if(stats.getSecondMaxRGB() != null)
-						stretchIn[stretchIn.length - 1] = maxValue = stats.getSecondMaxRGB()[band];
+					if(stats.getSecondMinByteUnsigned() != null)
+						stretchIn[0] = minValue = stats.getSecondMinByteUnsigned()[band];
+					if(stats.getSecondMaxByteUnsigned() != null)
+						stretchIn[stretchIn.length - 1] = maxValue = stats.getSecondMaxByteUnsigned()[band];
 				} else {
 					if(stats.getSecondMin() != null)
 						stretchIn[0] = minValue = stats.getSecondMin()[band];
@@ -343,7 +343,7 @@ public class LinearStretchParams {
 		}
 		if (renderBands[0] >= 0) {
 			if (rgb)
-				leParams.red.stretchIn = new double[] { stats.getMinRGB()[0], stats.getMaxRGB()[0] };
+				leParams.red.stretchIn = new double[] { stats.getMinByteUnsigned()[0], stats.getMaxByteUnsigned()[0] };
 			else
 				leParams.red.stretchIn = new double[] { stats.getMin()[renderBands[0]], stats.getMax()[renderBands[0]] };
 		}
@@ -352,7 +352,7 @@ public class LinearStretchParams {
 		leParams.red.tailTrimMax = tailTrim;
 		if (renderBands[1] >= 0) {
 			if (rgb)
-				leParams.green.stretchIn = new double[] { stats.getMinRGB()[0], stats.getMaxRGB()[0] };
+				leParams.green.stretchIn = new double[] { stats.getMinByteUnsigned()[0], stats.getMaxByteUnsigned()[0] };
 			else
 				leParams.green.stretchIn = new double[] { stats.getMin()[renderBands[1]], stats.getMax()[renderBands[1]] };
 		}
@@ -361,7 +361,7 @@ public class LinearStretchParams {
 		leParams.green.tailTrimMax = tailTrim;
 		if (renderBands[2] >= 0) {
 			if (rgb)
-				leParams.blue.stretchIn = new double[] { stats.getMinRGB()[0], stats.getMaxRGB()[0] };
+				leParams.blue.stretchIn = new double[] { stats.getMinByteUnsigned()[0], stats.getMaxByteUnsigned()[0] };
 			else
 				leParams.blue.stretchIn = new double[] { stats.getMin()[renderBands[2]], stats.getMax()[renderBands[2]] };
 		}

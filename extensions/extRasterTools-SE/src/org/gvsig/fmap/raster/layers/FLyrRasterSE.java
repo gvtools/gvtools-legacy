@@ -862,7 +862,8 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 			data += "    Pixel_Point=\"Out\"\n";
 		else
 			data += "    Pixel_Point=\"" + (int) px.getX() + " , " + (int) px.getY() + "\"\n";
-		data += "    RGB=\"" + rgb[1] + "  " + rgb[2] + "  " + rgb[3] + "\"\n";
+		if(getDataType()[0] != IBuffer.TYPE_BYTE)
+			data += "    RGB=\"" + rgb[1] + "  " + rgb[2] + "  " + rgb[3] + "\"\n";
 		double[] cmyk = conv.RGBtoCMYK(rgb[1] & 0xff, rgb[2] & 0xff, rgb[3] & 0xff, 1D);
 		data += "    CMYK=\"" + MathUtils.format(cmyk[0], 4) + ", " + MathUtils.format(cmyk[1], 4) + ", " + MathUtils.format(cmyk[2], 4) + "," + MathUtils.format(cmyk[3], 4) + "\"\n";
 		double[] hsl = conv.RGBtoHSL(rgb[1] & 0xff, rgb[2] & 0xff, rgb[3] & 0xff);
@@ -877,7 +878,11 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 					for(int i = 0; i < getBandCount(); i++) {
 						if(getDataSource().isInside(pReal)) {
 							Point2D pxAux = transformPoint(i, pReal);
-							data += ((Integer)getDataSource().getData((int)pxAux.getX(), (int)pxAux.getY(), i)).intValue() + "  ";
+							int val = ((Integer)getDataSource().getData((int)pxAux.getX(), (int)pxAux.getY(), i)).intValue();
+							if(getDataType()[0] == IBuffer.TYPE_BYTE)
+								data += (val & 0x000000ff) + "  ";
+							else
+								data += val + "  ";
 						}
 					}
 				}

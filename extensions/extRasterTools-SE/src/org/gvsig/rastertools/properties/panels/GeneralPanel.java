@@ -46,6 +46,7 @@ import org.gvsig.raster.Configuration;
 import org.gvsig.raster.IProcessActions;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.RasterProcess;
+import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.dataset.properties.DatasetListStatistics;
 import org.gvsig.raster.dataset.serializer.RmfSerializerException;
 import org.gvsig.raster.grid.GridTransparency;
@@ -495,19 +496,20 @@ public class GeneralPanel extends AbstractPanel implements ActionListener, INoDa
 		}
 
 		if (statistics.isCalculated()) {
-			double[] maxRGB = statistics.getMaxRGB();
 			double[] max = statistics.getMax();
-			double[] minRGB = statistics.getMinRGB();
 			double[] min = statistics.getMin();
 			double[] variance = statistics.getVariance();
 			double[] mean = statistics.getMean();
+			
+			if(((FLyrRasterSE) fLayer).getDataType()[0] == IBuffer.TYPE_BYTE) {
+				max = statistics.getMaxByteUnsigned();
+				min = statistics.getMinByteUnsigned();
+			}
 			
 			for (int i=0; i<max.length; i++) {
 				html += setHTMLTitleTable(RasterToolsUtil.getText(this, "band") + " " + (i + 1), 2);
 				html += setHTMLBasicProperty(RasterToolsUtil.getText(this, "minimo"), Double.valueOf(min[i]).toString());
 				html += setHTMLBasicProperty(RasterToolsUtil.getText(this, "maximo"), Double.valueOf(max[i]).toString());
-				html += setHTMLBasicProperty(RasterToolsUtil.getText(this, "minimoRGB"), Double.valueOf(minRGB[i]).toString());
-				html += setHTMLBasicProperty(RasterToolsUtil.getText(this, "maximoRGB"), Double.valueOf(maxRGB[i]).toString());
 				html += setHTMLBasicProperty(RasterToolsUtil.getText(this, "media"), Double.valueOf(mean[i]).toString());
 				html += setHTMLBasicProperty(RasterToolsUtil.getText(this, "varianza"), Double.valueOf(variance[i]).toString());
 			}

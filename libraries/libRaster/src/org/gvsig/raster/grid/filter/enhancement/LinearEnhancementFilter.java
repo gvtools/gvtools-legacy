@@ -108,16 +108,16 @@ public class LinearEnhancementFilter extends RasterFilter {
 			offset = new double[stats.getMin().length];
 			if (removeEnds) { // Si está activado eliminar extremos gastamos el 2º máximo/mínimo
 				if(raster.getDataType() == IBuffer.TYPE_BYTE) {
-					minBandValue = stats.getSecondMinRGB();
-					maxBandValue = stats.getSecondMaxRGB();
+					minBandValue = stats.getSecondMinByteUnsigned();
+					maxBandValue = stats.getSecondMaxByteUnsigned();
 				} else {
 					minBandValue = stats.getSecondMin();
 					maxBandValue = stats.getSecondMax();
 				}
 			} else { // Si no está activado eliminar extremos
 				if(raster.getDataType() == IBuffer.TYPE_BYTE) {
-					minBandValue = stats.getMinRGB();
-					maxBandValue = stats.getMaxRGB();
+					minBandValue = stats.getMinByteUnsigned();
+					maxBandValue = stats.getMaxByteUnsigned();
 				} else {
 					minBandValue = stats.getMin();
 					maxBandValue = stats.getMax();

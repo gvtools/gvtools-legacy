@@ -207,10 +207,10 @@ public class DatasetListStatistics extends DatasetStatistics {
 		min = new double[len];
 		secondMax = new double[len];
 		secondMin = new double[len];
-		maxRGB = new double[len];
-		minRGB = new double[len];
-		secondMaxRGB = new double[len];
-		secondMinRGB = new double[len];
+		maxByteUnsigned = new double[len];
+		minByteUnsigned = new double[len];
+		secondMaxByteUnsigned = new double[len];
+		secondMinByteUnsigned = new double[len];
 		mean = new double[len];
 		variance = new double[len];
 			
@@ -223,10 +223,10 @@ public class DatasetListStatistics extends DatasetStatistics {
 				min[count] = statList[i].getMin()[j];
 				secondMax[count] = statList[i].getSecondMax()[j];
 				secondMin[count] = statList[i].getSecondMin()[j];
-				maxRGB[count] = statList[i].getMaxRGB()[j];
-				minRGB[count] = statList[i].getMinRGB()[j];
-				secondMaxRGB[count] = statList[i].getSecondMaxRGB()[j];
-				secondMinRGB[count] = statList[i].getSecondMinRGB()[j];
+				maxByteUnsigned[count] = statList[i].getMaxByteUnsigned()[j];
+				minByteUnsigned[count] = statList[i].getMinByteUnsigned()[j];
+				secondMaxByteUnsigned[count] = statList[i].getSecondMaxByteUnsigned()[j];
+				secondMinByteUnsigned[count] = statList[i].getSecondMinByteUnsigned()[j];
 				mean[count] = statList[i].getMean()[j];
 				variance[count] = statList[i].getVariance()[j];
 				count ++;
