@@ -1,6 +1,7 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Geographic Information System of the Valencian Government
  *
- * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
+ * Copyright (C) 2007-2008 Infrastructures and Transports Department
+ * of the Valencian Government (CIT)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,7 +15,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ *
  */
 package org.gvsig.raster.gui.preferences.panels;
 
@@ -24,7 +27,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -41,6 +43,8 @@ import org.gvsig.raster.datastruct.persistence.ColorTableLibraryPersistence;
 import org.gvsig.raster.gui.preferences.combocolortable.PaintItem;
 import org.gvsig.raster.gui.preferences.combocolortable.PreferenceColorTableIconPainter;
 import org.gvsig.raster.util.BasePanel;
+
+import com.iver.utiles.FileUtils;
 /**
  * PreferenceLoadLayer es una clase para la configuracion de las preferencias
  * de una capa raster.
@@ -117,7 +121,7 @@ public class PreferenceLoadLayer extends BasePanel implements ActionListener {
 	 * @return
 	 */
 	public String getPalettesPath() {
-		return ( com.iver.andami.Launcher.getAppHomeDir() + "colortable" );
+		return ( FileUtils.getAppHomeDir() + "colortable" );
 	}
 	
 	/**

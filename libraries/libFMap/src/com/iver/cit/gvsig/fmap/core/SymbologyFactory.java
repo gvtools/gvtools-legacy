@@ -1,6 +1,7 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Geographic Information System of the Valencian Government
  *
- * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
+ * Copyright (C) 2007-2008 Infrastructures and Transports Department
+ * of the Valencian Government (CIT)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,34 +15,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
  *
- * For more information, contact:
- *
- *  Generalitat Valenciana
- *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
- *   46010 VALENCIA
- *   SPAIN
- *
- *      +34 963862235
- *   gvsig@gva.es
- *      www.gvsig.gva.es
- *
- *    or
- *
- *   IVER T.I. S.A
- *   Salamanca 50
- *   46005 Valencia
- *   Spain
- *
- *   +34 963163400
- *   dac@iver.es
  */
 
 /* CVS MESSAGES:
 *
-* $Id: SymbologyFactory.java 30626 2009-08-31 07:53:38Z fdiaz $
+* $Id: SymbologyFactory.java 33213 2010-07-27 08:34:53Z nbrodin $
 * $Log$
 * Revision 1.11  2007-09-20 09:33:15  jaume
 * Refactored: fixed name of IPersistAnce to IPersistence
@@ -113,8 +94,6 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
-import java.io.File;
-import java.io.IOException;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.JFrame;
@@ -143,6 +122,7 @@ import com.iver.cit.gvsig.fmap.core.symbols.SimpleTextSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
 import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
+import com.iver.utiles.FileUtils;
 import com.iver.utiles.IPersistence;
 import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.XMLEntity;
@@ -159,18 +139,19 @@ import com.iver.utiles.swing.threads.Cancellable;
  *
  * @author jaume dominguez faus - jaume.dominguez@iver.es
  */
+
 public class SymbologyFactory {
 
 	/**
-	 * This Constants are only used in SymbologyPage (preferences page for symbology),
+ 	* This Constants are only used in SymbologyPage (preferences page for symbology),
 	 * do not use in other context.
 	 */
 	public static final Color FactoryDefaultSymbolColor = Color.GRAY;
 	public static final Color FactoryDefaultFillSymbolColor = new Color(60, 235, 235);
 	public static final Font FactoryDefaultTextFont =  new Font("Serif", Font.PLAIN, 8);
-	
-	public static final String FactorySymbolLibraryPath = com.iver.andami.Launcher.getAppHomeDir() + "Symbols";
-	public static final String FactoryStyleLibraryPath = com.iver.andami.Launcher.getAppHomeDir() + "Styles";
+
+	public static final String FactorySymbolLibraryPath = FileUtils.getAppHomeDir() + "Symbols";
+	public static final String FactoryStyleLibraryPath = FileUtils.getAppHomeDir() + "Styles";
 
 	public static final Boolean FactoryDefaultAleatoryFillColor = false;
 

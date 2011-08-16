@@ -4,9 +4,9 @@ import java.text.Collator;
 import java.util.Locale;
 import java.util.Vector;
 
-import com.iver.utiles.StringComparator;
-
 import junit.framework.TestCase;
+
+import com.iver.utiles.StringComparator;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *

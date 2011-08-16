@@ -47,14 +47,10 @@ import com.iver.utiles.XMLEntity;
  */
 
 public class NormPreferences extends AbstractPreferencePage {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
-	private String normFolder = com.iver.andami.Launcher.getAppHomeDir() + "normalization";
 	
+	private String normFolder = com.iver.andami.Launcher.getAppHomeDir() + "normalization" + File.separator;
+
 	private ImageIcon icon;
 
 	private String tag = "Normalization_pattern_folder";
@@ -80,7 +76,7 @@ public class NormPreferences extends AbstractPreferencePage {
 				+ "preferences.png";
 
 		icon = new ImageIcon(path);
-		
+
 		/* PERSISTENCE */
 		XMLEntity xml = ps.getPersistentXML();
 		// TAG exists in the persistence
@@ -96,8 +92,8 @@ public class NormPreferences extends AbstractPreferencePage {
 			ps.setPersistentXML(xml);
 			pathFolder = normFolder;
 			log.debug("Putting the default folder path");
-		}		
-		
+		}
+
 		/* Create Panel and add to gvSIG */
 		panel = new PreferencesNormPanel(pathFolder);
 		this.addComponent(panel);

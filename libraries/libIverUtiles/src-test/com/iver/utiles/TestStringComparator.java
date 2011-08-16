@@ -2,9 +2,9 @@ package com.iver.utiles;
 
 import java.text.Collator;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
-import java.util.List;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *

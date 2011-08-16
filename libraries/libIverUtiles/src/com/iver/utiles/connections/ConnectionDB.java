@@ -60,6 +60,8 @@ import org.apache.commons.dbcp.PoolingDriver;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
+import com.iver.utiles.FileUtils;
+
 
 /**
  * Class responsible of the operations on the database.
@@ -357,33 +359,26 @@ public class ConnectionDB {
         properties.put("jdbc.database", ct.getDb());
         properties.put("jdbc.connBeginning",ct.getConnBeginning());
         boolean success = true;
-        File file = null;        
-        
-        /*
-         * TODO LWS: esto tiene pinta de no ser portable (case, en linux). Ahora
-         * en el Launcher de Andami hay un appHome, pero si lo pongo aqui ya estamos metiendo
-         * dependencias circulares ...
-         */ 
-        String directory = com.iver.andami.Launcher.getAppHomeDir() + "connections";
-        
+        File file = null;
+       
+        String directory = FileUtils.getAppHomeDir() + "connections";
+
         if (!new File(directory).exists()) {
             file = new File(directory);
             success = file.mkdirs();
         }
 
         if (success) {
-        	File f = new File(directory + File.separator + name + ".properties");
+			File f = new File(directory + File.separator + name + ".properties");
             f.createNewFile();
 
             FileOutputStream out = new FileOutputStream(f);
             properties.store(out, name);
             out.close();
-        }        
+        }
     }
-    
-    
     public void delPersistence(String name){
-    	String directory = com.iver.andami.Launcher.getAppHomeDir() + "connections";
+    	String directory = FileUtils.getAppHomeDir() + "connections";
     	 File dir = new File(directory);
          File[] files = dir.listFiles();
          for (int i = 0; i < files.length; i++) {
@@ -392,8 +387,6 @@ public class ConnectionDB {
         	 }
          }
     }
-    
-    
     /**
      * Returns the data of the connection
      *
@@ -403,7 +396,7 @@ public class ConnectionDB {
      */
     public ConnectionTrans[] getPersistence() throws IOException {
         ArrayList conns = new ArrayList();
-        String directory = com.iver.andami.Launcher.getAppHomeDir() + "connections";
+        String directory = FileUtils.getAppHomeDir() + "connections";
         File dir = new File(directory);
         File[] files = dir.listFiles();
         if (files == null)

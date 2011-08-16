@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
+import junit.framework.TestCase;
+
 import com.iver.utiles.CompareLists;
 import com.iver.utiles.StringComparator;
-
-import junit.framework.TestCase;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *

@@ -55,8 +55,28 @@ import java.io.OutputStream;
  * @author wolf
  */
 public class FileUtils {
+	private static String appHomeDir = null;
+	
     private FileUtils() {
     }
+    
+	/**
+	 * Gets Home Directory location of the application.
+	 * @return
+	 */
+	public static String getAppHomeDir() {
+		if(appHomeDir == null) 
+			appHomeDir = System.getProperty("user.home") + File.separator + "gvSIG" + File.separator;
+		return appHomeDir;
+	}
+
+	/**
+	 * Sets Home Directory location of the application.
+	 * @param appHomeDir
+	 */
+	public static void setAppHomeDir(String appHomeDir) {
+		FileUtils.appHomeDir = appHomeDir;
+	}
 
     public static String getFileExtension(File f) {
         String fileName = f.getName();

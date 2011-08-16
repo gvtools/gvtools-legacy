@@ -1,6 +1,7 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Geographic Information System of the Valencian Government
  *
- * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
+ * Copyright (C) 2007-2008 Infrastructures and Transports Department
+ * of the Valencian Government (CIT)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,34 +15,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
  *
- * For more information, contact:
- *
- *  Generalitat Valenciana
- *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
- *   46010 VALENCIA
- *   SPAIN
- *
- *      +34 963862235
- *   gvsig@gva.es
- *      www.gvsig.gva.es
- *
- *    or
- *
- *   IVER T.I. S.A
- *   Salamanca 50
- *   46005 Valencia
- *   Spain
- *
- *   +34 963163400
- *   dac@iver.es
  */
 
 /* CVS MESSAGES:
  *
- * $Id: StyleSelector.java 27576 2009-03-26 12:41:07Z vcaballero $
+ * $Id: StyleSelector.java 33213 2010-07-27 08:34:53Z nbrodin $
  * $Log$
  * Revision 1.11  2007-08-21 09:32:53  jvidal
  * javadoc
@@ -421,7 +402,7 @@ public class StyleSelector extends SymbolSelector{
 
 			public String getDescription() {
 				return PluginServices.getText(
-						this, "gvSIG_style_definition_file")+ " (*"+StyleSelectorListModel.STYLE_FILE_EXTENSION+")";
+						this, "gvSIG_style_definition_file")+ " ("+StyleSelectorListModel.STYLE_FILE_EXTENSION+")";
 			}
 		};
 		jfc.setFileFilter(ff);

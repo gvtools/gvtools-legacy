@@ -1,6 +1,7 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Geographic Information System of the Valencian Government
  *
- * Copyright (C) 2007 IVER T.I. and Generalitat Valenciana.
+ * Copyright (C) 2007-2008 Infrastructures and Transports Department
+ * of the Valencian Government (CIT)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,7 +15,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ *
  */
 package org.gvsig.fmap.raster.layers;
 
@@ -105,10 +108,10 @@ import com.iver.cit.gvsig.fmap.layers.layerOperations.StringXMLItem;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.XMLItem;
 import com.iver.cit.gvsig.fmap.rendering.ILegend;
 import com.iver.cit.gvsig.fmap.rendering.LegendListener;
+import com.iver.utiles.FileUtils;
 import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
-import com.sun.swing.internal.plaf.synth.resources.synth;
 /**
  * Capa raster
  * @author Nacho Brodin (nachobrodin@gmail.com)
@@ -473,7 +476,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 	private void loadEnhancedOrColorTable(RasterFilterListManager filterManager) throws FilterTypeException {
 		String colorTableName = configuration.getValueString("loadlayer_usecolortable", (String) null);
 
-		String palettesPath = com.iver.andami.Launcher.getAppHomeDir() + "colortable";
+		String palettesPath = FileUtils.getAppHomeDir() + "colortable";
 
 		IStatistics stats = getDataSource().getStatistics();
 

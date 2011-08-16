@@ -47,8 +47,6 @@
 package com.iver.utiles.xmlViewer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Stack;
 
 import javax.swing.JPanel;

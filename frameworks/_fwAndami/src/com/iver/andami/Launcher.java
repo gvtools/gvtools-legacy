@@ -141,6 +141,7 @@ import com.iver.andami.ui.splash.MultiSplashWindow;
 import com.iver.andami.ui.theme.Theme;
 import com.iver.andami.ui.wizard.UnsavedDataPanel;
 import com.iver.utiles.DateTime;
+import com.iver.utiles.FileUtils;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.xml.XMLEncodingUtils;
 import com.iver.utiles.xmlEntity.generate.XmlTag;
@@ -162,7 +163,7 @@ import com.iver.utiles.xmlEntity.generate.XmlTag;
  *
  *
  * @author $author$
- * @version $Revision: 32877 $
+ * @version $Revision: 33213 $
  */
 public class Launcher {
 	private static Logger logger = Logger.getLogger(Launcher.class.getName());
@@ -213,7 +214,6 @@ public class Launcher {
 
     		appName = args[0];
 
-    		//Se crea el directorio de configuraciï¿½n de la aplicaciï¿½n
     		appHomeDir = System.getProperty(args[0]+".home");
     		if (appHomeDir == null)
     			appHomeDir = System.getProperty("user.home");
@@ -236,14 +236,24 @@ public class Launcher {
     			}
     		}
     		
+    		FileUtils.setAppHomeDir(appHomeDir);
     		logger.debug("User settings will be stored in: " + appHomeDir );
     		
     		File parent = new File( appHomeDir );
     		parent.mkdirs();    		
+
+    		// CHANGE FROM CARTOLAB TO ALLOW MORE THAN 1 GVSIG INSTALLATION
+    		// WITH ITS OWN CONFIG FILE
+    		andamiConfigPath = System.getProperty("user.dir") +  File.separator + "andami-config.xml";
+    		pluginsPersistencePath = System.getProperty("user.dir") + File.separator + "plugins-persistence.xml";
     		
-    		andamiConfigPath = appHomeDir + "andami-config.xml";
-    		pluginsPersistencePath = appHomeDir + "plugins-persistence.xml";
-    		    		
+//    		andamiConfigPath = appHomeDir + "andami-config.xml";
+//    		pluginsPersistencePath = appHomeDir + "plugins-persistence.xml";
+
+    		// END OF CARTOLAB CHANGE
+    		
+    		
+    		
     		// Configurar el log4j
     		Launcher.class.getClassLoader()
 			.getResource(".");
@@ -251,9 +261,13 @@ public class Launcher {
 
     		PatternLayout l = new PatternLayout("%p %t %C - %m%n");
 
+    		// CONTRIBUCIÓN FROM CARTOLAB
     		RollingFileAppender fa = new RollingFileAppender(l,
-    				appHomeDir + args[0] + ".log", false);
-
+    				System.getProperty("user.dir") + File.separator + args[0] + ".log", false);
+    		
+//    		RollingFileAppender fa = new RollingFileAppender(l,
+//    				appHomeDir + args[0] + ".log", false);
+    		// END CONTRIBUTION FROM CARTOLAB (PABLO XANXIAO)
     		fa.setMaxFileSize("512KB");
     		fa.setMaxBackupIndex(3);
     		Logger.getRootLogger().addAppender(fa);
@@ -448,6 +462,7 @@ public class Launcher {
     		SwingUtilities.invokeAndWait(new Runnable() {
     			public void run() {
     				postInitializeExtensions();
+
     			}
     		});
 
@@ -1921,7 +1936,7 @@ public class Launcher {
 	 * 'position' attribute), the priority of the extensions where the tool is defined.</li></ul>
 	 *
 	 * @author cesar
-	 * @version $Revision: 32877 $
+	 * @version $Revision: 33213 $
 	 */
 	private static class ToolComparator implements Comparator {
 		private static ToolBarComparator toolBarComp = new ToolBarComparator();
