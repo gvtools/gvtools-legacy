@@ -46,6 +46,7 @@ package com.iver.cit.gvsig.fmap.drivers.jdbc.postgis;
 import java.awt.geom.Rectangle2D;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -54,7 +55,9 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.postgis.PGbox2d;
@@ -133,6 +136,12 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 	boolean bShapeTypeRevised = false;
 
 	private int actual_position;
+
+	/**
+	 * It stores all schemas privileges, in order to avoid checking it everytime
+	 * canRead() is called.
+	 */
+	private Map<String, Boolean> schemasUsage = new HashMap<String, Boolean>();
 
 	static {
 		try {
@@ -1189,4 +1198,48 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		return error;
 	}
 
+	/**
+	 * Tells if user can read contents of the table.
+	 * 
+	 *  @param iconn connection with the database where the user is connected
+	 *  @param tablename to get the permissions over
+	 *  @return true if can read, either false
+	 *  @throws SQLException
+	 */
+	public boolean canRead(IConnection iconn, String tablename) throws SQLException {
+		String schema = null;
+		int dotPos = tablename.indexOf(".");
+		if (dotPos > -1) {
+			schema = tablename.substring(0, dotPos);
+		}
+		tablename = tableNameToComposedTableName(tablename);
+		Connection conn = ((ConnectionJDBC) iconn).getConnection();
+		boolean checkTable = true;
+		if (schema != null) {
+			if (!schemasUsage.containsKey(schema)) {
+				String query = "SELECT has_schema_privilege('" + schema + "', 'USAGE') AS usg";
+				Statement st = conn.createStatement();
+				ResultSet rs = st.executeQuery(query);
+				if (rs.next()) {
+					schemasUsage.put(schema, rs.getBoolean("usg"));
+				} else {
+					//this sentence should never be executed...
+					schemasUsage.put(schema, false);
+				}
+				rs.close();
+				st.close();
+			}
+			checkTable = schemasUsage.get(schema);
+		}
+		if (checkTable) {
+			String query = "SELECT has_table_privilege('" + tablename + "', 'SELECT') as selct";
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			if (rs.next()) {
+				return rs.getBoolean("selct");
+			} else {
+				return false;
+			}
+		} else return false;
+	}
 }
