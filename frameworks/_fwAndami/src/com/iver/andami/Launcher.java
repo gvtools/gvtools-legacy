@@ -163,7 +163,7 @@ import com.iver.utiles.xmlEntity.generate.XmlTag;
  *
  *
  * @author $author$
- * @version $Revision: 33214 $
+ * @version $Revision: 33300 $
  */
 public class Launcher {
 	private static Logger logger = Logger.getLogger(Launcher.class.getName());
@@ -242,15 +242,10 @@ public class Launcher {
     		File parent = new File( appHomeDir );
     		parent.mkdirs();    		
 
-    		// CHANGE FROM CARTOLAB TO ALLOW MORE THAN 1 GVSIG INSTALLATION
-    		// WITH ITS OWN CONFIG FILE
-    		andamiConfigPath = System.getProperty("user.dir") +  File.separator + "andami-config.xml";
-    		pluginsPersistencePath = System.getProperty("user.dir") + File.separator + "plugins-persistence.xml";
     		
-//    		andamiConfigPath = appHomeDir + "andami-config.xml";
-//    		pluginsPersistencePath = appHomeDir + "plugins-persistence.xml";
+    		andamiConfigPath = appHomeDir + "andami-config.xml";
+    		pluginsPersistencePath = appHomeDir + "plugins-persistence.xml";
 
-    		// END OF CARTOLAB CHANGE
     		
     		// Configurar el log4j
     		Launcher.class.getClassLoader()
@@ -1930,7 +1925,7 @@ public class Launcher {
 	 * 'position' attribute), the priority of the extensions where the tool is defined.</li></ul>
 	 *
 	 * @author cesar
-	 * @version $Revision: 33214 $
+	 * @version $Revision: 33300 $
 	 */
 	private static class ToolComparator implements Comparator {
 		private static ToolBarComparator toolBarComp = new ToolBarComparator();
