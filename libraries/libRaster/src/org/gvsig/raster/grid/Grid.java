@@ -326,7 +326,6 @@ public class Grid implements IQueryableGrid, IWritableGrid{
 	private void init(BufferFactory ds) {
 		int i;
 		GridTransparency transparency = null;
-		this.dataSource = ds.getDataSource();
 
 		double dCellSize = getCellSize();
 
@@ -334,6 +333,7 @@ public class Grid implements IQueryableGrid, IWritableGrid{
 		if (ds == null)
 			transparency = new GridTransparency();
 		else {
+			this.dataSource = ds.getDataSource();
 			Transparency transp = ds.getDataSource().getTransparencyFilesStatus();
 			if (transp != null)
 				transparency = new GridTransparency(transp);
