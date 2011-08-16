@@ -86,12 +86,8 @@ public class DBFDriver extends AbstractFieldManager implements FileDriver, IWrit
     public void open(File file) throws OpenDriverException {
     	this.file  = file;
         try {
-        	if (charSet == null){
-        		String charSetName=prefs.get("dbf_encoding", DbaseFile.getDefaultCharset().toString());
-        		dbf.setCharSet(Charset.forName(charSetName));
-        	}
         	dbf.open(file);
-        	// Después de abrir el fichero sabemos cual es su charset
+        	// After opening the file, we know its charsetname
         	setCharSet(dbf.getCharSet());
         	fieldTypes = new char[getFieldCount()];
         	for (int i = 0; i < fieldTypes.length; i++) {

@@ -22,6 +22,7 @@ import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.prefs.Preferences;
 
 import javax.swing.JOptionPane;
 
@@ -398,16 +399,32 @@ public class DbaseFile {
 		// create the header to contain the header information.
 		myHeader = new DbaseFileHeader();
 		myHeader.readHeader(buffer);
-	   String charSetName = DbfEncodings.getInstance().getCharsetForDbfId(myHeader.getLanguageID());
-		if ((charSetName != null && !charSetName.equalsIgnoreCase("UNKNOWN"))){
-			try{
-				charSet = Charset.forName(charSetName);
-			}catch (UnsupportedCharsetException e) {
-				charSet = Charset.defaultCharset();
+		if (charSet == null) {
+			// Firsttime:
+			Preferences prefs = Preferences.userRoot().node( "gvSIG.encoding.dbf" );
+    		String defaultCharSetName=prefs.get("dbf_encoding", DbaseFile.getDefaultCharset().toString());
+		    String charSetName = DbfEncodings.getInstance().getCharsetForDbfId(myHeader.getLanguageID());
+		    // If the file has a charset already set, use it. If not, use the one from preferences
+			if ((charSetName == null) || (charSetName.equalsIgnoreCase("UNKNOWN"))){
+				try {
+					charSet = Charset.forName(defaultCharSetName);
+				}
+				catch (UnsupportedCharsetException e) {
+					charSet = Charset.defaultCharset();
+				}
 			}
-		}
-		if (charSet==null){
-			charSet = Charset.defaultCharset();
+			else { // Use the charset set to the file
+				try{
+					charSet = Charset.forName(charSetName);
+				}catch (UnsupportedCharsetException e) {
+					charSet = Charset.defaultCharset();
+				}
+			}
+//			if (charSet==null){
+//				charSet = Charset.defaultCharset();
+//			}
+    		
+
 		}
 		bytesCachedRecord = new byte[myHeader.getRecordLength()];
 		}catch (IOException e) {

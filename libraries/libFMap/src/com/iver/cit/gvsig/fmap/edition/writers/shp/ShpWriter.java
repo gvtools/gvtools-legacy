@@ -8,6 +8,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.sql.Types;
+import java.util.prefs.Preferences;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -36,6 +37,7 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
 public class ShpWriter extends AbstractWriter implements ISpatialWriter {
+	private static Preferences prefs = Preferences.userRoot().node( "gvSIG.encoding.dbf" );
 	private String shpPath;
 	private String shxPath;
 	private String dbfPath;
@@ -72,6 +74,8 @@ public class ShpWriter extends AbstractWriter implements ISpatialWriter {
 	public ShpWriter() {
 		super();
 		this.capabilities.setProperty("FieldNameMaxLength","10");
+		String charSetName = prefs.get("dbf_encoding", DbaseFile.getDefaultCharset().toString());
+		charset = Charset.forName(charSetName);
 	}
 	public void setFile(File f)
 	{

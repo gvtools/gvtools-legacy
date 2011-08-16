@@ -388,19 +388,19 @@ public class DbaseFileNIO {
 		String charSetName = DbfEncodings.getInstance().getCharsetForDbfId(myHeader.getLanguageID());
 		if (charSetName == null)
 		{
-			charSet = Charset.defaultCharset();
+			charSet = defaultCharset; //Charset.defaultCharset();
 //			System.out.println("Opening file " + file.getName() + " with languageId = " + myHeader.getLanguageID());
 		}
 		else
 		{
 //			System.out.println("Opening file " + file.getName() + " with encoding " + charSetName);
 			if (charSetName.equalsIgnoreCase("UNKNOWN"))
-				charSet = Charset.defaultCharset();
+				charSet = defaultCharset; //Charset.defaultCharset();
 			else{
 				try{
 					charSet = Charset.forName(charSetName);
 				}catch (UnsupportedCharsetException e) {
-					charSet = Charset.defaultCharset();
+					charSet = defaultCharset; //Charset.defaultCharset();
 				}
 			}
 		}

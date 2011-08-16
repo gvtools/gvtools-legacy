@@ -6,7 +6,7 @@ import java.util.Hashtable;
 public class DbfEncodings {
 	private static DbfEncodings theInstance = null;
 	private final int [] dbfIds = {0x00, 0x02, 0x03, 0x04, 0x64, 0x65, 0x66, 0x67, 0x6A, 0x6B, 0x78,
-			0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7E, 0x96, 0x97, 0x98, 0xC8, 0xC9, 0xCA, 0xCB, 0x99};
+			0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7E, 0x96, 0x97, 0x98, 0xC8, 0xC9, 0xCA, 0xCB, 0xF7, 0xF8, 0x99};
 
 	private Hashtable<Byte, String> dbfId2charset;
 
@@ -105,6 +105,12 @@ public class DbfEncodings {
 		case (0xCB):
 			cCP = "ISO-8859-7"; //"Codepage 1253 Greek Windows";
 			break;
+		case (0xF7):
+			cCP = "ISO-8859-1"; //"(inventado)";
+			break;
+		case (0xF8):
+			cCP = "ISO-8859-15"; //"(inventado)";
+			break;
 		case (0x99):
 			cCP = "UTF-8"; //"utf8 (inventado)";
 			break;
@@ -145,6 +151,8 @@ public class DbfEncodings {
 		if (s.equalsIgnoreCase("Cp1254")) dbfId = 0xCA;
 		if (s.equalsIgnoreCase("windows-1254")) dbfId = 0xCA;
 		if (s.equalsIgnoreCase("ISO-8859-7")) dbfId = 0xCB;
+		if (s.equalsIgnoreCase("ISO-8859-1")) dbfId = 0xF7; // invented
+		if (s.equalsIgnoreCase("ISO-8859-15")) dbfId = 0xF8; // invented
 		if (s.equalsIgnoreCase("UTF-8")) dbfId = 0x99;
 		System.out.println("getDbfIdForCharset " + s + " dbfId = " + dbfId);
 		
