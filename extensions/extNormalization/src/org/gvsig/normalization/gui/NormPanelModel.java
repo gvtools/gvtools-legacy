@@ -758,8 +758,11 @@ public class NormPanelModel implements INormPanelModel {
 	private void loadTable(NormalizationNewTable normTable) {
 		String name = normTable.getOuputFile().getName();
 
-		LayerFactory.getDataSourceFactory().addDataSource(
-				normTable.getDriver(), name);
+		//		LayerFactory.getDataSourceFactory().addDataSource(
+		//		normTable.getDriver(), name);
+
+		LayerFactory.getDataSourceFactory().addFileDataSource("Ficheros_dbf",
+				name, normTable.getOuputFile().getAbsolutePath());		
 
 		EditableAdapter editAdapterSecond = null;
 
@@ -768,10 +771,11 @@ public class NormPanelModel implements INormPanelModel {
 			dtSecond = LayerFactory.getDataSourceFactory()
 					.createRandomDataSource(name,
 							DataSourceFactory.AUTOMATIC_OPENING);
-
+			
+			SelectableDataSource sel = new SelectableDataSource(dtSecond);			
+			
 			editAdapterSecond = new EditableAdapter();
-			editAdapterSecond.setOriginalDataSource(new SelectableDataSource(
-					dtSecond));
+			editAdapterSecond.setOriginalDataSource(sel);
 
 			// add to doc factory
 			ProjectTable ptsec = ProjectFactory.createTable(name,
