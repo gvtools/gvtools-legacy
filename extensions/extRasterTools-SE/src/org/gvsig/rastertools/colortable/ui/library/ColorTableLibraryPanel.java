@@ -1,6 +1,7 @@
-/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
+/* gvSIG. Geographic Information System of the Valencian Government
  *
- * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
+ * Copyright (C) 2007-2008 Infrastructures and Transports Department
+ * of the Valencian Government (CIT)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,7 +15,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ *
  */
 package org.gvsig.rastertools.colortable.ui.library;
 
@@ -50,6 +53,7 @@ import org.gvsig.raster.util.RasterUtilities;
 import org.gvsig.rastertools.colortable.data.ColorTableData;
 
 import com.iver.andami.PluginServices;
+import com.iver.utiles.FileUtils;
 /**
  * Panel que aparece en la parte inferior derecha que contiene la lista
  * de librerias disponibles para las tablas de color, con sus botones correspondientes
@@ -71,13 +75,13 @@ public class ColorTableLibraryPanel extends BasePanel implements ActionListener,
 
 	private ArrayList         actionCommandListeners = new ArrayList();
 	private ColorTableData    colorTableData         = null;
-	
+
 	private ColorTable        currentColorTable      = null;
-	
-	public static String palettesPath = com.iver.andami.Launcher.getAppHomeDir() + "colortable";
+
+	public static String      palettesPath           = FileUtils.getAppHomeDir() + "colortable";
 		
 	/**
-	 *Inicializa componentes grï¿½ficos y traduce
+	 *Inicializa componentes gráficos y traduce
 	 */
 	public ColorTableLibraryPanel() {
 		init();
