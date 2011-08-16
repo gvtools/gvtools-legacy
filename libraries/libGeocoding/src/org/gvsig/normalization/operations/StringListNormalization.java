@@ -136,7 +136,8 @@ public class StringListNormalization extends AbstractNormalization implements
 
 			tipoCampo = this.driver.getFieldType(posi);
 			// create values
-			vals[posi] = createValue(row, tipoCampo, posi, cadena);
+			//vals[posi] = createValue(row, tipoCampo, posi, cadena);
+			vals[posi] = createValue(row, tipoCampo, this.posNameNewFields[j], cadena);
 		}
 		this.driver.addRow(vals);
 	}
@@ -216,7 +217,7 @@ public class StringListNormalization extends AbstractNormalization implements
 			update("ERROR.errorwrittingdbf");
 			return false;
 		}
-
+		
 		update("INFO.endnormalizing");
 		return true;
 	}

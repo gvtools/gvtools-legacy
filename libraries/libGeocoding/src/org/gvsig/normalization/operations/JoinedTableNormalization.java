@@ -211,7 +211,7 @@ public class JoinedTableNormalization extends TableNormalization implements
 			cadena = cadena.trim();
 			tipoCampo = driver.getFieldType(posi);
 			// create values
-			vals[posi] = createValue(row, tipoCampo, posi, cadena);
+			vals[posi] = createValue(row, tipoCampo, posNameNewFields[j], cadena);
 		}
 	}
 
