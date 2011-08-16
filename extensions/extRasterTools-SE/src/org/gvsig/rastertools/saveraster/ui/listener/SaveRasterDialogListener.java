@@ -116,7 +116,6 @@ public class SaveRasterDialogListener implements ButtonsPanelListener {
 		//Limitamos el tamaño
 		if(dialog.getDataInputListener().getWidthInPixels() > 20000 || dialog.getDataInputListener().getHeightInPixels() > 20000) {
 			RasterToolsUtil.messageBoxInfo("output_file_too_big", dialog);
-			return false;
 		}
 		
 		//Comprobamos que el en la ruta de destino tengamos permisos de escritura
