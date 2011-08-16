@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# r.type
+# Changes data (storage) type of a raster dataset
+
+# This script can be used to e.g. change all cells in a GDA-supported 
+# raster dataset from type "byte" to type "int16".
+
+# It has mostly been written to provide a type converter for Java GIS 
+# that cannot handle unsigned byte types. It uses direct GDAL access to
+# the data source, bypassing any data management of the host GIS.
+
+# - use r.in.gdal/r.out.gdal
+# - allow explicit setting of "no data" value
+
