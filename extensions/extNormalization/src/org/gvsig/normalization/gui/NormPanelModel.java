@@ -794,6 +794,7 @@ public class NormPanelModel implements INormPanelModel {
 			Project theProject = pe.getProject();
 			theProject.addDocument(ptsec);
 			pe.getProjectFrame().refreshControls();
+			pe.getProjectFrame().repaint();
 		} catch (Exception e) {
 			log.error("Error loading the new table", e);
 		}
