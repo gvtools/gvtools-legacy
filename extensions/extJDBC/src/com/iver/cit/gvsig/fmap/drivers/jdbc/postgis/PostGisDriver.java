@@ -472,6 +472,8 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 				return ValueFactory.createValue(buf.getFloat());
 			if (metaData.getColumnType(fieldId) == Types.INTEGER)
 				return ValueFactory.createValue(buf.getInt());
+			if (metaData.getColumnType(fieldId) == Types.SMALLINT)
+				return ValueFactory.createValue(buf.getShort());
 			if (metaData.getColumnType(fieldId) == Types.BIGINT)
 				return ValueFactory.createValue(buf.getLong());
 			if (metaData.getColumnType(fieldId) == Types.BIT)
