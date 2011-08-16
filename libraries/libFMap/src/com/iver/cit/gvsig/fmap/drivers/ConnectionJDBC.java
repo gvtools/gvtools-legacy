@@ -58,6 +58,9 @@ public class ConnectionJDBC implements IConnection {
 	private String user;
 	private String _pw;
 
+	// to cache the quote string to avoid make a query each time
+	private String identifierQuoteString = null;
+
 	public ConnectionJDBC() {
 
 	}
@@ -132,6 +135,29 @@ public class ConnectionJDBC implements IConnection {
 			throw new DBException(e);
 		}
 
+	}
+
+	/**
+	 *
+	 * @return the quote string for this gbdms. A empty string is returned if there are any error
+	 * or if quoting is not supported
+	 */
+	public String getIdentifierQuoteString() {
+		/* if there is not an error the quote string is cached, if there is an error an empty string
+		 * is returned to avoid obligate the user to check this method.
+		 */
+
+		String quote = identifierQuoteString;
+		if (quote == null) {
+			try {
+				quote = connection.getMetaData().getIdentifierQuoteString().trim();
+				identifierQuoteString = quote;
+
+			} catch (SQLException e) {
+				quote = "";
+			}
+		}
+		return quote;
 	}
 
 	public String getTypeConnection() {

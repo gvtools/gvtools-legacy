@@ -283,14 +283,16 @@ public class DBLayerDefinition extends LayerDefinition {
 		return schema;
 	}
 	/**
-	 * @return schema.tableName or only tableName if schema is not defined
+	 * @return "schema"."tableName" or only "tableName" if schema is not defined. schema and tableName are quoted
 	 */
 	public String getComposedTableName() {
+		String quote = conn.getIdentifierQuoteString();
+
 		String compoundTable = "";
 		if (getSchema()!=null && !getSchema().equals("")){
-			compoundTable = getSchema()+ ".";
+			compoundTable = quote + getSchema() + quote + ".";
 		}
-		compoundTable = compoundTable+ getTableName();
+		compoundTable = compoundTable + quote + getTableName() + quote;
 		return compoundTable;
 	}
 	public void setIdFieldID(int idFieldID) {

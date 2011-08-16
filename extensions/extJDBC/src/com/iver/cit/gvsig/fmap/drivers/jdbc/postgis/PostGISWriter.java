@@ -102,11 +102,7 @@ IFieldManager {
 			}
 			((ConnectionJDBC) conex).getConnection().setAutoCommit(false);
 
-			String schema_tablename =  lyrDef.getTableName();
-			String schema = lyrDef.getSchema();
-			if (schema != null || schema.trim().length() > 0 ){
-				schema_tablename = schema + '.' + schema_tablename;
-			}
+			String schema_tablename = lyrDef.getComposedTableName();
 			fieldManager = new JdbcFieldManager(((ConnectionJDBC)conex).getConnection(), schema_tablename);
 
 

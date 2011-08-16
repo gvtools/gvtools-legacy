@@ -462,7 +462,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 					return ValueFactory.createValue(character.trim());
 				}else{
 					return ValueFactory.createValue(character);
-				}					
+				}
 			}
 			if (metaData.getColumnType(fieldId) == Types.FLOAT)
 				return ValueFactory.createValue(buf.getFloat());
@@ -1025,5 +1025,43 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
         }
         return strAux.toString();
 	}
+
+
+    /**
+     *       Gets all field names of a given table
+     * @param conn connection object
+     * @param table_name table name
+     * @return all field names of the given table
+     * @throws SQLException
+     */
+    public String[] getAllFields(IConnection conn, String table_name) throws DBException {
+    	return super.getAllFields(conn, tableNameToComposedTableName(table_name));
+    }
+
+    public String[] getAllFieldTypeNames(IConnection conn, String table_name) throws DBException {
+    	return super.getAllFieldTypeNames(conn, tableNameToComposedTableName(table_name));
+    }
+
+    /**
+     *
+     * @param tableName
+     * @return a string with the schema and the tableName quoted
+     */
+    private String tableNameToComposedTableName(String tableName) {
+    	String composedTableName = null;
+    	String[] tokens = tableName.trim().replace("\"", "").split("\\u002E");
+
+    	if (tokens.length == 1) {
+    		composedTableName = "\"" + tokens[0] + "\"";
+
+    	} else if (tokens.length == 2) {
+    		composedTableName = "\"" + tokens[0] + "\".\"" + tokens[1] + "\"";
+    	} else {
+    		// this is a not predictable case, so we return the same
+    		composedTableName = tableName;
+    	}
+
+    	return composedTableName;
+    }
 
 }

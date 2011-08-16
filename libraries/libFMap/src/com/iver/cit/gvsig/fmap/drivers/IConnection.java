@@ -16,4 +16,6 @@ public interface IConnection {
 
 	String getTypeConnection();
 
+	String getIdentifierQuoteString();
+
 }
