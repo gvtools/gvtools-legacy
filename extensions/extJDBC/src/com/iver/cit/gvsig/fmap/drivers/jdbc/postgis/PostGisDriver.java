@@ -229,8 +229,8 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		try {
 			((ConnectionJDBC)conn).getConnection().setAutoCommit(false);
 			sqlOrig = "SELECT " + getTotalFields() + " FROM "
-					+ getLyrDef().getComposedTableName() + " ";
-					// + getLyrDef().getWhereClause();
+			+ getLyrDef().getComposedTableName() + " ";
+			// + getLyrDef().getWhereClause();
 			if (canReproject(strEPSG)) {
 				completeWhere = getCompoundWhere(sqlOrig, workingArea, strEPSG);
 			} else {
@@ -354,15 +354,15 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			// ResultSet rs = st.executeQuery(sql);
 			geomIterator = new PostGisFeatureIterator(((ConnectionJDBC)conn).getConnection(), provCursorName, sql);
 		} catch (SQLException e) {
-//			e.printStackTrace();
-//			e.printStackTrace();
-//			SqlDriveExceptionType type = new SqlDriveExceptionType();
-//            type.setDriverName("PostGIS Driver");
-//            type.setSql(sql);
-//            type.setLayerName(getTableName());
-//            type.setSchema(null);
-            throw new ReadDriverException("PostGIS Driver",e);
-//			throw new DriverException(e);
+			//			e.printStackTrace();
+			//			e.printStackTrace();
+			//			SqlDriveExceptionType type = new SqlDriveExceptionType();
+			//            type.setDriverName("PostGIS Driver");
+			//            type.setSql(sql);
+			//            type.setLayerName(getTableName());
+			//            type.setSchema(null);
+			throw new ReadDriverException("PostGIS Driver",e);
+			//			throw new DriverException(e);
 			// return null;
 		}
 
@@ -370,7 +370,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 	}
 
 	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG)
-			throws ReadDriverException {
+	throws ReadDriverException {
 		if (workingArea != null)
 			r = r.createIntersection(workingArea);
 
@@ -404,14 +404,14 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		double xMax = r.getMaxX();
 		double yMax = r.getMaxY();
 		String wktBox = "GeometryFromText('LINESTRING(" + xMin + " " + yMin
-				+ ", " + xMax + " " + yMin + ", " + xMax + " " + yMax + ", "
-				+ xMin + " " + yMax + ")', " + strEPSG + ")";
+		+ ", " + xMax + " " + yMin + ", " + xMax + " " + yMax + ", "
+		+ xMin + " " + yMax + ")', " + strEPSG + ")";
 		String sqlAux;
 		if (getWhereClause().toUpperCase().indexOf("WHERE") != -1)
 			sqlAux = getWhereClause() + " AND " + getLyrDef().getFieldGeometry() + " && " + wktBox;
 		else
 			sqlAux = "WHERE " + getLyrDef().getFieldGeometry() + " && "
-					+ wktBox;
+			+ wktBox;
 		return sqlAux;
 	}
 
@@ -429,7 +429,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 	 *      int)
 	 */
 	public Value getFieldValue(long rowIndex, int idField)
-			throws ReadDriverException {
+	throws ReadDriverException {
 		boolean resul;
 		// EL ABSOLUTE NO HACE QUE SE VUELVAN A LEER LAS
 		// FILAS, ASI QUE MONTAMOS ESTA HISTORIA PARA QUE
@@ -491,47 +491,47 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			if (metaData.getColumnType(fieldId) == Types.TIME)
 			{
 				// TODO:
-					// throw new RuntimeException("TIME type not implemented yet");
-					return ValueFactory.createValue("NOT IMPLEMENTED YET");
-				}
-				if (metaData.getColumnType(fieldId) == Types.TIMESTAMP)
-				{
-					double segsReferredTo2000 = buf.getDouble();
-					long real_msecs = (long) (XTypes.NUM_msSecs2000 + segsReferredTo2000*1000);
-					Timestamp valTimeStamp = new Timestamp(real_msecs);
-					return ValueFactory.createValue(valTimeStamp);
-				}
-
-				if (metaData.getColumnType(fieldId) == Types.NUMERIC) {
-					// System.out.println(metaData.getColumnName(fieldId) + " "
-					// + metaData.getColumnClassName(fieldId));
-					short ndigits = buf.getShort();
-					short weight = buf.getShort();
-					short sign = buf.getShort();
-					short dscale = buf.getShort();
-					String strAux;
-					if (sign == 0)
-						strAux = "+";
-					else
-						strAux = "-";
-
-					for (int iDigit = 0; iDigit < ndigits; iDigit++) {
-						short digit = buf.getShort();
-						strAux = strAux + digit;
-						if (iDigit == weight)
-							strAux = strAux + ".";
-
-					}
-					strAux = strAux + "0";
-					BigDecimal dec;
-					dec = new BigDecimal(strAux);
-					// System.out.println(ndigits + "_" + weight + "_" + dscale
-					// + "_" + strAux);
-					// System.out.println(strAux + " Big= " + dec);
-					return ValueFactory.createValue(dec.doubleValue());
-				}
-
+				// throw new RuntimeException("TIME type not implemented yet");
+				return ValueFactory.createValue("NOT IMPLEMENTED YET");
 			}
+			if (metaData.getColumnType(fieldId) == Types.TIMESTAMP)
+			{
+				double segsReferredTo2000 = buf.getDouble();
+				long real_msecs = (long) (XTypes.NUM_msSecs2000 + segsReferredTo2000*1000);
+				Timestamp valTimeStamp = new Timestamp(real_msecs);
+				return ValueFactory.createValue(valTimeStamp);
+			}
+
+			if (metaData.getColumnType(fieldId) == Types.NUMERIC) {
+				// System.out.println(metaData.getColumnName(fieldId) + " "
+				// + metaData.getColumnClassName(fieldId));
+				short ndigits = buf.getShort();
+				short weight = buf.getShort();
+				short sign = buf.getShort();
+				short dscale = buf.getShort();
+				String strAux;
+				if (sign == 0)
+					strAux = "+";
+				else
+					strAux = "-";
+
+				for (int iDigit = 0; iDigit < ndigits; iDigit++) {
+					short digit = buf.getShort();
+					strAux = strAux + digit;
+					if (iDigit == weight)
+						strAux = strAux + ".";
+
+				}
+				strAux = strAux + "0";
+				BigDecimal dec;
+				dec = new BigDecimal(strAux);
+				// System.out.println(ndigits + "_" + weight + "_" + dscale
+				// + "_" + strAux);
+				// System.out.println(strAux + " Big= " + dec);
+				return ValueFactory.createValue(dec.doubleValue());
+			}
+
+		}
 
 		return ValueFactory.createNullValue();
 
@@ -574,10 +574,10 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			myCursorId++;
 			st.execute("declare " + getTableName() + myCursorId + "_wkb_cursorAbsolutePosition binary scroll cursor with hold for " + sqlTotal);
 			st.executeQuery("fetch absolute " + fetch_min
-			+ " in " + getTableName() + myCursorId + "_wkb_cursorAbsolutePosition");
+					+ " in " + getTableName() + myCursorId + "_wkb_cursorAbsolutePosition");
 
 			rs = st.executeQuery("fetch forward " + FETCH_SIZE
-			+ " in " + getTableName() + myCursorId + "_wkb_cursorAbsolutePosition");
+					+ " in " + getTableName() + myCursorId + "_wkb_cursorAbsolutePosition");
 
 		}
 		rs.absolute(index - fetch_min + 1);
@@ -640,15 +640,15 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		try {
 			Statement stAux = ((ConnectionJDBC)conn).getConnection().createStatement();
 
-//			String sql = "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_NAME = '"
-//					+ getTableName() + "' AND F_GEOMETRY_COLUMN = '" + getLyrDef().getFieldGeometry() + "'";
+			//			String sql = "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_NAME = '"
+			//					+ getTableName() + "' AND F_GEOMETRY_COLUMN = '" + getLyrDef().getFieldGeometry() + "'";
 			String sql;
 			if (dbld.getSchema() == null || dbld.getSchema().equals("")){
 				sql = "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_SCHEMA = current_schema() AND F_TABLE_NAME = '"
 					+ dbld.getTableName() + "' AND F_GEOMETRY_COLUMN = '" + dbld.getFieldGeometry() + "'";
 			}else{
 				sql = "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_SCHEMA = '"+ dbld.getSchema() + "' AND F_TABLE_NAME = '"
-						+ dbld.getTableName() + "' AND F_GEOMETRY_COLUMN = '" + dbld.getFieldGeometry() + "'";
+				+ dbld.getTableName() + "' AND F_GEOMETRY_COLUMN = '" + dbld.getFieldGeometry() + "'";
 			}
 
 			ResultSet rs = stAux.executeQuery(sql);
@@ -723,14 +723,14 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		hashRelate = new Hashtable();
 		try {
 			String strSQL = "SELECT " + getLyrDef().getFieldID() + " FROM "
-					+ getLyrDef().getComposedTableName() + " ";
-					// + getLyrDef().getWhereClause();
+			+ getLyrDef().getComposedTableName() + " ";
+			// + getLyrDef().getWhereClause();
 			if (canReproject(strEPSG)) {
 				strSQL = strSQL
-						+ getCompoundWhere(strSQL, workingArea, strEPSG);
+				+ getCompoundWhere(strSQL, workingArea, strEPSG);
 			} else {
 				strSQL = strSQL
-						+ getCompoundWhere(strSQL, workingArea, originalEPSG);
+				+ getCompoundWhere(strSQL, workingArea, originalEPSG);
 			}
 			strSQL = strSQL + " ORDER BY " + getLyrDef().getFieldID();
 			Statement s = ((ConnectionJDBC)getConnection()).getConnection().createStatement(
@@ -853,8 +853,8 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			clonedLyrDef.setFieldsDesc( (FieldDescription[])myFieldsDesc.toArray(new FieldDescription[]{}) );
 
 			String sqlProv = "SELECT " + strAux + " FROM "
-					+ lyrDef.getComposedTableName() + " ";
-					// + getLyrDef().getWhereClause();
+			+ lyrDef.getComposedTableName() + " ";
+			// + getLyrDef().getWhereClause();
 
 			if (canReproject(strEPSG)) {
 				sqlAux = sqlProv + getCompoundWhere(sqlProv, r, strEPSG);
@@ -868,15 +868,15 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			geomIterator.setLyrDef(clonedLyrDef);
 			return geomIterator;
 		} catch (Exception e) {
-//			e.printStackTrace();
-//			SqlDriveExceptionType type = new SqlDriveExceptionType();
-//            type.setDriverName("PostGIS Driver");
-//            type.setSql(sqlAux);
-//            type.setLayerName(getTableName());
-//            type.setSchema(null);
-            throw new ReadDriverException("PostGIS Driver",e);
+			//			e.printStackTrace();
+			//			SqlDriveExceptionType type = new SqlDriveExceptionType();
+			//            type.setDriverName("PostGIS Driver");
+			//            type.setSql(sqlAux);
+			//            type.setLayerName(getTableName());
+			//            type.setSchema(null);
+			throw new ReadDriverException("PostGIS Driver",e);
 
-//			throw new DriverException(e);
+			//			throw new DriverException(e);
 		}
 	}
 
@@ -918,7 +918,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 		writer.initialize(dbLyrDef);
 	}
-*/
+	 */
 	public boolean isWritable() {
 		// CHANGE FROM CARTOLAB
 		// return true;
@@ -933,55 +933,55 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 	public String[] getGeometryFieldsCandidates(IConnection conn, String table_name) throws DBException {
 		ArrayList list = new ArrayList();
 		try{
-		Statement stAux = ((ConnectionJDBC)conn).getConnection().createStatement();
- 		String[] tokens = table_name.split("\\u002E", 2);
-        String sql;
-        if (tokens.length > 1)
-        {
-        	sql = "select * from GEOMETRY_COLUMNS WHERE F_TABLE_SCHEMA = '"
-                 + tokens[0] + "' AND F_TABLE_NAME = '" +
-            tokens[1] + "'";
-        }
-        else
-        {
-        	sql = "select * from GEOMETRY_COLUMNS" +
-            " where F_TABLE_SCHEMA = current_schema() AND F_TABLE_NAME = '" + table_name + "'";
+			Statement stAux = ((ConnectionJDBC)conn).getConnection().createStatement();
+			String[] tokens = table_name.split("\\u002E", 2);
+			String sql;
+			if (tokens.length > 1)
+			{
+				sql = "select * from GEOMETRY_COLUMNS WHERE F_TABLE_SCHEMA = '"
+					+ tokens[0] + "' AND F_TABLE_NAME = '" +
+					tokens[1] + "'";
+			}
+			else
+			{
+				sql = "select * from GEOMETRY_COLUMNS" +
+				" where F_TABLE_SCHEMA = current_schema() AND F_TABLE_NAME = '" + table_name + "'";
 
-        }
+			}
 
-//		String sql = "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_NAME = '"
-//				+ table_name + "'";
+			//		String sql = "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_NAME = '"
+			//				+ table_name + "'";
 
-		ResultSet rs = stAux.executeQuery(sql);
-		while (rs.next())
-		{
-			String geomCol = rs.getString("F_GEOMETRY_COLUMN");
-			list.add(geomCol);
-		}
-		rs.close(); stAux.close();
+			ResultSet rs = stAux.executeQuery(sql);
+			while (rs.next())
+			{
+				String geomCol = rs.getString("F_GEOMETRY_COLUMN");
+				list.add(geomCol);
+			}
+			rs.close(); stAux.close();
 		} catch (SQLException e) {
 			throw new DBException(e);
 		}
 		return (String[]) list.toArray(new String[0]);
 	}
-//	public String[] getTableFields(IConnection conex, String table) throws DBException {
-//		try{
-//		Statement st = ((ConnectionJDBC)conex).getConnection().createStatement();
-//        // ResultSet rs = dbmd.getTables(catalog, null, dbLayerDefinition.getTable(), null);
-//		ResultSet rs = st.executeQuery("select * from " + table + " LIMIT 1");
-//		ResultSetMetaData rsmd = rs.getMetaData();
-//
-//		String[] ret = new String[rsmd.getColumnCount()];
-//
-//		for (int i = 0; i < ret.length; i++) {
-//			ret[i] = rsmd.getColumnName(i+1);
-//		}
-//
-//		return ret;
-//		}catch (SQLException e) {
-//			throw new DBException(e);
-//		}
-//	}
+	//	public String[] getTableFields(IConnection conex, String table) throws DBException {
+	//		try{
+	//		Statement st = ((ConnectionJDBC)conex).getConnection().createStatement();
+	//        // ResultSet rs = dbmd.getTables(catalog, null, dbLayerDefinition.getTable(), null);
+	//		ResultSet rs = st.executeQuery("select * from " + table + " LIMIT 1");
+	//		ResultSetMetaData rsmd = rs.getMetaData();
+	//
+	//		String[] ret = new String[rsmd.getColumnCount()];
+	//
+	//		for (int i = 0; i < ret.length; i++) {
+	//			ret[i] = rsmd.getColumnName(i+1);
+	//		}
+	//
+	//		return ret;
+	//		}catch (SQLException e) {
+	//			throw new DBException(e);
+	//		}
+	//	}
 
 	private DBLayerDefinition cloneLyrDef(DBLayerDefinition lyrDef){
 		DBLayerDefinition clonedLyrDef = new DBLayerDefinition();
@@ -1017,51 +1017,176 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	public String getTotalFields() {
 		StringBuilder strAux = new StringBuilder();
-        strAux.append(getGeometryField(getLyrDef().getFieldGeometry()));
-        String[] fieldNames = getLyrDef().getFieldNames();
-        for (int i=0; i< fieldNames.length; i++)
-        {
-            strAux.append(", " + PostGIS.escapeFieldName(fieldNames[i]));
-        }
-        return strAux.toString();
+		strAux.append(getGeometryField(getLyrDef().getFieldGeometry()));
+		String[] fieldNames = getLyrDef().getFieldNames();
+		for (int i=0; i< fieldNames.length; i++)
+		{
+			strAux.append(", " + PostGIS.escapeFieldName(fieldNames[i]));
+		}
+		return strAux.toString();
 	}
 
 
-    /**
-     *       Gets all field names of a given table
-     * @param conn connection object
-     * @param table_name table name
-     * @return all field names of the given table
-     * @throws SQLException
-     */
-    public String[] getAllFields(IConnection conn, String table_name) throws DBException {
-    	return super.getAllFields(conn, tableNameToComposedTableName(table_name));
-    }
+	/**
+	 * Gets all field names of a given table.
+	 * 
+	 * This method comes from DefaultJDBC.java class. Postgis driver has no method to check
+	 *  the status of the connection -if it is valid or not. So, as it's not possible to assure 
+	 *  its status, close the connection when an exception happens and re-open it on demand 
+	 *  on the proper method will solve the problems related to an invalid status.
+	 * 
+	 * @param conn connection object
+	 * @param table_name table name
+	 * @return all field names of the given table
+	 * @throws SQLException
+	 */
+	@Override
+	public String[] getAllFields(IConnection conn, String table_name) throws DBException {
+		Statement st = null;
+		ResultSet rs = null;
+		table_name = tableNameToComposedTableName(table_name);
 
-    public String[] getAllFieldTypeNames(IConnection conn, String table_name) throws DBException {
-    	return super.getAllFieldTypeNames(conn, tableNameToComposedTableName(table_name));
-    }
+		try {
+			st = ((ConnectionJDBC)conn).getConnection().createStatement();
+			rs = st.executeQuery("SELECT * FROM " + table_name + " LIMIT 1");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			String[] ret = new String[rsmd.getColumnCount()];
 
-    /**
-     *
-     * @param tableName
-     * @return a string with the schema and the tableName quoted
-     */
-    private String tableNameToComposedTableName(String tableName) {
-    	String composedTableName = null;
-    	String[] tokens = tableName.trim().replace("\"", "").split("\\u002E");
+			for (int i = 0; i < ret.length; i++) {
+				ret[i] = rsmd.getColumnName(i+1);
+			}
 
-    	if (tokens.length == 1) {
-    		composedTableName = "\"" + tokens[0] + "\"";
+			return ret;
+		} catch (SQLException e) {
+			// Next time  getConnection() method is called it will be re-opened.
+			// @see com.iver.cit.gvsig.fmap.drivers.ConnectionJDBC.java;
+			closeConnection(conn);
+			throw new DBException(e);
+		}
+		finally {
+			closeResultSet(rs);
+			closeStatement(st);
+		}
+	}
 
-    	} else if (tokens.length == 2) {
-    		composedTableName = "\"" + tokens[0] + "\".\"" + tokens[1] + "\"";
-    	} else {
-    		// this is a not predictable case, so we return the same
-    		composedTableName = tableName;
-    	}
+	/**
+	 * Gets all field type names of a given table.
+	 * 
+	 * This method comes from DefaultJDBC.java class. Postgis driver has no method to check
+	 *  the status of the connection -if it is valid or not. So, as it's not possible to assure 
+	 *  its status, close the connection when an exception happens and re-open it on demand 
+	 *  on the proper method will solve the problems related to an invalid status.
+	 * 
+	 * @param conn connection object
+	 * @param table_name table name
+	 * @return all field type names of the given table
+	 * @throws SQLException
+	 */
+	public String[] getAllFieldTypeNames(IConnection conn, String table_name) throws DBException {
+		table_name = tableNameToComposedTableName(table_name);
+		try {
+			Statement st = ((ConnectionJDBC)conn).getConnection().createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM " + table_name + " LIMIT 1");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			String[] ret = new String[rsmd.getColumnCount()];
 
-    	return composedTableName;
-    }
+			for (int i = 0; i < ret.length; i++) {
+				ret[i] = rsmd.getColumnTypeName(i+1);
+			}
+			return ret;
+		} catch (SQLException e) {
+			// Next time  getConnection() method is called it will be re-opened.
+			// @see com.iver.cit.gvsig.fmap.drivers.ConnectionJDBC.java;
+			closeConnection(conn);
+			throw new DBException(e);
+		}
+		finally{
+			closeStatement(st);
+			closeResultSet(rs);
+		}
+	}
+
+	/**
+	 *
+	 * @param tableName
+	 * @return a string with the schema and the tableName quoted
+	 */
+	private String tableNameToComposedTableName(String tableName) {
+		String composedTableName = null;
+		// \u002E = unicode character for .
+		String[] tokens = tableName.trim().replace("\"", "").split("\\u002E");
+
+		if (tokens.length == 1) {
+			composedTableName = "\"" + tokens[0] + "\"";
+
+		} else if (tokens.length == 2) {
+			composedTableName = "\"" + tokens[0] + "\".\"" + tokens[1] + "\"";
+		} else {
+			// this is a not predictable case, so we return the same
+			composedTableName = tableName;
+		}
+
+		return composedTableName;
+	}
+
+	/**
+	 * Close a ResultSet
+	 * @param rs, the resultset to be closed
+	 * @return true if the resulset was correctly closed. false in any other case
+	 */
+	public boolean closeResultSet(ResultSet rs) {
+		boolean error = false;
+
+		if (rs != null) {
+			try {
+				rs.close();
+				error = true;
+			} catch (SQLException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+
+		return error;
+	}
+
+	/**
+	 * Close a Statement
+	 * @param st, the statement to be closed
+	 * @return true if the  statement was correctly closed, false in any other case
+	 */
+	public boolean closeStatement(Statement st) {
+		boolean error = false;
+
+		if (st != null) {
+			try {
+				st.close();
+				error = true;
+			} catch (SQLException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+
+		return error;
+	}
+
+	/**
+	 * Close a Connection
+	 * @param conn, the  connection to be closed
+	 * @return true if the connection was correctly closed, false in any other case
+	 */
+	public boolean closeConnection(IConnection conn) {
+		boolean error = false;
+
+		if (conn != null) {
+			try {
+				conn.close();
+				error = true;
+			} catch (DBException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+
+		return error;
+	}
 
 }
