@@ -97,10 +97,10 @@ public class SmartOrderManager implements OrderManager, IExtensionBuilder {
 				int maxVector = 0;
 				for (int i=0; i<target.getLayersCount(); i++) {
 					if (target.getLayer(i) instanceof FLyrVect) {
-						maxVector = i;
+						maxVector++;
 					}
 				}
-				return maxVector+1;
+				return maxVector;
 			}
 			else if (auxConfig.getRasterBehaviour()==OrderConfig.UNDER_VECTOR) {
 				for (int i=0; i<target.getLayersCount(); i++) {
