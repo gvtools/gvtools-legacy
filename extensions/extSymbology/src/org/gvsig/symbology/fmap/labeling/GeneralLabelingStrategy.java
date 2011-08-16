@@ -109,6 +109,7 @@ package org.gvsig.symbology.fmap.labeling;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.StringReader;
@@ -193,9 +194,8 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 	private long parseTime;
 	private int unit;
 	private int referenceSystem;
-	private double sizeAfter;	
+	private double sizeAfter;
 	private boolean printMode = false; /* indicate whether output is for a print product (PDF, PS, ...) */
-	
 
 	public void setLayer(FLayer layer) throws ReadDriverException {
 		FLyrVect l = (FLyrVect) layer;
@@ -223,22 +223,19 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 	}
 	public void draw(BufferedImage mapImage, Graphics2D mapGraphics,
 			ViewPort viewPort,	Cancellable cancel, double dpi) throws ReadDriverException {
-		int x=(int)viewPort.getOffset().getX();
-		int y=(int)viewPort.getOffset().getY();
-		
-		/* offsets for page generation (PDF, PS, direct printing) */
+		int x = (int)viewPort.getOffset().getX();
+		int y = (int)viewPort.getOffset().getY();
+//		boolean bVisualFXEnabled = false; // if true, the user can see how the labeling is drawing up
+
+		//offsets for page generation (PDF, PS, direct printing)
 		int print_offset_x = x;
 		int print_offset_y = y;
-		
-		if ( printMode ) {
-			/* for printing, we never offset the labels themselves */
+		if (printMode) {
+			//for printing, we never offset the labels themselves
 			x = 0;
 			y = 0;
 			printMode = false;
-		}
-				
-//		boolean bVisualFXEnabled = false; // if true, the user can see how the labeling is drawing up
-
+		}		
 
 		TreeMap<String[], GeometryItem> labelsToPlace = null;
 		parseTime =0;
@@ -294,6 +291,7 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 			Graphics2D overlapDetectGraphics = null;
 			if (bLabelsReallocatable) {
 				int width = viewPort.getImageWidth() + print_offset_x;
+
 				if(width<0){
 					width = 1;
 				}
@@ -303,8 +301,8 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 				}
 				if (mapImage!=null)
 					overlapDetectImage = new BufferedImage(
-							mapImage.getWidth() + print_offset_x,
-							mapImage.getHeight() + print_offset_y,
+							mapImage.getWidth()  + print_offset_x,
+							mapImage.getHeight()  + print_offset_y,
 							BufferedImage.TYPE_INT_ARGB
 				);
 				else
@@ -856,7 +854,7 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 
 	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel, PrintRequestAttributeSet properties) throws ReadDriverException {
 		double dpi = 100;
-		
+
 		PrintQuality resolution=(PrintQuality)properties.get(PrintQuality.class);
 		if (resolution.equals(PrintQuality.NORMAL)){
 			dpi = 300;
@@ -865,10 +863,12 @@ public class GeneralLabelingStrategy implements ILabelingStrategy, Cloneable,Car
 		} else if (resolution.equals(PrintQuality.DRAFT)){
 			dpi = 72;
 		}
+
+		viewPort.setOffset(new Point2D.Double(0,0));	
 		
 		/* signal printing output */
-		printMode=true;
-		
+		printMode = true;
+
 		draw(null,g,viewPort,cancel,dpi);
 	}
 
