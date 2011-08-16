@@ -117,14 +117,6 @@ public class GdalNative extends Gdal {
 		int[] dt = new int[getRasterCount()];
 		for (int i = 0; i < getRasterCount(); i++) {
 			dt[i] = this.getRasterBand(i + 1).getRasterDataType();
-			
-			/* DEBUG */
-			// Java does not have an unsigned byte type, so we have to use a short instead!
-			if ( dt[i] == GDT_Byte ) {
-				System.err.println ("*** DEBUG: changed band " + i + " to type GDT_Int16");
-				dt[i] = GDT_Int16;
-			}
-			
 		}
 			
 		setDataType(dt);
@@ -925,14 +917,6 @@ public class GdalNative extends Gdal {
 		for (int i = 0; i < gdalBands.length; i++) {
 			if(gdalBands[i] != null) {
 				dt[i] = gdalBands[i].getRasterDataType();
-				
-				/* DEBUG */
-				// Java does not have an unsigned byte type, so we have to use a short instead!
-				if ( dt[i] == GDT_Byte ) {
-					System.err.println ("*** DEBUG: changed band " + i + " to type GDT_Int16");
-					dt[i] = GDT_Int16;
-				}
-				
 			}
 		}
 		setDataType(dt);
