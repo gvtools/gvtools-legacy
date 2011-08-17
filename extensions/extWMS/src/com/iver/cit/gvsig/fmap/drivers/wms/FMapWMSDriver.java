@@ -261,6 +261,9 @@ public class FMapWMSDriver  {
 
         // Abstract
         myNode.setAbstract(node.getAbstract());
+        
+        myNode.setScaleMax(node.getScaleMax());
+        myNode.setScaleMin(node.getScaleMin());
 
         // Fixed Size
         myNode.setFixedSize(node.getfixedWidth(), node.getfixedHeight());

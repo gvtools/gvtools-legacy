@@ -105,6 +105,7 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.exceptions.layers.URLLayerException;
 import com.iver.cit.gvsig.exceptions.layers.UnsupportedVersionLayerException;
 import com.iver.cit.gvsig.fmap.ConnectionErrorExceptionType;
+import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.WMSDriverExceptionType;
 import com.iver.cit.gvsig.fmap.crs.CRSFactory;
@@ -193,6 +194,17 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	private int                         lastNColumns = 0;
 	private int                         lastNRows = 0;
 	private boolean 					hasImageLegend = false;
+
+	/***
+	 * WMS 1.3 standard defines a fixed pixel size of 0.28 mm for the server.
+	 * As
+	 *   1 inch = 25.4 mm
+	 * then the server is supposed to have the following DPI:
+	 *   25.4 / 0.28 = 90.714285714 dpi
+	 */
+
+	private final double WMS_DPI = 90.714285714;
+   
 
 	private class MyCancellable implements ICancellable
 	{
@@ -287,6 +299,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		this.setSRS(sSRS);
 		this.setName(sLayer);
 		this.setOnlineResources(drv.getOnlineResources());
+		initServerScale();
 		load();
 	}
 
@@ -1230,7 +1243,103 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		return true;
 	}
 
+   /**
+    * Applies server min/max scale as layer min/max scale.
+    * The purpose is to update the TOC icon according with
+    * the WMS layer visibilitiy. 
+    */
+   private void initServerScale() {
+       /**
+        * We have to calculate the equivalent scale for our system, taking into account the
+        * server DPI and our real DPI.
+        */
+       double minScale = getCorrectedServerMinScale();
+       double maxScale = getCorrectedServerMaxScale();
+       if (minScale>0) {
+           setMinScale(minScale);
+       }
+       if (maxScale>0 &&
+               maxScale>=minScale) {
+           setMaxScale(maxScale);
+       }
+   }
+	
 	/**
+    * Calculates the equivalent MinScaleDenominator for our system, taking into account the
+    * server DPI and our real DPI.
+    * 
+    * WMS 1.3 standard defines a fixed pixel size of 0.28 mm for the server,
+    * which may not match our real settings, so this conversion is required
+    * to properly use MinScaleDenominator and MaxScaleDenominator values.
+    *
+    * @return
+    */
+   public double getCorrectedServerMinScale() {
+       return (getServerMinScale()*MapContext.getScreenDPI())/WMS_DPI;
+   }
+   
+   /**
+    * Calculates the equivalent MaxScaleDenominator for our system, taking into account the
+    * server DPI and our real DPI.
+    * 
+    * WMS 1.3 standard defines a fixed pixel size of 0.28 mm for the server,
+    * which may not match our real settings, so this conversion is required
+    * to properly use MinScaleDenominator and MaxScaleDenominator values.
+    *
+    * @return
+    */
+   public double getCorrectedServerMaxScale() {
+       return (getServerMaxScale()*MapContext.getScreenDPI())/WMS_DPI;
+   }
+   
+   /**
+    * Returns the value of MinScaleDenominator tag, if available,
+    * or -1 otherwise.
+    *  
+    * @return
+    */
+   public double getServerMinScale() {
+       String[] layers = getLayerNames();
+       double minScale=Double.MAX_VALUE;
+       for (int i=0; i<layers.length; i++) {
+           WMSLayerNode layer = wms.getLayer(layers[i]);
+           double lyrMinScale = layer.getScaleMin(); 
+           if (lyrMinScale!=-1 &&
+                   lyrMinScale<minScale) {
+               minScale = lyrMinScale;
+           }
+       }
+       if (minScale==Double.MAX_VALUE) {
+           return -1;
+       }
+       else {
+           return minScale;
+       }
+   }
+
+   /**
+    * Returns the value of MaxScaleDenominator tag, if available,
+    * or -1 otherwise.
+    *  
+    * @return
+    */
+   public double getServerMaxScale() {
+       String[] layers = getLayerNames();
+       double maxScale=-1, lyrMaxScale;
+       for (int i=0; i<layers.length; i++) {
+           WMSLayerNode layer = wms.getLayer(layers[i]);
+           lyrMaxScale = layer.getScaleMax();
+           if (lyrMaxScale!=-1
+                   && lyrMaxScale>maxScale) {
+               maxScale = lyrMaxScale;
+           }
+           
+       }
+       return maxScale;
+   }
+   
+   
+   /**
 	 * Obtiene la extensión del fichero de georreferenciación
 	 * @return String con la extensión del fichero de georreferenciación dependiendo
 	 * del valor del formato obtenido del servidor. Por defecto asignaremos un .wld
@@ -1339,6 +1448,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	public void setDriver(FMapWMSDriver drv) {
 		//TODO: Comprobar cambio
 		wms = drv;
+		initServerScale();
 		this.updateDrawVersion();
 	}
 
@@ -1409,6 +1519,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		}
 
 		this.layerQuery = layerQuery;
+       wmsStatus.setLayerNames(Utilities.createVector(layerQuery,","));
 		this.updateDrawVersion();
 	}
 
@@ -1521,6 +1632,28 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	public double getMinY() {
 		return visualStatus.minY;
 	}
+
+  
+   /**
+    * Returns the names of the WMS layers that are loaded in this
+    * gvSIG layer.
+    * 
+    * @return An array containing the names of the WMS layers
+    */
+   public String[] getLayerNames() {
+       Vector namesList = wmsStatus.getLayerNames();
+       String[] names = new String[namesList.size()];
+       for (int i=0; i<names.length; i++) {
+           Object o = namesList.get(i);
+           if (o instanceof String) {
+               names[i] = (String) o;
+           }
+           else { // this should not happen
+               names[i] = o.toString();
+           }
+       }
+       return names;
+   }
 
 	/**
 	 * @return Returns the wmsTransparency.

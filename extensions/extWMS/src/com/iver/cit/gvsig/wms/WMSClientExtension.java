@@ -48,6 +48,7 @@ import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrWMS;
 import com.iver.cit.gvsig.gui.toc.WMSPropsTocMenuEntry;
+import com.iver.cit.gvsig.gui.toc.ZoomToVisibleScaleTocMenuEntry;
 import com.iver.cit.gvsig.gui.wizards.WMSWizard;
 import com.iver.cit.gvsig.project.documents.view.toc.gui.FPopupMenu;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
@@ -63,6 +64,7 @@ public class WMSClientExtension extends Extension {
     public void initialize() {
     	// Adds an entry to the TOC's floating menu to those layers defined in this extension
         FPopupMenu.addEntry(new WMSPropsTocMenuEntry());
+        FPopupMenu.addEntry(new ZoomToVisibleScaleTocMenuEntry());
 
         // Adds a new tab to the "add layer" wizard for WMS layer creation
     	AddLayer.addWizard(WMSWizard.class);

@@ -41,7 +41,7 @@
 
 /* CVS MESSAGES:
 *
-* $Id: WMSLayerNode.java 9554 2007-01-08 07:57:34Z jaume $
+* $Id: WMSLayerNode.java 34406 2011-01-17 12:47:11Z fdiaz $
 * $Log$
 * Revision 1.11  2007-01-08 07:57:34  jaume
 * *** empty log message ***
@@ -162,6 +162,16 @@ public class WMSLayerNode {
     private WMSLayerNode _parent;
 	private Dimension fixedSize;
 
+    /**
+     * <p>min scale for the layer to be visible</p>
+     */
+    private double scaleMin = -1;
+
+    /**
+     * <p>max scale for the layer to be visible</p>
+     */
+    private double scaleMax = -1;
+    
     /**
      * @return Returns the name.
      */
@@ -294,6 +304,39 @@ public class WMSLayerNode {
         lAbstract = _abstract;
     }
 
+    /**
+     * <p>gets the maximum scale for this layer</p>
+     * @return
+     */
+    public double getScaleMax() {
+        return scaleMax;
+    }
+
+    /**
+     * <p>gets the minimum scale for this layer</p>
+     * @return
+     */
+    public double getScaleMin() {
+        return scaleMin;
+    }
+
+    /**
+     * <p>sets the minimum scale for this layer to be visible.</p>
+     *
+     * @param scale
+     */
+    public void setScaleMin(double scale) {
+        scaleMin = scale;
+    }
+
+    /**
+     * <p>sets the maximum scale for this layer to be visible</p>
+     * @param scale
+     */
+    public void setScaleMax(double scale) {
+        scaleMax = scale;
+    }
+    
     /**
      * @param name
      * @param units

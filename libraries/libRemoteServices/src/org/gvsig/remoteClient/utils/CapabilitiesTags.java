@@ -66,7 +66,8 @@ public class CapabilitiesTags
 	public final static String STYLE ="Style";
 	public final static String LEGENDURL="LegendURL";
 	public final static String SCALEHINT ="ScaleHint";
-	public final static String MINSCALEDENOMINATOR ="MinScaleDenominator";
+	public final static String MIN_SCALE_DENOMINATOR ="MinScaleDenominator";
+	public final static String MAX_SCALE_DENOMINATOR = "MaxScaleDenominator";
 	public final static String DIMENSION ="Dimension";
 	public final static String TIME ="Time";
 

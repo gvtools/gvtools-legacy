@@ -149,15 +149,17 @@ public class WMSLayer1_3_0 extends org.gvsig.remoteClient.wms.WMSLayer {
                         setLatLonBox(bbox);
                         addSrs(bbox.getSrs());
                     }						
-                    else if (parser.getName().compareTo(CapabilitiesTags.SCALEHINT)==0)
+                    else if (CapabilitiesTags.MAX_SCALE_DENOMINATOR.compareToIgnoreCase(parser.getName())==0)
                     {
-                        value = parser.getAttributeValue("",CapabilitiesTags.MIN);
+                        value = parser.nextText();
+                        if ((value != null) && (Utilities.isNumber(value)))
+                            setScaleMax(Double.parseDouble(value));																
+                    }
+                    else if (CapabilitiesTags.MIN_SCALE_DENOMINATOR.compareToIgnoreCase(parser.getName())==0) {
+                    	value = parser.nextText();
                         if ((value != null) && (Utilities.isNumber(value)))
                             setScaleMin(Double.parseDouble(value));
-                        value = parser.getAttributeValue("",CapabilitiesTags.MAX);
-                        if ((value != null) && (Utilities.isNumber(value)))
-                            setScaleMax(Double.parseDouble(value));																	
-                    }						
+                    }	
                     else if (parser.getName().compareTo(CapabilitiesTags.STYLE)==0)
                     {
                         WMSStyle1_3_0 style = new WMSStyle1_3_0();
