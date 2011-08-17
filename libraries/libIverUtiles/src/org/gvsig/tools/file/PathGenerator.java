@@ -1,6 +1,8 @@
 package org.gvsig.tools.file;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
 /**
@@ -34,10 +36,12 @@ public class PathGenerator {
 		 if (isAbsolutePath || basePath==null){
 			 return targetPath;
 		 }
-			 
+		 if (targetPath == null) {
+			 return null;
+		 }
 		 boolean isDir = false;
 		 {
-		   File f = new File(targetPath);
+		   File f = getFile(targetPath);
 		   isDir = f.isDirectory();
 		 }
 		 //  We need the -1 argument to split to make sure we get a trailing 
@@ -97,9 +101,30 @@ public class PathGenerator {
 	  * @param path of .GVP
 	  */
 	public void setBasePath(String path){
-		basePath=path;
+		if(path!=null){
+			basePath = getFile(path).getAbsolutePath();
+		} else {
+			basePath = null;
+		}
 	}
-	
+
+	/**
+	 * Returns a file from a path.
+	 * @param path relative path.
+	 * @return
+	 */
+	private File getFile(String path){
+		if (path==null)
+			return null;
+		File filePath;
+		try {
+			URI uri = new URI(path.replace(" ", "%20"));
+			filePath = new File(uri);
+		} catch (Exception e) {
+			filePath=new File(path);
+		}
+		return filePath;
+	}
 	/**
 	 * Returns absolute path from a relative.
 	 * @param path relative path.
@@ -108,7 +133,7 @@ public class PathGenerator {
 	public String getAbsolutePath(String path){
 		if (path==null)
 			return null;
-		File filePath=new File(path);
+		File filePath = getFile(path);
 		if (isAbsolutePath && filePath.exists())
 			return path;
 		filePath=new File(basePath, path);
