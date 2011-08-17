@@ -8,7 +8,7 @@ import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 
 public class Version {
 	public final static int MAJOR_VERSION_NUMBER = 1;
-	public final static int MINOR_VERSION_NUMBER = 10;
+	public final static int MINOR_VERSION_NUMBER = 0;
 	public final static int RELEASE_NUMBER = 0;
 
 	private static String BUILD = null;
