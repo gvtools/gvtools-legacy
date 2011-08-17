@@ -98,6 +98,9 @@ public class WMSWizardData { // should implemement any kind of wizard data inter
 		}
         if (wms.getAbstract()  != null)
             theAbstract = wms.getAbstract();
+        
+        if (wms.getServiceTitle()  != null)
+            title = wms.getServiceTitle();
 
         Vector f = wms.getFormats();
         ArrayList formatos = new ArrayList();
