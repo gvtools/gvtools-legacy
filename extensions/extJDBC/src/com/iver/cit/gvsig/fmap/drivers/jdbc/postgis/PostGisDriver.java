@@ -45,6 +45,7 @@ package com.iver.cit.gvsig.fmap.drivers.jdbc.postgis;
 
 import java.awt.geom.Rectangle2D;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.sql.Connection;
 import java.sql.Date;
@@ -62,6 +63,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.postgis.PGbox2d;
 import org.postgis.PGbox3d;
+import org.postgresql.util.PSQLException;
+import org.postgresql.util.PSQLState;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -86,11 +89,12 @@ import com.iver.cit.gvsig.fmap.edition.IWriter;
 
 /**
  * @author FJP
- *
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Generation - Code and Comments
  */
-public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, IWriteable {
+public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
+		IWriteable {
 	private static Logger logger = Logger.getLogger(PostGisDriver.class
 			.getName());
 
@@ -143,6 +147,30 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 	 */
 	private Map<String, Boolean> schemasUsage = new HashMap<String, Boolean>();
 
+	private static final BigInteger _nbase = new BigInteger("10000");
+
+	private static final BigInteger _nbasePow2 = _nbase.pow(2);
+
+	private static final BigInteger _nbasePow4 = _nbase.pow(4);
+
+	private static final long nbaseLong = _nbase.longValue();
+
+	private static final long nbaseLongPow2 = nbaseLong * nbaseLong;
+
+	private static final int nbaseInt = (int) nbaseLong;
+
+	protected static BigInteger getNBase() {
+		return _nbase;
+	}
+
+	protected static BigInteger getNBasePow2() {
+		return _nbasePow2;
+	}
+
+	protected static BigInteger getNBasePow4() {
+		return _nbasePow4;
+	}
+
 	static {
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -164,8 +192,9 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getDriverAttributes()
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDriver#getDriverAttributes()
 	 */
 	public DriverAttributes getDriverAttributes() {
 		return null;
@@ -173,7 +202,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.hardcode.driverManager.Driver#getName()
 	 */
 	public String getName() {
@@ -198,7 +227,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 				geom = parser.parse(data);
 			}
 		} catch (SQLException e) {
-			throw new ReadDriverException(this.getName(),e);
+			throw new ReadDriverException(this.getName(), e);
 		}
 
 		return geom;
@@ -206,7 +235,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/**
 	 * First, the geometry field. After, the rest of fields
-	 *
+	 * 
 	 * @return
 	 */
 	/*
@@ -219,11 +248,12 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 	/**
 	 * Antes de llamar a esta función hay que haber fijado el workingArea si se
 	 * quiere usar.
-	 *
+	 * 
 	 * @param conn
 	 * @throws DBException
 	 */
-	public void setData(IConnection conn, DBLayerDefinition lyrDef) throws DBException {
+	public void setData(IConnection conn, DBLayerDefinition lyrDef)
+			throws DBException {
 		this.conn = conn;
 		// TODO: Deberíamos poder quitar Conneciton de la llamada y meterlo
 		// en lyrDef desde el principio.
@@ -236,7 +266,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		getLyrDef().setSRID_EPSG(originalEPSG);
 
 		try {
-			((ConnectionJDBC)conn).getConnection().setAutoCommit(false);
+			((ConnectionJDBC) conn).getConnection().setAutoCommit(false);
 			sqlOrig = "SELECT " + getTotalFields() + " FROM "
 			+ getLyrDef().getComposedTableName() + " ";
 			// + getLyrDef().getWhereClause();
@@ -249,17 +279,20 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			// completeWhere = getLyrDef().getWhereClause() + completeWhere;
 
 			String sqlAux = sqlOrig + completeWhere + " ORDER BY "
-			+ getLyrDef().getFieldID();
+					+ getLyrDef().getFieldID();
 
 			sqlTotal = sqlAux;
 			logger.info("Cadena SQL:" + sqlAux);
-			st = ((ConnectionJDBC)conn).getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+			st = ((ConnectionJDBC) conn).getConnection().createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
 			// st.setFetchSize(FETCH_SIZE);
 			myCursorId++;
-			st.execute("declare " + getTableName() + myCursorId + "_wkb_cursor binary scroll cursor with hold for " + sqlAux);
-			rs = st.executeQuery("fetch forward " + FETCH_SIZE
-					+ " in " + getTableName() + myCursorId + "_wkb_cursor");
+			st.execute("declare " + getTableName() + myCursorId
+					+ "_wkb_cursor binary scroll cursor with hold for "
+					+ sqlAux);
+			rs = st.executeQuery("fetch forward " + FETCH_SIZE + " in "
+					+ getTableName() + myCursorId + "_wkb_cursor");
 			fetch_min = 0;
 			fetch_max = FETCH_SIZE - 1;
 			actual_position = 0;
@@ -270,10 +303,9 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			writer.setWriteAll(false);
 			writer.initialize(lyrDef);
 
-
 		} catch (SQLException e) {
 			try {
-				if (rs != null){
+				if (rs != null) {
 					rs.close();
 				}
 			} catch (SQLException e1) {
@@ -291,17 +323,19 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 	public Rectangle2D getFullExtent() throws ReadDriverException {
 		if (fullExtent == null) {
 			try {
-				Statement s = ((ConnectionJDBC)conn).getConnection().createStatement();
+				Statement s = ((ConnectionJDBC) conn).getConnection()
+						.createStatement();
 				ResultSet r = s.executeQuery("SELECT extent("
 						+ getLyrDef().getFieldGeometry()
-						+ ") AS FullExtent FROM " + getLyrDef().getComposedTableName()
-						+ " " + getCompleteWhere());
+						+ ") AS FullExtent FROM "
+						+ getLyrDef().getComposedTableName() + " "
+						+ getCompleteWhere());
 				r.next();
 				String strAux = r.getString(1);
 				System.out.println("fullExtent = " + strAux);
-				if (strAux == null)
-				{
-					logger.debug("La capa " + getLyrDef().getName() + " no tiene FULLEXTENT");
+				if (strAux == null) {
+					logger.debug("La capa " + getLyrDef().getName()
+							+ " no tiene FULLEXTENT");
 					return null;
 				}
 				if (strAux.startsWith("BOX3D")) {
@@ -320,7 +354,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 					fullExtent = new Rectangle2D.Double(x, y, w, h);
 				}
 			} catch (SQLException e) {
-				throw new ReadDriverException(this.getName(),e);
+				throw new ReadDriverException(this.getName(), e);
 			}
 
 		}
@@ -329,10 +363,13 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getGeometryIterator(java.lang.String)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getGeometryIterator
+	 * (java.lang.String)
 	 */
-	public IFeatureIterator getFeatureIterator(String sql) throws ReadDriverException {
+	public IFeatureIterator getFeatureIterator(String sql)
+			throws ReadDriverException {
 		PostGisFeatureIterator geomIterator = null;
 		geomIterator = myGetFeatureIterator(sql);
 		geomIterator.setLyrDef(getLyrDef());
@@ -340,38 +377,41 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		return geomIterator;
 	}
 
-	private PostGisFeatureIterator myGetFeatureIterator(String sql) throws ReadDriverException {
+	private PostGisFeatureIterator myGetFeatureIterator(String sql)
+			throws ReadDriverException {
 		PostGisFeatureIterator geomIterator = null;
 		try {
 			// st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
 			// ResultSet.CONCUR_READ_ONLY);
 
-
 			// st = conn.createStatement
 			if (provCursorName != null) {
-				/* st.execute("BEGIN");
-				st.execute("CLOSE " + provCursorName);
-				bCursorActivo = false;
-				st.execute("COMMIT"); */
+				/*
+				 * st.execute("BEGIN"); st.execute("CLOSE " + provCursorName);
+				 * bCursorActivo = false; st.execute("COMMIT");
+				 */
 				numProvCursors++;
 			}
 			// st.execute("BEGIN");
-			provCursorName = getTableName() + myCursorId + "wkb_cursor_prov_" + System.currentTimeMillis() + "" + numProvCursors;
+			provCursorName = getTableName() + myCursorId + "wkb_cursor_prov_"
+					+ System.currentTimeMillis() + "" + numProvCursors;
 
 			// st.execute("BEGIN");
 			bCursorActivo = true;
 			// ResultSet rs = st.executeQuery(sql);
-			geomIterator = new PostGisFeatureIterator(((ConnectionJDBC)conn).getConnection(), provCursorName, sql);
+			geomIterator = new PostGisFeatureIterator(
+					((ConnectionJDBC) conn).getConnection(), provCursorName,
+					sql);
 		} catch (SQLException e) {
-			//			e.printStackTrace();
-			//			e.printStackTrace();
-			//			SqlDriveExceptionType type = new SqlDriveExceptionType();
-			//            type.setDriverName("PostGIS Driver");
-			//            type.setSql(sql);
-			//            type.setLayerName(getTableName());
-			//            type.setSchema(null);
-			throw new ReadDriverException("PostGIS Driver",e);
-			//			throw new DriverException(e);
+			// e.printStackTrace();
+			// e.printStackTrace();
+			// SqlDriveExceptionType type = new SqlDriveExceptionType();
+			// type.setDriverName("PostGIS Driver");
+			// type.setSql(sql);
+			// type.setLayerName(getTableName());
+			// type.setSchema(null);
+			throw new ReadDriverException("PostGIS Driver", e);
+			// throw new DriverException(e);
 			// return null;
 		}
 
@@ -399,7 +439,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 	 * Le pasas el rectángulo que quieres pedir. La primera vez es el
 	 * workingArea, y las siguientes una interseccion de este rectangulo con el
 	 * workingArea
-	 *
+	 * 
 	 * @param r
 	 * @param strEPSG
 	 * @return
@@ -417,7 +457,8 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		+ xMin + " " + yMax + ")', " + strEPSG + ")";
 		String sqlAux;
 		if (getWhereClause().toUpperCase().indexOf("WHERE") != -1)
-			sqlAux = getWhereClause() + " AND " + getLyrDef().getFieldGeometry() + " && " + wktBox;
+			sqlAux = getWhereClause() + " AND "
+					+ getLyrDef().getFieldGeometry() + " && " + wktBox;
 		else
 			sqlAux = "WHERE " + getLyrDef().getFieldGeometry() + " && "
 			+ wktBox;
@@ -433,9 +474,9 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.DefaultDBDriver#getFieldValue(long,
-	 *      int)
+	 * int)
 	 */
 	public Value getFieldValue(long rowIndex, int idField)
 	throws ReadDriverException {
@@ -451,12 +492,11 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			return getFieldValue(rs, fieldId);
 
 		} catch (SQLException e) {
-			throw new ReadDriverException("PostGIS Driver",e);
+			throw new ReadDriverException("PostGIS Driver", e);
 		}
 	}
 
-	static Value getFieldValue(ResultSet aRs, int fieldId)
-	throws SQLException {
+	static Value getFieldValue(ResultSet aRs, int fieldId) throws SQLException {
 		ResultSetMetaData metaData = aRs.getMetaData();
 		byte[] byteBuf = aRs.getBytes(fieldId);
 		if (byteBuf == null)
@@ -489,24 +529,21 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 				return ValueFactory.createValue((byteBuf[0] == 1));
 			if (metaData.getColumnType(fieldId) == Types.BOOLEAN)
 				return ValueFactory.createValue(aRs.getBoolean(fieldId));
-			if (metaData.getColumnType(fieldId) == Types.DATE)
-			{
+			if (metaData.getColumnType(fieldId) == Types.DATE) {
 				long daysAfter2000 = buf.getInt() + 1;
-				long msecs = daysAfter2000*24*60*60*1000;
+				long msecs = daysAfter2000 * 24 * 60 * 60 * 1000;
 				long real_msecs_date1 = (long) (XTypes.NUM_msSecs2000 + msecs);
 				Date realDate1 = new Date(real_msecs_date1);
 				return ValueFactory.createValue(realDate1);
 			}
-			if (metaData.getColumnType(fieldId) == Types.TIME)
-			{
+			if (metaData.getColumnType(fieldId) == Types.TIME) {
 				// TODO:
 				// throw new RuntimeException("TIME type not implemented yet");
 				return ValueFactory.createValue("NOT IMPLEMENTED YET");
 			}
-			if (metaData.getColumnType(fieldId) == Types.TIMESTAMP)
-			{
+			if (metaData.getColumnType(fieldId) == Types.TIMESTAMP) {
 				double segsReferredTo2000 = buf.getDouble();
-				long real_msecs = (long) (XTypes.NUM_msSecs2000 + segsReferredTo2000*1000);
+				long real_msecs = (long) (XTypes.NUM_msSecs2000 + segsReferredTo2000 * 1000);
 				Timestamp valTimeStamp = new Timestamp(real_msecs);
 				return ValueFactory.createValue(valTimeStamp);
 			}
@@ -514,26 +551,28 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			if (metaData.getColumnType(fieldId) == Types.NUMERIC) {
 				// System.out.println(metaData.getColumnName(fieldId) + " "
 				// + metaData.getColumnClassName(fieldId));
-				short ndigits = buf.getShort();
-				short weight = buf.getShort();
-				short sign = buf.getShort();
-				short dscale = buf.getShort();
-				String strAux;
-				if (sign == 0)
-					strAux = "+";
-				else
-					strAux = "-";
+				// short ndigits = buf.getShort();
+				// short weight = buf.getShort();
+				// short sign = buf.getShort();
+				// short dscale = buf.getShort();
+				// String strAux;
+				// if (sign == 0)
+				// strAux = "+";
+				// else
+				// strAux = "-";
+				//
+				// for (int iDigit = 0; iDigit < ndigits; iDigit++) {
+				// short digit = buf.getShort();
+				// strAux = strAux + digit;
+				// if (iDigit == weight)
+				// strAux = strAux + ".";
+				//
+				// }
+				// strAux = strAux + "0";
 
-				for (int iDigit = 0; iDigit < ndigits; iDigit++) {
-					short digit = buf.getShort();
-					strAux = strAux + digit;
-					if (iDigit == weight)
-						strAux = strAux + ".";
-
-				}
-				strAux = strAux + "0";
 				BigDecimal dec;
-				dec = new BigDecimal(strAux);
+				dec = getBigDecimal(buf.array());
+				// dec = new BigDecimal(strAux);
 				// System.out.println(ndigits + "_" + weight + "_" + dscale
 				// + "_" + strAux);
 				// System.out.println(strAux + " Big= " + dec);
@@ -543,6 +582,111 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		}
 
 		return ValueFactory.createNullValue();
+
+	}
+
+	private static BigDecimal getBigDecimal(byte[] number) throws SQLException {
+
+		short ndigits = (short) (((number[0] & 0xff) << 8) | (number[1] & 0xff));
+		short weight = (short) (((number[2] & 0xff) << 8) | (number[3] & 0xff));
+		short sign = (short) (((number[4] & 0xff) << 8) | (number[5] & 0xff));
+		short dscale = (short) (((number[6] & 0xff) << 8) | (number[7] & 0xff));
+
+		if (sign == (short) 0xC000) {
+			// Numeric NaN - BigDecimal doesn't support this
+			throw new PSQLException(
+					"The numeric value is NaN - can't convert to BigDecimal",
+					PSQLState.NUMERIC_VALUE_OUT_OF_RANGE);
+		}
+
+		final int bigDecimalSign = sign == 0x4000 ? -1 : 1;
+
+		// System.out.println("ndigits=" + ndigits
+		// +",\n wieght=" + weight
+		// +",\n sign=" + sign
+		// +",\n dscale=" + dscale);
+		// // for (int i=8; i < number.length; i++) {
+		// System.out.println("numer[i]=" + (int) (number[i] & 0xff));
+		// }
+
+		int tail = ndigits % 4;
+		int bytesToParse = (ndigits - tail) * 2 + 8;
+		// System.out.println("numberParseLength="+numberParseLength);
+		int i;
+		BigInteger unscaledValue = BigInteger.ZERO;
+		final BigInteger nbase = getNBase();
+		final BigInteger nbasePow2 = getNBasePow2();
+		final BigInteger nbasePow4 = getNBasePow4();
+
+
+		byte[] buffer = new byte[8];
+
+		// System.out.println("tail = " + tail + " bytesToParse = " +
+		// bytesToParse);
+
+		for (i = 8; i < bytesToParse; i += 8) {
+			// This Hi and Lo aren't bytes Hi Li, but decimal Hi Lo!! (Big &
+			// Small)
+			long valHi = (((number[i] & 0xff) << 8) | (number[i + 1] & 0xff))
+					* 10000
+					+ (((number[i + 2] & 0xff) << 8) | (number[i + 3] & 0xff));
+			long valLo = (((number[i + 4] & 0xff) << 8) | (number[i + 5] & 0xff))
+					* 10000
+					+ (((number[i + 6] & 0xff) << 8) | (number[i + 7] & 0xff));
+			long val = valHi * nbaseLongPow2 + valLo;
+			buffer[0] = (byte) (val >>> 56);
+			buffer[1] = (byte) (val >>> 48);
+			buffer[2] = (byte) (val >>> 40);
+			buffer[3] = (byte) (val >>> 32);
+			buffer[4] = (byte) (val >>> 24);
+			buffer[5] = (byte) (val >>> 16);
+			buffer[6] = (byte) (val >>> 8);
+			buffer[7] = (byte) (val >>> 0);
+
+			BigInteger valBigInteger = new BigInteger(bigDecimalSign, buffer);
+			unscaledValue = unscaledValue.multiply(nbasePow4)
+					.add(valBigInteger);
+		}
+		tail = tail % 2;
+		bytesToParse = (ndigits - tail) * 2 + 8;
+		// System.out.println("tail = " + tail + " bytesToParse = " +
+		// bytesToParse);
+
+		buffer = new byte[4];
+		for (; i < bytesToParse; i += 4) {
+			int val = (((number[i] & 0xff) << 8) | (number[i + 1] & 0xff))
+					* nbaseInt
+					+ (((number[i + 2] & 0xff) << 8) | (number[i + 3] & 0xff));
+			buffer[0] = (byte) (val >>> 24);
+			buffer[1] = (byte) (val >>> 16);
+			buffer[2] = (byte) (val >>> 8);
+			buffer[3] = (byte) val;
+			BigInteger valBigInteger = new BigInteger(bigDecimalSign, buffer);
+			unscaledValue = unscaledValue.multiply(nbasePow2)
+					.add(valBigInteger);
+		}
+
+		// Add the rest of number
+		if (tail % 2 == 1) {
+			buffer = new byte[2];
+			buffer[0] = number[number.length - 2];
+			buffer[1] = number[number.length - 1];
+			BigInteger valBigInteger = new BigInteger(bigDecimalSign, buffer);
+			unscaledValue = unscaledValue.multiply(nbase).add(valBigInteger);
+			// System.out.println("Value (2)  unscaled =" + unscaledValue
+			// +", valBI = "+ valBigInteger);
+		}
+
+
+		// Calculate scale offset
+		final int databaseScale = (ndigits - weight - 1) * 4; // Number of
+																// digits in
+																// nbase
+		// TODO This number of digits should be calculeted depending on nbase
+		// (getNbase());
+
+		BigDecimal result = new BigDecimal(unscaledValue, databaseScale);
+		return result;
 
 	}
 
@@ -568,25 +712,28 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		// System.out.println("getShape " + index + " fetchMin=" + fetch_min + "
 		// fetchMax=" + fetch_max);
 
-		if ((index >= fetch_min) && (index <= fetch_max))
-		{
+		if ((index >= fetch_min) && (index <= fetch_max)) {
 			// Está en el intervalo, así que lo podemos posicionar
 
-		}
-		else
-		{
+		} else {
 			// calculamos el intervalo correcto
 			fetch_min = (index / FETCH_SIZE) * FETCH_SIZE;
-			fetch_max = fetch_min +  FETCH_SIZE - 1;
+			fetch_max = fetch_min + FETCH_SIZE - 1;
 			// y cogemos ese cacho
 			rs.close();
 			myCursorId++;
-			st.execute("declare " + getTableName() + myCursorId + "_wkb_cursorAbsolutePosition binary scroll cursor with hold for " + sqlTotal);
-			st.executeQuery("fetch absolute " + fetch_min
-					+ " in " + getTableName() + myCursorId + "_wkb_cursorAbsolutePosition");
+			st.execute("declare "
+					+ getTableName()
+					+ myCursorId
+					+ "_wkb_cursorAbsolutePosition binary scroll cursor with hold for "
+					+ sqlTotal);
+			st.executeQuery("fetch absolute " + fetch_min + " in "
+					+ getTableName() + myCursorId
+					+ "_wkb_cursorAbsolutePosition");
 
-			rs = st.executeQuery("fetch forward " + FETCH_SIZE
-					+ " in " + getTableName() + myCursorId + "_wkb_cursorAbsolutePosition");
+			rs = st.executeQuery("fetch forward " + FETCH_SIZE + " in "
+					+ getTableName() + myCursorId
+					+ "_wkb_cursorAbsolutePosition");
 
 		}
 		rs.absolute(index - fetch_min + 1);
@@ -626,42 +773,48 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.ICanReproject#getSourceProjection()
 	 */
-	public String getSourceProjection(IConnection conn,DBLayerDefinition dbld) {
+	public String getSourceProjection(IConnection conn, DBLayerDefinition dbld) {
 		if (originalEPSG == null)
-			getTableEPSG_and_shapeType(conn,dbld);
+			getTableEPSG_and_shapeType(conn, dbld);
 		return originalEPSG;
 	}
 
 	/**
-	 * Las tablas con geometrías están en la tabla GEOMETRY_COLUMNS y de
-	 * ahí sacamos en qué proyección están.
-	 * El problema es que si el usuario hace una vista de esa
-	 * tabla, no estará dada de alta aquí y entonces gvSIG
-	 * no se entera en qué proyección está trabajando (y le
-	 * ponemos un -1 como mal menor). El -1 implica que luego
-	 * no podremos reproyectar al vuelo desde la base de datos.
-	 * OJO: ES SENSIBLE A MAYUSCULAS / MINUSCULAS!!!
+	 * Las tablas con geometrías están en la tabla GEOMETRY_COLUMNS y de ahí
+	 * sacamos en qué proyección están. El problema es que si el usuario hace
+	 * una vista de esa tabla, no estará dada de alta aquí y entonces gvSIG no
+	 * se entera en qué proyección está trabajando (y le ponemos un -1 como mal
+	 * menor). El -1 implica que luego no podremos reproyectar al vuelo desde la
+	 * base de datos. OJO: ES SENSIBLE A MAYUSCULAS / MINUSCULAS!!!
 	 */
-	private void getTableEPSG_and_shapeType(IConnection conn, DBLayerDefinition dbld) {
+	private void getTableEPSG_and_shapeType(IConnection conn,
+			DBLayerDefinition dbld) {
 		try {
-			Statement stAux = ((ConnectionJDBC)conn).getConnection().createStatement();
+			Statement stAux = ((ConnectionJDBC) conn).getConnection()
+					.createStatement();
 
-			//			String sql = "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_NAME = '"
-			//					+ getTableName() + "' AND F_GEOMETRY_COLUMN = '" + getLyrDef().getFieldGeometry() + "'";
+			// String sql =
+			// "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_NAME = '"
+			// + getTableName() + "' AND F_GEOMETRY_COLUMN = '" +
+			// getLyrDef().getFieldGeometry() + "'";
 			String sql;
-			if (dbld.getSchema() == null || dbld.getSchema().equals("")){
+			if (dbld.getSchema() == null || dbld.getSchema().equals("")) {
 				sql = "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_SCHEMA = current_schema() AND F_TABLE_NAME = '"
-					+ dbld.getTableName() + "' AND F_GEOMETRY_COLUMN = '" + dbld.getFieldGeometry() + "'";
-			}else{
-				sql = "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_SCHEMA = '"+ dbld.getSchema() + "' AND F_TABLE_NAME = '"
-				+ dbld.getTableName() + "' AND F_GEOMETRY_COLUMN = '" + dbld.getFieldGeometry() + "'";
+						+ dbld.getTableName()
+						+ "' AND F_GEOMETRY_COLUMN = '"
+						+ dbld.getFieldGeometry() + "'";
+			} else {
+				sql = "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_SCHEMA = '"
+						+ dbld.getSchema() + "' AND F_TABLE_NAME = '"
+						+ dbld.getTableName() + "' AND F_GEOMETRY_COLUMN = '"
+						+ dbld.getFieldGeometry() + "'";
 			}
 
 			ResultSet rs = stAux.executeQuery(sql);
-			if (rs.next()){
+			if (rs.next()) {
 				originalEPSG = "" + rs.getInt("SRID");
 				String geometryType = rs.getString("TYPE");
 				int shapeType = FShape.MULTI;
@@ -675,15 +828,14 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 					shapeType = FShape.MULTIPOINT;
 				else if (geometryType.compareToIgnoreCase("MULTILINESTRING") == 0)
 					shapeType = FShape.LINE;
-				else if (geometryType.compareToIgnoreCase("MULTILINESTRINGM") == 0) //MCoord
+				else if (geometryType.compareToIgnoreCase("MULTILINESTRINGM") == 0) // MCoord
 					shapeType = FShape.LINE | FShape.M;
 				else if (geometryType.compareToIgnoreCase("MULTIPOLYGON") == 0)
 					shapeType = FShape.POLYGON;
 				dbld.setShapeType(shapeType);
-			} else{
+			} else {
 				originalEPSG = "-1";
 			}
-
 
 			rs.close();
 		} catch (SQLException e) {
@@ -697,7 +849,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.core.ICanReproject#getDestProjection()
 	 */
 	public String getDestProjection() {
@@ -706,8 +858,10 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.core.ICanReproject#setDestProjection(java.lang.String)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.core.ICanReproject#setDestProjection(java.lang
+	 * .String)
 	 */
 	public void setDestProjection(String toEPSG) {
 		this.strEPSG = toEPSG;
@@ -715,8 +869,9 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.core.ICanReproject#canReproject(java.lang.String)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.core.ICanReproject#canReproject(java.lang.String)
 	 */
 	public boolean canReproject(String toEPSGdestinyProjection) {
 		// TODO POR AHORA, REPROYECTA SIEMPRE gvSIG.
@@ -725,7 +880,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.DefaultDBDriver#doRelateID_FID()
 	 */
 	protected void doRelateID_FID() throws DBException {
@@ -742,9 +897,9 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 				+ getCompoundWhere(strSQL, workingArea, originalEPSG);
 			}
 			strSQL = strSQL + " ORDER BY " + getLyrDef().getFieldID();
-			Statement s = ((ConnectionJDBC)getConnection()).getConnection().createStatement(
-					ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY);
+			Statement s = ((ConnectionJDBC) getConnection()).getConnection()
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+							ResultSet.CONCUR_READ_ONLY);
 			int fetchSize = 5000;
 			ResultSet r = s.executeQuery(strSQL);
 			int id = 0;
@@ -753,7 +908,8 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 				gid = r.getString(1);
 				Value aux = ValueFactory.createValue(gid);
 				hashRelate.put(aux, new Integer(id));
-				// System.out.println("ASOCIANDO CLAVE " + aux + " CON VALOR " + id);
+				// System.out.println("ASOCIANDO CLAVE " + aux + " CON VALOR " +
+				// id);
 				id++;
 				// System.out.println("Row " + id + ":" + strAux);
 			}
@@ -761,14 +917,14 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			numReg = id;
 
 			/*
-			 * for (int index = 0; index < getShapeCount(); index++) { Value aux =
-			 * getFieldValue(index, idFID_FieldName-2); hashRelate.put(aux, new
-			 * Integer(index)); // System.out.println("Row " + index + " clave=" +
-			 * aux); }
+			 * for (int index = 0; index < getShapeCount(); index++) { Value aux
+			 * = getFieldValue(index, idFID_FieldName-2); hashRelate.put(aux,
+			 * new Integer(index)); // System.out.println("Row " + index +
+			 * " clave=" + aux); }
 			 */
 			/*
 			 * int index = 0;
-			 *
+			 * 
 			 * while (rs.next()) { Value aux = getFieldValue(index,
 			 * idFID_FieldName-2); hashRelate.put(aux, new Integer(index));
 			 * index++; System.out.println("Row " + index + " clave=" + aux); }
@@ -776,8 +932,8 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			 */
 			// rs.beforeFirst();
 			/*
-			 * } catch (com.hardcode.gdbms.engine.data.driver.DriverException e) { //
-			 * TODO Auto-generated catch block e.printStackTrace();
+			 * } catch (com.hardcode.gdbms.engine.data.driver.DriverException e)
+			 * { // TODO Auto-generated catch block e.printStackTrace();
 			 */
 		} catch (SQLException e) {
 			throw new DBException(e);
@@ -797,7 +953,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.iver.cit.gvsig.fmap.drivers.DefaultDBDriver#close()
 	 */
 	public void close() {
@@ -814,16 +970,19 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getFeatureIterator(java.awt.geom.Rectangle2D,
-	 *      java.lang.String, java.lang.String[])
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.drivers.VectorialDatabaseDriver#getFeatureIterator
+	 * (java.awt.geom.Rectangle2D, java.lang.String, java.lang.String[])
 	 */
 	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG,
 			String[] alphaNumericFieldsNeeded) throws ReadDriverException {
 		String sqlAux = null;
 		DBLayerDefinition lyrDef = getLyrDef();
 		DBLayerDefinition clonedLyrDef = cloneLyrDef(lyrDef);
-		ArrayList<FieldDescription> myFieldsDesc = new ArrayList<FieldDescription>(); // = new FieldDescription[alphaNumericFieldsNeeded.length+1];
+		ArrayList<FieldDescription> myFieldsDesc = new ArrayList<FieldDescription>(); // =
+																						// new
+																						// FieldDescription[alphaNumericFieldsNeeded.length+1];
 		try {
 			if (workingArea != null)
 				r = r.createIntersection(workingArea);
@@ -839,12 +998,19 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 				FieldDescription[] fieldsDesc = lyrDef.getFieldsDesc();
 
 				for (int i = 0; i < alphaNumericFieldsNeeded.length; i++) {
-					fieldIndex =lyrDef.getFieldIdByName(alphaNumericFieldsNeeded[i]);
-					if (fieldIndex < 0){
-						throw new RuntimeException("No se ha encontrado el nombre de campo " + metaData.getColumnName(i));
+					fieldIndex = lyrDef
+							.getFieldIdByName(alphaNumericFieldsNeeded[i]);
+					if (fieldIndex < 0) {
+						throw new RuntimeException(
+								"No se ha encontrado el nombre de campo "
+										+ metaData.getColumnName(i));
 					}
-					strAux = strAux + ", " + PostGIS.escapeFieldName(lyrDef.getFieldNames()[fieldIndex]);
-					if (alphaNumericFieldsNeeded[i].equalsIgnoreCase(lyrDef.getFieldID())){
+					strAux = strAux
+							+ ", "
+							+ PostGIS
+									.escapeFieldName(lyrDef.getFieldNames()[fieldIndex]);
+					if (alphaNumericFieldsNeeded[i].equalsIgnoreCase(lyrDef
+							.getFieldID())) {
 						found = true;
 						clonedLyrDef.setIdFieldID(i);
 					}
@@ -853,13 +1019,14 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 				}
 			}
 			// Nos aseguramos de pedir siempre el campo ID
-			if (found == false){
+			if (found == false) {
 				strAux = strAux + ", " + lyrDef.getFieldID();
-				myFieldsDesc.add(lyrDef.getFieldsDesc()[lyrDef.getIdField(
-						lyrDef.getFieldID())]);
-				clonedLyrDef.setIdFieldID(myFieldsDesc.size()-1);
+				myFieldsDesc.add(lyrDef.getFieldsDesc()[lyrDef
+						.getIdField(lyrDef.getFieldID())]);
+				clonedLyrDef.setIdFieldID(myFieldsDesc.size() - 1);
 			}
-			clonedLyrDef.setFieldsDesc( (FieldDescription[])myFieldsDesc.toArray(new FieldDescription[]{}) );
+			clonedLyrDef.setFieldsDesc((FieldDescription[]) myFieldsDesc
+					.toArray(new FieldDescription[] {}));
 
 			String sqlProv = "SELECT " + strAux + " FROM "
 			+ lyrDef.getComposedTableName() + " ";
@@ -877,56 +1044,47 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 			geomIterator.setLyrDef(clonedLyrDef);
 			return geomIterator;
 		} catch (Exception e) {
-			//			e.printStackTrace();
-			//			SqlDriveExceptionType type = new SqlDriveExceptionType();
-			//            type.setDriverName("PostGIS Driver");
-			//            type.setSql(sqlAux);
-			//            type.setLayerName(getTableName());
-			//            type.setSchema(null);
-			throw new ReadDriverException("PostGIS Driver",e);
+			// e.printStackTrace();
+			// SqlDriveExceptionType type = new SqlDriveExceptionType();
+			// type.setDriverName("PostGIS Driver");
+			// type.setSql(sqlAux);
+			// type.setLayerName(getTableName());
+			// type.setSchema(null);
+			throw new ReadDriverException("PostGIS Driver", e);
 
-			//			throw new DriverException(e);
+			// throw new DriverException(e);
 		}
 	}
 
-	/* public void preProcess() throws EditionException {
-		writer.preProcess();
-	}
-
-	public void process(IRowEdited row) throws EditionException {
-		writer.process(row);
-	}
-
-	public void postProcess() throws EditionException {
-		writer.postProcess();
-	}
-
-	public String getCapability(String capability) {
-		return writer.getCapability(capability);
-	}
-
-	public void setCapabilities(Properties capabilities) {
-		writer.setCapabilities(capabilities);
-	}
-
-	public boolean canWriteAttribute(int sqlType) {
-		return writer.canWriteAttribute(sqlType);
-	}
-
-	public boolean canWriteGeometry(int gvSIGgeometryType) {
-		return writer.canWriteGeometry(gvSIGgeometryType);
-	}
-
-	public void initialize(ITableDefinition layerDef) throws EditionException {
-		writer.setCreateTable(false);
-		writer.setWriteAll(false);
-		// Obtenemos el DBLayerDefinition a partir del driver
-
-		DBLayerDefinition dbLyrDef = getLyrDef();
-
-
-		writer.initialize(dbLyrDef);
-	}
+	/*
+	 * public void preProcess() throws EditionException { writer.preProcess(); }
+	 * 
+	 * public void process(IRowEdited row) throws EditionException {
+	 * writer.process(row); }
+	 * 
+	 * public void postProcess() throws EditionException { writer.postProcess();
+	 * }
+	 * 
+	 * public String getCapability(String capability) { return
+	 * writer.getCapability(capability); }
+	 * 
+	 * public void setCapabilities(Properties capabilities) {
+	 * writer.setCapabilities(capabilities); }
+	 * 
+	 * public boolean canWriteAttribute(int sqlType) { return
+	 * writer.canWriteAttribute(sqlType); }
+	 * 
+	 * public boolean canWriteGeometry(int gvSIGgeometryType) { return
+	 * writer.canWriteGeometry(gvSIGgeometryType); }
+	 * 
+	 * public void initialize(ITableDefinition layerDef) throws EditionException
+	 * { writer.setCreateTable(false); writer.setWriteAll(false); // Obtenemos
+	 * el DBLayerDefinition a partir del driver
+	 * 
+	 * DBLayerDefinition dbLyrDef = getLyrDef();
+	 * 
+	 * 
+	 * writer.initialize(dbLyrDef); }
 	 */
 	public boolean isWritable() {
 		// CHANGE FROM CARTOLAB
@@ -939,60 +1097,64 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		return writer;
 	}
 
-	public String[] getGeometryFieldsCandidates(IConnection conn, String table_name) throws DBException {
+	public String[] getGeometryFieldsCandidates(IConnection conn,
+			String table_name) throws DBException {
 		ArrayList list = new ArrayList();
-		try{
-			Statement stAux = ((ConnectionJDBC)conn).getConnection().createStatement();
+		try {
+			Statement stAux = ((ConnectionJDBC) conn).getConnection()
+					.createStatement();
 			String[] tokens = table_name.split("\\u002E", 2);
 			String sql;
-			if (tokens.length > 1)
-			{
+			if (tokens.length > 1) {
 				sql = "select * from GEOMETRY_COLUMNS WHERE F_TABLE_SCHEMA = '"
-					+ tokens[0] + "' AND F_TABLE_NAME = '" +
-					tokens[1] + "'";
-			}
-			else
-			{
-				sql = "select * from GEOMETRY_COLUMNS" +
-				" where F_TABLE_SCHEMA = current_schema() AND F_TABLE_NAME = '" + table_name + "'";
+						+ tokens[0] + "' AND F_TABLE_NAME = '" + tokens[1]
+						+ "'";
+			} else {
+				sql = "select * from GEOMETRY_COLUMNS"
+						+ " where F_TABLE_SCHEMA = current_schema() AND F_TABLE_NAME = '"
+						+ table_name + "'";
 
 			}
 
-			//		String sql = "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_NAME = '"
-			//				+ table_name + "'";
+			// String sql =
+			// "SELECT * FROM GEOMETRY_COLUMNS WHERE F_TABLE_NAME = '"
+			// + table_name + "'";
 
 			ResultSet rs = stAux.executeQuery(sql);
-			while (rs.next())
-			{
+			while (rs.next()) {
 				String geomCol = rs.getString("F_GEOMETRY_COLUMN");
 				list.add(geomCol);
 			}
-			rs.close(); stAux.close();
+			rs.close();
+			stAux.close();
 		} catch (SQLException e) {
 			throw new DBException(e);
 		}
 		return (String[]) list.toArray(new String[0]);
 	}
-	//	public String[] getTableFields(IConnection conex, String table) throws DBException {
-	//		try{
-	//		Statement st = ((ConnectionJDBC)conex).getConnection().createStatement();
-	//        // ResultSet rs = dbmd.getTables(catalog, null, dbLayerDefinition.getTable(), null);
-	//		ResultSet rs = st.executeQuery("select * from " + table + " LIMIT 1");
-	//		ResultSetMetaData rsmd = rs.getMetaData();
-	//
-	//		String[] ret = new String[rsmd.getColumnCount()];
-	//
-	//		for (int i = 0; i < ret.length; i++) {
-	//			ret[i] = rsmd.getColumnName(i+1);
-	//		}
-	//
-	//		return ret;
-	//		}catch (SQLException e) {
-	//			throw new DBException(e);
-	//		}
-	//	}
 
-	private DBLayerDefinition cloneLyrDef(DBLayerDefinition lyrDef){
+	// public String[] getTableFields(IConnection conex, String table) throws
+	// DBException {
+	// try{
+	// Statement st = ((ConnectionJDBC)conex).getConnection().createStatement();
+	// // ResultSet rs = dbmd.getTables(catalog, null,
+	// dbLayerDefinition.getTable(), null);
+	// ResultSet rs = st.executeQuery("select * from " + table + " LIMIT 1");
+	// ResultSetMetaData rsmd = rs.getMetaData();
+	//
+	// String[] ret = new String[rsmd.getColumnCount()];
+	//
+	// for (int i = 0; i < ret.length; i++) {
+	// ret[i] = rsmd.getColumnName(i+1);
+	// }
+	//
+	// return ret;
+	// }catch (SQLException e) {
+	// throw new DBException(e);
+	// }
+	// }
+
+	private DBLayerDefinition cloneLyrDef(DBLayerDefinition lyrDef) {
 		DBLayerDefinition clonedLyrDef = new DBLayerDefinition();
 
 		clonedLyrDef.setName(lyrDef.getName());
@@ -1028,8 +1190,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject, I
 		StringBuilder strAux = new StringBuilder();
 		strAux.append(getGeometryField(getLyrDef().getFieldGeometry()));
 		String[] fieldNames = getLyrDef().getFieldNames();
-		for (int i=0; i< fieldNames.length; i++)
-		{
+		for (int i = 0; i < fieldNames.length; i++) {
 			strAux.append(", " + PostGIS.escapeFieldName(fieldNames[i]));
 		}
 		return strAux.toString();

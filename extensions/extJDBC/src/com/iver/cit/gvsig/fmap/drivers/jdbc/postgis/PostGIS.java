@@ -434,11 +434,13 @@ public class PostGIS {
 		return toEncode;
 	}
 	public void setEncoding(String toEncode){
-		if (toEncode.compareToIgnoreCase("SQL_ASCII") == 0){
-		   this.toEncode = "ASCII";
-		  } else {
-			  this.toEncode = toEncode;
-		  }
+		if (toEncode.compareToIgnoreCase("SQL_ASCII") == 0) {
+			this.toEncode = "ASCII";
+		} else if (toEncode.compareToIgnoreCase("WIN1252") == 0) {
+			this.toEncode = "Latin1";
+		} else {
+			this.toEncode = toEncode;
+		}
 	}
 
 	static String escapeFieldName(String name){
