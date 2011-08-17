@@ -43,7 +43,7 @@
  */
 /* CVS MESSAGES:
  *
- * $Id: AttrQueryFeatureIterator.java 30109 2009-07-23 10:34:02Z jpiera $
+ * $Id: AttrQueryFeatureIterator.java 33330 2010-08-24 09:12:44Z vcaballero $
  * $Log$
  * Revision 1.1  2007-05-29 19:08:11  azabala
  * first version in cvs
@@ -98,7 +98,7 @@ public class AttrQueryFeatureIterator extends DefaultFeatureIterator {
 			if(hasWhere(sqlQuery)){
 				DataSource datasource = LayerFactory.getDataSourceFactory().executeSQL(sqlQuery,
 						DataSourceFactory.MANUAL_OPENING);
-				super.setFieldNames(datasource.getFieldNames());
+				super.setFieldNames(source.getRecordset().getFieldNames());
 				indexes = datasource.getWhereFilter();
 			}else{
 				//TODO This is not very elegant: rethink

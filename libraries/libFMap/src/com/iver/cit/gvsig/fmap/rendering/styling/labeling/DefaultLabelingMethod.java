@@ -129,7 +129,7 @@ public class DefaultLabelingMethod implements ILabelingMethod {
 		StringBuilder sql = new StringBuilder();
 		sql.append("select ");
 		for (int i=0; i<fieldNames.length-1; i++) {
-			sql.append(fieldNames[i]);
+			sql.append("'"+fieldNames[i]+"'");
 			sql.append(",");
 		}
 		sql.append(fieldNames[fieldNames.length-1]);
