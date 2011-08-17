@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.5.5.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.5.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/gvsig-i18n.jar" sourcepath="/libInternationalization/src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
+	<classpathentry kind="lib" path="lib/org.gvsig.installer.lib.api-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/org.gvsig.installer.lib.impl-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/org.gvsig.installer.lib.spi-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/org.gvsig.installer.prov.plugin-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/org.gvsig.installer.swing.api-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/org.gvsig.installer.swing.impl-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/org.gvsig.tools.lib-2.1.0.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

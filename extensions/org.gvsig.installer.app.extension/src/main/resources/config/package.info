@@ -1,0 +1,15 @@
+
+			state=devel
+			name=Add-ons manager
+			official=true
+			code=org.gvsig.installer.app.extension
+			operating-system=all
+			architecture=all
+			java-version=j1_5
+			gvSIG-version=1.11
+			version=1.0.1
+			type=plugin
+			build=1
+			description=
+			model-version=1.0.0
+		
