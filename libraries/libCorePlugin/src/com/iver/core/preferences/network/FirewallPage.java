@@ -258,9 +258,10 @@ public class FirewallPage extends AbstractPreferencePage {
 			prefs.put("firewall.http.port", httpPort.getText());
 			String proxyUser = httpUser.getText();
 			String proxyPassword = new String(httpPass.getPassword());
+			String httpNonProxyHosts = httpNonProxy.getText();
 			prefs.put("firewall.http.user", proxyUser);
 			prefs.put("firewall.http.password", proxyPassword);
-			prefs.put("firewall.http.nonProxyHosts", httpNonProxy.getText());
+			prefs.put("firewall.http.nonProxyHosts", httpNonProxyHosts);
 
 			if (httpEnabled.isSelected()) {
 				systemSettings.put("http.proxySet", "true");
@@ -268,12 +269,14 @@ public class FirewallPage extends AbstractPreferencePage {
 				systemSettings.put("http.proxyPort", httpURL.getPort()+"");
 				systemSettings.put("http.proxyUserName", proxyUser);
 				systemSettings.put("http.proxyPassword", proxyPassword);
+				systemSettings.put("http.nonProxyHosts", httpNonProxyHosts);
 			} else {
 				systemSettings.put("http.proxySet", "false");
 				systemSettings.remove("http.proxyHost");
 				systemSettings.remove("http.proxyPort");
 				systemSettings.remove("http.proxyUserName");
 				systemSettings.remove("http.proxyPassword");
+				systemSettings.remove("http.nonProxyHosts");
 				prefs.remove("firewall.http.host");
 				prefs.remove("firewall.http.port");
 				prefs.remove("firewall.http.user");
