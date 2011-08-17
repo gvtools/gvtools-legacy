@@ -1421,7 +1421,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	}
 	
 	private void swapIndexes(String[] ret, int i, int j){
-	    if(i!=j && i>=0 && i<ret.length && j>0 && j<ret.length){
+	    if(i!=j && i>=0 && i<ret.length && j>=0 && j<ret.length){
 	        String aux = ret[i];
 	        ret[i] = ret[j];
 	        ret[j] = aux;
