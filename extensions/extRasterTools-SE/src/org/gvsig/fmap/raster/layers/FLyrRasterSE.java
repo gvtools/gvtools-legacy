@@ -525,7 +525,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 		
 		EnhancementStretchListManager elm = new EnhancementStretchListManager(filterManager);
 		try {
-			elm.addEnhancedStretchFilter(LinearStretchParams.createStandardParam(getRenderBands(), 0.0, stats, false), 
+			elm.addEnhancedStretchFilter(LinearStretchParams.createStandardParam(getRenderBands(), 0.0, stats, true), 
 										stats, 
 										getRender().getRenderBands(), 
 										false);
