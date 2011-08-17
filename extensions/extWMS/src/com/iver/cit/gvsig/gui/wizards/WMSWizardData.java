@@ -48,6 +48,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.gvsig.remoteClient.wms.ICancellable;
+
 import com.iver.cit.gvsig.exceptions.layers.ConnectionErrorLayerException;
 import com.iver.cit.gvsig.fmap.drivers.wms.FMapWMSDriver;
 import com.iver.cit.gvsig.fmap.drivers.wms.FMapWMSDriverFactory;
@@ -78,12 +80,12 @@ public class WMSWizardData { // should implemement any kind of wizard data inter
         return wms.getHost();
     }
 
-    public void setHost(URL host, boolean override) throws ConnectionErrorLayerException{
+    public void setHost(URL host, boolean override, ICancellable cancel) throws ConnectionErrorLayerException{
         try {
         	wms = FMapWMSDriverFactory.getFMapDriverForURL(host);
 
         	// Send a getCapabilities request;
-        	if (!wms.connect(override, null))
+        	if (!wms.connect(override, cancel))
         		throw new ConnectionErrorLayerException(layer.getName(),null);
         } catch (ConnectException e) {
         	throw new ConnectionErrorLayerException(layer.getName(),e);

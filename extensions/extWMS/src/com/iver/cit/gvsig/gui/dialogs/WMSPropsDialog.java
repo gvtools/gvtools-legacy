@@ -167,7 +167,7 @@ public class WMSPropsDialog extends JPanel implements IWindow {
 	        	// host
                 URL host = (URL) info.get("host");
                 WMSWizardData dataSource = new WMSWizardData();
-                dataSource.setHost(host, false);
+                dataSource.setHost(host, false, null);
 
                 // name
 	            WMSParamsPanel toc = new WMSParamsPanel();

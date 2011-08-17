@@ -43,6 +43,8 @@ package com.iver.cit.gvsig.gui.wizards;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -58,9 +60,11 @@ import javax.swing.JPanel;
 import javax.swing.tree.TreePath;
 
 import org.apache.log4j.Logger;
+import org.gvsig.remoteClient.wms.ICancellable;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.persistence.serverData.ServerDataPersistence;
+import com.iver.cit.gvsig.exceptions.layers.ConnectionErrorLayerException;
 import com.iver.cit.gvsig.exceptions.layers.ProjectionLayerException;
 import com.iver.cit.gvsig.fmap.drivers.wms.FMapWMSDriver;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -81,12 +85,13 @@ import com.iver.utiles.swing.jcomboServer.ServerData;
  *
  * @author Jaume Dominguez Faus
  */
-public class WMSWizard extends WizardPanel {
+public class WMSWizard extends WizardPanel implements ActionListener {
 	private static Logger logger = Logger.getLogger(WMSWizard.class.getName());
 	protected int page;
 	protected boolean connected = false;
 	private JComboServer cmbHost = null;
 	private org.gvsig.gui.beans.swing.JButton btnConnect = null;
+	private org.gvsig.gui.beans.swing.JButton btnCancel = null;
 	private javax.swing.JPanel jPanel = null;
 	private javax.swing.JLabel jLabel1 = null;
 	private javax.swing.JLabel lblTitle = null;
@@ -106,6 +111,36 @@ public class WMSWizard extends WizardPanel {
 	private boolean refreshing = fPrefs.getBoolean("refresh_capabilities", false);
 	protected int firstPage;
 	private JPanel pnlName = null;
+	private ICancellable cancel = null;
+	
+	/**
+	 * Thread to connect to a WMS server
+	 * @author Nacho Brodin (nachobrodin@gmail.com)
+	 */
+	public class ConnectThread extends Thread {
+		private ICancellable             cancel      = null;
+		private WMSWizardData            wData       = null;
+		private WMSWizard                wizard      = null;
+		private String                   host        = null;
+		
+		public ConnectThread(ICancellable cancel, WMSWizardData wData, WMSWizard wizard, String host) {
+			this.cancel = cancel;
+			this.wData = wData;
+			this.wizard = wizard;
+			this.host = host;
+		}
+		
+	    public void run() {
+	    	try {
+				wData.setHost(new URL(host), refreshing, cancel);
+			} catch (ConnectionErrorLayerException e) {
+				getTxtAbstract().setText("The connection cannot be established");
+			} catch (MalformedURLException e) {
+				getTxtAbstract().setText("The connection cannot be established");
+			}
+			wizard.rellenarControles();
+	    }
+	}
 
 	public WMSWizard (WMSParamsPanel params){
 
@@ -156,7 +191,9 @@ public class WMSWizard extends WizardPanel {
 		firstPage = 0;
 		page = firstPage;
 		initialize();
+		cancel = new CancelTaskImpl();
 	}
+	
 	/**
 	 * This method initializes this
 	 */
@@ -222,7 +259,7 @@ public class WMSWizard extends WizardPanel {
 		try {
 			String host = cmbHost.getModel().getSelectedItem().toString();
 
-			dataSource.setHost(new URL(host), refreshing);
+			//dataSource.setHost(new URL(host), refreshing);
 			lblTitle.setText(dataSource.getTitle());
 			lblServerTypeValue.setText(dataSource.getServerType());
 			txtAbstract.setText(dataSource.getAbstract());
@@ -240,7 +277,24 @@ public class WMSWizard extends WizardPanel {
 			listenerSupport.callError(e);
 			getBtnSiguiente().setEnabled(false);
 			getBtnAnterior().setEnabled(true);
-//			e.printStackTrace();
+		} finally {
+			getBtnCancel().setEnabled(false);
+		}
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == getBtnConnect()) {
+			getBtnCancel().setEnabled(true);
+			getTxtAbstract().setText("Trying to connect...");
+			String host = cmbHost.getModel().getSelectedItem().toString();
+			((CancelTaskImpl)cancel).setCanceled(false);
+			new ConnectThread(cancel, dataSource, this, host).start();
+		}
+		
+		if(e.getSource() == getBtnCancel()) {
+			getTxtAbstract().setText("Cancelled...");
+			((CancelTaskImpl)cancel).setCanceled(true);
+			getBtnCancel().setEnabled(false);
 		}
 	}
 
@@ -395,17 +449,36 @@ public class WMSWizard extends WizardPanel {
 		if (btnConnect == null) {
 			btnConnect = new org.gvsig.gui.beans.swing.JButton();
 			btnConnect.setPreferredSize(new java.awt.Dimension(100, 20));
-			btnConnect.setBounds(366, 50, 100, 20);
+			btnConnect.setBounds(272, 50, 100, 20);
 			btnConnect.setText(PluginServices.getText(this, "conectar"));
-			btnConnect.addActionListener(new java.awt.event.ActionListener() {
+			btnConnect.addActionListener(this);
+			/*btnConnect.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					rellenarControles();
 				}
-			});
+			});*/
 		}
 
 		return btnConnect;
 	}
+	
+	/**
+	 * This method initializes btnDetalles
+	 *
+	 * @return javax.swing.JButton
+	 */
+	private org.gvsig.gui.beans.swing.JButton getBtnCancel() {
+		if (btnCancel == null) {
+			btnCancel = new org.gvsig.gui.beans.swing.JButton();
+			btnCancel.setEnabled(false);
+			btnCancel.setPreferredSize(new java.awt.Dimension(100, 20));
+			btnCancel.setBounds(366, 50, 100, 20);
+			btnCancel.setText(PluginServices.getText(this, "cancel"));
+			btnCancel.addActionListener(this);
+		}
+
+		return btnCancel;
+	}	
 
 	/**
 	 * This method initializes jPanel
@@ -593,6 +666,7 @@ public class WMSWizard extends WizardPanel {
 			jPanel1.setBounds(2, 5, 477, 85);
 			jPanel1.add(getTxtHost(), null);
 			jPanel1.add(getBtnConnect(), null);
+			jPanel1.add(getBtnCancel(), null);
 			jPanel1.add(getChkCaching(), null);
 		}
 
@@ -920,7 +994,7 @@ public class WMSWizard extends WizardPanel {
 	private JCheckBox getChkCaching() {
 		if (chkCaching == null) {
 			chkCaching = new JCheckBox();
-			chkCaching.setBounds(7, 51, 349, 20);
+			chkCaching.setBounds(7, 51, 249, 20);
 			chkCaching.setText(PluginServices.getText(this, "refresh_capabilities"));
 			chkCaching.setToolTipText(PluginServices.getText(this, "refresh_capabilities_tooltip"));
 			chkCaching.setSelected(refreshing);
