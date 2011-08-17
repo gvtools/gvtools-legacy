@@ -1349,12 +1349,11 @@ public class NormalizationPanel extends javax.swing.JPanel implements IWindow,
 
 			boolean pass = true;
 			String[] values = { "!", "\"", "#", "$", "%", "&", "\'", "(", ")",
-					"*", "+", ",", "-", "/", ";", "<", "=", ">", "?", "@", "[",
+					"*", "+", ",", "/", ";", "<", "=", ">", "?", "@", "[",
 					"]", "^", "´", "`", "}", "{", "~" };
 
-			char c = evt.getKeyChar();
-			String s = c + "";
-
+			int len = tx.length();
+			String s = tx.substring(len-1);
 			for (int j = 0; j < values.length; j++) {
 				String val = values[j];
 				if (s.contains(val)) {
@@ -1382,7 +1381,7 @@ public class NormalizationPanel extends javax.swing.JPanel implements IWindow,
 				}
 			}
 		}
-
+		
 	}
 
 	/**
