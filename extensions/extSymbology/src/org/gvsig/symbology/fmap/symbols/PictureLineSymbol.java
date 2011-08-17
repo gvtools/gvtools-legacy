@@ -260,8 +260,8 @@ public class PictureLineSymbol extends AbstractLineSymbol  {
 		xml.putProperty("className", getClassName());
 		xml.putProperty("isShapeVisible", isShapeVisible());
 		xml.putProperty("desc", getDescription());
-		xml.putProperty("imagePath", pathGenerator.getPath(imagePath));
-		xml.putProperty("selImagePath", pathGenerator.getPath(selImagePath));
+		xml.putProperty("imagePath", pathGenerator.getURLPath(imagePath));
+		xml.putProperty("selImagePath", pathGenerator.getURLPath(selImagePath));
 		xml.putProperty("lineWidth", getLineWidth());
 		xml.putProperty("xScale", getXScale());
 		xml.putProperty("yScale", getYScale());
@@ -280,8 +280,8 @@ public class PictureLineSymbol extends AbstractLineSymbol  {
 		System.out.println(this.getClass().getClassLoader());
 		setDescription(xml.getStringProperty("desc"));
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
-		imagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("imagePath"));
-		selImagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("selImagePath"));
+		imagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("imagePath"));
+		selImagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("selImagePath"));
 		setLineWidth(xml.getDoubleProperty("lineWidth"));
 		setXScale(xml.getDoubleProperty("xScale"));
 		setYScale(xml.getDoubleProperty("yScale"));

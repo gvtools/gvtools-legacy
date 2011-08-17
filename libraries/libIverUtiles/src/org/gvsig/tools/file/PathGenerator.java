@@ -1,8 +1,10 @@
 package org.gvsig.tools.file;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.regex.Pattern;
 
 /**
@@ -24,6 +26,28 @@ public class PathGenerator {
 		}
 		return instance;
 	}
+	
+	/**
+	 * Return the path relative or absolute depends if the option 
+	 * isAbsolutePath is true or false. 
+	 * @param targetPath Absolute path of file
+	 * @param pathSeparator separator path of system
+	 * @return the path of file.
+	 */
+	 public String getURLPath(String targetPath) {
+		 try {
+			URL url=new URL(targetPath);
+			File fileIn = new File(url.toURI());
+			File file = getFile(getPath(fileIn.getAbsolutePath()));
+			return file.toURI().toURL().toString();
+		 } catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		 return targetPath;
+		 
+	 }
 	
 	/**
 	 * Return the path relative or absolute depends if the option 
@@ -130,6 +154,26 @@ public class PathGenerator {
 	 * @param path relative path.
 	 * @return
 	 */
+	public String getAbsoluteURLPath(String path){
+		try {
+			URL url=new URL(path);
+			File fileIn=new File(url.toURI());
+			File file = getFile(getAbsolutePath(fileIn.getAbsolutePath()));
+			return file.toURI().toURL().toString();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return path;
+		
+	}
+	
+	/**
+	 * Returns absolute path from a relative.
+	 * @param path relative path.
+	 * @return
+	 */
 	public String getAbsolutePath(String path){
 		if (path==null)
 			return null;
@@ -139,7 +183,7 @@ public class PathGenerator {
 		filePath=new File(basePath, path);
 		if (filePath.exists())
 			return filePath.getAbsolutePath();
-		return null;
+		return path;
 	}
 	
 	/**

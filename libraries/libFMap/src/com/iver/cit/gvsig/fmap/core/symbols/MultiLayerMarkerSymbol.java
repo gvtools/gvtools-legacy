@@ -41,7 +41,7 @@
 
 /* CVS MESSAGES:
 *
-* $Id: MultiLayerMarkerSymbol.java 31297 2009-10-15 13:28:14Z fpenarrubia $
+* $Id: MultiLayerMarkerSymbol.java 34263 2010-12-14 11:40:17Z vcaballero $
 * $Log$
 * Revision 1.17  2007-09-21 12:25:32  jaume
 * cancellation support extended down to the IGeometry and ISymbol level
@@ -198,7 +198,8 @@ public class MultiLayerMarkerSymbol extends AbstractMarkerSymbol implements IMar
 	public void drawInsideRectangle(Graphics2D g, AffineTransform scaleInstance, Rectangle r, PrintRequestAttributeSet properties) throws SymbolDrawingException {
 		g.rotate(rotation, r.getCenterX(), r.getCenterY());
 		for (int i = 0; i < layers.length; i++) {
-			layers[i].drawInsideRectangle(g, scaleInstance, r, properties);
+			if (layers[i]!=null)
+				layers[i].drawInsideRectangle(g, scaleInstance, r, properties);
 		}
 		g.rotate(-rotation, r.getCenterX(), r.getCenterY());
 	}

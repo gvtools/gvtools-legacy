@@ -240,8 +240,8 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 		xml.putProperty("angle", angle);
 		xml.putProperty("scaleX", xScale);
 		xml.putProperty("scaleY", yScale);
-		xml.putProperty("imagePath", pathGenerator.getPath(imagePath));
-		xml.putProperty("selImagePath", pathGenerator.getPath(selImagePath));
+		xml.putProperty("imagePath", pathGenerator.getURLPath(imagePath));
+		xml.putProperty("selImagePath", pathGenerator.getURLPath(selImagePath));
 		if (getFillColor()!=null)
 			xml.putProperty("fillColor", StringUtilities.color2String(getFillColor()));
 
@@ -260,8 +260,8 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 
 	public void setXMLEntity(XMLEntity xml) {
 
-		imagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("imagePath"));
-		selImagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("selImagePath"));
+		imagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("imagePath"));
+		selImagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("selImagePath"));
 		setDescription(xml.getStringProperty("desc"));
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
 		setAngle(xml.getDoubleProperty("angle"));

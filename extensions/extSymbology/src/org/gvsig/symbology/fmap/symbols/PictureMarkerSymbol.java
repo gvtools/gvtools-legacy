@@ -239,8 +239,8 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 		xml.putProperty("className", getClassName());
 		xml.putProperty("isShapeVisible", isShapeVisible());
 		xml.putProperty("desc", getDescription());
-		xml.putProperty("imagePath", pathGenerator.getPath(imagePath));
-		xml.putProperty("selImagePath", pathGenerator.getPath(selImagePath));
+		xml.putProperty("imagePath", pathGenerator.getURLPath(imagePath));
+		xml.putProperty("selImagePath", pathGenerator.getURLPath(selImagePath));
 		xml.putProperty("size", getSize());
 		xml.putProperty("offsetX", getOffset().getX());
 		xml.putProperty("offsetY", getOffset().getY());
@@ -262,8 +262,8 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 	public void setXMLEntity(XMLEntity xml) {
 		setDescription(xml.getStringProperty("desc"));
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
-		imagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("imagePath"));
-		selImagePath = pathGenerator.getAbsolutePath(xml.getStringProperty("selImagePath"));
+		imagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("imagePath"));
+		selImagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("selImagePath"));
 		setSize(xml.getDoubleProperty("size"));
 		double offsetX = 0.0;
 		double offsetY = 0.0;
