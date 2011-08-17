@@ -129,7 +129,7 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 		super();
 		initialize();
 		refreshControls();
-		Help.getHelp().enableHelp(this, this.getClass().getName());
+		Help.getHelp().enableHelp(this, "Manual-usuario-gvSIG-1.10-Proyectos-de-gvSIG-Introdución");
 	}
 
 	/**
