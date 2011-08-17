@@ -48,6 +48,8 @@ public class ComboScale extends JPanel implements IControl {
 	private boolean isScaleCombo;
 
 	static private int eventId = Integer.MIN_VALUE;
+	
+	private long lastScaleValue=0;
 
 	// jaume
 	private class ComboScaleItem {
@@ -123,7 +125,10 @@ public class ComboScale extends JPanel implements IControl {
 							StringBuffer sb = new StringBuffer((String) item);
 							// remove any point in the number
 							final String digits = "0123456789";
-							int i = sb.charAt(0) == '-' ? 1 : 0;
+							int i = 0;
+							if ((sb.length() > 0) && (sb.charAt(0) == '-')){
+								i = 1;
+							}
 							BitSet deleteChars=new BitSet();
 							while (i < sb.length()) {
 								if (digits.indexOf(sb.charAt(i))==-1)
@@ -137,7 +142,9 @@ public class ComboScale extends JPanel implements IControl {
 							jComboBox.removeItem(item);
 							try{
 								scale = Long.parseLong(sb.toString());
+								lastScaleValue = scale;
 							}catch (NumberFormatException e1) {
+								scale = lastScaleValue;
 							}
 						} else {
 							scale = ((ComboScaleItem) jComboBox.getSelectedItem())
@@ -170,6 +177,7 @@ public class ComboScale extends JPanel implements IControl {
 		bDoCallListeners = false;
 		getJComboBox().setSelectedItem(new ComboScaleItem(item));
 		bDoCallListeners = true;
+		this.lastScaleValue=item;
 	}
 
 	/**
