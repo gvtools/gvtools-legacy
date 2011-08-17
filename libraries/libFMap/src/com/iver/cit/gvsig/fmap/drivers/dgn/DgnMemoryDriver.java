@@ -172,11 +172,14 @@ public class DgnMemoryDriver extends MemoryDriver implements VectorialFileDriver
 			auxRow[ID_FIELD_ROTATIONTEXT] = ValueFactory.createValue(0);
 			auxRow[ID_FIELD_TEXT] = ValueFactory.createNullValue();
 
-			if (elemento.properties != 0) {
-				nClass = elemento.properties & DGNFileHeader.DGNPF_CLASS;
-			}
-
-			if ((elemento != null) && (elemento.deleted == 0) && (nClass == 0)) //Leer un elemento
+			// CHANGE: WE DON'T TEST AGAINS DGNPF_CLASS BECAUSE WE LOOSE SOME ENTITIES
+			// DRAWN IN IGN FILES, FOR EXAMPLE
+//			if (elemento.properties != 0) {
+//				nClass = elemento.properties & DGNFileHeader.DGNPF_CLASS;
+//			}
+			// END CHANGE (We should check with dgn files with acotaciones)
+			
+			if ((elemento != null) && (elemento.deleted == 0) && (nClass == 0)) //Leer un elemento				
 			 {
 				aux = null;
 
