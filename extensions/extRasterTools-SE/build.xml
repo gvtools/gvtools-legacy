@@ -17,8 +17,8 @@
 	<property name="andamiLibs" location="${andami}/lib" />
 	<property name="drivers-dir" location="../_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers" />
 	<property name="fmapJar" location="../libFMap/dist/lib/fmap.jar"/>
-	<property name="gvsigRTJar" location="org.gvsig.raster.gui.jar"/>
-	<property name="fmapRTJar" location="org.gvsig.fmap.raster.jar"/>
+	<property name="gvsigRTJar" location="${dist}/org.gvsig.raster.gui.jar"/>
+	<property name="fmapRTJar" location="${dist}/org.gvsig.fmap.raster.jar"/>
 	<!--<import file="compile-classpath.xml"/>-->
 	<!--<property name="compile-classpath" value="${andamiJar}:${gvsigJar}:${fmapJar}:${andamiLibs}/iver-utiles.jar:${cmsLibs}/jecw-0.0.2.jar:${cmsLibs}/jecwcompress-1.0.0.jar:${cmsLibs}/jgdal-0.6.1.jar:${cmsLibs}/jmrsid-0.0.2.jar:${fmapLibs}/libproj.jar" />-->
 	<import file="../binaries/ant/utilities.xml"/>
