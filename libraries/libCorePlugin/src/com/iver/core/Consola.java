@@ -40,6 +40,8 @@
  */
 package com.iver.core;
 
+import org.apache.log4j.Logger;
+
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
@@ -50,6 +52,9 @@ import com.iver.andami.plugins.Extension;
  * la consola de la aplicación y los muestra en el frame
  */
 public class Consola extends Extension {
+	
+	private static Logger logger = Logger.getLogger(Consola.class.getName());
+	
 	static PluginServices ps;
     public static ConsolaFrame consolaFrame;
     public static NotificationDialog notificationDialog;
@@ -77,6 +82,7 @@ public class Consola extends Extension {
 		consolaFrame.setSize(400, 325);
 		consolaFrame.setVisible(true);
         PluginServices.getMDIManager().addWindow(consolaFrame);
+		
 	}
 
 	/* (non-Javadoc)
@@ -93,3 +99,5 @@ public class Consola extends Extension {
 		return true;
 	}
 }
+
+// [eiel-gestion-excepciones]

@@ -2,6 +2,7 @@ package com.iver.cit.gvsig.fmap.edition;
 
 import java.io.IOException;
 import java.rmi.server.UID;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,6 +37,8 @@ import com.iver.cit.gvsig.exceptions.visitors.StopWriterVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.core.DefaultRow;
 import com.iver.cit.gvsig.fmap.core.IRow;
+import com.iver.cit.gvsig.fmap.drivers.ConnectionJDBC;
+import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.ITableDefinition;
@@ -278,6 +281,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 	public void saveEdits(IWriter writer, int sourceType)
 			throws StopWriterVisitorException {
 
+		Throwable true_cause = null;
 		// TODO: ARREGLAR ESTO PARA QUE CUANDO HA HABIDO CAMBIOS
 		// EN LOS CAMPOS, PODAMOS CAMBIAR LO QUE TOQUE (A SER POSIBLE
 		// SIN TENER QUE REESCRIBIR TODA LA TABLA CON POSTGIS)
@@ -318,7 +322,11 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 				}
 			}
 		}
+		
+		ITableDefinition tab_def = null;
+		
 		try {
+			tab_def = writer.getTableDefinition();
 			writer.preProcess();
 			// Procesamos primero los borrados.
 			// Cuando se genere un tema nuevo, no se les debe hacer caso
@@ -372,13 +380,35 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 			ds = null;
 			clean();
 		} catch (ReadDriverException e) {
-			throw new StopWriterVisitorException(writer.getName(),e);
+			repairConnectionIfNeeded(tab_def);
+			true_cause = e.getCause();
+			throw new StopWriterVisitorException(writer.getName(), true_cause == null ? e : true_cause);
 		} catch (StartWriterVisitorException e) {
-			throw new StopWriterVisitorException(writer.getName(),e);
+			repairConnectionIfNeeded(tab_def);
+			true_cause = e.getCause();
+			throw new StopWriterVisitorException(writer.getName(), true_cause == null ? e : true_cause);
 		} catch (VisitorException e) {
-			throw new StopWriterVisitorException(writer.getName(),e);
+			repairConnectionIfNeeded(tab_def);
+			true_cause = e.getCause();
+			throw new StopWriterVisitorException(writer.getName(), true_cause == null ? e : true_cause);
 		}
 
+	}
+
+	private void repairConnectionIfNeeded(ITableDefinition tdef) {
+		
+		if (tdef instanceof DBLayerDefinition) {
+			DBLayerDefinition dbl = (DBLayerDefinition) tdef;
+			if (dbl.getConnection() instanceof ConnectionJDBC) {
+				ConnectionJDBC conn = (ConnectionJDBC) dbl.getConnection();
+				try {
+					conn.getConnection().rollback();
+				} catch (SQLException e) {
+					logger.error("Unable to rollback connection after write error: " + e.getMessage());
+				}
+			}
+		}
+		
 	}
 
 	/**
@@ -1376,7 +1406,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 	public ITableDefinition getTableDefinition() throws ReadDriverException {
 		Driver originalDriver = getOriginalDriver();
 		if(! (originalDriver instanceof AlphanumericDBDriver)){
-			TableDefinition tableDef = new TableDefinition();			
+			TableDefinition tableDef = new TableDefinition();
 			tableDef.setFieldsDesc(getRecordset().getFieldsDescription());
 			tableDef.setName(getRecordset().getSourceInfo().name);
 			return tableDef;
@@ -1652,3 +1682,5 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 //	}
 
 }
+
+// [eiel-gestion-excepciones]

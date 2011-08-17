@@ -8,7 +8,7 @@ public class StartWriterVisitorException extends StartVisitorException {
 	public StartWriterVisitorException(String layer,Throwable exception) {
 		super(layer,exception);
 		init();
-		initCause(exception);
+		// initCause(exception);
 	}
 
 	private void init() {
@@ -16,3 +16,5 @@ public class StartWriterVisitorException extends StartVisitorException {
 		formatString = "Cannot start writer visitor for layer: %(layer). ";
 	}
 }
+
+// [eiel-gestion-excepciones]

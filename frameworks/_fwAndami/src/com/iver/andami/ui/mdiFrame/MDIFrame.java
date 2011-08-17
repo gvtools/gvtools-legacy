@@ -56,12 +56,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -97,18 +98,14 @@ import com.iver.andami.plugins.config.generate.ToolBar;
 import com.iver.andami.ui.mdiManager.MDIManager;
 import com.iver.andami.ui.mdiManager.MDIManagerFactory;
 
-import java.awt.event.KeyEvent;
-import java.util.Vector;
-import java.util.StringTokenizer;
-
 
 /**
  * Main application window.
  *
- * @version $Revision: 15944 $
+ * @version $Revision: 35160 $
  */
 public class MDIFrame extends JFrame implements ComponentListener,
-	ContainerListener, ActionListener, MainFrame {
+ContainerListener, ActionListener, MainFrame {
 	/** DOCUMENT ME! */
 	private static Logger logger = Logger.getLogger(MDIFrame.class.getName());
 	private MDIManager mdiManager = MDIManagerFactory.createManager();
@@ -125,21 +122,21 @@ public class MDIFrame extends JFrame implements ComponentListener,
 	/** Asocia los nombres con las barras de herramientas */
 	private HashMap toolBarMap = new HashMap();
 
-		/** Almacena los grupos de selectableTools */
+	/** Almacena los grupos de selectableTools */
 	private HashMap buttonGroupMap = new HashMap();
 	/**
 	 * Stores the initially selected tools.
-     * It contains pairs (String groupName, JToolBarToggleButton button)
+	 * It contains pairs (String groupName, JToolBarToggleButton button)
 	 */
 	private HashMap initialSelectedTools = new HashMap();
 
-    /**
-     * Stores the actionCommand of the selected tool, for each group.
-     * It contains pairs (String groupName, JToolBarToggleButton button)
-     */
-    private HashMap selectedTool = null;
-    // this should be the same value defined at plugin-config.xsd
-    private String defaultGroup = "unico";
+	/**
+	 * Stores the actionCommand of the selected tool, for each group.
+	 * It contains pairs (String groupName, JToolBarToggleButton button)
+	 */
+	private HashMap selectedTool = null;
+	// this should be the same value defined at plugin-config.xsd
+	private String defaultGroup = "unico";
 
 	/** Asocia los nombres con los popupMenus */
 	private HashMap popupMap = new HashMap();
@@ -172,7 +169,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 	private HashMap infoCodedMenus = new HashMap();
 
 	private String titlePrefix;
-	
+
 	private static final String noIcon = "no-icon";
 
 	/**
@@ -188,10 +185,10 @@ public class MDIFrame extends JFrame implements ComponentListener,
 
 		//Se a�aden los listeners del JFrame
 		this.addWindowListener(new WindowAdapter() {
-				public void windowClosing(WindowEvent e) {
-					Launcher.closeApplication();
-				}
-			});
+			public void windowClosing(WindowEvent e) {
+				Launcher.closeApplication();
+			}
+		});
 		this.addComponentListener(this);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
@@ -248,8 +245,8 @@ public class MDIFrame extends JFrame implements ComponentListener,
 	 * @throws RuntimeException DOCUMENT ME!
 	 */
 	public void addTool(PluginClassLoader loader, SkinExtensionType ext,
-		ToolBar toolBar, SelectableTool selectableTool)
-		throws ClassNotFoundException {
+			ToolBar toolBar, SelectableTool selectableTool)
+	throws ClassNotFoundException {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			throw new RuntimeException("No Event Dispatch Thread");
 		}
@@ -338,7 +335,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 	 * @throws RuntimeException DOCUMENT ME!
 	 */
 	public void addTool(PluginClassLoader loader, SkinExtensionType ext,
-		ToolBar toolBar, ActionTool actionTool) throws ClassNotFoundException {
+			ToolBar toolBar, ActionTool actionTool) throws ClassNotFoundException {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			throw new RuntimeException("No Event Dispatch Thread");
 		}
@@ -464,7 +461,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 	 * @throws RuntimeException DOCUMENT ME!
 	 */
 	public void addMenu(PluginClassLoader loader, SkinExtensionType ext,
-		Menu menu) throws ClassNotFoundException {
+			Menu menu) throws ClassNotFoundException {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			throw new RuntimeException("No Event Dispatch Thread");
 		}
@@ -472,7 +469,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 		JMenu menuPadre = createMenuAncestors(menu, loader);
 
 		//Se registra y a�ade el menu
-        /* String[] aux = menu.getText().split("/");
+		/* String[] aux = menu.getText().split("/");
 
         if (aux.length == 2)
             if (aux[1].equals("----"))
@@ -480,18 +477,17 @@ public class MDIFrame extends JFrame implements ComponentListener,
                 menuPadre.addSeparator();
                 return;
             } */
-		
-        if (menu.getIs_separator())
-        {
-        	menuPadre.addSeparator();
-            return;
-        }
-        
+		if (menu.getIs_separator())
+		{
+			menuPadre.addSeparator();
+			return;
+		}
+
 		JMenuItem nuevoMenu = createJMenuItem(loader, menu);
 		nuevoMenu.addMouseListener(tooltipListener);
-		nuevoMenu.addActionListener(this);        
+		nuevoMenu.addActionListener(this);
 		menuPadre.add(nuevoMenu);
-        controlClass.put(nuevoMenu, loader.loadClass(ext.getClassName()));
+		controlClass.put(nuevoMenu, loader.loadClass(ext.getClassName()));
 	}
 
 
@@ -509,7 +505,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 
 			for (int i=0; i<parentItem.getMenuComponentCount(); i++) {
 				if (parentItem.getMenuComponent(i).getName()!=null // not a JToolBar.Separator
-					&& parentItem.getMenuComponent(i).getName().compareTo((String)nombres.get(0)) == 0) {
+						&& parentItem.getMenuComponent(i).getName().compareTo((String)nombres.get(0)) == 0) {
 					nombres.remove(0);
 					if (nombres.isEmpty()) {
 						if (parentItem.getMenuComponent(i) instanceof javax.swing.JMenuItem) {
@@ -689,8 +685,9 @@ public class MDIFrame extends JFrame implements ComponentListener,
 			if (ext==null) {
 				logger.error(Messages.getString("No_extension_associated_with_this_event_")+ e.getActionCommand());
 			}
-			NotificationManager.addError(Messages.getString(
-					"MDIFrame.Error_no_capturado_por_el_usuario"), t);
+			NotificationManager.addError(
+					Messages.getString("PluginServices.Bug_en_el_codigo") + ": " + t.getMessage(),
+					t);
 		}
 
 		enableControls();
@@ -780,7 +777,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 		if (menu.getMnemonic() != null) {
 			if (menu.getMnemonic().length() != 1) {
 				throw new RuntimeException(
-					"Mnemonic must be 1 character length");
+				"Mnemonic must be 1 character length");
 			}
 
 			nuevoMenu.setMnemonic(KeyMapping.getKey(menu.getMnemonic().charAt(0)));
@@ -795,7 +792,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 						menu.getKey().charAt(0)), Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 			} else {
 				nuevoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyMapping.getKey(
-						menu.getKey().charAt(0)), ActionEvent.CTRL_MASK));
+						menu.getKey().charAt(0)), ActionEvent.ALT_MASK));
 			}
 		}
 
@@ -860,7 +857,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 	 * @param loader
 	 */
 	public void addPopupMenuListener(String popupName, Component c,
-		ActionListener listener, PluginClassLoader loader) {
+			ActionListener listener, PluginClassLoader loader) {
 		final String name = getName(popupName, loader);
 
 		JPopupMenu menu = (JPopupMenu) popupMap.get(name);
@@ -876,18 +873,18 @@ public class MDIFrame extends JFrame implements ComponentListener,
 		}
 
 		c.addMouseListener(new MouseAdapter() {
-				public void mousePressed(MouseEvent e) {
-					if (e.isPopupTrigger()) {
-						showPopupMenu(name, e.getX(), e.getY(), e.getComponent());
-					}
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showPopupMenu(name, e.getX(), e.getY(), e.getComponent());
 				}
+			}
 
-				public void mouseReleased(MouseEvent e) {
-					if (e.isPopupTrigger()) {
-						showPopupMenu(name, e.getX(), e.getY(), e.getComponent());
-					}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showPopupMenu(name, e.getX(), e.getY(), e.getComponent());
 				}
-			});
+			}
+		});
 	}
 
 	/**
@@ -938,8 +935,9 @@ public class MDIFrame extends JFrame implements ComponentListener,
 					visibilidadExtensiones.put(ext, visible);
 				}
 			} catch (Throwable e1) {
-				NotificationManager.addError(Messages.getString(
-						"MDIFrame.Error_no_capturado_por_el_usuario"), e1);
+				NotificationManager.addError(
+						Messages.getString("PluginServices.Bug_en_el_codigo") + ": " + e1.getMessage(),
+						e1);
 				estadoExtensiones.put(ext, Boolean.FALSE);
 			}
 		}
@@ -952,7 +950,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 
 			try {
 				com.iver.andami.plugins.IExtension ext = (com.iver.andami.plugins.IExtension) classesExtensions.get((Class) controlClass.get(
-							control));
+						control));
 				boolean enabled = ((Boolean) estadoExtensiones.get(ext)).booleanValue();
 				boolean visible = ((Boolean) visibilidadExtensiones.get(ext)).booleanValue();
 				control.setEnabled(enabled);
@@ -970,20 +968,20 @@ public class MDIFrame extends JFrame implements ComponentListener,
 			if (menu instanceof JMenu) {
 				//hide (ugly) redundant separators and assign keyboard mnemonics
 				Component[] comps = ((JMenu)menu).getMenuComponents();				
-		        // mnemonics have to be unique for each top-level menu
-		        char mnemonics[] = new char[comps.length];
-		        if ( comps.length > 0 ) {
-		        	// Set keyboard mnemonic for this top-level entry
-		        	String text = ((JMenu)menu).getText();
-		        	char mnemonic = getMnemonic(text, mnemonics);
-		        	if (' ' != mnemonic)
-		        	{
-		        		((JMenu)menu).setMnemonic(mnemonic);
-		        		mnemonics[0] = mnemonic;                
-		        	}
-		        }
-	            // now go through all entries in this menu, hid
-	            // separators if necessary and assing remaining mnemonics
+				// mnemonics have to be unique for each top-level menu
+				char mnemonics[] = new char[comps.length];
+				if ( comps.length > 0 ) {
+					// Set keyboard mnemonic for this top-level entry
+					String text = ((JMenu)menu).getText();
+					char mnemonic = getMnemonic(text, mnemonics);		        
+					if (' ' != mnemonic)
+					{
+						((JMenu)menu).setMnemonic(mnemonic);
+						mnemonics[0] = mnemonic;                
+					}
+				}
+				// now go through all entries in this menu, hid
+				// separators if necessary and assing remaining mnemonics
 				hideSeparatorsAndMakeMnemonics(menu, mnemonics);
 			}
 		}
@@ -1041,7 +1039,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 	 */
 	private boolean hideMenus(MenuElement menu) {
 		MenuElement[] submenus = menu.getSubElements();
-				
+
 		//Si no tiene hijos se devuelve su visibilidad
 		if (submenus.length == 0) {
 			return menu.getComponent().isVisible();
@@ -1058,6 +1056,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 				if (!(menu instanceof JPopupMenu)) {
 					menu.getComponent().setVisible(true);
 				}
+
 				visible = true;
 			}
 		}
@@ -1069,10 +1068,8 @@ public class MDIFrame extends JFrame implements ComponentListener,
 		menu.getComponent().setVisible(false);
 
 		return false;
-	}
+	}	
 
-	
-	    
 	/**
 	 * 
 	 * Recurse through all menu elements and make sure there are no
@@ -1084,14 +1081,14 @@ public class MDIFrame extends JFrame implements ComponentListener,
 	private void hideSeparatorsAndMakeMnemonics(MenuElement menu, char[] mnemonics ) {
 		// flag that indicates whether a separator is to be displayed or not
 		boolean allowSeparator;
-		
+
 		allowSeparator = false; // separator not allowed as very first menu item
 		Component[] comps = ((JMenu)menu).getMenuComponents();
 		if ( comps.length < 1 ) {
 			//zero-length menu: skip
 			return;
 		}
-			
+
 		for ( int i=0; i < comps.length; i++ ) {				
 			if ( comps[i] instanceof JSeparator ) {
 				// got a separator: display only if allowed at this position
@@ -1122,13 +1119,13 @@ public class MDIFrame extends JFrame implements ComponentListener,
 					if ( comps[i].isVisible() ) {
 						allowSeparator = true; // separators are OK after visible submenus
 						// Set keyboard mnemonic for this submenu
-			            String text = ((JMenu)comps[i]).getText();
-			            char mnemonic = getMnemonic(text, mnemonics);
-			            if (' ' != mnemonic)
-			            {
-			            	((JMenu)comps[i]).setMnemonic(mnemonic);
-			                mnemonics[i] = mnemonic;                
-			            }							
+						String text = ((JMenu)comps[i]).getText();
+						char mnemonic = getMnemonic(text, mnemonics);
+						if (' ' != mnemonic)
+						{
+							((JMenu)comps[i]).setMnemonic(mnemonic);
+							mnemonics[i] = mnemonic;                
+						}							
 					}
 				} else {
 					if ( comps[i].isVisible() ) {							
@@ -1139,6 +1136,11 @@ public class MDIFrame extends JFrame implements ComponentListener,
 							if (' ' != mnemonic)
 							{
 								((JMenuItem)comps[i]).setMnemonic(mnemonic);
+
+//								if (((JMenuItem)comps[i]).getAccelerator() == null){								
+//									char[] mnemonicsLower = new char[]{mnemonic};							
+//									((JMenuItem)comps[i]).setAccelerator(KeyStroke.getKeyStroke(KeyMapping.getKey(new String(mnemonicsLower).toLowerCase().charAt(0)), ActionEvent.ALT_MASK));
+//								}
 								mnemonics[i] = mnemonic;                
 							}
 						}
@@ -1148,74 +1150,73 @@ public class MDIFrame extends JFrame implements ComponentListener,
 			}
 		} 
 	}
-		
+
 
 	/**
 	 * Helper functios for assigning a unique mnemomic char from
 	 * a pool of unassigned onces, stored in the array "mnemomnics"
 	 */
-    private static char getMnemonic(String text, char[] mnemonics)
-    {
-        Vector words = new Vector();
-        StringTokenizer t = new StringTokenizer(text);
-        int maxsize = 0;
+	private char getMnemonic(String text, char[] mnemonics)
+	{
+		Vector words = new Vector();
+		StringTokenizer t = new StringTokenizer(text);
+		int maxsize = 0;
 
-        while (t.hasMoreTokens())
-        {
-            String word = (String) t.nextToken();
-            if (word.length() > maxsize) maxsize = word.length();
-            words.addElement(word);
-        }
-        words.trimToSize();
+		while (t.hasMoreTokens())
+		{
+			String word = (String) t.nextToken();
+			if (word.length() > maxsize) maxsize = word.length();
+			words.addElement(word);
+		}
+		words.trimToSize();
 
-        for (int i = 0; i < maxsize; ++i)
-        {
-            char mnemonic = getMnemonic(words, mnemonics, i);
-            if (' ' != mnemonic)
-                return mnemonic;
-        }
+		for (int i = 0; i < maxsize; ++i)
+		{
+			char mnemonic = getMnemonic(words, mnemonics, i);
+			if (' ' != mnemonic)
+				return mnemonic;
+		}
 
-        return ' ';
-    }
+		return ' ';
+	}
 
-    private static char getMnemonic(Vector words, char[] mnemonics, int index)
-    {
-        int numwords = words.size();
+	private char getMnemonic(Vector words, char[] mnemonics, int index)
+	{
+		int numwords = words.size();
 
-        for (int i = 0; i < numwords; ++i)
-        {
-            String word = (String) words.elementAt(i);
-            if (index >= word.length()) continue;
+		for (int i = 0; i < numwords; ++i)
+		{
+			String word = (String) words.elementAt(i);
+			if (index >= word.length()) continue;
 
-            char c = word.charAt(index);
-            if (!isMnemonicExists(c, mnemonics)) {
-            	/* pick only valid chars */
-            	if ( c!=':' && c!='.' && c!=',' && 
-            		 c!=';' && c!='-' && c!='+' && 
-            		 c!='/' && c!='\\' && c!='\'' &&
-            		 c!='\"' && c!=' ' && c!='=' &&
-            	     c!='(' && c!=')' && c!='[' &&
-            	     c!=']' && c!='{' && c!='}' &&
-            	     c!='$' && c!='*' && c!='&' &&
-            	     c!='%' && c!='!' && c!='?' &&
-            	     c!='#' && c!='~' && c!='_' ) 
-            	{
-            		return c;
-            	}
-            }
-        }
-        return ' ';
-    }
+			char c = word.charAt(index);
+			if (!isMnemonicExists(c, mnemonics)) {
+				/* pick only valid chars */
+				if ( c!=':' && c!='.' && c!=',' && 
+						c!=';' && c!='-' && c!='+' && 
+						c!='/' && c!='\\' && c!='\'' &&
+						c!='\"' && c!=' ' && c!='=' &&
+						c!='(' && c!=')' && c!='[' &&
+						c!=']' && c!='{' && c!='}' &&
+						c!='$' && c!='*' && c!='&' &&
+						c!='%' && c!='!' && c!='?' &&
+						c!='#' && c!='~' && c!='_' ) 
+				{
+					return c;
+				}
+			}
+		}
+		return ' ';
+	}
 
-    private static boolean isMnemonicExists(char c, char[] mnemonics)
-    {
-        int num = mnemonics.length;
-        for (int i = 0; i < num; ++i)
-            if (mnemonics[i] == c) return true;
-        return false;
-    } 	
+	private boolean isMnemonicExists(char c, char[] mnemonics)
+	{
+		int num = mnemonics.length;
+		for (int i = 0; i < num; ++i)
+			if (mnemonics[i] == c) return true;
+		return false;
+	} 	
 
-	
 	/**
 	 * Muestra la memoria consumida por el programa
 	 */
@@ -1243,63 +1244,63 @@ public class MDIFrame extends JFrame implements ComponentListener,
 		return bEstado;
 	}
 	/**
-     * You can use this function to select the appropiate
-     * tool inside the toolbars
-     */
-    public void setSelectedTool(String actionCommand)
-    {
-    	setSelectedTool(defaultGroup, actionCommand);
-    }
+	 * You can use this function to select the appropiate
+	 * tool inside the toolbars
+	 */
+	public void setSelectedTool(String actionCommand)
+	{
+		setSelectedTool(defaultGroup, actionCommand);
+	}
 
 	/**
-     * You can use this function to select the appropiate
-     * tool inside the toolbars
-     */
-    public void setSelectedTool(String groupName, String actionCommand)
-    {
-    	ButtonGroup group = (ButtonGroup) buttonGroupMap.get(groupName);
-    	if (group==null)
-    		return;
+	 * You can use this function to select the appropiate
+	 * tool inside the toolbars
+	 */
+	public void setSelectedTool(String groupName, String actionCommand)
+	{
+		ButtonGroup group = (ButtonGroup) buttonGroupMap.get(groupName);
+		if (group==null)
+			return;
 
-    	Enumeration enumeration = group.getElements();
-    	while (enumeration.hasMoreElements()) {
-    		AbstractButton button = (AbstractButton) enumeration.nextElement();
-    		if (button.getActionCommand().equals(actionCommand)) {
-    			button.setSelected(true);
-    		}
-    	}
+		Enumeration enumeration = group.getElements();
+		while (enumeration.hasMoreElements()) {
+			AbstractButton button = (AbstractButton) enumeration.nextElement();
+			if (button.getActionCommand().equals(actionCommand)) {
+				button.setSelected(true);
+			}
+		}
 
-    	selectedTool.put(groupName, actionCommand);
-    }
+		selectedTool.put(groupName, actionCommand);
+	}
 
 	/**
-     * You can use this function to select the appropiate
-     * tool inside the toolbars
-     */
-    public void setSelectedTools(HashMap selectedTools)
-    {
-        selectedTool = selectedTools;
-        if (selectedTools==null) return;
-    	Iterator groupNames = selectedTools.keySet().iterator();
-    	while (groupNames.hasNext()) {
-    		try {
-    			String groupName = (String) groupNames.next();
-    			ButtonGroup group = (ButtonGroup) buttonGroupMap.get(groupName);
-	        	Enumeration enumeration = group.getElements();
-	        	String actionCommand = (String) selectedTools.get(groupName);
-	        	if (actionCommand==null) continue;
-	        	while (enumeration.hasMoreElements()) {
-	        		AbstractButton button = (AbstractButton) enumeration.nextElement();
-	        		if (button.getActionCommand().equals(actionCommand)) {
-	        			button.setSelected(true);
-	        		}
-	        	}
-    		}
-    		catch (ClassCastException ex) {
-    			logger.error("selectedTool should only contain pairs (String groupName, JToolBarToggleButton button)");
-    		}
-    	}
-    }
+	 * You can use this function to select the appropiate
+	 * tool inside the toolbars
+	 */
+	public void setSelectedTools(HashMap selectedTools)
+	{
+		selectedTool = selectedTools;
+		if (selectedTools==null) return;
+		Iterator groupNames = selectedTools.keySet().iterator();
+		while (groupNames.hasNext()) {
+			try {
+				String groupName = (String) groupNames.next();
+				ButtonGroup group = (ButtonGroup) buttonGroupMap.get(groupName);
+				Enumeration enumeration = group.getElements();
+				String actionCommand = (String) selectedTools.get(groupName);
+				if (actionCommand==null) continue;
+				while (enumeration.hasMoreElements()) {
+					AbstractButton button = (AbstractButton) enumeration.nextElement();
+					if (button.getActionCommand().equals(actionCommand)) {
+						button.setSelected(true);
+					}
+				}
+			}
+			catch (ClassCastException ex) {
+				logger.error("selectedTool should only contain pairs (String groupName, JToolBarToggleButton button)");
+			}
+		}
+	}
 
 	/**
 	 * DOCUMENT ME!
@@ -1346,7 +1347,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 	 * 		java.awt.event.ActionListener, PluginClassLoader)
 	 */
 	public void addMenu(Menu menu, ActionListener listener,
-		PluginClassLoader loader) {
+			PluginClassLoader loader) {
 		JMenu menuPadre = createMenuAncestors(menu, loader);
 
 		//Se registra y a�ade el menu
@@ -1363,7 +1364,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 	 * 		String, com.iver.andami.plugins.PluginClassLoader)
 	 */
 	public void changeMenuName(String[] menu, String newName,
-		PluginClassLoader loader) {
+			PluginClassLoader loader) {
 
 		ArrayList menuList = new ArrayList();
 		for (int i = 0; i < menu.length; i++) {
@@ -1422,7 +1423,7 @@ public class MDIFrame extends JFrame implements ComponentListener,
 	 * DOCUMENT ME!
 	 *
 	 * @author $author$
-	 * @version $Revision: 15944 $
+	 * @version $Revision: 35160 $
 	 */
 	public class TooltipListener extends MouseAdapter {
 		/**
@@ -1461,63 +1462,63 @@ public class MDIFrame extends JFrame implements ComponentListener,
 		this.titlePrefix = titlePrefix;
 	}
 
-    public HashMap getSelectedTools() {
-        return selectedTool;
-    }
+	public HashMap getSelectedTools() {
+		return selectedTool;
+	}
 
-    public HashMap getInitialSelectedTools() {
-        return initialSelectedTools;
-    }
+	public HashMap getInitialSelectedTools() {
+		return initialSelectedTools;
+	}
 
 
-    /**
-     * Get a previously added JComponent by name. For example
-     * you can use it if you need to obtain a JToolBar to
-     * add some customized component.
-     * @param name
-     * @return the JComponent or null if none has been found
-     */
-    public JComponent getComponentByName(String name)
-    {
-        Iterator e = controlClass.keySet().iterator();
+	/**
+	 * Get a previously added JComponent by name. For example
+	 * you can use it if you need to obtain a JToolBar to
+	 * add some customized component.
+	 * @param name
+	 * @return the JComponent or null if none has been found
+	 */
+	public JComponent getComponentByName(String name)
+	{
+		Iterator e = controlClass.keySet().iterator();
 
-        while (e.hasNext()) {
-            JComponent control = (JComponent) e.next();
-            String nameCtrl = control.getName();
-            if (nameCtrl != null)
-            {
-            	if (nameCtrl.compareTo(name) == 0)
-            		return control;
-            }
-        }
-        Iterator it = toolBarMap.values().iterator();
-        while (it.hasNext()) {
-            SelectableToolBar t = (SelectableToolBar) it.next();
-            String nameCtrl = t.getName();
-            if (nameCtrl != null)
-            	if (nameCtrl.compareTo(name) == 0)
-            		return t;
+		while (e.hasNext()) {
+			JComponent control = (JComponent) e.next();
+			String nameCtrl = control.getName();
+			if (nameCtrl != null)
+			{
+				if (nameCtrl.compareTo(name) == 0)
+					return control;
+			}
+		}
+		Iterator it = toolBarMap.values().iterator();
+		while (it.hasNext()) {
+			SelectableToolBar t = (SelectableToolBar) it.next();
+			String nameCtrl = t.getName();
+			if (nameCtrl != null)
+				if (nameCtrl.compareTo(name) == 0)
+					return t;
 
-        }
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public SelectableToolBar[] getToolbars() {
-    	return (SelectableToolBar[]) toolBarMap.values().toArray(new SelectableToolBar[0]);
-    }
+	public SelectableToolBar[] getToolbars() {
+		return (SelectableToolBar[]) toolBarMap.values().toArray(new SelectableToolBar[0]);
+	}
 
-    public boolean getToolbarVisibility(String name) {
-    	JComponent component = PluginServices.getMainFrame().getComponentByName(name);
+	public boolean getToolbarVisibility(String name) {
+		JComponent component = PluginServices.getMainFrame().getComponentByName(name);
 		if (component!=null && component instanceof SelectableToolBar) {
 			SelectableToolBar toolBar = (SelectableToolBar) component;
 			return toolBar.getAndamiVisibility();
 		}
 		return false;
-    }
+	}
 
-    public boolean setToolbarVisibility(String name, boolean visibility) {
-    	JComponent component = PluginServices.getMainFrame().getComponentByName(name);
+	public boolean setToolbarVisibility(String name, boolean visibility) {
+		JComponent component = PluginServices.getMainFrame().getComponentByName(name);
 		if (component!=null && component instanceof SelectableToolBar) {
 			SelectableToolBar toolBar = (SelectableToolBar) component;
 			boolean oldVisibility = toolBar.getAndamiVisibility();
@@ -1526,12 +1527,12 @@ public class MDIFrame extends JFrame implements ComponentListener,
 			return oldVisibility;
 		}
 		return false;
-    }
+	}
 
-    public javax.swing.JMenuItem getMenuEntry(String[] menuPath) {
-    	ArrayList menu = new ArrayList();
-    	for (int i=0; i<menuPath.length; i++)
-    		menu.add(menuPath[i]);
-    	return getMenu(menu, menuBar);
-    }
+	public javax.swing.JMenuItem getMenuEntry(String[] menuPath) {
+		ArrayList menu = new ArrayList();
+		for (int i=0; i<menuPath.length; i++)
+			menu.add(menuPath[i]);
+		return getMenu(menu, menuBar);
+	}
 }

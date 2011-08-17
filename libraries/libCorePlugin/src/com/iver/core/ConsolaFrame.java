@@ -73,6 +73,9 @@ public class ConsolaFrame extends JPanel implements IWindow, SingletonWindow,Not
 	private final static String marcaError ="font size='3' color='#FF0000'";
 	private JTabbedPane tabs;
 	private JPanel panelErrores;
+	
+	public static final int WIDTH = 500;
+	public static final int HEIGHT = 270;
 
     /**
      * Crea la consola con los mensajes producidos hasta el momento de la
@@ -85,7 +88,7 @@ public class ConsolaFrame extends JPanel implements IWindow, SingletonWindow,Not
      */
     public ConsolaFrame() {
 
-		this.setSize(400, 325);
+		this.setSize(WIDTH,HEIGHT);
 
         //Las cajas de texto donde van los mensajes
         textoInfos = new JEditorPane();
@@ -291,3 +294,5 @@ public class ConsolaFrame extends JPanel implements IWindow, SingletonWindow,Not
 	}
 	
 }
+
+// [eiel-gestion-excepciones]

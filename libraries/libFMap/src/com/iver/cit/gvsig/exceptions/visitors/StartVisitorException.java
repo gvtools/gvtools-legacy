@@ -50,7 +50,7 @@ public class StartVisitorException extends VisitorException {
 	public StartVisitorException(String layer,Throwable exception) {
 		super(layer,exception);
 		init();
-		initCause(exception);
+		// initCause(exception);
 	}
 
 	private void init() {
@@ -58,3 +58,5 @@ public class StartVisitorException extends VisitorException {
 		formatString = "Cannot start visitor for layer: %(layer). ";
 	}
 }
+
+// [eiel-gestion-excepciones]

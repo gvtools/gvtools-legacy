@@ -59,6 +59,10 @@ public class MemoryExpansionFile implements ExpansionFile {
 	ArrayList rows = new ArrayList();
 	EditableAdapter edAdapter;
 
+	private MemoryExpansionFile() {
+		// private makes sure nobody calls this
+	}
+	
 	private class InternalRow
 	{
 		private IRowEdited row;
@@ -221,3 +225,5 @@ public class MemoryExpansionFile implements ExpansionFile {
 		return invalidRows;
 	}*/
 }
+
+// [eiel-gestion-excepciones]

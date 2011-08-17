@@ -50,7 +50,7 @@ public class StopVisitorException extends VisitorException {
 	public StopVisitorException(String layer,Throwable exception) {
 		super(layer,exception);
 		init();
-		initCause(exception);
+		// initCause(exception);
 	}
 
 	private void init() {
@@ -58,3 +58,5 @@ public class StopVisitorException extends VisitorException {
 		formatString = "Cannot stop visitor for layer: %(layer). ";
 	}
 }
+
+// [eiel-gestion-excepciones]

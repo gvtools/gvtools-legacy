@@ -8,7 +8,7 @@ public class StopWriterVisitorException extends StopVisitorException {
 	public StopWriterVisitorException(String layer,Throwable exception) {
 		super(layer,exception);
 		init();
-		initCause(exception);
+		// initCause(exception);
 	}
 
 	private void init() {
@@ -16,3 +16,5 @@ public class StopWriterVisitorException extends StopVisitorException {
 		formatString = "Cannot stop writer visitor for layer: %(layer). ";
 	}
 }
+
+// [eiel-gestion-excepciones]
