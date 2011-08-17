@@ -969,7 +969,7 @@ public class GdalNative extends Gdal {
 		
 		GdalBuffer gdalBuf = null;
 		for(int iBand = 0; iBand < gdalBands.length; iBand++) {
-			int[] drawableBands = bandList.getBufferBandToDraw(fileName, iBand);
+			int[] drawableBands = bandList.getBufferBandToDraw(RasterUtilities.getFormatedRasterFileName(fileName), iBand);
 			if(drawableBands == null || (drawableBands.length == 1 && drawableBands[0] == -1))
 				continue;	
 			int init = (int)((bufWidth * stpY) + stpX); //Pos inicial. Desplazamos stpX pixels hacia la derecha y bajamos stpY lineas
@@ -1046,7 +1046,7 @@ public class GdalNative extends Gdal {
 		RasterTask task = RasterTaskQueue.get(Thread.currentThread().toString());
 		
 		for(int iBand = 0; iBand < gdalBands.length; iBand++) {
-			int[] drawableBands = bandList.getBufferBandToDraw(fileName, iBand);
+			int[] drawableBands = bandList.getBufferBandToDraw(RasterUtilities.getFormatedRasterFileName(fileName), iBand);
 			if(drawableBands == null || (drawableBands.length == 1 && drawableBands[0] == -1))
 				continue;	
 			if(dataType[iBand] == Gdal.GDT_Byte) {

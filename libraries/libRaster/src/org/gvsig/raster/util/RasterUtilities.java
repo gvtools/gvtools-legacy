@@ -396,7 +396,7 @@ public class RasterUtilities {
 			// Obtenemos los cuatro puntos de la petición de origen
 		Point2D ul = new Point2D.Double(extToAdj.getULX(), extToAdj.getULY());
 		Point2D lr = new Point2D.Double(extToAdj.getLRX(), extToAdj.getLRY());
-		
+
 		// Los convertimos a coordenadas pixel con la matriz de transformación
 		try {
 			at.inverseTransform(ul, ul);
@@ -423,11 +423,10 @@ public class RasterUtilities {
 			lr.setLocation(lr.getX(), 0);
 		if (lr.getY() >= dim.getHeight())
 			lr.setLocation(lr.getX(), dim.getHeight());
-		
+
 		// Lo convertimos a coordenadas reales nuevamente
 		at.transform(ul, ul);
 		at.transform(lr, lr);
-				
 		return new Extent(ul, lr);
 	}
 
@@ -599,7 +598,37 @@ public class RasterUtilities {
 
 	// ---------------------------------------------------------------
 	// TRATAMIENTO DE FICHEROS
+ 	
+	/**
+	 * Gets the name of a raster file
+	 */
+	public static String getFormatedRasterFileName(String name) {
+		if(name.startsWith("PG:host=")) {
+			String newName = "";
+			String schema = null;
+			String table = null;
+			int index = name.indexOf(" schema='") + 8;
+			if(index != -1) {
+				try {
+					schema = name.substring(index + 1, name.indexOf("'", index + 1)); 
+					newName += schema + ".";
+				} catch (StringIndexOutOfBoundsException e) {
+				}
+			}
+			index = name.indexOf(" table='") + 7;
+			if(index != -1) {
+				try {
+					table = name.substring(index + 1, name.indexOf("'", index + 1));
+					newName += table;
+				} catch (StringIndexOutOfBoundsException e) {
+				}
+			}
+			return newName;
+		}
 
+		return name;
+	}
+	
 	/**
 	 * Copia de ficheros
 	 * @param pathOrig Ruta de origen
@@ -708,8 +737,6 @@ public class RasterUtilities {
 		String extWorldFile = ".wld";
 		if (fileName.endsWith("tif"))
 			extWorldFile = ".tfw";
-		if (fileName.endsWith("png"))
-			extWorldFile = ".pgw";		
 		if (fileName.endsWith("jpg") || fileName.endsWith("jpeg"))
 			extWorldFile = ".jpgw";
 

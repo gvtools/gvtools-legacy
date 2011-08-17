@@ -25,6 +25,7 @@ import org.cresques.cts.IProjection;
 import org.cresques.geo.Projected;
 import org.gvsig.raster.dataset.io.IRegistrableRasterFormat;
 import org.gvsig.raster.datastruct.Extent;
+import org.gvsig.raster.util.RasterUtilities;
 /**
  * Ancestro de todos los formatos geográficos
  */
@@ -33,7 +34,9 @@ public abstract class GeoInfo implements Projected {
 	protected long            fileSize               = 0;
 	protected long            bytesReaded            = 0;
 	protected long            lineCnt                = 0;
-	protected String          name;
+	private String            name;
+	private Object            openParam              = null;
+	
 	/**
 	 * Transformación creada a partir de la información de georreferencia de la
 	 * propia imagen. Esta información está en la cabecera o en ficheros
@@ -48,7 +51,8 @@ public abstract class GeoInfo implements Projected {
 
 	public GeoInfo() {}
 
-		public GeoInfo(IProjection p, Object param) {
+	public GeoInfo(IProjection p, Object param) {
+		openParam = param;
 		proj = p;
 		if (param instanceof String)
 			name = translateFileName((String) param);
@@ -73,8 +77,16 @@ public abstract class GeoInfo implements Projected {
 		return fileName;
 	}
 
+	/**
+	 * Gets the input parameters
+	 * @return
+	 */
+	public String getOpenParameters() {
+		return openParam.toString();
+	}
+
 	public String getFName() {
-		return name;
+		return RasterUtilities.getFormatedRasterFileName(name);
 	}
 
 	public void setFName(String n) {

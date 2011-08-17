@@ -74,6 +74,11 @@ public abstract class RasterDataset extends GeoInfo {
 	public static final int              GREEN_BAND          = 0x02;
 	public static final int              BLUE_BAND           = 0x04;
 	public static final int              ALPHA_BAND          = 0x08;
+	/**
+	 * Tipos de raster dependiendo de su fuente
+	 */
+	public static final int              FILE                = 0;
+	public static final int              POSTGIS             = 1;
 
 	/**
 	 * Número de bandas de la imagen
@@ -185,7 +190,13 @@ public abstract class RasterDataset extends GeoInfo {
 	 */
 	protected void init() {
 	}
-	
+
+	public int getRasterType() {
+		if(getOpenParameters().startsWith("PG:host"))
+			return POSTGIS;
+		return FILE;
+	}
+
 	/**
 	 * Tipo de fichero soportado.
 	 * Devuelve true si el tipo de fichero (extension) está soportado, si no

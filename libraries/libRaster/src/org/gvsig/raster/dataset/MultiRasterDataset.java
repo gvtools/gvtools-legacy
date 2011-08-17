@@ -23,7 +23,6 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
 import org.cresques.cts.IProjection;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.buffer.RasterBuffer;
@@ -277,7 +276,7 @@ public class MultiRasterDataset implements IRasterDataSource {
 	public String[] getNameDatasetStringList(int i, int j) {
 		String[] list = new String[files.size()];
 		for(int k = 0; k < files.size(); k++)
-			list[k] = ((RasterDataset)files.get(k)).getFName();
+			list[k] = ((RasterDataset)files.get(k)).getOpenParameters();
 		return list;
 	}
 	

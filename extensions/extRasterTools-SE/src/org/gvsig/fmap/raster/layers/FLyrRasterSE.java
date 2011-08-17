@@ -1231,6 +1231,8 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 			for (int i = 0; i < files.length; i++) {
 				File file = new File(files[i]);
 				File dirTemp = RasterLibrary.getTemporalFile();
+				if(!file.exists())
+					continue;
 				if (dirTemp.compareTo(file.getParentFile()) == 0) {
 					file.delete();
 					
@@ -1400,12 +1402,18 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 	 * @see org.gvsig.fmap.raster.IRasterFile#getFileFormat()
 	 */
 	public String getFileFormat() {
-		String fName = dataset.getDataset(0)[0].getFName();
-		int index = fName.lastIndexOf(".") + 1;
-		String ext = null;
-		if (index > 0)
-			ext = fName.substring(fName.lastIndexOf(".") + 1, fName.length());
-		return ext;
+		if(dataset.getDataset(0)[0].getRasterType() == RasterDataset.FILE) {
+			String fName = dataset.getDataset(0)[0].getFName();
+			int index = fName.lastIndexOf(".") + 1;
+			String ext = null;
+			if (index > 0)
+				ext = fName.substring(fName.lastIndexOf(".") + 1, fName.length());
+			return ext;
+		}
+		if(dataset.getDataset(0)[0].getRasterType() == RasterDataset.POSTGIS) {
+			return "POSTGIS";
+		}
+		return null;
 	}
 
 	/*
@@ -2067,7 +2075,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 	public FLayer cloneLayer() throws Exception {
 		FLyrRasterSE newLayer = FLyrRasterSE.createLayer(this.getName(), params, this.getProjection());
 		for (int i = 0; i < dataset.getDatasetCount(); i++) {
-			String name = dataset.getDataset(i)[0].getFName();
+			String name = dataset.getDataset(i)[0].getOpenParameters();
 			if (!(dataset instanceof CompositeDataset) && !name.equals(this.getName()) && !isActionEnabled(IRasterLayerActions.REMOTE_ACTIONS))
 				newLayer.addFile(name);
 		}

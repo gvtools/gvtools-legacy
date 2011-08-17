@@ -172,8 +172,13 @@ public class RasterReadOnlyBuffer extends RasterBuffer {
 		bFactory.setDrawableBands(bandList.getDrawableBands());
 		
 		nPages = (int)Math.ceil((double)height / (double)RasterLibrary.blockHeight);
-		double aux = ((double)height / (double)RasterLibrary.blockHeight);
-		heightLastPage = (int)((aux - (int)aux) * RasterLibrary.blockHeight);
+		
+		if(height % RasterLibrary.blockHeight == 0)
+			heightLastPage = RasterLibrary.blockHeight;
+		else {
+			double aux = ((double)height / (double)RasterLibrary.blockHeight);
+			heightLastPage = (int)((aux - (int)aux) * RasterLibrary.blockHeight);
+		}
 		
 		drawableBands = new int[dataset.getBandCount()];
 			for (int i = 0; i < drawableBands.length; i++) 
