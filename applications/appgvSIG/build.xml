@@ -69,8 +69,6 @@
 		extGeoProcessing,
 		extGeoprocessingExtensions,
 		extGeoreferencing,
-		extGridViewLayout,
-		extMeasureGeometry,
 		extTopology,
 		extOracleSpatial,
 		extSDE,
@@ -101,6 +99,7 @@
 		extLayerLoadingOrder,
 		extTableImport,
 		extTableExport,
+		org.gvsig.installer.app.extension,
 		binaries
 	"/>
 
@@ -109,7 +108,8 @@
 		libCorePlugin,
 		libFMap,
 		appgvSIG,
-		extJCRS
+		extJCRS,
+		org.gvsig.installer.app.extension
 	"/>
 
 	<property name="global.installBaseDir" location="${andami}"/>
@@ -187,6 +187,7 @@
                 <fileset dir="config" includes="*" />
         </copy>
 		<copy file="build.number" todir="${dist}"/>
+		<copy file="package.info" todir="${dist}"/>
 		<copy todir="${dist}/images">
 			<fileset dir="images/" includes="*"/>
 		</copy>
@@ -196,6 +197,12 @@
     </target>
 
 	<target name="move-to-andami" description="Moves the build directory to andami">
+		<property file="build.number"/>
+		<propertyfile file="package.info">
+			<entry  key="build" value="${build.number}"/>
+			<entry  key="buildNumber" value="${build.number}"/>
+		</propertyfile>
+
 		<move todir="${extensionDir}/${plugin}/">
 			<fileset dir="${dist}" includes="**/**"/>
 		</move>
