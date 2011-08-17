@@ -77,7 +77,9 @@ public class Help  {
 		} catch (MalformedURLException e) {
 			return false;
 		}
-		resources.add(url);
+		if (!resources.contains(url)){
+			resources.add(url);
+		}
 		return true;
 	}
 
@@ -100,6 +102,7 @@ public class Help  {
 		int i=0;
 	    for( Iterator it=resources.iterator(); it.hasNext() ;) {
 	    	urls[i++] = (URL) it.next();
+	    	log().info("Help Resources:"+ urls[i-1]);
 	    }
 
 	    //
@@ -111,10 +114,12 @@ public class Help  {
 	    for( Iterator it=helps.iterator(); it.hasNext() ;) {
 	    	String name = (String) it.next();
 	    	String lang = Locale.getDefault().getLanguage();
+	    	log().info("Searching Help in "+ name + "/" + lang + "/help.hs");
 	    	HelpSet hs = createHelpSet(urls, name + "/" + lang + "/help.hs");
 	    	if( hs == null ) {
 	    		lang = "en";
-	    		hs = createHelpSet(urls, name + "/" + lang + "/help.hs");
+	    		log().info("Searching Help in "+ name + "/" + lang + "/help.hs");
+		    	hs = createHelpSet(urls, name + "/" + lang + "/help.hs");
 	    	}
 	    	if( hs != null ) {
 	    		helpSets.add(hs);
