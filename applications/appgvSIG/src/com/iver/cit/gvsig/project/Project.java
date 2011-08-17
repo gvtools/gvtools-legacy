@@ -1718,7 +1718,10 @@ public class Project implements Serializable, PropertyChangeListener {
 			FileSourceInfo vfdi = (FileSourceInfo) di;
 			child.putProperty("type", "otherDriverFile");
 			child.putProperty("gdbmsname", vfdi.name);
-			child.putProperty("file", pathGenerator.getPath(vfdi.file));
+			if (vfdi.file!=null)
+				child.putProperty("file", pathGenerator.getPath(vfdi.file));
+			else
+				child.putProperty("file", vfdi.file);
 			child.putProperty("driverName", vfdi.driverName);
 		} else if (di instanceof DBSourceInfo) {
 			DBTableSourceInfo dbdi = (DBTableSourceInfo) di;
