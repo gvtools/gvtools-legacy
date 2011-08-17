@@ -325,11 +325,11 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			try {
 				Statement s = ((ConnectionJDBC) conn).getConnection()
 						.createStatement();
-				ResultSet r = s.executeQuery("SELECT extent("
-						+ getLyrDef().getFieldGeometry()
-						+ ") AS FullExtent FROM "
-						+ getLyrDef().getComposedTableName() + " "
-						+ getCompleteWhere());
+				String query = "SELECT extent(\""
+				    + getLyrDef().getFieldGeometry()
+				    + "\") AS FullExtent FROM " + getLyrDef().getComposedTableName()
+				    + " " + getCompleteWhere();
+				ResultSet r = s.executeQuery(query);
 				r.next();
 				String strAux = r.getString(1);
 				System.out.println("fullExtent = " + strAux);
@@ -457,10 +457,9 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		+ xMin + " " + yMax + ")', " + strEPSG + ")";
 		String sqlAux;
 		if (getWhereClause().toUpperCase().indexOf("WHERE") != -1)
-			sqlAux = getWhereClause() + " AND "
-					+ getLyrDef().getFieldGeometry() + " && " + wktBox;
+		    sqlAux = getWhereClause() + " AND \"" + getLyrDef().getFieldGeometry() + "\" && " + wktBox;
 		else
-			sqlAux = "WHERE " + getLyrDef().getFieldGeometry() + " && "
+		    sqlAux = "WHERE \"" + getLyrDef().getFieldGeometry() + "\" && "
 			+ wktBox;
 		return sqlAux;
 	}
@@ -749,7 +748,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	 * @see com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver#getGeometryField(java.lang.String)
 	 */
 	public String getGeometryField(String fieldName) {
-		return "AsEWKB(" + fieldName + ", 'XDR')";
+	    return "AsEWKB(\"" + fieldName + "\", 'XDR')";
 	}
 
 	/**

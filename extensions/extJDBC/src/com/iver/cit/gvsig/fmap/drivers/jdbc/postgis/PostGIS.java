@@ -257,7 +257,7 @@ public class PostGIS {
 			sqlBuf.append(" " + "\""+name+"\"" + ",");
 			// }
 		}
-		sqlBuf.append(" " + dbLayerDef.getFieldGeometry());
+		sqlBuf.append(" \"" + dbLayerDef.getFieldGeometry() + "\"");
 		// sqlBuf.deleteCharAt(sqlBuf.lastIndexOf(","));
 		sqlBuf.append(" ) VALUES (");
 		String insertQueryHead = sqlBuf.toString();
@@ -384,7 +384,7 @@ public class PostGIS {
 			if (pos > -1){
 				sqlBuf.append(",");
 			}
-			sqlBuf.append(" " + dbLayerDef.getFieldGeometry());
+			sqlBuf.append(" \"" + dbLayerDef.getFieldGeometry() + "\"");
 			sqlBuf.append(" = ");
 			//MCoord
 			int type = feat.getGeometry().getGeometryType();
