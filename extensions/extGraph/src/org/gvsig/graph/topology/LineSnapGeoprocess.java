@@ -283,9 +283,9 @@ public class LineSnapGeoprocess extends AbstractGeoprocess {
 				coordMap.put(c2, c2);
 			}
 			coords[0] = c1;
-			coords[1] = c2;
-			jtsGeom.getFactory().createLineString(coords);
-			feat.setGeometry(FConverter.jts_to_igeometry(jtsGeom));
+			coords[coords.length-1] = c2;
+			Geometry newJtsG = jtsGeom.getFactory().createLineString(coords);
+			feat.setGeometry(FConverter.jts_to_igeometry(newJtsG));
 			return feat;
 			
 		}

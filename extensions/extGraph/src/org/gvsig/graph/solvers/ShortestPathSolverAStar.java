@@ -41,6 +41,7 @@
 package org.gvsig.graph.solvers;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.graph.core.GlobalCounter;
@@ -163,15 +164,15 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 		node.calculateStimation(finalNode, 0);
 		
         // Priority Queue
-        FibHeap pq = new FibHeap(graph.numVertices());
-        pq.insert(node, node.getStimation());
+        PriorityQueue<GvNode> pq = new PriorityQueue<GvNode>();
+        pq.add(node);
 
 
 		// Mientras que la lista de candidatosSTL no esté vacía, procesamos
 		// Nodos
 		double bestStimation;
 
-		while ((!bExit) && (!pq.empty())) {
+		while ((!bExit) && (!pq.isEmpty())) {
 			// Buscamos el nodo con mínimo coste
 //			node = (GvNode) candidatos.get(0);
 //			bestNode = node;
@@ -186,7 +187,7 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 //				}
 //			} // for nodeNum candidatosSTL
 
-            node = (GvNode) pq.extract_min(); // get the lowest-weightSum Vertex 'u',
+            node = pq.poll(); // get the lowest-weightSum Vertex 'u',
 //			node = bestNode;
 			// Borramos el mejor nodo de la lista de candidatosSTL
 			node.setStatus(GvNode.statWasInList);
@@ -295,7 +296,7 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 
 					if (toNode.getStatus() != GvNode.statNowInList) {
 						toNode.setStatus(GvNode.statNowInList);
-						pq.insert_or_dec_key(toNode, toNode.getStimation());
+						pq.add(toNode);
 //						candidatos.add(toNode);
 					}
 				} // Si hay mejora

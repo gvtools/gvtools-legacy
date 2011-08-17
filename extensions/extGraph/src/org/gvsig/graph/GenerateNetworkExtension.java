@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
+/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibï¿½ï¿½ez, 50
+ *   Av. Blasco Ibáñez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -156,9 +156,9 @@ public class GenerateNetworkExtension extends Extension implements
 	private void generateNetwork(FLyrVect lyr) {
 		NetworkGvTableWriter netBuilder = new NetworkGvTableWriter();
 		// Por ahora, a pelo, pero hay que sacar un cuadro
-		// de diï¿½logo para hecer el mapping.
-		// Tambiï¿½n un cuadro de diï¿½logo para seleccionar
-		// en quï¿½ tablas quiere escribir, y su formato
+		// de diálogo para hecer el mapping.
+		// También un cuadro de diálogo para seleccionar
+		// en qué tablas quiere escribir, y su formato
 		// (dbf, postgres, etc)
 		String fieldType = "tipored";
 		String fieldDist = "length";
@@ -217,7 +217,7 @@ public class GenerateNetworkExtension extends Extension implements
 			int numShapes;
 			try {
 				numShapes = inputLayer.getSource().getShapeCount();
-				// lo del 10 es para que termine despuï¿½s de
+				// lo del 10 es para que termine después de
 				// escribir los puntos
 				setFinalStep(numShapes + 10);
 
@@ -276,7 +276,7 @@ public class GenerateNetworkExtension extends Extension implements
 				this.redFile = NetworkUtils.getNetworkFile(inputLayer);
 				this.pseudonodes = (FLyrVect) layers.getLayer(1);
 			}
-			else if (object instanceof FLyrVect) // no habï¿½a errores
+			else if (object instanceof FLyrVect) // no había errores
 			{
 				this.inputLayer = (FLyrVect) object;
 				inputLayer.createSpatialIndex();
@@ -328,7 +328,7 @@ public class GenerateNetworkExtension extends Extension implements
 				int numShapes;
 			
 				numShapes = layer.getSource().getShapeCount();
-				// lo del 10 es porque escribimos los nodos despuï¿½s de
+				// lo del 10 es porque escribimos los nodos después de
 				// los tramos.
 				setFinalStep(numShapes + 10);
 				setDeterminatedProcess(true);
@@ -457,9 +457,9 @@ public class GenerateNetworkExtension extends Extension implements
 
 		NetworkFileRedWriter netBuilder = new NetworkFileRedWriter();
 		// Por ahora, a pelo, pero hay que sacar un cuadro
-		// de diï¿½logo para hecer el mapping.
-		// Tambiï¿½n un cuadro de diï¿½logo para seleccionar
-		// en quï¿½ tablas quiere escribir, y su formato
+		// de diálogo para hecer el mapping.
+		// También un cuadro de diálogo para seleccionar
+		// en qué tablas quiere escribir, y su formato
 		// (dbf, postgres, etc)
 
 		ImageIcon icon = new ImageIcon(this.getClass().getClassLoader()

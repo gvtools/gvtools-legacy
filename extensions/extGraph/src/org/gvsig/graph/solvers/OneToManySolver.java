@@ -41,6 +41,7 @@
 package org.gvsig.graph.solvers;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Stack;
 
 import org.gvsig.exceptions.BaseException;
@@ -243,16 +244,16 @@ public class OneToManySolver extends AbstractNetSolver {
 		node.setStatus(GvNode.statNowInList);
 		bestCost = Double.MAX_VALUE;
         // Priority Queue
-        FibHeap pq = new FibHeap(graph.numVertices());
-        pq.insert(node, 0);
+        PriorityQueue<GvNode> pq = new PriorityQueue<GvNode>();
+        pq.add(node);
 
 		// Mientras que la lista de candidatosSTL no esté vacía, procesamos
 		// Nodos
 		int stopActual = 0;
 
-		while ((!bExit) && (!pq.empty())) {
+		while ((!bExit) && (!pq.isEmpty())) {
 			// Buscamos el nodo con mínimo coste
-			node = (GvNode) pq.extract_min(); // get the lowest-weightSum Vertex 'u',
+			node = pq.poll(); // get the lowest-weightSum Vertex 'u',
 			node.setStatus(GvNode.statWasInList);
 			
 			if (callMinimumCostNodeSelectedListeners(node))
@@ -354,7 +355,8 @@ public class OneToManySolver extends AbstractNetSolver {
 
 						if (toNode.getStatus() != GvNode.statNowInList) {
 							toNode.setStatus(GvNode.statNowInList);
-							pq.insert_or_dec_key(toNode, newCost);
+							toNode.setStimation(newCost);
+							pq.add(toNode);
 						}
 					} // Si hay mejora
 				} // if ese nodo no ha estado en la lista de candidatosSTL

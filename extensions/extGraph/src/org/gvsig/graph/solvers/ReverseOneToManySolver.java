@@ -41,6 +41,7 @@
 package org.gvsig.graph.solvers;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Stack;
 
 import org.gvsig.exceptions.BaseException;
@@ -166,20 +167,22 @@ public class ReverseOneToManySolver extends OneToManySolver {
 		node = graph.getNodeByID(idStart);
 		node.initialize();
         // Priority Queue
-        FibHeap pq = new FibHeap(graph.numVertices());
-        pq.insert(node, 0);
+        PriorityQueue<GvNode> pq = new PriorityQueue<GvNode>();
 
-		node.setCostZero();
+        node.setCostZero();
 		node.setStatus(GvNode.statNowInList);
+
+        pq.add(node);
+
 		bestCost = Double.MAX_VALUE;
 
 		// Mientras que la lista de candidatosSTL no esté vacía, procesamos
 		// Nodos
 		int stopActual = 0;
 
-		while ((!bExit) && (!pq.empty())) {
+		while ((!bExit) && (!pq.isEmpty())) {
 			// Buscamos el nodo con mínimo coste
-			node = (GvNode) pq.extract_min(); // get the lowest-weightSum Vertex 'u',
+			node = pq.poll(); // get the lowest-weightSum Vertex 'u',
 
 			node.setStatus(GvNode.statWasInList);
 			
@@ -294,7 +297,8 @@ public class ReverseOneToManySolver extends OneToManySolver {
 
 						if (toNode.getStatus() != GvNode.statNowInList) {
 							toNode.setStatus(GvNode.statNowInList);
-							pq.insert_or_dec_key(toNode, newCost);
+							toNode.setStimation(newCost);
+							pq.add(toNode);
 						}
 					} // Si hay mejora
 				} // if ese nodo no ha estado en la lista de candidatosSTL

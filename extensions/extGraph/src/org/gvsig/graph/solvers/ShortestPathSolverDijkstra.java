@@ -41,6 +41,7 @@
 package org.gvsig.graph.solvers;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.graph.core.AbstractNetSolver;
@@ -153,13 +154,13 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 		node.setStatus(GvNode.statNowInList);
 		bestCost = Double.MAX_VALUE;
         // Priority Queue
-        FibHeap pq = new FibHeap(graph.numVertices());
-        pq.insert(node, 0);
+        PriorityQueue<GvNode> pq = new PriorityQueue<GvNode>();
+        pq.add(node);
 
 		// Mientras que la lista de candidatosSTL no esté vacía, procesamos
 		// Nodos
 
-		while ((!bExit) && (!pq.empty())) {
+		while ((!bExit) && (!pq.isEmpty())) {
 			// Buscamos el nodo con mínimo coste
 //			node = (GvNode) candidatos.get(0);
 //			bestNode = node;
@@ -174,7 +175,7 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 //
 //			
 //			node = bestNode;
-			node = (GvNode) pq.extract_min(); // get the lowest-weightSum Vertex 'u',
+			node = pq.poll(); // get the lowest-weightSum Vertex 'u',
 			// Borramos el mejor nodo de la lista de candidatosSTL
 			node.setStatus(GvNode.statWasInList);
 			// TODO: BORRAR POR INDEX, NO ASÍ. ES MÁS LENTO QUE SI BORRAMOS EL i-ésimo.
@@ -245,7 +246,8 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 
 						if (toNode.getStatus() != GvNode.statNowInList) {
 							toNode.setStatus(GvNode.statNowInList);
-							pq.insert_or_dec_key(toNode, newCost);
+							toNode.setStimation(newCost);
+							pq.add(toNode);
 							//candidatos.add(toNode);
 						}
 					} // Si hay mejora

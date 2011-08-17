@@ -42,7 +42,9 @@ package org.gvsig.graph.core;
 
 import java.util.ArrayList;
 
-public class GvNode {
+import org.gvsig.fmap.algorithm.triangulation.visad.SetException;
+
+public class GvNode implements Comparable<GvNode> {
 	public final static int statNotInList = 0;
 	public final static int statNowInList = 1;
 	public final static int statWasInList = 2;
@@ -485,7 +487,7 @@ public class GvNode {
 		
 		// TODO: provisional. QUITAR bestCost como atributo
 //		best_cost = 0;
-				
+		setStimation(0);
 	}
 
 	/**
@@ -571,6 +573,11 @@ public class GvNode {
 		turnCosts = new ArrayList<GvTurn>();
 		
 	}
+	
+	public int compareTo(GvNode o) {
+		return Double.compare(getStimation(), o.getStimation());
+	}
+
 }
 
 

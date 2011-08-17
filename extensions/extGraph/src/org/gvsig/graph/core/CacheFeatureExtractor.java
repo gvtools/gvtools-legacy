@@ -38,7 +38,7 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 public class CacheFeatureExtractor implements IFeatureExtractor {
 
-	ArrayList<IFeature> feats;
+	ArrayList<IFeature> feats = new ArrayList<IFeature>();
 	
 	/**
 	 * @param lyr The layer from features will be extracted.
