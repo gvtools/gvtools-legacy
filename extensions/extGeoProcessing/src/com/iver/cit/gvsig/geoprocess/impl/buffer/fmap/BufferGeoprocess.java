@@ -43,7 +43,7 @@
  */
 /* CVS MESSAGES:
  *
- * $Id: BufferGeoprocess.java 32916 2010-07-01 09:12:40Z vcaballero $
+ * $Id: BufferGeoprocess.java 33353 2010-09-02 11:20:30Z jpiera $
  * $Log$
  * Revision 1.6  2007-08-07 15:09:22  azabala
  * changes to remove UnitUtils' andami dependencies
@@ -135,10 +135,10 @@ import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
+import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.ILayerDefinition;
-import com.iver.cit.gvsig.fmap.drivers.LayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.edition.writers.shp.ShpWriter;
@@ -387,7 +387,7 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 			if(!dissolveBuffers){
 				resultLayerDefinition = new SHPLayerDefinition();
 				try {
-					resultLayerDefinition.setShapeType(firstLayer.getShapeType());
+					resultLayerDefinition.setShapeType(FShape.POLYGON);
 					resultLayerDefinition.setProjection(firstLayer.getProjection());
 					resultLayerDefinition.setName(firstLayer.getName());
 					resultLayerDefinition.setFieldsDesc(firstLayer.getRecordset().getFieldsDescription());
