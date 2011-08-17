@@ -39,7 +39,8 @@ public class PathGenerator {
 			URL url=new URL(targetPath);
 			File fileIn = new File(url.toURI());
 			File file = getFile(getPath(fileIn.getAbsolutePath()));
-			return file.toURI().toURL().toString();
+			file=new File(file.getPath().replace(".\\.\\", ".\\").replace("././", "./"));
+			return file.getPath();
 		 } catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
@@ -161,7 +162,13 @@ public class PathGenerator {
 			File file = getFile(getAbsolutePath(fileIn.getAbsolutePath()));
 			return file.toURI().toURL().toString();
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			try {
+				File filePath = new File(path);
+				File file = new File(getAbsolutePath(filePath.getPath()));
+				return file.toURI().toURL().toString();
+			} catch (MalformedURLException e1) {
+				e1.printStackTrace();
+			}
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
