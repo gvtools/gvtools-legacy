@@ -6,10 +6,8 @@
 	<property name="targetDir" location="." />
 
 
-	<available property="is3D" file="3D" />
 
-	<target name="main" depends="ecw, gdal, mrsid, crs, potrace, 3D" />
-	<target name="without-3D" depends="ecw, gdal, mrsid, crs, potrace" />
+	<target name="main" depends="ecw, gdal, mrsid, crs, potrace" />
 
 	<target name="ecw">
 		<copy todir="${targetDir}">
@@ -47,19 +45,9 @@
 		</copy>
 	</target>
 	
-	<target name="3D" if="is3D">
-		<copy todir="${targetDir}">
-			<fileset dir="3D" includes="**/**" />
-		</copy>
-	</target>
 
-	<target name="clean3D" if="is3D">
-		<delete includeemptydirs="true">
-			<fileset dir="${targetDir}" includes="osgPlugins**/**" />
-		</delete>
-	</target>
 
-	<target name="clean" depends="clean3D">
+	<target name="clean" >
 		<delete>
 			<fileset dir="${targetDir}" includes="*.dll *.lib *.jar *.manifest" />
 		</delete>

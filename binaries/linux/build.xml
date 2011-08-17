@@ -3,7 +3,6 @@
         Reorganiza el directorio binaries/linux, para que pueda usarse directamente por gvSIG.
     </description>
 
-	<available property="is3D" file="3D" />
 
 	<target name="init">
 		<condition property="isLinux">
@@ -12,8 +11,7 @@
 	</target>
 	<property name="targetDir" location="." />
 
-	<target name="main" depends="init, ecw, gdal, mrsid, crs, potrace, 3D, grass" />
-	<target name="without-3D" depends="init, ecw, gdal, mrsid, crs, potrace" />
+	<target name="main" depends="init, ecw, gdal, mrsid, crs, potrace, grass" />
 
 	<target name="ecw">
 		<copy todir="${targetDir}">
@@ -433,13 +431,8 @@
 		</exec>
 	</target>
 
-	<target name="clean3D" if="is3D">
-		<delete includeemptydirs="true">
-			<fileset dir="${targetDir}" includes="osgPlugins**/**" />
-		</delete>
-	</target>
 
-	<target name="clean" depends="clean3D">
+	<target name="clean" >
 		<delete>
 			<fileset
 				dir="${targetDir}"
@@ -448,21 +441,5 @@
 	</target>
 
 
-	<target name="3D" if="is3D">
-		<copy todir="${targetDir}">
-			<fileset dir="3D" includes="*.so*" />
-		</copy>
-		<copy todir="${targetDir}">
-			<fileset dir="3D" includes="**/*.so*" />
-		</copy>
-
-		<!--<property file="3D/links.properties" prefix="links3D"/>-->
-		<exec executable="${basedir}/3D/install-3D.sh">
-			<arg value="${targetDir}"/>
-		</exec>
-
-		<!-- cd $HOME/.depman/lib ; find . -type l -exec ls -l {} ';' | sed 's/.*[.][/]//g' | sed 's/\(.*\) -> \(.*\)$/ln -sf \2 \1/g' > ${3D}/install-3D.sh ; cat ${3D}/install-3D.sh.head ${3D}/install-3D.sh > ${3D}/install-3D.sh -->
-
-	</target>
 
 </project>
