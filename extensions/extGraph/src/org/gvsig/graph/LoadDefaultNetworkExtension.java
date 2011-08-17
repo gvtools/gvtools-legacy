@@ -207,7 +207,7 @@ public class LoadDefaultNetworkExtension extends Extension {
 		FieldDescription[] fields = lyrVect.getRecordset().getFieldsDescription();
 		for (int i=0; i<fields.length; i++)
 		{
-			if (fields[i].getFieldType() == Types.VARCHAR)
+			if ((fields[i].getFieldType() == Types.VARCHAR) || (fields[i].getFieldType() == Types.LONGVARCHAR))
 			{
 				aux.add(fields[i].getFieldName());
 			}
