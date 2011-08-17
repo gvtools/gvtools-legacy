@@ -257,7 +257,7 @@ public class OracleSpatialUtils {
      * @throws SQLException
      */
     public static STRUCT fShapeToSTRUCT(Object fshp, IConnection c, int srid,
-        boolean agu_b, boolean hasSrid) throws SQLException {
+        boolean agu_b, boolean hasSrid, boolean is_geodet) throws SQLException {
         boolean three = false;
 
         if (fshp instanceof FShape3D) {
@@ -287,13 +287,12 @@ public class OracleSpatialUtils {
         else {
             if (fshp instanceof FPolygon2D) { // polygon 2/3d
 
-                if (fshp instanceof FCircle2D) {
+                if ((fshp instanceof FCircle2D) && (!is_geodet)) {
                     resp = getCircleAsStruct((FCircle2D) fshp, srid, c, hasSrid);
-                }
-                else {
+                } else {
                     // also FEllipse2D
                     resp = getMultiPolygonAsStruct((FShape) fshp, srid, three,
-                            c, agu_b, hasSrid);
+                            c, agu_b, hasSrid, is_geodet);
 
                     // ArrayList polys = getPolygonsEasily(fshp);
                     // resp = getMultiPolygonAsStruct(polys, srid, three, c);
@@ -301,7 +300,7 @@ public class OracleSpatialUtils {
             }
             else { // line 2/3d
 
-                ArrayList _lines = getLineStrings((FShape) fshp);
+                ArrayList _lines = getLineStrings((FShape) fshp, is_geodet);
                 resp = getMultiLineAsStruct(_lines, srid, three, c, hasSrid);
             }
         }
@@ -555,7 +554,7 @@ public class OracleSpatialUtils {
         return false;
     }
 
-    private static ArrayList getPolygonsEasily(FShape mpolygon) {
+    private static ArrayList getPolygonsEasily(FShape mpolygon, boolean isgeo) {
         boolean threed = false;
 
         if (mpolygon instanceof FPolygon3D) {
@@ -574,7 +573,9 @@ public class OracleSpatialUtils {
         Coordinate onlyCoord = null;
         int numParts = 0;
 
-        PathIterator theIterator = mpolygon.getPathIterator(null, FLATNESS);
+        PathIterator theIterator = mpolygon.getPathIterator(null,
+        		isgeo ? (FLATNESS / 150000.0) : FLATNESS);
+        
 
         while (!theIterator.isDone()) {
             //while not done
@@ -780,7 +781,7 @@ public class OracleSpatialUtils {
         return resp;
     }
 
-    private static ArrayList getLineStrings(FShape mlines) {
+    private static ArrayList getLineStrings(FShape mlines, boolean isgeo) {
         boolean threed = false;
 
         if (mlines instanceof FPolyline3D) {
@@ -795,7 +796,7 @@ public class OracleSpatialUtils {
         LineString3D lin;
 
         ArrayList arrayLines = new ArrayList();
-        PathIterator theIterator = mlines.getPathIterator(null, FLATNESS);
+        PathIterator theIterator = mlines.getPathIterator(null, isgeo ? (FLATNESS/150000.0) : FLATNESS);
         int theType = -99;
         double[] theData = new double[6];
         ArrayList arrayCoords = null;
@@ -1554,16 +1555,16 @@ public class OracleSpatialUtils {
 
     // private static STRUCT // private static ArrayList getPolygonsEasily(FShape mpolygon) {
     private static STRUCT getMultiPolygonAsStruct(FShape mpol, int srid,
-        boolean threed, IConnection _conn, boolean agu_bien, boolean hasSrid)
+        boolean threed, IConnection _conn, boolean agu_bien, boolean hasSrid, boolean isgeo)
         throws SQLException {
-        ArrayList all_ls = getPolygonsEasily(mpol);
+        ArrayList all_ls = getPolygonsEasily(mpol, isgeo);
         Object[] hs = getHolesForShells(all_ls);
         ArrayList sh = (ArrayList) hs[0];
         ArrayList _ho = (ArrayList) hs[1];
         ArrayList ho = reverseHoles(_ho);
 
-        return getMultiPolygonAsStruct(sh, ho, srid, threed, _conn, agu_bien,
-            hasSrid);
+        return getMultiPolygonAsStruct(sh, ho, srid, threed, _conn, agu_bien, hasSrid);
+
     }
 
     private static ArrayList reverseHoles(ArrayList hh) {

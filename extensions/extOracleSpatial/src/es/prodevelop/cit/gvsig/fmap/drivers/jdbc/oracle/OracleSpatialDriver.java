@@ -159,8 +159,8 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
     public static final String ORACLE_GEO_SCHEMA = "MDSYS";
     public static final String CONN_STR_BEGIN = "jdbc:oracle:thin:";
     
-    public static final int VARCHAR2_DEFAULT_SIZE = 2000; //  512;  
-    public static final int VARCHAR2_MAX_SIZE = 2000;
+    // public static final int VARCHAR2_DEFAULT_SIZE = 2000; //  512;  
+    public static final int VARCHAR2_MAX_SIZE = 4000;
     
     public static final int MAX_ID_LENGTH = 30;
     private final static GeometryFactory geomFactory = new GeometryFactory();
@@ -1234,7 +1234,12 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
         try {
             int aux = fieldId + 1; // fieldId viene basado en 0
-            i = metaData.getColumnDisplaySize(aux);
+            int _type = metaData.getColumnType(aux);
+            if (NumberUtilities.isNumeric(_type)) {
+                i = metaData.getPrecision(aux);
+            } else {
+                i = metaData.getColumnDisplaySize(aux);
+            }
         }
         catch (SQLException e) {
             logger.error("While getting field width: " + e.getMessage());
@@ -1718,64 +1723,67 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
 
 
-    public static String fieldTypeToSqlStringType(FieldDescription fieldDesc) {
-        String aux = "VARCHAR2(" + VARCHAR2_DEFAULT_SIZE + " BYTE)"; // Por defecto.
+    public static String fieldTypeToSqlStringType(FieldDescription fd) {
+    	
+        String aux = "VARCHAR2(" + VARCHAR2_MAX_SIZE + ")"; // Por defecto.
+        int the_type = fd.getFieldType();
+        
+        int _w = fd.getFieldLength();
+        int _dec = 0;
+        
+        if (NumberUtilities.isNumeric(the_type)) {
+        	_dec = fd.getFieldDecimalCount(); 
+        }
 
-        switch (fieldDesc.getFieldType()) {
+        switch (the_type) {
         case Types.SMALLINT:
-            aux = "NUMBER(5, 0)";
-
+            aux = "NUMBER(" + _w + ", 0)";
             break;
 
         case Types.INTEGER:
-            aux = "NUMBER(12, 0)";
-
+            aux = "NUMBER(" + _w + ", 0)";
             break;
 
         case Types.BIGINT:
-            aux = "NUMBER(38, 0)";
-
+            aux = "NUMBER(" + _w + ", 0)";
             break;
 
         case Types.BOOLEAN:
             aux = "NUMBER(1, 0)";
-
             break;
 
         case Types.DECIMAL:
-            aux = "NUMBER";
-
+            aux = "NUMBER(" + _w + ", " + _dec + ")";
             break;
 
         case Types.NUMERIC:
-            aux = "NUMBER";
-
+            aux = "NUMBER(" + _w + ", " + _dec + ")";
             break;
 
         case Types.DOUBLE:
-            aux = "FLOAT";
-
+            aux = "NUMBER(" + _w + ", " + _dec + ")";
             break;
 
         case Types.FLOAT:
-            aux = "FLOAT";
-
+            aux = "NUMBER(" + _w + ", " + _dec + ")";
             break;
 
         case Types.CHAR:
             aux = "CHAR(1 BYTE)";
-
             break;
 
         case Types.VARCHAR:
-            aux = "NVARCHAR2(" + nvarchar2Limited(fieldDesc.getFieldLength()) + ")";
-
+            aux = "VARCHAR2(" + _w + ")";
             break;
 
         case Types.LONGVARCHAR:
-            aux = "NVARCHAR2(" + nvarchar2Limited(fieldDesc.getFieldLength()) + ")";
-
+            aux = "VARCHAR2(" + _w + ")";
             break;
+            
+        case Types.DATE:
+            aux = "DATE";
+            break;
+
         }
 
         return aux;
@@ -2860,7 +2868,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
         try {
             STRUCT the_struct = OracleSpatialUtils.fShapeToSTRUCT(shp, _conn,
-                    _srid, agu_bien, hasSrid);
+                    _srid, agu_bien, hasSrid, _isGeoCS);
 
             return the_struct;
         }
@@ -3737,18 +3745,6 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
 	public void write(DataWare arg0) throws WriteDriverException, ReadDriverException {
 	}
-	
-	public static int nvarchar2Limited(int n) {
-		
-		if (n <= VARCHAR2_DEFAULT_SIZE) return VARCHAR2_DEFAULT_SIZE;
-		if (n <= VARCHAR2_MAX_SIZE) return n;
-		
-		return VARCHAR2_MAX_SIZE;
-	}
-	
-
-    
-
 	
 	public static String removePrefix(String str) {
 		
