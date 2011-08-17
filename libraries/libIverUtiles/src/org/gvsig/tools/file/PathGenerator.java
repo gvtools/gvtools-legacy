@@ -43,6 +43,8 @@ public class PathGenerator {
 			return file.getPath();
 		 } catch (MalformedURLException e) {
 			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			return targetPath;
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -169,7 +171,9 @@ public class PathGenerator {
 			} catch (MalformedURLException e1) {
 				e1.printStackTrace();
 			}
-		} catch (URISyntaxException e) {
+		} catch (IllegalArgumentException e) {
+			return path;
+		}catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 		return path;
