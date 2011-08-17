@@ -454,7 +454,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 					ctm.addColorTableFilter(p);
 				} else {
 					//sino hace lo que dice en las preferencias
-					if (getDataType()[0] != IBuffer.TYPE_BYTE) 
+					if (!(getBandCount() >= 3 && getDataType()[0] == IBuffer.TYPE_BYTE)) 
 						loadEnhancedOrColorTable(filterManager);
 
 				}
