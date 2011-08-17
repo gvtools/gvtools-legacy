@@ -1201,6 +1201,8 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
         }
         if (source instanceof VectorialFileAdapter) {
             xml.putProperty("type", "vectorial");
+            xml.putProperty("absolutePath",((VectorialFileAdapter) source)
+                    .getFile().getAbsolutePath());
             xml.putProperty("file", pathGenerator.getPath(((VectorialFileAdapter) source)
                     .getFile().getAbsolutePath()));
             try {

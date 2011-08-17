@@ -973,8 +973,10 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 	 */
 	public XMLEntity getXMLEntityWithoutChecks() throws XMLException {
 		XMLEntity xml = super.getXMLEntity();
-		if(getFile() != null)
+		if(getFile() != null){
+			xml.putProperty("absolutePath", getFile().getAbsolutePath());
 			xml.putProperty("file", pathGenerator.getPath(getFile().getAbsolutePath()));
+		}
 		xml.putProperty("driverName", "gvSIG Raster Driver");
 
 		// Si no hay ningín Status aplicamos el StatusLayerRaster que se usa por defecto
@@ -1004,8 +1006,13 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 		loadingFromProject = true;
 		
 		try {
-			params = new File(pathGenerator.getAbsolutePath(xml.getStringProperty("file")));
-
+			String path=pathGenerator.getAbsolutePath((String)xml.getStringProperty("file"));
+			if (path!=null){
+				params = new File(pathGenerator.getAbsolutePath(xml.getStringProperty("file")));
+			}else{
+				params = new File(xml.getStringProperty("absolutePath"));
+			}
+			
 			if(params != null && getName() != null && getName().compareTo("") != 0) {
 				try {
 					enableAwake();

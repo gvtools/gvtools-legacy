@@ -1269,10 +1269,16 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 						} catch (DriverLoadException e1) {
 							throw new DriverLayerException(name,e1);
 						}
-						layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
-								new File(pathGenerator.getAbsolutePath((String)xml.getStringProperty("file"))),
+						String path=pathGenerator.getAbsolutePath((String)xml.getStringProperty("file"));
+						if (path!=null){
+							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
+									new File(pathGenerator.getAbsolutePath((String)xml.getStringProperty("file"))),
+									proj);
+						}else{
+							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
+								new File(xml.getStringProperty("absolutePath")),
 								proj);
-
+						}
 
 
 					}

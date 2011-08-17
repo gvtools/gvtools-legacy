@@ -109,7 +109,10 @@ public class PathGenerator {
 		File filePath=new File(path);
 		if (isAbsolutePath && filePath.exists())
 			return path;
-		return new File(basePath, path).getAbsolutePath();
+		filePath=new File(basePath, path);
+		if (filePath.exists())
+			return filePath.getAbsolutePath();
+		return null;
 	}
 	
 	/**
