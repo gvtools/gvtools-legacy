@@ -195,12 +195,22 @@ public class I18nPreferencePage extends AbstractPreferencePage implements
 		    StringBuffer msg = new StringBuffer(Messages
 			    .getText("I18nPreferencePage.idiomas_instalados"));
 
+		    if (installedLocales.length>=3){
+			    msg.append("\n");
+		    }
 		    for (int i = 0; i < installedLocales.length; i++) {
 			msg.append(manager.getDisplayName(installedLocales[i]));
 			if (i < installedLocales.length - 1) {
-			    msg.append(", ");
+				if((i+1)%3 == 0){
+				    msg.append(",\n");
+				} else {
+					msg.append(", ");
+				}
 			}
 		    }
+		    msg.append("\n");
+		    msg.append(Messages
+		    		.getText("I18nPreferencePage.changes_will_be_applied_when_restarting_the_application"));
 		    tableModel.reloadLocales();
 		    JOptionPane
 			    .showMessageDialog(
@@ -215,7 +225,7 @@ public class I18nPreferencePage extends AbstractPreferencePage implements
 	    }
 	}
     }
-
+    
     /**
      * Updates the translation of a locale
      */
