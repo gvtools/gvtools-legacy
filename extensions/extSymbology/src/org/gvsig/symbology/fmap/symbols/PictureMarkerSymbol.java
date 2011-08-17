@@ -283,7 +283,11 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 			try{
 				setImage(new URL(imagePath));
 			} catch (MalformedURLException e) {
-				setImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +imagePath));
+				try{
+					setImage(new URL(pathGenerator.getAbsoluteURLPath(imagePath)));
+				} catch (MalformedURLException e1) {
+					setImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +imagePath));
+				}
 			}
 		} catch (MalformedURLException e) {
 			Logger.getLogger(getClass()).error(Messages.getString("invalid_url")+": "+imagePath);
@@ -294,7 +298,11 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 			try{
 				setSelImage(new URL(selImagePath));
 			} catch (MalformedURLException e) {
-				setSelImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +selImagePath));
+				try{
+					setSelImage(new URL(pathGenerator.getAbsoluteURLPath(selImagePath)));
+				} catch (MalformedURLException e1) {
+					setSelImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +selImagePath));
+				}
 			}
 		} catch (MalformedURLException e) {
 			Logger.getLogger(getClass()).error(Messages.getString("invalid_url")+": "+selImagePath);

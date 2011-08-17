@@ -274,9 +274,26 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 		createStyleFromXML(
 				xml.firstChild("id", "fillProperties"), "fill properties");
 
+		File rootDir = new File(SymbologyFactory.SymbolLibraryPath);
 		try {
-			setImage(new URL(imagePath));
-			setSelImage(new URL(selImagePath));
+			try{
+				setImage(new URL(imagePath));
+			} catch (MalformedURLException e) {
+				try{
+					setImage(new URL(pathGenerator.getAbsoluteURLPath(imagePath)));
+				} catch (MalformedURLException e1) {
+					setImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +imagePath));
+				}
+			}
+			try{
+				setSelImage(new URL(selImagePath));
+			} catch (MalformedURLException e) {
+				try{
+					setSelImage(new URL(pathGenerator.getAbsoluteURLPath(selImagePath)));
+				} catch (MalformedURLException e1) {
+					setSelImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +selImagePath));
+				}
+			}
 		} catch (MalformedURLException e) {
 			Logger.getLogger(getClass()).error(Messages.getString("invalid_url"));
 		} catch (IOException e) {
