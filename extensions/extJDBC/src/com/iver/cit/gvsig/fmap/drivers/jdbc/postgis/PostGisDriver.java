@@ -49,6 +49,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -1408,4 +1409,157 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			}
 		} else return false;
 	}
+
+  
+	private Integer getGidFieldIndex(String ret[]){
+	    for (int i=0; i<ret.length; i++) {
+	        if (ret[i].equalsIgnoreCase("gid")) {
+	            return new Integer(i);
+	        }	    
+	    }
+	    return null;
+	}
+	
+	private void swapIndexes(String[] ret, int i, int j){
+	    if(i!=j && i>=0 && i<ret.length && j>0 && j<ret.length){
+	        String aux = ret[i];
+	        ret[i] = ret[j];
+	        ret[j] = aux;
+	    }
+	}
+
+	public String[] getIdFieldsCandidates(IConnection conn, String table_name) throws DBException {
+
+	    String[] ret = getAllFields(conn, table_name);
+
+	    String pk = getPrimaryKey(conn, table_name);
+
+	    if (!pk.equals("")){
+	        for (int i = 0; i < ret.length; i++) {
+	            if (pk.equals(ret[i])) {
+	                    //swap possible gid col with the first element
+	                    //in order to make it the default selection on 
+	                    //combobox
+	                    swapIndexes(ret, i, 0);
+	                    break;
+	            }
+	        }
+	    } else {
+	        Integer gidFieldIndex = getGidFieldIndex(ret);
+	        if (gidFieldIndex!=null){
+	            //swap possible gid col with the first element
+	            //in order to make it the default selection on 
+	            //combobox
+	            int index = gidFieldIndex.intValue();
+	            swapIndexes(ret, index, 0);
+	        } else {
+	            for (int i = 0; i < ret.length; i++) {
+	                if (isAutoIncrement(conn, table_name, ret[i])) {
+	                    //swap possible gid col with the first element
+	                    //in order to make it the default selection on 
+	                    //combobox
+	                    swapIndexes(ret, i, 0);
+	                    break;
+	                }
+	            }
+	        }
+	    }
+	    return ret;
+	}
+
+	private boolean isAutoIncrement(IConnection con, String table_name, String colName) {
+		
+		String query = "SELECT column_default SIMILAR TO 'nextval%regclass%' AS isautoincremental "
+			+ "FROM information_schema.columns " 
+			+ "WHERE table_name = ? AND table_schema=? " 
+			+ "AND column_name=?";
+		
+		try {
+			// get schema and table from the composed tablename
+			String[] tokens = table_name.split("\\u002E", 2);
+			String schema = "";
+			String tableName = "";
+			if (tokens.length == 1) {
+				tableName = tokens[0];
+			} else {
+				schema = tokens[0];
+				tableName = tokens[1];
+			}
+			
+			
+			Connection c = ((ConnectionJDBC)con).getConnection();
+			PreparedStatement st = c.prepareStatement(query);
+			st.setString(1, tableName);
+			st.setString(2, schema);
+			st.setString(3, colName);
+			
+			ResultSet rs = st.executeQuery();
+			boolean isAutoincrement = false;
+			if (rs.next()) {
+				isAutoincrement = rs.getBoolean("isautoincremental");
+			}
+			
+			rs.close();
+			st.close();
+			
+			return isAutoincrement;
+		} catch (SQLException e) {
+			try {
+				con.close();
+			} catch (DBException e2) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			return false;
+
+		}
+		
+		
+	}
+
+	   private String getPrimaryKey(IConnection con, String table_name) {
+
+	       String query = "SELECT column_name FROM information_schema.key_column_usage" +
+	       		" WHERE table_name=? AND table_schema=? AND constraint_name=?";
+
+	        try {
+	            // get schema and table from the composed tablename
+	            String[] tokens = table_name.split("\\u002E", 2);
+	            String schema = "";
+	            String tableName = "";
+	            if (tokens.length == 1) {
+	                tableName = tokens[0];
+	            } else {
+	                schema = tokens[0];
+	                tableName = tokens[1];
+	            }
+	            
+	            
+	            Connection c = ((ConnectionJDBC)con).getConnection();
+	            PreparedStatement st = c.prepareStatement(query);
+	            st.setString(1, tableName);
+	            st.setString(2, schema);
+	            st.setString(3, tableName+"_pkey");
+	            
+	            ResultSet rs = st.executeQuery();
+	            
+	            String primaryKey = "";
+	            if (rs.next()) {
+	                primaryKey = rs.getString("column_name");
+	            }
+	            
+	            rs.close();
+	            st.close();
+	            
+	            return primaryKey;
+	        } catch (SQLException e) {
+	            try {
+	                con.close();
+	            } catch (DBException e2) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+	            } 
+	            return "";
+	        }
+	    }
 }
