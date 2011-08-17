@@ -49,6 +49,7 @@ package org.gvsig.hyperlink;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.gvsig.hyperlink.actions.FolderFormat;
 import org.gvsig.hyperlink.actions.ImgFormat;
 import org.gvsig.hyperlink.actions.LoadRasterLayer;
 import org.gvsig.hyperlink.actions.LoadVectorLayer;
@@ -93,6 +94,7 @@ public class LinkControls extends Extension {
 	private static final int LEGACY_HTML_TYPE = 1;
 	private static final int LEGACY_PDF_TYPE = 2;
 	private static final int LEGACY_SVG_TYPE = 3;
+	private static final int LEGACY_FOLDER_TYPE = 4;
 
 	/*
 	 * @see com.iver.andami.plugins.IExtension#execute(java.lang.String)
@@ -172,6 +174,8 @@ public class LinkControls extends Extension {
 			return PdfFormat.actionCode;
 		case LEGACY_SVG_TYPE:
 			return SvgFormat.actionCode;
+		case LEGACY_FOLDER_TYPE:
+			return FolderFormat.actionCode;
 		case LEGACY_HTML_TYPE:
 		default:
 			return TxtFormat.actionCode;
@@ -255,6 +259,8 @@ public class LinkControls extends Extension {
 		tmpAction = new LoadVectorLayer();
 		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(), tmpAction);
 		tmpAction = new SvgFormat();
+		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(), tmpAction);
+		tmpAction = new FolderFormat();
 		extensionPoints.add(ACTIONSEXTENSIONPOINT, tmpAction.getActionCode(), tmpAction);
 	}
 
