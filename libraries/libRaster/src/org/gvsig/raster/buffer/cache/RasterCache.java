@@ -48,6 +48,7 @@ public class RasterCache extends RasterBuffer {
 
 	private Cache 			cache = null;
 	private LRUAlgorithm  	lru = null;
+    private int lastLine = -1;
 		
 	//TODO: FUNCIONALIDAD: Intercambio de bandas para el buffer cacheado
 	
@@ -141,282 +142,273 @@ public class RasterCache extends RasterBuffer {
 	
 	//*********************************************************
 	
-	public byte[][] getLineByte(int line) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {return null;}
-		return cache.getAccessPage().getLineByte((line & cache.getOffset()));
+	public byte[][] getLineByte(int line) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage()
+                .getLineByte((line & cache.getOffset()));
+        }
+        return null;
 	}
 
-	public short[][] getLineShort(int line) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {return null;}
-		return cache.getAccessPage().getLineShort((line & cache.getOffset()));
+	public short[][] getLineShort(int line) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getLineShort(
+                (line & cache.getOffset()));
+        }
+        return null;
 	}
 
-	public int[][] getLineInt(int line) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {return null;}
-		return cache.getAccessPage().getLineInt((line & cache.getOffset()));
+	public int[][] getLineInt(int line) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getLineInt((line & cache.getOffset()));
+        }
+        return null;
 	}
 
-	public float[][] getLineFloat(int line) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {return null;}
-		return cache.getAccessPage().getLineFloat((line & cache.getOffset()));
+	public float[][] getLineFloat(int line) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getLineFloat(
+                (line & cache.getOffset()));
+        }
+        return null;
 	}
 
-	public double[][] getLineDouble(int line) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {return null;}
-		return cache.getAccessPage().getLineDouble((line & cache.getOffset()));
-	}
-
-	//*********************************************************
-	
-	public void setLineByte(byte[][] data, int line) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setLineByte(data, (line & cache.getOffset()));
-	}
-
-	public void setLineShort(short[][] data, int line) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setLineShort(data, (line & cache.getOffset()));
-	}
-
-	public void setLineInt(int[][] data, int line) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setLineInt(data, (line & cache.getOffset()));
-	}
-
-	public void setLineFloat(float[][] data, int line) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setLineFloat(data, (line & cache.getOffset()));
-	}
-
-	public void setLineDouble(double[][] data, int line) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setLineDouble(data, (line & cache.getOffset()));
+	public double[][] getLineDouble(int line) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getLineDouble(
+                (line & cache.getOffset()));
+        }
+        return null;
 	}
 
 	//*********************************************************
 	
-	public byte[] getLineFromBandByte(int line, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {return null;}
-		return cache.getAccessPage().getLineFromBandByte((line & cache.getOffset()), band);
+	public void setLineByte(byte[][] data, int line) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setLineByte(data, (line & cache.getOffset()));
+        }
 	}
 
-	public short[] getLineFromBandShort(int line, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {return null;}
-		return cache.getAccessPage().getLineFromBandShort((line & cache.getOffset()), band);
+	public void setLineShort(short[][] data, int line) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage()
+                .setLineShort(data, (line & cache.getOffset()));
+        }
 	}
 
-	public int[] getLineFromBandInt(int line, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {return null;}
-		return cache.getAccessPage().getLineFromBandInt((line & cache.getOffset()), band);
+	public void setLineInt(int[][] data, int line) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setLineInt(data, (line & cache.getOffset()));
+        }
 	}
 
-	public float[] getLineFromBandFloat(int line, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {return null;}
-		return cache.getAccessPage().getLineFromBandFloat((line & cache.getOffset()), band);
+	public void setLineFloat(float[][] data, int line) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage()
+                .setLineFloat(data, (line & cache.getOffset()));
+        }
 	}
 
-	public double[] getLineFromBandDouble(int line, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {return null;}
-		return cache.getAccessPage().getLineFromBandDouble((line & cache.getOffset()), band);
+	public void setLineDouble(double[][] data, int line) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setLineDouble(data, (line & cache.getOffset()));
+        }
 	}
 
 	//*********************************************************
 	
-	public void setLineInBandByte(byte[] data, int line, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setLineInBandByte(data, (line & cache.getOffset()), band);
+	public byte[] getLineFromBandByte(int line, int band) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getLineFromBandByte(
+                (line & cache.getOffset()), band);
+        }
+        return null;
 	}
 
-	public void setLineInBandShort(short[] data, int line, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setLineInBandShort(data, (line & cache.getOffset()), band);
+	public short[] getLineFromBandShort(int line, int band) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getLineFromBandShort(
+                (line & cache.getOffset()), band);
+        }
+        return null;
 	}
 
-	public void setLineInBandInt(int[] data, int line, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setLineInBandInt(data, (line & cache.getOffset()), band);
+	public int[] getLineFromBandInt(int line, int band) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getLineFromBandInt(
+                (line & cache.getOffset()), band);
+        }
+        return null;
 	}
 
-	public void setLineInBandFloat(float[] data, int line, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setLineInBandFloat(data, (line & cache.getOffset()), band);
+	public float[] getLineFromBandFloat(int line, int band) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getLineFromBandFloat(
+                (line & cache.getOffset()), band);
+        }
+        return null;
 	}
 
-	public void setLineInBandDouble(double[] data, int line, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setLineInBandDouble(data, (line & cache.getOffset()), band);
+	public double[] getLineFromBandDouble(int line, int band) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getLineFromBandDouble(
+                (line & cache.getOffset()), band);
+        }
+        return null;
 	}
 
 	//*********************************************************
 	
-	public byte getElemByte(int line, int col, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {
-			return (byte)getNoDataValue(); //No leemos el dato
+	public void setLineInBandByte(byte[] data, int line, int band) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setLineInBandByte(data,
+                (line & cache.getOffset()), band);
+        }
+	}
+
+	public void setLineInBandShort(short[] data, int line, int band) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setLineInBandShort(data,
+                (line & cache.getOffset()), band);
+        }
+	}
+
+	public void setLineInBandInt(int[] data, int line, int band) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setLineInBandInt(data,
+                (line & cache.getOffset()), band);
+        }
+	}
+
+	public void setLineInBandFloat(float[] data, int line, int band) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setLineInBandFloat(data,
+                (line & cache.getOffset()), band);
+        }
+	}
+
+	public void setLineInBandDouble(double[] data, int line, int band) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setLineInBandDouble(data,
+                (line & cache.getOffset()), band);
+        }
+	}
+
+	//*********************************************************
+	
+	public byte getElemByte(int line, int col, int band) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getElemByte(
+                (line & cache.getOffset()), col, band);
 		}
-		return cache.getAccessPage().getElemByte((line & cache.getOffset()), col, band);
+        return (byte) getNoDataValue(); // No leemos el dato
 	}
 
-	public short getElemShort(int line, int col, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {
-			return (short)getNoDataValue(); //No leemos el dato
+	public short getElemShort(int line, int col, int band) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getElemShort(
+                (line & cache.getOffset()), col, band);
 		}
-		return cache.getAccessPage().getElemShort((line & cache.getOffset()), col, band);
+        return (short) getNoDataValue(); // No leemos el dato
 	}
 
-	public int getElemInt(int line, int col, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {
-			return (int)getNoDataValue(); //No leemos el dato
+	public int getElemInt(int line, int col, int band) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getElemInt((line & cache.getOffset()),
+                col, band);
 		}
-		return cache.getAccessPage().getElemInt((line & cache.getOffset()), col, band);
+        return (int) getNoDataValue(); // No leemos el dato
 	}
 
-	public float getElemFloat(int line, int col, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {
-			return (float)getNoDataValue(); //No leemos el dato
+	public float getElemFloat(int line, int col, int band) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getElemFloat(
+                (line & cache.getOffset()), col, band);
 		}
-		return cache.getAccessPage().getElemFloat((line & cache.getOffset()), col, band);
+        return (float) getNoDataValue(); // No leemos el dato
 	}
 
-	public double getElemDouble(int line, int col, int band) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {
-			return (double)getNoDataValue(); //No leemos el dato
+	public double getElemDouble(int line, int col, int band) throws InterruptedException  {
+        if (exists(line)) {
+            return cache.getAccessPage().getElemDouble(
+                (line & cache.getOffset()), col, band);
 		}
-		return cache.getAccessPage().getElemDouble((line & cache.getOffset()), col, band);
+        return (double) getNoDataValue(); // No leemos el dato
 	}
 
 	//*********************************************************
 	
-	public void setElem(int line, int col, int band, byte data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) { return;}
-		cache.getAccessPage().setElem((line & cache.getOffset()), col, band, data);
+	public void setElem(int line, int col, int band, byte data) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setElem((line & cache.getOffset()), col,
+                band, data);
+        }
 	}
 
-	public void setElem(int line, int col, int band, short data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setElem((line & cache.getOffset()), col, band, data);
+	public void setElem(int line, int col, int band, short data) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setElem((line & cache.getOffset()), col,
+                band, data);
+        }
 	}
 
-	public void setElem(int line, int col, int band, int data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setElem((line & cache.getOffset()), col, band, data);
+	public void setElem(int line, int col, int band, int data) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setElem((line & cache.getOffset()), col,
+                band, data);
+        }
 	}
 
-	public void setElem(int line, int col, int band, float data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setElem((line & cache.getOffset()), col, band, data);
+	public void setElem(int line, int col, int band, float data) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setElem((line & cache.getOffset()), col,
+                band, data);
+        }
 	}
 
-	public void setElem(int line, int col, int band, double data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setElem((line & cache.getOffset()), col, band, data);
+	public void setElem(int line, int col, int band, double data) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setElem((line & cache.getOffset()), col,
+                band, data);
+        }
 	}
 	
 	//*********************************************************
 
-	public void getElemByte(int line, int col, byte[] data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {
+	public void getElemByte(int line, int col, byte[] data) throws InterruptedException  {
+        if (!exists(line)) {
 			for (int iBand = 0; iBand < data.length; iBand++)
 	            data[iBand] = (byte)getNoDataValue();
 		}
 		cache.getAccessPage().getElemByte((line & cache.getOffset()), col, data);
 	}
 
-	public void getElemShort(int line, int col, short[] data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {
+	public void getElemShort(int line, int col, short[] data) throws InterruptedException  {
+        if (!exists(line)) {
 			for (int iBand = 0; iBand < data.length; iBand++)
 	            data[iBand] = (short)getNoDataValue();
 		}
 		cache.getAccessPage().getElemShort((line & cache.getOffset()), col, data);
 	}
 
-	public void getElemInt(int line, int col, int[] data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {
+	public void getElemInt(int line, int col, int[] data) throws InterruptedException  {
+        if (!exists(line)) {
 			for (int iBand = 0; iBand < data.length; iBand++)
 	            data[iBand] = (int)getNoDataValue();
 		}
 		cache.getAccessPage().getElemInt((line & cache.getOffset()), col, data);
 	}
 
-	public void getElemFloat(int line, int col, float[] data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {
+	public void getElemFloat(int line, int col, float[] data) throws InterruptedException  {
+        if (!exists(line)) {
 			for (int iBand = 0; iBand < data.length; iBand++)
 	            data[iBand] = (float)getNoDataValue();
 		}
 		cache.getAccessPage().getElemFloat((line & cache.getOffset()), col, data);
 	}
 
-	public void getElemDouble(int line, int col, double[] data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, true);
-		} catch (InvalidPageNumberException e) {
+	public void getElemDouble(int line, int col, double[] data) throws InterruptedException  {
+        if (!exists(line)) {
 			for (int iBand = 0; iBand < data.length; iBand++)
 	            data[iBand] = (double)getNoDataValue();
 		}
@@ -425,40 +417,54 @@ public class RasterCache extends RasterBuffer {
 	
 	//*********************************************************
 	
-	public void setElemByte(int line, int col, byte[] data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setElemByte((line & cache.getOffset()), col, data);
-	}
+    private boolean exists(int line) throws InterruptedException {
+        // Store the last line checked so we don't check it again for each
+        // pixel of the same line
+        if (line != lastLine) {
+            try {
+                lru.cacheAccess(line, false);
+                this.lastLine = line;
+            } catch (InvalidPageNumberException e) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	public void setElemShort(int line, int col, short[] data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setElemShort((line & cache.getOffset()), col, data);
-	}
+    public void setElemByte(int line, int col, byte[] data) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setElemByte((line & cache.getOffset()), col,
+                data);
+        }
+    }
 
-	public void setElemInt(int line, int col, int[] data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setElemInt((line & cache.getOffset()), col, data);
-	}
+    public void setElemShort(int line, int col, short[] data) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setElemShort((line & cache.getOffset()), col,
+                data);
+        }
+    }
 
-	public void setElemFloat(int line, int col, float[] data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setElemFloat((line & cache.getOffset()), col, data);
-	}
+    public void setElemInt(int line, int col, int[] data) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setElemInt((line & cache.getOffset()), col,
+                data);
+        }
+    }
 
-	public void setElemDouble(int line, int col, double[] data) throws InterruptedException {
-		try {
-			lru.cacheAccess(line, false);
-		} catch (InvalidPageNumberException e) {return;}
-		cache.getAccessPage().setElemDouble((line & cache.getOffset()), col, data);
-	}
+    public void setElemFloat(int line, int col, float[] data) throws InterruptedException  {
+        if (exists(line)) {
+            cache.getAccessPage().setElemFloat((line & cache.getOffset()), col,
+                data);
+        }
+    }
+
+    public void setElemDouble(int line, int col, double[] data) throws InterruptedException {
+        if (exists(line)) {
+            cache.getAccessPage().setElemDouble((line & cache.getOffset()),
+                col, data);
+        }
+    }
 
     /*
      *  (non-Javadoc)
@@ -535,7 +541,7 @@ public class RasterCache extends RasterBuffer {
 		}		
 	}
 
-	public void assign(int band, int value) throws InterruptedException {
+	public void assign(int band, int value) throws InterruptedException  {
 		for(int line = 0; line < height; line ++){
 			boolean beginLine = true;  //Para acelerar solo comprobará si la página está en caché cada vez que empieza una línea
     		for(int col = 0; col < width; col ++){
@@ -550,7 +556,7 @@ public class RasterCache extends RasterBuffer {
 		}	
 	}
 
-	public void assign(int band, float value) throws InterruptedException {
+	public void assign(int band, float value) throws InterruptedException  {
 		for(int line = 0; line < height; line ++){
 			boolean beginLine = true;  //Para acelerar solo comprobará si la página está en caché cada vez que empieza una línea
     		for(int col = 0; col < width; col ++){
@@ -565,7 +571,7 @@ public class RasterCache extends RasterBuffer {
 		}	
 	}
 
-	public void assign(int band, double value) throws InterruptedException {
+	public void assign(int band, double value) throws InterruptedException  {
 		for(int line = 0; line < height; line ++){
 			boolean beginLine = true;  //Para acelerar solo comprobará si la página está en caché cada vez que empieza una línea
     		for(int col = 0; col < width; col ++){
@@ -592,7 +598,7 @@ public class RasterCache extends RasterBuffer {
      * (non-Javadoc)
      * @see org.gvsig.fmap.driver.IBuffer#interchangeBands(int, int)
      */
-	public void interchangeBands(int band1, int band2) throws InterruptedException {
+	public void interchangeBands(int band1, int band2) throws InterruptedException  {
 		IBand b1 = getBand(band1);
 		IBand b2 = getBand(band2);
 		
@@ -674,7 +680,7 @@ public class RasterCache extends RasterBuffer {
 	 *  (non-Javadoc)
 	 * @see org.gvsig.fmap.driver.IBuffer#assignBand(int, org.gvsig.fmap.dataaccess.buffer.IBand)
 	 */
-	public void assignBand(int nBand, IBand band) throws InterruptedException {
+	public void assignBand(int nBand, IBand band) throws InterruptedException  {
 		if(band instanceof CacheBand) {
 			//((CacheBand)band).setFileName(nBand);
 			try {
@@ -692,7 +698,7 @@ public class RasterCache extends RasterBuffer {
 	 *  (non-Javadoc)
 	 * @see org.gvsig.fmap.driver.IBuffer#createBand(byte)
 	 */
-	public IBand createBand(byte defaultValue) throws InterruptedException {
+	public IBand createBand(byte defaultValue) throws InterruptedException  {
 		PageBandBuffer pageBuffer = new PageBandBuffer(getDataType(), getWidth(), cache.getHPag(), 1, true, 0);
 		IBand band = null;
 		try {
@@ -738,7 +744,7 @@ public class RasterCache extends RasterBuffer {
 	 * @throws IOException
 	 * @throws InterruptedException 
 	 */
-	private IBand createBand(PageBandBuffer pageBuffer) throws IOException, InterruptedException{
+	private IBand createBand(PageBandBuffer pageBuffer) throws InterruptedException, IOException{
 		CacheDataServer[] ds = new CacheDataServer[cache.getNTotalPags()];
 		for (int i = 0; i < cache.getNTotalPags(); i++) {
 			ds[i] = new CacheDataServer(null, 0, i);
