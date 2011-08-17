@@ -206,7 +206,7 @@
 		<deltree dir="${generated-src}"/>
 	</target>
 
-	<target name="copy-data-files">
+	<target name="copy-data-files" depends="make-package-info">
 	    <copy file="config/config.xml" todir="${dist}"/>
 		<copy todir="${dist}">
 			<fileset dir="config" includes="text*.properties"/>
@@ -221,9 +221,11 @@
 		<copy todir="${dist}/default_symbology">
 		   <fileset dir="${default_symbols_dir}" includes="**"/>
 		</copy>
+		<copy file="package.info" todir="${dist}"/>
+
 	</target>
 
-	<target name="move-to-andami">
+	<target name="move-to-andami" >
 	  	<move file="${fmapRTJar}" todir="${extensionsDir}/com.iver.cit.gvsig/lib/"/>
 		<move  file="${dist}/${jarRSerName}" todir="${extensionsDir}/com.iver.cit.gvsig/lib/"/>
 		<move todir="${extensionsDir}/${plugin}/">

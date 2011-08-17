@@ -55,7 +55,7 @@
 
 	</target>
 
-	<target name="copy-data-files">
+	<target name="copy-data-files" depends="make-package-info">
 		<copy todir="${dist}/lib/">
 			<fileset dir="lib/" includes="**/**" />
 		</copy>
@@ -70,6 +70,7 @@
 		<copy todir="${dist}/images">
 			<fileset dir="images" includes="**/**" />
 		</copy>
+		<copy file="package.info" todir="${dist}"/>
 
 	</target>
 

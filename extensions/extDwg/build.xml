@@ -105,12 +105,13 @@
 	</target>
 
 	<target name="create-jar"
-			description="Creates the plugin jar">
+			description="Creates the plugin jar" depends="make-package-info">
 		<mkdir dir="${dist}"/>
 		<copy file="config/config.xml" todir="${dist}"/>
 	    <copy todir="${dist}">
 	      <fileset dir="config/" includes="text*.properties"/>
 	    </copy>
+		<copy file="package.info" todir="${dist}"/>
 		<copy todir="${dist}/images">
 			<fileset dir="images/" includes="*"/>
 		</copy>

@@ -57,7 +57,7 @@
 	  -->
     </target>
 
-  <target name="generate-without-source" description="generate the distribution without the source file" >
+  <target name="generate-without-source" description="generate the distribution without the source file" depends="make-package-info">
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}"/>
 
@@ -68,6 +68,7 @@
 
   	<copy file="config/config.xml" todir="${dist}"/>
   	<copy file="build.number" todir="${dist}"/>
+	<copy file="package.info" todir="${dist}"/>
 
   	<copy todir="${dist}/images">
   	  	    	<fileset dir="images/" includes="*"/>

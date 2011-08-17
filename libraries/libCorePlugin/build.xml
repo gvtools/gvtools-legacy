@@ -24,7 +24,7 @@
     <mkdir dir="${build}"/>
   </target>
 
-  <target name="dist" description="generate the distribution" >
+  <target name="dist" description="generate the distribution" depends="make-package-info">
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}"/>
 
@@ -35,7 +35,8 @@
     <jar jarfile="${dist}/${plugin}.jar" basedir="${build}"/>
     <copy file="config/config.xml" todir="${dist}"/>
   	<copy file="build.number" todir="${dist}"/>
-    <copy todir="${dist}">
+	<copy file="package.info" todir="${dist}"/>
+	<copy todir="${dist}">
     	<fileset dir="config" includes="text*.properties"/>
     </copy>
     <copy todir="${dist}/images">
@@ -72,9 +73,10 @@
 				classpath="${compile-classpath}"/>-->
 	</target>
 
-	<target name="copy-data-files">
+	<target name="copy-data-files" depends="make-package-info">
 		<copy file="config/config.xml" todir="${dist}"/>
 		<copy file="build.number" todir="${dist}"/>
+		<copy file="package.info" todir="${dist}"/>
 		<copy todir="${dist}">
 			<fileset dir="config" includes="text*.properties"/>
 		</copy>

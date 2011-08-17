@@ -11,9 +11,8 @@
   <property name="build-test" location="bin-test"/>
   <property name="doc"  location="doc"/>
   <property name="dist"  location="dist"/>
-  <property name="buildNumberFile"  value="build.number"/>
   <property name="without_src"  location="without_src"/>
-  <property name="plugin" value="com.iver.cit.gvsig.geoprocess"/>	
+  <property name="plugin" value="com.iver.cit.gvsig.geoprocess"/>
 
 
 	<property name="lib" value="lib"/>
@@ -143,9 +142,10 @@
 	    <jar jarfile="${dist}/lib/${jarName}" basedir="${build}"/>
 	</target>
 
-	<target name="copy-data-files">
+	<target name="copy-data-files" depends="make-package-info">
 	    <copy file="config/config.xml" todir="${dist}"/>
 		<copy file="build.number" todir="${dist}"/>
+		<copy file="package.info" todir="${dist}"/>
 		<copy todir="${dist}">
 			<fileset dir="config" includes="text*.properties"/>
 		</copy>

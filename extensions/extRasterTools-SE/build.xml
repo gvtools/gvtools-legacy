@@ -145,7 +145,7 @@
   	-->
 	</target>
 
-	<target name="copy-data-files">
+	<target name="copy-data-files" depends="make-package-info">
 		<delete dir="${extensionsDir}/${plugin}/"/>
 
 		<!-- Instala extensión salvar a raster -->
@@ -159,6 +159,7 @@
 
 		<copy file="config/config.xml" todir="${extensionsDir}/${plugin}" />
 		<copy file="config/plugin.dtd" todir="${extensionsDir}/${plugin}" />
+		<copy file="package.info" todir="${extensionsDir}/${plugin}" />
 		<copy todir="${extensionsDir}/${plugin}">
 			<fileset dir="config" includes="text*.properties" />
 		</copy>

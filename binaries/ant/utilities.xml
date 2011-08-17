@@ -310,5 +310,30 @@
 						excludes="**/*.java"/>
 		</copy>
 	</target>
+	
+	<target name="make-package-info">
+		<antcall target="make-package-info-task" inheritall="false">
+			<param file="../appgvSIG/package.info"/> 
+		</antcall>
+	</target>
 
+	<target name="make-package-info-task">
+		<!--property file="../appgvSIG/package.info"/-->
+		<echo file="package.info">
+state=${state}
+name=${plugin}
+official=${official}
+code=${plugin}
+operating-system=${operating-system}
+architecture=${architecture}
+java-version=${java-version}
+gvSIG-version=${gvSIG-version}
+version=${version}
+type=plugin
+description=${description}
+build=${build}
+buildNumber=${buildNumber}
+model-version=1.0.0
+		</echo>
+	</target>
 </project>

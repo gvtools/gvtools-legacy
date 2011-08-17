@@ -14,6 +14,7 @@
 	<property name="gvsigLibs" location="${andamiBaseDir}/gvSIG/extensiones/com.iver.cit.gvsig/lib"/>
 	<!--<property name="compile-classpath" value="${andamiBaseDir}/andami.jar:${andamiLibs}/beans.jar:${gvsigLibs}/cms.jar:${gvsigLibs}/fmap.jar:${gvsigLibs}/com.iver.cit.gvsig.jar"/>-->
 	<property name="pluginName" value="com.iver.gvsig.centerviewpoint"/>
+	<property name="plugin" value="${pluginName}"/>
 	<property name="installDir" location="${andamiBaseDir}/gvSIG/extensiones/${pluginName}"/>
 	<property name="buildNumberFile" location="build.number"/>
 
@@ -57,9 +58,10 @@
 	    <jar jarfile="${dist}/${pluginName}.jar" basedir="${build}" />
 	</target>
 
-	<target name="copy-data-files">
+	<target name="copy-data-files" depends="make-package-info">
 	    <copy file="config/config.xml" todir="${dist}"/>
 		<copy file="build.number" todir="${dist}"/>
+		<copy file="package.info" todir="${dist}"/>
 		<copy todir="${dist}">
 			<fileset dir="config" includes="text*.properties"/>
 		</copy>

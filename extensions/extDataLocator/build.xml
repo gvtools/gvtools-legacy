@@ -24,6 +24,8 @@
   <target name="init">
     <!-- Create the time stamp -->
     <tstamp/>
+	<echo>
+		Compiling ${ant.project.name}...</echo>
   </target>
 
 
@@ -137,9 +139,10 @@
 	    <jar jarfile="${dist}/${plugin}.jar" basedir="${build}"/>
 	</target>
 
-	<target name="copy-data-files">
+	<target name="copy-data-files" depends="make-package-info">
 	    <copy file="config/config.xml" todir="${dist}"/>
 		<copy file="build.number" todir="${dist}"/>
+		<copy file="package.info" todir="${dist}"/>
 		<copy todir="${dist}">
 			<fileset dir="config" includes="text*.properties"/>
 		</copy>

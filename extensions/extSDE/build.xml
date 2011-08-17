@@ -53,7 +53,7 @@
 		/>
 	</target>
 
-	<target name="copy-data-files">
+	<target name="copy-data-files" depends="make-package-info">
 		<mkdir dir="config"/>
 		<mkdir dir="${dist}"/>
 		<mkdir dir="${dist}/images"/>
@@ -70,6 +70,7 @@
 	  		file="${dist}/about.htm"
 	  	  	token="#build.number#"
 	  		value="${build.number}"/>
+		<copy file="package.info" todir="${dist}"/>
 	</target>
 
 	<target name="copy-libs">

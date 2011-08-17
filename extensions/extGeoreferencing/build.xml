@@ -113,9 +113,10 @@
 	  	    	includes="org/gvsig/georeferencing/**" />
 	</target>
 
-	<target name="copy-data-files">
+	<target name="copy-data-files" depends="make-package-info">
 	  	<copy file="config/config.xml" todir="${dist}"/>
 	  	<copy file="build.number" todir="${dist}"/>
+		<copy file="package.info" todir="${dist}"/>
 	    <copy file="config/plugin.dtd" todir="${dist}"/>
 	    <copy todir="${dist}">
 	    	<fileset dir="config/" includes="text*.properties"/>

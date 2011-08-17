@@ -117,9 +117,10 @@
 		<jar jarfile="${without_src}/${plugin}.jar" basedir="${build}"/>
     </target>
 
-    <target name="copy-data-files">
+    <target name="copy-data-files" depends="make-package-info">
 		<copy file="config/config.xml" todir="${without_src}"/>
 		<copy file="build.number" todir="${without_src}"/>
+		<copy file="package.info" todir="${without_src}"/>
 		<copy file="config/about.htm" todir="${without_src}"/>
 		<loadproperties srcFile="build.number"/>
 		<replace casesensitive="true"

@@ -59,7 +59,7 @@
 	</target>
 
 
-	<target name="generate-without-source" description="generate the distribution without the source file" >
+	<target name="generate-without-source" description="generate the distribution without the source file"  depends="make-package-info">
 	    <!-- Create the distribution directory -->
 	    <mkdir dir="${dist}"/>
 
@@ -88,6 +88,7 @@
 	    </copy>
 
     	<copy file="build.number" todir="${dist}"/>
+		<copy file="package.info" todir="${dist}"/>
 
 		<!-- <move file="${dist}/${plugin}.jar" todir="${gvSIGlib-dir}" />
 	    <move todir="${extension-dir}/${plugin}/">
@@ -119,7 +120,7 @@
 				</copy>
 		</target>
 
-		 <target name="generate-validation-without-source" description="generate the validation module distribution without the source file" >
+		 <target name="generate-validation-without-source" description="generate the validation module distribution without the source file">
 		    <!-- Create the distribution directory -->
 		    <mkdir dir="${dist}"/>
 		    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
@@ -133,7 +134,7 @@
 
 		 </target>
 
-		 <target name="generate-model-without-source" description="generate the model module distribution without the source file" >
+		 <target name="generate-model-without-source" description="generate the model module distribution without the source file">
 		    <!-- Create the distribution directory -->
 		    <mkdir dir="${dist}"/>
 		    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->

@@ -88,9 +88,10 @@
         <jar jarfile="${dist}/lib/gvsig-annotation.jar" basedir="${build}" includes="com/iver/cit/gvsig/fmap/**"/>
     </target>
 
-    <target name="copy-data-files">
+    <target name="copy-data-files" depends="make-package-info">
         <copy file="config/config.xml" todir="${dist}"/>
         <copy file="build.number" todir="${dist}"/>
+		<copy file="package.info" todir="${dist}"/>
         <copy file="config/about.htm" todir="${dist}"/>
         <loadproperties srcFile="build.number"/>
         <replace casesensitive="true"

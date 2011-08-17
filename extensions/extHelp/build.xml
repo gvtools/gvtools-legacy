@@ -49,13 +49,16 @@
 		<jar jarfile="${dist}/${plugin}.jar" basedir="${build}"/>
 	</target>
 
-	<target name="copy-data-files">
+	<target name="copy-data-files" depends="make-package-info">
 	    <copy todir="${dist}">
+	    	<fileset dir="./dist" includes="gvSIG/*.zip"/>
 	    	<fileset dir="./config" includes="**/**"/>
 	    </copy>
+		<copy file="package.info" todir="${dist}"/>
 	    <copy todir="${dist}/lib">
 	    	<fileset dir="./lib" includes="**/**"/>
 	    </copy>
+
 	</target>
 
 

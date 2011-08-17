@@ -35,7 +35,7 @@
 		<property file="build.number" />
 	</target>
 	
-	<target name="generate-without-source" description="generate the distribution without the source file">
+	<target name="generate-without-source" description="generate the distribution without the source file" depends="make-package-info">
 		<!-- Create the distribution directory -->
 		<mkdir dir="${dist}" />
 
@@ -49,6 +49,7 @@
 			<fileset dir="resources/locale" includes="text*.properties" />
 		</copy>
 		<copy file="build.number" todir="${dist}" />
+		<copy file="package.info" todir="${dist}"/>
 
 		<!-- AQUÍ SE HACE LA COPIA DEL about.htm A LA CARPETA TEMPORAL -->
 		<copy file="resources/about/about.htm" todir="${dist}" />
@@ -77,9 +78,10 @@
 
 
 	<!-- TODO: revisar -->
-	<target name="copy-data-files">
+	<target name="copy-data-files" depends="make-package-info">
 		<copy file="resources/config/config.xml" todir="${dist}" />
 		<copy file="build.number" todir="${dist}" />
+		<copy file="package.info" todir="${dist}"/>
 		<copy file="resources/about/about.htm" todir="${dist}" />
 		<!-- AQUÍ SE HACE LA COPIA DEL about.htm A LA CARPETA TEMPORAL -->
 		<loadproperties srcFile="build.number" />
