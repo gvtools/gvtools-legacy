@@ -106,15 +106,14 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 
 				if (v instanceof Table) {
 					vista = (Table) v;
-
 					dataSource = vista.getModel().getModelo().getRecordset();
 					filterTitle = vista.getModel().getName();
 					vista.getModel().setModified(true);
 				} else if (v instanceof com.iver.cit.gvsig.project.documents.view.gui.View) {
-					IProjectView pv = ((com.iver.cit.gvsig.project.documents.view.gui.View) v).getModel();
-					filterTitle = ((com.iver.cit.gvsig.project.documents.view.gui.View) v).getModel().getName();
-					FLayer layer = pv.getMapContext()
-					.getLayers().getActives()[0];
+					IProjectView pv = ((com.iver.cit.gvsig.project.documents.view.gui.View) v).getModel();					
+					FLayer layer = pv.getMapContext().getLayers().getActives()[0];
+					//filterTitle = ((com.iver.cit.gvsig.project.documents.view.gui.View) v).getModel().getName();
+					filterTitle = layer.getName();
 					dataSource = pv.getProject().getDataSourceByLayer(layer);
 					((ProjectDocument)pv).setModified(true);
 				}
@@ -124,8 +123,29 @@ public class FiltroExtension extends Extension implements ExpressionListener {
 
 			doExecute();
 		}
+		if ("FILTER_DATASOURCE".equals(actionCommand)) {
+			// It should be set before using setDatasource(SelectableDataSource ds) method. 
+			if (dataSource != null){
+				doExecute();
+			}
+		}
+		
 	}
-
+	
+	/** 	
+	 * Set a SelectableDataSource to apply the filter. If this method are not used, the filter extension 
+	 * will get one from the ActiveWindow.
+	 * 
+	 * @param ds SelectableDataSource to filter
+	 */
+	public void setDatasource(SelectableDataSource ds, String dsName){		
+		dataSource = ds;
+		if (dsName == null){
+			dsName = "";
+		}
+		filterTitle = dsName;
+	}	
+	
 	/**
 	 * "execute" method action.
 	 *
