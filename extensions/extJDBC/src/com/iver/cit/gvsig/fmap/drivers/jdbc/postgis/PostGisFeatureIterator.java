@@ -110,7 +110,16 @@ public class PostGisFeatureIterator implements IFeatureIterator {
 		// de geometria
 		// Debe ser forward only
 		st = conn.createStatement();
-		st.execute("BEGIN");
+		
+		// CodeSprint 2010 (Manuel López Sánchez)
+		try{
+			st.execute("BEGIN");  
+		}catch(SQLException e){
+			st.execute("END"); // Cerramos la transacción para anular los cursores binarios
+									// que pueden quedar colgados (from CodeSprint 2010)								
+			st.execute("BEGIN"); // Si salta otra excepción, no la capturamos
+		}
+		// End CodeSprint 2010
 		st.execute("declare " + cursorName + " binary cursor for " + sql);
 
 		this.rs = st.executeQuery("fetch forward " + FETCH_SIZE + " in "
