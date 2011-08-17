@@ -51,7 +51,6 @@
 
 	<target name="copy-data-files" depends="make-package-info">
 	    <copy todir="${dist}">
-	    	<fileset dir="./dist" includes="gvSIG/*.zip"/>
 	    	<fileset dir="./config" includes="**/**"/>
 	    </copy>
 		<copy file="package.info" todir="${dist}"/>
