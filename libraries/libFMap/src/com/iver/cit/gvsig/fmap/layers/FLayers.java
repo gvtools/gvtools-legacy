@@ -1274,9 +1274,13 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
 									new File(pathGenerator.getAbsolutePath((String)xml.getStringProperty("file"))),
 									proj);
-						}else{
+						}else if (xml.contains("absolutePath")){
 							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
 								new File(xml.getStringProperty("absolutePath")),
+								proj);
+						}else{
+							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
+								new File(xml.getStringProperty("file")),
 								proj);
 						}
 
