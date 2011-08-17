@@ -41,6 +41,7 @@
 package org.gvsig.graph.core;
 
 import java.awt.Color;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -62,6 +63,7 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;
+import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
@@ -72,6 +74,7 @@ import com.iver.cit.gvsig.fmap.core.symbols.IMarkerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol;
 import com.iver.cit.gvsig.fmap.core.v02.FConstant;
+import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
 import com.iver.cit.gvsig.fmap.drivers.BoundedShapes;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
@@ -88,12 +91,15 @@ import com.iver.cit.gvsig.fmap.spatialindex.QuadtreeJts;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.xmlEntity.generate.XmlTag;
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.CoordinateList;
+import com.vividsolutions.jts.geom.CoordinateSequences;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineSegment;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiPoint;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.impl.CoordinateArraySequence;
 
 public class NetworkUtils {
 	static int idSymbolFlag = -1;
@@ -440,6 +446,224 @@ public class NetworkUtils {
 				.toArray(new Coordinate[0]));
 	}
 
+	
+	
+	/**
+	 * If coordList != null, it will be used to return all coordinates. Useful to avoid
+	 * two iterations, and only if you linestring is single part.
+	 * If you don't need it, simply set coordList = null
+	 * @param geom
+	 * @param coordList
+	 * @return
+	 */
+	public static double getLength(IGeometry geom, ArrayList<Coordinate> coordList) {
+		double partlength = 0;
+		PathIterator pi = geom.getPathIterator(null, FConverter.FLATNESS);
+		double[] theData = new double[6];
+		double totalLength = 0;
+		Coordinate c1 = null;
+		Coordinate c2 = null;
+		Coordinate first = null;
+		while (!pi.isDone()) {
+			//while not done
+			int type = pi.currentSegment(theData);
+        	switch (type)
+        	{
+        	case PathIterator.SEG_MOVETO:
+//        		coordList = new CoordinateList();
+//        		listOfParts.add(coordList);
+        		totalLength += partlength;
+        		partlength = 0;
+        		c1= new Coordinate(theData[0], theData[1]);
+        		first = c1;
+        		if (coordList != null)
+        			coordList.add(c1);
+        		break;
+        	case PathIterator.SEG_LINETO:
+        		c2= new Coordinate(theData[0], theData[1]);
+        		if (coordList != null)
+        			coordList.add(c2);
+        		partlength += c2.distance(c1);
+        		c1 = c2;
+        		break;
+
+        	case PathIterator.SEG_CLOSE:
+        		if (coordList != null)
+        			coordList.add(first);
+        		partlength += c1.distance(first);
+        		break;
+
+        	}
+        	pi.next();
+		}
+		totalLength += partlength;
+		return totalLength;
+	}
+	
+	public static IGeometry flipGeometry(IGeometry geom) {
+		GeneralPathX gp = new GeneralPathX();
+		PathIterator pi = geom.getPathIterator(null, FConverter.FLATNESS);
+		double[] theData = new double[6];
+        Coordinate first = null;
+        CoordinateList coordList = new CoordinateList();
+        Coordinate c1;
+        GeneralPathX newGp = new GeneralPathX();
+        ArrayList listOfParts = new ArrayList();
+		while (!pi.isDone()) {
+			//while not done
+			int type = pi.currentSegment(theData);
+        	switch (type)
+        	{
+        	case PathIterator.SEG_MOVETO:
+        		coordList = new CoordinateList();
+        		listOfParts.add(coordList);
+        		c1= new Coordinate(theData[0], theData[1]);
+        		coordList.add(c1, true);
+        		break;
+        	case PathIterator.SEG_LINETO:
+        		c1= new Coordinate(theData[0], theData[1]);
+        		coordList.add(c1, true);
+        		break;
+
+        	case PathIterator.SEG_CLOSE:
+        		coordList.add(coordList.getCoordinate(0));
+        		break;
+
+        	}
+        	pi.next();
+		}
+
+		for (int i=listOfParts.size()-1; i>=0; i--)
+		{
+			coordList = (CoordinateList) listOfParts.get(i);
+			Coordinate[] coords = coordList.toCoordinateArray();
+			CoordinateArraySequence seq = new CoordinateArraySequence(coords);
+			CoordinateSequences.reverse(seq);
+			coords = seq.toCoordinateArray();
+			newGp.moveTo(coords[0].x, coords[0].y);
+			for (int j=1; j < coords.length; j++)
+			{
+				newGp.lineTo(coords[j].x, coords[j].y);
+			}
+		}
+		
+		return ShapeFactory.createPolyline2D(newGp);
+	}
+	
+	
+	/**
+	 * Receives IGeometry, percentage of desired linestring and direction.
+	 * Used in populateRoute (at least) in order to speed up populate route
+	 * 
+	 * @param geom
+	 * @param pct
+	 * @param direction
+	 *            1=> same as geometry. 0=> Inversed
+	 * @return partial linestring
+	 */
+	public static IGeometry getPartialLineString(IGeometry geom, double pct,
+			int direction)
+	// Si parte vale cero, los válidos son los primeros. Si no, los segundos.
+	{
+		int j, numVertices;
+		double longAcum, longReal, longBuscada, distSobre, miniPorcentaje;
+		double nuevaX, nuevaY; // Por cuestiones de claridad al programar
+		double dist = 0;
+
+		longAcum = 0;
+		ArrayList<Coordinate> coords = new ArrayList<Coordinate>();
+		longReal = getLength(geom, coords);
+		longBuscada = longReal * pct;
+//		Coordinate[] coords = geom.getCoordinates();
+		Coordinate c1 = null, c2 = null;
+//		ArrayList savedCoords = new ArrayList();
+		GeneralPathX gpx = new GeneralPathX();
+		Coordinate lastCoord = null;
+
+		if (direction > 0) // Hemos entrado por el 1 hacia el 2 (al 2 no
+		// llegamos)
+		{
+			numVertices = 0;
+			for (j = 0; j < coords.size() - 1; j++) {
+				c1 = coords.get(j);
+				c2 = coords.get(j + 1);
+				dist = c1.distance(c2);
+				longAcum += dist;
+				if ((lastCoord == null) || (!c1.equals2D(lastCoord))) {
+//					savedCoords.add(c1);
+					if (numVertices == 0)
+						gpx.moveTo(c1.x, c1.y);
+					else
+						gpx.lineTo(c1.x, c1.y);
+					numVertices++;
+					lastCoord = c1;
+				}
+
+				if (longAcum >= longBuscada) {
+					// Hasta aquí. Ahora ahi que poner el punto sobre el tramo
+					distSobre = dist - (longAcum - longBuscada);
+					miniPorcentaje = distSobre / dist;
+
+					nuevaX = c1.x + (c2.x - c1.x) * miniPorcentaje;
+					nuevaY = c1.y + (c2.y - c1.y) * miniPorcentaje;
+
+//					savedCoords.add(new Coordinate(nuevaX, nuevaY));
+					gpx.lineTo(nuevaX, nuevaY);
+					numVertices++;
+					break;
+				} // if longAcum >= longBuscada
+			} // for j
+
+		} else // Hemos entrado por el 2 hacia el 1
+		{
+			numVertices = 0;
+			for (j = 0; j < coords.size(); j++) {
+				// //////////////////////////////////////////////////////////////
+				// 13_ene_2005: Si el último punto es el último punto no
+				// podemos acceder al elemento j+1 porque nos salimos del shape
+				// ///////////////////////////////////////////////////////////////
+				c1 = coords.get(j);
+				if (j < coords.size() - 1) {
+					c2 = coords.get(j + 1);
+
+					dist = c1.distance(c2);
+					longAcum += dist;
+				}
+
+				if (longAcum >= longBuscada) {
+					// Hasta aquí. Empezamos a meter puntos
+
+					if (numVertices == 0) {
+						distSobre = dist - (longAcum - longBuscada);
+						miniPorcentaje = distSobre / dist;
+						nuevaX = c1.x + (c2.x - c1.x) * miniPorcentaje;
+						nuevaY = c1.y + (c2.y - c1.y) * miniPorcentaje;
+
+//						savedCoords.add(new Coordinate(nuevaX, nuevaY));
+//						savedCoords.add(c2);
+						gpx.moveTo(nuevaX, nuevaY);
+						gpx.lineTo(c2.x, c2.y);
+					} else {
+						if ((lastCoord == null) || (!c2.equals2D(lastCoord))) {
+//							savedCoords.add(c2);
+							gpx.lineTo(c2.x, c2.y);
+							lastCoord = c2;
+						}
+
+					}
+					numVertices++;
+					// break;
+				} // if longAcum >= longBuscada
+			} // for j
+
+			// savedCoords.add(c2);
+
+		} // if else
+
+		return ShapeFactory.createPolyline2D(gpx);
+	}
+	
+	
 	/**
 	 * Retrieves a sub-linestring from pct1 and length = pct2 
 	 * 

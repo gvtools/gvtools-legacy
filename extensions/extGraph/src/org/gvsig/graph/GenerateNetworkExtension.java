@@ -55,6 +55,7 @@ import org.gvsig.graph.core.writers.NetworkFileRedWriter;
 import org.gvsig.graph.core.writers.NetworkGvTableWriter;
 import org.gvsig.graph.gui.wizard.NetWizard;
 import org.gvsig.graph.preferences.RoutePage;
+import org.gvsig.graph.topology.LineSnapGeoprocess;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -86,6 +87,7 @@ import com.iver.cit.gvsig.fmap.spatialindex.QuadtreeJts;
 import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.fmap.XTypes;
 import com.iver.cit.gvsig.geoprocess.impl.topology.lineclean.fmap.LineCleanGeoprocess;
+import com.iver.cit.gvsig.geoprocess.impl.topology.lineclean.fmap.LineCleanVisitor;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.IView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
@@ -97,6 +99,10 @@ import com.iver.utiles.swing.threads.PipeTask;
 public class GenerateNetworkExtension extends Extension implements
 		IPreferenceExtension {
 	private static final IPreference[] thePreferencePages = new IPreference[] { new RoutePage() };
+	
+	public boolean onlySnapNodes = true;
+
+	private double snapTolerance;
 
 	public void initialize() {
 		PluginServices.getIconTheme().registerDefault(
@@ -368,7 +374,7 @@ public class GenerateNetworkExtension extends Extension implements
 	/**
 	 * It returns a geoprocess to make a CLEAN of the input layer
 	 */
-	private LineCleanGeoprocess createCleanGeoprocess(FLyrVect lineLyr) {
+	private LineSnapGeoprocess createCleanGeoprocess(FLyrVect lineLyr) {
 		File outputFile = null;
 		JOptionPane.showMessageDialog(null, PluginServices.getText(null,
 				"Especifique_fichero_shp_resultante"), PluginServices.getText(
@@ -399,7 +405,9 @@ public class GenerateNetworkExtension extends Extension implements
 		} else {
 			return null;
 		}
-		LineCleanGeoprocess geoprocess = new LineCleanGeoprocess(lineLyr);
+//		LineCleanGeoprocess geoprocess = new LineCleanGeoprocess(lineLyr);
+		LineSnapGeoprocess geoprocess = new LineSnapGeoprocess(lineLyr);
+		geoprocess.setTolerance(snapTolerance);
 		SHPLayerDefinition definition = (SHPLayerDefinition) geoprocess
 				.createLayerDefinition();
 		definition.setFile(outputFile);
@@ -427,6 +435,7 @@ public class GenerateNetworkExtension extends Extension implements
 		geoprocess.setResultLayerProperties(writer, schemaManager);
 		HashMap params = new HashMap();
 		params.put("layer_selection", new Boolean(false));
+		params.put("onlysnapnodes", new Boolean(onlySnapNodes));
 //		boolean createLayerWithError = true;
 //		params.put("createlayerswitherrors", new Boolean(createLayerWithError));
 		
@@ -476,17 +485,20 @@ public class GenerateNetworkExtension extends Extension implements
 				.getSenseReverseDigitalization());
 		File redFile = wiz.getNetworkFile();
 
+		boolean applySnap = wiz.getApplySnapTolerance();
+		if (applySnap) {
+			snapTolerance = wiz.getSnapTolerance();
+			netBuilder.setSnapTolerance(snapTolerance);
+		}
+
 		boolean cleanOrigLyr = wiz.getCleanOriginalLayer();
-		LineCleanGeoprocess clean = null;
+		LineSnapGeoprocess clean = null;
 		if (cleanOrigLyr) {
 			clean = createCleanGeoprocess(lyr);
 			if (clean == null)
 				return;
-		}
-		boolean applySnap = wiz.getApplySnapTolerance();
-		if (applySnap) {
-			double snapTolerance = wiz.getSnapTolerance();
-			netBuilder.setSnapTolerance(snapTolerance);
+			
+			
 		}
 		if (clean != null) {
 			// we wont start the process of network creation

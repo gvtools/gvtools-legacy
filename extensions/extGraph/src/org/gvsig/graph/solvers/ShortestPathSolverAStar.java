@@ -51,6 +51,7 @@ import org.gvsig.graph.core.GvFlag;
 import org.gvsig.graph.core.GvNode;
 import org.gvsig.graph.core.GvTurn;
 import org.gvsig.graph.core.IGraph;
+import org.gvsig.graph.solvers.pqueue.FibHeap;
 
 /**
  * @author fjp Este es útil solo cuando podemos calcular la distancia estimada
@@ -97,6 +98,9 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 						System.out.println("T populateRoute=" + (t2-t1));
 					} catch (BaseException e) {
 						e.printStackTrace();
+						net.reconstruyeTramo(fFrom.getIdArc());
+						net.reconstruyeTramo(fTo.getIdArc());
+
 						throw new GraphException(e);
 					}
 				} else {
@@ -122,7 +126,7 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 		boolean bExit = false;
 
 		boolean bGiroProhibido;
-		ArrayList candidatos = new ArrayList();
+//		ArrayList candidatos = new ArrayList();
 
 		// char Mensaje[200];
 
@@ -143,7 +147,7 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 			} // for nodeNum */
 		}
 
-		candidatos.clear();
+//		candidatos.clear();
 		// Añadimos el Start Node a la lista de candidatosSTL
 		// Nodo final
 		finalNode = graph.getNodeByID(idStop);
@@ -151,41 +155,47 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 
 		node = graph.getNodeByID(idStart);
 		node.initialize();
-		bestNode = node;
+//		bestNode = node;
 
-		candidatos.add(node);
+//		candidatos.add(node);
 		node.setCostZero();
 		node.setStatus(GvNode.statNowInList);
 		node.calculateStimation(finalNode, 0);
+		
+        // Priority Queue
+        FibHeap pq = new FibHeap(graph.numVertices());
+        pq.insert(node, node.getStimation());
+
 
 		// Mientras que la lista de candidatosSTL no esté vacía, procesamos
 		// Nodos
 		double bestStimation;
 
-		while ((!bExit) && (candidatos.size() > 0)) {
+		while ((!bExit) && (!pq.empty())) {
 			// Buscamos el nodo con mínimo coste
-			node = (GvNode) candidatos.get(0);
-			bestNode = node;
-			bestStimation = node.getStimation();
-			for (nodeNum = 1; nodeNum < candidatos.size(); nodeNum++) {
-				node = (GvNode) candidatos.get(nodeNum);
-				if (node.getStimation() < bestStimation) {
-					bestStimation = node.getStimation();
-					bestNode = node;
-				}
-			} // for nodeNum candidatosSTL
+//			node = (GvNode) candidatos.get(0);
+//			bestNode = node;
+//			bestStimation = node.getStimation();
+//			int bestIndex = 0;
+//			for (nodeNum = 1; nodeNum < candidatos.size(); nodeNum++) {
+//				node = (GvNode) candidatos.get(nodeNum);
+//				if (node.getStimation() < bestStimation) {
+//					bestStimation = node.getStimation();
+//					bestNode = node;
+//					bestIndex = nodeNum;
+//				}
+//			} // for nodeNum candidatosSTL
 
-			node = bestNode;
+            node = (GvNode) pq.extract_min(); // get the lowest-weightSum Vertex 'u',
+//			node = bestNode;
 			// Borramos el mejor nodo de la lista de candidatosSTL
 			node.setStatus(GvNode.statWasInList);
-			// TODO: BORRAR POR INDEX, NO ASÍ. ES MÁS LENTO QUE SI BORRAMOS EL
-			// i-ésimo.
-			candidatos.remove(node);
+//			candidatos.remove(bestIndex);
 			// System.out.println("LINK " + link.getIdArc() + " from ");
 			// System.out.println("from " + idStart + " to " +
 			// finalNode.getIdNode() + ". node=" + node.getIdNode());
 			// Miramos si hemos llegado donde queríamos
-			if (bestNode.getIdNode() == idStop) {
+			if (node.getIdNode() == idStop) {
 				bExit = true;
 				break;
 			}
@@ -285,7 +295,8 @@ public class ShortestPathSolverAStar extends AbstractShortestPathSolver {
 
 					if (toNode.getStatus() != GvNode.statNowInList) {
 						toNode.setStatus(GvNode.statNowInList);
-						candidatos.add(toNode);
+						pq.insert_or_dec_key(toNode, toNode.getStimation());
+//						candidatos.add(toNode);
 					}
 				} // Si hay mejora
 

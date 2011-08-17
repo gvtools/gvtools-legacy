@@ -54,6 +54,7 @@ import org.gvsig.graph.core.GvNode;
 import org.gvsig.graph.core.IGraph;
 import org.gvsig.graph.core.InfoShp;
 import org.gvsig.graph.core.NetworkUtils;
+import org.gvsig.graph.solvers.pqueue.FibHeap;
 
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -118,7 +119,7 @@ public class ReverseOneToManySolver extends OneToManySolver {
 		int linkNum;
 		double newCost;
 		int idSiguienteNodo;
-		GvNode node, toNode, bestNode; // , *pNodoProv;
+		GvNode node, toNode; // , *pNodoProv;
 		GvEdge link;
 		boolean bExit = false;
 		double bestCost;
@@ -131,7 +132,6 @@ public class ReverseOneToManySolver extends OneToManySolver {
 			Integer idStop = (Integer) stops.get(i);
 			clonedStops.add(new StopAux(idStop));
 		}
-		ArrayList candidatos = new ArrayList();
 
 //		GvTurn elGiro;
 		// char Mensaje[200];
@@ -153,7 +153,6 @@ public class ReverseOneToManySolver extends OneToManySolver {
 			} // for nodeNum */
 		}
 
-		candidatos.clear();
 		// Añadimos el Start Node a la lista de candidatosSTL
 		// Nodos finales
 		for (int h=0; h < clonedStops.size(); h++)
@@ -166,9 +165,10 @@ public class ReverseOneToManySolver extends OneToManySolver {
 		}
 		node = graph.getNodeByID(idStart);
 		node.initialize();
-		bestNode = node;
+        // Priority Queue
+        FibHeap pq = new FibHeap(graph.numVertices());
+        pq.insert(node, 0);
 
-		candidatos.add(node);
 		node.setCostZero();
 		node.setStatus(GvNode.statNowInList);
 		bestCost = Double.MAX_VALUE;
@@ -177,32 +177,19 @@ public class ReverseOneToManySolver extends OneToManySolver {
 		// Nodos
 		int stopActual = 0;
 
-		while ((!bExit) && (candidatos.size() > 0)) {
+		while ((!bExit) && (!pq.empty())) {
 			// Buscamos el nodo con mínimo coste
-			node = (GvNode) candidatos.get(0);
-			bestNode = node;
-			bestCost = node.getBestCost();
-			for (nodeNum = 1; nodeNum < candidatos.size(); nodeNum++) {
-				node = (GvNode) candidatos.get(nodeNum);
-				if (node.getBestCost() < bestCost) {
-					bestCost = node.getBestCost();
-					bestNode = node;
-				}
-			} // for nodeNum candidatosSTL
+			node = (GvNode) pq.extract_min(); // get the lowest-weightSum Vertex 'u',
 
-			node = bestNode;
-			// Borramos el mejor nodo de la lista de candidatosSTL
 			node.setStatus(GvNode.statWasInList);
-			// TODO: BORRAR POR INDEX, NO ASÍ. ES MÁS LENTO QUE SI BORRAMOS EL i-ésimo.
-			candidatos.remove(node);
 			
 			if (callMinimumCostNodeSelectedListeners(node))
 				bExit = true;
 			
 			// Si hemos fijado un máximo coste de exploración, lo
 			// tenemos en cuenta para salir.
-			if ((maxCost < bestNode.getBestCost()) ||
-					maxDistance < bestNode.getAccumulatedLength())
+			if ((maxCost < node.getBestCost()) ||
+					maxDistance < node.getAccumulatedLength())
 			{
 				bExit=true;
 			}
@@ -215,7 +202,7 @@ public class ReverseOneToManySolver extends OneToManySolver {
 				StopAux auxStop = (StopAux) clonedStops.get(stopActual);
 				int idStop = auxStop.getIdStop().intValue();
 				
-				if (bestNode.getIdNode() == idStop) {
+				if (node.getIdNode() == idStop) {
 					// Hemos llegado a ese punto. Miramos el resto de puntos destino
 					// a ver si ya hemos pasado por alguno de ellos.
 					// Si con algun punto no pasamos por aquí, no habremos llegado a ese punto.
@@ -307,11 +294,11 @@ public class ReverseOneToManySolver extends OneToManySolver {
 
 						if (toNode.getStatus() != GvNode.statNowInList) {
 							toNode.setStatus(GvNode.statNowInList);
-							candidatos.add(toNode);
+							pq.insert_or_dec_key(toNode, newCost);
 						}
 					} // Si hay mejora
 				} // if ese nodo no ha estado en la lista de candidatosSTL
-				if (callAdjacenteEdgeVisitedListeners(bestNode, link))
+				if (callAdjacenteEdgeVisitedListeners(node, link))
 					continue;				
 
 			} // for linkNum

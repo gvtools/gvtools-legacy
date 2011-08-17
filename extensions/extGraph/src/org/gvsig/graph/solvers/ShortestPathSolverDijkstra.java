@@ -52,6 +52,7 @@ import org.gvsig.graph.core.GvFlag;
 import org.gvsig.graph.core.GvNode;
 import org.gvsig.graph.core.GvTurn;
 import org.gvsig.graph.core.IGraph;
+import org.gvsig.graph.solvers.pqueue.FibHeap;
 
 import com.hardcode.gdbms.engine.data.driver.DriverException;
 
@@ -109,13 +110,13 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 		int linkNum;
 		double newCost;
 		int idSiguienteNodo;
-		GvNode node, toNode, finalNode, bestNode; // , *pNodoProv;
+		GvNode node, toNode, finalNode;// , bestNode; // , *pNodoProv;
 		GvEdge link;
 		boolean bExit = false;
 		double bestCost;
 
 		boolean bGiroProhibido;
-		ArrayList candidatos = new ArrayList();
+//		ArrayList candidatos = new ArrayList();
 
 		GvTurn theTurn;
 		// char Mensaje[200];
@@ -137,7 +138,7 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 			} // for nodeNum */
 		}
 
-		candidatos.clear();
+//		candidatos.clear();
 		// Añadimos el Start Node a la lista de candidatosSTL
 		// Nodo final
 		finalNode = graph.getNodeByID(idStop);
@@ -145,38 +146,43 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 
 		node = graph.getNodeByID(idStart);
 		node.initialize();
-		bestNode = node;
+//		bestNode = node;
 
-		candidatos.add(node);
+//		candidatos.add(node);
 		node.setCostZero();
 		node.setStatus(GvNode.statNowInList);
 		bestCost = Double.MAX_VALUE;
+        // Priority Queue
+        FibHeap pq = new FibHeap(graph.numVertices());
+        pq.insert(node, 0);
 
 		// Mientras que la lista de candidatosSTL no esté vacía, procesamos
 		// Nodos
 
-		while ((!bExit) && (candidatos.size() > 0)) {
+		while ((!bExit) && (!pq.empty())) {
 			// Buscamos el nodo con mínimo coste
-			node = (GvNode) candidatos.get(0);
-			bestNode = node;
-			bestCost = node.getBestCost();
-			for (nodeNum = 1; nodeNum < candidatos.size(); nodeNum++) {
-				node = (GvNode) candidatos.get(nodeNum);
-				if (node.getBestCost() < bestCost) {
-					bestCost = node.getBestCost();
-					bestNode = node;
-				}
-			} // for nodeNum candidatosSTL
-
-			node = bestNode;
+//			node = (GvNode) candidatos.get(0);
+//			bestNode = node;
+//			bestCost = node.getBestCost();
+//			for (nodeNum = 1; nodeNum < candidatos.size(); nodeNum++) {
+//				node = (GvNode) candidatos.get(nodeNum);
+//				if (node.getBestCost() < bestCost) {
+//					bestCost = node.getBestCost();
+//					bestNode = node;
+//				}
+//			} // for nodeNum candidatosSTL
+//
+//			
+//			node = bestNode;
+			node = (GvNode) pq.extract_min(); // get the lowest-weightSum Vertex 'u',
 			// Borramos el mejor nodo de la lista de candidatosSTL
 			node.setStatus(GvNode.statWasInList);
 			// TODO: BORRAR POR INDEX, NO ASÍ. ES MÁS LENTO QUE SI BORRAMOS EL i-ésimo.
-			candidatos.remove(node);
+//			candidatos.remove(node);
 			// System.out.println("LINK " + link.getIdArc() + " from ");
 			// System.out.println("from " + idStart + " to " + finalNode.getIdNode() + ". node=" + node.getIdNode());
 			// Miramos si hemos llegado donde queríamos
-			if (bestNode.getIdNode() == idStop) {
+			if (node.getIdNode() == idStop) {
 				bExit = true;
 				break;
 			}
@@ -239,7 +245,8 @@ public class ShortestPathSolverDijkstra extends AbstractShortestPathSolver {
 
 						if (toNode.getStatus() != GvNode.statNowInList) {
 							toNode.setStatus(GvNode.statNowInList);
-							candidatos.add(toNode);
+							pq.insert_or_dec_key(toNode, newCost);
+							//candidatos.add(toNode);
 						}
 					} // Si hay mejora
 				} // if ese nodo no ha estado en la lista de candidatosSTL

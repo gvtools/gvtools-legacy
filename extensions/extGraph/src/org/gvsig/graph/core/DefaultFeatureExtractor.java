@@ -27,8 +27,11 @@
  
 package org.gvsig.graph.core;
 
+import java.util.ArrayList;
+
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
+import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -39,9 +42,19 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 public class DefaultFeatureExtractor implements IFeatureExtractor {
 
 	private FLyrVect lyr;
+	
+	// FIXME: ONLY SUITABLE IF USED IN POPULATE ROUTE BECAUSE ALWAYS ACCESS THE SAME FIELD
+	private ArrayList<Value> cacheStreetNames = null;
+	private Value nullValue;
 
 	public DefaultFeatureExtractor(FLyrVect lyr) {
 		this.lyr = lyr;
+		nullValue = ValueFactory.createNullValue();
+		int n = getNumFeatures();
+		cacheStreetNames = new ArrayList<Value>(getNumFeatures());
+		for (int i = 0; i <= n; i++) {
+			cacheStreetNames.add(nullValue);
+		}
 	}
 	
 	public IFeature getFeature(long i) {
@@ -73,10 +86,15 @@ public class DefaultFeatureExtractor implements IFeatureExtractor {
 		
 		Value f = null;
 		try {
-			SelectableDataSource rs = lyr.getSource().getRecordset();
-			rs.start();
-			f = rs.getFieldValue(i, idField);
-			rs.stop();
+			f= cacheStreetNames.get((int)i);
+			if (f == nullValue) {				
+				SelectableDataSource rs = lyr.getSource().getRecordset();
+				rs.start();
+				f = rs.getFieldValue(i, idField);
+				cacheStreetNames.set((int) i, f);
+				rs.stop();
+			}
+//			f = cacheStreetNames.get((int) i);
 		} catch (ExpansionFileReadException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

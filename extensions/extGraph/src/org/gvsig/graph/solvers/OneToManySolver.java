@@ -54,6 +54,7 @@ import org.gvsig.graph.core.GvNode;
 import org.gvsig.graph.core.IGraph;
 import org.gvsig.graph.core.InfoShp;
 import org.gvsig.graph.core.NetworkUtils;
+import org.gvsig.graph.solvers.pqueue.FibHeap;
 
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -196,23 +197,18 @@ public class OneToManySolver extends AbstractNetSolver {
 		int linkNum;
 		double newCost;
 		int idSiguienteNodo;
-		GvNode node, toNode, bestNode; // , *pNodoProv;
+		GvNode node, toNode; // , *pNodoProv;
 		GvEdge link;
 		boolean bExit = false;
 		double bestCost;
 
 		boolean bGiroProhibido;
-		// List clonedStops = Collections.synchronizedList(stops);
 		ArrayList clonedStops = new ArrayList();
 		for (int i=0; i < stops.size(); i++)
 		{
 			Integer idStop = (Integer) stops.get(i);
 			clonedStops.add(new StopAux(idStop));
 		}
-		ArrayList candidatos = new ArrayList();
-
-//		GvTurn elGiro;
-		// char Mensaje[200];
 		
 		IGraph graph = net.getGraph();
 
@@ -231,7 +227,6 @@ public class OneToManySolver extends AbstractNetSolver {
 			} // for nodeNum */
 		}
 
-		candidatos.clear();
 		// Añadimos el Start Node a la lista de candidatosSTL
 		// Nodos finales
 		for (int h=0; h < clonedStops.size(); h++)
@@ -244,43 +239,29 @@ public class OneToManySolver extends AbstractNetSolver {
 		}
 		node = graph.getNodeByID(idStart);
 		node.initialize();
-		bestNode = node;
-
-		candidatos.add(node);
 		node.setCostZero();
 		node.setStatus(GvNode.statNowInList);
 		bestCost = Double.MAX_VALUE;
+        // Priority Queue
+        FibHeap pq = new FibHeap(graph.numVertices());
+        pq.insert(node, 0);
 
 		// Mientras que la lista de candidatosSTL no esté vacía, procesamos
 		// Nodos
 		int stopActual = 0;
 
-		while ((!bExit) && (candidatos.size() > 0)) {
+		while ((!bExit) && (!pq.empty())) {
 			// Buscamos el nodo con mínimo coste
-			node = (GvNode) candidatos.get(0);
-			bestNode = node;
-			bestCost = node.getBestCost();
-			for (nodeNum = 1; nodeNum < candidatos.size(); nodeNum++) {
-				node = (GvNode) candidatos.get(nodeNum);
-				if (node.getBestCost() < bestCost) {
-					bestCost = node.getBestCost();
-					bestNode = node;
-				}
-			} // for nodeNum candidatosSTL
-
-			node = bestNode;
-			// Borramos el mejor nodo de la lista de candidatosSTL
+			node = (GvNode) pq.extract_min(); // get the lowest-weightSum Vertex 'u',
 			node.setStatus(GvNode.statWasInList);
-			// TODO: BORRAR POR INDEX, NO ASÍ. ES MÁS LENTO QUE SI BORRAMOS EL i-ésimo.
-			candidatos.remove(node);
 			
 			if (callMinimumCostNodeSelectedListeners(node))
 				bExit = true;
 			
 			// Si hemos fijado un máximo coste de exploración, lo
 			// tenemos en cuenta para salir.
-			if ((maxCost < bestNode.getBestCost()) ||
-					maxDistance < bestNode.getAccumulatedLength())
+			if ((maxCost < node.getBestCost()) ||
+					maxDistance < node.getAccumulatedLength())
 			{
 				bExit=true;
 			}
@@ -293,7 +274,7 @@ public class OneToManySolver extends AbstractNetSolver {
 				StopAux auxStop = (StopAux) clonedStops.get(stopActual);
 				int idStop = auxStop.getIdStop().intValue();
 				
-				if (bestNode.getIdNode() == idStop) {
+				if (node.getIdNode() == idStop) {
 					// Hemos llegado a ese punto. Miramos el resto de puntos destino
 					// a ver si ya hemos pasado por alguno de ellos.
 					// Si con algun punto no pasamos por aquí, no habremos llegado a ese punto.
@@ -327,15 +308,6 @@ public class OneToManySolver extends AbstractNetSolver {
 				}
 			} // if bExploreAll
 			
-			// sprintf(Mensaje,"Enlaces en el nodo %ld:
-			// %ld.",pNodo->idNodo,pNodo->Enlaces.GetSize());
-			// AfxMessageBox(Mensaje);
-
-			// Añadimos a la lista de candidatosSTL los vecinos del nodo que
-			// acabamos de borrar
-			// HAY Arcos QUE SALEN Y Arcos QUE LLEGAN. SOLO MIRAMOS LOS QUE
-			// SALEN.
-//			for (linkNum = 0; linkNum < node.getOutputLinks().size(); linkNum++) {
 			for (int iConec=0; iConec< node.getConnectors().size();  iConec++) {
 				// Pillamos el nodo vecino
 				GvConnector c = node.getConnectors().get(iConec);
@@ -377,22 +349,16 @@ public class OneToManySolver extends AbstractNetSolver {
 //					newCost = node.getBestCost() + link.getWeight();
 					// Change to take care of turn costs
 					if (toNode.existeMejora(link, newCost)) {  // Es una mejora, así que actualizamos el vecino y
-//						// lo añadimos a los candidatosSTL
-//						toNode.setBestCost(newCost);
-//						 
-//						toNode.setFromLink(link.getIdEdge());
-						// Es una mejora, así que actualizamos el vecino y
-						// lo añadimos a los candidatosSTL
 						double newLength = node.getAccumulatedLength() + link.getDistance();
 						toNode.setAccumulatedLength(newLength);
 
 						if (toNode.getStatus() != GvNode.statNowInList) {
 							toNode.setStatus(GvNode.statNowInList);
-							candidatos.add(toNode);
+							pq.insert_or_dec_key(toNode, newCost);
 						}
 					} // Si hay mejora
 				} // if ese nodo no ha estado en la lista de candidatosSTL
-				if (callAdjacenteEdgeVisitedListeners(bestNode, link))
+				if (callAdjacenteEdgeVisitedListeners(node, link))
 					continue;				
 
 			} // for linkNum

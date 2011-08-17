@@ -28,6 +28,7 @@
 package org.gvsig.graph.solvers;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Stack;
 
 import org.gvsig.exceptions.BaseException;
@@ -44,6 +45,7 @@ import org.gvsig.graph.core.Network;
 import org.gvsig.graph.core.NetworkUtils;
 
 import com.hardcode.gdbms.engine.values.Value;
+import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
@@ -121,6 +123,15 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 		System.out.println("Salgo con node = " + node.getIdNode());
 	}
 
+	/**
+	 * TODO: DON'T USE JTS GEOMETRIES IN ORDER TO DO IT MUCH FASTER!!
+	 * 			=> Implement 
+	 * @param origin
+	 * @param dest
+	 * @param idStart
+	 * @param idEnd
+	 * @throws BaseException
+	 */
 	protected void populateRoute(GvFlag origin, GvFlag dest, int idStart,
 			int idEnd) throws BaseException {
 		int idEnlace;
@@ -135,7 +146,14 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 		int from_link = node.get_best_from_link();
 
 		if (featExtractor == null)
-			featExtractor = new DefaultFeatureExtractor(net.getLayer());
+		{
+			if (net.getFeatExtractor() == null) { 
+				featExtractor = new DefaultFeatureExtractor(net.getLayer());
+				net.setFeatExtractor(featExtractor);
+			}
+			featExtractor = net.getFeatExtractor();
+					
+		}
 
 //		VectorialAdapter va = (VectorialAdapter) net.getLayer().getSource();
 //		va.start();
@@ -163,7 +181,7 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 
 		// Define a template class for a vector of IDs.
 		InfoShp infoShp;
-		Stack pilaShapes = new Stack();
+		LinkedList pilaShapes = new LinkedList();
 		// typedef stack<CInfoShp> PILAINFO;
 		// PILAINFO pilaShapes;
 
@@ -195,7 +213,7 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 		Value nameStreet = featExtractor.getFieldValue(finalEdge.getIdArc(),
 				getFieldIndexStreetName());
 
-		MultiLineString jtsGeom = (MultiLineString) g.toJTSGeometry();
+//		MultiLineString jtsGeom = (MultiLineString) g.toJTSGeometry();
 		// CoordinateFilter removeDuplicates = new
 		// UniqueCoordinateArrayFilter();
 		// jtsGeom.apply(removeDuplicates);
@@ -214,7 +232,7 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 				bFlipearShape = true;
 			}
 
-			LineString line = NetworkUtils.getPartialLineString(jtsGeom,
+			IGeometry line = NetworkUtils.getPartialLineString(g,
 					pctMax, 1);
 
 			pctMin = pctMin / pctMax; // Porque ha cambiado la longitud
@@ -223,9 +241,9 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 			line = NetworkUtils.getPartialLineString(line, pctMin, 0);
 
 			if (bFlipearShape)
-				line = (LineString) line.reverse();
+				line = NetworkUtils.flipGeometry(line);
 
-			IGeometry geom = FConverter.jts_to_igeometry(line);
+			IGeometry geom = line;
 			// TODO: Calcular bien el length de este arco,
 			// basandonos en el porcentaje costeTramoFinal / costeOriginal
 			route.addRouteFeature(geom, origin.getIdArc(), nodeEnd
@@ -291,7 +309,7 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 					infoShp.bFlip = true;
 			}
 
-			pilaShapes.push(infoShp);
+			pilaShapes.addFirst(infoShp);
 			if (pNodo.getIdNode() != idStart)
 				from_link = pNodo.get_from_link(idEnlace);
 		}
@@ -304,34 +322,35 @@ public abstract class AbstractShortestPathSolver extends AbstractNetSolver {
 
 		t1 = System.currentTimeMillis();
 
-		while (!pilaShapes.empty()) {
+		while (!pilaShapes.isEmpty()) {
 			infoShp = (InfoShp) pilaShapes.peek();
 			g = featExtractor.getGeometry(infoShp.idArc);
 			nameStreet = featExtractor.getFieldValue(infoShp.idArc,
 					getFieldIndexStreetName());
-
-			MultiLineString line = (MultiLineString) g.toJTSGeometry();
-
-			LineString aux = null;
+//			nameStreet = ValueFactory.createValue("TEST");
+			
+//			MultiLineString line = (MultiLineString) g.toJTSGeometry();
+			IGeometry line = g;
+			IGeometry aux = null;
 			if (infoShp.pct < 1.0)
-				aux = NetworkUtils.getPartialLineString(line, infoShp.pct,
+				aux = NetworkUtils.getPartialLineString(g, infoShp.pct,
 						infoShp.direction);
 
 			IGeometry geom = null;
 			if (aux == null) {
 				if (infoShp.bFlip)
-					line = (MultiLineString) line.reverse();
-				geom = FConverter.jts_to_igeometry(line);
+					line = NetworkUtils.flipGeometry(line);
+				geom = line; //FConverter.jts_to_igeometry(line);
 			} else {
 				if (infoShp.bFlip)
-					aux = (LineString) aux.reverse();
-				geom = FConverter.jts_to_igeometry(aux);
+					aux = NetworkUtils.flipGeometry(aux); //aux.reverse();
+				geom = aux; //FConverter.jts_to_igeometry(aux);
 			}
 
 			route.addRouteFeature(geom, infoShp.idArc, infoShp.cost,
 					infoShp.distance, nameStreet.toString());
 
-			pilaShapes.pop();
+			pilaShapes.removeFirst();
 			auxC++;
 
 		}
