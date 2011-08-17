@@ -338,7 +338,7 @@ ListSelectionListener, ItemListener, KeyListener {
 						capa.setSourceTransformation(capa.getNadsParams(p));
 					}					
 		        	panel.getJButtonNext().setEnabled(true);
-		        	if (condition = true) {
+		        	if (condition) {
 						panel.getJButtonAccept().setEnabled(true);
 						condition = false;
 					}
