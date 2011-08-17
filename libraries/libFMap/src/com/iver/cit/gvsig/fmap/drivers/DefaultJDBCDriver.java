@@ -93,7 +93,7 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	protected DBLayerDefinition lyrDef = null;
 	protected ResultSet rs;
 	protected boolean bCursorActivo = false;
-	protected Statement st;
+//	protected Statement st;
 	protected int numReg=-1;
 
 	protected Rectangle2D fullExtent = null;

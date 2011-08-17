@@ -283,7 +283,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 			sqlTotal = sqlAux;
 			logger.info("Cadena SQL:" + sqlAux);
-			st = ((ConnectionJDBC) conn).getConnection().createStatement(
+			Statement st = ((ConnectionJDBC) conn).getConnection().createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
 			// st.setFetchSize(FETCH_SIZE);
@@ -721,6 +721,10 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			fetch_max = fetch_min + FETCH_SIZE - 1;
 			// y cogemos ese cacho
 			rs.close();
+			
+			Statement st = ((ConnectionJDBC)conn).getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+			ResultSet.CONCUR_READ_ONLY);
+			
 			myCursorId++;
 			st.execute("declare "
 					+ getTableName()
@@ -1253,10 +1257,12 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	 * @throws SQLException
 	 */
 	public String[] getAllFieldTypeNames(IConnection conn, String table_name) throws DBException {
-		table_name = tableNameToComposedTableName(table_name);
+	    Statement st = null;
+	    ResultSet rs = null;
+	    table_name = tableNameToComposedTableName(table_name);
 		try {
-			Statement st = ((ConnectionJDBC)conn).getConnection().createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM " + table_name + " LIMIT 1");
+			st = ((ConnectionJDBC)conn).getConnection().createStatement();
+			rs = st.executeQuery("SELECT * FROM " + table_name + " LIMIT 1");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			String[] ret = new String[rsmd.getColumnCount()];
 

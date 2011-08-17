@@ -722,7 +722,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
     private void oneRowMetadata() {
         try {
 
-            st = ((ConnectionJDBC)conn).getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+            Statement st = ((ConnectionJDBC)conn).getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             
             ResultSet _rs = null;
@@ -771,6 +771,9 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
         	_sql = _sql + " where c." + geoColName + " is not NULL AND "
     		+ OracleSpatialUtils.EXPONENTIAL_INDICES_CONDITION;
         	
+            Statement st = ((ConnectionJDBC)conn).getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY);
+
             _rs = st.executeQuery(_sql);
 
             int aux = 0;
