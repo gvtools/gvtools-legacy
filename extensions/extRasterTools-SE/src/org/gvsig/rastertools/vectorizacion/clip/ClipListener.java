@@ -52,7 +52,6 @@ import com.iver.cit.gvsig.fmap.tools.Behavior.Behavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.MouseMovementBehavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.RectangleBehavior;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener;
 
 /**
@@ -226,7 +225,7 @@ public class ClipListener implements ActionListener, TableModelListener, Buttons
 		IWindow[] list = PluginServices.getMDIManager().getAllWindows();
 		BaseView view = null;
 		for (int i = 0; i < list.length; i++) {
-			if(list[i] instanceof View)
+			if(list[i] instanceof BaseView)
 				view = (BaseView)list[i];
 		}
 		if (view == null)

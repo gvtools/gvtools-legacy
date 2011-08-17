@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
 
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.fmap.raster.layers.ILayerState;
@@ -54,7 +53,6 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.addlayer.fileopen.FileOpenWizard;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 
@@ -219,7 +217,7 @@ public class SaveAsTocMenuEntry extends AbstractTocContextMenuAction implements 
 		chooser.setAccessory(panelProperty);
 		chooser.setAcceptAllFileFilterUsed(false);
 
-		if (w instanceof View) {
+		if (w instanceof BaseView) {
 			if (chooser.showSaveDialog(((BaseView) w).getComponent(0)) == JFileChooser.APPROVE_OPTION) {
 				// Creación de parámetros
 				String tit = PluginServices.getMDIManager().getWindowInfo(w).getTitle();

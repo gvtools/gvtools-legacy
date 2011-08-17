@@ -45,7 +45,7 @@ import com.iver.cit.gvsig.addlayer.fileopen.AbstractFileOpen;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
+
 /**
  * Clase que indicará que ficheros puede tratar al panel de apertura de
  * ficheros
@@ -367,8 +367,8 @@ public class FileOpenRaster extends AbstractFileOpen {
 			return mapControl;
 		
 		IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
-		if ((activeWindow != null) && (activeWindow instanceof View))
-			return ((View) activeWindow).getMapControl();
+		if ((activeWindow != null) && (activeWindow instanceof BaseView))
+			return ((BaseView) activeWindow).getMapControl();
 
 		IWindow[] w = PluginServices.getMDIManager().getAllWindows();
 		// Obtiene la primera vista activa

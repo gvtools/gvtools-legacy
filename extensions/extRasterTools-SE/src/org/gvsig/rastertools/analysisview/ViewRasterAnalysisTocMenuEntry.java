@@ -39,7 +39,6 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.project.documents.view.MapOverview;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.AbstractTocContextMenuAction;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 /**
@@ -152,9 +151,9 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 		for (int i = 0; i < w.length; i++) {
 			if (w[i] instanceof PixelIncreaseDialog)
 				RasterToolsUtil.closeWindow(w[i]);
-			if (w[i] instanceof View && w[i].equals(activeWindow))
+			if (w[i] instanceof BaseView && w[i].equals(activeWindow))
 				mcCurrentLoc = ((BaseView) w[i]).getMapOverview();
-			if (w[i] instanceof View)
+			if (w[i] instanceof BaseView)
 				mapControlListLoc.add(((BaseView) w[i]).getMapOverview());
 		}
 

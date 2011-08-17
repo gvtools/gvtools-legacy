@@ -55,7 +55,6 @@ import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toc.ITocItem;
 import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
@@ -391,7 +390,7 @@ public class RasterModule extends Extension implements ConfigurationListener {
 		if (f == null) {
 			return false;
 		}
-		if (f.getClass() == View.class) {
+		if (f.getClass() == BaseView.class) {
 			BaseView vista = (BaseView) f;
 			IProjectView model = vista.getModel();
 			MapContext mapa = model.getMapContext();
@@ -411,8 +410,8 @@ public class RasterModule extends Extension implements ConfigurationListener {
 		if (f == null)
 			return false;
 
-		if (f instanceof View) {
-			View vista = (View) f;
+		if (f instanceof BaseView) {
+			BaseView vista = (BaseView) f;
 			IProjectView model = vista.getModel();
 			MapContext mapa = model.getMapContext();
 			if (mapa.getLayers().getLayersCount() > 0)
@@ -447,8 +446,8 @@ public class RasterModule extends Extension implements ConfigurationListener {
 			if (f == null)
 				return;
 			for (int i = 0; i < f.length; i++) {
-				if (f[i] instanceof View) {
-					View vista = (View) f[i];
+				if (f[i] instanceof BaseView) {
+					BaseView vista = (BaseView) f[i];
 					IProjectView model = vista.getModel();
 					MapContext map = model.getMapContext();
 					FLayers lyrs = map.getLayers();

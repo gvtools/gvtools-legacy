@@ -41,7 +41,8 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.project.Project;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
+import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
+
 /**
  * Herramientas de uso general y que son dependientes de gvSIG, FMap o de
  * libUIComponents. En caso de no serlo existe una clase independiente de
@@ -387,25 +388,25 @@ public class RasterToolsUtil {
 			return null;
 
 		//Seleccionamos la vista de gvSIG
-		View theView = null;
+		BaseView theView = null;
 		try {
 			IWindow[] allViews = PluginServices.getMDIManager().getAllWindows();
 			if(viewName != null) {
 				for (int i = 0; i < allViews.length; i++) {
-					if (allViews[i] instanceof View
-						&& PluginServices.getMDIManager().getWindowInfo((View) allViews[i]).getTitle().equals(viewName))
-						theView = (View) allViews[i];
+					if (allViews[i] instanceof BaseView
+						&& PluginServices.getMDIManager().getWindowInfo((BaseView) allViews[i]).getTitle().equals(viewName))
+						theView = (BaseView) allViews[i];
 				}
 			} else {
 				IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
 				for (int i = 0; i < allViews.length; i++) {
-					if (allViews[i] instanceof View && ((View)allViews[i]) == activeWindow) //En la primera vista activa
-						theView = (View) allViews[i];
+					if (allViews[i] instanceof BaseView && ((BaseView)allViews[i]) == activeWindow) //En la primera vista activa
+						theView = (BaseView) allViews[i];
 				}
 				if(theView == null) {
 					for (int i = 0; i < allViews.length; i++) {
-						if (allViews[i] instanceof View) //En la primera vista
-							theView = (View) allViews[i];
+						if (allViews[i] instanceof BaseView) //En la primera vista
+							theView = (BaseView) allViews[i];
 					}
 				}
 			}
@@ -459,25 +460,25 @@ public class RasterToolsUtil {
 			return null;
 
 		//Seleccionamos la vista de gvSIG
-		View theView = null;
+		BaseView theView = null;
 		try {
 			IWindow[] allViews = PluginServices.getMDIManager().getAllWindows();
 			if(viewName != null) {
 				for (int i = 0; i < allViews.length; i++) {
-					if (allViews[i] instanceof View
-						&& PluginServices.getMDIManager().getWindowInfo((View) allViews[i]).getTitle().equals(viewName))
-						theView = (View) allViews[i];
+					if (allViews[i] instanceof BaseView
+						&& PluginServices.getMDIManager().getWindowInfo((BaseView) allViews[i]).getTitle().equals(viewName))
+						theView = (BaseView) allViews[i];
 				}
 			} else {
 				IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
 				for (int i = 0; i < allViews.length; i++) {
-					if (allViews[i] instanceof View && ((View)allViews[i]) == activeWindow) //En la primera vista activa
-						theView = (View) allViews[i];
+					if (allViews[i] instanceof BaseView && ((BaseView)allViews[i]) == activeWindow) //En la primera vista activa
+						theView = (BaseView) allViews[i];
 				}
 				if(theView == null) {
 					for (int i = 0; i < allViews.length; i++) {
-						if (allViews[i] instanceof View) //En la primera vista
-							theView = (View) allViews[i];
+						if (allViews[i] instanceof BaseView) //En la primera vista
+							theView = (BaseView) allViews[i];
 					}
 				}
 			}

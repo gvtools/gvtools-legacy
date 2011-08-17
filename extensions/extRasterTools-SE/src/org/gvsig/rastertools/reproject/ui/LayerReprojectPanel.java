@@ -43,7 +43,7 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.gui.panels.CRSSelectPanel;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
+
 /**
  * Panel para la reproyecci�n de capas cargadas.
  * 
@@ -250,16 +250,16 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 			
 			IProjection projectionAux = null;
 			IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
-			if (activeWindow instanceof View) {		
-				View activeView = (com.iver.cit.gvsig.project.documents.view.gui.View) activeWindow;
+			if (activeWindow instanceof BaseView) {		
+				BaseView activeView = (BaseView) activeWindow;
 				projectionAux = activeView.getProjection();
 				activeView.setProjection(projSrc);
 			}
 			
 			projectionSrcSelector = CRSSelectPanel.getPanel(projSrc);
 			
-			if (activeWindow instanceof View) {		
-				View activeView = (com.iver.cit.gvsig.project.documents.view.gui.View) activeWindow;
+			if (activeWindow instanceof BaseView) {		
+				BaseView activeView = (BaseView) activeWindow;
 				activeView.setProjection(projectionAux);
 			}
 			

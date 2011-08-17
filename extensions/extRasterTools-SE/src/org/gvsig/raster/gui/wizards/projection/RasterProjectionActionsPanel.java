@@ -35,7 +35,7 @@ import org.gvsig.raster.gui.wizards.FileOpenRaster;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
+import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 /**
  * Obtiene el panel con las opciones a realizar con la proyección. Nos ofrece
  * las siguientes posibilidades:
@@ -129,8 +129,8 @@ public class RasterProjectionActionsPanel extends DefaultButtonsPanel {
 			changeViewProjection = new JRadioButton(PluginServices.getText(this, "change_view_proj"));
 			
 			IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
-			if (activeWindow instanceof View) {		
-				View activeView = (com.iver.cit.gvsig.project.documents.view.gui.View) activeWindow;
+			if (activeWindow instanceof BaseView) {		
+				BaseView activeView = (BaseView) activeWindow;
 				if (activeView.getMapControl().getMapContext().getLayers().getLayersCount() >= 1)
 					changeViewProjection.setEnabled(false);
 			}

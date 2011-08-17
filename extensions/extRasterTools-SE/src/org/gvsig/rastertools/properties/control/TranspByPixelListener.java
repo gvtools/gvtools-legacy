@@ -47,7 +47,7 @@ import com.iver.cit.gvsig.fmap.tools.Behavior.Behavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.MouseMovementBehavior;
 import com.iver.cit.gvsig.fmap.tools.Behavior.PointBehavior;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
+
 /**
  * Maneja los eventos para el panel de transparencia por pixel.
  * 
@@ -151,13 +151,13 @@ public class TranspByPixelListener implements ActionListener, ListSelectionListe
 	 * Añade una tool a la vista para la selección de RGB.
 	 */
 	public void colorToolButton() {
-		View theView = null;
+		BaseView theView = null;
 		try {
 			IWindow[] allViews = PluginServices.getMDIManager().getAllWindows();
 			for (int i = 0; i < allViews.length; i++) {
-				if (allViews[i] instanceof View &&
-						PluginServices.getMDIManager().getWindowInfo((View) allViews[i]).getTitle().equals(viewName))
-					theView = (View) allViews[i];
+				if (allViews[i] instanceof BaseView &&
+						PluginServices.getMDIManager().getWindowInfo((BaseView) allViews[i]).getTitle().equals(viewName))
+					theView = (BaseView) allViews[i];
 			}
 			if (theView == null)
 				return;

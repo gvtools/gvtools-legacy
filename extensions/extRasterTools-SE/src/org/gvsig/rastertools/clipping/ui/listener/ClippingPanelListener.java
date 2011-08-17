@@ -72,7 +72,6 @@ import com.iver.cit.gvsig.fmap.tools.Behavior.RectangleBehavior;
 import com.iver.cit.gvsig.fmap.tools.Events.RectangleEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.RectangleListener;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
-import com.iver.cit.gvsig.project.documents.view.gui.View;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener;
 /**
  * <code>ClippingPanelListener</code> es una clase donde se recogerán y
@@ -906,14 +905,14 @@ public class ClippingPanelListener implements ActionListener, RectangleListener,
 	 */
 	public void selectToolButton() {
 		// seleccionamos la vista de gvSIG
-		com.iver.cit.gvsig.project.documents.view.gui.View theView = null;
+		BaseView theView = null;
 		try {
 			IWindow[] allViews = PluginServices.getMDIManager().getAllWindows();
 			for (int i = 0; i < allViews.length; i++) {
 				if (allViews[i] instanceof com.iver.cit.gvsig.project.documents.view.gui.View
-						&& PluginServices.getMDIManager().getWindowInfo((View) allViews[i])
+						&& PluginServices.getMDIManager().getWindowInfo((BaseView) allViews[i])
 								.getTitle().equals(viewName))
-					theView = (com.iver.cit.gvsig.project.documents.view.gui.View) allViews[i];
+					theView = (BaseView) allViews[i];
 			}
 			if (theView == null)
 				return;
