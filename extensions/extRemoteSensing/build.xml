@@ -35,7 +35,7 @@
 
 	<target name="compile" description="compile the source" >
 		<!-- Compile the Java code from ${src} to ${build} -->
-		<antcall target="gvSIG-import-build-number"/>
+		<!--antcall target="gvSIG-import-build-number"/-->
 		<mkdir dir="${build}" />
 		<loadEclipseClasspath project="${basedir}"/>
 		<gvSIG-javac
@@ -61,6 +61,11 @@
 		<copy file="build.number" todir="${dist}"/>
     <copy file="config/about.htm" todir="${dist}"/>
     <loadproperties srcFile="build.number"/>
+	<propertyfile file="package.info">
+		<entry  key="build" value="${build.number}"/>
+		<entry  key="buildNumber" value="${build.number}"/>
+	</propertyfile>
+	<copy file="package.info" todir="${dist}"/>
     <replace casesensitive="true"
     file="${dist}/about.htm"
     token="#build.number#"
@@ -78,7 +83,6 @@
   </target>
 
   <target name="move-to-andami">
-
     <move todir="${extension-dir}/${plugin}/">
     	<fileset dir="${dist}" includes="**/**"/>
     </move>
@@ -95,7 +99,7 @@
   <target name="buildNumber">  
     <propertyfile     file="build.number"
         comment="Build Number for ANT. Do not edit!">
-      <entry key="build.number" default="0" type="int" operation="+" />
+      <entry key="build.number" default="0" type="int" operation="+" pattern="0" />
     </propertyfile>
     <property file="build.number" />
   </target>

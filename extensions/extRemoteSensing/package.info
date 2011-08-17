@@ -1,0 +1,15 @@
+#Thu Feb 17 11:42:17 CET 2011
+state=devel
+name=org.gvsig.remotesensing
+buildNumber=1240
+official=true
+code=org.gvsig.remotesensing
+operating-system=all
+architecture=all
+java-version=j1_5
+gvSIG-version=1.11.0
+version=0.1.0
+type=plugin
+description=Remote sensing extensions
+build=1240
+model-version=1.0.0

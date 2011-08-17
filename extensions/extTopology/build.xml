@@ -21,7 +21,7 @@
 	<property name="extensionsDir" location="${andami}/gvSIG/extensiones"/>
 	<property name="docsGeoprocessDir" location="${extensionsDir}/${plugin}/docs"/>
 	<property name="andamiJar" location="${andami}/andami.jar"/>
-	<property name="gvsigJar" location="${extensionsDir}/com.iver.cit.gvsig/lib/com.iver.cit.gvsig.jar"/>
+	<!--property name="gvsigJar" location="${extensionsDir}/com.iver.cit.gvsig/lib/com.iver.cit.gvsig.jar"/-->
 	<property name="andamiLibs" location="${andami}/lib"/>
 	<property name="fmapLibs" location="../libFMap/lib" />
 	<property name="fmapJar" location="../libFMap/dist/lib/fmap.jar"/>
@@ -91,6 +91,9 @@
     	<jar jarfile="${without_src}/lib/${plugin}.jar" basedir="${build}"/>
 	    <copy file="config/config.xml" todir="${without_src}"/>
 	  	<copy file="build.number" todir="${without_src}"/>
+
+  	
+  	
   	
 		<copy file="config/about.htm" todir="${without_src}"/>
 	  	<loadproperties srcFile="build.number"/>
@@ -99,7 +102,12 @@
 	  		  token="#build.number#"
 	  		  value="${build.number}"/>
 
-	    
+		<propertyfile file="package.info">
+			<entry  key="build" value="${build.number}"/>
+			<entry  key="buildNumber" value="${build.number}"/>
+		</propertyfile>
+		<copy file="package.info" todir="${without_src}"/>
+
   		<copy todir="${without_src}">
 	    	<fileset dir="config" includes="text*.properties"/>
 	    </copy>
