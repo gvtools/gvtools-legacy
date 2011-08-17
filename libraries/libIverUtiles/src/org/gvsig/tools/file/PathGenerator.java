@@ -106,6 +106,8 @@ public class PathGenerator {
 	 * @return
 	 */
 	public String getAbsolutePath(String path){
+		if (path==null)
+			return null;
 		File filePath=new File(path);
 		if (isAbsolutePath && filePath.exists())
 			return path;
