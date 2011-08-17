@@ -43,7 +43,7 @@
  */
 /* CVS MESSAGES:
  *
- * $Id: RouteReportPanel.java 31987 2010-01-12 21:53:31Z fpenarrubia $
+ * $Id: RouteReportPanel.java 34304 2010-12-22 11:00:05Z fpenarrubia $
  * $Log$
  * Revision 1.15  2007-09-07 11:29:47  fjp
  * Casi compila. Falta arreglar lo de FArrowSymbol y retocar el graphiclist de FMap.
@@ -112,21 +112,27 @@ import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import org.cresques.cts.IProjection;
 import org.gvsig.graph.core.DocumentRenderer;
 import org.gvsig.graph.core.TurnUtil;
 import org.gvsig.graph.solvers.Route;
+import org.gvsig.graph.solvers.RouteMemoryDriver;
 import org.gvsig.gui.beans.swing.JButton;
 
 import com.hardcode.gdbms.engine.values.DoubleValue;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
+import com.iver.cit.gvsig.addlayer.AddLayerDialog;
+import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.ILineSymbol;
+import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.GraphicLayer;
+import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.rendering.FGraphic;
 
 public class RouteReportPanel extends JPanel implements IWindow {
@@ -254,15 +260,53 @@ public class RouteReportPanel extends JPanel implements IWindow {
 		initialize();
 		scrollPanel.setViewportView(htmlPanel);
 		add(scrollPanel, BorderLayout.CENTER);
-		JButton btn = new JButton(_T("Print"));
-		btn.addActionListener(new ActionListener() {
+		JPanel south = new JPanel();
+		JButton btnPrint = new JButton(_T("Print"));
+		btnPrint.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				printReport();
 			}
 
 		});
-		add(btn, BorderLayout.SOUTH);
+		JButton btnExport = new JButton(_T("Export"));
+		btnExport.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				exportRoute();
+			}
+
+		});
+		
+		south.add(btnPrint);
+		south.add(btnExport);
+		add(south, BorderLayout.SOUTH);
+	}
+
+	protected void exportRoute() {
+		RouteMemoryDriver driver = new RouteMemoryDriver(route.getFeatureList());
+		IProjection projection = AddLayerDialog.getLastProjection();
+		FLyrVect routeLayer = (FLyrVect) LayerFactory.createLayer("Route",
+				driver, projection);
+
+		FormatSelectionPanel selectionPanel = new FormatSelectionPanel(PluginServices.getText(null,
+		"Seleccione_un_formato_para_guardar_la_ruta"));
+		PluginServices.getMDIManager().addWindow(selectionPanel);
+
+		String format = selectionPanel.getSelectedFormat();
+		com.iver.cit.gvsig.ExportTo export = new com.iver.cit.gvsig.ExportTo();
+		MapContext context = mapControl.getMapContext();
+			if (format.equalsIgnoreCase("SHP")) {
+				export.saveToShp(context, routeLayer);
+			} else if (format.equalsIgnoreCase("DXF")) {
+				export.saveToDxf(context, routeLayer);
+//			} else if (format.equalsIgnoreCase("GML")) {
+//				export.saveToGml(context, routeLayer);
+			} else if (format.equalsIgnoreCase("POSTGIS")) {
+				export.saveToPostGIS(context, routeLayer);
+			}
+
+		
 	}
 
 	/**

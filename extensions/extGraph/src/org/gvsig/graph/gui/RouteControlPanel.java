@@ -41,7 +41,7 @@
 
 /* CVS MESSAGES:
  *
- * $Id: RouteControlPanel.java 31985 2010-01-12 16:57:17Z fpenarrubia $
+ * $Id: RouteControlPanel.java 34304 2010-12-22 11:00:05Z fpenarrubia $
  * $Log$
  * Revision 1.26  2007-09-07 11:29:47  fjp
  * Casi compila. Falta arreglar lo de FArrowSymbol y retocar el graphiclist de FMap.
@@ -166,7 +166,6 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -844,68 +843,6 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 			btnSaveStage.addActionListener(this);
 		}
 		return btnSaveStage;
-	}
-
-	class FormatSelectionPanel extends JPanel implements IWindow {
-
-		JComboBox formats;
-		WindowInfo wi = null;
-		private boolean isOkButtonPressed = false;;
-
-		public FormatSelectionPanel(String introductoryText) {
-			super(new BorderLayout());
-			String[] formatos = { "SHP", "DXF", "POSTGIS" }; //, "GML" };
-			formats = new JComboBox(formatos);
-			GridBagLayoutPanel contentPanel =
-				new GridBagLayoutPanel();
-			contentPanel.addComponent(new JLabel(introductoryText));
-			contentPanel.addComponent(formats);
-			JButton okButton = new JButton(PluginServices.getText(null,
-					"Aceptar"));
-			okButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					setIsOkButtonPressed(true);
-					close();
-				}
-			});
-			contentPanel.addComponent(okButton);
-
-			add(contentPanel);
-		}
-
-		protected void setIsOkButtonPressed(boolean b) {
-			this.isOkButtonPressed  = b;
-			
-		}
-
-		void close() {
-			PluginServices.getMDIManager().closeWindow(this);
-		}
-
-		public String getSelectedFormat() {
-			return (String) formats.getSelectedItem();
-		}
-
-		public WindowInfo getWindowInfo() {
-			if (wi == null) {
-				wi = new WindowInfo(WindowInfo.MODALDIALOG | WindowInfo.PALETTE);
-				wi.setTitle(PluginServices
-						.getText(null, "Format_selection"));// Internacionalizar
-																// esto
-				wi.setWidth(400);
-				wi.setHeight(55);
-			}
-			return wi;
-		}
-
-		public Object getWindowProfile() {
-			return WindowInfo.DIALOG_PROFILE;
-		}
-
-		public boolean isOkButtonPressed() {
-			return isOkButtonPressed;
-		}
-
 	}
 
 	public void actionPerformed(ActionEvent e) {
