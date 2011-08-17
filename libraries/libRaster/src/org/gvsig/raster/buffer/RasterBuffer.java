@@ -118,8 +118,8 @@ public abstract class RasterBuffer implements IBuffer {
 		}
 			
 		if(cacheOn){
-			long size = (RasterUtilities.getBytesFromRasterBufType(dataType) * width * height * bandNr) / 1024;
-			long ms1 = RasterLibrary.cacheSize * 1024;
+			long size = (long)((long)RasterUtilities.getBytesFromRasterBufType(dataType) * (long)width * (long)height * (long)bandNr) / 1024L;
+			long ms1 = RasterLibrary.cacheSize * 1024L;
 			if(size <= ms1)
 				return new RasterMemoryBuffer(dataType, width, height, bandNr, malloc);
 			else
