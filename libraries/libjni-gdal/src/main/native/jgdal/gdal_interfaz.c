@@ -56,6 +56,8 @@
 #include "cpl_string.h"
 #include "signal.h"
 
+
+
 /******************************************************************************/
 //								Open
 /******************************************************************************/
@@ -104,8 +106,6 @@ void handler(int n) {
 	#endif
 }
 
-
-
 JNIEXPORT jlong JNICALL Java_es_gva_cit_jgdal_Gdal_openArrayNat
   (JNIEnv *env, jobject obj, jbyteArray pszF, jint acc){
   	
@@ -117,7 +117,7 @@ JNIEXPORT jlong JNICALL Java_es_gva_cit_jgdal_Gdal_openArrayNat
   	jsize longitud = 0, i;
  	  	
   	longitud = (*env)->GetArrayLength(env, pszF); 
-	pszFilename = (*env)->GetByteArrayElements(env, pszF, 0);
+  	pszFilename = (*env)->GetByteArrayElements(env, pszF, 0);
   	
 	aux = (jbyte *)malloc(sizeof(jbyte) * (longitud + 1));
   	memcpy(aux, pszFilename, longitud);
@@ -125,23 +125,13 @@ JNIEXPORT jlong JNICALL Java_es_gva_cit_jgdal_Gdal_openArrayNat
   	pszFilename = aux;
   		
 	pszFilename[longitud] = '\0';
-	
-	fich = fopen( (char*) pszFilename, "r" );
-	if( fich )
-		fclose(fich);
-	else		
-      	return -1;
    	
    	GDALAllRegister();
   	dataset = GDALOpen((char *)pszFilename,(int)acc);
-
-	// rgaitan: Aquí pszFilename ya no apunta al array de java, 
-	// es el de aux, por lo que tenemos que liberarlo.
-	// este cambio se ha realizado en todas las librerías jni que utilizan
-	// el método "array" para abrir ficheros.
-	free(pszFilename);
   	
   	*(GDALDatasetH **)&jresult = dataset;
+  	
+    (*env)->ReleaseByteArrayElements(env, pszF, pszFilename, 0);
   	
   	if(dataset == NULL)
   		return -1; 
@@ -511,7 +501,7 @@ JNIEXPORT jstring JNICALL Java_es_gva_cit_jgdal_Gdal_getColorInterpretationNameN
    	 jstring 			typeName = NULL;
 	 
 	 dt = *(GDALDatasetH **)&cPtr;
-	 name = (char*) GDALGetColorInterpretationName(ci);  	 
+	 name = GDALGetColorInterpretationName(ci);  	 
 	 typeName = (*env)->NewStringUTF(env, name); 
 	 return typeName;
   }
