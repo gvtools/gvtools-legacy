@@ -41,7 +41,7 @@
 
 /* CVS MESSAGES:
 *
-* $Id: ViewPage.java 30507 2009-08-13 10:33:46Z vcaballero $
+* $Id: ViewPage.java 34491 2011-02-10 08:43:06Z fdiaz $
 * $Log$
 * Revision 1.27  2007-09-17 09:22:10  jaume
 * view draw frame rate now customizable
@@ -220,6 +220,7 @@ public class ViewPage extends AbstractPreferencePage {
 	private static final String ZOOM_IN_FACTOR_KEY_NAME = "ZoomInFactor";
 	private static final String ZOOM_OUT_FACTOR_KEY_NAME = "ZoomOutFactor";
 	private static final String ADD_NEW_LAYERS_IN_INVISIBLE_MODE_KEY_NAME = "NewLayersInInvisibleMode";
+	private static final String SHOW_FILE_EXTENSIONS_KEY_NAME = "ShowFileExtensions";
 	private static final String KEEP_SCALE_ON_RESIZING_KEY_NAME = "KeepScaleOnResizing";
 	private static final String DEFAULT_SELECTION_COLOR_KEY_NAME = "DefaultSelectionColor";
 	private static final String DEFAULT_VIEW_BACK_COLOR_KEY_NAME = "DefaultViewBackColor";
@@ -254,6 +255,7 @@ public class ViewPage extends AbstractPreferencePage {
 	private String fontName;
 	private JCheckBox chkInvisibleNewLayers;
 	private JCheckBox chkKeepScaleOnResizing;
+	private JCheckBox chkShowFileExtensions;
 	private ColorChooserPanel jccDefaultSelectionColor;
 	private ColorChooserPanel jccDefaultViewBackColor;
 	private JComboBox jCmbMapUnits;
@@ -350,6 +352,11 @@ public class ViewPage extends AbstractPreferencePage {
 				PluginServices.getText(this, "options.view.invisible_new_layers"));
 
 		addComponent("", chkInvisibleNewLayers);
+		
+		chkShowFileExtensions = new JCheckBox(
+				PluginServices.getText(this, "options.view.show_file_extensions"));
+		addComponent("", chkShowFileExtensions);
+				
 		chkKeepScaleOnResizing = new JCheckBox(
 				PluginServices.getText(this, "options.view.keep_scale_on_resizing"));
 		chkKeepScaleOnResizing.setEnabled(false);
@@ -417,6 +424,14 @@ public class ViewPage extends AbstractPreferencePage {
 		if (xml.contains(ADD_NEW_LAYERS_IN_INVISIBLE_MODE_KEY_NAME)) {
 			chkInvisibleNewLayers.setSelected(
 				xml.getBooleanProperty(ADD_NEW_LAYERS_IN_INVISIBLE_MODE_KEY_NAME));
+		}
+		
+		// Show file extension on ToC when adding layers 
+		if (xml.contains(SHOW_FILE_EXTENSIONS_KEY_NAME)) {
+			chkShowFileExtensions.setSelected(
+				xml.getBooleanProperty(SHOW_FILE_EXTENSIONS_KEY_NAME));
+		} else {
+			chkShowFileExtensions.setSelected(true);
 		}
 
 		// Keep scale on resizing
@@ -508,7 +523,7 @@ public class ViewPage extends AbstractPreferencePage {
 		String projName = lblDefaultProjection.getText();
 		double zif=1;
 		double zof=1;
-		boolean invisibleNewLayers, keepScaleOnResize;
+		boolean invisibleNewLayers, keepScaleOnResize, showFileExtensions;
 		Color selectionColor, viewBackColor;
 		/*
 		 * Locator's background color, for when we let it be possible
@@ -544,6 +559,7 @@ public class ViewPage extends AbstractPreferencePage {
 			Project.setDefaultDistanceArea(jCmbDistanceArea.getSelectedIndex());
 			invisibleNewLayers = chkInvisibleNewLayers.isSelected();
 			keepScaleOnResize = chkKeepScaleOnResizing.isSelected();
+			showFileExtensions = chkShowFileExtensions.isSelected();
 		} catch (Exception e) {
 			throw new StoreException(PluginServices.getText(this,"factor_zoom_incorrecto"));
 		}
@@ -558,6 +574,7 @@ public class ViewPage extends AbstractPreferencePage {
 		xml.putProperty(ZOOM_OUT_FACTOR_KEY_NAME, zof);
 		xml.putProperty(ADD_NEW_LAYERS_IN_INVISIBLE_MODE_KEY_NAME, invisibleNewLayers);
 		xml.putProperty(KEEP_SCALE_ON_RESIZING_KEY_NAME, keepScaleOnResize);
+		xml.putProperty(SHOW_FILE_EXTENSIONS_KEY_NAME, showFileExtensions);
 		xml.putProperty(DEFAULT_VIEW_BACK_COLOR_KEY_NAME, StringUtilities.color2String(viewBackColor));
 		/*
 		 * Locator's background color, for when we let it be possible

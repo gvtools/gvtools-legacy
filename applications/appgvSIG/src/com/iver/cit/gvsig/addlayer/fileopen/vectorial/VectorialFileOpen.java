@@ -30,6 +30,7 @@ import org.cresques.cts.IProjection;
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
+import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.addlayer.fileopen.AbstractFileOpen;
@@ -37,6 +38,7 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
+import com.iver.utiles.XMLEntity;
 /**
  * Clase que indicará que ficheros puede tratar al panel de apertura de ficheros
  *
@@ -107,6 +109,19 @@ public class VectorialFileOpen extends AbstractFileOpen{
 
 		// Envelope de cada fichero seleccionado por el usuario
 		String layerName = file.getName();
+
+		// Show file extension when adding layers on ToC
+		XMLEntity xml = PluginServices.getPluginServices("com.iver.cit.gvsig").getPersistentXML();
+		if (!xml.contains("ShowFileExtensions")) {
+			//Do nothing
+		} else {
+			boolean showFileExtension= xml.getBooleanProperty("ShowFileExtensions");
+			int dot_index = layerName.lastIndexOf(".");
+			if (!showFileExtension && dot_index > 0) {
+				layerName = layerName.substring(0, dot_index);
+			}
+		}
+		
 		try {
 
 			if (driver instanceof VectorialFileDriver) {
