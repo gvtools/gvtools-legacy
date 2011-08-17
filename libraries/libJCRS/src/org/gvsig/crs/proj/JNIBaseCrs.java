@@ -85,7 +85,7 @@ public class JNIBaseCrs
 		// **** Provisional: strErrNo tira la máquina virtual en Windows. *****
 		//TODO: Revisarlo en el código jni.
 		//if (errNo<0 && errNo!=-10) throw new CrsProjException("Error creating CRS: "+strErrNo(errNo));
-		if (errNo<0 && errNo!=-10) throw new CrsProjException("Error creating CRS.");
+		if (errNo<0 && errNo!=-10) throw new CrsProjException("Error creating CRS: "+strCrs);
 		_strCrs=strCrs;
 	}
 	
