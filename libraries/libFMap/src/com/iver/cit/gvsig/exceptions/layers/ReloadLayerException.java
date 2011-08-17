@@ -9,6 +9,12 @@ public class ReloadLayerException extends LoadLayerException {
 		super(l,exception);
 		init();
 	}
+	
+	public ReloadLayerException(String l) {
+		super(l);
+		init();
+	}	
+	
 	/**
 	 *
 	 */

@@ -16,6 +16,11 @@ public class LoadLayerException extends BaseException {
 		initCause(exception);
 	}
 
+	public LoadLayerException(String layer) {
+		this.layer = layer;
+		init();
+	}	
+	
 	private void init() {
 		messageKey = "error_load_layer";
 		formatString = "Failed to load layer: %(layer). ";

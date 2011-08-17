@@ -1796,6 +1796,9 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     }
 
     public void reload() throws ReloadLayerException {
+    	if(this.isEditing()){
+            throw new ReloadLayerException(getName());
+    	}
         this.setAvailable(true);
         super.reload();
         this.updateDrawVersion();
