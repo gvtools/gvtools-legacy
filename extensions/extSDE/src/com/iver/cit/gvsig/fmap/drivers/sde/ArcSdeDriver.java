@@ -1149,7 +1149,7 @@ public class ArcSdeDriver implements ICanReproject, IWriteable, IVectorialSDEDri
 			SeTable table = null;
 			Vector tables=((ConnectionSDE)conex).getConnection().getTables(SeDefs.SE_SELECT_PRIVILEGE);
 			for (int i=0;i<tables.size();i++) {
-				if (tableName.equals(((SeTable)tables.get(i)).getQualifiedName())) {
+				if (tableName.equalsIgnoreCase(((SeTable)tables.get(i)).getQualifiedName())) {
 					table=(SeTable)tables.get(i);
 					break;
 				}
@@ -1172,7 +1172,7 @@ public class ArcSdeDriver implements ICanReproject, IWriteable, IVectorialSDEDri
 			SeTable table = null;
 			Vector tables=((ConnectionSDE)conex).getConnection().getTables(SeDefs.SE_SELECT_PRIVILEGE);
 			for (int i=0;i<tables.size();i++) {
-				if (tableName.equals(((SeTable)tables.get(i)).getQualifiedName())) {
+				if (tableName.equalsIgnoreCase(((SeTable)tables.get(i)).getQualifiedName())) {
 					table=(SeTable)tables.get(i);
 					break;
 				}
