@@ -54,7 +54,6 @@ import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.rmi.NoSuchObjectException;
 import java.security.KeyManagementException;
@@ -62,6 +61,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -96,7 +97,7 @@ public class Utilities {
 	static Exception downloadException;
 	private static final String tempDirectoryPath = System.getProperty("java.io.tmpdir")+"/tmp-andami";
 
-
+	private static Logger logger = Logger.getLogger(Utilities.class.getName());
 	static {
 		characters = "";
 		for (int j = 32; j<=127; j++){
@@ -425,18 +426,6 @@ public class Utilities {
 
 	/**
 	 * Return the content of a file that has been created 
-	 * from a URL using the HTTP GET protocol
-	 * @param url
-	 * The URL
-	 * @return
-	 * File containing this URL's content or null if no file was found.
-	 */
-	private static File getPreviousDownloadedURL(URL url){
-		return getPreviousDownloaded(url);
-	}
-
-	/**
-	 * Return the content of a file that has been created 
 	 * from a URL using the HTTP POST protocol
 	 * @param url
 	 * The URL
@@ -446,6 +435,8 @@ public class Utilities {
 	 * File containing this URL's content or null if no file was found.
 	 */
 	private static File getPreviousDownloadedURL(URL url, String data){
+		if(data == null)
+			return getPreviousDownloaded(url);
 		return getPreviousDownloaded(url+data);
 	}
 
@@ -493,6 +484,21 @@ public class Utilities {
         }
 		 */
 	}
+	
+	/** 
+	 * Computes the correct temporal filename based on an input name.
+	 * 
+	 * @param name
+	 * @return Computed temporal filename
+	 */
+	private static String calculateFileName(String name){
+		int index = name.lastIndexOf(".");
+		if (index > 0){
+			return tempDirectoryPath + File.separator + name.substring(0,index) + System.currentTimeMillis() + 
+				name.substring(index, name.length());
+		}
+		return tempDirectoryPath+File.separator+name+System.currentTimeMillis();
+	}
 
 	/**
 	 * Downloads an URL into a temporary file that is removed the next time the
@@ -507,58 +513,7 @@ public class Utilities {
 	 * @throws UnknownHostException
 	 */
 	public static synchronized File downloadFile(URL url, String name, ICancellable cancel) throws IOException,ConnectException, UnknownHostException{
-		File f = null;
-
-		if ((f=getPreviousDownloadedURL(url))==null){
-			File tempDirectory = new File(tempDirectoryPath);
-			if (!tempDirectory.exists())
-				tempDirectory.mkdir();
-
-			f = new File(tempDirectoryPath+"/"+name+System.currentTimeMillis());
-
-			if (cancel == null) {
-				cancel = new ICancellable() {
-					public boolean isCanceled() {
-						return false;
-					}
-					public Object getID(){
-						return Utilities.class.getName();
-					}
-				};
-			}
-			Thread downloader = new Thread(new Downloader(url, f, cancel.getID()));
-			Thread monitor = new Thread(new Monitor(cancel));
-			monitor.start();
-			downloader.start();
-			while(!getCanceled(cancel.getID()) && downloader.isAlive()) {
-				try {
-					Thread.sleep(latency);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			if (getCanceled(cancel.getID()))
-				return null;
-			downloader = null;
-			monitor = null;
-			if (Utilities.downloadException!=null) {
-				Exception e = Utilities.downloadException;
-				if (e instanceof FileNotFoundException)
-					throw (IOException) e;
-				else if (e instanceof IOException)
-					throw (IOException) e;
-				else if (e instanceof ConnectException)
-					throw (ConnectException) e;
-				else if (e instanceof UnknownHostException)
-					throw (UnknownHostException) e;
-			}
-		} else {
-			System.out.println(url.toString()+" cached at '"+f.getAbsolutePath()+"'");
-		}
-
-		return f;
+		return downloadFile(url, null, name, cancel);
 	}
 
 	/**
@@ -585,7 +540,7 @@ public class Utilities {
 			if (!tempDirectory.exists())
 				tempDirectory.mkdir();
 
-			f = new File(tempDirectoryPath+"/"+name+System.currentTimeMillis());
+			f = new File(calculateFileName(name));
 
 			if (cancel == null) {
 				cancel = new ICancellable() {
@@ -597,8 +552,9 @@ public class Utilities {
 					}
 				};
 			}
+			Monitor monitorObj = new Monitor(cancel);
 			Thread downloader = new Thread(new Downloader(url, data, f, cancel.getID()));
-			Thread monitor = new Thread(new Monitor(cancel));
+			Thread monitor = new Thread(monitorObj);
 			monitor.start();
 			downloader.start();
 			while(!getCanceled(cancel.getID()) && downloader.isAlive()) {
@@ -609,11 +565,19 @@ public class Utilities {
 					e.printStackTrace();
 				}
 			}
+			try {
+				monitorObj.setFinish(true);
+				monitor.join();
+				downloader.join();
+			} catch (InterruptedException e1) {
+				logger.warning(e1.getMessage());
+			}
+			downloader = null;
+			monitor = null;
 
 			if (getCanceled(cancel.getID()))
 				return null;
-			downloader = null;
-			monitor = null;
+			
 			if (Utilities.downloadException!=null) {
 				Exception e = Utilities.downloadException;
 				if (e instanceof FileNotFoundException)
@@ -626,7 +590,7 @@ public class Utilities {
 					throw (UnknownHostException) e;
 			}
 		} else {
-			System.out.println(url.toString()+" cached at '"+f.getAbsolutePath()+"'");
+			logger.info(url.toString()+" cached at '"+f.getAbsolutePath()+"'");
 		}
 
 		return f;
@@ -717,12 +681,13 @@ public class Utilities {
 
 final class Monitor implements Runnable {
 	ICancellable c;
+	private volatile boolean finish = false;
 	public Monitor(ICancellable cancel) {
 		Utilities.setCanceled(cancel.getID(),false);
 		this.c = cancel;
 	}
 	public void run() {
-		while (!c.isCanceled()) {
+		while (!c.isCanceled() && !getFinish()) {
 			try {
 				Thread.sleep(Utilities.latency);
 			} catch (InterruptedException e) {
@@ -740,9 +705,11 @@ final class Monitor implements Runnable {
 		 *  and ease-of-use. So, we encourage you to wait for it instead of write your
 		 *  own code.
 		 */
-
-		Utilities.setCanceled(c.getID(),true);
+		if(c.isCanceled())
+			Utilities.setCanceled(c.getID(),true);
 	}
+	public synchronized void setFinish(boolean value) { finish = value; }
+	public synchronized boolean getFinish() { return finish; }
 }
 
 final class Downloader implements Runnable {
@@ -750,6 +717,7 @@ final class Downloader implements Runnable {
 	private File dstFile;
 	private Object groupID = null;
 	private String data = null;
+	private static Logger logger = Logger.getLogger(Downloader.class.getName());
 
 	public Downloader(URL url, File dstFile, Object groupID) {
 		this.url = url;
@@ -767,8 +735,11 @@ final class Downloader implements Runnable {
 	}
 
 	public void run() {
-		System.out.println("downloading '"+url.toString()+"' to: "+dstFile.getAbsolutePath());
-
+		logger.info("downloading '"+url.toString()+"' to: "+dstFile.getAbsolutePath());
+		// getting timeout from preferences in milliseconds.
+		Preferences prefs = Preferences.userRoot().node( "gvsig.downloader" );
+		// by default 1 minute (60000 milliseconds.
+		int timeout = prefs.getInt("timeout", 60000);
 		DataOutputStream dos;
 		try {
 			DataInputStream is;
@@ -778,7 +749,9 @@ final class Downloader implements Runnable {
 			if (url.getProtocol().equals("https")){
 				disableHttsValidation();
 			}
+			
 			connection = (HttpURLConnection)url.openConnection();
+			connection.setConnectTimeout(timeout);
 			//If it uses a HTTP POST
 			if (data != null){
 				connection.setRequestProperty("SOAPAction","post");
@@ -811,7 +784,7 @@ final class Downloader implements Runnable {
 			is = null;
 			dos = null;
 			if (Utilities.getCanceled(groupID)) {
-				System.err.println("[RemoteServices] '"+url+"' CANCELED.");
+				logger.warning("[RemoteServices] '"+url+"' CANCELED.");
 				dstFile.delete();
 				dstFile= null;
 			} else {
@@ -820,7 +793,7 @@ final class Downloader implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Utilities.downloadException = e;
-		}		
+		}
 	}
 
 	/**
