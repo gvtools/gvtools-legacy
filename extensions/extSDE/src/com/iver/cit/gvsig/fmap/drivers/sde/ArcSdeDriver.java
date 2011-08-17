@@ -45,6 +45,7 @@ package com.iver.cit.gvsig.fmap.drivers.sde;
 
 import java.awt.Component;
 import java.awt.geom.Rectangle2D;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Hashtable;
 import java.util.TreeMap;
@@ -1227,5 +1228,10 @@ public class ArcSdeDriver implements ICanReproject, IWriteable, IVectorialSDEDri
 				throw new DBException(e);
 			}
 		}
+	 
+	public boolean canRead(IConnection iconn, String tablename)
+			throws SQLException {
+		return true;
+	}
 
 }

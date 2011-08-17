@@ -116,4 +116,8 @@ public class ConnectionSDE implements IConnection {
 		return "sde";
 	}
 
+	public String getIdentifierQuoteString() {
+		return "";
+	}
+
 }
