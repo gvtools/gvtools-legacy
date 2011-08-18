@@ -119,6 +119,7 @@ public class GdalDriver extends RasterDataset {
 		point.register("hdr", GdalDriver.class);
 		point.register("raw", GdalDriver.class);
 		point.register("ers", GdalDriver.class);
+		point.register("dem", GdalDriver.class);
 	}
 	
 	/**
