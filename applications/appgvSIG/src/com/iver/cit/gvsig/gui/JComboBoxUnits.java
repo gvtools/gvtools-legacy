@@ -42,6 +42,7 @@ package com.iver.cit.gvsig.gui;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapContext;
+import com.iver.cit.gvsig.project.Project;
 import com.iver.utiles.swing.JComboBox;
 
 /**
@@ -82,7 +83,7 @@ public class JComboBoxUnits extends JComboBox {
 			super.addItem(PluginServices.getText(this, "pixels"));
 			setSelectedItem(PluginServices.getText(this, "pixels"));
 		} else {
-			setSelectedIndex(1);
+			setSelectedIndex(Project.getDefaultDistanceUnits());
 		}
 		setMaximumRowCount(10);
 	}

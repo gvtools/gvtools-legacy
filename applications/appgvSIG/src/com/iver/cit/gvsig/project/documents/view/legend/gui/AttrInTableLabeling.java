@@ -40,7 +40,6 @@
  */
 package com.iver.cit.gvsig.project.documents.view.legend.gui;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -58,7 +57,6 @@ import javax.swing.JTextField;
 
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import org.gvsig.gui.beans.swing.JBlank;
-import org.gvsig.gui.beans.swing.JComboBoxFonts;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -71,7 +69,6 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
 import com.iver.cit.gvsig.gui.JComboBoxUnits;
 import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
 import com.iver.cit.gvsig.gui.styling.JComboBoxUnitsReferenceSystem;
-import com.iver.cit.gvsig.gui.styling.SymbolEditor;
 import com.iver.cit.gvsig.gui.utils.FontChooser;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.utiles.swing.JComboBox;
@@ -178,7 +175,7 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 	private JRadioButton getRdBtnFixedHeight() {
 		if (rdBtnFixedHeight == null) {
 			rdBtnFixedHeight = new JRadioButton(PluginServices.getText(this, "fixed_height") + ":");
-			rdBtnFixedHeight.setSelected(false);
+			rdBtnFixedHeight.setSelected(true);
 			rdBtnFixedHeight.setName("RDFIXEDHEIGHT");
 		}
 
@@ -188,7 +185,7 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 	private JRadioButton getRdBtnHeightField() {
 		if (rdBtnHeightField == null) {
 			rdBtnHeightField = new JRadioButton(PluginServices.getText(this, "text_height_field") + ":");
-			rdBtnHeightField.setSelected(true);
+			rdBtnHeightField.setSelected(false);
 			rdBtnHeightField.setName("RDHEIGHTFIELD");
 		}
 
@@ -198,7 +195,7 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 	private JRadioButton getRdBtnFixedColor() {
 		if (rdBtnFixedColor == null) {
 			rdBtnFixedColor = new JRadioButton(PluginServices.getText(this, "fixed_color") + ":");
-			rdBtnFixedColor.setSelected(false);
+			rdBtnFixedColor.setSelected(true);
 			rdBtnFixedColor.setName("RDFIXEDCOLOR");
 		}
 
@@ -208,7 +205,7 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 	private JRadioButton getRdBtnColorField() {
 		if (rdBtnColorField == null) {
 			rdBtnColorField = new JRadioButton(PluginServices.getText(this, "color_field") + ":");
-			rdBtnColorField.setSelected(true);
+			rdBtnColorField.setSelected(false);
 			rdBtnColorField.setName("RDCOLORFIELD");
 		}
 
@@ -218,7 +215,6 @@ public class AttrInTableLabeling extends JPanel implements  ILabelingStrategyPan
 	private JComboBoxUnits getCmbUnits() {
 		if (cmbUnits == null) {
 			cmbUnits = new JComboBoxUnits();
-			cmbUnits.setSelectedIndex(Project.getDefaultDistanceUnits());
 			cmbUnits.setName("CMBUNITS");
 		}
 
