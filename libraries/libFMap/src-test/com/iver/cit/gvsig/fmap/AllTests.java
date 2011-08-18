@@ -25,6 +25,7 @@ import com.iver.cit.gvsig.fmap.featureiterators.PerformanceFeatureIteratorTest;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.LayersIteratorTest;
+import com.iver.cit.gvsig.fmap.rendering.FIntervalTest;
 import com.iver.cit.gvsig.fmap.spatialindex.SpatialIndexTest;
 import com.iver.cit.gvsig.fmap.tools.AreaListenerTest;
 import com.vividsolutions.jts.operation.overlay.SnappingOverlayOperationTest;
@@ -95,6 +96,8 @@ public class AllTests extends TestCase{
 		suite.addTestSuite(SpatialIndexTest.class);
 		suite.addTestSuite(TestDbf.class);
 		suite.addTestSuite(TestDgn.class);
+		
+		suite.addTestSuite(FIntervalTest.class);
 
 		//$JUnit-END$
 		return suite;
