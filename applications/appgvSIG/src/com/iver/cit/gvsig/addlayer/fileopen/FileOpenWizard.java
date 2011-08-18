@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
@@ -37,7 +36,6 @@ import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.swing.JFileChooser;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.addlayer.AddLayerDialog;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.MapControl;
@@ -46,8 +44,6 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.gui.WizardPanel;
 import com.iver.cit.gvsig.gui.panels.CRSSelectPanel;
 import com.iver.cit.gvsig.project.documents.gui.ListManagerSkin;
-import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
-import com.iver.cit.gvsig.project.documents.view.gui.FPanelLocConfig;
 import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
@@ -223,7 +219,7 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 	private TitledBorder getTitledBorder() {
 		if (titledBorder == null) {
 			titledBorder = BorderFactory.createTitledBorder(null, PluginServices.getText(this, "Seleccionar_fichero"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null);
-			titledBorder.setTitle(PluginServices.getText(this, PluginServices.getText(this, "Capas")));
+			titledBorder.setTitle(PluginServices.getText(this, "Capas"));
 		}
 		return titledBorder;
 	}
@@ -297,9 +293,9 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 			IFileOpen fileOpen = listFileOpen.get(i);
 			fileOpen.pre();
 			ArrayList<FileFilter> aux = fileOpen.getFileFilter();
-			
+
 			for (int j = 0; j < aux.size(); j++) {
-				FileFilter fileFilter = aux.get(j);				
+				FileFilter fileFilter = aux.get(j);
 				fileChooser.addChoosableFileFilter(fileFilter);
 				if (lastFileFilter!=null && lastFileFilter.getDescription().equals(fileFilter.getDescription())){
 					auxFilter=fileFilter;
@@ -341,42 +337,7 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 			for (int ind = 0; ind < newFiles.length; ind++) {
 				if (newFiles[ind] == null)
 					continue;
-				
-				
-				String driverName;
-
-				/* default: */
-				driverName = ((FileFilter) fileChooser.getFileFilter()).getDescription();
-				
-				/* translate known file chooser names to internal driver names */
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_SHP")) ) {
-					driverName = "gvSIG shp driver";
-				}
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_DGN")) ) {
-					driverName = "gvSIG DGN Memory Driver";
-				}
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_DWG")) ) {
-					driverName = "gvSIG DWG Memory Driver";
-				}				
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "dxf_files")) ) {
-					driverName = "gvSIG DXF Memory Driver";
-				}
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "gml_files")) ) {
-					driverName = "gvSIG GML Memory Driver";
-				}
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_KML")) ) {
-					driverName = "gvSIG KML Memory Driver";
-				}
-
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_dbf")) ) {
-					driverName = "gdbms dbf driver";
-				}
-
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_csv")) ) {
-					driverName = "csv string";
-				}
-				
-				/* add file to list of layers to add */
+				String driverName = ((FileFilter) fileChooser.getFileFilter()).getDescription();
 				toAdd.add(new MyFile(newFiles[ind], driverName, lastFileOpen));
 			}
 
@@ -385,50 +346,19 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 			return new Object[0];
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.gui.WizardPanel#execute()
+	/**
+	 * setMapControl() must be used before called this method
 	 */
 	public void execute() {
 		if (getFiles() == null)
 			return;
 
-		MapControl mapControl = null;
-		IWindow[] w = PluginServices.getMDIManager().getAllWindows();
+		MapControl mapControl = this.getMapCtrl();
 
-		// Si se está cargando la capa en el localizador se obtiene el mapcontrol de este
-		for (int i = 0; i < w.length; i++) {
-			if (w[i] instanceof FPanelLocConfig) {
-				mapControl = ((FPanelLocConfig) w[i]).getMapCtrl();
-				DefaultListModel lstModel = (DefaultListModel) ((FPanelLocConfig) w[i]).getJList().getModel();
-				lstModel.clear();
-				for (int k = 0; k < getFiles().length; k++)
-					lstModel.addElement(getFiles()[k].getName());
-				for (int j = mapControl.getMapContext().getLayers().getLayersCount() - 1; j >= 0; j--) {
-					FLayer lyr = mapControl.getMapContext().getLayers().getLayer(j);
-					lstModel.addElement(lyr.getName());
-				}
-			}
-		}
-
-		// Obtiene la primera vista activa
 		if (mapControl == null) {
-			for (int i = 0; i < w.length; i++) {
-				IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
-				if (w[i] instanceof BaseView && w[i].equals(activeWindow))
-					mapControl = ((BaseView) w[i]).getMapControl();
-			}
-		}
-		// Si no hay ninguna activa obtiene la primera vista aunque no esté activa
-		if (mapControl == null) {
-			for (int i = 0; i < w.length; i++) {
-				if (w[i] instanceof BaseView)
-					mapControl = ((BaseView) w[i]).getMapControl();
-			}
-		}
-
-		if (mapControl == null)
+			PluginServices.getLogger().warn("execute(): MapControl is not set");
 			return;
+		}
 
 		Rectangle2D[] rects = new Rectangle2D[getFiles().length];
 		boolean first = false;

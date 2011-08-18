@@ -259,10 +259,10 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		{
             AddLayer addLayer = (AddLayer)PluginServices.getExtension( AddLayer.class);//new AddLayer();
             //addLayer.initialize();
-            if (addLayer.addLayers(mapCtrl)) {
-	            refreshList();
-	            updateControls(null);
-            }
+            addLayer.addLayers(mapCtrl);
+	        refreshList();
+	        updateControls(null);
+          
             if (mapCtrl instanceof MapOverview){
             	((MapOverview)mapCtrl).refreshExtent();
             }
