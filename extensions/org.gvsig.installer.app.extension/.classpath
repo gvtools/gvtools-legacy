@@ -7,12 +7,12 @@
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.5.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/gvsig-i18n.jar" sourcepath="/libInternationalization/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.installer.lib.api-1.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.installer.lib.impl-1.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.installer.lib.spi-1.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.installer.prov.plugin-1.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.installer.swing.api-1.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.installer.swing.impl-1.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.tools.lib-2.1.0.jar"/>
+	<classpathentry kind="lib" path="/home/benni/workspace-gvsig/org.gvsig.installer.app.extension/lib/org.gvsig.installer.lib.api-1.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/benni/workspace-gvsig/org.gvsig.installer.app.extension/lib/org.gvsig.installer.lib.impl-1.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/benni/workspace-gvsig/org.gvsig.installer.app.extension/lib/org.gvsig.installer.lib.spi-1.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/benni/workspace-gvsig/org.gvsig.installer.app.extension/lib/org.gvsig.installer.prov.plugin-1.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/benni/workspace-gvsig/org.gvsig.installer.app.extension/lib/org.gvsig.installer.swing.api-1.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/benni/workspace-gvsig/org.gvsig.installer.app.extension/lib/org.gvsig.tools.swing.impl-3.0.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/benni/workspace-gvsig/org.gvsig.installer.app.extension/lib/org.gvsig.tools.lib-3.0.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
