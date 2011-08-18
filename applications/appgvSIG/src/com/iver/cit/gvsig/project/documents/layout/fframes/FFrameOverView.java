@@ -1,5 +1,6 @@
 package com.iver.cit.gvsig.project.documents.layout.fframes;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -47,6 +48,9 @@ public class FFrameOverView extends FFrameView implements IFFrameViewDependence{
 
 	 public void draw(Graphics2D g, AffineTransform at, Rectangle2D rv,
 			BufferedImage imgBase) {
+
+	     	 g.setStroke(new BasicStroke());
+
 		 if (getMapContext()!=null)
 			try {
 				getMapContext().getViewPort()
