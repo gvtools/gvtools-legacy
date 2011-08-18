@@ -35,6 +35,9 @@ public class PathGenerator {
 	 * @return the path of file.
 	 */
 	 public String getURLPath(String targetPath) {
+	     if (targetPath == null) {
+			return null;
+	     }
 		 try {
 			URL url=new URL(targetPath);
 			File fileIn = new File(url.toURI());
@@ -158,6 +161,9 @@ public class PathGenerator {
 	 * @return
 	 */
 	public String getAbsoluteURLPath(String path){
+	    if (path == null) {
+		return null;
+	    }
 		try {
 			URL url=new URL(path);
 			File fileIn=new File(url.toURI());
