@@ -14,9 +14,9 @@ import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.edition.IWriteable;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
+import com.prodevelop.cit.gvsig.vectorialdb.wizard.NewVectorDBConnectionPanel;
 
 import es.prodevelop.cit.gvsig.fmap.drivers.jdbc.oracle.OracleSpatialDriver;
-import es.prodevelop.cit.gvsig.jdbc_spatial.gui.jdbcwizard.NewOracleSpatialTableWizard;
 import es.prodevelop.cit.gvsig.jdbc_spatial.gui.jdbcwizard.RepeatedChooseGeometryTypePanel;
 import es.prodevelop.cit.gvsig.jdbc_spatial.gui.jdbcwizard.RepeatedFieldDefinitionPanel;
 
@@ -24,7 +24,6 @@ public class NewOracleSpatialTableExtension extends Extension {
 	
     private static Logger logger = Logger.getLogger(NewOracleSpatialTableExtension.class.getName());
     public static boolean ORACLE_JAR_PRESENT = false;
-	
 
 	public void initialize() {
 		ORACLE_JAR_PRESENT = isOracleJarPresent();
@@ -45,8 +44,11 @@ public class NewOracleSpatialTableExtension extends Extension {
        				 new RepeatedChooseGeometryTypePanel(wizard.getWizardComponents());
        			 RepeatedFieldDefinitionPanel panelFields =
        				 new RepeatedFieldDefinitionPanel(wizard.getWizardComponents());
-       			 NewOracleSpatialTableWizard connPanel = 
-       				 new NewOracleSpatialTableWizard(wizard.getWizardComponents());
+       			 NewVectorDBConnectionPanel connPanel = 
+       				 new NewVectorDBConnectionPanel(
+       						 wizard.getWizardComponents(),
+       						 OracleSpatialDriver.NAME,
+       						OracleSpatialDriver.MAX_ID_LENGTH);
 
        			 wizard.getWizardComponents().addWizardPanel(panelChoose);
        			 wizard.getWizardComponents().addWizardPanel(panelFields);
@@ -55,6 +57,7 @@ public class NewOracleSpatialTableExtension extends Extension {
        			 Driver driver = writerManager.getDriver(OracleSpatialDriver.NAME);
        			 panelFields.setWriter(((IWriteable) driver).getWriter());
        			 panelChoose.setDriver(driver);
+       			 
 
        			 View theView = (View) w;
        			 MapContext mc = theView.getMapControl().getMapContext();
@@ -112,3 +115,6 @@ public class NewOracleSpatialTableExtension extends Extension {
     }    
 
 }
+
+// [eiel-gestion-conexiones]
+

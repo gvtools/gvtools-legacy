@@ -46,6 +46,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * DOCUMENT ME!
@@ -53,6 +55,8 @@ import java.sql.SQLException;
  * @author Vicente Caballero Navarro
  */
 public class ConnectionJDBC implements IConnection {
+	
+	private static Logger logger = Logger.getLogger(ConnectionJDBC.class.getName());
     private Connection connection;
 	private String connectionStr;
 	private String user;
@@ -136,6 +140,20 @@ public class ConnectionJDBC implements IConnection {
 		}
 
 	}
+	
+	
+
+	public void setDataConnection(Connection _conn, String user, String _pw) throws DBException {
+		connection = _conn;
+		try {
+			connection.setAutoCommit(false);
+		} catch (Exception ex) {
+			logger.error("Autocommit not allowed for this driver: " + ex.getMessage());
+		}
+		this.connectionStr = null;
+		this.user = user;
+		this._pw = _pw;
+	}
 
 	/**
 	 *
@@ -164,3 +182,5 @@ public class ConnectionJDBC implements IConnection {
 		return "jdbc";
 	}
 }
+
+// [eiel-gestion-conexiones]

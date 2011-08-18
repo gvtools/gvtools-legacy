@@ -72,6 +72,7 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.edition.DataWare;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
+import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.ICanReproject;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -84,6 +85,7 @@ import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.WKBParser2;
+// import com.iver.cit.gvsig.fmap.drivers.WKBParser3;
 import com.iver.cit.gvsig.fmap.drivers.XTypes;
 import com.iver.cit.gvsig.fmap.edition.IWriteable;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
@@ -111,6 +113,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 	private PostGISWriter writer = new PostGISWriter();
 
+	// private WKBParser3 parser = new WKBParser3();
 	private WKBParser2 parser = new WKBParser2();
 
 	private int fetch_min = -1;
@@ -160,6 +163,8 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 	private static final int nbaseInt = (int) nbaseLong;
 
+	public static final String NAME = "PostGIS";
+
 	protected static BigInteger getNBase() {
 		return _nbase;
 	}
@@ -207,7 +212,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	 * @see com.hardcode.driverManager.Driver#getName()
 	 */
 	public String getName() {
-		return "PostGIS JDBC Driver";
+		return NAME;
 	}
 
 	/**
@@ -305,10 +310,15 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			writer.initialize(lyrDef);
 
 		} catch (SQLException e) {
+			
 			try {
-				if (rs != null) {
-					rs.close();
-				}
+				((ConnectionJDBC) conn).getConnection().rollback();
+			} catch (SQLException e1) {
+				logger.warn("Unable to rollback connection after problem (" + e.getMessage() + ") in setData()");
+			}
+			
+			try {
+				if (rs != null) { rs.close(); }
 			} catch (SQLException e1) {
 				throw new DBException(e);
 			}
@@ -734,10 +744,11 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			st.executeQuery("fetch absolute " + fetch_min + " in "
 					+ getTableName() + myCursorId
 					+ "_wkb_cursorAbsolutePosition");
-
+			
 			rs = st.executeQuery("fetch forward " + FETCH_SIZE + " in "
 					+ getTableName() + myCursorId
 					+ "_wkb_cursorAbsolutePosition");
+			
 
 		}
 		rs.absolute(index - fetch_min + 1);
@@ -837,6 +848,11 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 				else if (geometryType.compareToIgnoreCase("MULTIPOLYGON") == 0)
 					shapeType = FShape.POLYGON;
 				dbld.setShapeType(shapeType);
+				
+				//jomarlla
+				int dimension  = rs.getInt("COORD_DIMENSION");
+				dbld.setDimension(dimension);
+
 			} else {
 				originalEPSG = "-1";
 			}
@@ -910,6 +926,13 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			String gid;
 			while (r.next()) {
 				gid = r.getString(1);
+				
+				if (gid == null) {
+					throw new SQLException(
+							PluginServices.getText(null, "Found_null_id_in_table") + ": " +
+							getLyrDef().getComposedTableName());
+				}
+				
 				Value aux = ValueFactory.createValue(gid);
 				hashRelate.put(aux, new Integer(id));
 				// System.out.println("ASOCIANDO CLAVE " + aux + " CON VALOR " +
@@ -1132,6 +1155,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			rs.close();
 			stAux.close();
 		} catch (SQLException e) {
+			closeConnection(conn);
 			throw new DBException(e);
 		}
 		return (String[]) list.toArray(new String[0]);
@@ -1562,4 +1586,67 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	            return "";
 	        }
 	    }
+	   
+
+		public void validateData(IConnection _conn, DBLayerDefinition lyrDef) throws DBException {
+			
+			this.conn = _conn;
+			lyrDef.setConnection(conn);
+			setLyrDef(lyrDef);
+
+			getTableEPSG_and_shapeType(conn, lyrDef);
+
+			getLyrDef().setSRID_EPSG(originalEPSG);
+
+			try {
+				((ConnectionJDBC) conn).getConnection().setAutoCommit(false);
+				sqlOrig = "SELECT " + getTotalFields() + " FROM "
+				+ getLyrDef().getComposedTableName() + " ";
+				// + getLyrDef().getWhereClause();
+				if (canReproject(strEPSG)) {
+					completeWhere = getCompoundWhere(sqlOrig, workingArea, strEPSG);
+				} else {
+					completeWhere = getCompoundWhere(sqlOrig, workingArea,
+							originalEPSG);
+				}
+				// completeWhere = getLyrDef().getWhereClause() + completeWhere;
+
+				String sqlAux = sqlOrig + completeWhere + " ORDER BY "
+						+ getLyrDef().getFieldID();
+
+				sqlTotal = sqlAux;
+				logger.info("Cadena SQL:" + sqlAux);
+				Statement st = ((ConnectionJDBC) conn).getConnection().createStatement(
+						ResultSet.TYPE_SCROLL_INSENSITIVE,
+						ResultSet.CONCUR_READ_ONLY);
+				// st.setFetchSize(FETCH_SIZE);
+				// myCursorId++;
+				String temp_index_name = getTableName() + "_temp_wkb_cursor"; 
+				st.execute("declare " + temp_index_name + " binary scroll cursor with hold for "
+						+ sqlAux);
+				rs = st.executeQuery("fetch forward 50 in " + temp_index_name);
+				rs.close();
+				st.execute("close " + temp_index_name);
+				st.close();
+
+			} catch (SQLException e) {
+				
+				try {
+					((ConnectionJDBC) conn).getConnection().rollback();
+				} catch (SQLException e1) {
+					logger.warn("Unable to rollback connection after problem (" + e.getMessage() + ") in setData()");
+				}
+				
+				try {
+					if (rs != null) { rs.close(); }
+				} catch (SQLException e1) {
+					throw new DBException(e);
+				}
+				throw new DBException(e);
+			}
+		}
 }
+
+// [eiel-gestion-conexiones]
+// [eiel-postgis-3d]
+

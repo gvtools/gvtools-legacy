@@ -5,6 +5,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
+
+import sun.jdbc.odbc.JdbcOdbcConnection;
+
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessWriterVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StartWriterVisitorException;
@@ -12,8 +16,12 @@ import com.iver.cit.gvsig.exceptions.visitors.StopWriterVisitorException;
 import com.iver.cit.gvsig.fmap.core.IRow;
 import com.iver.cit.gvsig.fmap.drivers.XTypes;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
+import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
 public class JdbcWriter extends AbstractWriter {
+	
+	private static Logger logger = Logger.getLogger(JdbcWriter.class.getName());
+	
 	Connection conn;
 	ResultSet rs;
 	Value[] record;
@@ -36,7 +44,11 @@ public class JdbcWriter extends AbstractWriter {
 			try {
 				conn.setAutoCommit(false);
 			} catch (SQLException e) {
-				throw new StartWriterVisitorException(getName(),e);
+				if (conn instanceof JdbcOdbcConnection) {
+					logger.warn("Driver does not allow autocommit method: " + conn.getClass().getName());
+				} else {
+					throw new StartWriterVisitorException(getName(),e);
+				}
 			}
 			/* Statement st = conn.createStatement();
 
@@ -177,3 +189,6 @@ public class JdbcWriter extends AbstractWriter {
 		}
 	}
 }
+
+
+// [eiel-gestion-conexiones]

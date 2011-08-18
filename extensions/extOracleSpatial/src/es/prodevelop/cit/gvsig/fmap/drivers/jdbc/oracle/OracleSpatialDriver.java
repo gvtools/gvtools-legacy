@@ -99,7 +99,7 @@ import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
-import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleVectorialDBConnectionManager;
+import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleDBConnectionManager;
 import com.iver.cit.gvsig.fmap.edition.IWriteable;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
@@ -143,7 +143,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
     // public static final String ASSUMED_ORACLE_SRID = "8307";
     
     // -----------------------------------------------
-    public static final String NAME = "Oracle Spatial Database Driver";
+    public static final String NAME = "Oracle Spatial";
     public static final int ID_COLUMN_INDEX = 1;
     
     public static final String ALL_ORACLE_GEOMETADATA_VIEW = "ALL_SDO_GEOM_METADATA";
@@ -298,7 +298,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
         // This metadata is required to store layer in GVP
         // without problems:
         ConnectionWithParams _cwp =
-        	SingleVectorialDBConnectionManager.instance().findConnection(conn);
+        	SingleDBConnectionManager.instance().findConnection(conn);
 		host = _cwp.getHost();
 		port = _cwp.getPort();
 		dbName = _cwp.getDb();
@@ -306,15 +306,17 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
 		try {
 			if (conn.isClosed()) {
-				SingleVectorialDBConnectionManager.instance().closeAndRemove(_cwp);
-				_cwp = SingleVectorialDBConnectionManager.instance().getConnection(
+				SingleDBConnectionManager.instance().closeAndRemove(_cwp);
+				_cwp = SingleDBConnectionManager.instance().getConnection(
 						_cwp.getDrvName(),
 						_cwp.getUser(),
 						_cwp.getPw(),
 						_cwp.getName(),
 						_cwp.getHost(),
 						_cwp.getPort(),
-						_cwp.getDb(), true);
+						_cwp.getDb(),
+						_cwp.getSchema(),
+						true);
 			}
 		} catch (DBException e1) {
 			logger.error("While trying to reconnect: " + e1.getMessage());
@@ -387,14 +389,10 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
      * does not get blocked.
      *
      */
-    public void getMetaDataInThisThread() {
-        getMetadata();
-    }
-
-    private void getMetadata() {
+    public void getMetaDataInThisThread() throws SQLException {
 
     	long id_load_start = System.currentTimeMillis();
-        setIdRowTable();
+        setIdRowTable(false);
         long id_load_end = System.currentTimeMillis();
 
         long delay = id_load_end - id_load_start;
@@ -1011,7 +1009,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
 
 
-    private void setIdRowTable() {
+    private void setIdRowTable(boolean only_test) throws SQLException  {
         hashRelate = new Hashtable();
 
         java.sql.PreparedStatement ps = null;
@@ -1021,15 +1019,9 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
             logger.debug("SQL para leer ids: " + _sql);
             Statement st = null;
-
-
             st = ((ConnectionJDBC)conn).getConnection().createStatement(
             		ResultSet.TYPE_FORWARD_ONLY,
             		ResultSet.CONCUR_READ_ONLY);
-            
-            
-
-            // st = ((ConnectionJDBC)conn).getConnection().createStatement();
 
              st.setFetchSize(getAdaptedFetchSize());
              logger.info("FETCH_SIZE = " + getAdaptedFetchSize());
@@ -1111,8 +1103,8 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
             }
         }
         catch (SQLException e) {
-        	logger.error("While setting id-row hashmap: " +
-                e.getMessage());
+        	logger.error("While setting id-row hashmap: " + e.getMessage());
+        	throw e;
         }
     }
 
@@ -1736,6 +1728,10 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
         
         if (NumberUtilities.isNumeric(the_type)) {
         	_dec = fd.getFieldDecimalCount(); 
+        }
+        
+        if (_w < (_dec + 1)) {
+        	_w = Math.max(6+_dec,2*_dec);
         }
 
         switch (the_type) {
@@ -3493,6 +3489,11 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
     		boolean is_geo) {
 
     	Rectangle2D world = new Rectangle2D.Double(-180, -90, 360, 180);
+    	
+    	if (numReg == 0) {
+    		logger.warn("numReg is 0, returned worlld bbox in getEstimatedExtent(...).");
+    		return world;
+    	}
 
     	ArrayList ids = new ArrayList();
     	int _rnd_index = 0;
@@ -3868,3 +3869,6 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
     
 
 }
+
+// [eiel-gestion-conexiones]
+

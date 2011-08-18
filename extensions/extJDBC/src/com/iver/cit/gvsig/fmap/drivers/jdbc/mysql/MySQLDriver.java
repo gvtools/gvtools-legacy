@@ -139,7 +139,7 @@ public class MySQLDriver extends DefaultJDBCDriver
 	 * @see com.hardcode.driverManager.Driver#getName()
 	 */
 	public String getName() {
-		return "mySQL JDBC Driver";
+		return "MySQL Spatial";
 	}
 
 	/**
@@ -537,3 +537,5 @@ public String[] getGeometryFieldsCandidates(IConnection conn, String table_name)
 }
 
 }
+
+// [eiel-gestion-conexiones]

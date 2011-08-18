@@ -4,9 +4,13 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
+import com.hardcode.driverManager.Driver;
+import com.hardcode.gdbms.engine.data.driver.AlphanumericDBDriver;
 import com.iver.cit.gvsig.fmap.drivers.ConnectionFactory;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
+import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
+import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
 /**
  * Utility class to keep the connection parameters. It is used as a item in the
@@ -33,7 +37,7 @@ public class ConnectionWithParams {
     private String port;
     private String db;
 
-    private String schema;
+    private String schema = "";
 
     private boolean isNull = false;
 
@@ -92,6 +96,56 @@ public class ConnectionWithParams {
 		}
 	}
 
+	
+	/**
+	 * Class Constructor.
+	 *
+	 * @param _conn_str connection string
+	 * @param _c connection object
+	 * @param _drvName driver name
+	 * @param _user user name
+	 * @param _pw password
+	 * @param _name connection name (freely chosen by user)
+	 * @param _host host's url
+	 * @param _port port number as a string
+	 * @param _db database name
+	 * @param _schema schema name or null if not used
+	 * @param _isConn whether the connection is open or not
+	 */
+	public ConnectionWithParams(
+			String _conn_str,
+			IConnection _c,
+			String _drvName,
+			String _user,
+			String _pw,
+			String _name,
+			String _host,
+			String _port,
+			String _db,
+			String _schema,
+			boolean _isConn) {
+
+		connectionStr = _conn_str;
+		connected = _isConn;
+		conn = _c;
+		drvName = _drvName;
+		user = _user;
+		pw = _pw;
+		name = _name;
+
+		host = _host;
+		port = _port;
+		db = _db;
+		schema = _schema;
+
+		if (!connected) {
+			pw = null;
+			conn = null;
+		}
+	}
+	
+	
+	
 	public IConnection getConnection() {
 		return conn;
 	}
@@ -141,13 +195,25 @@ public class ConnectionWithParams {
 	public void connect(String _pw) throws DBException {
 
 		try {
-			conn = ConnectionFactory.createConnection(connectionStr, user, _pw);//DriverManager.getConnection(connectionStr, user, _pw);
-		} catch (DBException e) {
+			Driver _drv = LayerFactory.getDM().getDriver(drvName);
+			
+			if (_drv instanceof AlphanumericDBDriver) {
+				conn = SingleDBConnectionManager.getConnectionForDriver(
+						_drv, null, this.host, this.port, this.db, this.user, _pw);
+			} else {
+				if (_drv instanceof IVectorialDatabaseDriver) {
+					conn = ConnectionFactory.createConnection(this.connectionStr, this.user, _pw);
+				} else {
+					logger.error("CONNECT: Unexpected driver type: " + _drv.getClass().getName());
+					throw new DBException(new Exception("CONNECT: Unexpected driver type: " + _drv.getClass().getName()));
+				}
+			}
+		} catch (Exception e) {
 
 			pw = null;
 			conn = null;
 			connected = false;
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new DBException(e);
 		}
 
@@ -224,8 +290,10 @@ public class ConnectionWithParams {
 		return schema;
 	}
 
-	public void setSchema(String schema) {
-		this.schema = schema;
+	public void setSchema(String sch) {
+		schema = sch;
 	}
 
 }
+
+// [eiel-gestion-conexiones]

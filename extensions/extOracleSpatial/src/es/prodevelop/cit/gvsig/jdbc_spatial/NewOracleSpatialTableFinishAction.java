@@ -21,17 +21,17 @@ import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
+import com.prodevelop.cit.gvsig.vectorialdb.wizard.NewVectorDBConnectionPanel;
 
 import es.prodevelop.cit.gvsig.fmap.drivers.jdbc.oracle.OracleSpatialDriver;
 import es.prodevelop.cit.gvsig.fmap.drivers.jdbc.oracle.OracleSpatialWriter;
-import es.prodevelop.cit.gvsig.jdbc_spatial.gui.jdbcwizard.NewOracleSpatialTableWizard;
 import es.prodevelop.cit.gvsig.jdbc_spatial.gui.jdbcwizard.RepeatedChooseGeometryTypePanel;
 import es.prodevelop.cit.gvsig.jdbc_spatial.gui.jdbcwizard.RepeatedFieldDefinitionPanel;
 
 public class NewOracleSpatialTableFinishAction extends FinishAction {
 	
 	private static Logger logger = Logger.getLogger(NewOracleSpatialTableFinishAction.class.getName());
-	private NewOracleSpatialTableWizard connectionPanel;
+	private NewVectorDBConnectionPanel connectionPanel;
 	private RepeatedChooseGeometryTypePanel geoTypePanel;
 	private RepeatedFieldDefinitionPanel fieldsPanel;
 	private MapContext theMapContext;
@@ -43,7 +43,7 @@ public class NewOracleSpatialTableFinishAction extends FinishAction {
 	public NewOracleSpatialTableFinishAction(
 			JWizardComponents wc,
 			IWindow closeit,
-			NewOracleSpatialTableWizard connPanel,
+			NewVectorDBConnectionPanel connPanel,
 			MapContext mc) {
 		
 		super(wc);
@@ -168,3 +168,6 @@ public class NewOracleSpatialTableFinishAction extends FinishAction {
 	}
 
 }
+
+// [eiel-gestion-conexiones]
+

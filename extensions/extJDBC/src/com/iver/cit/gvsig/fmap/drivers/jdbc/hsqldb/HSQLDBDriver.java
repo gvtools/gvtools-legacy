@@ -94,7 +94,7 @@ public class HSQLDBDriver extends DefaultJDBCDriver {
      * @see com.hardcode.driverManager.Driver#getName()
      */
     public String getName() {
-        return "HSQLDB Driver";
+        return "HSQL Spatial";
     }
 
 	/**
@@ -322,3 +322,5 @@ public class HSQLDBDriver extends DefaultJDBCDriver {
 		}
 	}
 }
+
+// [eiel-gestion-conexiones]

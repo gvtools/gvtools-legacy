@@ -70,7 +70,7 @@ import com.iver.cit.gvsig.fmap.Messages;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
-import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleVectorialDBConnectionManager;
+import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleDBConnectionManager;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.XMLEntity;
@@ -577,15 +577,15 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 			if (poolPassw.containsKey(keyPool)) {
 
 				clave = (String) poolPassw.get(keyPool);
-				cwp = SingleVectorialDBConnectionManager.instance().getConnection(
+				cwp = SingleDBConnectionManager.instance().getConnection(
 						_drvName, userName, clave, connName,
-						host, port, dbName, true);
+						host, port, dbName, schema, true);
 
 			} else {
 
-				cwp = SingleVectorialDBConnectionManager.instance().getConnection(
+				cwp = SingleDBConnectionManager.instance().getConnection(
 						_drvName, userName, null, connName,
-						host, port, dbName, false);
+						host, port, dbName, schema, false);
 
 				if (cwp.isConnected()) {
 
@@ -616,7 +616,6 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 			}
 
 			newConn = cwp.getConnection();
-			//((ConnectionJDBC)newConn).getConnection().setAutoCommit(false);
 
 			DBLayerDefinition lyrDef = new DBLayerDefinition();
 			if (getLyrDef() == null) {
@@ -682,7 +681,7 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 			xml.putProperty("SRID", lyrDef.getSRID_EPSG());
 
 			ConnectionWithParams cwp =
-				SingleVectorialDBConnectionManager.instance().findConnection(getConnection());
+				SingleDBConnectionManager.instance().findConnection(getConnection());
 
 			//FIXME:(Chema) Estos cambios los hago porque da errores as persistencia
 			if (cwp != null){
@@ -1017,4 +1016,12 @@ public abstract class DefaultJDBCDriver implements IVectorialJDBCDriver, ObjectD
 	public boolean canRead(IConnection iconn, String tablename) throws SQLException {
 		return true;
 	}
+	
+	public void validateData(IConnection conn, DBLayerDefinition lyrDef) throws DBException {
+		// subclasses should implement this to allow early detection of 
+		// invalid layer settings (gvSIG will allow user to correct them and the
+		// notification dialog will not show) 
+	}
 }
+
+// [eiel-gestion-conexiones]

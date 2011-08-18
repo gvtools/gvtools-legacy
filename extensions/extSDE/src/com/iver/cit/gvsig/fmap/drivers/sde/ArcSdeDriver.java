@@ -91,7 +91,7 @@ import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
-import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleVectorialDBConnectionManager;
+import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleDBConnectionManager;
 import com.iver.cit.gvsig.fmap.edition.IWriteable;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
@@ -104,6 +104,10 @@ import com.iver.utiles.swing.JPasswordDlg;
  * @author Vicente Caballero Navarro
  */
 public class ArcSdeDriver implements ICanReproject, IWriteable, IVectorialSDEDriver, ObjectDriver{
+	
+    public static final String NAME = "ArcSDE";
+    
+
     protected static Hashtable poolPassw = new Hashtable();
     private SeLayer layer;
     private SeQuery query=null;
@@ -305,7 +309,7 @@ public class ArcSdeDriver implements ICanReproject, IWriteable, IVectorialSDEDri
      * @see com.hardcode.driverManager.Driver#getName()
      */
     public String getName() {
-        return "gvSIG SDE driver";
+        return NAME;
     }
 
     /* (non-Javadoc)
@@ -856,7 +860,7 @@ public class ArcSdeDriver implements ICanReproject, IWriteable, IVectorialSDEDri
         xml.putProperty("driverclass", this.getClass().getName());
         xml.putProperty("catalog", lyrDef.getCatalogName());
         ConnectionWithParams cwp =
-        	SingleVectorialDBConnectionManager.instance().findConnection(getConnection());
+        	SingleDBConnectionManager.instance().findConnection(getConnection());
 
         // TODO: NO DEBEMOS GUARDAR EL NOMBRE DE USUARIO Y CONTRASEÑA
         // AQUI. Hay que utilizar un pool de conexiones
@@ -1046,15 +1050,19 @@ public class ArcSdeDriver implements ICanReproject, IWriteable, IVectorialSDEDri
             if (poolPassw.containsKey(keyPool)) {
 
                 clave = (String) poolPassw.get(keyPool);
-                cwp = SingleVectorialDBConnectionManager.instance().getConnection(
+                cwp = SingleDBConnectionManager.instance().getConnection(
      					_drvName, lyrDef.getUser(), clave, lyrDef.getConnectionName(),
-     					lyrDef.getHost(), String.valueOf(lyrDef.getPort()), lyrDef.getDataBase(), true);
+     					lyrDef.getHost(), String.valueOf(lyrDef.getPort()), lyrDef.getDataBase(),
+     					lyrDef.getSchema(),
+     					true);
 
             } else {
 
-            	 cwp = SingleVectorialDBConnectionManager.instance().getConnection(
+            	 cwp = SingleDBConnectionManager.instance().getConnection(
       					_drvName, lyrDef.getUser(), null, lyrDef.getConnectionName(),
-      					lyrDef.getHost(), String.valueOf(lyrDef.getPort()), lyrDef.getDataBase(), false);
+      					lyrDef.getHost(), String.valueOf(lyrDef.getPort()), lyrDef.getDataBase(),
+      					lyrDef.getSchema(),
+      					false);
 
                 if (cwp.isConnected()) {
 
@@ -1235,3 +1243,5 @@ public class ArcSdeDriver implements ICanReproject, IWriteable, IVectorialSDEDri
 	}
 
 }
+
+// [eiel-gestion-conexiones]

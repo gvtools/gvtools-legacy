@@ -59,11 +59,11 @@ import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
+import com.prodevelop.cit.gvsig.vectorialdb.wizard.ConnectionChooserPanel;
 
 import es.prodevelop.cit.gvsig.fmap.drivers.jdbc.oracle.OracleSpatialDriver;
 import es.prodevelop.cit.gvsig.fmap.drivers.jdbc.oracle.OracleSpatialUtils;
 import es.prodevelop.cit.gvsig.fmap.drivers.jdbc.oracle.OracleSpatialWriter;
-import es.prodevelop.cit.gvsig.jdbc_spatial.gui.jdbcwizard.OracleConnectionChooserPanel;
 
 
 /**
@@ -112,7 +112,7 @@ public class ExportToOracle {
 
             tableName = tableName.toUpperCase();
 
-            OracleConnectionChooserPanel dlg = new OracleConnectionChooserPanel();
+            ConnectionChooserPanel dlg = new ConnectionChooserPanel(OracleSpatialDriver.NAME);
             PluginServices.getMDIManager().addWindow(dlg);
 
             if (!dlg.isOkPressed()) {
@@ -291,3 +291,6 @@ public class ExportToOracle {
 
 
 }
+
+// [eiel-gestion-conexiones]
+

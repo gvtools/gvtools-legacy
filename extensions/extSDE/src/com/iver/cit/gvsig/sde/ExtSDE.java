@@ -90,7 +90,9 @@ public class ExtSDE extends Extension {
 	    panelAbout.addAboutUrl(PluginServices.getText(this,"ArcSDE"),aboutURL);
 	    try{
 	    	LayerFactory.getDM().addDriver(new File(this.getClass().getResource(
-	    	"/lib").getFile()),"gvSIG SDE driver",ArcSdeDriver.class);
+	    	"/lib").getFile()),
+	    	ArcSdeDriver.NAME,
+	    	ArcSdeDriver.class);
 	    }catch (Error e) {
 	    	//FIXME: Se nos ha pedido por parte de la CIT que no se informe
 	    	//al usuario de que le falta esta librería.
@@ -101,3 +103,5 @@ public class ExtSDE extends Extension {
 	}
 
 }
+
+// [eiel-gestion-conexiones]
