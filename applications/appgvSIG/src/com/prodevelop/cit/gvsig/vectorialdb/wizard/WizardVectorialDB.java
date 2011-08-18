@@ -64,7 +64,9 @@ import org.apache.log4j.Logger;
 import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.swing.JButton;
 
+import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
+import com.hardcode.gdbms.engine.data.driver.AlphanumericDBDriver;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -75,8 +77,9 @@ import com.iver.cit.gvsig.fmap.drivers.DBException;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
+import com.iver.cit.gvsig.fmap.drivers.IVectorialJDBCDriver;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
-import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleVectorialDBConnectionManager;
+import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleDBConnectionManager;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
@@ -110,7 +113,14 @@ ListSelectionListener {
 	private UserSelectedFieldsPanel emptyFieldsPanel = null;
 	private JButton dbButton = null;
 	private BaseView view = null;
+	
 
+
+
+	// this will be created when "Accept" button is clicked, before saying if
+	// panel is finishable or not
+	// private FLayer return_layer = null;
+	
 	public WizardVectorialDB() {
 		super();
 		initialize();
@@ -154,7 +164,7 @@ ListSelectionListener {
 
 		getDatasourceComboBox().addItem(new ConnectionWithParams());
 
-		ConnectionWithParams[] conn = SingleVectorialDBConnectionManager.instance()
+		ConnectionWithParams[] conn = SingleDBConnectionManager.instance()
 		.getAllConnections();
 
 		if (conn == null) {
@@ -162,7 +172,10 @@ ListSelectionListener {
 		}
 
 		for (int i = 0; i < conn.length; i++) {
-			getDatasourceComboBox().addItem(conn[i]);
+			Driver _drv = SingleDBConnectionManager.getInstanceFromName(conn[i].getDrvName());
+			if (_drv != null && _drv instanceof IVectorialDatabaseDriver) {
+				getDatasourceComboBox().addItem(conn[i]);
+			}
 		}
 	}
 
@@ -218,7 +231,8 @@ ListSelectionListener {
 			String groupName = selectedDataSource.getDb() + " (" +
 					conex.getNameServer() + ")";
 
-			FLayer[] all_layers = new FLayer[count];
+			// AFLayer[] all_layers = new FLayer[count];
+			ArrayList unchecked_list = new ArrayList();
 			String strEPSG = getMapCtrl().getViewPort().getProjection()
 			.getAbrev();
 
@@ -290,17 +304,28 @@ ListSelectionListener {
 				lyrDef.setUser(selectedDataSource.getUser());
 				lyrDef.setPassword(selectedDataSource.getPw());
 
-				driver.setData(conex, lyrDef);
+				try {
+					
+					driver.setData(conex, lyrDef);
+					if (driver instanceof ICanReproject) {
+						proj = userTableSettingsPanel.getProjection();
+					}
+					unchecked_list.add(LayerFactory.createDBLayer(driver, layerName, proj));
 
-				if (driver instanceof ICanReproject) {
-					proj = userTableSettingsPanel.getProjection();
+				} catch (Exception ex) {
+					NotificationManager.addError(
+							PluginServices.getText(this, "panel_loading_exception") + " " + layerName, ex);
 				}
 
-				all_layers[i] = LayerFactory.createDBLayer(driver, layerName,
-						proj);
 			}
 
-			return layerArrayToGroup(all_layers, groupName);
+			if (unchecked_list == null || unchecked_list.size() == 0) {
+				return null;
+			} else {
+				return layerArrayToGroup(unchecked_list, groupName);
+				
+			}
+			
 		}
 		catch (Exception e) {
 			logger.error("While creating jdbc layer: " + e.getMessage(), e);
@@ -311,9 +336,19 @@ ListSelectionListener {
 		return null;
 	}
 
-	protected FLayer layerArrayToGroup(FLayer[] all_layers, String name) {
-		if (all_layers.length == 1) {
-			return all_layers[0];
+
+
+
+	protected FLayer layerArrayToGroup(ArrayList all_layers, String name) {
+		
+		int sz = all_layers.size();
+		
+		if (sz == 0) {
+			return null;
+		}
+		
+		if (sz == 1) {
+			return (FLayer) all_layers.get(0);
 		}
 
 		MapContext mc = view.getMapControl().getMapContext();
@@ -324,8 +359,8 @@ ListSelectionListener {
 		group.setParentLayer(root);
 		group.setName(name);
 
-		for (int i = 0; i < all_layers.length; i++) {
-			group.addLayer(all_layers[i]);
+		for (int i = 0; i < sz; i++) {
+			group.addLayer((FLayer) all_layers.get(i));
 		}
 
 		return group;
@@ -552,12 +587,12 @@ ListSelectionListener {
 			return;
 		}
 
-		String[] tablnames = null;
+		String[] _tablnames = null;
 
 		try {
-			tablnames = drv.getTableNames(conex, dbName);
-		}
-		catch (DBException e) {
+			_tablnames = drv.getTableNames(conex, dbName);
+			_tablnames = filterWithSchema(_tablnames, src.getSchema());
+		} catch (DBException e) {
 			logger.error("While getting table names: " + e.getMessage(), e);
 
 			return;
@@ -565,10 +600,10 @@ ListSelectionListener {
 
 		DefaultListModel lmodel = new DefaultListModel();
 
-		for (int i = 0; i < tablnames.length; i++) {
+		for (int i = 0; i < _tablnames.length; i++) {
 			try {
-				if (drv.canRead(conex, tablnames[i])) {
-					lmodel.addElement(new TablesListItem(tablnames[i], drv, conex,
+				if (drv.canRead(conex, _tablnames[i])) {
+					lmodel.addElement(new TablesListItem(_tablnames[i], drv, conex,
 							getMapCtrl(), this));
 				}
 			} catch (SQLException e) {
@@ -582,23 +617,26 @@ ListSelectionListener {
 		tablesScrollPane.updateUI();
 	}
 
-	public void valueChanged(ListSelectionEvent arg0) {
-		Object src = arg0.getSource();
-
-		if (src == tablesList) {
-			TablesListItem selected = (TablesListItem) tablesList.getSelectedValue();
-
-			try {
-				setSettingsPanels(selected);
-			}
-			catch (DBException e) {
-				showConnectionErrorMessage(e.getMessage());
-				tablesList.clearSelection();
-				setEmptyPanels();
-			}
-
-			checkFinishable();
+	private String[] filterWithSchema(String[] tt, String sc) {
+		
+		if (sc==null || sc.length()==0) {
+			return tt;
 		}
+		
+		int len = tt.length;
+		ArrayList resp = new ArrayList();
+		String str = "";
+		for (int i=0; i<len; i++) {
+			str = tt[i];
+			if (str.indexOf(sc + ".") == 0) {
+				resp.add(str);
+			}
+		}
+
+		return (String[]) resp.toArray(new String[0]);
+	}
+
+	public void valueChanged(ListSelectionEvent arg0) {
 	}
 
 	private boolean validFormSettings() {
@@ -651,7 +689,7 @@ ListSelectionListener {
 	 private ConnectionWithParams addNewConnection() {
 		 ConnectionWithParams resp = null;
 
-		 VectorialDBConnectionParamsDialog newco = new VectorialDBConnectionParamsDialog();
+		 DBConnectionParamsDialog newco = new DBConnectionParamsDialog();
 		 newco.showDialog();
 
 		 if (newco.isOkPressed()) {
@@ -662,13 +700,14 @@ ListSelectionListener {
 			 String _user = newco.getConnectionUser();
 			 String _pw = newco.getConnectionPassword();
 			 String _conn_usr_name = newco.getConnectionName();
+			 String _sche = newco.getConnectionSchema();
 
 			 boolean hasToBeCon = newco.hasToBeConnected();
 
 			 try {
-				 resp = SingleVectorialDBConnectionManager.instance()
+				 resp = SingleDBConnectionManager.instance()
 				 .getConnection(_drvname,
-						 _user, _pw, _conn_usr_name, _host, _port, _dbname,
+						 _user, _pw, _conn_usr_name, _host, _port, _dbname, _sche,
 						 hasToBeCon);
 			 }
 			 catch (DBException e) {
@@ -745,4 +784,152 @@ ListSelectionListener {
 			 }
 		 }
 	 }
+	 
+	 
+	 /**
+	  * @return Message describing why layers don't have good settings or
+	  * null if layers are ok.
+	  */ 	 
+	 public String[] validateLayerSettings() {
+
+		ArrayList listresp = new ArrayList();
+
+		TablesListItem[] selected = getSelectedTables();
+		int count = selected.length;
+		ArrayList unchecked_list = new ArrayList();
+
+		String strEPSG = getMapCtrl().getViewPort().getProjection().getAbrev();
+
+		String layerName = "[Unknown]";
+		for (int i = 0; i < count; i++) {
+			TablesListItem item = selected[i];
+
+			IVectorialDatabaseDriver _driver = null;
+			IVectorialJDBCDriver driver = null;
+			UserTableSettingsPanel utsp = null;
+
+			try {
+				utsp = item.getUserTableSettingsPanel(getMapCtrl()
+						.getViewPort().getProjection().getAbrev());
+				layerName = utsp.getUserLayerName();
+				_driver = getDriverFromName(selectedDataSource.getDrvName());
+			} catch (Exception ex) {
+				addErrorToList(listresp, layerName, "Error_while_creating_driver");
+				continue; // go to next
+			}
+			
+			if (_driver instanceof IVectorialJDBCDriver) {
+				driver = (IVectorialJDBCDriver) _driver; 
+			} else {
+				logger.warn("Did not validate settings for driver: " + _driver.getClass().getName());
+				continue;
+			}
+
+			Rectangle2D _wa = utsp.getWorkingArea();
+
+			if (_wa != null) {
+				if ((_wa.getWidth() <= 0) || (_wa.getHeight() <= 0)) {
+					addErrorToList(listresp, layerName, "Invalid_working_area");
+					continue; // go to next
+				} else {
+					driver.setWorkingArea(_wa);
+				}
+
+			}
+			// Change: we parse tableName to extract schema (or owner in Oracle)
+			String[] tokens = item.getTableName().split("\\u002E", 2);
+			String tableName;
+			String schema = null;
+			if (tokens.length > 1) {
+				schema = tokens[0];
+				tableName = tokens[1];
+			} else {
+				tableName = tokens[0];
+			}
+
+			String fidField = utsp.getIdFieldName();
+			String geomField = utsp.getGeoFieldName();
+
+			String[] fields = null;
+
+			try {
+				fields = item.getUserSelectedFieldsPanel()
+						.getUserSelectedFields(fidField, geomField);
+			} catch (Exception ex) {
+				addErrorToList(listresp, layerName, ex.getMessage());
+				continue; // go to next
+			}
+
+			// fields = driver.manageGeometryField(fields, geomField);
+
+			// driver.manageGeometryField(geomField);
+			DBLayerDefinition lyrDef = new DBLayerDefinition();
+			lyrDef.setName(layerName);
+			lyrDef.setSchema(schema);
+			lyrDef.setTableName(tableName);
+
+			if (utsp.isSqlActive()) {
+				String whereClause = utsp.getWhereClause();
+				lyrDef.setWhereClause(whereClause);
+			} else {
+				lyrDef.setWhereClause("");
+			}
+
+			lyrDef.setFieldGeometry(geomField);
+			lyrDef.setFieldNames(fields);
+
+			lyrDef.setFieldID(fidField);
+
+			if (_wa != null) {
+				lyrDef.setWorkingArea(_wa);
+			}
+
+			lyrDef.setSRID_EPSG(strEPSG);
+
+			if (driver instanceof ICanReproject) {
+				((ICanReproject) driver).setDestProjection(strEPSG);
+			}
+			lyrDef.setHost(selectedDataSource.getHost());
+			lyrDef.setPort(Integer.parseInt(selectedDataSource.getPort()));
+			lyrDef.setDataBase(selectedDataSource.getDb());
+			lyrDef.setUser(selectedDataSource.getUser());
+			lyrDef.setPassword(selectedDataSource.getPw());
+
+			try {
+				driver.validateData(conex, lyrDef);
+			} catch (Exception ex) {
+				addErrorToList(listresp, layerName, ex.getMessage());
+				continue; // go to next
+			}
+
+			try {
+				driver.close();
+				driver = null;
+			} catch (Exception ex) {
+			}
+
+		}
+
+		if (listresp.size() == 0) {
+			return null;
+		} else {
+			String[] msgs = (String[]) listresp.toArray(new String[0]);
+			return msgs;
+		}
+	}
+
+		
+	 
+	 private void addErrorToList(ArrayList lis, String lyr, String msg) {
+		 String addstr =
+				PluginServices.getText(this, "Capa") + ": " + lyr + "\n" + msg;
+		lis.add(addstr);
+	 }
+		
+		
+		
+		
+		
 } //  @jve:decl-index=0:visual-constraint="10,10"
+
+// [eiel-gestion-conexiones]
