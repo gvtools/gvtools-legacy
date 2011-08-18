@@ -1,9 +1,3 @@
-/*
- * Created on 18-jun-2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
@@ -75,26 +69,24 @@ import com.iver.cit.gvsig.project.documents.view.legend.gui.ThemeManagerWindow;
 /**
  * @author FJP
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * Dialog to config the locator
  */
 public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
+
+	private static final long serialVersionUID = -2271914332135260143L;
 	private javax.swing.JLabel jLabel = null;
-	private javax.swing.JList jList = null;  //  @jve:decl-index=0:visual-constraint="390,10"
-	private JButton jBtnAddLayer = null;  //
+	private javax.swing.JList jList = null;
+	private JButton jBtnAddLayer = null;
 	private JButton jBtnRemoveLayer = null;
 	private JButton jBtnEditLegend = null;
 	private JButton jBtnCancel = null;
 
-	//private JDialog m_Owner;
 	private MapControl mapCtrl;
 	private WindowInfo m_viewinfo = null;
-	private JPanel pnlButtons = null;  //  @jve:decl-index=0:visual-constraint="10,159"
+	private JPanel pnlButtons = null;
 	private BasicArrowButton jBtnUp;
 	private BasicArrowButton jBtnDown;
-	/**
-	 * This is the default constructor
-	 */
+
 	public FPanelLocConfig( MapControl mc) {
 		super();
 		mapCtrl = mc;
@@ -114,11 +106,6 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		}
 	}
 
-	/**
-	 * This method initializes this
-	 *
-	 * @return void
-	 */
 	private  void initialize() {
 		this.setLayout(null);
 		this.setSize(555, 210);
@@ -128,15 +115,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		this.add(getJBtnDown(), null);
 		this.add(getJPanel(), null);
 	}
-	/**
 
-	 * This method initializes jLabel
-
-	 *
-
-	 * @return javax.swing.JLabel
-
-	 */
 	private javax.swing.JLabel getJLabel() {
 		if (jLabel == null) {
 			jLabel = new javax.swing.JLabel();
@@ -146,15 +125,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return jLabel;
 	}
 
-	/**
 
-	 * This method initializes jList
-
-	 *
-
-	 * @return javax.swing.JList
-
-	 */
 	public javax.swing.JList getJList() {
 		if (jList == null) {
 			jList = new javax.swing.JList(new DefaultListModel());
@@ -174,7 +145,6 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 
 	private void updateControls(javax.swing.event.ListSelectionEvent e)
 	{
-		System.out.println("valueChanged()"); // TODO Auto-generated Event stub valueChanged()
 		DefaultListModel lstModel = (DefaultListModel) getJList().getModel();
 		int selIndex = jList.getSelectedIndex();
 		jBtnDown.setEnabled(false);
@@ -196,15 +166,6 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 
 	}
 
-	/**
-
-	 * This method initializes jBtnUp
-
-	 *
-
-	 * @return JButton
-
-	 */
 	private BasicArrowButton getJBtnUp() {
 		if (jBtnUp == null) {
 			jBtnUp = new javax.swing.plaf.basic.BasicArrowButton(
@@ -218,15 +179,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return jBtnUp;
 	}
 
-	/**
 
-	 * This method initializes jBtnDown
-
-	 *
-
-	 * @return JButton
-
-	 */
 	private BasicArrowButton getJBtnDown() {
 		if (jBtnDown == null) {
 			jBtnDown = new javax.swing.plaf.basic.BasicArrowButton(
@@ -239,15 +192,6 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return jBtnDown;
 	}
 
-	/**
-
-	 * This method initializes jButton2
-
-	 *
-
-	 * @return JButton
-
-	 */
 	private JButton getJBtnAddLayer() {
 		if (jBtnAddLayer == null) {
 			jBtnAddLayer = new JButton();
@@ -258,15 +202,6 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return jBtnAddLayer;
 	}
 
-	/**
-
-	 * This method initializes jBtnRemoveLayer
-
-	 *
-
-	 * @return JButton
-
-	 */
 	private JButton getJBtnRemoveLayer() {
 		if (jBtnRemoveLayer == null) {
 			jBtnRemoveLayer = new JButton();
@@ -278,15 +213,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return jBtnRemoveLayer;
 	}
 
-	/**
 
-	 * This method initializes jBtnEditLegend
-
-	 *
-
-	 * @return JButton
-
-	 */
 	private JButton getJBtnEditLegend() {
 		if (jBtnEditLegend == null) {
 			jBtnEditLegend = new JButton();
@@ -297,15 +224,6 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return jBtnEditLegend;
 	}
 
-	/**
-
-	 * This method initializes jBtnCancel
-
-	 *
-
-	 * @return JButton
-
-	 */
 	private JButton getJBtnCancel() {
 		if (jBtnCancel == null) {
 			jBtnCancel = new JButton();
@@ -317,9 +235,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return jBtnCancel;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
+
 	public void actionPerformed(ActionEvent e)
 	{
 		DefaultListModel lstModel = (DefaultListModel) getJList().getModel();
@@ -439,9 +355,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 
 
 	}
-	/* (non-Javadoc)
-	 * @see com.iver.mdiApp.ui.MDIManager.View#getViewInfo()
-	 */
+
 	public WindowInfo getWindowInfo() {
 		if (m_viewinfo==null){
     			m_viewinfo=new WindowInfo(WindowInfo.MODELESSDIALOG);
@@ -451,17 +365,11 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		}
 			return m_viewinfo;
 		}
-	/**
-	 * @see com.iver.mdiApp.ui.MDIManager.IWindow#windowActivated()
-	 */
+
 	public void viewActivated() {
 	}
 
-	/**
-	 * This method initializes jPanel
-	 *
-	 * @return javax.swing.JPanel
-	 */
+
 	private JPanel getJPanel() {
 		if (pnlButtons == null) {
 			pnlButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
@@ -474,10 +382,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return pnlButtons;
 	}
 
-	/**
-	 * Obtiene el MapControl asociado al localizador
-	 * @return MapControl
-	 */
+
 	public MapControl getMapCtrl() {
 		return mapCtrl;
 	}
@@ -486,4 +391,4 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 
-        }  //  @jve:visual-info  decl-index=0 visual-constraint="10,10"
+        }
