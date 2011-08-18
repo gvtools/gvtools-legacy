@@ -40,7 +40,7 @@ public class DefaultMapContextDrawer implements MapContextDrawer {
 	protected boolean isLayerCacheable(FLayer layer){
 		return layer.isActive();
 	}
-
+	
 	public void draw(FLayers root, BufferedImage image, Graphics2D g, Cancellable cancel,
 			double scale) throws ReadDriverException {
 
@@ -119,7 +119,7 @@ public class DefaultMapContextDrawer implements MapContextDrawer {
 							//si tenemos una composicion de capas, necesitamos pintarlas
 							//antes de guardarnos la imagen
 //							System.out.println("=======Pintando composicion de pintado "+ (layerPos-1)+" (antes de cache)============");
-							this.draw(composed, image, g, cancel, scale);
+							this.draw(composed, image, g, cancel, scale, MapContext.getScreenDPI());
 //							composed.draw(image, g, viewPort, cancel, scale);
 							composed = null;
 
@@ -158,7 +158,7 @@ public class DefaultMapContextDrawer implements MapContextDrawer {
 					}
 				} else {
 //					System.out.println("=======Pintando composicion de pintado "+ (layerPos-1)+" (cambio composicion)============");
-					this.draw(composed, image, g, cancel, scale);
+					this.draw(composed, image, g, cancel, scale, MapContext.getScreenDPI());
 //					composed.draw(image, g, viewPort, cancel, scale);
 					composed = layer.newComposedLayer();
 					if (composed != null){
@@ -172,14 +172,165 @@ public class DefaultMapContextDrawer implements MapContextDrawer {
 				}
 			}
 //			System.out.println("=== pintando "+ layerPos+ " "+layer.getName());
-			this.draw(layer, image, g, cancel, scale);
+			this.draw(layer, image, g, cancel, scale, MapContext.getScreenDPI());
 //			layer.draw(image, g, viewPort, cancel, scale);
 
 		}
 		if (composed != null){
 			// si la composicion no se ha pintado la pintamos
 //			System.out.println("=======Pintando composicion de pintado "+ (layerPos-1)+" (ultimo)============");
-			this.draw(composed, image, g, cancel, scale);
+			this.draw(composed, image, g, cancel, scale, MapContext.getScreenDPI());
+//			composed.draw(image, g, viewPort, cancel, scale);
+		}
+		if (cancel.isCanceled()){
+			return;
+		}
+
+		this.previousDrawList = drawList;
+
+	}
+	
+	
+
+	public void draw(FLayers root, BufferedImage image, Graphics2D g, Cancellable cancel,
+			double scale, double _dpi) throws ReadDriverException {
+
+		this.checkIntilalized();
+
+		boolean needToPaintAll = false;
+
+		DrawList drawList = this.createDrawList(root, cancel,scale);
+		if (cancel.isCanceled()){
+			return;
+		}
+
+		if (cachedImage == null){
+			needToPaintAll=true;
+		} else if (!cachedImage.isValid(mapContext, viewPort, drawList.getFirstLayerToDraw())){
+				needToPaintAll=true;
+			}
+
+
+		int firstLayer= 0;
+		if (!needToPaintAll){
+			firstLayer = cachedImage.getListPosition()+1;
+//			System.out.println("=======Pintando a partir de la pos "+ firstLayer+"============");
+			g.drawImage(cachedImage.getImage(), 0, 0, null);
+//			System.out.println("=======Pintando imagen ============");
+
+		} else{
+			this.cachedImage = null;
+//			System.out.println("=======Pintando todo============");
+		}
+
+
+		boolean cached=false;
+		ComposedLayer composed = null;
+		int pos;
+		int layerPos= -1;
+		FLayer layer;
+		Object obj;
+		LayersGroupEvent event;
+		for (pos=0; pos < drawList.size(); pos++){
+			if (cancel.isCanceled()){
+				return;
+			}
+
+			obj = drawList.get(pos);
+
+			// *** Gestion de eventos de pintado de grupos ***
+			if (obj instanceof LayersGroupEvent){
+				event = (LayersGroupEvent) obj;
+				if (event.type == LayersGroupEvent.IN_Event){
+//					System.out.println("=======Empiza a pintar grupo de capas "+ ((FLayers)event.group).getName() +"============");
+					event.group.beginDraw(g, viewPort);
+				} else{
+					event.group.endDraw(g, viewPort);
+//					System.out.println("=======Fin a pintar grupo de capas "+ ((FLayers)event.group).getName() +"============");
+
+				}
+				continue;
+			}
+			layerPos++;
+			if (layerPos < firstLayer){
+				continue;
+			}
+
+			layer = (FLayer) obj;
+			if (cancel.isCanceled()){
+				return;
+			}
+
+			// *** Gestion de cache ***
+			if ((!cached) && this.isLayerCacheable(layer)){
+				if (layerPos > 0){ //La primera capa es la activa, no cacheamos
+					if (cachedImage==null || cachedImage.getListPosition() < layerPos-1){
+
+						if (composed != null){
+							//si tenemos una composicion de capas, necesitamos pintarlas
+							//antes de guardarnos la imagen
+//							System.out.println("=======Pintando composicion de pintado "+ (layerPos-1)+" (antes de cache)============");
+							this.draw(composed, image, g, cancel, scale, _dpi);
+//							composed.draw(image, g, viewPort, cancel, scale);
+							composed = null;
+
+						}
+						CachedImage  newCached = new CachedImage();
+						newCached.setImage(image, mapContext, viewPort, layerPos-1);
+						this.cachedImage = newCached;
+//						System.out.println("=======Guardando imagen de la pos "+ (layerPos-1)+" ("+ newCached.getListPosition() +")============");
+					}
+				}
+				cached = true;
+			}
+			if (cancel.isCanceled()){
+				return;
+			}
+
+			if (composed == null){
+				composed = layer.newComposedLayer();
+				if (composed != null){
+					try {
+//						System.out.println("=== añadiendo a composicion de pintado "+ layerPos+ " "+layer.getName());
+						composed.add(layer);
+						continue;
+					} catch (Exception e) {
+						throw new ReadDriverException("DefaultMapContexDrawer exception",e);
+					}
+				}
+			}else{
+				if (composed.canAdd(layer)){
+					try {
+//						System.out.println("=== añadiendo a composicion de pintado "+ layerPos+ " "+layer.getName());
+						composed.add(layer);
+						continue;
+					} catch (Exception e) {
+						throw new ReadDriverException("DefaultMapContexDrawer exception",e);
+					}
+				} else {
+//					System.out.println("=======Pintando composicion de pintado "+ (layerPos-1)+" (cambio composicion)============");
+					this.draw(composed, image, g, cancel, scale, _dpi);
+//					composed.draw(image, g, viewPort, cancel, scale);
+					composed = layer.newComposedLayer();
+					if (composed != null){
+						try {
+//							System.out.println("=== añadiendo a composicion de pintado "+ layerPos+ " "+layer.getName());
+							composed.add(layer);
+							continue;
+						} catch (Exception e) {
+							throw new ReadDriverException("DefaultMapContexDrawer exception",e);
+						}					}
+				}
+			}
+//			System.out.println("=== pintando "+ layerPos+ " "+layer.getName());
+			this.draw(layer, image, g, cancel, scale, _dpi);
+//			layer.draw(image, g, viewPort, cancel, scale);
+
+		}
+		if (composed != null){
+			// si la composicion no se ha pintado la pintamos
+//			System.out.println("=======Pintando composicion de pintado "+ (layerPos-1)+" (ultimo)============");
+			this.draw(composed, image, g, cancel, scale, _dpi);
 //			composed.draw(image, g, viewPort, cancel, scale);
 		}
 		if (cancel.isCanceled()){
@@ -191,7 +342,7 @@ public class DefaultMapContextDrawer implements MapContextDrawer {
 	}
 
 	private void draw(Object layerOrComposed,BufferedImage image, Graphics2D g, Cancellable cancel,
-			double scale) throws ReadDriverException{
+			double scale, double _dpi) throws ReadDriverException{
 		ILabelable labelable= null;
 		ILabelable tmp= null;
 		if (layerOrComposed instanceof ILabelable){
@@ -212,7 +363,7 @@ public class DefaultMapContextDrawer implements MapContextDrawer {
 			composed.draw(image, g, viewPort, cancel, scale);
 		}
 		if (labelable != null){
-			labelable.drawLabels(image, g, viewPort, cancel, scale, MapContext.getScreenDPI());
+			labelable.drawLabels(image, g, viewPort, cancel, scale, _dpi);
 		}
 
 	}

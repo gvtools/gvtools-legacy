@@ -407,7 +407,7 @@ public class Attributes {
 	 *
 	 * @param area Printing area.
 	 */
-	private void setArea(double[] area) {
+	public void setArea(double[] area) {
 		if (!isLandSpace()) {
 			attributes.add(new MediaPrintableArea((float) (area[2] * 10),
 					(float) (area[0] * 10),
@@ -462,7 +462,7 @@ public class Attributes {
 	 *  NORMAL: 300 dpi.
 	 *  HIGH: 	600 dpi.
 	 */
-	private void setResolution(int i) {
+	public void setResolution(int i) {
 		m_resolutionSel = i;
 
 		switch (i) {

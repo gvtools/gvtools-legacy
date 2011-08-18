@@ -112,7 +112,7 @@ public class FFrameView extends FFrame implements ViewPortListener,
     private AffineTransform at = null;
     protected Project project = null;
     private double scaleAnt;
-	private boolean refresh=false;
+	private boolean refresh_=false;
 	private Point origin;
 	private Point2D p1;
 	private Point2D p2;
@@ -138,6 +138,21 @@ public class FFrameView extends FFrame implements ViewPortListener,
         return "FFrameView " + num + ": " + getView().getName();
     }
 
+    
+    private void setRefresh(boolean b) {
+//    	System.out.println("################### SET REFRESH = " + b + " (" +
+//    			this.getName()
+//    			+ ")");
+//    	Thread.dumpStack();
+    	refresh_ = b;
+    }
+    
+    private boolean getRefresh() {
+//    	System.out.println("################### GET REFRESH = " + refresh_ + " (" +
+//    			this.getName()
+//    			+ ")");
+    	return refresh_;
+    }
     /**
      * Rellena la escala de la vista que contiene el fframe.
      *
@@ -154,7 +169,7 @@ public class FFrameView extends FFrame implements ViewPortListener,
      */
     public void setNewExtent(Rectangle2D r) {
         getMapContext().getViewPort().setExtent(r);
-        refresh = true;
+        setRefresh(true);
         m_Scale = FLayoutUtilities.getScaleView(getMapContext().getViewPort(),
                 getBoundBox().width,
                 getBoundingBox(null).width / getBoundBox().width);
@@ -346,6 +361,10 @@ public class FFrameView extends FFrame implements ViewPortListener,
 			} else {
 				if (rv != null) {
 					// Dibujamos en pantalla
+					
+					double scale1_1 = MapContext.getScreenDPI() / 2.54;
+					double visible__factor = at.getScaleX() / scale1_1;
+					
 					Rectangle rclip = null;
 					if (g.getClipBounds()!=null)
 						rclip = (Rectangle)g.getClipBounds().clone();
@@ -362,7 +381,7 @@ public class FFrameView extends FFrame implements ViewPortListener,
 									&& origin.equals(getLayout().getLayoutControl().getRectOrigin())
 									&& getLayout() != null
 									&& getLayout().getLayoutControl().getAT().getScaleX() == scaleAnt
-									&& m_image != null && !refresh && !(r.getWidth() > getLayout().getWidth()
+									&& m_image != null && !getRefresh() && !(r.getWidth() > getLayout().getWidth()
 											|| r.getHeight() > getLayout().getHeight())) {
 								if (theBackColor != null) {
 									g.setColor(theBackColor);
@@ -433,7 +452,8 @@ public class FFrameView extends FFrame implements ViewPortListener,
 									try {
 										MapContext mapContext = getMapContext();
 										mapContext.getMapContextDrawer().clean();
-										mapContext.draw(m_image, gimg, getScale());
+										mapContext.draw(m_image, gimg, getScale(),
+												MapContext.getScreenDPI() * visible__factor);
 									} catch (ReadDriverException e) {
 										e.printStackTrace();
 									}
@@ -450,7 +470,7 @@ public class FFrameView extends FFrame implements ViewPortListener,
 								}
 								scaleAnt = getLayout().getLayoutControl().getAT().getScaleX();
 								origin = (Point) getLayout().getLayoutControl().getRectOrigin();
-								refresh = false;
+								setRefresh(false);
 							}
 						}
 					} else {
@@ -808,7 +828,7 @@ public class FFrameView extends FFrame implements ViewPortListener,
             	getLayout().getLayoutControl().setStatus(LayoutControl.DESACTUALIZADO);
             }
         }
-        refresh=true;
+        setRefresh(true);
     }
 
     /**
@@ -844,7 +864,7 @@ public class FFrameView extends FFrame implements ViewPortListener,
     public void legendChanged(LegendChangedEvent e) {
         if (getLinked()) {
         	getLayout().getLayoutControl().setStatus(LayoutControl.DESACTUALIZADO);
-            refresh=true;
+            setRefresh(true);
             //setBufferedImage(null);
         }
     }
@@ -987,7 +1007,7 @@ public class FFrameView extends FFrame implements ViewPortListener,
 	public void refresh() {
 		if (view!=null && (getTypeScale() == MANUAL || getTypeScale() == CONSTANTE ))
 			getMapContext().getViewPort().setExtent(getNewExtent(getScale()));
-		refresh=true;
+		setRefresh(true);
 	}
 
 	public void fullExtent() throws ReadDriverException {
@@ -1037,6 +1057,7 @@ public class FFrameView extends FFrame implements ViewPortListener,
 
 	}
 	public IFFrame cloneFFrame(Layout layout) {
+		
 		FFrameView frame =(FFrameView)FrameFactory.createFrameFromName(FFrameViewFactory.registerName);
         frame.setLevel(this.getLevel());
         frame.setNum(this.num);

@@ -64,7 +64,7 @@ public class AttrInTableLabelingStrategy implements ILabelingStrategy, Cartograp
 	private boolean useFixedSize;
 	private boolean useFixedColor;
 	private int referenceSystem;
-	private double  printDPI;
+	// private double  printDPI_;
 	private Font font;
 	private Color colorFont;
 	private String textFieldName;
@@ -97,7 +97,7 @@ public class AttrInTableLabelingStrategy implements ILabelingStrategy, Cartograp
 		this.zoom = constraints;
 	}
 
-	public void draw(BufferedImage image, Graphics2D g, ViewPort viewPort, Cancellable cancel, double dpi)
+	public void draw(BufferedImage image, Graphics2D g, ViewPort viewPort, Cancellable cancel, double _dpi)
 	throws ReadDriverException {
 		if (idTextField==-1)
 			return;
@@ -162,8 +162,8 @@ public class AttrInTableLabelingStrategy implements ILabelingStrategy, Cartograp
 								getCartographicLength(this,
 													  size,
 													  viewPort,
-													  MapContext.getScreenDPI());
-//													  dpi);
+													  _dpi);
+					  // MapContext.getScreenDPI());
 //								toScreenUnitYAxis(this,
 //												  size,
 //												  viewPort
@@ -429,7 +429,18 @@ public class AttrInTableLabelingStrategy implements ILabelingStrategy, Cartograp
 
 	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel, PrintRequestAttributeSet properties) throws ReadDriverException {
 		this.properties=properties;
-		draw(null, g, viewPort, cancel, printDPI);
+
+		double _dpi = 72;
+		PrintQuality resolution=(PrintQuality)properties.get(PrintQuality.class);
+		if (resolution.equals(PrintQuality.NORMAL)){
+			_dpi = 300;
+		} else if (resolution.equals(PrintQuality.HIGH)){
+			_dpi = 600;
+		} else if (resolution.equals(PrintQuality.DRAFT)){
+			_dpi = 72;
+		}
+
+		draw(null, g, viewPort, cancel, _dpi);
 		this.properties=null;
 	}
 
