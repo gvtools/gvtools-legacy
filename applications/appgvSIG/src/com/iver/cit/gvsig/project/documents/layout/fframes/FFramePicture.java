@@ -65,6 +65,7 @@ import org.apache.batik.bridge.UserAgentAdapter;
 import org.apache.batik.bridge.ViewBox;
 import org.apache.batik.gvt.GraphicsNode;
 import org.apache.batik.gvt.renderer.StaticRenderer;
+import org.gvsig.tools.file.PathGenerator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
@@ -307,7 +308,7 @@ public class FFramePicture extends FFrame {
         XMLEntity xml = super.getXMLEntity();
 
         try {
-            xml.putProperty("m_path", m_path);
+            xml.putProperty("m_path", PathGenerator.getInstance().getPath(m_path));
             xml.putProperty("m_quality", m_quality);
             xml.putProperty("m_viewing", m_viewing);
         } catch (Exception e) {
@@ -427,7 +428,7 @@ public class FFramePicture extends FFrame {
             this.setSelected(false);
         }
 
-        this.m_path = xml.getStringProperty("m_path");
+        this.m_path = PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("m_path"));
 
         try {
             load(this.m_path);
@@ -451,7 +452,7 @@ public class FFramePicture extends FFrame {
             this.setSelected(false);
         }
 
-        this.m_path = xml.getStringProperty("m_path");
+        this.m_path = PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("m_path"));
 
         try {
             load(this.m_path);
