@@ -1,166 +1,51 @@
-<project name="Generar extension en Andami" default="generate-without-source" basedir=".">
+<project name="Generar extension en Andami" default="build-for-eclipse" basedir=".">
     <description>
         Instala el plugin en Andami
     </description>
   <!-- set global properties for this build -->
-	<property name="src" location="src"/>
+	<property name="fmap" location="../libFMap"/>
+	<property name="andami" location="../_fwAndami"/>
 	<property name="build" location="bin"/>
-	<property name="dist"  location="dist"/>
-	<property name="mainplugin" value="com.iver.cit.gvsig"/>
-	<property name="gvsiglibjar" value="gvsig-catalogClient"/>
-
-	<property name="catalogPlugin" value="es.gva.cit.gvsig.catalogClient"/>
-	<property name="plugin" value="${catalogPlugin}"/>
-	<property name="gazzetterPlugin" value="es.gva.cit.gvsig.gazetteer"/>
-	<property name="remoteClientPlugin" value="remoteClient"/>
-	<property name="wfsPlugin" value="wfs"/>
-	<property name="postgisPlugin" value="postgis"/>
-
-	<property name="appCatalogDir" value="../appCatalogAndGazetteerClient"/>
-	<property name="remoteClientsDir" value="../libRemoteServices"/>
-
-	<property name="lib" value="lib"/>
-	<property name="andami" value="../_fwAndami"/>
-	<property name="extensionsDir" location="${andami}/gvSIG/extensiones"/>
-	<property name="catProtocolJarName" value="catCliProto.jar"/>
-	<property name="andamiJar" location="${andami}/andami.jar"/>
-	<property name="gvsigJar" location="${extensionsDir}/com.iver.cit.gvsig/lib/com.iver.cit.gvsig.jar"/>
+	<property name="src" location="src"/>
+	<property name="dist" location="dist"/>
+	<property name="lib" location="lib"/>
 	<property name="andamiLibs" location="${andami}/lib"/>
-	<property name="fmapLibs" location="../libFMap/lib" />
+	<property name="fmapLibs" location="${fmap}/lib"/>
+	<property name="targetDir" location="../extCatalogAndGazetteer/dist/lib"/>
+	<property name="jarName" value="catCliProto.jar"/>
+	<!--<property name="compile-classpath" value="${lib}/a2j_v2-2.0.9.jar:${lib}/a2jruntime.jar:${lib}/activation.jar:${lib}/commons-beanutils.jar:${lib}/commons-codec.jar:${lib}/commons-httpclient-2.0.2.jar:${lib}/commons-logging.jar:${lib}/cql-java-1.0.0.jar:${lib}/junit.jar:${lib}/jzkit2_core-2.0.0.jar:${lib}/jzkit2_z3950_plugin-2.0.0.jar:${lib}/log4j-1.2.4.jar:${lib}/mail.jar:${lib}/soap.jar:${lib}/ostermillerutils_1_04_03_for_java_1_4.jar:${lib}/spring.jar:${lib}/xalan.jar:${lib}/amic-util.jar:${andamiLibs}/xerces_2_5_0.jar:${andamiLibs}/iver-utiles.jar:${andamiLibs}/gvsig-i18n.jar"/>-->
 	<import file="../binaries/ant/utilities.xml"/>
-
 
 
   <target name="init">
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${build}"/>
-    <mkdir dir="${dist}"/>
-  	<!-- Creamos un fichero con el timeStamp para que lo lea el FPanelAbout -->
-
+  	<buildnumber/>
   </target>
 
-	<target name="buildNumber">
-		<!--      <echo> Obsoleto: este proyecto se distribuye con gvSIG de base </echo>        -->
-
-		<propertyfile
-				file="build.number"
-				comment="Build Number for ANT. Do not edit!">
-				<entry  key="build.number" default="0" type="int" operation="+"/>
-		</propertyfile>
-		<property file="build.number"/>
-
-	</target>
-
-	<target name="import-build-number">
+	  <target name="import-build-number">
 	  	<copy todir=".">
 	  		<fileset file="${buildNumberFile}"/>
 	  	</copy>
+	  </target>
+
+	<target name="build-for-eclipse"
+			description="generates the jar and moves it to the target dir, but doesn't compile the sources"
+			depends="create-jar,move-to-targetDir">
+		<!-- this is not normally used, as extCatalog already builds appCatalog, but
+			 we include it here and make something meaningful, just in case the user
+			 wants to build only appCatalog.-->
 	</target>
 
-  <target name="generate-without-source_old"
-  		description="generate the distribution without the source file">
-  		<!-- depends="wcs-driver" -->
-    <!-- Create the distribution directory -->
-    <mkdir dir="${dist}"/>
-    <mkdir dir="${dist}/lib"/>
-
-    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <jar jarfile="${dist}/lib/${catProtocolJarName}" basedir="${appCatalogDir}/bin"/>
-  	<jar jarfile="${dist}/lib/${remoteClientPlugin}.jar" basedir="${remoteClientsDir}/bin"/>
-    <jar jarfile="${dist}/lib/${catalogPlugin}.jar" basedir="${build}" includes="es/gva/cit/gvsig/catalog/**"/>
-  	<jar jarfile="${dist}/lib/${gazzetterPlugin}.jar" basedir="${build}" includes="es/gva/cit/gvsig/gazetteer/**"/>
-  	<copy file="config/config.xml" todir="${dist}"/>
-  	<copy file="build.number" todir="${dist}"/>
-  	<copy file="config/about.htm" todir="${dist}"/>
-  	<loadproperties srcFile="build.number"/>
-  	<replace casesensitive="true"
-  		file="${dist}/about.htm"
-  	  	token="#build.number#"
-  		value="${build.number}"/>
-  	<replace casesensitive="true"
-  		file="${dist}/about.htm"
-  	  	token="#build.number.original#"
-  		value="${build.number.original}"/>
-    <copy file="config/plugin.dtd" todir="${dist}"/>
-    <copy todir="${dist}">
-    	<fileset dir="config" includes="text*.properties"/>
-    </copy>
-    <copy todir="${dist}/images">
-    	<fileset dir="${appCatalogDir}/images/" includes="*"/>
-    </copy>
-    <copy todir="${dist}/config">
-      	<fileset dir="${appCatalogDir}/config/" includes="*"/>
-    </copy>
-    <copy todir="${dist}">
-    	<!--fileset dir="./lib" includes="*.jar,*.zip"/ -->
-    	<fileset dir="." includes=".keystore"/>
-     	<fileset dir="${appCatalogDir}" includes="servers.txt"/>
-        </copy>
-    <copy todir="${dist}/lib">
-    	<fileset dir="${appCatalogDir}/lib" includes="*.jar"/>
-    </copy>
-  	<move todir="${extensionsDir}/${catalogPlugin}/">
-    	<fileset dir="${dist}" includes="**/**"/>
-    </move>
-  	<delete file="${extensionsDir}/${catalogPlugin}/lib/xercesImpl.jar"/>
-  	<delete file="${extensionsDir}/${catalogPlugin}/lib/xml-apis.jar"/>
-
+    <target name="batch-build"
+	        description="compile the source"
+    		depends="compile,create-jar,move-to-targetDir">
+	     <!-- Compile the Java code from ${src} to ${bin} -->
   </target>
 
-	<target name="generate-with-source"
-   			description="generate the distribution with the source file">
-    <!-- Create the distribution directory -->
-    <mkdir dir="${dist}"/>
-
-    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <jar jarfile="${dist}/${catalogPlugin}.jar" basedir="${build}"/>
-    <copy file="config/config.xml" todir="${dist}"/>
-	<copy file="build.number" todir="${dist}"/>
-	  	<copy file="config/about.htm" todir="${dist}"/>
-	  	<loadproperties srcFile="build.number"/>
-	  	<replace casesensitive="true"
-	  		file="${dist}/about.htm"
-	  	  	token="#build.number#"
-	  		value="${build.number}"/>
-	  	<replace casesensitive="true"
-	  		file="${dist}/about.htm"
-	  	  	token="#build.number.original#"
-	  		value="${build.number.original}"/>
-    <copy file="config/plugin.dtd" todir="${dist}"/>
-    <copy todir="${dist}">
-    	<fileset dir="config" includes="text*.properties"/>
-    </copy>
-    <copy todir="${dist}">
-    	<fileset dir="." includes="${src}"/>
-    </copy>
-    <copy todir="${dist}/images">
-    	<fileset dir="images/" includes="*"/>
-    </copy>
-    <!--copy todir="${dist}">
-    	<fileset dir="./lib" includes="*.jar,*.zip"/>
-    </copy-->
-    <move todir="${extension-dir}/${catalogPlugin}/">
-    	<fileset dir="${dist}" includes="**/**"/>
-    </move>
-  </target>
-
-	<target name="batch-build"
-			description="compile the sources, create the jar file"
-			depends="call-appCatalog-build,compile,create-jar,copy-data-files,move-to-andami">
-	</target>
-
-	<target name="call-appCatalog-build">
-		<ant dir="${appCatalogDir}" target="batch-build" inheritAll="false">
-			<property name="targetDir" location="${dist}/lib"/>
-			<property name="jarName" value="catCliProto.jar"/>
-			<property name="andamiLibs" value="${andamiLibs}"/>
-		</ant>
-	</target>
-
-	<target name="compile" description="compile the source" >
-		<!-- Compile the Java code from ${src} to ${build} -->
+	<target name="compile">
+		<mkdir dir="${build}"/>
 		<antcall target="gvSIG-import-build-number"/>
 		<mkdir dir="${build}" />
 		<loadEclipseClasspath project="${basedir}"/>
@@ -168,80 +53,26 @@
 			classpath="${eclipseClasspath}"/>
 	</target>
 
-
-	<target name="create-jar"
-			description="Creates the plugin jar">
-		<mkdir dir="${dist}/lib"/>
-	    <jar jarfile="${dist}/lib/${catalogPlugin}.jar" basedir="${build}" includes="es/gva/cit/gvsig/catalog/**"/>
-	  	<jar jarfile="${dist}/lib/${gazzetterPlugin}.jar" basedir="${build}" includes="es/gva/cit/gvsig/gazetteer/**"/>
+	<target name="create-jar">
+		<mkdir dir="${dist}" />
+	    <jar jarfile="${dist}/${jarName}" basedir="${build}"/>
 	</target>
 
-	<target name="copy-data-files" depends="make-package-info">
-	  	<copy file="config/config.xml" todir="${dist}"/>
-		<copy file="build.number" todir="${dist}"/>
-		<copy file="package.info" todir="${dist}"/>
-	  	<copy file="config/about.htm" todir="${dist}"/>
-	  	<loadproperties srcFile="build.number"/>
-	  	<replace casesensitive="true"
-	  		file="${dist}/about.htm"
-	  	  	token="#build.number#"
-	  		value="${build.number}"/>
-	  	<replace casesensitive="true"
-	  		file="${dist}/about.htm"
-	  	  	token="#build.number.original#"
-	  		value="${build.number.original}"/>
-	    <copy file="config/plugin.dtd" todir="${dist}"/>
-	    <copy todir="${dist}">
-	    	<fileset dir="config" includes="text*.properties"/>
-	    </copy>
-	    <copy todir="${dist}/images">
-	    	<fileset dir="images" includes="*"/>
-	    </copy>
-	    <copy todir="${dist}/images">
-	    	<fileset dir="${appCatalogDir}/images/" includes="*"/>
-	    </copy>
-	    <copy todir="${dist}">
-	    	<!--fileset dir="./lib" includes="*.jar,*.zip"/ -->
-	    	<fileset dir="." includes=".keystore"/>
-	     	<fileset dir="${appCatalogDir}" includes="servers.txt"/>
-        </copy>
-	    <copy todir="${dist}/config">
-	      	<fileset dir="${appCatalogDir}/config/" includes="*"/>
-	    </copy>
-	</target>
-
-	<target name="move-to-andami">
-	    <copy todir="${dist}/lib">
-	    	<fileset dir="${appCatalogDir}/lib" includes="*.jar"/>
-	    </copy>
-	  	<move todir="${extensionsDir}/${catalogPlugin}/">
-	    	<fileset dir="${dist}" includes="**/**"/>
+	<target name="move-to-targetDir">
+		<mkdir dir="${targetDir}" />
+	  	<move todir="${targetDir}">
+	    	<fileset file="${dist}/${jarName}"/>
 	    </move>
 	</target>
 
-	<target name="clean"
-    	description="clean up" >
-		<!-- Delete the ${build} and ${dist} directory trees -->
-		<delete dir="${build}"/>
-		<delete dir="${dist}"/>
-	</target>
-
-
-  <target name="clean-orig"
+  <target name="clean"
         description="clean up" >
     <!-- Delete the ${build} and ${dist} directory trees -->
-
-
+	<delete includeemptydirs="true" failonerror="no">
+        <fileset dir="${build}" includes="**"/>
+        <fileset dir="${dist}" includes="**"/>
+    </delete>
   </target>
-	<target name="distribution"
-		description="increment build number and generate the distribution without the source file"
-		depends="buildNumber,call-appCatalog-build,compile,create-jar,copy-data-files,move-to-andami">
-	</target>
 
-	<target name="generate-without-source"
-   			description="generate the distribution with the source file"
-		depends="call-appCatalog-build,create-jar,copy-data-files,move-to-andami">
-
-	</target>
 </project>
 
