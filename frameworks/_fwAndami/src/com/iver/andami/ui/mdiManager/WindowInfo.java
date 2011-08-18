@@ -85,14 +85,18 @@ public class WindowInfo {
 
 
     /** Specifies that this window has an editor profile */
+    /** To be used for View Windows */
     public static final Integer EDITOR_PROFILE = new Integer(1);
-    /** Specifies that this window has an editor profile */
+    /** Specifies that this window has Tool profile */
+    /** To be used for toolbox windows */
     public static final Integer TOOL_PROFILE = new Integer(2);
-    /** Specifies that this window has an editor profile */
+    /** Specifies that this window has a Project profile */
+    /** To be used only in the project windows */
     public static final Integer PROJECT_PROFILE = new Integer(3);
-    /** Specifies that this window has an editor profile */
+    /** Specifies that this window has a Properties profile */
+    /** To be used for general property panels */
     public static final Integer PROPERTIES_PROFILE = new Integer(4);
-    /** Specifies that this window has an editor profile */
+    /** Specifies that this window has an Dialog profile */
     public static final Integer DIALOG_PROFILE = new Integer(5);
 
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
