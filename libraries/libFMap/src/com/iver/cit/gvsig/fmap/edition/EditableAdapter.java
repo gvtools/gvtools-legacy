@@ -684,7 +684,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 					previousExpansionFileIndex));
 			return numAnt;
 		}
-		//fireAfterModifyRow(geometryIndex, sourceType);
+		fireAfterModifyRow(geometryIndex, sourceType);
 		return -1;
 	}
 
@@ -768,7 +768,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 			relations.put(integer, new Integer(num));
 		}
 		isFullExtentDirty = true;
-		//fireAfterModifyRow(index, sourceType);
+		fireAfterModifyRow(index, sourceType);
 		return pos;
 	}
 
