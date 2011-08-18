@@ -365,4 +365,13 @@ public class FMapWMSDriver  {
     	return client.getHost();
 
     }
+
+    /**
+     * @return <b>Boolean</b> returns true if the layer has LegendUrl in the "style" section (capabilities)
+     * 
+     */
+    public boolean hasLegendUrl(WMSStatus wmsStatus, String layerQuery) {
+    	return client.hasLegendUrl(wmsStatus,layerQuery);
+    }
+
 }

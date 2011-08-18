@@ -274,4 +274,15 @@ public class WMSClient extends org.gvsig.remoteClient.RasterClient {
 	public boolean connect(ICancellable cancel) {
 		return connect(false, cancel);
 	}
+
+	 /**
+     * 
+     * @param wmsStatus 
+     * @param layerQuery
+     * @return true if the layers has LegendUrl inside the style object (getcapabilities)
+     */
+    public boolean hasLegendUrl(WMSStatus wmsStatus, String layerQuery)
+    {
+    	return handler.hasLegendUrl(wmsStatus, layerQuery);  
+    }
 }

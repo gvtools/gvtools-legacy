@@ -13,6 +13,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -581,10 +582,25 @@ public abstract class WMSProtocolHandler {
     }
 
     /**
-     * Builds the GetMapRequest according to the OGC WMS Specifications
+     * @return string that represents the url for getting the wms legend
+     * If the layer has the object layer-->style-->legendurl that url will be returned 
+     * otherwise builds the getLegendGraphic according to the OGC WMS Specifications
+     * 
      */
     private String buildGetLegendGraphicRequest(WMSStatus status, String layerName)
     {
+    	//TODO: deal with more than one layer    	
+    	WMSLayer lyr = (WMSLayer) this.layers.get(layerName);
+    	WMSStyle sty =null;
+    	if (lyr != null){
+    		Iterator it = lyr.getStyles().iterator();
+    		while (it.hasNext()){
+    			sty = (WMSStyle) it.next();
+    			if (sty.getName().equals(status.getStyles().get(0))){    				
+    				return sty.getLegendURLOnlineResourceHRef();
+    			}
+    		}
+    	}
     	//TODO: pass by parameter the legend output format?
 		StringBuffer req = new StringBuffer();
 		String symbol = null;
@@ -775,4 +791,24 @@ public abstract class WMSProtocolHandler {
             operations = new HashMap();
         }
      }
+
+	 /**
+     * @return true if the layer has legendurl (layer-->style object in capabilities)
+     *  returns false when more than one layer is selected
+     *   
+     */
+    public boolean hasLegendUrl(WMSStatus status, String layerName){
+		WMSLayer lyr = (WMSLayer) this.layers.get(layerName);
+    	WMSStyle style =null;
+    	if (lyr != null){
+    		Iterator it = lyr.getStyles().iterator();
+    		while (it.hasNext()){
+    			style = (WMSStyle) it.next();
+    			if (style.getName().equals(status.getStyles().get(0))){        				
+    				return true;        				
+    			}
+    		}
+    	}
+    	return false;
+    }
  }

@@ -1955,7 +1955,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		try {
 			if (wms == null)
 				wms = getDriver();
-			if (wms.hasLegendGraphic() || hasImageLegend) {
+			if (wms.hasLegendUrl(wmsStatus,layerQuery) ||wms.hasLegendGraphic() || hasImageLegend) {
 				wmsStatus.setOnlineResource((String) onlineResources
 						.get("GetLegendGraphic"));
 				String path = getPathImage();// File legend =
