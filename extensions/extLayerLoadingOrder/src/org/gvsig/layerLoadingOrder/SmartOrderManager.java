@@ -56,7 +56,7 @@ public class SmartOrderManager implements OrderManager, IExtensionBuilder {
 				return 0;
 			}
 			else if (auxConfig.getVectorBehaviour()==OrderConfig.OVER_RASTER) {
-				int maxRaster = 0;
+				int maxRaster = -1;
 				for (int i=0; i<target.getLayersCount(); i++) {
 					if (target.getLayer(i) instanceof FLyrRasterSE) {
 						maxRaster = i;
