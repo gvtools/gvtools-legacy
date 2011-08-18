@@ -17,7 +17,7 @@ import com.hardcode.gdbms.parser.SQLEngineConstants;
  * wrapper apropiado
  *
  * @author $author$
- * @version $Revision: 32743 $
+ * @version $Revision: 35774 $
  */
 public class ValueFactory {
     final static int BYTE = 0;
@@ -204,15 +204,11 @@ public class ValueFactory {
             case SQLEngineConstants.FLOATING_POINT_LITERAL:
 
                 try {
-                    FloatValue r2 = new FloatValue();
-                    r2.setValue(Float.parseFloat(text));
-
+                	DoubleValue r2 = new DoubleValue();
+                    r2.setValue(Double.parseDouble(text));
                     return r2;
                 } catch (NumberFormatException e) {
-                    DoubleValue r2 = new DoubleValue();
-                    r2.setValue(Double.parseDouble(text));
-
-                    return r2;
+                    throw new SemanticException("Text could not be parsed as decimal (double): " + text);
                 }
 
             default:
