@@ -163,7 +163,9 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 
 	private static final int nbaseInt = (int) nbaseLong;
 
-	public static final String NAME = "PostGIS";
+	public static final String NAME = "PostGIS JDBC Driver";
+	// PostGIS
+	// PostGIS JDBC Driver
 
 	protected static BigInteger getNBase() {
 		return _nbase;
