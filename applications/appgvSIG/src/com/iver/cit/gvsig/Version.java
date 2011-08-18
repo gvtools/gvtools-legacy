@@ -1,54 +1,122 @@
 package com.iver.cit.gvsig;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.StringTokenizer;
+import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
+import com.iver.cit.gvsig.DEMO.SingleView;
 import com.iver.cit.gvsig.gui.panels.FPanelAbout;
 
 public class Version {
-	public final static int MAJOR_VERSION_NUMBER = 1;
-	public final static int MINOR_VERSION_NUMBER = 0;
-	public final static int RELEASE_NUMBER = 0;
+	private static Logger logger = Logger.getLogger(Version.class.getName());
+	/**
+	 * @deprecated Use method getMajor 
+	 */
+	public static int MAJOR_VERSION_NUMBER = 0;
+	/**
+	 * @deprecated Use method getMinor 
+	 */
+	public static int MINOR_VERSION_NUMBER = 0;
+	/**
+	 * @deprecated Use method getRelease 
+	 */
+	public static int RELEASE_NUMBER = 0;
+	private static boolean loaded = false;
 
 	private static String BUILD = null;
+	private static String STATE = null;
 
+	static {
+		Version version = new Version();
+		version.loadVersion();
+	}
+	/**
+	 * @deprecated Use method getFormat 
+	 */
 	public static String format() {
 
-		if (RELEASE_NUMBER < 1) {
-			return MAJOR_VERSION_NUMBER +"."+MINOR_VERSION_NUMBER;
-		} else {
-			return MAJOR_VERSION_NUMBER +"."+MINOR_VERSION_NUMBER+"."+RELEASE_NUMBER;
-		}
+		Version version = new Version();
+		return version.getFormat();
 	}
 
+	/**
+	 * @deprecated Use method getLongFormat 
+	 */
 	public static String longFormat() {
 
-		if (RELEASE_NUMBER < 1) {
-			return MAJOR_VERSION_NUMBER +"."+MINOR_VERSION_NUMBER + " (Build " + getBuild() + ")";
-		} else {
-			return MAJOR_VERSION_NUMBER +"."+MINOR_VERSION_NUMBER+"."+RELEASE_NUMBER + " (Build " + getBuild() + ")";
-		}
+		Version version = new Version();
+		return version.getLongFormat();
 	}
+	
+	/**
+	 * @deprecated Use method getBuildId 
+	 */
 	public static String getBuild() {
-		if (BUILD == null) {
+
+		Version version = new Version();
+		return version.getBuildId();
+	}
+	
+	private void loadVersion() {
+		if (!loaded) {
 			try {
-				// Leemos el nº de build
-				BufferedReader fich = new BufferedReader(
-						new FileReader(FPanelAbout.class.getResource("/build.number").getFile()));
-				fich.readLine();
-				fich.readLine();
-				String strVer = fich.readLine();
-				StringTokenizer strTokenizer = new StringTokenizer(strVer);
-				String strToken = strTokenizer.nextToken("=");
-				strToken = strTokenizer.nextToken();
-				BUILD = strToken;
-				fich.close();
+				Properties props=new Properties();
+				props.load(FPanelAbout.class.getResourceAsStream("/package.info"));
+				String version = props.getProperty("version", "0.0.0");
+				String[] versionSplit = version.split("[.]");
+				MAJOR_VERSION_NUMBER = Integer.parseInt(versionSplit[0]);
+				MINOR_VERSION_NUMBER = Integer.parseInt(versionSplit[1]);
+				RELEASE_NUMBER = Integer.parseInt(versionSplit[2]);
+				STATE = props.getProperty("state", "");
+				props=new Properties();
+				props.load(FPanelAbout.class.getResourceAsStream("/build.number"));
+				BUILD = props.getProperty("build.number", "0");
+				loaded = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("cant_load_properties", e);
 			}
 
 		}
+		
+	}
+	
+	
+	public int getMinor() {
+		loadVersion();
+		return MINOR_VERSION_NUMBER;
+	}
+
+	public int getMajor() {
+		loadVersion();
+		return MAJOR_VERSION_NUMBER;
+	}
+
+	public int getRelease() {
+		loadVersion();
+		return RELEASE_NUMBER;
+	}
+
+	public String getBuildId() {
+		loadVersion();
 		return BUILD;
 	}
+
+	public String getState() {
+		loadVersion();
+		return STATE;
+	}
+
+	public String toString() {
+		return getLongFormat();		
+	}
+
+    public String getFormat() {
+		return this.getMajor() +"."+this.getMinor()+"."+this.getRelease();
+    }
+
+    public String getLongFormat() {
+		return this.getMajor() + "." + this.getMinor() + "." + this.getRelease() + 
+		" " + this.getState() + " (Build " + this.getBuildId() + ")";
+    }
+
 }
