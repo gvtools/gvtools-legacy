@@ -33,8 +33,16 @@ public class ColumnModel extends DefaultTableColumnModel{
 
 
 	public void propertyChange(PropertyChangeEvent arg0) {
+		
 		try{
+			
 			super.propertyChange(arg0);
+			
+			if (! (arg0.getNewValue() instanceof Integer)) {
+				// sometimes it's not Integer
+				return;
+			}
+
 			int w=((Integer)arg0.getNewValue()).intValue();
 			if (arg0.getSource() instanceof TableColumn && (w!=75)){
 				TableColumn tc=(TableColumn)arg0.getSource();
@@ -63,3 +71,5 @@ public class ColumnModel extends DefaultTableColumnModel{
 		return pt.getMapping().length;
 	}
 }
+
+// [eiel-error-postgis]

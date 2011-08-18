@@ -9,6 +9,8 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import com.hardcode.gdbms.driver.exceptions.BadFieldDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.driver.ReadAccess;
@@ -20,6 +22,10 @@ import com.hardcode.gdbms.engine.values.ValueFactory;
  * DBDrivers helper class
  */
 public class JDBCSupport implements ReadAccess {
+	
+	private static Logger logger = Logger.getLogger(JDBCSupport.class
+			.getName());
+	
     private ResultSet resultSet;
     private int rowCount = -1;
     private Connection conn=null;
@@ -148,12 +154,17 @@ public class JDBCSupport implements ReadAccess {
                     break;
 
                 default:
-                    auxString = resultSet.getString(fieldId);
-                	if (auxString != null) {
-                	    value = ValueFactory.createValue(auxString);
+                	Object _obj = null;
+                	try {
+                		_obj = resultSet.getObject(fieldId);
+                	} catch (Exception ex) {
+                		logger.error("Error getting object: " + ex.getMessage());
                 	}
-
-                	break;
+                	if (_obj == null) {
+                		value = ValueFactory.createValue("");
+                	} else {
+                		value = ValueFactory.createValue(_obj.toString());
+                	}
             }
 
             if (resultSet.wasNull()) {
@@ -298,3 +309,5 @@ public class JDBCSupport implements ReadAccess {
 
 	}
 }
+
+// [eiel-error-postgis]
