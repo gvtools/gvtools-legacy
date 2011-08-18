@@ -99,7 +99,7 @@ public class Print extends Extension implements Printable {
 		try {
 			PluginServices.backgroundExecution(new Runnable() {
 					public void run() {
-						if (l.getLayoutContext().getAtributes().getType() == Attributes.CUSTOM) {
+						if (l.getLayoutContext().getAtributes().getType() == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 							l.showPrintDialog(printerJob);
 						} else {
 							l.showPrintDialog(null);
@@ -218,7 +218,7 @@ public class Print extends Extension implements Printable {
 		l = layout;
 
 		try {
-			if (layout.getLayoutContext().getAtributes().getType() == Attributes.CUSTOM) {
+			if (layout.getLayoutContext().getAtributes().getType() == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 				layout.showPrintDialog(printerJob);
 			} else {
 				layout.showPrintDialog(null);
@@ -282,3 +282,5 @@ public class Print extends Extension implements Printable {
 		}
 	}
 }
+
+// [eiel-add-print-formats]

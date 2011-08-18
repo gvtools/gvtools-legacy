@@ -50,6 +50,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
@@ -62,8 +65,11 @@ import javax.print.attribute.standard.OrientationRequested;
 import javax.print.attribute.standard.PrintQuality;
 import javax.print.attribute.standard.Sides;
 
+import org.apache.log4j.Logger;
+
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapContext;
+import com.iver.cit.gvsig.printutils.UserMediaSizeName;
 import com.iver.utiles.XMLEntity;
 
 
@@ -73,6 +79,8 @@ import com.iver.utiles.XMLEntity;
  * @author Vicente Caballero Navarro
  */
 public class Attributes {
+	
+	private static Logger logger = Logger.getLogger(Attributes.class);
 	/** Array of doubles containg the change factro from <b>CENTIMETERS</b> to KILOMETERS, METERS, CENTIMETERS, MILLIMETERS, MILES, YARDS, FEET, INCHES, DECIMAL DEGREES*/
 	 /* Do not alter the order and the values of this array, if you need append values.*/
 	public static final double[] CHANGE = {
@@ -90,37 +98,79 @@ public class Attributes {
 	//	Para impresión
 	public final static double PULGADA = 2.54;
 
-	//public final static Size CUSTOM_PAPER_SIZE = new Size(8.5, 11.0);
-	public final static Size STANDARD_LETTER_PAPER_SIZE = new Size(8.5, 11.0);
-	public final static Size STANDARD_FOLIO_PAPER_SIZE = new Size(8.5, 13.0);
-	public final static Size STANDARD_LEGAL_PAPER_SIZE = new Size(8.5, 14.0);
-	public final static Size STANDARD_TABLOID_PAPER_SIZE = new Size(11.0, 17.0);
+	public final static Size NA_LETTER_PAPER_SIZE = new Size(PULGADA * 11.0, PULGADA * 8.5);
+	public final static Size NA_LEGAL_PAPER_SIZE = new Size(PULGADA * 14.0, PULGADA * 8.5);
+	public final static Size NA_TABLOID_PAPER_SIZE = new Size(PULGADA * 17.0, PULGADA * 11.0);
+	// public final static Size FOLIO_PAPER_SIZE = new Size(PULGADA * 13.0, PULGADA * 8.5);
+	
 	public final static Size METRIC_A0_PAPER_SIZE = new Size(118.9, 84.1);
 	public final static Size METRIC_A1_PAPER_SIZE = new Size(84.1, 59.4);
 	public final static Size METRIC_A2_PAPER_SIZE = new Size(59.4, 42.0);
 	public final static Size METRIC_A3_PAPER_SIZE = new Size(42.0, 29.7);
 	public final static Size METRIC_A4_PAPER_SIZE = new Size(29.7, 21.0);
 	public final static Size METRIC_A5_PAPER_SIZE = new Size(21.0, 14.8);
-	public final static Size ANSI_ENG_A_PAPER_SIZE = new Size(11.0, 8.5);
-	public final static Size ANSI_ENG_B_PAPER_SIZE = new Size(17.0, 11.0);
-	public final static Size ANSI_ENG_C_PAPER_SIZE = new Size(22.0, 17.0);
-	public final static Size ANSI_ENG_D_PAPER_SIZE = new Size(34.0, 22.0);
-	public final static Size ANSI_ENG_E_PAPER_SIZE = new Size(44.0, 34.0);
-	public final static Size ANSI_ARCH_A_PAPER_SIZE = new Size(12.0, 9.0);
-	public final static Size ANSI_ARCH_B_PAPER_SIZE = new Size(18.0, 12.0);
-	public final static Size ANSI_ARCH_C_PAPER_SIZE = new Size(24.0, 18.0);
-	public final static Size ANSI_ARCH_D_PAPER_SIZE = new Size(36.0, 24.0);
-	public final static Size ANSI_ARCH_E_PAPER_SIZE = new Size(42.0, 30.0);
-	public static Size CUSTOM_PAPER_SIZE = new Size(100.0, 100.0);
-	public final static int PRINT = 0;
-	public final static int CUSTOM = 6;
-	public final static int A0 = 5;
-	public final static int A1 = 4;
-	public final static int A2 = 3;
-	public final static int A3 = 2;
-	public final static int A4 = 1;
+	// public final static Size ANSI_ENG_A_PAPER_SIZE = new Size(11.0, 8.5);
+	// public final static Size ANSI_ENG_B_PAPER_SIZE = new Size(17.0, 11.0);
+	// public final static Size ANSI_ENG_C_PAPER_SIZE = new Size(22.0, 17.0);
+	// public final static Size ANSI_ENG_D_PAPER_SIZE = new Size(34.0, 22.0);
+	// public final static Size ANSI_ENG_E_PAPER_SIZE = new Size(44.0, 34.0);
+	// public final static Size ANSI_ARCH_A_PAPER_SIZE = new Size(12.0, 9.0);
+	// public final static Size ANSI_ARCH_B_PAPER_SIZE = new Size(18.0, 12.0);
+	// public final static Size ANSI_ARCH_C_PAPER_SIZE = new Size(24.0, 18.0);
+	// public final static Size ANSI_ARCH_D_PAPER_SIZE = new Size(36.0, 24.0);
+	// public final static Size ANSI_ARCH_E_PAPER_SIZE = new Size(42.0, 30.0);
+	
+	public static Size CUSTOM_PAPER_SIZE = new Size(30.0, 20.0);
+	
+	// ===============================================
+	public final static int PREPARE_PAGE_ID_PRINT = 0;
+	public final static int PREPARE_PAGE_ID_A4 = 1;
+	public final static int PREPARE_PAGE_ID_A3 = 2;
+	public final static int PREPARE_PAGE_ID_A2 = 3;
+	public final static int PREPARE_PAGE_ID_A1 = 4;
+	public final static int PREPARE_PAGE_ID_A0 = 5;
+
+	// added gvSIG EIEL march 2011 - start
+	public final static int PREPARE_PAGE_ID_NA_LETTER = 6;
+	public final static int PREPARE_PAGE_ID_NA_LEGAL = 7;
+	public final static int PREPARE_PAGE_ID_EXEC_MONARCH = 8;
+	public final static int PREPARE_PAGE_ID_B5_JIS = 9;
+	public final static int PREPARE_PAGE_ID_TABLOID = 10;
+	public final static int PREPARE_PAGE_ID_ENV_MONARCH = 11;
+	public final static int PREPARE_PAGE_ID_ENV_N10 = 12;
+	public final static int PREPARE_PAGE_ID_ENV_C5 = 13;
+	public final static int PREPARE_PAGE_ID_ENV_DL = 14;
+	public final static int PREPARE_PAGE_ID_ENV_B5 = 15;
+	// ----------------------------------------------
+	public final static int PREPARE_PAGE_ID_CUSTOM = 16;
+	// ======================================
+	// public final static Size US_LETTER_PAPER_SIZE = new Size(PULGADA * 8.5, PULGADA * 11);
+	// public final static Size NA_LEGAL_PAPER_SIZE = new Size(PULGADA * 8.5, PULGADA * 14);
+	public final static Size EXEC_MONARCH_PAPER_SIZE = new Size(PULGADA * 10.5, PULGADA * 7.25);
+	public final static Size B5_JIS_PAPER_SIZE = new Size(25.7, 18.2);
+	// public final static Size ENV_11X17_PAPER_SIZE = new Size(11, 17);
+	public final static Size ENV_MONARCH_PAPER_SIZE = new Size(PULGADA * 7.5, PULGADA * 3.875);
+	public final static Size ENV_N10_PAPER_SIZE = new Size(PULGADA * 9.5, PULGADA * 4.125);
+	public final static Size ENV_C5_PAPER_SIZE = new Size(22.9, 16.2);
+	public final static Size ENV_DL_PAPER_SIZE = new Size(22,11);
+	public final static Size ENV_B5_PAPER_SIZE = new Size(25,17.6);
+	
+	
+	// ==========================================
+	// public static UserMediaSizeName USR_MEDIA_EXEC_MONARCH = new UserMediaSizeName("Executive");
+	// public static UserMediaSizeName USR_MEDIA_B5_JIS = new UserMediaSizeName("B5 (JIS)");
+	public static UserMediaSizeName USR_MEDIA_ENV_MONARCH = new UserMediaSizeName("Envelope_Monarch");
+	public static UserMediaSizeName USR_MEDIA_ENV_N10 = new UserMediaSizeName("Envelope_no10");
+	public static UserMediaSizeName USR_MEDIA_ENV_C5 = new UserMediaSizeName("Envelope_C5");
+	public static UserMediaSizeName USR_MEDIA_ENV_DL = new UserMediaSizeName("Envelope_DL");
+	public static UserMediaSizeName USR_MEDIA_ENV_B5 = new UserMediaSizeName("Envelope_B5");
+	// added gvSIG EIEL march 2011 - end
+
+	
 	public static int DPI = 300;
 	public static int DPISCREEN = 72;
+	public static double STANDARD_SCREEN_DOTS_PER_CM = 72 / 2.54;
+	
 	public static Rectangle clipRect = new Rectangle();
 	private static Point2D defaultGridGap;
 
@@ -140,7 +190,7 @@ public class Attributes {
 	private double m_unitY = 0;
 	private boolean hasmargin;
 	private int m_resolutionSel = NORMAL;
-	private int m_typeSel = PRINT;
+	private int m_typeSel = PREPARE_PAGE_ID_PRINT;
 	private int m_selTypeUnit = 2;
 	public Size m_sizePaper = new Size(METRIC_A4_PAPER_SIZE.getAlto(),
 			METRIC_A4_PAPER_SIZE.getAncho());
@@ -266,6 +316,14 @@ public class Attributes {
 			m_sizePaper.getAlto() - m_area[1] - m_area[3]);
 
 		return rect;
+	}
+
+	/**
+	 * Get current 4 margin values as an array[0..3] [top, bottom, left, right]
+	 * @return 4 margin values as an array[0..3] [top, bottom, left, right]
+	 */
+	public double[] getMargins() {
+		return m_area;
 	}
 
 	/**
@@ -527,7 +585,7 @@ public class Attributes {
 
 		//m_sizePaper=getSizePaper(t);
 		switch (t) {
-			case (PRINT):
+			case (PREPARE_PAGE_ID_PRINT):
 				m_type = ((MediaSizeName) attributes.get(Media.class));
 
 				if (isLandSpace()) {
@@ -539,7 +597,7 @@ public class Attributes {
 
 				break;
 
-			case (A4):
+			case (PREPARE_PAGE_ID_A4):
 				m_type = MediaSizeName.ISO_A4;
 
 				if (isLandSpace()) {
@@ -551,7 +609,7 @@ public class Attributes {
 
 				break;
 
-			case (A3):
+			case (PREPARE_PAGE_ID_A3):
 				m_type = MediaSizeName.ISO_A3;
 
 				if (isLandSpace()) {
@@ -563,7 +621,7 @@ public class Attributes {
 
 				break;
 
-			case (A2):
+			case (PREPARE_PAGE_ID_A2):
 				m_type = MediaSizeName.ISO_A2;
 
 				if (isLandSpace()) {
@@ -575,7 +633,7 @@ public class Attributes {
 
 				break;
 
-			case (A1):
+			case (PREPARE_PAGE_ID_A1):
 				m_type = MediaSizeName.ISO_A1;
 
 				if (isLandSpace()) {
@@ -587,7 +645,7 @@ public class Attributes {
 
 				break;
 
-			case (A0):
+			case (PREPARE_PAGE_ID_A0):
 				m_type = MediaSizeName.ISO_A0;
 
 				if (isLandSpace()) {
@@ -599,9 +657,8 @@ public class Attributes {
 
 				break;
 
-			case (CUSTOM):
+			case (PREPARE_PAGE_ID_CUSTOM):
 				m_type = MediaSizeName.PERSONAL_ENVELOPE;
-
 //			if (isLandSpace()) {
 //			m_sizePaper = new Size(CUSTOM_PAPER_SIZE.getAncho()*m_TypeUnit,
 //					CUSTOM_PAPER_SIZE.getAlto()*m_TypeUnit);
@@ -609,8 +666,123 @@ public class Attributes {
 //			m_sizePaper = new Size(CUSTOM_PAPER_SIZE.getAlto()*m_TypeUnit,
 //					CUSTOM_PAPER_SIZE.getAncho()*m_TypeUnit);
 //		}
-
 				break;
+				
+				
+
+				// public final static int PREPARE_PAGE_ID_US_LETTER = 7;
+			case (PREPARE_PAGE_ID_NA_LETTER):
+				m_type = MediaSizeName.NA_LETTER;
+				if (isLandSpace()) {
+					m_sizePaper = new Size(
+							NA_LETTER_PAPER_SIZE.getAncho(),
+							NA_LETTER_PAPER_SIZE.getAlto());
+				} else {
+					m_sizePaper = NA_LETTER_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_US_LEGAL = 8;
+			case (PREPARE_PAGE_ID_NA_LEGAL):
+				m_type = MediaSizeName.NA_LEGAL;
+				if (isLandSpace()) {
+					m_sizePaper = new Size(
+							NA_LEGAL_PAPER_SIZE.getAncho(),
+							NA_LEGAL_PAPER_SIZE.getAlto());
+				} else {
+					m_sizePaper = NA_LEGAL_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_EXEC_MONARCH = 9;
+			case (PREPARE_PAGE_ID_EXEC_MONARCH):
+				m_type = MediaSizeName.EXECUTIVE;
+				if (isLandSpace()) {
+					m_sizePaper = new Size(
+							EXEC_MONARCH_PAPER_SIZE.getAncho(),
+							EXEC_MONARCH_PAPER_SIZE.getAlto());
+				} else {
+					m_sizePaper = EXEC_MONARCH_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_B5_JIS = 10;
+			case (PREPARE_PAGE_ID_B5_JIS):
+				m_type = MediaSizeName.JIS_B5;
+				if (isLandSpace()) {
+					m_sizePaper = new Size(
+							B5_JIS_PAPER_SIZE.getAncho(),
+							B5_JIS_PAPER_SIZE.getAlto());
+				} else {
+					m_sizePaper = B5_JIS_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_11X17 = 11;
+			case (PREPARE_PAGE_ID_TABLOID):
+				m_type = MediaSizeName.TABLOID;
+				if (isLandSpace()) {
+					m_sizePaper = new Size(
+							NA_TABLOID_PAPER_SIZE.getAncho(),
+							NA_TABLOID_PAPER_SIZE.getAlto());
+				} else {
+					m_sizePaper = NA_TABLOID_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_MONARCH = 12;
+			case (PREPARE_PAGE_ID_ENV_MONARCH):
+				m_type = MediaSizeName.MONARCH_ENVELOPE;
+				if (isLandSpace()) {
+					m_sizePaper = new Size(
+							ENV_MONARCH_PAPER_SIZE.getAncho(),
+							ENV_MONARCH_PAPER_SIZE.getAlto());
+				} else {
+					m_sizePaper = ENV_MONARCH_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_N10 = 13;
+			case (PREPARE_PAGE_ID_ENV_N10):
+				m_type = MediaSizeName.NA_NUMBER_10_ENVELOPE;
+				if (isLandSpace()) {
+					m_sizePaper = new Size(
+							ENV_N10_PAPER_SIZE.getAncho(),
+							ENV_N10_PAPER_SIZE.getAlto());
+				} else {
+					m_sizePaper = ENV_N10_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_C5 = 14;
+			case (PREPARE_PAGE_ID_ENV_C5):
+				m_type = USR_MEDIA_ENV_C5;
+				if (isLandSpace()) {
+					m_sizePaper = new Size(
+							ENV_C5_PAPER_SIZE.getAncho(),
+							ENV_C5_PAPER_SIZE.getAlto());
+				} else {
+					m_sizePaper = ENV_C5_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_DL = 15;
+			case (PREPARE_PAGE_ID_ENV_DL):
+				m_type = USR_MEDIA_ENV_DL;
+			// MediaSizeName.NA_LETTER.
+			
+				if (isLandSpace()) {
+					m_sizePaper = new Size(
+							ENV_DL_PAPER_SIZE.getAncho(),
+							ENV_DL_PAPER_SIZE.getAlto());
+				} else {
+					m_sizePaper = ENV_DL_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_B5 = 16;
+			case (PREPARE_PAGE_ID_ENV_B5):
+				m_type = USR_MEDIA_ENV_B5;
+				if (isLandSpace()) {
+					m_sizePaper = new Size(
+							ENV_B5_PAPER_SIZE.getAncho(),
+							ENV_B5_PAPER_SIZE.getAlto());
+				} else {
+					m_sizePaper = ENV_B5_PAPER_SIZE;
+				}
+				break;
+
 		}
 		attributes.add(m_type);
 		setSizeinUnits(isLandSpace());
@@ -629,7 +801,7 @@ public class Attributes {
 		Size size = null;
 
 		switch (type) {
-			case (PRINT):
+			case (PREPARE_PAGE_ID_PRINT):
 
 				if (isLand) {
 					size = new Size(METRIC_A4_PAPER_SIZE.getAncho(),
@@ -640,7 +812,7 @@ public class Attributes {
 
 				break;
 
-			case (A4):
+			case (PREPARE_PAGE_ID_A4):
 
 				if (isLand) {
 					size = new Size(METRIC_A4_PAPER_SIZE.getAncho(),
@@ -651,7 +823,7 @@ public class Attributes {
 
 				break;
 
-			case (A3):
+			case (PREPARE_PAGE_ID_A3):
 
 				if (isLand) {
 					size = new Size(METRIC_A3_PAPER_SIZE.getAncho(),
@@ -662,7 +834,7 @@ public class Attributes {
 
 				break;
 
-			case (A2):
+			case (PREPARE_PAGE_ID_A2):
 
 				if (isLand) {
 					size = new Size(METRIC_A2_PAPER_SIZE.getAncho(),
@@ -673,7 +845,7 @@ public class Attributes {
 
 				break;
 
-			case (A1):
+			case (PREPARE_PAGE_ID_A1):
 
 				if (isLand) {
 					size = new Size(METRIC_A1_PAPER_SIZE.getAncho(),
@@ -684,7 +856,7 @@ public class Attributes {
 
 				break;
 
-			case (A0):
+			case (PREPARE_PAGE_ID_A0):
 
 				if (isLand) {
 					size = new Size(METRIC_A0_PAPER_SIZE.getAncho(),
@@ -695,16 +867,115 @@ public class Attributes {
 
 				break;
 
-			case (CUSTOM):
+			case (PREPARE_PAGE_ID_CUSTOM):
 
-//				if (isLand) {
-				size = new Size(CUSTOM_PAPER_SIZE.getAncho()*m_TypeUnit,
-						CUSTOM_PAPER_SIZE.getAlto()*m_TypeUnit);
-//			} else {
-//				size = new Size(CUSTOM_PAPER_SIZE.getAlto()*m_TypeUnit,
-//						CUSTOM_PAPER_SIZE.getAncho()*m_TypeUnit);
-//			}
+				size = new Size(CUSTOM_PAPER_SIZE.getAncho(),
+						CUSTOM_PAPER_SIZE.getAlto());
 				break;
+				
+				// =============================
+				// =============================
+				
+			case (PREPARE_PAGE_ID_NA_LETTER):
+				if (isLand) {
+					size = new Size(
+							NA_LETTER_PAPER_SIZE.getAncho(),
+							NA_LETTER_PAPER_SIZE.getAlto());
+				} else {
+					size = NA_LETTER_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_US_LEGAL = 8;
+			case (PREPARE_PAGE_ID_NA_LEGAL):
+				if (isLand) {
+					size = new Size(
+							NA_LEGAL_PAPER_SIZE.getAncho(),
+							NA_LEGAL_PAPER_SIZE.getAlto());
+				} else {
+					size = NA_LEGAL_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_EXEC_MONARCH = 9;
+			case (PREPARE_PAGE_ID_EXEC_MONARCH):
+				if (isLand) {
+					size = new Size(
+							EXEC_MONARCH_PAPER_SIZE.getAncho(),
+							EXEC_MONARCH_PAPER_SIZE.getAlto());
+				} else {
+					size = EXEC_MONARCH_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_B5_JIS = 10;
+			case (PREPARE_PAGE_ID_B5_JIS):
+				if (isLand) {
+					size = new Size(
+							B5_JIS_PAPER_SIZE.getAncho(),
+							B5_JIS_PAPER_SIZE.getAlto());
+				} else {
+					size = B5_JIS_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_11X17 = 11;
+			case (PREPARE_PAGE_ID_TABLOID):
+				if (isLand) {
+					size = new Size(
+							NA_TABLOID_PAPER_SIZE.getAncho(),
+							NA_TABLOID_PAPER_SIZE.getAlto());
+				} else {
+					size = NA_TABLOID_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_MONARCH = 12;
+			case (PREPARE_PAGE_ID_ENV_MONARCH):
+				if (isLand) {
+					size = new Size(
+							ENV_MONARCH_PAPER_SIZE.getAncho(),
+							ENV_MONARCH_PAPER_SIZE.getAlto());
+				} else {
+					size = ENV_MONARCH_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_N10 = 13;
+			case (PREPARE_PAGE_ID_ENV_N10):
+				if (isLand) {
+					size = new Size(
+							ENV_N10_PAPER_SIZE.getAncho(),
+							ENV_N10_PAPER_SIZE.getAlto());
+				} else {
+					size = ENV_N10_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_C5 = 14;
+			case (PREPARE_PAGE_ID_ENV_C5):
+				if (isLand) {
+					size = new Size(
+							ENV_C5_PAPER_SIZE.getAncho(),
+							ENV_C5_PAPER_SIZE.getAlto());
+				} else {
+					size = ENV_C5_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_DL = 15;
+			case (PREPARE_PAGE_ID_ENV_DL):
+				if (isLand) {
+					size = new Size(
+							ENV_DL_PAPER_SIZE.getAncho(),
+							ENV_DL_PAPER_SIZE.getAlto());
+				} else {
+					size = ENV_DL_PAPER_SIZE;
+				}
+				break;
+				// public final static int PREPARE_PAGE_ID_ENV_B5 = 16;
+			case (PREPARE_PAGE_ID_ENV_B5):
+				if (isLand) {
+					size = new Size(
+							ENV_B5_PAPER_SIZE.getAncho(),
+							ENV_B5_PAPER_SIZE.getAlto());
+				} else {
+					size = ENV_B5_PAPER_SIZE;
+				}
+				break;
+
 		}
 
 		m_sizeinUnits = new Size(size.getAlto() / m_TypeUnit,
@@ -931,41 +1202,57 @@ public class Attributes {
 	 * @return Type of sheet.
 	 */
 	private int getTypePaper(Size size) {
-		int tol = 1;
-		Size auxSize = size;
+
+		float tol = 0.1f; //  1mm
+		Size auxSize = null;
 
 		if (isLandSpace()) {
-			auxSize = new Size(size.getAncho(), size.getAlto());
+			auxSize = new Size(size.getAncho() - tol, size.getAlto() - tol);
+		} else {
+			auxSize = new Size(size.getAlto() - tol, size.getAncho() - tol);
 		}
-
-		if ((((auxSize.getAncho() * PULGADA) / DPISCREEN) < (tol +
-				METRIC_A4_PAPER_SIZE.getAncho())) &&
-				(((auxSize.getAlto() * PULGADA) / DPISCREEN) < (tol +
-				METRIC_A4_PAPER_SIZE.getAlto()))) {
-			return A4;
-		} else if ((((auxSize.getAncho() * PULGADA) / DPISCREEN) < (tol +
-				METRIC_A3_PAPER_SIZE.getAncho())) &&
-				(((auxSize.getAlto() * PULGADA) / DPISCREEN) < (tol +
-				METRIC_A3_PAPER_SIZE.getAlto()))) {
-			return A3;
-		} else if ((((auxSize.getAncho() * PULGADA) / DPISCREEN) < (tol +
-				METRIC_A2_PAPER_SIZE.getAncho())) &&
-				(((auxSize.getAlto() * PULGADA) / DPISCREEN) < (tol +
-				METRIC_A2_PAPER_SIZE.getAlto()))) {
-			return A2;
-		} else if ((((auxSize.getAncho() * PULGADA) / DPISCREEN) < (tol +
-				METRIC_A1_PAPER_SIZE.getAncho())) &&
-				(((auxSize.getAlto() * PULGADA) / DPISCREEN) < (tol +
-				METRIC_A1_PAPER_SIZE.getAlto()))) {
-			return A1;
-		} else if ((((auxSize.getAncho() * PULGADA) / DPISCREEN) < (tol +
-				METRIC_A0_PAPER_SIZE.getAncho())) &&
-				(((auxSize.getAlto() * PULGADA) / DPISCREEN) < (tol +
-				METRIC_A0_PAPER_SIZE.getAlto()))) {
-			return A0;
+		
+		Size small = getSmallestFor(auxSize.getAncho(), auxSize.getAlto());
+		if (small == null) {
+			return PREPARE_PAGE_ID_A4;
+		} else {
+			Integer resp = idForSize(small);
+			if (resp == null) {
+				return PREPARE_PAGE_ID_A4;
+			} else {
+				return resp.intValue();
+			}
 		}
+		
 
-		return A4;
+//		if ((((auxSize.getAncho() * PULGADA) / DPISCREEN) < (tol +
+//				METRIC_A4_PAPER_SIZE.getAncho())) &&
+//				(((auxSize.getAlto() * PULGADA) / DPISCREEN) < (tol +
+//				METRIC_A4_PAPER_SIZE.getAlto()))) {
+//			return PREPARE_PAGE_ID_A4;
+//		} else if ((((auxSize.getAncho() * PULGADA) / DPISCREEN) < (tol +
+//				METRIC_A3_PAPER_SIZE.getAncho())) &&
+//				(((auxSize.getAlto() * PULGADA) / DPISCREEN) < (tol +
+//				METRIC_A3_PAPER_SIZE.getAlto()))) {
+//			return PREPARE_PAGE_ID_A3;
+//		} else if ((((auxSize.getAncho() * PULGADA) / DPISCREEN) < (tol +
+//				METRIC_A2_PAPER_SIZE.getAncho())) &&
+//				(((auxSize.getAlto() * PULGADA) / DPISCREEN) < (tol +
+//				METRIC_A2_PAPER_SIZE.getAlto()))) {
+//			return PREPARE_PAGE_ID_A2;
+//		} else if ((((auxSize.getAncho() * PULGADA) / DPISCREEN) < (tol +
+//				METRIC_A1_PAPER_SIZE.getAncho())) &&
+//				(((auxSize.getAlto() * PULGADA) / DPISCREEN) < (tol +
+//				METRIC_A1_PAPER_SIZE.getAlto()))) {
+//			return PREPARE_PAGE_ID_A1;
+//		} else if ((((auxSize.getAncho() * PULGADA) / DPISCREEN) < (tol +
+//				METRIC_A0_PAPER_SIZE.getAncho())) &&
+//				(((auxSize.getAlto() * PULGADA) / DPISCREEN) < (tol +
+//				METRIC_A0_PAPER_SIZE.getAlto()))) {
+//			return PREPARE_PAGE_ID_A0;
+//		}
+
+
 	}
 
 	/**
@@ -1125,4 +1412,175 @@ public class Attributes {
 		return m_unitX;
 	}
 
+	
+	public static Size getSmallestFor(double ancho, double alto) {
+		
+		ArrayList cand = new ArrayList();
+		Iterator kiter = PAPER_SIZES_LIST.keySet().iterator();
+		Size aux = null;
+		Integer kitem = null;
+		while (kiter.hasNext()) {
+			kitem = (Integer) kiter.next(); 
+			aux = (Size) PAPER_SIZES_LIST.get(kitem);
+			if (fitsIn(ancho, alto, aux) && isRealFormat(kitem)) {
+				cand.add(aux);
+			}
+		}
+		return smallest(cand);
+	}
+	
+	private static boolean isRealFormat(Integer k) {
+		return
+		(k.intValue() != PREPARE_PAGE_ID_CUSTOM)
+		&& (k.intValue() != PREPARE_PAGE_ID_PRINT);
+	}
+
+	public static HashMap PAPER_SIZES_LIST = new HashMap(); 
+	static {
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_CUSTOM), CUSTOM_PAPER_SIZE);
+		// as printer
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_PRINT), CUSTOM_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_A0), METRIC_A0_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_A1), METRIC_A1_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_A2), METRIC_A2_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_A3), METRIC_A3_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_A4), METRIC_A4_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_NA_LETTER), NA_LETTER_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_NA_LEGAL), NA_LEGAL_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_TABLOID), NA_TABLOID_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_EXEC_MONARCH), EXEC_MONARCH_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_B5_JIS), B5_JIS_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_ENV_MONARCH), ENV_MONARCH_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_ENV_N10), ENV_N10_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_ENV_C5), ENV_C5_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_ENV_DL), ENV_DL_PAPER_SIZE);
+		PAPER_SIZES_LIST.put(new Integer(PREPARE_PAGE_ID_ENV_B5), ENV_B5_PAPER_SIZE);
+	}
+	
+	public static HashMap PAPER_NAMES_LIST = new HashMap(); 
+	static {
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_CUSTOM), new UserMediaSizeName(
+				"Personalizado"));
+		// as printer
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_PRINT), new UserMediaSizeName(
+				"Igual_que_la_impresora"));
+		
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_A0), MediaSizeName.ISO_A0);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_A1), MediaSizeName.ISO_A1);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_A2), MediaSizeName.ISO_A2);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_A3), MediaSizeName.ISO_A3);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_A4), MediaSizeName.ISO_A4);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_NA_LETTER), MediaSizeName.NA_LETTER);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_NA_LEGAL), MediaSizeName.NA_LEGAL);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_TABLOID), MediaSizeName.TABLOID);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_EXEC_MONARCH), MediaSizeName.EXECUTIVE);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_B5_JIS), MediaSizeName.JIS_B5);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_ENV_MONARCH), USR_MEDIA_ENV_MONARCH);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_ENV_N10), USR_MEDIA_ENV_N10);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_ENV_C5), USR_MEDIA_ENV_C5);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_ENV_DL), USR_MEDIA_ENV_DL);
+		PAPER_NAMES_LIST.put(new Integer(PREPARE_PAGE_ID_ENV_B5), USR_MEDIA_ENV_B5);
+	}
+
+	
+	public static Integer idForSize(Size sz) {
+		
+		Iterator kiter = PAPER_SIZES_LIST.keySet().iterator();
+		Size aux = null;
+		Integer kitem = null;
+		while (kiter.hasNext()) {
+			kitem = (Integer) kiter.next();
+			aux = (Size) PAPER_SIZES_LIST.get(kitem);
+			if (aux == sz) {
+				return kitem;
+			}
+		}
+		logger.error("Did not find paper size [h,w] : [" + sz.getAlto() + " , " + sz.getAncho() + "] (returned id a4)");
+		return PREPARE_PAGE_ID_A4;
+	}
+	
+	public static Size sizeForId(int id) {
+		
+		Iterator kiter = PAPER_SIZES_LIST.keySet().iterator();
+		Integer kitem = null;
+		while (kiter.hasNext()) {
+			kitem = (Integer) kiter.next();
+			if (kitem.intValue() == id) {
+				return (Size) PAPER_SIZES_LIST.get(kitem);
+			}
+		}
+		
+		logger.error("Did not find paper type id: " + id + " (returned a4)");
+		return METRIC_A4_PAPER_SIZE;
+	}
+
+	
+	public static Size smallest(ArrayList sszs) {
+		
+		int len = sszs.size();
+		
+		if (len == 0) {
+			return null;
+		}
+		
+		if (len == 1) {
+			return (Size) sszs.get(0);
+		}
+		
+		int resp = 0;
+		Size aux = (Size) sszs.get(0);
+		double min = aux.getAlto() * aux.getAncho();
+		double auxmin = 0;
+		for (int i=1; i<len; i++) {
+			aux = (Size) sszs.get(i);
+			auxmin = aux.getAlto() * aux.getAncho();
+			if (auxmin < min) {
+				min = auxmin;
+				resp = i;
+			}
+		}
+		return (Size) sszs.get(resp);
+	}
+	
+	public static boolean fitsIn(double anchoin, double altoin, Size outer) {
+		return (anchoin <= outer.getAncho()) && (altoin <= outer.getAlto()); 
+	}
+
+	public static MediaSizeName getMediaSizeNameForId(int type) {
+		
+		Iterator iter = PAPER_NAMES_LIST.keySet().iterator();
+		Integer kitem = null;
+		while (iter.hasNext()) {
+			
+			kitem = (Integer) iter.next();
+			if (kitem.intValue() == type) {
+				return (MediaSizeName) PAPER_NAMES_LIST.get(kitem);
+			}
+		}
+		logger.error("Did not find paper type id: " + type + " (returned a4)");
+		return MediaSizeName.ISO_A4;
+	}
+
+	public static int getIdForMediaSizeName(MediaSizeName msn) {
+		
+		Iterator iter = PAPER_NAMES_LIST.keySet().iterator();
+		Integer kitem = null;
+		MediaSizeName item_msn = null;
+		while (iter.hasNext()) {
+			kitem = (Integer) iter.next();
+			item_msn = (MediaSizeName) PAPER_NAMES_LIST.get(kitem);
+			if (item_msn == msn) {
+				return kitem.intValue();
+			}
+		}
+		logger.error("Did not find msn: " + msn.toString() + " (returned id for a4)");
+		return PREPARE_PAGE_ID_A4;
+	}
+
+	public Size getPaperSize() {
+		return m_sizePaper;
+	}
+
 }
+
+// [eiel-add-print-formats]

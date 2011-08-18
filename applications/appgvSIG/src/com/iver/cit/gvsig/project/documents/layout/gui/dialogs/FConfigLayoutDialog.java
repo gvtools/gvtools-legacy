@@ -46,13 +46,20 @@ package com.iver.cit.gvsig.project.documents.layout.gui.dialogs;
 
 import java.awt.Dimension;
 import java.text.NumberFormat;
+import java.util.Iterator;
 
+import javax.print.attribute.standard.MediaSizeName;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
+
+import org.apache.log4j.Logger;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.MapContext;
+import com.iver.cit.gvsig.printutils.MediaSizeNameWrapper;
+import com.iver.cit.gvsig.printutils.UserMediaSizeName;
 import com.iver.cit.gvsig.project.documents.layout.Attributes;
 import com.iver.cit.gvsig.project.documents.layout.Size;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
@@ -64,6 +71,9 @@ import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
  * @author Vicente Caballero Navarro
  */
 public class FConfigLayoutDialog extends JPanel implements IWindow {
+	
+	private static Logger logger = Logger.getLogger(FConfigLayoutDialog.class);
+	
 	private javax.swing.JLabel lTamPag = null;
 	private javax.swing.JComboBox cbTipoFolio = null;
 	private javax.swing.JLabel lDistancia = null;
@@ -181,28 +191,36 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			cbTipoFolio.setSize(175, 20);
 			cbTipoFolio.setPreferredSize(new java.awt.Dimension(130, 20));
 			cbTipoFolio.setLocation(175, 15);
-			cbTipoFolio.addItem(PluginServices.getText(this,
-					"Igual_que_la_impresora"));
-			cbTipoFolio.addItem(PluginServices.getText(this, "A4"));
-			cbTipoFolio.addItem(PluginServices.getText(this, "A3"));
-			cbTipoFolio.addItem(PluginServices.getText(this, "A2"));
-			cbTipoFolio.addItem(PluginServices.getText(this, "A1"));
-			cbTipoFolio.addItem(PluginServices.getText(this, "A0"));
-			cbTipoFolio.addItem(PluginServices.getText(this, "Personalizado"));
-
-			cbTipoFolio.setSelectedIndex(m_layout.getLayoutContext().getAtributes().getType());
+			
+			Iterator iter = Attributes.PAPER_NAMES_LIST.keySet().iterator();
+			while (iter.hasNext()) {
+				cbTipoFolio.addItem(
+						new MediaSizeNameWrapper(
+								(MediaSizeName) Attributes.PAPER_NAMES_LIST.get(iter.next())));
+			}
+			
+			int curr_type = m_layout.getLayoutContext().getAtributes().getType();
+			int index = getIndexOfWrapperWithId(cbTipoFolio, curr_type);
+			cbTipoFolio.setSelectedIndex(index);
+			
 			cbTipoFolio.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
-						type = cbTipoFolio.getSelectedIndex();
+						
+						MediaSizeNameWrapper wra =
+							(MediaSizeNameWrapper) cbTipoFolio.getSelectedItem();
+						
+						type = Attributes.getIdForMediaSizeName(wra.getMediaSizeName());
 
 						Size size = m_layout.getLayoutContext().getAtributes().getSizeinUnits(isLand,
 								type);
+						
 						getTAlto().setText(String.valueOf(nf.format(
 									size.getAlto())));
 						getTAncho().setText(String.valueOf(nf.format(
 									size.getAncho())));
 						setMargin(margin);
-						if (cbTipoFolio.getSelectedItem().equals(PluginServices.getText(this,"Personalizado"))) {
+						if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
+								// cbTipoFolio.getSelectedItem().equals(PluginServices.getText(this,"Personalizado"))) {
 							getTAlto().setEnabled(true);
 							getTAncho().setEnabled(true);
 							getChbVertical().setSelected(true);
@@ -221,6 +239,24 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 		}
 
 		return cbTipoFolio;
+	}
+
+	
+
+	private int getIndexOfWrapperWithId(JComboBox combo, int id) {
+		
+		MediaSizeName msn = Attributes.getMediaSizeNameForId(id);
+		
+		int cnt = combo.getItemCount();
+		MediaSizeNameWrapper w = null;
+		for (int i=0; i<cnt; i++) {
+			w = (MediaSizeNameWrapper) combo.getItemAt(i);
+			if (w.getMediaSizeName() == msn) {
+				return i;
+			}
+		}
+		logger.error("Did not find MSN for ID: " + id + " (returned index 0 for combo)");
+		return 0;
 	}
 
 	/**
@@ -262,9 +298,9 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 						Size size = m_layout.getLayoutContext().getAtributes().getSizeinUnits(isLand,
 								type);
 						getTAlto().setText(String.valueOf(nf.format(
-									size.getAncho())));
-						getTAncho().setText(String.valueOf(nf.format(
 									size.getAlto())));
+						getTAncho().setText(String.valueOf(nf.format(
+									size.getAncho())));
 						setMargin(margin);
 					}
 				});
@@ -640,9 +676,9 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 	private javax.swing.JButton getBAceptar() {
 		if (bAceptar == null) {
 			bAceptar = new javax.swing.JButton();
-			bAceptar.setSize(84, 23);
+			bAceptar.setSize(84, 26);
 			bAceptar.setText(PluginServices.getText(this, "Aceptar"));
-			bAceptar.setLocation(130, 245);
+			bAceptar.setLocation(90, 255);
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
 						m_layout.getLayoutContext().getAtributes().setUnit(unit);
@@ -659,13 +695,17 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 
 						double[] area = { sup, inf, izq, der };
 
-						if (type == Attributes.CUSTOM) {
+						if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 							String width=getTAncho().getText().replace(',','.');
 							String height=getTAlto().getText().replace(',','.');
-							Attributes.CUSTOM_PAPER_SIZE = new Size(Double.valueOf(
-										width).doubleValue(),
-									Double.valueOf(height)
-										  .doubleValue());
+							
+							double _w = Double.valueOf(width).doubleValue();
+							double _h = Double.valueOf(height).doubleValue();
+							
+							_w = m_layout.getLayoutContext().getAtributes().fromUnits(_w);
+							_h = m_layout.getLayoutContext().getAtributes().fromUnits(_h);
+							
+							Attributes.CUSTOM_PAPER_SIZE = new Size(_w, _h);
 							m_layout.getLayoutContext().getAtributes().m_sizePaper=Attributes.CUSTOM_PAPER_SIZE;
 						}
 						m_layout.getLayoutContext().getAtributes().setType(type);
@@ -690,9 +730,9 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 	private javax.swing.JButton getBCancelar() {
 		if (bCancelar == null) {
 			bCancelar = new javax.swing.JButton();
-			bCancelar.setSize(85, 23);
+			bCancelar.setSize(85, 26);
 			bCancelar.setText(PluginServices.getText(this, "Cancelar"));
-			bCancelar.setLocation(245, 245);
+			bCancelar.setLocation(185, 255);
 			bCancelar.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
 						//setVisible(false);
@@ -736,7 +776,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 							setMargin(margin);
 
 							//}else{
-							if (type == Attributes.CUSTOM) {
+							if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 								Attributes.CUSTOM_PAPER_SIZE = new Size(Double.valueOf(
 											getTAlto().getText()).doubleValue(),
 										Double.valueOf(getTAncho().getText())
@@ -791,7 +831,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 							setMargin(margin);
 
 							//}else{
-							if (type == Attributes.CUSTOM) {
+							if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 								Attributes.CUSTOM_PAPER_SIZE = new Size(Double.valueOf(
 											getTAncho().getText()).doubleValue(),
 										Double.valueOf(getTAlto().getText())
@@ -820,7 +860,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_viewinfo = new WindowInfo(WindowInfo.MODALDIALOG);
 		m_viewinfo.setWidth(371);
-		m_viewinfo.setHeight(300);
+		m_viewinfo.setHeight(260);
 		m_viewinfo.setTitle(PluginServices.getText(this, "Preparar_pagina"));
 
 		return m_viewinfo;
@@ -874,3 +914,5 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 		return WindowInfo.DIALOG_PROFILE;
 	}
 }
+
+// [eiel-add-print-formats]
