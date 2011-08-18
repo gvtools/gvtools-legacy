@@ -222,6 +222,12 @@ public class I18nManagerImpl implements I18nManager {
 	    // displayName = Messages.getText("__catalan");
 	    // }
 	    displayName = "Valencià";
+	} 
+	// Correction for the Galician language display name. 
+	else if ("gl".equals(locale.getLanguage()) 
+		&& "gallegan".equalsIgnoreCase(locale
+			.getDisplayLanguage(displayLocale))) {
+	    displayName = "Galego";
 	} else {
 	    displayName = locale.getDisplayLanguage(displayLocale);
 	}
