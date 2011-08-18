@@ -59,19 +59,21 @@ import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.printutils.MediaSizeNameWrapper;
-import com.iver.cit.gvsig.printutils.UserMediaSizeName;
 import com.iver.cit.gvsig.project.documents.layout.Attributes;
 import com.iver.cit.gvsig.project.documents.layout.Size;
 import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
 
 /**
- * Clase para configurar el Layout.
+ * Page setup dialog for printing Maps
  *
  * @author Vicente Caballero Navarro
  */
 public class FConfigLayoutDialog extends JPanel implements IWindow {
 	
+
+    	private static final long serialVersionUID = -6516923224668133499L;
+
 	private static Logger logger = Logger.getLogger(FConfigLayoutDialog.class);
 	
 	private javax.swing.JLabel lTamPag = null;
@@ -111,20 +113,13 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 	private double inf = 2.54;
 	private NumberFormat nf = NumberFormat.getInstance();
 
-	/**
-	 * This is the default constructor
-	 *
-	 * @param layout Referencia al Layout.
-	 */
 	public FConfigLayoutDialog(Layout layout) {
 		super();
 		m_layout = layout;
 		initialize();
 	}
 
-	/**
-	 * This method initializes this
-	 */
+
 	private void initialize() {
 		nf.setMaximumFractionDigits(2);
 		this.setLayout(null);
@@ -220,7 +215,6 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 									size.getAncho())));
 						setMargin(margin);
 						if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
-								// cbTipoFolio.getSelectedItem().equals(PluginServices.getText(this,"Personalizado"))) {
 							getTAlto().setEnabled(true);
 							getTAncho().setEnabled(true);
 							getChbVertical().setSelected(true);
@@ -355,7 +349,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			Size size = m_layout.getLayoutContext().getAtributes().getSizeinUnits(isLand, type);
 			String s = String.valueOf(nf.format(size.getAncho()));
 			tAncho.setText(s);
-			if (getCbTipoFolio().getSelectedItem().equals(PluginServices.getText(this,"Personalizado"))) {
+			if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 				getTAncho().setEnabled(true);
 			}else {
 				getTAncho().setEnabled(false);
@@ -379,7 +373,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			Size size = m_layout.getLayoutContext().getAtributes().getSizeinUnits(isLand, type);
 			String s = String.valueOf(nf.format(size.getAlto()));
 			tAlto.setText(s);
-			if (getCbTipoFolio().getSelectedItem().equals(PluginServices.getText(this,"Personalizado"))) {
+			if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 				getTAlto().setEnabled(true);
 			}else {
 				getTAlto().setEnabled(false);
@@ -705,7 +699,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 							_w = m_layout.getLayoutContext().getAtributes().fromUnits(_w);
 							_h = m_layout.getLayoutContext().getAtributes().fromUnits(_h);
 							
-							Attributes.CUSTOM_PAPER_SIZE = new Size(_w, _h);
+							Attributes.CUSTOM_PAPER_SIZE = new Size(_h, _w);
 							m_layout.getLayoutContext().getAtributes().m_sizePaper=Attributes.CUSTOM_PAPER_SIZE;
 						}
 						m_layout.getLayoutContext().getAtributes().setType(type);
@@ -756,7 +750,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			chbHorizontal.setText(PluginServices.getText(this, "horizontal"));
 			chbHorizontal.setLocation(130, 110);
 			chbHorizontal.setSelected(isLand);
-			if (getCbTipoFolio().getSelectedItem().equals(PluginServices.getText(this,"Personalizado"))) {
+			if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 				chbHorizontal.setEnabled(false);
 				chbHorizontal.setSelected(false);
 				isLand=false;
@@ -811,7 +805,7 @@ public class FConfigLayoutDialog extends JPanel implements IWindow {
 			chbVertical.setText(PluginServices.getText(this, "vertical"));
 			chbVertical.setLocation(245, 110);
 			chbVertical.setSelected(!isLand);
-			if (getCbTipoFolio().getSelectedItem().equals(PluginServices.getText(this,"Personalizado"))) {
+			if (type == Attributes.PREPARE_PAGE_ID_CUSTOM) {
 				chbVertical.setEnabled(false);
 				chbVertical.setSelected(true);
 				isLand=false;
