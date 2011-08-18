@@ -43,7 +43,7 @@
  */
 /* CVS MESSAGES:
 *
-* $Id: AttributeBufferVisitor.java 32916 2010-07-01 09:12:40Z vcaballero $
+* $Id: AttributeBufferVisitor.java 35728 2011-07-08 12:01:37Z fpuga $
 * $Log$
 * Revision 1.4  2007-08-07 15:09:22  azabala
 * changes to remove UnitUtils' andami dependencies
@@ -117,10 +117,7 @@ public class AttributeBufferVisitor extends BufferVisitor {
 	 * Attribute name from which visitor will get buffer distances
 	 */
 	private String attributeName;
-	/**
-	 * It allows visitor to get attribute values link to geometries
-	 */
-	private SelectableDataSource recordset;
+	
 
 	/**
 	 * projection of the active view. Useful to convert linear distances in angular arcs
