@@ -368,7 +368,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
         workingAreaInViewsCS = lyrDef.getWorkingArea();
         
         if ((workingAreaInViewsCS != null) && (epsgSRID != null)) {
-            IProjection viewProj = CRSFactory.getCRS("EPSG:" + destProj);
+            IProjection viewProj = CRSFactory.getCRS(destProj);
             IProjection tableProj = CRSFactory.getCRS("EPSG:" + epsgSRID);
             ICoordTrans reprojecter = viewProj.getCT(tableProj);
         	workingAreaInTablesCS = reprojecter.convert(workingAreaInViewsCS);
