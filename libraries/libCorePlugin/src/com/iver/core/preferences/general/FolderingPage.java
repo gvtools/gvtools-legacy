@@ -40,32 +40,32 @@
  */
 
 /* CVS MESSAGES:
-*
-* $Id: FolderingPage.java 15635 2007-10-30 11:58:33Z jmvivo $
-* $Log$
-* Revision 1.8  2007-01-26 13:35:06  jaume
-* *** empty log message ***
-*
-* Revision 1.7  2006/10/02 07:12:12  jaume
-* *** empty log message ***
-*
-* Revision 1.6  2006/09/13 16:21:00  jaume
-* *** empty log message ***
-*
-* Revision 1.5  2006/09/12 12:09:51  jaume
-* *** empty log message ***
-*
-* Revision 1.4  2006/09/12 11:49:04  jaume
-* *** empty log message ***
-*
-* Revision 1.3  2006/09/12 10:11:25  jaume
-* *** empty log message ***
-*
-* Revision 1.1.2.1  2006/09/08 11:56:24  jaume
-* *** empty log message ***
-*
-*
-*/
+ *
+ * $Id: FolderingPage.java 35999 2011-08-05 10:54:59Z jlopez $
+ * $Log$
+ * Revision 1.8  2007-01-26 13:35:06  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.7  2006/10/02 07:12:12  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.6  2006/09/13 16:21:00  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.5  2006/09/12 12:09:51  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.4  2006/09/12 11:49:04  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.3  2006/09/12 10:11:25  jaume
+ * *** empty log message ***
+ *
+ * Revision 1.1.2.1  2006/09/08 11:56:24  jaume
+ * *** empty log message ***
+ *
+ *
+ */
 package com.iver.core.preferences.general;
 
 import java.awt.event.ActionEvent;
@@ -152,22 +152,22 @@ public class FolderingPage extends AbstractPreferencePage{
 				}
 
 				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fc.setMultiSelectionEnabled(false);
-                fc.setAcceptAllFileFilterUsed(false);
-                fc.addChoosableFileFilter(def);
-                int result = fc.showOpenDialog(FolderingPage.this);
+				fc.setMultiSelectionEnabled(false);
+				fc.setAcceptAllFileFilterUsed(false);
+				fc.addChoosableFileFilter(def);
+				int result = fc.showOpenDialog(FolderingPage.this);
 
-                if (result == JFileChooser.APPROVE_OPTION && (file = fc.getSelectedFile()) != null) {
-                	if (e.getSource().equals(btnSelectProjectsFolder)) {
-    					txtProjectsFolder.setText(file.getAbsolutePath());
-                	} else if (e.getSource().equals(btnSelectDataFolder)) {
-                		txtDataFolder.setText(file.getAbsolutePath());
-                	} else if (e.getSource().equals(btnSelectSymbolLibraryFolder)) {
-                		txtSymbolLibraryFolder.setText(file.getAbsolutePath());
-        			} else {
-    					txtTemplatesFolder.setText(file.getAbsolutePath());
-    				}
-                }
+				if (result == JFileChooser.APPROVE_OPTION && (file = fc.getSelectedFile()) != null) {
+					if (e.getSource().equals(btnSelectProjectsFolder)) {
+						txtProjectsFolder.setText(file.getAbsolutePath());
+					} else if (e.getSource().equals(btnSelectDataFolder)) {
+						txtDataFolder.setText(file.getAbsolutePath());
+					} else if (e.getSource().equals(btnSelectSymbolLibraryFolder)) {
+						txtSymbolLibraryFolder.setText(file.getAbsolutePath());
+					} else {
+						txtTemplatesFolder.setText(file.getAbsolutePath());
+					}
+				}
 			}
 
 		};
@@ -352,7 +352,7 @@ public class FolderingPage extends AbstractPreferencePage{
 			txtTemplatesFolder.setText(xml.getStringProperty(TEMPLATES_FOLDER_PROPERTY_NAME));
 		}
 		if (xml.contains(SYMBOL_LIBRARY_FOLDER_PROPERTY_NAME)) {
-			txtTemplatesFolder.setText(xml.getStringProperty(SYMBOL_LIBRARY_FOLDER_PROPERTY_NAME));
+			txtSymbolLibraryFolder.setText(xml.getStringProperty(SYMBOL_LIBRARY_FOLDER_PROPERTY_NAME));
 		}
 	}
 
