@@ -14,7 +14,6 @@
 			active="true"
 			priority="10">
 			<menu text="Vista/export/web_map_context"
-				tooltip="export_to_map_context"
 				action-command="EXPORT" />
 		</extension>
 		<extension class-name="com.iver.cit.gvsig.wmc.ImportWebMapContextExtension"
@@ -22,7 +21,6 @@
 			active="true"
 			priority="10">
 			<menu text="Archivo/import/web_map_context"
-				tooltip="import_map_context"
 				position="50"
 				action-command="IMPORT" />
 			<menu text="Archivo"

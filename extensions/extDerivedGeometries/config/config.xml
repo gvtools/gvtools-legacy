@@ -18,6 +18,7 @@
 			priority="30">
 			<menu text="Capa/add_derivative_geometry_shp"
 				action-command="ADD_DERIVATIVE_GEOMETRY_SHP"
+				position="15"
 				icon="images/create-derivative-geometry-shape-icon.png" />
 		</extension>
 	</extensions>

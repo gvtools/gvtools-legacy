@@ -6,17 +6,19 @@
 	<extensions>
 		<extension class-name="org.gvsig.tableExport.xls.ExportTableToExcelExtension"
 			description="Export a table to excel file."
-			active="true"
+			active="true"			
 			priority="30">
-			<menu text="Tabla/export/Excel"
-				position="11500"/>
+			<menu text="Tabla/export/Excel spreadsheet..."
+				position="70"
+				/>
 		</extension>
 		<extension class-name="org.gvsig.tableExport.ExportTableToFileExtension"
 			description="Export table to a file"
 			active="true"
 			priority="30">
-			<menu text="Tabla/export/DBF"
-				position="11505" action-command="gdbms dbf driver|dbf|dbf file"/>
+			<menu text="Tabla/export/DBase table..."
+				position="-69"
+				action-command="gdbms dbf driver|dbf|dbf file"/>
 		</extension>
 	</extensions>
 </plugin-config>

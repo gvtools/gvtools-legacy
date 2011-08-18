@@ -14,13 +14,12 @@
 				   description="Herramienta para la definición de reglas topológicas"
 				   active="true">
 			
-			<menu text="Vista/Topology/Create_Topology" tooltip="Create_Topology" 
+			<menu text="Ver/Topology/Create_Topology"
 				action-command="CREATE_TOPOLOGY" 
-				icon="create-topology" />
-				
+				icon="create-topology" 
+				position="1017"/>							
 			
-			
-			<tool-bar name="Topology">
+			<tool-bar name="Topology" position="70">
 				<action-tool icon="create-topology"
 							 action-command="CREATE_TOPOLOGY" 
 							 tooltip="Create_Topology"
@@ -29,21 +28,19 @@
 							 position="1"/>
 			</tool-bar>
 		</extension>
-		
-		
-		
+				
 		<extension class-name="org.gvsig.topology.LoadTopologyExtension"
 			description="herramienta para cargar topologías de ficheros xml"
 			active="true">
 			
-			<menu text="Vista/Topology/Load_Topology" tooltip="Load_Topology" 
+			<menu text="Ver/Topology/Load_Topology"
 				action-command="LOAD_TOPOLOGY" 
-				icon="load-topology" />
+				icon="load-topology"
+				position="1018" />
 			<tool-bar name="Topology">
 				<action-tool icon="load-topology"
 							 action-command="LOAD_TOPOLOGY" 
 							 tooltip="Load_Topology"
-							 enable-text="debería de estar activada" 
 							 last="false" 
 							 position="2"/>
 			</tool-bar>
@@ -53,10 +50,11 @@
 			description="herramienta para guardar topologías en ficheros xml"
 			active="true">
 			
-			<menu text="Vista/Topology/Save_Topology" tooltip="Save_Topology" 
+			<menu text="Ver/Topology/Save_Topology"
 				action-command="SAVE_TOPOLOGY" 
-				icon="create-topology" />
-						
+				icon="create-topology" 
+				position="1019"/>
+
 			<tool-bar name="Topology">
 				<action-tool icon="save-topology"
 							 action-command="SAVE_TOPOLOGY" 
@@ -64,7 +62,18 @@
 							 enable-text="select_a_topology_in_toc" 
 							 last="false" 
 							 position="3"/>
-							 
+			</tool-bar>
+		
+		   	<menu text="Ver/Topology/Save_Topology" position="1020" is_separator="true" /> 
+
+			<menu text="Ver/Topology/Evaluate_Topology"
+				action-command="EVALUATE_TOPOLOGY" 
+				icon="evaluate-topology"
+				position="1021"/>
+
+			<menu text="Ver/Topology/Evaluate_Topology" position="1022" is_separator="true" /> 						
+
+			<tool-bar name="Topology">							 
 				<action-tool icon="evaluate-topology"
 							 action-command="EVALUATE_TOPOLOGY" 
 							 tooltip="Evaluate_Topology"
@@ -74,6 +83,99 @@
 			</tool-bar>
 		 </extension>
 		 
+		<extension class-name="org.gvsig.topology.GeometryInfoExtension"
+				   description="Herramienta para obtener información geométrica de features vectoriales"
+				   active="true">
+
+			<menu text="Ver/Topology/geometry-info"
+				icon="geometry-info"
+				position="1023"/>
+
+			<menu text="Ver/Topology/geometry-info" position="1024" is_separator="true" />
+
+		 	<tool-bar name="Topology">
+					<action-tool icon="geometry-info"
+							 tooltip="geometry-info"
+							 enable-text="select_vectorial_layer" 
+							 position="5"/>
+			</tool-bar>
+
+		</extension>
+		 		 
+		<extension class-name="com.iver.cit.gvsig.cad.TopologicalEditVertexExtension"
+			description="herramienta para hacer edición topológica"
+			active="true">			
+
+			<menu text="Ver/Topology/topological_edition"
+				icon="topological-edit-vertex"
+				position="1025"/>
+			
+			<tool-bar name="Topology">
+				<action-tool icon="topological-edit-vertex"
+							 action-command="_topologicaleditvertex" 
+							 tooltip="topological_edition"
+							 enable-text="put_a_layer_of_topology_in_edition_mode" 
+							 last="false" 
+							 position="7"/>
+			</tool-bar>
+		 </extension>
+		 
+		 <extension class-name="com.iver.cit.gvsig.cad.SimplifyGeometry"
+			description="herramienta para simplificar geometrias de 1 y 2 dimensiones"
+			active="true">
+
+			<menu text="Ver/Topology/simplify_geometry"
+				icon="smooth-geometry"
+				position="1026"/>
+			
+			<tool-bar name="Topology">
+				<action-tool icon="smooth-geometry"
+							 action-command="simplify" 
+							 tooltip="simplify_geometry"
+							 enable-text="select_geometry_to_simplify" 
+							 last="false" 
+							 position="10"/>
+			</tool-bar>
+		 </extension>
+		 
+		 <extension class-name="com.iver.cit.gvsig.cad.SmoothGeometry"
+			description="herramienta para suavizar geometrias de 1 y 2 dimensiones mediante curvas"
+			active="true">
+
+			<menu text="Ver/Topology/smooth_geometry"
+				icon="curve-geometry"
+				position="1027"/>
+			
+			<tool-bar name="Topology">
+				<action-tool icon="curve-geometry"
+							 action-command="curve" 
+							 tooltip="smooth_geometry"
+							 enable-text="select_geometry_to_smooth" 
+							 last="false" 
+							 position="11"/>
+			</tool-bar>
+
+			<menu text="Ver/Topology" position="1028" is_separator="true" /> 						
+
+		 </extension>
+
+		 <extension class-name="org.gvsig.topology.RegisterGeoprocessesExtension"
+		 			description="Registra los geoprocesos definidos en el proyecto de topologia en el gestor de geoprocesos
+		 			            de gvsig"
+		 			active="true"/>		 					 			
+		
+		<extension class-name="org.gvsig.AboutTopologyExtension"
+			description="Extension to add about panel."
+			active="true"/>
+			
+		<extension class-name="com.iver.cit.gvsig.geoprocess.util.StopEditingClean"
+			description="Extension to stop the edition over a layer without prompt if want to save"
+			active="true"/>
+		<extension class-name="com.iver.cit.gvsig.geoprocess.util.StartEditingClean"
+			description="Extension to start the edition over a layer without showing the console"
+			active="true"/>
+
+
 		 <!--extension class-name="org.gvsig.topology.ComputeBuildAndCleanExtension"
 			description="herramienta para ejecutar los geoprocesos CLEAN y BUILD con capas de lineas"
 			active="true">
@@ -101,24 +203,9 @@
 							 last="false" 
 							 position="6"/>				 						 
 			</tool-bar>
-		 </extension-->
-		 
-		 
-		 <extension class-name="com.iver.cit.gvsig.cad.TopologicalEditVertexExtension"
-			description="herramienta para hacer edición topológica"
-			active="true">
-			
-			
-			<tool-bar name="Topology">
-				<action-tool icon="topological-edit-vertex"
-							 action-command="_topologicaleditvertex" 
-							 tooltip="topological_edition"
-							 enable-text="put_a_layer_of_topology_in_edition_mode" 
-							 last="false" 
-							 position="7"/>
-			</tool-bar>
-		 </extension>
-		 
+		 </extension-->			
+
+		<!--
 		 <extension class-name="com.iver.cit.gvsig.cad.SplitGeometryCADToolExtension"
 			description="herramienta para dividir una geometria con una linea"
 			active="true">
@@ -133,6 +220,8 @@
 							 position="8"/>
 			</tool-bar>
 		 </extension>
+		-->
+
 		 <!-- @deprecated: this tool has been replaced by the AutoCompletePolygon tool
 		 in extCAD, which provides similar behaviour but it's less buggy.
 		 
@@ -149,33 +238,6 @@
 			</tool-bar>
 		</extension>
 		  -->
-		 <extension class-name="com.iver.cit.gvsig.cad.SimplifyGeometry"
-			description="herramienta para simplificar geometrias de 1 y 2 dimensiones"
-			active="true">
-			
-			<tool-bar name="Topology">
-				<action-tool icon="smooth-geometry"
-							 action-command="simplify" 
-							 tooltip="simplify_geometry"
-							 enable-text="select_geometry_to_simplify" 
-							 last="false" 
-							 position="10"/>
-			</tool-bar>
-		 </extension>
-		 
-		 <extension class-name="com.iver.cit.gvsig.cad.SmoothGeometry"
-			description="herramienta para suavizar geometrias de 1 y 2 dimensiones mediante curvas"
-			active="true">
-			
-			<tool-bar name="Topology">
-				<action-tool icon="curve-geometry"
-							 action-command="curve" 
-							 tooltip="smooth_geometry"
-							 enable-text="select_geometry_to_smooth" 
-							 last="false" 
-							 position="11"/>
-			</tool-bar>
-		 </extension>
 		 <!--
 		  <extension class-name="org.gvsig.topology.ReferencingExtension"
 			description="Herramienta para aplicar transformaciones sobre capas vectoriales"
@@ -191,34 +253,8 @@
 			</tool-bar>
 		 </extension>
 		 -->
-		 <extension class-name="org.gvsig.topology.RegisterGeoprocessesExtension"
-		 			description="Registra los geoprocesos definidos en el proyecto de topologia en el gestor de geoprocesos
-		 			            de gvsig"
-		 			active="true"/>
-		 			
-		 			
-		 <extension class-name="org.gvsig.topology.GeometryInfoExtension"
-				   description="Herramienta para obtener información geométrica de features vectoriales"
-				   active="true">		
-		 		<tool-bar name="Topology">
-					<action-tool icon="geometry-info"
-							 tooltip="geometry-info"
-							 enable-text="select_vectorial_layer" 
-							 last="true" 
-							 position="13"/>
-			</tool-bar>
-		</extension>
-		
-		<extension class-name="org.gvsig.AboutTopologyExtension"
-			description="Extension to add about panel."
-			active="true"/>
-			
-		<extension class-name="com.iver.cit.gvsig.geoprocess.util.StopEditingClean"
-			description="Extension to stop the edition over a layer without prompt if want to save"
-			active="true"/>
-		<extension class-name="com.iver.cit.gvsig.geoprocess.util.StartEditingClean"
-			description="Extension to start the edition over a layer without showing the console"
-			active="true"/>
-			
+
+
 	</extensions>
+
 </plugin-config>

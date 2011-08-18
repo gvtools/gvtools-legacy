@@ -19,7 +19,7 @@
 				is_separator="true"
 				/>
 			
-			<menu text="Archivo/Scripting/Consola_de_jython" tooltip="Consola_de_jython_tooltip" 
+			<menu text="Archivo/Scripting/Consola_de_jython"
 				action-command="run(fileName='gvSIG/extensiones/org.gvsig.scripting/scripts/jython/console/runConsole.py',language='jython')" 
 				icon="scripting-console" 
 				position="52"

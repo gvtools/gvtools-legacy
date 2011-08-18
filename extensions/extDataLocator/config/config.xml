@@ -7,13 +7,20 @@
 		<extension class-name="com.iver.gvsig.datalocator.DataLocatorExtension"
 			description="Extensión que permite hacer zooms en función de los valores de la base de datos. También permite guardar y recuperar estos zooms."
 			active="true">
-			<menu text="Vista/Localizador_por_atributo" tooltip="Localizador_por_atributo"
+			<menu text="Vista/Localizador_por_atributo"
+				key="f"
+				position="14"
 				action-command="DATALOCATOR"
 				icon="view-locator" />
-			<tool-bar name="com.iver.cit.gvsig.Herramientas">
+			<menu text="Vista/Localizador_por_atributo"
+				position="15"
+				is_separator="true"
+				/>
+			<tool-bar name="Herramientas_localizador" position="4">
 				<action-tool icon="view-locator"
 					action-command="DATALOCATOR" tooltip="Localizador_por_atributo"
-				last="true"/>
+					enable-text="Localizador_por_atributo"
+					position="2"/>
 			</tool-bar>
 		</extension>
 	</extensions>

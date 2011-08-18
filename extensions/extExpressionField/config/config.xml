@@ -9,14 +9,14 @@
 		<extension class-name="com.iver.cit.gvsig.ExpressionFieldExtension"
 			description="Extension that evaluate the expression to a column."
 			active="true">
-			<menu text="field/expression" tooltip="expression"
+			<menu text="Tabla/expression"
 				action-command="EXPRESSION"
 				icon="ext-kcalc"
-				position="700" />
-			<tool-bar name="field_toolbar">
+				position="10"
+				last="true" />
+			<tool-bar name="field_toolbar" position="21">
 				<action-tool icon="ext-kcalc"
-					action-command="EXPRESSION" tooltip="expression"
-					last="true"/>
+					action-command="EXPRESSION" enable-text="expression" tooltip="expression"/>
 			</tool-bar>
 		</extension>
 		<extension class-name="com.iver.cit.gvsig.AboutExpressionFieldExtension"

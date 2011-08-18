@@ -9,7 +9,10 @@
 			active="true"
 			priority="30">
 			<menu text="Vista/Quick_Print"
-				position="80600"/>
+				position="26"/>
+			<menu text="Vista/Quick_Print"
+				position="27"
+				is_separator="true"/>
 		</extension>
 	</extensions>
 </plugin-config>

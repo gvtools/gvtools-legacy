@@ -8,14 +8,15 @@
 			description="Extensión encargada activar las herramientas de georeferenciar raster."
 			active="true" 
 			priority="1">
-<!--
-			<tool-bar name="com.iver.cit.gvsig.raster">
+
+			<menu text="Ver/georreferenciacion" action-command="GEOREFERENCING" icon="images/georef-tool.png" position="1012"/>
+			<menu text="Ver/georreferenciacion" is_separator="true" position="1013"/>
+			<tool-bar name="Herramienta_georeferenciacion" position="60">
 				<action-tool 
-					icon="geolocalization-icon" 
+					icon="images/georef-tool.png" 
 					action-command="GEOREFERENCING"  
 					tooltip="georeferencing"/>	
 			</tool-bar>
--->
 		</extension>
 	</extensions>
 </plugin-config>

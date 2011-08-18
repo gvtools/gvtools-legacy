@@ -8,22 +8,19 @@
 			description="Catalog extension"
 			active="true" 
 			priority="3">
-			<tool-bar name="Catalogo">
+			<menu text="Ver/catalog_search" icon="catalog-search" position="1008"/>			
+			<tool-bar name="Catalogo" position="1">
 				<action-tool icon="catalog-search" 
 					tooltip="catalog_search"
 					position="1"
 				/>
 			</tool-bar>		
 		</extension>
-		<extension class-name="es.gva.cit.gvsig.catalog.CatalogClientAboutExtension"
-			description="About panel for the catalog and gazetteer clients" 
-			active="true" 
-			priority="3">
-		</extension>
 		<extension class-name="es.gva.cit.gvsig.gazetteer.GazetteerExtension"
 			description="Gazetteer extension" 
 			active="true" 
 			priority="3">
+			<menu text="Ver/gazetteer_connect" action-command="GAZETTEER" icon="gazetteer-search" position="1009"/>
 			<tool-bar name="Catalogo">
 				<action-tool icon="gazetteer-search" 
 					tooltip="gazetteer_search"
@@ -36,6 +33,8 @@
 			description="Tool to remove the previous gazetteer searches" 
 			active="true" 
 			priority="2">
+			<menu text="Ver/mantainold" action-command="DELETE" icon="catalog-clear-point" position="1010"/>
+			<menu text="Ver/mantainold" action-command="DELETE" is_separator="true" position="1011"/>
 			<tool-bar name="Catalogo">
 				<action-tool icon="catalog-clear-point" 
 					tooltip="mantainold"
@@ -43,6 +42,11 @@
 					position="3"
 					name="delete"/>
 			</tool-bar>
+		</extension>
+		<extension class-name="es.gva.cit.gvsig.catalog.CatalogClientAboutExtension"
+			description="About panel for the catalog and gazetteer clients" 
+			active="true" 
+			priority="3">
 		</extension>
 	</extensions>
 </plugin-config>

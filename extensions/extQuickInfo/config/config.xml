@@ -19,9 +19,9 @@
 				action-command="QINFO"
 			    tooltip="quick_information"
 				icon="images/view-quick-info-icon.png"
-				position="5014"/>
+				position="21"/>
 			<tool-bar name="View_Tools_Query" position="5">
-				<action-tool icon="images/view-quick-info-icon.png" action-command="QINFO" tooltip="quick_information" position="1"/>
+				<action-tool icon="images/view-quick-info-icon.png" action-command="QINFO" enable-text="quick_information" tooltip="quick_information" position="2"/>
 			</tool-bar>
 		</extension>
 	</extensions>

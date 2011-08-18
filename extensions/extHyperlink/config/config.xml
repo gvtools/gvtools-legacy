@@ -8,9 +8,9 @@
 			description="Manages the advanced hyperlink."
 			active="true"
 			priority="20">
-			<menu text="Capa/Advanced_Hyperlink" action-command="HYPERLINK" icon="images/Link.png" position="5040"/>
+			<menu text="Capa/Advanced_Hyperlink" key="h" action-command="HYPERLINK" icon="images/Link.png" position="10"/>
 			<tool-bar name="View_Tools_Query" position="5">
-				<selectable-tool icon="view-query-link" action-command="HYPERLINK"  tooltip="Advanced_Hyperlink" position="7"/>
+				<selectable-tool icon="view-query-link" action-command="HYPERLINK"  tooltip="Advanced_Hyperlink" position="5"/>
 			</tool-bar>
 		</extension>
 	<!-- 	<extension class-name="org.gvsig.hyperlink.LinkConfigExtension"

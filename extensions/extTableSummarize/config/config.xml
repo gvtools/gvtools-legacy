@@ -8,8 +8,9 @@
 			description="Módulo para el cálculo de estadisticas sobre tablas DBF." 
 			active="true" 
 			priority="1">
-			<tool-bar name="Herramientas" position="12">
-				<action-tool icon="tableSummarize-statistics" tooltip="table_summarize" position="9"/>
+			<menu text="Tabla/Summarize" icon="tableSummarize-statistics" position="9"/>
+			<tool-bar name="Herramientas_Tabla" position="20">
+				<action-tool icon="tableSummarize-statistics" tooltip="table_summarize" position="4"/>
 			</tool-bar>
 		</extension>
 	</extensions>		

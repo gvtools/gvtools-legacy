@@ -17,22 +17,25 @@
 			active="true"
 			priority="30">
 			<menu text="Vista/seleccion/select_all"
+				key="a"
 				action-command="SELALL"
-				tooltip="select_all_info"
 				icon="images/select-all-icon.png"
 				position="6570"/>
+			<tool-bar name="Tools_Select" position="7">
+				<action-tool icon="images/select-all-icon.png" action-command="SELALL" enable-text="select_all_info" tooltip="select_all_info" position="4"/>
+			</tool-bar>
 		</extension>
 		<extension class-name="org.gvsig.selectionTools.SelectByCircleExtension"
 			description="Extension that allows select all geometries of the selected vectorial layers that are contained or intersect with a circle defined by the user."
 			active="true"
 			priority="30">
+			<menu text="Vista/seleccion/select_by_circle" is_separator="true" position="6520"/>
 			<menu text="Vista/seleccion/select_by_circle"
 				action-command="SELCIRCLE"
-				tooltip="select_by_circle_info"
 				icon="select-by-circle-icon"
 				position="6521"/>
-			<tool-bar name="Tools_Select" position="6">
-				<selectable-tool icon="select-by-circle-icon" action-command="SELCIRCLE" tooltip="select_by_circle" position="6"/>
+			<tool-bar name="Tools_Select_Advanced" position="8">
+				<selectable-tool icon="select-by-circle-icon" action-command="SELCIRCLE" enable-text="select_by_circle" tooltip="select_by_circle" position="1"/>
 			</tool-bar>
 		</extension>
 		<extension class-name="org.gvsig.selectionTools.SelectByPolylineExtension"
@@ -41,11 +44,10 @@
 			priority="30">
 			<menu text="Vista/seleccion/select_by_polyline"
 				action-command="SELPOLYLINE"
-				tooltip="select_by_polyline_info"
 				icon="select-by-polyline-icon"
 				position="6531"/>
-			<tool-bar name="Tools_Select" position="6">
-				<selectable-tool icon="select-by-polyline-icon" action-command="SELPOLYLINE" tooltip="select_by_polyline" position="5"/>
+			<tool-bar name="Tools_Select_Advanced" position="8">
+				<selectable-tool icon="select-by-polyline-icon" action-command="SELPOLYLINE" enable-text="select_by_polyline" tooltip="select_by_polyline" position="2"/>
 			</tool-bar>
 		</extension>
 		<extension class-name="org.gvsig.selectionTools.SelectByBufferExtension"
@@ -54,11 +56,11 @@
 			priority="30">
 			<menu text="Vista/seleccion/select_by_buffer"
 				action-command="SELBUFFER"
-				tooltip="select_by_buffer_info"
 				icon="select-by-buffer-icon"
 				position="6532"/>
-			<tool-bar name="Tools_Select" position="6">
-				<action-tool icon="select-by-buffer-icon" action-command="SELBUFFER" tooltip="select_by_buffer" position="7"/>
+			<menu text="Vista/seleccion/select_by_buffer" is_separator="true" position="6533"/>
+			<tool-bar name="Tools_Select_Advanced" position="8">
+				<action-tool icon="select-by-buffer-icon" action-command="SELBUFFER" enable-text="select_by_buffer" tooltip="select_by_buffer" position="3"/>
 			</tool-bar>
 		</extension>
 	</extensions>

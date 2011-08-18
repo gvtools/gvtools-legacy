@@ -7,15 +7,16 @@
 		<extension class-name="com.iver.gvsig.addeventtheme.AddEventThemeExtension"
 			description="LoadGeometry 0.1RC1 Extensión que permite cargar un tema de eventos."
 			active="true">
-			<menu text="Vista/Anadir_capa_de_eventos" tooltip="Anadir_capa_de_eventos"
+			<menu text="Vista/Anadir_capa_de_eventos"
 				action-command="ADDEVENTTHEME"
 				icon="view-addevent-layer" />
+			<menu text="Vista/Anadir_capa_de_eventos" is_separator="true" />
 			<!--tool-bar name="com.iver.cit.gvsig.Herramientas"-->
-			<tool-bar name="Anadir capa de eventos">
+			<!--tool-bar name="Anadir_capa_de_eventos">
 				<action-tool icon="view-addevent-layer"
 					action-command="ADDEVENTTHEME" tooltip="Anadir_capa_de_eventos"
 					enable-text="debería de estar activada" last="true"/>
-			</tool-bar>
+			</tool-bar-->
 		</extension>
 	</extensions>
 </plugin-config>

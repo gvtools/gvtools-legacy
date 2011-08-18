@@ -10,7 +10,7 @@
 			active="true">
 			<menu text="Capa/add_geometric_info"
 				icon="add-geom-info"
-				tooltip="add_geometric_info"
+				position="20"
 				action-command="ADD_GEOMETRIC_INFO_TO_TABLE" />
 		</extension>
 		<extension class-name="org.gvsig.tableImport.importfields.ImportFieldsExtension"
@@ -18,7 +18,9 @@
 			active="true"
 			priority="30">
 			<menu text="Tabla/import_fields"
-				position="11506" action-command="gdbms dbf driver|dbf|dbf file"/>
+				action-command="gdbms dbf driver|dbf|dbf file"
+				position="24"
+				/>
 		</extension>
 	</extensions>
 </plugin-config>

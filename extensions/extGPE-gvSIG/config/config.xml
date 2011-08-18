@@ -13,8 +13,8 @@
 		<extension class-name="org.gvsig.gpe.GPEWriterExtension"
 			description="Support for writing"
 			active="true">
-			<menu text="Capa/export_to/GML" action-command="GML"/>
-			<menu text="Capa/export_to/KML" action-command="KML"/>
+			<menu text="Capa/export_to/GML" action-command="GML" position="4"/>
+			<menu text="Capa/export_to/KML" action-command="KML" position="5"/>
 		</extension>
 		<extension class-name="org.gvsig.gpe.AboutGPEExtension"
                 description="Extension to add about panel."
