@@ -8,6 +8,7 @@ import org.apache.bsf.BSFManager;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.BooleanValue;
 import com.hardcode.gdbms.engine.values.DateValue;
+import com.hardcode.gdbms.engine.values.IntValue;
 import com.hardcode.gdbms.engine.values.NumericValue;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.ExpressionFieldExtension;
@@ -21,7 +22,10 @@ public abstract class AbstractField extends AbstractOperator{
 		try {
 			int index=sds.getFieldIndexByName(nameField);
 			Value value=sds.getFieldValue(indexRow.get(),index);
-			if (value instanceof NumericValue) {
+			if (value instanceof IntValue) {
+				int iv=((IntValue)value).intValue();
+				return new Integer(iv);
+			}else if (value instanceof NumericValue) {
 				double dv=((NumericValue)value).doubleValue();
 				return new Double(dv);
 			}else if (value instanceof DateValue) {
