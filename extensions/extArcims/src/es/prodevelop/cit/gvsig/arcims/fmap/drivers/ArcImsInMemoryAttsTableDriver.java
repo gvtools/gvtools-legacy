@@ -592,4 +592,45 @@ public class ArcImsInMemoryAttsTableDriver  {
     
     
     // ================== Object driver
+	
+	
+	
+	/**
+	 * Utility methods to avoid issue when server declares attribute names which contain dot (.)
+	 * Driver keeps two versions: name used with server (original) and name used by user
+	 * (because you cannot use points because they are not valid in logical expressions)
+	 */   
+	public String[] gvSigNamesToServerNames(String[] gvsig_flds) {
+		int len = gvsig_flds.length;
+		String[] resp = new String[len];
+		for (int i = 0; i < len; ++i) {
+			resp[i] = sqlNameToOrigName(gvsig_flds[i]);
+		}
+		return resp;
+	}
+
+	private String sqlNameToOrigName(String fld) {
+		int inde = indexIn(fld, this.sqlColumnNames);
+		if (inde == -1) {
+			logger.error("Did not find field: " + fld);
+			return fld;
+		}
+		return ((String) this.originalColumnNames.get(inde));
+	}
+
+	private int indexIn(String str, ArrayList list) {
+		int sz = list.size();
+
+		String item = null;
+		for (int i = 0; i < sz; ++i) {
+			if (list.get(i) instanceof String) {
+				if (str.compareTo((String) list.get(i)) == 0)
+					return i;
+			} else {
+				return -1;
+			}
+		}
+		return -1;
+	}
+
 }

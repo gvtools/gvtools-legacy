@@ -938,4 +938,9 @@ public class FMapFeatureArcImsDriver implements ArcImsDriver, VectorialDriver, O
 	public ArcImsInMemoryAttsTableDriver getDataTable() {
 		return dataTable;
 	}
+	
+   public String[] gvSigNamesToServerNames(String[] _flds) {
+	     return this.dataTable.gvSigNamesToServerNames(_flds);
+   }
+
 }

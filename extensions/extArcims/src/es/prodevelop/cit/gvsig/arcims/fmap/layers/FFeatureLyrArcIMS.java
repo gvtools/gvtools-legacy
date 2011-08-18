@@ -234,8 +234,7 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
 		if (lgnd instanceof IClassifiedVectorLegend) {
 			
 			_legflds = ((IClassifiedVectorLegend) lgnd).getClassifyingFieldNames();
-			legflds = replaceSpecialChars(_legflds);
-			// legflds = _legflds;
+	       legflds = gvSigNamesToServerNames(_legflds);
 			
 			if (legflds!=null) {
 				String[] appended = appendAtringArrays(savedFieldNames, legflds);
@@ -483,6 +482,12 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
     			throw e;
     		}
     	}
+    }
+
+    private String[] gvSigNamesToServerNames(String[] flds)
+    {
+      FMapFeatureArcImsDriver imsdrv = (FMapFeatureArcImsDriver)getSource().getDriver();
+      return imsdrv.gvSigNamesToServerNames(flds);
     }
 
 
