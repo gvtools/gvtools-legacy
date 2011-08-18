@@ -42,6 +42,7 @@ package com.iver.cit.gvsig.project.documents.layout.fframes.gui.dialogs;
 
 import java.awt.geom.Rectangle2D;
 
+import javax.swing.JCheckBox;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
@@ -58,7 +59,7 @@ import com.iver.cit.gvsig.project.documents.layout.gui.Layout;
 
 
 /**
- * Diálogo para añadir una localizador al Layout.
+ * Dialog to add a new locator map to the layout
  *
  * @author Vicente Caballero Navarro
  */
@@ -71,8 +72,9 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 	private javax.swing.JButton bCancelar = null;
 	private javax.swing.JLabel lCalidad = null;
 	private javax.swing.JComboBox cbCalidad = null;
-	private Rectangle2D rect = new Rectangle2D.Double();
-	private FFrameOverView fframeoverview = null; //new FFrameView();
+	private JCheckBox showCrossCHB;
+    private Rectangle2D rect = new Rectangle2D.Double();
+    private FFrameOverView fframeoverview = null;
 	private Layout m_layout = null;
 	private boolean isAcepted = false;
 	private JPRotation rotation = null;
@@ -84,8 +86,8 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 	/**
 	 * This is the default constructor
 	 *
-	 * @param layout Referencia al Layout.
-	 * @param fframe Referencia al fframe vista.
+	 * @param layout Reference to the layout
+	 * @param fframe Reference to the view fframe
 	 */
 	public FFrameOverViewDialog(Layout layout, FFrameOverView fframe) {
 		super();
@@ -107,9 +109,9 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 	}
 
 	/**
-	 * Inserta el rectángulo que ocupará el fframe vista.
+	 * Insert the rectangle which the view fframe will take up
 	 *
-	 * @param r Rectángulo.
+	 * @param r Rectangle
 	 */
 	public void setRectangle(Rectangle2D r) {
 		rect.setRect(r);
@@ -128,15 +130,26 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 			jContentPane.add(getJScrollPane(), null);
 			jContentPane.add(getLCalidad(), null);
 			jContentPane.add(getCbCalidad(), null);
+			jContentPane.add(getShowCrossCHB(), null);
 			jContentPane.add(getbAceptar(), null);
 			jContentPane.add(getBCancelar(), null);
-			jContentPane.setSize(462, 184);
+			jContentPane.setSize(462, 200);
 			jContentPane.setPreferredSize(new java.awt.Dimension(60, 60));
 			jContentPane.setLocation(0, 0);
 			jContentPane.add(getPRotation(), null);
 		}
 
 		return jContentPane;
+	}
+
+	private JCheckBox getShowCrossCHB() {
+		if (showCrossCHB == null) {
+			showCrossCHB = new JCheckBox(PluginServices.getText(this, "show_cross"));
+			showCrossCHB.setSelected(fframeoverview.getShowCross());
+			showCrossCHB.setSize(304, 16);
+			showCrossCHB.setLocation(14, 125);
+		}
+		return showCrossCHB;
 	}
 
 	/**
@@ -301,7 +314,7 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 			bAceptar = new javax.swing.JButton();
 			bAceptar.setSize(85, 26);
 			bAceptar.setText(PluginServices.getText(this, "Aceptar"));
-			bAceptar.setLocation(59, 136);
+			bAceptar.setLocation(59, 160);
 			bAceptar.addActionListener(new java.awt.event.ActionListener() {
 
 					public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -309,6 +322,7 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 						newFFrameView.setBoundBox(FLayoutUtilities.toSheetRect(
 								rect, m_layout.getLayoutControl().getAT()));
 						newFFrameView.setRotation(getPRotation().getRotation());
+						newFFrameView.setShowCross(showCrossCHB.isSelected());
 						if (fframeDependence!=null) {
 							newFFrameView.setName(fframeDependence.getView().getName());
 
@@ -364,7 +378,7 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 			bCancelar = new javax.swing.JButton();
 			bCancelar.setSize(85, 26);
 			bCancelar.setText(PluginServices.getText(this, "Cancelar"));
-			bCancelar.setLocation(199, 136);
+			bCancelar.setLocation(199, 160);
 			bCancelar.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
 						newFFrameView=null;
@@ -386,7 +400,7 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 			lCalidad = new javax.swing.JLabel();
 			lCalidad.setSize(86, 16);
 			lCalidad.setText(PluginServices.getText(this, "calidad"));
-			lCalidad.setLocation(14, 112);
+			lCalidad.setLocation(14, 90);
 		}
 
 		return lCalidad;
@@ -399,14 +413,13 @@ public class FFrameOverViewDialog extends JPanel implements IFFrameDialog {
 	 */
 	private javax.swing.JComboBox getCbCalidad() {
 		if (cbCalidad == null) {
-			//String[] s={"Presentación","Borrador"};
 			cbCalidad = new javax.swing.JComboBox();
 			cbCalidad.setSize(220, 20);
 			cbCalidad.addItem(PluginServices.getText(this, "presentacion"));
 			cbCalidad.addItem(PluginServices.getText(this, "borrador"));
 			cbCalidad.setSelectedIndex(fframeoverview.getQuality());
 			cbCalidad.setPreferredSize(new java.awt.Dimension(200, 20));
-			cbCalidad.setLocation(104, 112);
+			cbCalidad.setLocation(104, 90);
 		}
 
 		return cbCalidad;

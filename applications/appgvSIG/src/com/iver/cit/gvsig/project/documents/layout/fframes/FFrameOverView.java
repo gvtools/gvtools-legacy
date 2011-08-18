@@ -25,7 +25,7 @@ import com.iver.utiles.XMLEntity;
 
 
 /**
- * FFrame para introducir el localizador de una vista en el Layout.
+ * FFrame to draw the locator map of a view in the Layout
  *
  * @author Vicente Caballero Navarro
  */
@@ -34,14 +34,17 @@ public class FFrameOverView extends FFrameView implements IFFrameViewDependence{
     private Rectangle2D extent;
 	private FFrameView fframeview;
 	private int dependenceIndex = -1;
-    /**
-     * DOCUMENT ME!
-     *
-     * @param g DOCUMENT ME!
-     * @param at DOCUMENT ME!
-     * @param rv DOCUMENT ME!
-     * @param imgBase DOCUMENT ME!
-     */
+	private boolean showCross = false;
+
+	public void setShowCross (boolean showCross) {
+		this.showCross = showCross;
+	}
+
+	public boolean getShowCross() {
+		return showCross;
+	}
+
+
 	 public void draw(Graphics2D g, AffineTransform at, Rectangle2D rv,
 			BufferedImage imgBase) {
 		 if (getMapContext()!=null)
@@ -77,55 +80,36 @@ public class FFrameOverView extends FFrameView implements IFFrameViewDependence{
 					(int) r.getHeight());
 			g.setColor(Color.red);
 			g.draw(extentPixels);
-			// System.err.println("extentPixels =
-			// "+extentPixels.getX()+","+extentPixels.getY()+",
-			// "+extentPixels.getWidth()+","+extentPixels.getHeight());
+
 			g.setColor(new Color(100, 100, 100, 100));
 			g.fill(extentPixels);
-			// dibujamos las líneas vertical y horizontal
-			double pRightUp = (int) (r.getWidth() + r.getX());
 
-			Line2D.Double linVert = new Line2D.Double(
-					extentPixels.getCenterX(), r.getY(), extentPixels
-							.getCenterX(), r.getMaxY());
-			Line2D.Double linHoriz = new Line2D.Double(r.getX(), extentPixels
-					.getCenterY(), pRightUp, extentPixels.getCenterY());
-
-			g.setColor(Color.darkGray);
-			g.draw(linVert);
-			g.draw(linHoriz);
+			 // Draw the cross if the user active this option
+			if (showCross) {
+				double pRightUp = (int) (r.getWidth() + r.getX());
+				Line2D.Double linVert = new Line2D.Double( extentPixels.getCenterX(), r.getY(), extentPixels.getCenterX(), r.getMaxY());
+				Line2D.Double linHoriz = new Line2D.Double(r.getX(), extentPixels.getCenterY(), pRightUp, extentPixels.getCenterY());
+				g.setColor(Color.darkGray);
+				g.draw(linVert);
+				g.draw(linHoriz);
+			}
 
 			g.setClip((int) clip.getX(), (int) clip.getY(), (int) clip
 					.getWidth(), (int) clip.getHeight());
 			extent = null;
-			// System.err.println("Dibujando FFrameOverView ...");
 		}
 
 	}
-    /**
-	 * DOCUMENT ME!
-	 *
-	 * @param g
-	 *            DOCUMENT ME!
-	 * @param at
-	 *            DOCUMENT ME!
-	 * @param rv
-	 *            DOCUMENT ME!
-	 * @param imgBase
-	 *            DOCUMENT ME!
-	 *
-	 * @throws ReadDriverException
-	 */
+
     public void print(Graphics2D g, AffineTransform at)
     throws ReadDriverException {
     	draw(g, at, null, null);
     }
 
     /**
-     * Inserta el ProjectView de donde obtener las propiedades de la vista a
-     * mostrar.
+     * Set the ProjectView from where it gets the properties of the view to show
      *
-     * @param v Modelo de la vista.
+     * @param v Model of the view
      */
     public void setView(ProjectView v) {
         view = v;
@@ -166,8 +150,7 @@ public class FFrameOverView extends FFrameView implements IFFrameViewDependence{
             	v.getMapContext().getViewPort().addViewPortListener(this);
             	fframeview.getView().getMapOverViewContext().addLayerListener(this);
         	} catch (XMLException e1) {
-        		NotificationManager.addError("Cuando se añade una vista al Layout",
-        				e1);
+        		NotificationManager.addError("when_a_view_add_to_layout", e1);
         	}
         }
     }
@@ -202,6 +185,7 @@ public class FFrameOverView extends FFrameView implements IFFrameViewDependence{
         frame.assoc_map=this.assoc_map;
         frame.extent=this.extent;
         frame.dependenceIndex=dependenceIndex;
+        frame.showCross = this.showCross;
         frame.fframeview=fframeview;
         frame.initDependence(layout.getLayoutContext().getAllFFrames());
         frame.setFrameLayoutFactory(factory);
@@ -245,8 +229,7 @@ public class FFrameOverView extends FFrameView implements IFFrameViewDependence{
 	                	getView().getMapContext().getViewPort().addViewPortListener(this);
 	                	fframeview.getView().getMapOverViewContext().addLayerListener(this);
 	            	} catch (XMLException e1) {
-	            		NotificationManager.addError("Cuando se añade una vista al Layout",
-	            				e1);
+	            		NotificationManager.addError("when_a_view_add_to_layout", e1);
 	            	}
 	            }
 	        }
@@ -274,12 +257,6 @@ public class FFrameOverView extends FFrameView implements IFFrameViewDependence{
         return xml;
     }
 
-//    public void setXMLEntity(XMLEntity xml) {
-//    	super.setXMLEntity(xml);
-//        if (xml.contains("index")) {
-//            dependenceIndex = xml.getIntProperty("index");
-//        }
-//    }
 
     public void setXMLEntity(XMLEntity xml) {
         if (xml.getIntProperty("m_Selected") != 0) {
@@ -317,8 +294,7 @@ public class FFrameOverView extends FFrameView implements IFFrameViewDependence{
 
         			view = (ProjectView) views.get(indice);
         		} catch (IndexOutOfBoundsException e) {
-        			NotificationManager.addError("No se ha encontrado la vista de indice "+ indice,
-            				e);
+        			NotificationManager.addError("index_not_found" + indice, e);
         		}
         	}
         }
@@ -359,8 +335,7 @@ public class FFrameOverView extends FFrameView implements IFFrameViewDependence{
                 	getView().getMapContext().getViewPort().addViewPortListener(this);
                 	fframeview.getView().getMapOverViewContext().addLayerListener(this);
             	} catch (XMLException e1) {
-            		NotificationManager.addError("Cuando se añade una vista al Layout",
-            				e1);
+            		NotificationManager.addError("when_a_view_add_to_layout", e1);
             	}
             }
 		}
