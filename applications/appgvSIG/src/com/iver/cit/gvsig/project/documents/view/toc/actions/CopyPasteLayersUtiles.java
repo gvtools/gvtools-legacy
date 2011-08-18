@@ -43,8 +43,13 @@ public class CopyPasteLayersUtiles {
 		XMLEntity xmlDataSources = this.newDataSourcesNode();
 
 		for (int i=0;i < actives.length; i++) {
-			if (!this.addToXMLLayer(actives[i],xmlLayers ,xmlTables,xmlDataSources)) return null;
-
+			//If the parent of my parent is not null, the layer is a root layer
+			if (actives[i].getParentLayer().getParentLayer() == null){
+				if (!this.addToXMLLayer(actives[i],xmlLayers ,xmlTables,xmlDataSources)) return null;
+			}//If the layer is not a root layer, is copied if its parent layer is not active
+			else if (!actives[i].getParentLayer().isActive()){
+				if (!this.addToXMLLayer(actives[i],xmlLayers ,xmlTables,xmlDataSources)) return null;
+			}
 		}
 
 		if (xmlDataSources.getChildrenCount() > 0) {
