@@ -1,11 +1,12 @@
-#LyX 2.0.0beta3 created this file. For more info see http://www.lyx.org/
-\lyxformat 410
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
 \begin_document
 \begin_header
 \textclass article
 \use_default_options true
 \maintain_unincluded_children false
 \language english
+\language_package default
 \inputencoding auto
 \fontencoding global
 \font_roman default
@@ -53,6 +54,7 @@
 \tracking_changes false
 \output_changes false
 \html_math_output 0
+\html_css_as_file 0
 \html_be_strict false
 \end_header
 
@@ -149,7 +151,7 @@ Eclipse project setup
 \begin_layout Standard
 Mostly accurate description here: 
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -520,6 +522,7 @@ Eclipse project setup
 \begin_layout Standard
 It seems that there is currently a lag in updates for the JNI wrappers in
  SVN trunk.
+ Work on them stopped in April 2008.
  More recent versions are available in 
 \begin_inset Quotes eld
 \end_inset
@@ -545,23 +548,23 @@ branches/gvSIG_19_ext3D_osgVP_2_2_0/binaries
 \end_layout
 
 \begin_layout LyX-Code
-branches/gvSIG_19_ext3D_osgVP_2_2_0/libjni-ecw
+branches/gvSIG_19_ext3D_osgVP_2_2_0/libraries/libjni-ecw
 \end_layout
 
 \begin_layout LyX-Code
-branches/gvSIG_19_ext3D_osgVP_2_2_0/libjni-gdal
+branches/gvSIG_19_ext3D_osgVP_2_2_0/libraries/libjni-gdal
 \end_layout
 
 \begin_layout LyX-Code
-branches/gvSIG_19_ext3D_osgVP_2_2_0/libjni-mrsid
+branches/gvSIG_19_ext3D_osgVP_2_2_0/libraries/libjni-mrsid
 \end_layout
 
 \begin_layout LyX-Code
-branches/gvSIG_19_ext3D_osgVP_2_2_0/libjni-potrace
+branches/gvSIG_19_ext3D_osgVP_2_2_0/libraries/libjni-potrace
 \end_layout
 
 \begin_layout LyX-Code
-branches/gvSIG_19_ext3D_osgVP_2_2_0/libjni-proj4
+branches/gvSIG_19_ext3D_osgVP_2_2_0/libraries/libjni-proj4
 \end_layout
 
 \begin_layout Standard
@@ -611,7 +614,7 @@ branches/gvSIG_19_ext3D_osgVP_2_2_0/build
 \begin_layout Standard
 That directory should not be checkout as a project in Eclipse (it isn't
  one).
- Better to simply export the folder directly to the Exlipse workspace folder.
+ Better to simply export the folder directly to the Eclipse workspace folder.
 \end_layout
 
 \begin_layout Standard
@@ -3532,7 +3535,7 @@ with their C string value:
 \end_layout
 
 \begin_layout LyX-Code
-potrace, 1.8, mkbitmap
+potrace, 1.9, mkbitmap
 \end_layout
 
 \begin_layout Paragraph

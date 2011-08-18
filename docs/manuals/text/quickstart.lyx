@@ -1,0 +1,5613 @@
+#LyX 1.6.6 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options false
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans helvet
+\font_typewriter default
+\font_default_family sfdefault
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize 12
+\spacing single
+\use_hyperref true
+\pdf_title "OA Digital Quickstart Guide to gvSIG"
+\pdf_author "OA Digital"
+\pdf_subject "A quick introductio to using gvSIG (OA Digital Edition)"
+\pdf_keywords "gvSIG, quickstart, guide, GIS, Oxford Archaeology, OA Digital"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\leftmargin 2cm
+\topmargin 3cm
+\rightmargin 2.5cm
+\bottommargin 2.5cm
+\secnumdepth 1
+\tocdepth 2
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle fancy
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\size giant
+GvSIG OA Digital Edition
+\size default
+
+\begin_inset Newline newline
+\end_inset
+
+Quickstart Guide
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_11.png
+	lyxscale 50
+	width 90col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace vfill
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../illustrations/logo.png
+	scale 50
+
+\end_inset
+
+ 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://oadigital.net
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+thispagestyle{empty}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Important information
+\end_layout
+
+\begin_layout Standard
+This document was originally written for gvSIG version 1.1.2 and the OADE
+ distribution based on that version.
+\end_layout
+
+\begin_layout Standard
+Unfortunately, we no longer have the resources to maintain a comprehensive
+ user guide for current releases of gvSIG, so this guide has been discontinued.
+ We still provide it as most of the information also applies to the current
+ release of gvSIG.
+ But there will be no updates in the foreseeable future.
+\end_layout
+
+\begin_layout Standard
+Those sections, that do not apply to the current version of gvSIG at all
+ anylonger have been completely removed.
+\end_layout
+
+\begin_layout Standard
+If you need up-to-date information about gvSIG or help about how to use
+ it, you have the following options:
+\end_layout
+
+\begin_layout Enumerate
+Browse the official gvSIG documentation repository at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://gvsig.org/web/docusr/manuales-en
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Read the manuals provided for older versions of gvSIG.
+ Much of the content is still helpful.
+\end_layout
+
+\begin_layout Enumerate
+Write to the gvSIG mailing list and ask your questions: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://gvsig.org/web/home/community/mailing-lists
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\lang british
+
+\begin_inset VSpace vfill
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Copyright Note
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+copyright{}
+\end_layout
+
+\end_inset
+
+ 2009 OA Digital (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://oadigital.net
+\end_layout
+
+\end_inset
+
+).
+ Some rights reserved.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+You are free:
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+\begin_inset Graphics
+	filename ../illustrations/share.png
+	scale 35
+
+\end_inset
+
+ to copy, distribute, display, and perform the work 
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+\begin_inset Graphics
+	filename ../illustrations/remix.png
+	scale 35
+
+\end_inset
+
+ to make derivative works
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+Under the following conditions:
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+\begin_inset Graphics
+	filename ../illustrations/by.png
+	scale 35
+
+\end_inset
+
+ 
+\series bold
+Attribution.
+
+\series default
+ You must give the original author credit.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+For any reuse or distribution, you must make clear to others the licence
+ terms of this work.
+ Any of these conditions can be waived if you get permission from the copyright
+ holder.
+ Nothing in this license impairs or restricts the author's moral rights.
+ Full licensing terms can be found in Appendix 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:License"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../illustrations/CC_somerights.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Welcome to the gvSIG OA Digital Edition
+\end_layout
+
+\begin_layout Standard
+GvSIG (
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.gvsig.gva.es
+\end_layout
+
+\end_inset
+
+) is a free and open source Geoinformation System (GIS), that enables you
+ to interactively visualise, manage, modify and analyse spatial information
+ in the form of digital maps, images and database tables.
+ It is easy to learn, yet versatile and efficient enough for demanding GIS
+ tasks and above all freely available, at no charge and under a license
+ that emphasizes your freedom of use rather than restrictions.
+ It is a cross-platform application, based on Sun's Java technology, which
+ currently runs on Windows (2000/XP/Vista), Linux and Mac OS X operating
+ systems, giving you great flexibility in its deployment.
+\end_layout
+
+\begin_layout Standard
+At Oxford Archaeology, we believe that gvSIG has matured into a powerful
+ GIS tool that can be used productively in many working environments, especially
+ when used in combination with other open source solutions such as GRASS
+ GIS (
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.grass.itc.it
+\end_layout
+
+\end_inset
+
+).
+ However, the complex installation procedure and linguistic deficiencies
+ of the English user interface translation have caused unnecessary irritations
+ for users and we have thus committed ourselves to providing a more polished,
+ accessible version of the software.
+ The result of our efforts is this OA Digital Edition of gvSIG.
+\end_layout
+
+\begin_layout Standard
+This edition is based on gvSIG 1.1.2.
+ It is provided 
+\begin_inset Quotes eld
+\end_inset
+
+as-is
+\begin_inset Quotes erd
+\end_inset
+
+.
+ We do not intend to produce updates for the 1.1.x line of this software as
+ we will focus our resources on the next version of gvSIG (2.0).
+\end_layout
+
+\begin_layout Standard
+This guide is meant to be a quick introduction to the software which should
+ get you started in a matter of minutes.
+ It is not meant to replace the much more exhaustive, official User Guide
+ which can be downloaded from the gvSIG project page.
+ Once you have worked through this 
+\begin_inset Quotes eld
+\end_inset
+
+quickstart guide
+\begin_inset Quotes erd
+\end_inset
+
+ and have got a basic feeling for how things work in gvSIG, we advise you
+ to consult the User Guide in depth to develop a more complete understanding
+ of the software's capabilities.
+ We also assume that you have some prior experience with using GIS and know
+ the fundamental concepts and terminology.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Due to an updated English translation, there will be some differences between
+ the screenshots and instructions used in the official User Guide and the
+ user interface of the OA Digital Edition.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Features of the OA Digital Edition
+\end_layout
+
+\begin_layout Standard
+Browse our website at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://oadigital.net
+\end_layout
+
+\end_inset
+
+ for further information, more in-depths guides and documents and other
+ news regarding the gvSIG OA Digital Edition.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+By default, this edition will use an English user interface and create new
+ data views using the spatial reference system of the British Ordnance Survey.
+ If these default settings do not suite your needs, you can easily change
+ them in the gvSIG preferences dialog (to be found under 
+\begin_inset Quotes eld
+\end_inset
+
+Window>Preferences
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Installation procedure
+\end_layout
+
+\begin_layout Standard
+Please see the Installation Guide, also available on 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://oadigital.net
+\end_layout
+
+\end_inset
+
+ for details.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The gvSIG user interface
+\end_layout
+
+\begin_layout Standard
+The main window of gvSIG consists of the main menu bar on the top of the
+ screen and one or more rows of icons just below it providing shortcuts
+ for often needed functions.
+ GvSIG arranges child windows (for viewing data, designing map layouts,
+ managing tables etc.) inside the main window.
+ You can change the size and position of child windows only within the limits
+ of the main window.
+ This multi document interface (MDI) approach is something that Windows
+ users will probably be more accustomed to than Linux and Mac OS X users.
+\end_layout
+
+\begin_layout Standard
+One important thing to know is that 
+\series bold
+the contents of both the main menu bar and the icon area will change depending
+ on what child window or element of a child window (such as a layer in a
+ data view) is currently active
+\series default
+.
+ The gvSIG user interface will only expose those functions to you that you
+ can actually apply in any given situation.
+ If you start gvSIG for the first time, you will notice the Project manager
+ window.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_01.png
+	width 60col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The project manager
+\end_layout
+
+\begin_layout Standard
+The project manager provides a way of working with several data views and
+ map layouts within one project.
+ You can even copy and paste many types of data, such as GIS layers, between
+ objects in the project manager.
+ It contains the sections 
+\begin_inset Quotes eld
+\end_inset
+
+View
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Table
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+Map.
+ To open it at any time, choose 
+\begin_inset Quotes eld
+\end_inset
+
+Show\SpecialChar \menuseparator
+Project manager
+\begin_inset Quotes erd
+\end_inset
+
+ from the main menu.
+\end_layout
+
+\begin_layout Standard
+Create a new data view by highlighting the 
+\begin_inset Quotes eld
+\end_inset
+
+View
+\begin_inset Quotes erd
+\end_inset
+
+ icon and pressing 
+\begin_inset Quotes eld
+\end_inset
+
+New
+\begin_inset Quotes erd
+\end_inset
+
+ in the project manager window.
+ Once the view has been created, you can rename it and change its properties
+ (select it and press 
+\begin_inset Quotes eld
+\end_inset
+
+Properties
+\begin_inset Quotes erd
+\end_inset
+
+).
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+Current projection:
+\begin_inset Quotes erd
+\end_inset
+
+ property defines the spatial reference system (SRS) for the data view.
+ You can change it by clicking on 
+\begin_inset Quotes eld
+\end_inset
+
+...
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Make a selection from the 
+\begin_inset Quotes eld
+\end_inset
+
+Type:
+\begin_inset Quotes erd
+\end_inset
+
+ list to choose between different databases and 
+\begin_inset Quotes eld
+\end_inset
+
+Search
+\begin_inset Quotes erd
+\end_inset
+
+ for the system you need either by name, area (supported for EPSG database)
+ or abbreviation code.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_03.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+You can save and load gvSIG projects using the 
+\begin_inset Quotes eld
+\end_inset
+
+File
+\begin_inset Quotes erd
+\end_inset
+
+ menu (file extension 
+\begin_inset Quotes eld
+\end_inset
+
+.gvp
+\begin_inset Quotes erd
+\end_inset
+
+).
+ This saves only your project 
+\begin_inset Quotes eld
+\end_inset
+
+structure
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+definition
+\begin_inset Quotes erd
+\end_inset
+
+, not the geodata itself.
+ The latter always resides in different sources such as Shapefiles or GeoTIFF
+ image files on your hard disk and needs to be copied and archived along
+ with the project definition file.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Basic Usage
+\end_layout
+
+\begin_layout Standard
+In this section we will discuss how to get GIS data into a project.
+ GvSIG supports many different modes of geodata storage, such as files,
+ database tables and web services.
+ In this guide, we will only look into the typical file-based operations.
+\end_layout
+
+\begin_layout Standard
+Select the view you just created from the list and click 
+\begin_inset Quotes eld
+\end_inset
+
+Open
+\begin_inset Quotes erd
+\end_inset
+
+.
+ A new window will open which contains three empty areas.
+ On the left, there is room for the list of GIS data layers (to be added
+ in a moment) and an overview map area below it.
+ The bigger part of the view to the right is the display area for the actual
+ data.
+ If you activate the new view window (e.g.
+ by clicking on its title frame) and click on its window to bring it to
+ the foreground, new entries 
+\begin_inset Quotes eld
+\end_inset
+
+Layer
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Table
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+View
+\begin_inset Quotes erd
+\end_inset
+
+ will appear in the main menu bar.
+ This is the way it always works with gvSIG: 
+\series bold
+what items are available in the menu bar depends on what type of window
+ is currently active
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_04.png
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Getting data into gvSIG
+\end_layout
+
+\begin_layout Standard
+For example, to add a vector data layer based on an ESRI Shapefile, choose
+ 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Add layer
+\begin_inset Quotes erd
+\end_inset
+
+ from the main menu (make sure that a data view window is active to see
+ these menu options) or click on the corresponding icon in the icon bar.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+File
+\begin_inset Quotes erd
+\end_inset
+
+ tab allows you to import (among others) ESRI Shapefiles.
+ So make sure that it is activated and choose 
+\begin_inset Quotes eld
+\end_inset
+
+Add
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Browse for Shapefiles on your file system (make sure to set the 
+\begin_inset Quotes eld
+\end_inset
+
+Files of Type
+\begin_inset Quotes erd
+\end_inset
+
+ option to 
+\begin_inset Quotes eld
+\end_inset
+
+gvSIG shp driver
+\begin_inset Quotes erd
+\end_inset
+
+).
+ Use the SHIFT and CTRL keys to select multiple files if you want, then
+ click 
+\begin_inset Quotes eld
+\end_inset
+
+Open
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This will add all selected files to the list of files to be imported.
+ You can keep adding more files to the list in this way if you wish.
+ 
+\end_layout
+
+\begin_layout Standard
+You may also want to choose an SRS for the data (
+\begin_inset Quotes eld
+\end_inset
+
+Current projection
+\begin_inset Quotes erd
+\end_inset
+
+).
+ If you choose an SRS that differs from the one in the current view, then
+ gvSIG will automatically re-project the imported data into the view's SRS.
+\end_layout
+
+\begin_layout Standard
+Finally click 
+\begin_inset Quotes eld
+\end_inset
+
+OK
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The Shapefiles should now get added as new vector layers to the layer list
+ of the active view.
+ Press 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Navigation\SpecialChar \menuseparator
+Full extent
+\begin_inset Quotes erd
+\end_inset
+
+ to set the view extent to encompass all the data you just imported.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_05.png
+	lyxscale 50
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_06.png
+	lyxscale 50
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+If you have installed any of the sample data that comes with the OA Digital
+ Edition, then you can browse the directory 
+\begin_inset Quotes eld
+\end_inset
+
+sample_data
+\begin_inset Quotes erd
+\end_inset
+
+ inside the directory you chose to install gvSIG into for some sample geodata.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Managing layers
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\shape italic
+\emph on
+Layers generally need to be active to perform any operation on them
+\series default
+\shape default
+ 
+\emph default
+(even just setting properties)
+\emph on
+.
+
+\emph default
+ To activate a layer, click on its title in the layer list.
+ A gray box will be drawn around it to indicate that it is now active.
+\end_layout
+
+\begin_layout Standard
+Click the right mouse button (CRTL plus mouse button on Mac OS X) on an
+ active layer to open the layer's context menu.
+ Select 
+\begin_inset Quotes eld
+\end_inset
+
+Zoom to layer(s)
+\begin_inset Quotes erd
+\end_inset
+
+ which will set the current data view to match the extents of the layer
+ and is a very convenient function for quick navigation (we will look into
+ more navigation options shortly).
+\end_layout
+
+\begin_layout Standard
+Layers will be shown in bottom-to-top order.
+ You can drag and drop layers in the view's layer list to change their order.
+ Selecting 
+\begin_inset Quotes eld
+\end_inset
+
+Move to top
+\begin_inset Quotes erd
+\end_inset
+
+ from the context menu will move a layer to the top of the list.
+ You can toggle a layer's visibility using the little tick mark box to the
+ left of its title.
+\end_layout
+
+\begin_layout Standard
+Activate several layers using the SHIFT (adjacent) or CTRL (non-adjacent)
+ keys and choose 
+\begin_inset Quotes eld
+\end_inset
+
+Group layers
+\begin_inset Quotes erd
+\end_inset
+
+ from the context menu to put them into a group.
+ Groups can be arranged in the list just like single layers.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_07.png
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Remember that layers can also be copied and pasted between different views
+ using the context menu, giving you an additional level of structuring flexibili
+ty using the project manager.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Navigation
+\end_layout
+
+\begin_layout Standard
+You have already seen how to zoom to the data's total extent and to that
+ of an individual layer.
+ We will now explore some more options for navigating around the spatial
+ data in a view.
+\end_layout
+
+\begin_layout Subsubsection
+Basic navigation
+\end_layout
+
+\begin_layout Standard
+Check the 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Navigation
+\begin_inset Quotes erd
+\end_inset
+
+ Menu for a complete list of navigation tools.
+ The navigation tools are also available from the icon bar for quick access.
+ Use the basic 
+\begin_inset Quotes eld
+\end_inset
+
+Zoom in
+\begin_inset Quotes erd
+\end_inset
+
+ tool to zoom into an area.
+ After selecting the 
+\begin_inset Quotes eld
+\end_inset
+
+Panning
+\begin_inset Quotes erd
+\end_inset
+
+ tool, keeping the left mouse button pressed on the main map view and moving
+ the mouse allows you to drag data into the current view area (
+\begin_inset Quotes eld
+\end_inset
+
+panning
+\begin_inset Quotes erd
+\end_inset
+
+).
+ You can center the data display on given coordinates using 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Center view on point
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_15.png
+	width 25col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Using the locator map
+\end_layout
+
+\begin_layout Standard
+You can add GIS data to the overview map in the lower left corner of the
+ data view window by choosing 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Configure locator map
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Selecting add 
+\begin_inset Quotes eld
+\end_inset
+
+Add layer...
+\begin_inset Quotes erd
+\end_inset
+
+ will let you add data to the overview map independently of the main data
+ view.
+ Hold the left mouse button pressed to define a rectangular area in the
+ overview map to zoom to.
+ Use the right mouse button to center the view on another position.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_10.png
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Spatial bookmarks
+\end_layout
+
+\begin_layout Standard
+Select 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Navigation\SpecialChar \menuseparator
+Zoom manager
+\begin_inset Quotes erd
+\end_inset
+
+ to set 
+\begin_inset Quotes eld
+\end_inset
+
+spatial bookmarks
+\begin_inset Quotes erd
+\end_inset
+
+ for managing region settings that you might need to use often.
+ You can save the location and extent of the current data view and restore
+ it later.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-01-04.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Vector layer properties
+\end_layout
+
+\begin_layout Standard
+Recall that clicking the right mouse button (CRTL plus mouse button on Mac
+ OS X) on an active layer in the list will bring up the layer context menu.
+ From there you can select the 
+\begin_inset Quotes eld
+\end_inset
+
+Properties
+\begin_inset Quotes erd
+\end_inset
+
+ item to adjust a layer's properties.
+ Enter a new 
+\begin_inset Quotes eld
+\end_inset
+
+Name
+\begin_inset Quotes erd
+\end_inset
+
+ to appear in the layer list if needed.
+ Selecting 
+\begin_inset Quotes eld
+\end_inset
+
+Use spatial index
+\begin_inset Quotes erd
+\end_inset
+
+ will create an additional index file that can significantly speed up the
+ display of complex vector layers.
+ You can also set a layer to be hidden at certain mapping scales.
+ Please consult the gvSIG User Guide regarding the option to hyperlink a
+ layer's features to external image and text files.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-01-06.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+You can read the current scale in the status bar at the bottom of the data
+ view window.
+ This also allows you to set the current view's scale to a specified value.
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Thematic maps using unique values
+\end_layout
+
+\begin_layout Standard
+Thematic maps can be created using drawing styles to show differences in
+ attribute values.
+ Choosing 
+\begin_inset Quotes eld
+\end_inset
+
+Unique symbols
+\begin_inset Quotes erd
+\end_inset
+
+ uses the same drawing styles and transparency setting for all features
+ of a map.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+Unique values
+\begin_inset Quotes erd
+\end_inset
+
+ section lets you choose different settings for each feature based on an
+ attribute table field.
+ Choose the 
+\begin_inset Quotes eld
+\end_inset
+
+Classification field
+\begin_inset Quotes erd
+\end_inset
+
+ and then 
+\begin_inset Quotes eld
+\end_inset
+
+Add all
+\begin_inset Quotes erd
+\end_inset
+
+ to create a list of all category values for that field.
+ You can choose to 
+\begin_inset Quotes eld
+\end_inset
+
+Remove
+\begin_inset Quotes erd
+\end_inset
+
+ categories selectively.
+ All field values not in the final list will end up in the 
+\begin_inset Quotes eld
+\end_inset
+
+Default
+\begin_inset Quotes erd
+\end_inset
+
+ category.
+ Double-click on a 
+\begin_inset Quotes eld
+\end_inset
+
+Symbols
+\begin_inset Quotes erd
+\end_inset
+
+ entry to choose individual drawing styles for a category.
+ Click on 
+\begin_inset Quotes eld
+\end_inset
+
+Label
+\begin_inset Quotes erd
+\end_inset
+
+ to enter a custom category description.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-01-05.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Thematic maps using value ranges
+\end_layout
+
+\begin_layout Standard
+Map themes can also be created by breaking up attribute data ranges into
+ categories.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+Intervals
+\begin_inset Quotes erd
+\end_inset
+
+ dialog provides options for this purpose.
+ Start by choosing a 
+\begin_inset Quotes eld
+\end_inset
+
+Classification field
+\begin_inset Quotes erd
+\end_inset
+
+ of the layer's attribute table, then select the method for calculating
+ category boundaries under 
+\begin_inset Quotes eld
+\end_inset
+
+Interval type
+\begin_inset Quotes erd
+\end_inset
+
+.
+ After setting a 
+\begin_inset Quotes eld
+\end_inset
+
+Begin color
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+End color
+\begin_inset Quotes erd
+\end_inset
+
+ for the theme, select 
+\begin_inset Quotes eld
+\end_inset
+
+Compute intervals
+\begin_inset Quotes erd
+\end_inset
+
+ to create the actual categories.
+ Double-click on a 
+\begin_inset Quotes eld
+\end_inset
+
+Symbols
+\begin_inset Quotes erd
+\end_inset
+
+ field to choose individual drawing styles for a category.
+ Click on 
+\begin_inset Quotes eld
+\end_inset
+
+Label
+\begin_inset Quotes erd
+\end_inset
+
+ to enter a custom category description.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_09.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You can also use 
+\begin_inset Quotes eld
+\end_inset
+
+Labeling
+\begin_inset Quotes erd
+\end_inset
+
+ to print the contents of a field of the attribute table onto the map's
+ features.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Annotation layers can be used for better label placement and style control.
+ We will discuss them later.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Raster layer properties
+\end_layout
+
+\begin_layout Standard
+Recall that clicking the right mouse button (CRTL plus mouse button on Mac
+ OS X) on an active layer in the list will bring up the layer context menu.
+ The options found here will differ from those available for vector layers,
+ allowing you to view histograms of raster data distributions, setting a
+ color table and filtering the data.
+ You can select the 
+\begin_inset Quotes eld
+\end_inset
+
+Properties
+\begin_inset Quotes erd
+\end_inset
+
+ item to adjust layer properties in much the same way as vector layers.
+\end_layout
+
+\begin_layout Standard
+We will not discuss raster properties in detail here as they are fairly
+ self-explanatory.
+ Read the gvSIG User Guide for more in-depth information.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_12.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Raster band compositions
+\end_layout
+
+\begin_layout Standard
+Remote sensing data often comes as a set of raster maps representing different
+ 
+\begin_inset Quotes eld
+\end_inset
+
+bands
+\begin_inset Quotes erd
+\end_inset
+
+ of the total sensor data range.
+ Open the 
+\begin_inset Quotes eld
+\end_inset
+
+Bands
+\begin_inset Quotes erd
+\end_inset
+
+ section in the 
+\begin_inset Quotes eld
+\end_inset
+
+Raster properties
+\begin_inset Quotes erd
+\end_inset
+
+ dialog to load different data sets as Red, Green and Blue components, allowing
+ you to create true color or other representations, such as near infrared,
+ of your imagery (refer to your data provider's description for details
+ on how to do this for a particular sensor type).
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot_13.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Vector data selection and export
+\end_layout
+
+\begin_layout Standard
+Selecting (querying) and extracting subsets of vector data (features) is
+ one of the very basic GIS tasks.
+ GvSIG offers a range of tools for selecting data from a layer.
+ Make sure that the layer you wish to select from is activated, then make
+ your choice from the tools in 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Selection
+\begin_inset Quotes erd
+\end_inset
+
+.
+ All tools support adding or subtracting features to the current set, allowing
+ you to build very complex selections.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Interactive selections
+\end_layout
+
+\begin_layout Standard
+There are several tools that allow you to select features interactively.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Select by point
+\begin_inset Quotes erd
+\end_inset
+
+ lets you to click on a feature to toggle its selection status.
+ Press and hold the CTRL key while selecting to add/remove individual features
+ from the selected set.
+ Use 
+\begin_inset Quotes eld
+\end_inset
+
+Select by rectangle
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+Select by polygon
+\begin_inset Quotes erd
+\end_inset
+
+ for mass selections.
+ You can freely switch between those tools while selecting.
+ Use 
+\begin_inset Quotes eld
+\end_inset
+
+Invert selection
+\begin_inset Quotes erd
+\end_inset
+
+ to select all features that are not in the current set.
+ Click outside any feature or choose 
+\begin_inset Quotes eld
+\end_inset
+
+Layer\SpecialChar \menuseparator
+Clear selection
+\begin_inset Quotes erd
+\end_inset
+
+ to clear the selection set.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-02-01.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Select all features in a layer by first making sure that none are selected,
+ then choosing 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Selection\SpecialChar \menuseparator
+Invert selection
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Plain Layout
+You can adjust the colour used for marking selected features under 
+\begin_inset Quotes eld
+\end_inset
+
+Window\SpecialChar \menuseparator
+Preferences\SpecialChar \menuseparator
+View
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Attribute queries
+\end_layout
+
+\begin_layout Standard
+Activate a vector layer and choose 
+\begin_inset Quotes eld
+\end_inset
+
+Layer\SpecialChar \menuseparator
+Show attribute table
+\begin_inset Quotes erd
+\end_inset
+
+ to display the attribute data rows linked to the map objects (features)
+ in the active layer.
+ This will give you access to the full 
+\begin_inset Quotes eld
+\end_inset
+
+Table
+\begin_inset Quotes erd
+\end_inset
+
+ menu, containing many functions for managing attribute data.
+ Selecting features by attribute table row works in the same way as the
+ interactive selections.
+ Use the CTRL and SHIFT keys to select more than one row of data.
+ Click on a field heading and choose 
+\begin_inset Quotes eld
+\end_inset
+
+Table\SpecialChar \menuseparator
+Ascending order
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+Table\SpecialChar \menuseparator
+Descending order
+\begin_inset Quotes erd
+\end_inset
+
+ to sort the rows for easier selection.
+\end_layout
+
+\begin_layout Standard
+For more advanced selections, you can use the SQL query builder under 
+\begin_inset Quotes eld
+\end_inset
+
+Table\SpecialChar \menuseparator
+Filter
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Either type the SQL WHERE statement into the input box (bottom part of
+ dialog) manually or double-click a field name, single-click an operator
+ and (if applicable) double-click a value in the list view (upper part of
+ dialog).
+\end_layout
+
+\begin_layout Standard
+If you want to zoom onto the feature(s) for which you have selected the
+ data row(s), use 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Navigation\SpecialChar \menuseparator
+Zoom to selection
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-02-02.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Select all rows in an attribute table by pressing CTRL+A.
+\end_layout
+
+\begin_layout Plain Layout
+Remember that text (string) type attribute values have to be bracketed using
+ single quotes:
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+FTPYE='RESERVOIR' 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Spatial queries
+\end_layout
+
+\begin_layout Standard
+Selecting features by their spatial relation with other features is a four-step
+ procedure that takes a little getting used to:
+\end_layout
+
+\begin_layout Enumerate
+Activate the layer which has the features to which you want to spatially
+ compare your actual features of interest (if you wanted to select all lakes
+ crossed by a road, then this would be your 
+\begin_inset Quotes eld
+\end_inset
+
+Streets
+\begin_inset Quotes erd
+\end_inset
+
+ layer).
+\end_layout
+
+\begin_layout Enumerate
+Make a selection of features in that layer.
+ Try to reduce the selection as much as possible, as spatial tests can be
+ computationally expensive and take a long time.
+\end_layout
+
+\begin_layout Enumerate
+Activate the layer(s) which contain(s) your actual objects of interest (in
+ our example the 
+\begin_inset Quotes eld
+\end_inset
+
+Lakes
+\begin_inset Quotes erd
+\end_inset
+
+ layer).
+\end_layout
+
+\begin_layout Enumerate
+Choose 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Selection\SpecialChar \menuseparator
+Select by spatial relation
+\begin_inset Quotes erd
+\end_inset
+
+, make your choice of a spatial relation and set the 
+\begin_inset Quotes eld
+\end_inset
+
+Selected items in layer
+\begin_inset Quotes erd
+\end_inset
+
+ option to the layer you want to test your object of interest against (in
+ our example 
+\begin_inset Quotes eld
+\end_inset
+
+Streets
+\begin_inset Quotes erd
+\end_inset
+
+).
+ You can choose to create a 
+\begin_inset Quotes eld
+\end_inset
+
+New set
+\begin_inset Quotes erd
+\end_inset
+
+, potentially deselecting previously selected features in the active layer,
+ or to add/remove the features that pass the relational test to/from the
+ current selection set.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-02-03.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Exporting selected features
+\end_layout
+
+\begin_layout Standard
+Once you have made a selection, you may want to extract only the selected
+ features into a new layer.
+ You can do so by choosing 
+\begin_inset Quotes eld
+\end_inset
+
+Layer\SpecialChar \menuseparator
+Export to...
+\begin_inset Quotes erd
+\end_inset
+
+ and selecting the appropriate data format.
+ Make sure that the right layer is active.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-02-04.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Advanced Usage
+\end_layout
+
+\begin_layout Standard
+In this section, we will take a look at more advanced functionality which
+ includes editing vector layer geometries and attribute table data, using
+ external database tables to bring in data and using annotation layers for
+ better control over label placement.
+ We will also take a look at how to rectify an image using gvSIG's geoprocessing
+ tools.
+\end_layout
+
+\begin_layout Standard
+Remember that we can only cover the basics for all these operations here
+ and that you will need to consult the official gvSIG User Guide for all
+ the details.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Make sure that you have a good degree of control over gvSIG's basic tools
+ before you start with this section
+\series default
+, as we will skip details previously discussed for the sake of brevity.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-03-01.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Editing vector layers
+\end_layout
+
+\begin_layout Standard
+GvSIG has very extensive, CAD-like free and constrained editing tools.
+ We can only scratch the surface of its capabilities here.
+ Please consult the official gvSIG User Guide for a more complete coverage.
+\end_layout
+
+\begin_layout Standard
+To start editing, activate a layer and select 
+\begin_inset Quotes eld
+\end_inset
+
+Start editing
+\begin_inset Quotes erd
+\end_inset
+
+ from its context menu (right mouse button or CTRL and mouse button on a
+ Mac).
+ The layer's name will be highlighted in red and you should get a cross-hair
+ cursor and a command console, indicating that you are now in editing mode.
+ There will now also be a new menu item 
+\begin_inset Quotes eld
+\end_inset
+
+Geometry
+\begin_inset Quotes erd
+\end_inset
+
+ in the main toolbar and a large number of additional icons to quickly access
+ the most important editing functions.
+\end_layout
+
+\begin_layout Standard
+By default, editing starts in selection mode, which means that you can select
+ features by clicking on them or dragging a rectangle around them by specifying
+ to opposite corners.
+ Press ESC to return to basic selection mode any time you get lost.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-02-05.png
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Unlike most other GIS, gvSIG allows you to keep several layers open for
+ editing at the same time.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Editing features (geometries)
+\end_layout
+
+\begin_layout Standard
+Choose from the drawing tools under 
+\begin_inset Quotes eld
+\end_inset
+
+Geometry\SpecialChar \menuseparator
+Insert
+\begin_inset Quotes erd
+\end_inset
+
+ (or the corresponding icon) to create new features.
+ The geometries available will depend on the type of layer under editing.
+ For ESRI Shapefile layers, you will be restricted to creating either points,
+ lines or polygons.
+ Many tools offer useful functions via a context menu (right mouse button
+ or CTRL plus mouse button on the Mac while editing).
+\end_layout
+
+\begin_layout Standard
+Irregular polygons are created using the 
+\begin_inset Quotes eld
+\end_inset
+
+Polyline
+\begin_inset Quotes erd
+\end_inset
+
+ tool.
+ You can switch between straight line segments and curved approximations
+ from the context menu.
+ Choose 
+\begin_inset Quotes eld
+\end_inset
+
+Finish
+\begin_inset Quotes erd
+\end_inset
+
+ from the context menu to snap the final line segment to the first vertex,
+ closing the polygon.
+\end_layout
+
+\begin_layout Standard
+Individual vertices can be edited once the polygon has been finished.
+ Selecting a polygon will highlight all of its vertices, allowing you to
+ drag them to another location.
+ To add more vertices or delete existing ones, choose the 
+\begin_inset Quotes eld
+\end_inset
+
+Edit vertex
+\begin_inset Quotes erd
+\end_inset
+
+ tool.
+ Cycle trough the vertices using 
+\begin_inset Quotes eld
+\end_inset
+
+Next
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+Previous
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Then select 
+\begin_inset Quotes eld
+\end_inset
+
+Delete
+\begin_inset Quotes erd
+\end_inset
+
+ to delete the active vertex.
+ Adding a vertex can be done by choosing 
+\begin_inset Quotes eld
+\end_inset
+
+Add
+\begin_inset Quotes erd
+\end_inset
+
+ and selecting a location on the polygon or line.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-02-07.png
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-02-06.png
+	width 75col%
+
+\end_inset
+
+
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+All editing tools have keyboard shortcuts that can be entered directly into
+ the console.
+ Consult the gvSIG User Guide for details.
+\end_layout
+
+\begin_layout Plain Layout
+To delete a whole feature, select it using any of gvSIG's selection tools
+ and hit the DEL or BACKSPACE key.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+Undo
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+Redo
+\begin_inset Quotes erd
+\end_inset
+
+ functions can be found in the 
+\begin_inset Quotes eld
+\end_inset
+
+Layer
+\begin_inset Quotes erd
+\end_inset
+
+ menu.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Adjusting editing settings
+\end_layout
+
+\begin_layout Standard
+Once a layer has been opened for editing, you will find a new item 
+\begin_inset Quotes eld
+\end_inset
+
+Editing settings
+\begin_inset Quotes erd
+\end_inset
+
+ in its context menu.
+ Select it to adjust basic snapping settings.
+ Unfold the other options by clicking on the little 
+\begin_inset Quotes eld
+\end_inset
+
++
+\begin_inset Quotes erd
+\end_inset
+
+ next to 
+\begin_inset Quotes eld
+\end_inset
+
+Editing
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Quotes eld
+\end_inset
+
+Flatness
+\begin_inset Quotes erd
+\end_inset
+
+ setting specifies in how much detail curves are approximated by straight
+ line segments.
+ If you work on very small details, you may want to decrease this setting
+ to get more rounded shapes.
+ You may want to increase it for rougher approximation of larger shapes,
+ keeping polygons simpler.
+ 
+\end_layout
+
+\begin_layout Standard
+You can also choose to activate a snapping 
+\begin_inset Quotes eld
+\end_inset
+
+Grid
+\begin_inset Quotes erd
+\end_inset
+
+.
+ If you do so, the editing cursor will be constrained to snap to grid nodes
+ only.
+ Make sure the distance settings are reasonable for the scale of your editing.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-02-08.png
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Saving your edits
+\end_layout
+
+\begin_layout Standard
+Choose 
+\begin_inset Quotes eld
+\end_inset
+
+Stop editing
+\begin_inset Quotes erd
+\end_inset
+
+ from the context menu of the layer you have worked on.
+ You will be asked whether you want to save your changes.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-02-09.png
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Editing attribute table data
+\end_layout
+
+\begin_layout Standard
+To edit the attribute data row linked to a feature, activate a layer that
+ is open in editing mode and select 
+\begin_inset Quotes eld
+\end_inset
+
+Layer\SpecialChar \menuseparator
+Show attribute table
+\begin_inset Quotes erd
+\end_inset
+
+ (or use the corresponding icon).
+ This will open the attribute table in editing mode and you can directly
+ type a value into any of the attribute table's fields.
+\end_layout
+
+\begin_layout Standard
+You will also be able to add, delete or rename attribute fields themselves
+ by selecting 
+\begin_inset Quotes eld
+\end_inset
+
+Table\SpecialChar \menuseparator
+Manage fields
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+If you delete a row in the attribute table, the corresponding feature will
+ also be deleted.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-02-10.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Creating new vector layers
+\end_layout
+
+\begin_layout Standard
+To create a new, empty vector layer select 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+New layer
+\begin_inset Quotes erd
+\end_inset
+
+ and make your choice of a format.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-02-11.png
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After choosing a geometry type (ESRI Shapefiles do not support 
+\begin_inset Quotes eld
+\end_inset
+
+Multiple type
+\begin_inset Quotes erd
+\end_inset
+
+ geometries), you will get into a dialog that allows you to specify the
+ field structure for the layer's attribute table.
+\end_layout
+
+\begin_layout Standard
+Add as many fields as needed to the attribute table and specify their data
+ types.
+\end_layout
+
+\begin_layout Standard
+Then choose a folder and name for the new layer in your file system in the
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Enter file path
+\begin_inset Quotes erd
+\end_inset
+
+ field (or use the 
+\begin_inset Quotes eld
+\end_inset
+
+...
+\begin_inset Quotes erd
+\end_inset
+
+ button to browse for a place using the file selector, as this tends to
+ work more reliably).
+\end_layout
+
+\begin_layout Standard
+The new layer will automatically be added at the top of the layers list
+ in the current view and opened in editing mode.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Remember that the ESRI Shapefile standard requires you to have at least
+ one field in the attribute table.
+ By default, attribute tables are stored in DBase (DBF) format, which imposes
+ some restrictions.
+ Any field name should not exceed 10 characters in length and consist of
+ alpha-numeric symbols only.
+ Do not use any whitespace, use 
+\begin_inset Quotes eld
+\end_inset
+
+_
+\begin_inset Quotes erd
+\end_inset
+
+ (underscore) instead.
+ Using mathematical operators, such as the 
+\begin_inset Quotes eld
+\end_inset
+
+-
+\begin_inset Quotes erd
+\end_inset
+
+ (minus) sign or any special characters, such as accented characters, in
+ field names is also unwise.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Managing data tables
+\end_layout
+
+\begin_layout Standard
+GvSIG has very flexible tools for managing tabular data in files (such as
+ DBase) and database connections (such as ODBC or PostgreSQL).
+ It can also connect to spatial databases, reading, writing and manipulating
+ both feature geometries and attributes.
+ We will only cover the most basic tools here.
+\end_layout
+
+\begin_layout Subsubsection
+External tables and attribute tables
+\end_layout
+
+\begin_layout Standard
+The project manager has a section 
+\begin_inset Quotes eld
+\end_inset
+
+Table
+\begin_inset Quotes erd
+\end_inset
+
+ which contains any database tables you work on in your project.
+ These can be the attribute tables of layers or external tables not initially
+ connected to any layer, such as simple DBF files.
+\end_layout
+
+\begin_layout Standard
+To add an attribute table, simply activate the corresponding layer in the
+ data view and choose 
+\begin_inset Quotes eld
+\end_inset
+
+Layer\SpecialChar \menuseparator
+Show attribute table
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This will automatically add an entry for that layer's attribute table in
+ the 
+\begin_inset Quotes eld
+\end_inset
+
+Table
+\begin_inset Quotes erd
+\end_inset
+
+ section of the project manager.
+\end_layout
+
+\begin_layout Standard
+External tables can be added from files or database connections (including
+ ODBC).
+ By clicking the 
+\begin_inset Quotes eld
+\end_inset
+
+New
+\begin_inset Quotes erd
+\end_inset
+
+ button in the table manager.
+ Any successfully connection to an external table will result in its contents
+ being displayed immediately.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-05.png
+	width 65col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+ODBC connections are read-only in gvSIG.
+ Other connections (such as DBF files), are editable.
+ In those cases, open the table and select 
+\begin_inset Quotes eld
+\end_inset
+
+Start editing
+\begin_inset Quotes erd
+\end_inset
+
+ from the 
+\begin_inset Quotes eld
+\end_inset
+
+Table
+\begin_inset Quotes erd
+\end_inset
+
+ menu to edit the field contents.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Joining external data tables
+\end_layout
+
+\begin_layout Standard
+Large external database tables can be joined to a layer's attribute table
+ conveniently using a primary key field common to both the attribute and
+ the external table.
+\end_layout
+
+\begin_layout Standard
+Highlight the 
+\begin_inset Quotes eld
+\end_inset
+
+features
+\begin_inset Quotes erd
+\end_inset
+
+ layer and select 
+\begin_inset Quotes eld
+\end_inset
+
+Layer\SpecialChar \menuseparator
+See table of attributes
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This automatically adds the layer's attribute table to the 
+\begin_inset Quotes eld
+\end_inset
+
+Table
+\begin_inset Quotes erd
+\end_inset
+
+ list in the project manager.
+ Then use the 
+\begin_inset Quotes eld
+\end_inset
+
+New
+\begin_inset Quotes erd
+\end_inset
+
+ button in the 
+\begin_inset Quotes eld
+\end_inset
+
+Table
+\begin_inset Quotes erd
+\end_inset
+
+ section of the project manager to add the external table that you wish
+ to join to your attribute table.
+ Make sure any one of the table displays is selected, so that you have access
+ to the 
+\begin_inset Quotes eld
+\end_inset
+
+Table
+\begin_inset Quotes erd
+\end_inset
+
+ menu in the main menu bar.
+ From there, select 
+\begin_inset Quotes eld
+\end_inset
+
+Table\SpecialChar \menuseparator
+Join
+\begin_inset Quotes erd
+\end_inset
+
+ to bring up a dialog that steps you through the joining procedure.
+\end_layout
+
+\begin_layout Standard
+First select the 
+\begin_inset Quotes eld
+\end_inset
+
+table to join to
+\begin_inset Quotes erd
+\end_inset
+
+ (i.e.
+ the attribute table).
+ Press 
+\begin_inset Quotes eld
+\end_inset
+
+Next
+\begin_inset Quotes erd
+\end_inset
+
+ and select the 
+\begin_inset Quotes eld
+\end_inset
+
+field to use for link
+\begin_inset Quotes erd
+\end_inset
+
+ (this must be a primary key/index field common to both tables).
+ Press 
+\begin_inset Quotes eld
+\end_inset
+
+Next
+\begin_inset Quotes erd
+\end_inset
+
+ (the second button from the left) and select the table 
+\begin_inset Quotes eld
+\end_inset
+
+to link
+\begin_inset Quotes erd
+\end_inset
+
+ (i.e.
+ the external table).
+ Press 
+\begin_inset Quotes eld
+\end_inset
+
+Next
+\begin_inset Quotes erd
+\end_inset
+
+ (second button from the left) and 
+\begin_inset Quotes eld
+\end_inset
+
+select the 
+\begin_inset Quotes eld
+\end_inset
+
+field to use for link
+\begin_inset Quotes erd
+\end_inset
+
+ (the corresponding primary key/index field in the external table).
+ Then press 
+\begin_inset Quotes eld
+\end_inset
+
+Finish
+\begin_inset Quotes erd
+\end_inset
+
+ (third button from the left).
+ If the join was successful then you should now see one or more fields prefixed
+ with 
+\begin_inset Quotes eld
+\end_inset
+
+link_
+\begin_inset Quotes erd
+\end_inset
+
+ in the attribute table which represent the fields joined in from the external
+ table.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-06.png
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+To remove the fields joined to the attribute table, display the attribute
+ table and choose 
+\begin_inset Quotes eld
+\end_inset
+
+Table\SpecialChar \menuseparator
+Remove join
+\begin_inset Quotes erd
+\end_inset
+
+ from the main menu bar.
+ To make a join permanent, export the layer with the joined attribute table
+ as e.g.
+ a new Shapefile.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Point layers from tables
+\end_layout
+
+\begin_layout Standard
+Tables that contain 2D point coordinates in their fields can be turned into
+ point maps easily.
+ Make sure that the table you want to turn into a point map has been loaded
+ into the 
+\begin_inset Quotes eld
+\end_inset
+
+Table
+\begin_inset Quotes erd
+\end_inset
+
+ section of the project manager.
+ Then activate a data view and choose 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Add events layer
+\begin_inset Quotes erd
+\end_inset
+
+.
+ In the dialog, specify, from top to bottom, the name of the table to generate
+ the points from, the field holding the X (easting) and the Y (northing)
+ coordinates.
+\end_layout
+
+\begin_layout Standard
+Simple ASCII text files with one point record per line, called 
+\begin_inset Quotes eld
+\end_inset
+
+CSV
+\begin_inset Quotes erd
+\end_inset
+
+ (comma separated values) files, can be used to conveniently store point
+ lists for mapping.
+ They can be loaded as external tables, just like DBF files.
+ Despite the name, it is not a good idea to use commas to separate fields,
+ as they may also be part of the actual data (the comma is used for number
+ formatting in some countries).
+ In fact, gvSIG assumes that you use 
+\begin_inset Quotes eld
+\end_inset
+
+;
+\begin_inset Quotes erd
+\end_inset
+
+ (semicolons) as separators.
+ The first line is assumed to contain the field names:
+\end_layout
+
+\begin_layout LyX-Code
+Name;Easting;Northing 
+\end_layout
+
+\begin_layout LyX-Code
+Point 1;606509.00;165210.50 
+\end_layout
+
+\begin_layout LyX-Code
+Point 2;610820.50;165450.20 
+\end_layout
+
+\begin_layout LyX-Code
+\SpecialChar \ldots{}
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-08.png
+	width 65col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Tables generated from CSV files are read-only.
+ All fields in a CSV file will be imported as text (string) type fields.
+ Use an external spreadsheet or other application to convert your data to
+ DBase (DBF) format if you need more control or flexibility.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Calculating field values
+\end_layout
+
+\begin_layout Standard
+GvSIG allows you to use mathematical expressions to calculate the values
+ of attribute table fields.
+\end_layout
+
+\begin_layout Standard
+First start editing the vector layer for which you wish to calculate field
+ values and choose 
+\begin_inset Quotes eld
+\end_inset
+
+Layer\SpecialChar \menuseparator
+Show table of attributes
+\begin_inset Quotes erd
+\end_inset
+
+ to display its attribute table.
+ Now make a selection of features for which you want to calculate field
+ values by either selecting data rows in the attribute table or their correspond
+ing geometries in the data view.
+ When that is done, click on the title (name) of the field for which you
+ wish to calculate values.
+\end_layout
+
+\begin_layout Standard
+This should allow you to select "Field\SpecialChar \menuseparator
+Expression" from the main menu bar
+ to open the 
+\begin_inset Quotes eld
+\end_inset
+
+Calculate expression
+\begin_inset Quotes erd
+\end_inset
+
+ dialog.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+Expression
+\begin_inset Quotes erd
+\end_inset
+
+ input field lets you compose expressions using 
+\begin_inset Quotes eld
+\end_inset
+
+Field
+\begin_inset Quotes erd
+\end_inset
+
+ names and 
+\begin_inset Quotes eld
+\end_inset
+
+Commands
+\begin_inset Quotes erd
+\end_inset
+
+ (depending on the 
+\begin_inset Quotes eld
+\end_inset
+
+Type
+\begin_inset Quotes erd
+\end_inset
+
+ of a field) that can be added by double-clicking on one of the items in
+ the lists in the center of the dialog.
+\end_layout
+
+\begin_layout Standard
+The expression's result will be calculated only for the selected data rows,
+ stored in the selected attribute table column and overwrite any existing
+ values.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-07.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Use 
+\begin_inset Quotes eld
+\end_inset
+
+Table\SpecialChar \menuseparator
+Undo
+\begin_inset Quotes erd
+\end_inset
+
+ to revert unwanted changes.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Annotation layers
+\end_layout
+
+\begin_layout Standard
+The vector layer properties offer little control over label placement and
+ style.
+ But you can use a special points map called an 
+\begin_inset Quotes eld
+\end_inset
+
+annotation layer
+\begin_inset Quotes erd
+\end_inset
+
+ to place and formats labels exactly how you want them.
+ Create an annotation layer from any vector layer via "Layer\SpecialChar \menuseparator
+Export to...\SpecialChar \menuseparator
+Annotation".
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Duplicate control
+\begin_inset Quotes erd
+\end_inset
+
+ allows you to specify where the annotation points will be placed on the
+ features.
+ In the case of line or polygon layers, the new points will be placed in
+ the center of each feature by default.
+ The second option allows you to choose the attribute table field which
+ will be used as the actual label text.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-01-07.png
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After choosing 
+\begin_inset Quotes eld
+\end_inset
+
+Next
+\begin_inset Quotes erd
+\end_inset
+
+, you can then select fields to read the rotation, color, height and font
+ of the individual labels from.
+ Leave the settings at 
+\begin_inset Quotes eld
+\end_inset
+
+Default
+\begin_inset Quotes erd
+\end_inset
+
+ to create new fields for these settings.
+ Choosing 
+\begin_inset Quotes eld
+\end_inset
+
+Finish
+\begin_inset Quotes erd
+\end_inset
+
+ will then create a Shapefile with special capabilities to make advanced
+ labeling easy.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Opening an annotation layer for editing (select 
+\begin_inset Quotes eld
+\end_inset
+
+Start editing
+\begin_inset Quotes erd
+\end_inset
+
+ from its context menu) will give you access to a special editing function
+ in 
+\begin_inset Quotes eld
+\end_inset
+
+Layer\SpecialChar \menuseparator
+Modify annotation
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This allows you to quickly modify a label's appearance.
+ If you wish to change the label's location, simply use the standard point
+ editing tools.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-01-09.png
+	width 45col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To import an external annotation layer into a view, use 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Add layer
+\begin_inset Quotes erd
+\end_inset
+
+ and select the "Annotation" section for import.
+ The selected Shapefile will be imported as an annotation layer.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-01-10.png
+	width 65col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Default font settings for annotations can be adjusted in "Window\SpecialChar \menuseparator
+Preferences".
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+The only difference between a regular points Shapefile and an annotation
+ layer file is the presence of an additional file with the extension 
+\begin_inset Quotes eld
+\end_inset
+
+.gva
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Remember to keep this file when copying or moving data to another location
+ in the file system or you will not be able to open it as an annotation
+ layer any longer!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Geoprocessing
+\end_layout
+
+\begin_layout Standard
+For automated data manipulation, there are several geoprocessing tools built
+ into gvSIG itself.
+ The OA Digital Edition of gvSIG also includes the SEXTANTE plug-in (
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://www.sextantegis.com/
+\end_layout
+
+\end_inset
+
+) which provides a large number of additional geoprocessing tools.
+\end_layout
+
+\begin_layout Standard
+We cannot cover the details of typical geoprocessing tasks such as interpolation
+, data model conversion or generating exploratory statistics here.
+ Instead, we will just show you where to find the tools and how to use them
+ in general.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-13.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+GvSIG geoprocessing tools
+\end_layout
+
+\begin_layout Standard
+GvSIG's own geoprocessing tools cover only the most fundamental tools for
+ vector data manipulation, but they are particularly easy to use.
+ Activate a data view which has at least one vector data layer in it and
+ choose 
+\begin_inset Quotes eld
+\end_inset
+
+View\SpecialChar \menuseparator
+Geoprocessing toolbox
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Click on the little 
+\begin_inset Quotes eld
+\end_inset
+
++
+\begin_inset Quotes erd
+\end_inset
+
+ icons to unfold the tree of categorized tools.
+\end_layout
+
+\begin_layout Standard
+Double-click on the name of a tool or choose 
+\begin_inset Quotes eld
+\end_inset
+
+Open geoprocessing tool
+\begin_inset Quotes erd
+\end_inset
+
+ to start it.
+\end_layout
+
+\begin_layout Subsubsection
+Using the gvSIG geoprocessing tools
+\end_layout
+
+\begin_layout Standard
+All of the processing tools should be straight-forward to use.
+ Simply fill in the parameters going from top to bottom and hit 
+\begin_inset Quotes eld
+\end_inset
+
+Ok
+\begin_inset Quotes erd
+\end_inset
+
+ to perform the processing.
+\end_layout
+
+\begin_layout Standard
+Output will be saved as ESRI Shapefiles.
+ Use the 
+\begin_inset Quotes eld
+\end_inset
+
+Open
+\begin_inset Quotes erd
+\end_inset
+
+ button next to an output field to browse your file system for a place to
+ save them.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-04.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Example: spatial join
+\end_layout
+
+\begin_layout Standard
+A spatial join is an operation that allows you to transfer attributes from
+ one layer to features in another based on a transfer criterion.
+ E.g.
+ you may want to join the geological class labels attached to labeling points
+ to the attribute table of the polygons representing the actual geological
+ units.
+\end_layout
+
+\begin_layout Standard
+Open the 
+\begin_inset Quotes eld
+\end_inset
+
+Geoprocessing toolbox
+\begin_inset Quotes erd
+\end_inset
+
+ and select 
+\begin_inset Quotes eld
+\end_inset
+
+Geoprocesses\SpecialChar \menuseparator
+Analysis\SpecialChar \menuseparator
+Proximity\SpecialChar \menuseparator
+Spatial Join
+\begin_inset Quotes erd
+\end_inset
+
+.
+ For 
+\begin_inset Quotes eld
+\end_inset
+
+Input cover
+\begin_inset Quotes erd
+\end_inset
+
+, choose the layer to transfer the attribute data to (in this example the
+ geological units).
+ Under 
+\begin_inset Quotes eld
+\end_inset
+
+Clip cover
+\begin_inset Quotes erd
+\end_inset
+
+, choose the layer to transfer the attribute data from (in this case the
+ geological labels).
+ Select 
+\begin_inset Quotes eld
+\end_inset
+
+Use nearest geometry
+\begin_inset Quotes erd
+\end_inset
+
+ to transfer the attributes 1:1 from the label points to the polygons in
+ which they lie.
+\end_layout
+
+\begin_layout Standard
+Finally, specify an ESRI Shapefile as 
+\begin_inset Quotes eld
+\end_inset
+
+Output cover
+\begin_inset Quotes erd
+\end_inset
+
+ and click on 
+\begin_inset Quotes eld
+\end_inset
+
+Ok
+\begin_inset Quotes erd
+\end_inset
+
+ to start the operation.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-09.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+SEXTANTE GIS tools
+\end_layout
+
+\begin_layout Standard
+SEXTANTE is a collection of more than 200 geoprocessing tools that have
+ been taken from the SAGA GIS project (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.saga-gis.uni-goettingen.de/html/index.php
+\end_layout
+
+\end_inset
+
+) and made available as a 
+\begin_inset Quotes eld
+\end_inset
+
+toolbox
+\begin_inset Quotes erd
+\end_inset
+
+, integrated into gvSIG.
+ It can be accessed via a group of five icons in gvSIG's main icon bar only.
+ The most important one is the one with the little sextant on it.
+ It gives you straight access to all the geoprocessing tools in a categorized
+ list.
+\end_layout
+
+\begin_layout Subsubsection
+Getting started with SEXTANTE
+\end_layout
+
+\begin_layout Standard
+Click on the left-most one of the SEXTANTE icons to open the toolbox.
+ You will get a categorized list of tools to run.
+ Click on the little 
+\begin_inset Quotes eld
+\end_inset
+
++
+\begin_inset Quotes erd
+\end_inset
+
+ icons to unfold the tree of categorized tools.
+ Double-click on the name of a module to open its parameter input dialog.
+ Which 
+\series bold
+modules are available depends on the layers in your active data view
+\series default
+.
+ Some modules may require a certain layer type, e.g.
+ a points vector layer, to be present in one of your project's data views
+ before they can be started, otherwise they will remain grayed out.
+\end_layout
+
+\begin_layout Standard
+Results can be saved to temporary layers or permanent data files in your
+ file system.
+ If the result of an operation is a new raster layer, then you need to specify
+ its extent and cell resolution under the 
+\begin_inset Quotes eld
+\end_inset
+
+Raster output
+\begin_inset Quotes erd
+\end_inset
+
+ tab.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-10.png
+	width 55col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+When saving results as temporary layers, remember to export them to a permanent
+ datafile using gvSIG's 
+\begin_inset Quotes eld
+\end_inset
+
+Layer\SpecialChar \menuseparator
+Export to...
+\begin_inset Quotes erd
+\end_inset
+
+ function if you want to keep them.
+ Otherwise, they will get lost when you quit gvSIG!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Example: IDW interpolation
+\end_layout
+
+\begin_layout Standard
+Let's look at how to run a simple inverse distance weighting interpolation
+ to create a raster elevation model using the SEXTANTE tools.
+ Make sure there is a vector point map with an elevation field in its attribute
+ data table in one of your project's data views.
+ Then open the SEXTANTE toolbox by clicking on the little 
+\begin_inset Quotes eld
+\end_inset
+
+sextant
+\begin_inset Quotes erd
+\end_inset
+
+ icon.
+\end_layout
+
+\begin_layout Standard
+Unfold the list and choose 
+\begin_inset Quotes eld
+\end_inset
+
+Tools\SpecialChar \menuseparator
+Rasterization and interpolation\SpecialChar \menuseparator
+Density(kernel)
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Double click on the tool's list entry to open its input form.
+\end_layout
+
+\begin_layout Standard
+Under 
+\begin_inset Quotes eld
+\end_inset
+
+Parameters
+\begin_inset Quotes erd
+\end_inset
+
+, set 
+\begin_inset Quotes eld
+\end_inset
+
+Vector layer
+\begin_inset Quotes erd
+\end_inset
+
+ to the layer that has your elevation points.
+ Set 
+\begin_inset Quotes eld
+\end_inset
+
+Field
+\begin_inset Quotes erd
+\end_inset
+
+ to the attribute table field that has the elevation readings.
+ Adjust the 
+\begin_inset Quotes eld
+\end_inset
+
+Search radius
+\begin_inset Quotes erd
+\end_inset
+
+ so you can be sure there will be a sufficient number of given points in
+ the neighborhood of every point to be interpolated.
+ Leave the other parameters at their defaults.
+ Set the 
+\begin_inset Quotes eld
+\end_inset
+
+Output view
+\begin_inset Quotes erd
+\end_inset
+
+ to the data view to which you want the result raster to be added.
+\end_layout
+
+\begin_layout Standard
+Switch to the 
+\begin_inset Quotes eld
+\end_inset
+
+Raster output
+\begin_inset Quotes erd
+\end_inset
+
+ tab.
+ You need to choose an extent for the result raster.
+ An obvious choice would be to set it to 
+\begin_inset Quotes eld
+\end_inset
+
+Use extent from layer
+\begin_inset Quotes erd
+\end_inset
+
+ and choose the input points layer.
+ Finally, set the cell size to a value that results in a reasonable number
+ of raster rows and columns and click on 
+\begin_inset Quotes eld
+\end_inset
+
+Accept
+\begin_inset Quotes erd
+\end_inset
+
+ to start the interpolation.
+ The resulting raster layer should automatically be added to your selected
+ view.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-11.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+More about SEXTANTE
+\end_layout
+
+\begin_layout Standard
+SEXTANTE also allows you to use a command line interface or even build flow-char
+t type geoprocessing models.
+ There is much more to this powerful collection of tools than can be discussed
+ here.
+ One (English) piece of documentation that may be particularly helpful for
+ a quick start, can be found at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://sextantegis-docs.googlecode.com/files/ArticleForOSGeoJournal.pdf
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-12.png
+	width 75col%
+
+\end_inset
+
+
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Unfortunately, only the Spanish version of SEXTANTE comes with extensive
+ documentation of its modules.
+ However, since its tools have been taken from the SAGA GIS project, you
+ can consult the English documentation available here: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.saga-gis.org/en/index.html
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Map production
+\end_layout
+
+\begin_layout Standard
+You can create map layouts for printing maps easily with gvSIG and either
+ print them directly or export them as PDF and Postscript files.
+ GvSIG's project manager has a 
+\begin_inset Quotes eld
+\end_inset
+
+Map
+\begin_inset Quotes erd
+\end_inset
+
+ section which allows you to to create as many map layouts as you like.
+\end_layout
+
+\begin_layout Standard
+GvSIG comes with powerful tools to create map layouts as a mixture of data,
+ text and decorative elements.
+ Again, consult the gvSIG User Guide to make sure you know all of them.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-14.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Creating a basic map layout
+\end_layout
+
+\begin_layout Standard
+Open the project manager and create a new 
+\begin_inset Quotes eld
+\end_inset
+
+Map
+\begin_inset Quotes erd
+\end_inset
+
+ using the 
+\begin_inset Quotes eld
+\end_inset
+
+New
+\begin_inset Quotes erd
+\end_inset
+
+ button.
+ Open it.
+ You will get an empty page layout and the 
+\begin_inset Quotes eld
+\end_inset
+
+Map
+\begin_inset Quotes erd
+\end_inset
+
+ menu will appear in the main menu bar, giving you access to a wealth of
+ drawing and layout tools.
+ All tools can also be activated via their respective icons in the icon
+ bar.
+\end_layout
+
+\begin_layout Standard
+The first thing you will probably want to adjust is the page size and margin
+ settings.
+ Choose 
+\begin_inset Quotes eld
+\end_inset
+
+Map\SpecialChar \menuseparator
+Page layout
+\begin_inset Quotes erd
+\end_inset
+
+ for this purpose.
+\end_layout
+
+\begin_layout Standard
+There is a separate set of tools for zooming and panning in the layout view
+ under 
+\begin_inset Quotes eld
+\end_inset
+
+Map\SpecialChar \menuseparator
+Navigation
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Quotes eld
+\end_inset
+
+Map\SpecialChar \menuseparator
+Insert
+\begin_inset Quotes erd
+\end_inset
+
+ menu contains all the elements you can add to your layout.
+ All 
+\begin_inset Quotes eld
+\end_inset
+
+data elements
+\begin_inset Quotes erd
+\end_inset
+
+, such as data views, legends and scalebars, expect you to create a 
+\series bold
+frame
+\series default
+ into which they will be printed.
+ To do so, click anywhere on your page layout, keep the mouse button pressed
+ and drag the frame to its intended extents.
+ 
+\end_layout
+
+\begin_layout Standard
+All layout objects have a context menu (right mouse button or CTRL plus
+ mouse button on a Mac) which gives you access to their individual properties.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-15.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Select one or more objects and press the DEL or BACKSPACE key to delete
+ them.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Adding a data view to a layout
+\end_layout
+
+\begin_layout Standard
+Select 
+\begin_inset Quotes eld
+\end_inset
+
+Map\SpecialChar \menuseparator
+Insert\SpecialChar \menuseparator
+View
+\begin_inset Quotes erd
+\end_inset
+
+ to create a frame in which to print any of your project's data views (i.e.
+ the actual map data).
+ This will open the properties dialog of the new layout frame.
+ Select the data view you wish to map under 
+\begin_inset Quotes eld
+\end_inset
+
+View
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Make sure to select 
+\begin_inset Quotes eld
+\end_inset
+
+Active link
+\begin_inset Quotes erd
+\end_inset
+
+ if you wish the layout frame to update when you change the data zoom and/or
+ extent back in the data view.
+\end_layout
+
+\begin_layout Standard
+GvSIG will also need to know how the scale of the data view relates to the
+ frame in your map layout.
+ Select 
+\begin_inset Quotes eld
+\end_inset
+
+Automatic
+\begin_inset Quotes erd
+\end_inset
+
+ to let gvSIG choose a scale that will best fit the data view's contents
+ into the layout frame.
+ Select 
+\begin_inset Quotes eld
+\end_inset
+
+Maintain viewing scale
+\begin_inset Quotes erd
+\end_inset
+
+ to reproduce the same scale that the data view uses.
+ Select 
+\begin_inset Quotes eld
+\end_inset
+
+Scale specified by the user
+\begin_inset Quotes erd
+\end_inset
+
+ and enter a scale value in the field below to enforce a specific scale
+ setting.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-16.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+A quick way to change what's displayed in a data view frame is to use the
+ tools under 
+\begin_inset Quotes eld
+\end_inset
+
+Map\SpecialChar \menuseparator
+Navigation in a view
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Plain Layout
+If things get messy, try using the 
+\begin_inset Quotes eld
+\end_inset
+
+Refresh
+\begin_inset Quotes erd
+\end_inset
+
+ function in the frame's context menu.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Adding map decorations
+\end_layout
+
+\begin_layout Standard
+Scale bars, legends and north arrows can be added in precisely the same
+ manner as data views.
+ The only difference is that they need to be linked to a data view frame
+ already present in your layout.
+ You cannot make any good use of the elements unless you have already added
+ at least one data view.
+\end_layout
+
+\begin_layout Standard
+In addition, you can add any number of text, drawing elements or bitmap
+ images to your map layout.
+\end_layout
+
+\begin_layout Standard
+GvSIG has powerful aligning tools to help you distribute graphical elements
+ over a map layout evenly and neatly.
+ To make use of them, select all elements you wish to align and choose 
+\begin_inset Quotes eld
+\end_inset
+
+Map\SpecialChar \menuseparator
+Graphics\SpecialChar \menuseparator
+Align
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Decorative frames can quickly be created around any selection of layout
+ elements by choosing 
+\begin_inset Quotes eld
+\end_inset
+
+Map\SpecialChar \menuseparator
+Graphics\SpecialChar \menuseparator
+Graphic line
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/screenshot-04-17.png
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+You can export a finished map layout to Postscript and PDF files via the
+ 
+\begin_inset Quotes eld
+\end_inset
+
+File
+\begin_inset Quotes erd
+\end_inset
+
+ menu.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\start_of_appendix
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+License
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:License"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/logo_code.gif
+	width 35col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+
+\series bold
+\size footnotesize
+Attribution 2.0 England and Wales
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\size footnotesize
+CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE LEGAL
+ SERVICES.
+ DISTRIBUTION OF THIS LICENCE DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP.
+ CREATIVE COMMONS PROVIDES THIS INFORMATION ON AN "AS-IS" BASIS.
+ CREATIVE COMMONS MAKES NO WARRANTIES REGARDING THE INFORMATION PROVIDED,
+ AND DISCLAIMS LIABILITY FOR DAMAGES RESULTING FROM ITS USE.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+\emph on
+Licence
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+THE WORK (AS DEFINED BELOW) IS PROVIDED UNDER THE TERMS OF THIS CREATIVE
+ COMMONS PUBLIC LICENCE ("CCPL" OR "LICENCE").
+ THE WORK IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW.
+ ANY USE OF THE WORK OTHER THAN AS AUTHORIZED UNDER THIS LICENCE OR COPYRIGHT
+ LAW IS PROHIBITED.
+ BY EXERCISING ANY RIGHTS TO THE WORK PROVIDED HERE, YOU ACCEPT AND AGREE
+ TO BE BOUND BY THE TERMS OF THIS LICENCE.
+ THE LICENSOR GRANTS YOU THE RIGHTS CONTAINED HERE IN CONSIDERATION OF YOUR
+ ACCEPTANCE OF SUCH TERMS AND CONDITIONS.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+This Creative Commons England and Wales Public Licence enables You (all
+ capitalised terms defined below) to view, edit, modify, translate and distribut
+e Works worldwide, provided that You credit the Original Author.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+'OA Digital'
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+and
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+'You'
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+agree as follows:
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+1.
+ Definitions
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\size footnotesize
+"Attribution"
+\series default
+ means acknowledging all the parties who have contributed to and have rights
+ in the Work, Derivative Work or Collective Work under this Licence.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\size footnotesize
+"Collective Work"
+\series default
+ means the Work in its entirety in unmodified form along with a number of
+ other separate and independent works, assembled into a collective whole.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\size footnotesize
+"Derivative Work"
+\series default
+ means any work created by the editing, modification, adaptation or translation
+ of the Work in any media (however a work that constitutes a Collective
+ Work will not be considered a Derivative Work for the purpose of this Licence).
+ For the avoidance of doubt, where the Work is a musical composition or
+ sound recording, the synchronization of the Work in timed-relation with
+ a moving image ("synching") will be considered a Derivative Work for the
+ purpose of this Licence.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\size footnotesize
+"Licence"
+\series default
+ means this Creative Commons England and Wales Public Licence agreement.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\size footnotesize
+"Original Author"
+\series default
+ means the individual (or entity) who created the Work.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+\size footnotesize
+"Work"
+\series default
+ means the work protected by copyright which is offered under the terms
+ of this Licence.
+\end_layout
+
+\begin_layout Enumerate
+
+\size footnotesize
+For the purpose of this Licence, when not inconsistent with the context,
+ words in the singular number include the plural number.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+2.
+ Licence Terms
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+2.1 The Licensor hereby grants to You a worldwide, royalty-free, non-exclusive,
+ Licence for use and for the duration of copyright in the Work.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+You may:
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+copy the Work;
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+create one or more Derivative Works;
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+incorporate the Work into one or more Collective Works;
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+copy Derivative Works or the Work as incorporated in any Collective Work;
+ and
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+publish, distribute, archive, perform or otherwise disseminate the Work,
+ Derivative Works or the Work as incorporated in any Collective Work, to
+ the public in any material form in any media whether now known or hereafter
+ created.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+HOWEVER,
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+You must not:
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+impose any terms on the use to be made of the Work, the Derivative Work
+ or the Work as incorporated in a Collective Work that alter or restrict
+ the terms of this Licence or any rights granted under it or has the effect
+ or intent of restricting the ability to exercise those rights;
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+impose any digital rights management technology on the Work, the Derivative
+ Work or the Work as incorporated in a Collective Work that alters or restricts
+ the terms of this Licence or any rights granted under it or has the effect
+ or intent of restricting the ability to exercise those rights;
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+sublicense the Work;
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+subject the Work to any derogatory treatment as defined in the Copyright,
+ Designs and Patents Act 1988.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+FINALLY,
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+You must:
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+make reference to this Licence (by Uniform Resource Identifier (URI), spoken
+ word or as appropriate to the media used) on all copies of the Work and
+ Derivative Works and Collective Works published, distributed, performed
+ or otherwise disseminated or made available to the public by You;
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+recognise the Licensor's / Original Author's right of attribution in any
+ Work, Derivative Work and Collective Work that You publish, distribute,
+ perform or otherwise disseminate to the public and ensure that You credit
+ the Licensor / Original Author as appropriate to the media used; and
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+to the extent reasonably practicable, keep intact all notices that refer
+ to this Licence, in particular the URI, if any, that the Licensor specifies
+ to be associated with the Work, unless such URI does not refer to the copyright
+ notice or licensing information for the Work.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+Additional Provisions for third parties making use of the Work
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+2.2.
+ Further licence from the Licensor
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+Each time You publish, distribute, perform or otherwise disseminate
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+the Work; or
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+any Derivative Work; or
+\end_layout
+
+\begin_layout Itemize
+
+\size footnotesize
+the Work as incorporated in a Collective Work
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+the Licensor agrees to offer to the relevant third party making use of the
+ Work (in any of the alternatives set out above) a licence to use the Work
+ on the same terms and conditions as granted to You hereunder.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+2.3.
+ This Licence does not affect any rights that the User may have under any
+ applicable law, including fair use, fair dealing or any other legally recognise
+d limitation or exception to copyright infringement.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+2.4.
+ All rights not expressly granted by the Licensor are hereby reserved, including
+ but not limited to, the exclusive right to collect, whether individually
+ or via a licensing body, such as a collecting society, royalties for any
+ use of the Work.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+3.
+ Warranties and Disclaimer
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+Except as required by law, the Work or any Derivative Work is licensed by
+ the Licensor on an "as is" and "as available" basis and without any warranty
+ of any kind, either express or implied.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+4.
+ Limit of Liability
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+Subject to any liability which may not be excluded or limited by law the
+ Licensor shall not be liable and hereby expressly excludes all liability
+ for loss or damage howsoever and whenever caused to You.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+5.
+ Termination
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+The rights granted to You under this Licence shall terminate automatically
+ upon any breach by You of the terms of this Licence.
+ Individuals or entities who have received Derivative Works or Collective
+ Works from You under this Licence, however, will not have their Licences
+ terminated provided such individuals or entities remain in full compliance
+ with those Licences.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+6.
+ General
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+6.1.
+ The validity or enforceability of the remaining terms of this agreement
+ is not affected by the holding of any provision of it to be invalid or
+ unenforceable.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+6.2.
+ This Licence constitutes the entire Licence Agreement between the parties
+ with respect to the Work licensed here.
+ There are no understandings, agreements or representations with respect
+ to the Work not specified here.
+ The Licensor shall not be bound by any additional provisions that may appear
+ in any communication in any form.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+6.3.
+ A person who is not a party to this Licence shall have no rights under
+ the Contracts (Rights of Third Parties) Act 1999 to enforce any of its
+ terms.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+6.4.
+ This Licence shall be governed by the law of England and Wales and the
+ parties irrevocably submit to the exclusive jurisdiction of the Courts
+ of England and Wales.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\size footnotesize
+7.
+ On the role of Creative Commons
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+7.1.
+ Neither the Licensor nor the User may use the Creative Commons logo except
+ to indicate that the Work is licensed under a Creative Commons Licence.
+ Any permitted use has to be in compliance with the Creative Commons trade
+ mark usage guidelines at the time of use of the Creative Commons trade
+ mark.
+ These guidelines may be found on the Creative Commons website or be otherwise
+ available upon request from time to time.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+7.2.
+ Creative Commons Corporation does not profit financially from its role
+ in providing this Licence and will not investigate the claims of any Licensor
+ or user of the Licence.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+7.3.
+ One of the conditions that Creative Commons Corporation requires of the
+ Licensor and You is an acknowledgement of its limited role and agreement
+ by all who use the Licence that the Corporation is not responsible to anyone
+ for the statements and actions of You or the Licensor or anyone else attempting
+ to use or using this Licence.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+7.4.
+ Creative Commons Corporation is not a party to this Licence, and makes
+ no warranty whatsoever in connection to the Work or in connection to the
+ Licence, and in all events is not liable for any loss or damage resulting
+ from the Licensor's or Your reliance on this Licence or on its enforceability.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+7.5.
+ USE OF THIS LICENCE MEANS THAT YOU AND THE LICENSOR EACH ACCEPTS THESE
+ CONDITIONS IN SECTION 7.1, 7.2, 7.3, 7.4 AND EACH ACKNOWLEDGES CREATIVE COMMONS
+ CORPORATION'S VERY LIMITED ROLE AS A FACILITATOR OF THE LICENCE FROM THE
+ LICENSOR TO YOU.
+\end_layout
+
+\begin_layout Standard
+
+\size footnotesize
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Creative Commons is not a party to this Licence, and makes no warranty whatsoeve
+r in connection with the Work.
+ Creative Commons will not be liable to You or any party on any legal theory
+ for any damages whatsoever, including without limitation any general, special,
+ incidental or consequential damages arising in connection to this licence.
+ Notwithstanding the foregoing two (2) sentences, if Creative Commons has
+ expressly identified itself as the Licensor hereunder, it shall have all
+ rights and obligations of Licensor.
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Except for the limited purpose of indicating to the public that the Work
+ is licensed under the CCPL, neither party will use the trademark "Creative
+ Commons" or any related trademark or logo of Creative Commons without the
+ prior written consent of Creative Commons.
+ Any permitted use will be in compliance with Creative Commons' then-current
+ trademark usage guidelines, as may be published on its website or otherwise
+ made available upon request from time to time.
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+Creative Commons may be contacted at 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://creativecommons.org/
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

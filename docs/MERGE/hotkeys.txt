@@ -1,0 +1,92 @@
+Archivo
+	abrir		
+	nuevo		
+	guardar		s
+
+	Exit		
+
+Vista
+	New layer->Shapefile	n
+	Add layer	l
+
+	Navigation
+		Pan		y
+		Zoom in 	+
+		Zoom out	-
+
+		Zoom to selection q
+		Zoom to all	  w
+		Zoom previous     b
+
+	Locate by attribute	f
+
+	Selection
+		Select all	a
+		Clear selection	d
+
+	Query
+		Information	i
+		Measure dist	u
+		Measure area    o
+		
+Capa
+	Start editing		e
+	Stop  editing		e
+
+	Show attribute table	t
+
+	Advanced Hyperlinks	h
+	
+Tabla
+	Start editing		e
+	Stop editing		e
+
+	Filter			f
+
+	Move selection to top	m
+
+	Cut			x
+	Copy			c
+	Paste			v
+
+	Join			j
+	Link			l
+
+	Undo			z
+	Redo			r
+	Command stack		k
+
+Geometry
+	
+	Modify
+		Edit Vertex	v
+
+	Undo			z
+	Redo			r
+	Command stack		k
+	
+Mapa
+	
+	View frame
+		Pan		y
+		Zoom in 	+
+		Zoom out	-
+
+		Zoom to all	w
+	
+		Edit vertices	v
+
+		Undo		z
+		Redo		r
+		Command stack	k
+	
+Ver
+	Project Manager		p
+	Geodatabase Manager	g
+	
+Ventana
+	Cascade			
+	Tile			
+	
+
+	

@@ -1,0 +1,2190 @@
+#LyX 1.6.6 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options false
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans helvet
+\font_typewriter default
+\font_default_family sfdefault
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize 12
+\spacing single
+\use_hyperref true
+\pdf_title "OA Digital Quickstart Guide to gvSIG"
+\pdf_author "OA Digital"
+\pdf_subject "A quick introductio to using gvSIG (OA Digital Edition)"
+\pdf_keywords "gvSIG, quickstart, guide, GIS, Oxford Archaeology, OA Digital"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2.5cm
+\bottommargin 2.5cm
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle empty
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\size giant
+GvSIG OA Digital Edition 2010
+\size default
+
+\begin_inset Newline newline
+\end_inset
+
+Installation Guide
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename /home/benni/Projekte/GvSIG-Devel/installbuilder-6/documentation/illustrations/gvsig-oade-2010.png
+	lyxscale 50
+	width 90col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace vfill
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../../images/logo.png
+	scale 50
+
+\end_inset
+
+ 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://oadigital.net
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+thispagestyle{empty}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Important information
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Welcome to the gvSIG OA Digital Edition 2010!
+\end_layout
+
+\begin_layout Standard
+GvSIG is a free and open source Geoinformation System (GIS) that enables
+ you to interactively visualise, manage, modify and analyse spatial information
+ in the form of digital maps, images and database tables.
+ It is easy to learn, yet versatile and efficient enough for demanding GIS
+ tasks and above all freely available, at no charge and under a license
+ that emphasizes your freedom of use rather than restrictions.
+ It is a cross-platform application, based on Oracle's Java technology,
+ which currently runs on Windows (2000/XP/Vista/7), Linux and Mac OS X (preferab
+ly Snow Leopard) operating systems, giving you great flexibility in its
+ deployment.
+\end_layout
+
+\begin_layout Standard
+At Oxford Archaeology, we believe that gvSIG has developed into one of the
+ most versatile GIS applications available, especially when used in combination
+ with the powerful SEXTANTE and GRASS GIS processing tools (both included
+ in this release).
+\end_layout
+
+\begin_layout Standard
+This version is based on the source code of gvSIG 1.10, as developed by CIT
+ Valencia and others.
+ We would like to thank them all for their great work making user-friendly,
+ cross-platform and open source GIS a reality.
+ The official pages of the gvSIG project can be found here: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.gvsig.org
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+This software is provided 
+\begin_inset Quotes eld
+\end_inset
+
+as-is
+\begin_inset Quotes erd
+\end_inset
+
+.
+ We may produce minor updates for this edition of gvSIG in the future, but
+ most development is now focused on version 2.0, a radical redesign of the
+ gvSIG code-base.
+\end_layout
+
+\begin_layout Subsection
+Features of the OA Digital Edition
+\end_layout
+
+\begin_layout Standard
+GvSIG OADE 2010 differs from the official CIT gvSIG 1.10 release in the following
+ respects:
+\end_layout
+
+\begin_layout Standard
+- completely new installer frontend
+\end_layout
+
+\begin_layout Standard
+- includes latest Java Runtime Environment
+\end_layout
+
+\begin_layout Standard
+- reworked menu structure, keyboard shortcuts and layer context menus
+\end_layout
+
+\begin_layout Standard
+- better integration into all supported operating systems
+\end_layout
+
+\begin_layout Standard
+- comes with SEXTANTE 0.6 and GRASS GIS 6.4 integrated
+\end_layout
+
+\begin_layout Standard
+- additional documentation and sample data
+\end_layout
+
+\begin_layout Standard
+- fully self-contained; can e.g.
+ run from a removable USB device
+\end_layout
+
+\begin_layout Standard
+We have tried to be as exhaustive as possible in our overhaul of gvSIG for
+ this release, but some rough edges, most notably, Spanish texts in the
+ user interface may still not be taken care of.
+ It is not our intention to keep any of gvSIG's remaining limitations a
+ secret, so 
+\series bold
+we are keeping a database of the most important issues (and some possible
+ work-arounds) on our website
+\series default
+.
+ Please consult it for a quick assessment of gvSIG's suitability for your
+ purposes and also as a first step to helping you with any problems you
+ encounter.
+ We suggest you give gvSIG a test run in any case, as it is free, comes
+ with no obligations and your criticism will help making the next release
+ of gvSIG perform even better.
+ You can direct feedback to the international gvSIG mailing list on 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://runas.cap.gva.es/mailman/listinfo/gvsig_internacional
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Watch our website at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://oadigital.net
+\end_layout
+
+\end_inset
+
+ for further information, more in-depths guides and documents and other
+ news regarding the gvSIG OA Digital Edition.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+By default, this edition will use an English user interface and create new
+ data views using the spatial reference system of the British Ordnance Survey
+ (EPSG 27700).
+ If these default settings do not suite your needs, you can easily change
+ them in the gvSIG preferences dialog (to be found under 
+\begin_inset Quotes eld
+\end_inset
+
+Window>Preferences
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+General notes
+\end_layout
+
+\begin_layout Standard
+This software is designed to be installed without the need for a user account
+ with administrator privileges.
+ It will never touch any system-wide settings on the computer where it is
+ deployed.
+ Once installed anywhere, it can be run from that location or any other,
+ simply by copying the installation folder to another place in the file
+ system.
+ Of course, this makes it perfectly possible to run gvSIG OADE 2010 off
+ a removable storage device such as a USB pendrive.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+ If you copy your GIS data onto the same device, you will be able to work
+ like a true digital nomad!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The installation procedure itself is nearly identical on all supported operating
+ systems.
+ However, there may be some differences that matter for your particular
+ setup.
+ So please make sure to consult the operating system specific notes (
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Operating-system-specific"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection
+Java notes
+\end_layout
+
+\begin_layout Standard
+This version of gvSIG has been optimized to run on Java 1.6 virtual machines.
+ It will no longer work on older versions of Java.
+\end_layout
+
+\begin_layout Standard
+On Linux and Windows platforms, gvSIG OADE comes with a bundled Java Runtime
+ Environment (JRE) which has been tested and is known to work well with
+ this release of the software.
+ We recommend you just keep it that way.
+ Running gvSIG with a different JRE may or may not work.
+ Try at your own risk.
+\end_layout
+
+\begin_layout Standard
+On Mac OS X, Java comes hard-wired with the OS and the version of Java depends
+ on the version of Mac OS X.
+ For Java 1.6, you need to be running Mac OS X 10.5 (newer hardware only)
+ or higher.
+ However, there are other options to install Java 1.6 on older Macs (see
+ 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:Mac-OS-X"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection
+Old user settings
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Old-user-settings"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you had another version of gvSIG previously installed on your computer,
+ then chances are that you also have an older user settings folder.
+ We recommend that you move this folder out of the way by renaming it, or
+ (provided you have not made any important modifications to files contained
+ in that folder) simply delete it, before you proceed with the installation
+ of gvSIG OADE 2010.
+\end_layout
+
+\begin_layout Standard
+The settings folder is called 
+\begin_inset Quotes eld
+\end_inset
+
+gvSIG
+\begin_inset Quotes erd
+\end_inset
+
+.
+ It's location depends on your operating system:
+\end_layout
+
+\begin_layout Itemize
+On Linux and Mac OS X systems, it is located directly in your home folder.
+\end_layout
+
+\begin_layout Itemize
+On Windows 2000/XP it is usually 
+\emph on
+C:
+\backslash
+Documents and Settings
+\backslash
+<username>.
+\end_layout
+
+\begin_layout Itemize
+On Windows Vista/7 it is usually 
+\emph on
+C:
+\backslash
+Users
+\backslash
+<username>
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+(See here for more information: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://en.wikipedia.org/wiki/Home_directory
+\end_layout
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+If you run gvSIG for the first time, right after the installation, it will
+ create a new settings folder and fill it with some default settings that
+ we feel make a lot of sense and improve the user experience.
+\end_layout
+
+\begin_layout Standard
+Afterwards, open 
+\begin_inset Quotes eld
+\end_inset
+
+File\SpecialChar \menuseparator
+Preferences
+\begin_inset Quotes erd
+\end_inset
+
+ in gvSIG and go through all the options to make sure they fit your needs.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Installation procedure
+\end_layout
+
+\begin_layout Standard
+Installing gvSIG using our customized installer is a snap.
+ Download the installer package for your platform from our website and run
+ it to start the installation procedure.
+ The following instructions are based on the Windows installer, but the
+ versions for other platforms will work in an almost identical way.
+ This guide will take you through the installation procedure step by step.
+\end_layout
+
+\begin_layout Standard
+The installer will greet you with a Welcome screen.
+ Press 
+\begin_inset Quotes eld
+\end_inset
+
+Next >
+\begin_inset Quotes erd
+\end_inset
+
+ to advance to the license agreement.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/installation-01.png
+	lyxscale 50
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+You do not need administrator rights to install this software, and you can
+ install it into any location, including a USB pendrive.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This software comes under the GNU Public License, which is an open source
+ license.
+ Make sure you read and understand all of its terms and choose to accept
+ it if you think it is suitable for you.
+ You can only choose 
+\begin_inset Quotes eld
+\end_inset
+
+Next >
+\begin_inset Quotes erd
+\end_inset
+
+ and start the actual installation if you accept the licensing conditions.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/installation-02.png
+	lyxscale 50
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The next step is to choose the installation directory.
+ Click on the little folder icon to browse for an installation directory.
+ Choose whatever place is suitable for you and press 
+\begin_inset Quotes eld
+\end_inset
+
+Next >
+\begin_inset Quotes erd
+\end_inset
+
+ once you have made your choice.
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/installation-03.png
+	lyxscale 50
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You can now select individual components to include in the installation.
+ Select a component by clicking on its title to get a description.
+ Although, due to its size, the North Carolina Data is not part of the default
+ installation, we recommend you install it if you can afford the disk space,
+ as our quickstart guide is based on it.
+ Press 
+\begin_inset Quotes eld
+\end_inset
+
+Next >
+\begin_inset Quotes erd
+\end_inset
+
+ when you have made your choice of components.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/installation-04.png
+	lyxscale 50
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On Windows, you can choose whether to associate gvSIG project files (.gvp)
+ with gvSIG.
+ This will allow you to double-click such files and have them open up in
+ gvSIG.
+ If you want this, select 
+\begin_inset Quotes eld
+\end_inset
+
+Yes
+\begin_inset Quotes erd
+\end_inset
+
+ here.
+ Then press 
+\begin_inset Quotes eld
+\end_inset
+
+Next >
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename /home/benni/Projekte/GvSIG-Devel/installbuilder-6/documentation/illustrations/installation-05.png
+	lyxscale 50
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+This setting is only for the current user.
+ Due to its portable design, gvSIG does not deal with any system-wide settings.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Performance Tweaking option allows you to reserve more of your PC's
+ memory for gvSIG which can improve performance and stability when working
+ with very large projects and many data layers.
+ In most cases, however, the default setting will work just fine.
+ Press 
+\begin_inset Quotes eld
+\end_inset
+
+Next >
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/installation-06.png
+	lyxscale 50
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+You can change this setting later by manually editing the 
+\emph on
+gvSIG.ini
+\emph default
+ (Windows), 
+\emph on
+gvSIG.sh
+\emph default
+ (Linux), or 
+\emph on
+preJava
+\emph default
+ (Mac OS X) file and entering different values for the 
+\emph on
+-Xmx
+\emph default
+ and 
+\emph on
+-Xms
+\emph default
+ options on the Java command line (see 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:Java-customization-(32/64"
+
+\end_inset
+
+ for details).
+ Make sure you know what you are doing or gvSIG might not even start anymore
+ after a change!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+That's it! Press 
+\begin_inset Quotes eld
+\end_inset
+
+Next >
+\begin_inset Quotes erd
+\end_inset
+
+ one more time to have the installer copy all required files to your hard
+ disk.
+ This can take a few minutes.
+ When the installation is finished, you can choose to view some further
+ information and launch gvSIG.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename ../illustrations/installation-08.png
+	lyxscale 50
+	width 75col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The installer will create an icon on your desktop which allows you to start
+ gvSIG.
+ On Windows systems, you should also find a 
+\begin_inset Quotes eld
+\end_inset
+
+GvSIG OA Digital Edition
+\begin_inset Quotes erd
+\end_inset
+
+ menu group in the Windows 
+\begin_inset Quotes eld
+\end_inset
+
+Start
+\begin_inset Quotes erd
+\end_inset
+
+ menu.
+ From there you can launch gvSIG, browse related websites and documentation
+ (in PDF format) or open one of our prepared sample project files.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename /home/benni/Projekte/GvSIG-Devel/installbuilder-6/documentation/illustrations/windows-02.png
+	lyxscale 50
+	width 45col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+User preferences
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:User-preferences"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After a fresh installation of gvSIG OADE (and provided that you moved any
+ old settings folder aside, as discussed in 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Old-user-settings"
+
+\end_inset
+
+), gvSIG will start up with a set of default values we feel make good sense
+ for most users.
+\end_layout
+
+\begin_layout Standard
+To customize them further to your needs, open the preferences dialog under
+ 
+\begin_inset Quotes eld
+\end_inset
+
+File\SpecialChar \menuseparator
+Preferences
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Perhaps the most critical things to verify are:
+\end_layout
+
+\begin_layout Itemize
+The default encoding for DBase files (e.g.
+ Shapefile attribute tables): 
+\begin_inset Quotes eld
+\end_inset
+
+DBF Encoding
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Screen density (so you can display objects true to scale on your monitor):
+ 
+\begin_inset Quotes eld
+\end_inset
+
+General\SpecialChar \menuseparator
+Screen
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Your network connection (if you are behind a company firewall and want to
+ work with online geodata services): 
+\begin_inset Quotes eld
+\end_inset
+
+Network
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+The spatial reference system to use as default for new data views: choose
+ 
+\begin_inset Quotes eld
+\end_inset
+
+View
+\begin_inset Quotes erd
+\end_inset
+
+, then change 
+\begin_inset Quotes eld
+\end_inset
+
+Default projection
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Finally, if you don't like the way gvSIG OADE 2010 looks, you can change
+ the user interface's 
+\begin_inset Quotes eld
+\end_inset
+
+look and feel
+\begin_inset Quotes erd
+\end_inset
+
+ in the section 
+\begin_inset Quotes eld
+\end_inset
+
+General->Appearance
+\begin_inset Quotes erd
+\end_inset
+
+.
+ After a change, you will have to restart gvSIG to see the effects.
+ We recommend 
+\begin_inset Quotes eld
+\end_inset
+
+Plastic XP
+\begin_inset Quotes erd
+\end_inset
+
+, especially on Mac OS X.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+SEXTANTE and GRASS GIS
+\end_layout
+
+\begin_layout Standard
+This version of gvSIG comes with powerful geoprocessing support.
+ More than 500 tools are provided by the SEXTANTE extension in combination
+ with the GRASS GIS interface.
+ Setup is simple (provided you chose to install both SEXTANTE and GRASS
+ GIS).
+ Open the SEXTANTE toolbox by clicking the little blue sextant icon situated
+ towards the right end of the gvSIG icon toolbar (1).
+ Then click on the 
+\begin_inset Quotes eld
+\end_inset
+
+i
+\begin_inset Quotes erd
+\end_inset
+
+ button (2), and browse to 
+\begin_inset Quotes eld
+\end_inset
+
+Using GRASS and WPS
+\begin_inset Quotes erd
+\end_inset
+
+ to get detailed information.
+\end_layout
+
+\begin_layout Standard
+Finally, click on the 
+\begin_inset Quotes eld
+\end_inset
+
+tools
+\begin_inset Quotes erd
+\end_inset
+
+ button in the lower right corner of the SEXTANTE toolbox (3) and open the
+ page 
+\begin_inset Quotes eld
+\end_inset
+
+GRASS
+\begin_inset Quotes erd
+\end_inset
+
+ to configure GRASS GIS.
+ The GRASS installation folder is contained inside the folder where you
+ installed gvSIG OADE 2010.
+ On Linux and Windows, this will be a subfolder called 
+\emph on
+grass
+\emph default
+.
+ On Mac OS X, you need to browse the contents of the gvSIG OADE 2010 App
+ folder and find the folder 
+\emph on
+Contents/Resources/grass
+\emph default
+ therein.
+\end_layout
+
+\begin_layout Standard
+On Windows, you will also need to specify the shell executable (sh.exe).
+ This is located in the subfolder 
+\emph on
+msys
+\backslash
+bin
+\emph default
+ of your gvSIG OADE 2010 installation folder.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename /home/benni/Projekte/GvSIG-Devel/installbuilder-6/documentation/illustrations/sextante-001.png
+	lyxscale 50
+	width 55col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After making the necessary settings, hit the 
+\begin_inset Quotes eld
+\end_inset
+
+Setup GRASS
+\begin_inset Quotes erd
+\end_inset
+
+ button and wait until GRASS has been configured.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Operating system specific notes
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Operating-system-specific"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We have designed this software to look and behave as identically as possible
+ on all supported operating systems.
+ However, there are still some small differences, so please read the notes
+ that apply to your operating system below.
+\end_layout
+
+\begin_layout Subsection
+Linux Notes
+\end_layout
+
+\begin_layout Standard
+Linux is the preferred platform for running gvSIG.
+ It offers superior 32 bit memory management and full control over the Java
+ environment in which gvSIG runs.
+ Linux is also our primary development and testing platform.
+\end_layout
+
+\begin_layout Standard
+This software has minimal dependencies on system libraries and should run
+ well on any Linux distribution that's not more than ca.
+ 5 years old.
+ To be precise, the minimum version of GNU Libc required is 2.3.
+ That version is found e.g.
+ in Ubuntu 6.06.
+ On Linux distributions that do not fullfill the requirements, there will
+ be no raster and projection functionality.
+\end_layout
+
+\begin_layout Subsubsection
+32 Bit compatibility libraries needed
+\end_layout
+
+\begin_layout Standard
+If you are running a 64 bit Linux system and getting the following error
+ message on startup:
+\end_layout
+
+\begin_layout LyX-Code
+Exception in thread "main" java.lang.UnsatisfiedLinkError:
+\end_layout
+
+\begin_layout LyX-Code
+<gvSIG-install-dir>/jre/lib/i386/xawt/libmawt.so: libXext.so.6: 
+\end_layout
+
+\begin_layout LyX-Code
+cannot open shared object file: No such file or directory
+\end_layout
+
+\begin_layout Standard
+Then this indicates that "libXext.so.6", which is a requirement of Orcale's
+ JRE 1.6 32 bit (the one that comes bundled with gvSIG OADE) is missing.
+ That library should be in some 32 bit compatibility package of your Linux
+ distribution.
+ On Debian based systems (including Ubuntu) it is called "ia32".
+ For installation instructions, please consult your Linux distribution's
+ manual.
+\end_layout
+
+\begin_layout Subsection
+Windows notes
+\end_layout
+
+\begin_layout Standard
+In general, gvSIG runs very well on Windows XP, Vista and 7.
+ It is reported to also run on Windows 2000, but this has not been tested
+ by us.
+ Windows has worse memory management on 32 bit platforms, so the maximum
+ chunk of memory that Java can use will be somewhat more limited than on
+ Linux or Mac OS X.
+\end_layout
+
+\begin_layout Standard
+The installer will put a number of useful links into the desktop 
+\begin_inset Quotes eld
+\end_inset
+
+Start
+\begin_inset Quotes erd
+\end_inset
+
+ menu, including links to important web pages and all the manuals and sample
+ data project (if you chose to install them).
+\end_layout
+
+\begin_layout Standard
+If, for some reason you wish to start gvSIG manually from its installation
+ folder: do not start it via 
+\emph on
+bin
+\backslash
+gvSIG.exe
+\emph default
+! If you do so, then some things, such as restoring default settings or
+ switching the user settings folder will not work.
+ Instead, start it via 
+\emph on
+bin
+\backslash
+gvSIG.bat
+\emph default
+.
+\end_layout
+
+\begin_layout Subsection
+Mac OS X notes
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Mac-OS-X"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Mac OS X port of gvSIG OADE 2010 is relatively new and there may still
+ be a few (minor) glitches.
+ The binaries we provide are for Intel-based Macs only.
+ No PPC support.
+ Sorry.
+\end_layout
+
+\begin_layout Standard
+Note that, as opposed to all other supported operating systems, we cannot
+ bundle a specific Java Virtual Machine with the Mac version of gvSIG.
+ Note also that Snow Leopard is the first Mac OS X to use a 64 bit Java
+ environment by default.
+ However, gvSIG currently ships as 32 bit binaries only, so upon startup
+ it will switch to a 32 bit Java environment.
+\end_layout
+
+\begin_layout Standard
+The GPS Extension is not available on Mac OS X, due to missing GPS support
+ libraries for that platform.
+\end_layout
+
+\begin_layout Subsubsection
+Startup behaviour
+\end_layout
+
+\begin_layout Standard
+Under Mac OS X, gvSIG will launch as 
+\begin_inset Quotes eld
+\end_inset
+
+com.iver.andami.Launcher
+\begin_inset Quotes erd
+\end_inset
+
+ and display the standard Java icon in the dock.
+ This is due to it being controlled by a startup script and then manually
+ starting Java, bypassing Mac OS X's usual App configuration.
+ This is necessary to properly set up gvSIG each time it is started.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Do not quit gvSIG from the Mac OS X main menu bar, as this will just kill
+ the application and prevent it from cleanly shutting down! Instead, choose
+ 
+\begin_inset Quotes eld
+\end_inset
+
+File\SpecialChar \menuseparator
+Exit
+\begin_inset Quotes erd
+\end_inset
+
+ from the main gvSIG menu.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Look and feel
+\end_layout
+
+\begin_layout Standard
+Apple provides a Java 
+\begin_inset Quotes eld
+\end_inset
+
+look and feel
+\begin_inset Quotes erd
+\end_inset
+
+ designed to mimic that of other Mac OS X applications.
+ However, we recommend that you do not use Apple's Mac OS X look and feel
+ for Java, as it does not comply with that of the other platforms and leads
+ to numerous problems with the user interface (see 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:User-preferences"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+If using the (default and recommended) 
+\begin_inset Quotes eld
+\end_inset
+
+Plastic XP
+\begin_inset Quotes erd
+\end_inset
+
+ look and feel, the keyboard shortcuts for 
+\begin_inset Quotes eld
+\end_inset
+
+Copy
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Cut
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+Paste
+\begin_inset Quotes erd
+\end_inset
+
+ will no longer be 
+\begin_inset Quotes eld
+\end_inset
+
+Apple+<key>
+\begin_inset Quotes erd
+\end_inset
+
+ but 
+\begin_inset Quotes eld
+\end_inset
+
+CTRL+<key>
+\begin_inset Quotes erd
+\end_inset
+
+, instead.
+ You will also be able to use menu navigation shortcuts by pressing 
+\begin_inset Quotes eld
+\end_inset
+
+Alt+<underlined letter>
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Java 1.6 for older Macs
+\end_layout
+
+\begin_layout Standard
+If Apple does not provide Java 1.6 for your Mac OS X version or hardware,
+ then you can still run gvSIG using an alternative Java implementation.
+ Currently you have the choice between Soylatte (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://landonf.bikemonkey.org/static/soylatte/
+\end_layout
+
+\end_inset
+
+), which supports a somewhat outdated but working version of Java 1.6, and
+ OpenJDK (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://openjdk.java.net/projects/bsd-port/
+\end_layout
+
+\end_inset
+
+), which has superseded Soylatte and comes under a less restrictive license,
+ but requires more work to install (in fact, so much more that we won't
+ cover it here).
+ The following steps describe setting up Soylatte.
+ However, if you choose OpenJDK, all of them except no.
+ 2 apply in an almost identical manner.
+\end_layout
+
+\begin_layout Enumerate
+Make sure that X11 is installed on your Mac.
+ If it is not, install if from your Mac OS installation media now.
+\end_layout
+
+\begin_layout Enumerate
+Download the ready-to-use Soylatte binaries from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://landonf.bikemonkey.org/static/soylatte/
+\end_layout
+
+\end_inset
+
+.
+ Please read the notes under "License" carefully.
+ Then, under "Binaries", download the "32-bit JDK for Mac OS X 10.4 and 10.5".
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Decompress the downloaded archive file into a location of your choice.
+ E.g.
+ to install into your user account's home folder:
+\end_layout
+
+\begin_layout LyX-Code
+tar -xjf soylatte16-i386-1.0.3.tar.bz2 -C $HOME/
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+You now need to modify the gvSIG startup script slightly.
+ Using the Mac Finder, open the folder 
+\emph on
+Contents/MacOS
+\emph default
+ inside the gvSIG OADE App package (wherever you installed gvSIG OADE).
+ You will find a file "preJava" inside.
+ Open it with a text editor.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+At the top of the file, locate the line that reads:
+\end_layout
+
+\begin_layout LyX-Code
+#Java="$HOME/soylatte16-i386-1.0.3/bin/java"
+\end_layout
+
+\begin_layout Standard
+This sets the variable 
+\emph on
+JAVA
+\emph default
+ to the path leading up to the Java program in the folder in which Soylatte
+ was installed.
+ If you installed it somewhere else than was suggested above, then you need
+ to modify the setting for 
+\emph on
+JAVA
+\emph default
+ accordingly (adjust the path within the quotation marks).
+ Almost certainly, you will find the executable 
+\emph on
+java
+\emph default
+ in the 
+\emph on
+bin 
+\emph default
+folder of your alternative Java installation, just like shown above.
+ Note that 
+\emph on
+$HOME
+\emph default
+ is a variable which automatically unfolds into the absolute path of your
+ user account's home directory.
+\end_layout
+
+\begin_layout Standard
+Remove the leading "#" to activate the code in that line and save the modified
+ text file.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+On the next startup, gvSIG will use the alternative Java version of your
+ choice.
+ If you want to switch back to your system's built-in Java, simply retype
+ the "#" at the start of the line mentioned above.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Advanced installation
+\end_layout
+
+\begin_layout Standard
+A lot of work has been put into fine-tuning gvSIG's default behaviour, but
+ in some situations (such as complex multi-user environments and automated
+ roll-outs), different tweaks may be necessary for an optimal installation.
+ The following provides some hints for these cases.
+\end_layout
+
+\begin_layout Subsection
+User-defined SRS
+\end_layout
+
+\begin_layout Standard
+In the past, gvSIG used to manage user-defined spatial reference systems
+ inside its application directory, which could lead to numerous problems
+ in multi-user environments (change conflicts, missing write-permissions,
+ etc.).
+ This has now been changed so that gvSIG will by default manage custom SRS
+ definitions inside the user's settings folder.
+\end_layout
+
+\begin_layout Standard
+However, it will only do so if the files 
+\emph on
+usr.script
+\emph default
+ and 
+\emph on
+usr.properties
+\emph default
+ are present in the user settings folder.
+ Otherwise, it will revert to the old behavior, which is to read those two
+ files from 
+\emph on
+gvSIG/extensiones/org.gvsig.crs
+\emph default
+ inside the gvSIG application folder.
+ The startup script for gvSIG OADE will automatically copy some default
+ SRS definitions to the user settings folder if they are not already present.
+ This means that by default all users will have their own SRS definitions
+ available in their personal settings folder.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+If you already have some customized SRS, then make sure to copy them out
+ of 
+\emph on
+gvSIG/extensiones/org.gvsig.crs 
+\emph default
+folder and into your user settings folder so you can continue using them.
+ You should always do this before you deinstall a version of gvSIG or reinstall
+ into the same directory.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you do not like any of this, then you can also explicitly set a folder
+ to be used for this purpose, via the new environment variable 
+\emph on
+GVSIG_CONF_DIR
+\emph default
+, as explained below.
+\end_layout
+
+\begin_layout Subsection
+Startup scripts
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Startup-scripts"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On all platforms, the actual gvSIG application is only launched after a
+ startup script has been run that carries out a number of tasks, such as
+ ensuring that sensible default application settings, style files and templates
+ are always present in the user settings folder.
+ It also makes sure that the Java environment is properly set up.
+ On Linux and Windows, the startup scripts are contained in the 
+\emph on
+bin
+\emph default
+ subfolder of the gvSIG application folder.
+ On Mac OS X, the location is the folder 
+\emph on
+Contents/MacOS
+\emph default
+ inside the application package.
+\end_layout
+
+\begin_layout Standard
+The name of the script is 
+\emph on
+gvSIG.sh
+\emph default
+ on Linux, 
+\emph on
+gvSIG.bat
+\emph default
+ on Windows and 
+\emph on
+preJava
+\emph default
+ on Mac OS X.
+ The Linux and Mac OS X scripts configure the entire Java environment.
+ On Windows, 
+\emph on
+gvSIG.ini
+\emph default
+ contains most of the settings for Java.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Environment variables
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Environment-variables"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There a few environment variables that you can set to control the way the
+ gvSIG OADE startup scripts handle user settings.
+\end_layout
+
+\begin_layout Subsubsection
+GVSIG_CONF_DIR
+\end_layout
+
+\begin_layout Standard
+By default, gvSIG will manage all user preferences, style files, and several
+ other data files in a folder called 
+\emph on
+gvSIG
+\emph default
+ inside the user's home directory.
+ If you wish to change this (which can be useful to e.g.
+ separate the preferences of different gvSIG versions), then set 
+\emph on
+GVSIG_CONF_DIR
+\emph default
+ to the name of a different folder.
+ If that folder does not exist, it will be created the next time gvSIG is
+ started and filled with default settings.
+\end_layout
+
+\begin_layout Subsubsection
+GVSIG_CRS_DIR
+\end_layout
+
+\begin_layout Standard
+This variable, if set, will tell gvSIG where to manage user-defined spatial
+ reference system definitions.
+ It has to be set to the name of a folder that already exists on your system
+ and has the appropriate access permissions.
+ The custom SRS definitions database, consisting of the two files 
+\emph on
+usr.script
+\emph default
+ and 
+\emph on
+usr.properties,
+\emph default
+ has to be present in that folder and be readable.
+ If this variable is set to a wrong value, then gvSIG will fail to start!
+\end_layout
+
+\begin_layout Subsection
+Java properties
+\end_layout
+
+\begin_layout Standard
+If you do not want to use the gvSIG OADE startup scripts and wish to control
+ the behaviour described above directly, then you can use the Java properties
+ equivalents of the environment variables and pass them directly to the
+ Java VM.
+ The general syntax is:
+\end_layout
+
+\begin_layout LyX-Code
+java -D<property>=<value>
+\end_layout
+
+\begin_layout Standard
+E.g., to set the user preferences folder and SRS storage, the Linux startup
+ script does this:
+\end_layout
+
+\begin_layout Verse
+java -DgvSIG.confDir="$MY_CONF_DIR" -DgvSIG.crsDir="$GVSIG_CRS_DIR" [..]
+\end_layout
+
+\begin_layout Subsubsection
+gvSIG.confDir
+\end_layout
+
+\begin_layout Standard
+This is the equivalent of 
+\emph on
+GVSIG_CONF_DIR
+\emph default
+.
+\end_layout
+
+\begin_layout Subsubsection
+gvSIG.crsDir
+\end_layout
+
+\begin_layout Standard
+This is the equivalent of 
+\emph on
+GVSIG_CRS_DIR
+\emph default
+.
+\end_layout
+
+\begin_layout Subsection
+Customizing the Java VM (32/64 bit)
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Java-customization-(32/64"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This software contains 32 bit JNI (Java Native Interface) bindings for raster
+ data and projection support.
+ It cannot be run from a 64 bit JVM.
+ If you do not wish to or cannot use the bundled 32 bit JRE that comes with
+ gvSIG OADE and instead use a 64 bit JRE/JVM installed on your system, then
+ you must force that JVM into 32 bit mode via the 
+\begin_inset Quotes eld
+\end_inset
+
+-d32
+\begin_inset Quotes erd
+\end_inset
+
+ option.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+If you attempt to run gvSIG OADE on a 64 bit JVM and use any raster data
+ or projection functionality, then you will get an 
+\begin_inset Quotes eld
+\end_inset
+
+UnsatisfiedLinkError
+\begin_inset Quotes eld
+\end_inset
+
+ and the data will fail to load into the project View.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On Mac OS X and Linux you will find the variable definitions that set the
+ Java interpreter to use (see 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:Mac-OS-X"
+
+\end_inset
+
+ for an example) and the memory settings at the top of the startup script.
+ E.g., on Linux you will see something like this:
+\end_layout
+
+\begin_layout LyX-Code
+# Path to an alternative Java executable used to run gvSIG.
+\end_layout
+
+\begin_layout LyX-Code
+# Uncomment the line below to use your system's default Java.
+\end_layout
+
+\begin_layout LyX-Code
+#JAVA=java
+\end_layout
+
+\begin_layout LyX-Code
+ 
+\end_layout
+
+\begin_layout LyX-Code
+# Java tuning settings.
+\end_layout
+
+\begin_layout LyX-Code
+INI_HEAP=1024M
+\end_layout
+
+\begin_layout LyX-Code
+MAX_HEAP=1024M
+\end_layout
+
+\begin_layout Standard
+The variable 
+\emph on
+INI_HEAP
+\emph default
+ (equals Java setting 
+\emph on
+-Xms
+\emph default
+) is the initial size of the Java memory heap, 
+\emph on
+MAX_HEAP
+\emph default
+ (same as Java setting 
+\emph on
+-Xmx
+\emph default
+) is its maximum size.
+ You can set both variables to the same value to tell gvSIG the maximum
+ size of a single memory chunk it can claim at a time (not the total memory
+ it can use while it runs!).
+ On systems with plenty of RAM, it can make sense to increase the Java heapspace
+ to be able and work with very large data sets.
+\end_layout
+
+\begin_layout Standard
+However, on 32 bit systems there are strict limits to how high you can go
+ with the memory settings.
+ On Linux and Mac OS X, people have reported settings of up to about 2000M
+ to be working, on Windows the limit is significantly lower at about 1500M.
+ It is safe to experiment with this; if the settings are too high than gvSIG
+ will simply crash on startup.
+\end_layout
+
+\begin_layout Standard
+On Windows, the memory settings are in 
+\emph on
+gvSIG.ini.
+ 
+\emph default
+Look for the line that starts with 
+\begin_inset Quotes eld
+\end_inset
+
+command = 
+\begin_inset Quotes erd
+\end_inset
+
+, it has the Java memory settings, which you can change as needed:
+\end_layout
+
+\begin_layout LyX-Code
+command = #JAVA# [..] -Xms512M -Xmx512M [..]
+\end_layout
+
+\begin_layout Standard
+If you whish to change the Java Virtual Machine to use on Windows, then
+ look for the variable 
+\emph on
+JAVA_HOME, 
+\emph default
+also in 
+\emph on
+gvSIG.ini
+\emph default
+.
+ However, please note that the JRE bundled with the Windows version of gvSIG
+ OADE includes a number of additional DLL files in the 
+\begin_inset Quotes eld
+\end_inset
+
+bin
+\begin_inset Quotes erd
+\end_inset
+
+ directory.
+ If you wish to run gvSIG OADE using a different JRE, then you need to also
+ copy all of these into your new JRE's 
+\begin_inset Quotes eld
+\end_inset
+
+bin
+\begin_inset Quotes erd
+\end_inset
+
+ directory!
+\end_layout
+
+\begin_layout Subsection
+Unattended installation
+\end_layout
+
+\begin_layout Standard
+It is possible to run the installer in non-interactive mode from the command
+ line.
+ You can pass all options that you would otherwise set in the graphical
+ installer and choose the components to be installed.
+\end_layout
+
+\begin_layout Standard
+Open a command line terminal and start the gvSIG OADE installer binary with
+ the 
+\begin_inset Quotes eld
+\end_inset
+
+--help
+\begin_inset Quotes erd
+\end_inset
+
+ option appended.
+\end_layout
+
+\begin_layout Standard
+You will get a listing of all available components, options and values.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Last minute notes
+\end_layout
+
+\begin_layout Standard
+This section contain some important notes that do not fit anywhere else.
+\end_layout
+
+\begin_layout Subsection
+Compatibility with 3D extension
+\end_layout
+
+\begin_layout Standard
+The 3D Extension for gvSIG is currently under heavy development.
+ Please be aware that you cannot install the available prerelease over a
+ gvSIG OADE 2010 installation, as the packaged binary files are not compatible.
+\end_layout
+
+\begin_layout Standard
+If you wish to try the 3D extension, you must find a compatible version
+ of gvSIG on 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.gvsig.org
+\end_layout
+
+\end_inset
+
+.
+ We will include the 3D Extension in a future update of gvSIG OADE.
+\end_layout
+
+\end_body
+\end_document
