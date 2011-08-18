@@ -46,6 +46,7 @@ package com.iver.cit.gvsig.fmap.drivers.jdbc.postgis;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -58,6 +59,7 @@ import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.fmap.core.FPolygon2D;
 import com.iver.cit.gvsig.fmap.core.FPolyline2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
+import com.iver.cit.gvsig.fmap.core.FShape3D;
 import com.iver.cit.gvsig.fmap.core.FShapeM;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IFeature;
@@ -212,16 +214,23 @@ public class PostGIS {
 		return retString;
 	}
 
+	/**
+	 * FIXME: Maybe we don't need to test if encoding to the database is possible or not. This conversion may be slow.
+	 * But in the other hand, the user may be able to store his data and don't loose all the changes...
+	 * @param obj
+	 * @return
+	 */
 	private String doubleQuote(Object obj) {
 		String aux = obj.toString().replaceAll("'", "''");
 		StringBuffer strBuf = new StringBuffer(aux);
 		ByteArrayOutputStream out = new ByteArrayOutputStream(strBuf.length());
-		PrintStream printStream = new PrintStream(out);
-		printStream.print(aux);
-		String aux2 = "ERROR";
+		String aux2 = "Encoding ERROR";
+
 		try {
+			PrintStream printStream = new PrintStream(out, true, toEncode);
+			printStream.print(aux);			
 			aux2 = out.toString(toEncode);
-			System.out.println(aux + " " + aux2);
+//			System.out.println(aux + " " + aux2);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -292,21 +301,44 @@ public class PostGIS {
 				geometry=ShapeMFactory.createPolyline2DM(new GeneralPathX(geometry.getInternalShape()),((IGeometryM)geometry).getMs()); //MCoord
 			}
 		}
+		
 		if (!isCorrectGeometry(geometry, type))
 			throw new ProcessVisitorException("incorrect_geometry",new Exception());
 		//MCoord
-		if ((type == (FShape.LINE|FShape.M)) || (type == (FShape.POINT|FShape.M))){
+		if (((type & FShape.M) != 0) && ((type & FShape.MULTIPOINT) == 0)) {
 			sqlBuf.append(" GeometryFromText( '"
 					+ ((FShapeM)geometry.getInternalShape()).toText() + "', "
 					+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
-		}else{
-			Geometry jtsGeom=geometry.toJTSGeometry();
-			if (jtsGeom==null || !isCorrectType(jtsGeom, type)){
-				throw new ProcessVisitorException("incorrect_geometry",new Exception());
-			}
+		} else
+			//ZCoord
+			if ((type & FShape.Z) != 0) {
+				if ((type & FShape.MULTIPOINT) != 0) {
+					//TODO: Metodo toText 3D o 2DM 					
+				} else {
+				//Its not a multipoint
+				sqlBuf.append(" GeometryFromText( '"
+						+ ((FShape3D)feat.getGeometry().getInternalShape()).toText() + "', "
+						+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
+				}
+
+			}	
+			//XYCoord
+			else {
+				Geometry jtsGeom=geometry.toJTSGeometry();
+				if (jtsGeom==null || !isCorrectType(jtsGeom, type)){
+					throw new ProcessVisitorException("incorrect_geometry",new Exception());
+				}
+				
+		
+			//If they layer is a 2D layer writing a 2D geometry will throw an error
+			//With st_force_3d it is avoid		
+			if (dbLayerDef.getDimension() == 3) sqlBuf.append("ST_Force_3D (");
+			
 			sqlBuf.append(" GeometryFromText( '"
 				+ jtsGeom.toText() + "', "
 				+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
+
+			if (dbLayerDef.getDimension() == 3) sqlBuf.append(")");			
 		}
 
 		// sqlBuf.deleteCharAt(sqlBuf.lastIndexOf(","));
@@ -388,14 +420,37 @@ public class PostGIS {
 			sqlBuf.append(" = ");
 			//MCoord
 			int type = feat.getGeometry().getGeometryType();
-			if ((type == (FShape.LINE|FShape.M)) || (type == (FShape.POINT|FShape.M))){
+			if (((type & FShape.M) != 0) && ((type & FShape.MULTIPOINT) == 0)) {
 				sqlBuf.append(" GeometryFromText( '"
 						+ ((FShapeM)feat.getGeometry().getInternalShape()).toText() + "', "
 						+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
-			}else{
+			} else
+				
+			//ZCoord
+				if ((type & FShape.Z) != 0) {
+					if ((type & FShape.MULTIPOINT) != 0) {
+						//TODO: Metodo toText 3D o 2DM 											
+					} else {
+					//Its not a multipoint
+					sqlBuf.append(" GeometryFromText( '"
+							+ ((FShape3D)feat.getGeometry().getInternalShape()).toText() + "', "
+							+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
+					}
+					
+				}
+			
+			//XYCoord
+			else{
+				
+				//If they layer is a 2D layer writing a 2D geometry will throw an error
+				//With st_force_3d it is avoid		
+				if (dbLayerDef.getDimension() == 3) sqlBuf.append("ST_Force_3D (");
+				
 				sqlBuf.append(" GeometryFromText( '"
 				+ feat.getGeometry().toJTSGeometry().toText() + "', "
 				+ DefaultJDBCDriver.removePrefix(dbLayerDef.getSRID_EPSG()) + ")");
+				
+				if (dbLayerDef.getDimension() == 3) sqlBuf.append(")");
 			}
 		}
 		sqlBuf.append(" WHERE ");
@@ -438,6 +493,8 @@ public class PostGIS {
 			this.toEncode = "ASCII";
 		} else if (toEncode.compareToIgnoreCase("WIN1252") == 0) {
 			this.toEncode = "Latin1";
+		} else if (toEncode.compareToIgnoreCase("UTF8") == 0) {
+			this.toEncode = "UTF-8";
 		} else {
 			this.toEncode = toEncode;
 		}
