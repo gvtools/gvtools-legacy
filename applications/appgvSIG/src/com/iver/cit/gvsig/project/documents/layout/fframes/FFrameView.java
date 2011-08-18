@@ -503,6 +503,15 @@ public class FFrameView extends FFrame implements ViewPortListener,
         this.getMapContext().getViewPort().setImageSize(new Dimension((int) r.width,
                 (int) r.height));
 
+        ViewPort viewPort = this.getMapContext().getViewPort();
+        Color theBackColor = viewPort.getBackColor();
+		if (theBackColor != null) {
+			g.setColor(theBackColor);
+			g.fillRect((int) r.x, (int) r.y, viewPort
+					.getImageWidth(), viewPort
+					.getImageHeight());
+		}
+		
         try {
         	this.getMapContext().print(g, getScale(),getLayout().getLayoutContext().getAtributes().toPrintAttributes());
         } catch (ReadDriverException e) {
