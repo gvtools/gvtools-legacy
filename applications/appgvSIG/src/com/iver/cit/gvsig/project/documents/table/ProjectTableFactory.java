@@ -88,7 +88,7 @@ public class ProjectTableFactory extends ProjectDocumentFactory {
             fod.setTitle(PluginServices.getText(this, "Tablas"));
 
             DataBaseOpenDialog dbod = new DataBaseOpenDialog(fopen);
-            dbod.setClasses(new Class[] { DBDriver.class });
+            // dbod.setClasses(new Class[] { DBDriver.class });
             fopen.addWizardTab(PluginServices.getText(this, "Fichero"), fod);
             fopen.addTab(PluginServices.getText(this, "base_datos"), dbod);
             PluginServices.getMDIManager().addWindow(fopen);
@@ -335,3 +335,5 @@ public class ProjectTableFactory extends ProjectDocumentFactory {
 		return true;
 	}
 }
+
+// [eiel-gestion-conexiones]

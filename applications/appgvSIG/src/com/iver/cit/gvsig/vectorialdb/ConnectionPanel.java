@@ -408,6 +408,7 @@ public class ConnectionPanel extends JPanel implements Step {
         cs.setUser(getUser());
         cs.setPassw(getPassword());
         cs.setName(getSettingsName());
+        cs.setSchema(getSchema());
 
         PluginServices ps = PluginServices.getPluginServices(this);
         XMLEntity xml = ps.getPersistentXML();
@@ -796,3 +797,5 @@ public class ConnectionPanel extends JPanel implements Step {
 		return txtSchema;
 	}
 } //  @jve:decl-index=0:visual-constraint="7,3"
+
+// [eiel-gestion-conexiones]

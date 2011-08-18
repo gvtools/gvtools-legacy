@@ -126,4 +126,9 @@ public class FooDriver implements AlphanumericDBDriver {
 		return null;
 	}
 
+	public String getDefaultPort() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

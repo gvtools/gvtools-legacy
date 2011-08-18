@@ -52,17 +52,17 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
-import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleVectorialDBConnectionManager;
+import com.iver.cit.gvsig.fmap.drivers.db.utils.SingleDBConnectionManager;
 import com.iver.cit.gvsig.vectorialdb.ConnectionSettings;
 import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.XMLEntity;
-import com.prodevelop.cit.gvsig.vectorialdb.wizard.VectorialDBConnectionManagerDialog;
+import com.prodevelop.cit.gvsig.vectorialdb.wizard.DBConnectionManagerDialog;
 
 
 /**
  * This extension allows the user to access the single connection manager dialog
  *
- * @see com.iver.cit.gvsig.fmap.drivers.db.utils.SingleVectorialDBConnectionManager
+ * @see com.iver.cit.gvsig.fmap.drivers.db.utils.SingleDBConnectionManager
  *
  * @author jldominguez
  *
@@ -97,7 +97,7 @@ public class SingleVectorialDBConnectionExtension extends Extension {
      */
     public void execute(String actionCommand) {
         if (actionCommand.compareToIgnoreCase("GESTOR_VECTORIALDB") == 0) {
-            VectorialDBConnectionManagerDialog dlg = new VectorialDBConnectionManagerDialog();
+            DBConnectionManagerDialog dlg = new DBConnectionManagerDialog();
             dlg.showDialog();
 //            saveAllToPersistence();
 
@@ -119,7 +119,7 @@ public class SingleVectorialDBConnectionExtension extends Extension {
         xml.putProperty("literalDBName",true);
         xml.remove("db-connections");
 
-        ConnectionWithParams[] all = SingleVectorialDBConnectionManager.instance()
+        ConnectionWithParams[] all = SingleDBConnectionManager.instance()
                                                                 .getAllConnections();
 
         if (all == null) {
@@ -145,6 +145,7 @@ public class SingleVectorialDBConnectionExtension extends Extension {
         _cs.setDriver(cwp.getDrvName());
         _cs.setUser(cwp.getUser());
         _cs.setName(cwp.getName());
+        _cs.setSchema(cwp.getSchema());
 
         String newstr = _cs.toString();
 
@@ -269,10 +270,10 @@ public class SingleVectorialDBConnectionExtension extends Extension {
 
     private void addDisconnected(ConnectionSettings _cs) {
         try {
-            SingleVectorialDBConnectionManager.instance()
+            SingleDBConnectionManager.instance()
                                        .getConnection(_cs.getDriver(),
                 _cs.getUser(), null, _cs.getName(), _cs.getHost(),
-                _cs.getPort(), _cs.getDb(), false);
+                _cs.getPort(), _cs.getDb(), _cs.getSchema(), false);
         }
         catch (DBException e) {
             System.err.println("While getting connection: " + e.getMessage());
@@ -289,6 +290,8 @@ public class SingleVectorialDBConnectionExtension extends Extension {
 
     public void terminate() {
     	saveAllToPersistence();
-        SingleVectorialDBConnectionManager.instance().closeAllBeforeTerminate();
+        SingleDBConnectionManager.instance().closeAllBeforeTerminate();
     }
 }
+
+// [eiel-gestion-conexiones]

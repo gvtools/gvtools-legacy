@@ -277,13 +277,14 @@ public class AddLayer extends Extension {
 		PluginServices.getMDIManager().addWindow(fopen);
 
 		if (fopen.isAccepted()) {
-				if (fopen.getSelectedTab() instanceof WizardPanel) {
+			if (fopen.getSelectedTab() instanceof WizardPanel) {
 				WizardPanel wp = (WizardPanel) fopen.getSelectedTab();
 				return loadGenericWizardPanelLayers(mapControl, wp);
 			} else {
 				JOptionPane.showMessageDialog((Component) PluginServices
 						.getMainFrame(), PluginServices.getText(this,"ninguna_capa_seleccionada"));
 			}
+			
 		}
 		return false;
 	}
@@ -302,3 +303,5 @@ public class AddLayer extends Extension {
 
 	}
 }
+
+// [eiel-gestion-conexiones]

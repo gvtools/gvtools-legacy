@@ -86,38 +86,37 @@ public class AvailableTablesCheckBoxList extends JList {
 
                     actingTable = (TablesListItem) getModel().getElementAt(index);
 
-                    if ((e.getClickCount() == 2) || (e.getX() < 15)) {
-                        if (!actingTable.isActivated()) {
-                            actingTable.activate();
-                        }
-
-                        actingTable.setSelected(!actingTable.isSelected());
-
-                        if (actingTable.isSelected()) {
-                            actingTable.setEnabledPanels(true);
-                        }
-                        else {
-                            actingTable.setEnabledPanels(false);
-                        }
-
+                    try {
+                	parent.setSettingsPanels(actingTable);
+                	if ((e.getClickCount() == 2) || (e.getX() < 15)) {
+                	    if (!actingTable.isActivated()) {
+                		actingTable.activate();
+                	    }
+                	actingTable.setSelected(!actingTable.isSelected());
+                	enableFieldsAndSettingsPanels();
+                	}
+                        parent.checkFinishable();
                         repaint();
                     }
-
-                    try {
-                        parent.setSettingsPanels(actingTable);
-                        parent.checkFinishable();
-                    }
                     catch (Exception e1) {
-                        actingTable.setEnabledPanels(false);
-                        actingTable.setSelected(false);
                         logger.error("While setting selected table: " +
                             e1.getMessage(), e1);
-                        showConnectionErrorMessage(e1.getMessage());
+                        // showConnectionErrorMessage(e1.getMessage());
                     }
                 }
+
             });
 
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+
+    private void enableFieldsAndSettingsPanels() {
+	if (actingTable.isSelected()) {
+	    actingTable.setEnabledPanels(true);
+	}
+	else {
+	    actingTable.setEnabledPanels(false);
+	}
     }
 
     private void showConnectionErrorMessage(String _msg) {
@@ -147,3 +146,5 @@ public class AvailableTablesCheckBoxList extends JList {
         }
     }
 }
+
+// [eiel-gestion-conexiones]

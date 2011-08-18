@@ -124,7 +124,7 @@ public class MySQLDriver extends AbstractJDBCDriver implements DBTransactionalDr
      * @see com.hardcode.driverManager.Driver#getName()
      */
     public String getName() {
-        return "mysql";
+        return "MySQL Alphanumeric";
     }
 
     /*
@@ -165,5 +165,12 @@ public class MySQLDriver extends AbstractJDBCDriver implements DBTransactionalDr
 		// TODO Auto-generated method stub
 
 	}
+	
+	public String getDefaultPort() {
+		return "3306";
+	}
+
 
 }
+
+// [eiel-gestion-conexiones]

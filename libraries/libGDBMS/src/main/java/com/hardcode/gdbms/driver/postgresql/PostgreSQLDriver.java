@@ -2,9 +2,13 @@ package com.hardcode.gdbms.driver.postgresql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.hardcode.gdbms.engine.data.driver.AbstractJDBCDriver;
+import com.iver.cit.gvsig.fmap.drivers.ITableDefinition;
 
 
 /**
@@ -63,7 +67,40 @@ public class PostgreSQLDriver extends AbstractJDBCDriver {
      * @see com.hardcode.driverManager.Driver#getName()
      */
     public String getName() {
-        return "postgresql";
+        return "PostgreSQL Alphanumeric";
     }
+    
+	public String getDefaultPort() {
+		return "5432";
+	}
+	
+//	public String[] getAvailableTables(
+//			Connection co,
+//			String schema) throws SQLException {
+//		
+//		String sql = "select c.relname FROM pg_catalog.pg_class c " +
+//		"LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace " +
+//		"WHERE c.relkind IN ('r','v','') AND n.nspname = '" + schema + "' " +
+//		"AND pg_catalog.pg_table_is_visible(c.oid);";
+//		
+//		Statement st = co.createStatement(ResultSet.TYPE_FORWARD_ONLY,
+//				ResultSet.CONCUR_READ_ONLY);
+//		ResultSet res = st.executeQuery(sql);
+//		
+//		ArrayList str_list = new ArrayList();
+//		while (res.next()) {
+//			str_list.add(res.getString(1));
+//		}
+//		res.close();
+//		st.close();
+//		return (String[]) str_list.toArray(new String[0]) ;
+//	}
+
+
+
+
+
 
 }
+
+// [eiel-gestion-conexiones]

@@ -56,7 +56,7 @@ public class ConnectionSettings {
     }
 
     public String toString(){
-        return host+","+port+","+db+","+driver+","+user+","+name;
+        return host+","+port+","+db+","+driver+","+user+","+schema+","+name;
     }
 
     public void setFromString(String str) {
@@ -66,9 +66,10 @@ public class ConnectionSettings {
         db = values[2];
         driver = values[3];
         user = values[4];
-        name = values[5];
-        if (values.length == 7)
-            passw = values[6];
+        schema = values[5];
+        name = values[6];
+        if (values.length == 8)
+            passw = values[7];
     }
     public String getPassw() {
         return passw;
@@ -94,3 +95,5 @@ public class ConnectionSettings {
 		this.schema = schema;
 	}
 }
+
+// [eiel-gestion-conexiones]

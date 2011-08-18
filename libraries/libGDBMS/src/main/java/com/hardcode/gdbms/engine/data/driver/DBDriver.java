@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.hardcode.gdbms.engine.values.ValueWriter;
+import com.iver.cit.gvsig.fmap.drivers.ITableDefinition;
 
 
 /**
@@ -59,4 +60,17 @@ public interface DBDriver extends ReadAccess, GDBMSDriver, ValueWriter {
      * @return String
      */
     public String getInternalTableName(String tablename);
+    
+    /**
+     * @return default port used by thsese type of DB
+     */
+    public String getDefaultPort();
+    
+    /**
+     * @return list available tables for connection and schema.
+     * null if it's not possible
+     */
+    // public String[] getAvailableTables(Connection co, String schema) throws SQLException;
 }
+
+// [eiel-gestion-conexiones]

@@ -87,4 +87,16 @@ public abstract class WizardPanel extends JPanel implements ILayerPanel{
     public void setMapCtrl(MapControl mapCtrl) {
         this.mapCtrl = mapCtrl;
     }
+    
+    /**
+     * 
+     * @return Messages describing why layers don't have good settings or null if layers are ok. Returns
+     * null by default since it is a new method not used until now. GeoDB wizard is the first to use this. 
+     *  
+     */
+	public String[] validateLayerSettings() {
+		return null; 
+	}
 }
+
+// [eiel-gestion-conexiones]

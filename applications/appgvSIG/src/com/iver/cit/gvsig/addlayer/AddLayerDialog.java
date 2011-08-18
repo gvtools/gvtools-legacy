@@ -19,11 +19,13 @@
 package com.iver.cit.gvsig.addlayer;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -48,7 +50,9 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 	static private IProjection proj           = null;
 	private JTabbedPane        jTabbedPane    = null;
 	private AcceptCancelPanel  jPanel         = null;
+	
 	private boolean            accepted       = false;
+	
 	private String             title          = PluginServices.getText(this, "add_layer");
 	private WizardListener     wizardListener = new DialogWizardListener();
 
@@ -149,16 +153,43 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 		if (jPanel == null) {
 			ActionListener okAction = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					accepted = true;
-					if (PluginServices.getMainFrame() == null) {
-						((JDialog) (getParent().getParent().getParent().getParent())).dispose();
+					
+					// if not wizard panel, simply close
+					if (!(getSelectedTab() instanceof WizardPanel)) {
+						accepted = true;
+						if (PluginServices.getMainFrame() == null) {
+							((JDialog) (getParent().getParent().getParent().getParent())).dispose();
+						} else {
+							PluginServices.getMDIManager().closeWindow((IWindow) AddLayerDialog.this);
+						}
 					} else {
-						PluginServices.getMDIManager().closeWindow((IWindow) AddLayerDialog.this);
+						// // if wizard panel, validated settings first
+						WizardPanel wp = (WizardPanel) getSelectedTab();
+						String[] invalid_layer_settings_message = wp.validateLayerSettings(); 
+						if (invalid_layer_settings_message == null) {
+							accepted = true;
+							if (PluginServices.getMainFrame() == null) {
+								((JDialog) (getParent().getParent().getParent().getParent())).dispose();
+							} else {
+								PluginServices.getMDIManager().closeWindow((IWindow) AddLayerDialog.this);
+							}
+						} else {
+							JOptionPane.showMessageDialog(
+									(Component) PluginServices.getMainFrame(),
+									PluginServices.getText(this, "Error_reported_check_also_restrictions") + "\n" +
+									appendStringArray(invalid_layer_settings_message),
+									PluginServices.getText(this, "panel_loading_exception"),
+									JOptionPane.ERROR_MESSAGE
+									);
+						}
 					}
 				}
 			};
+			
+			
 			ActionListener cancelAction = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					accepted = false;
 					if (PluginServices.getMainFrame() != null) {
 						PluginServices.getMDIManager().closeWindow((IWindow) AddLayerDialog.this);
 					} else {
@@ -171,12 +202,8 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 		return jPanel;
 	}
 
-	/**
-	 * @return
-	 */
-	public boolean isAccepted() {
-		return accepted;
-	}
+
+
 
 	/**
 	 * Listener para el Wizard de apertura de fichero
@@ -221,4 +248,20 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 		// TODO Auto-generated method stub
 		return WindowInfo.DIALOG_PROFILE;
 	}
+
+	public boolean isAccepted() {
+		return accepted;
+	}
+	
+	private String appendStringArray(String[] strarr) {
+		
+		String resp = "";
+		int len = strarr.length;
+		for (int i=0; i<len; i++) {
+			resp = "\n" + strarr[i] + "\n";  
+		}
+		return resp;
+	}
 }
+
+// [eiel-gestion-conexiones]

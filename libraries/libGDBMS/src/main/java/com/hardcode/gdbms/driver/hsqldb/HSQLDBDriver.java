@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 
 import com.hardcode.gdbms.engine.data.driver.AbstractJDBCDriver;
 
+// import org.hsqldb.jdbcDriver;
+// import org.hsqldb.util.QueryTool;
 
 /**
  * DOCUMENT ME!
@@ -51,8 +53,34 @@ public class HSQLDBDriver extends AbstractJDBCDriver {
      * @see com.hardcode.driverManager.Driver#getName()
      */
     public String getName() {
-        return "GDBMS HSQLDB driver";
+        return "HSQL";
     }
+
+
+	public String getDefaultPort() {
+		return "9001";
+	}
+
+
+//	public String[] getAvailableTables(Connection co, String schema)
+//			throws SQLException {
+//		
+//		jdbcDriver drv = null;
+//		QueryTool qt = new QueryTool();
+//		co.getMetaData().getTa
+//		
+//		
+//		try {
+//			drv = (jdbcDriver) Class.forName("org.hsqldb.jdbcDriver").newInstance();
+//			// drv.
+//        } catch (Exception ex) {
+//        	throw new SQLException(ex.getMessage());
+//        }
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	
 }
+
+// [eiel-gestion-conexiones]

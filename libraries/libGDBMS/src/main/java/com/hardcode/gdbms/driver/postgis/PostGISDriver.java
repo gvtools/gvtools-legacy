@@ -29,6 +29,7 @@ import com.hardcode.gdbms.engine.data.driver.SpatialDBDriver;
 import com.hardcode.gdbms.engine.spatial.GeneralPath;
 import com.hardcode.gdbms.engine.spatial.GeometryImpl;
 import com.hardcode.gdbms.engine.values.Value;
+import com.iver.cit.gvsig.fmap.drivers.ITableDefinition;
 
 
 /**
@@ -258,7 +259,7 @@ public class PostGISDriver implements SpatialDBDriver {
      * @see com.hardcode.driverManager.Driver#getName()
      */
     public String getName() {
-        return "GDBMS PostGIS driver";
+        return "PostGIS (old)";
     }
 
     private GeneralPath getGeneralPath(long rowIndex, int fieldIndex) throws SQLException{
@@ -436,4 +437,18 @@ public class PostGISDriver implements SpatialDBDriver {
 	public int getFieldWidth(int i) throws ReadDriverException {
 		return jdbcSupport.getFieldWidth(i);
 	}
+	
+	public String getDefaultPort() {
+		return "5432";
+	}
+
+//	public String[] getAvailableTables(Connection co, String schema) throws SQLException {
+//		// not implemented in this unused driver
+//		return null;
+//	}
+
+
+
 }
+
+// [eiel-gestion-conexiones]

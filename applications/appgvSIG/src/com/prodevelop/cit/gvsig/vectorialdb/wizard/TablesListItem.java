@@ -66,12 +66,13 @@ import com.iver.cit.gvsig.gui.panels.CRSSelectPanel;
  * @author jldominguez
  *
  */
-public class TablesListItem extends JCheckBox {
-    private String tableName = "";
+public class TablesListItem extends TablesListItemSimple {
+	
+    
     private UserSelectedFieldsPanel selectedFieldsPanel = null;
     private UserTableSettingsPanel tableSettingsPanel = null;
     private IVectorialDatabaseDriver driver = null;
-    private IConnection conn = null;
+
     private MapControl mc;
     private WizardVectorialDB parent = null;
     private boolean activated = false;
@@ -79,10 +80,10 @@ public class TablesListItem extends JCheckBox {
 
     public TablesListItem(String name, IVectorialDatabaseDriver drv, IConnection _conn,
         MapControl _mc, WizardVectorialDB _parent) {
-        tableName = name;
+    	
+    	super(name, null,  _conn);
         setText(name);
         driver = drv;
-        conn = _conn;
         mc = _mc;
         parent = _parent;
     }
@@ -114,13 +115,6 @@ public class TablesListItem extends JCheckBox {
         return tableSettingsPanel.hasValidValues();
     }
 
-    public String toString() {
-        return tableName;
-    }
-
-    public String getTableName() {
-        return tableName;
-    }
 
     public void setEnabledPanels(boolean b) {
         selectedFieldsPanel.enableControls(b);
@@ -152,6 +146,7 @@ public class TablesListItem extends JCheckBox {
         		String title = PluginServices.getText(this, "id_error");
         		JOptionPane.showMessageDialog(parent, msg, title, JOptionPane.ERROR_MESSAGE);
         		setSelected(false);
+        		throw se;
         	}
 
         	String[] geos = new String[0];
@@ -163,6 +158,7 @@ public class TablesListItem extends JCheckBox {
         		String title = PluginServices.getText(this, "geo_field_error");
         		JOptionPane.showMessageDialog(parent, msg, title, JOptionPane.ERROR_MESSAGE);
         		setSelected(false);
+        		throw se;
         	}
 
             int ids_size = ids.length;
@@ -254,3 +250,5 @@ public class TablesListItem extends JCheckBox {
 		return jPanelProj;
 	}
 }
+
+// [eiel-gestion-conexiones]

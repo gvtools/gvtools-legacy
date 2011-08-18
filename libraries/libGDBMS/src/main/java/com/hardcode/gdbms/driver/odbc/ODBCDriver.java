@@ -88,7 +88,7 @@ public class ODBCDriver implements AlphanumericDBDriver, IWriteable {
      * @see com.hardcode.driverManager.Driver#getName()
      */
     public String getName() {
-        return "odbc";
+        return "ODBC";
     }
 
     /**
@@ -309,4 +309,11 @@ public class ODBCDriver implements AlphanumericDBDriver, IWriteable {
 		}
 		return fieldsDescrip;
 	}
+	
+	public String getDefaultPort() {
+		return "";
+	}
+
 }
+
+// [eiel-gestion-conexiones]

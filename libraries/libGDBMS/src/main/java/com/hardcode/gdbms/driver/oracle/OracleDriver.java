@@ -46,6 +46,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.hardcode.gdbms.engine.data.db.JDBCSupport;
 import com.hardcode.gdbms.engine.data.driver.AbstractJDBCDriver;
@@ -108,7 +109,7 @@ public class OracleDriver extends AbstractJDBCDriver {
      * @see com.hardcode.driverManager.Driver#getName()
      */
     public String getName() {
-        return "oracle";
+        return "Oracle Alphanumeric";
     }
 
 	public void open(Connection con, String sql) throws SQLException {
@@ -145,8 +146,41 @@ public class OracleDriver extends AbstractJDBCDriver {
         jdbcSupport = JDBCSupport.newJDBCSupport(con, sql);
 
 	}
+	
+	public String getDefaultPort() {
+		return "1521";
+	}
+
+//	public String[] getAvailableTables(Connection co, String schema) throws SQLException {
+//		
+//		ArrayList str_list = new ArrayList();
+//
+//        Statement st = co.createStatement();
+//		String sql = "select TABLE_NAME from ALL_TABLES where OWNER = '" + schema + "' and TABLE_NAME not like '%$' order by TABLE_NAME";
+//        ResultSet rs = st.executeQuery(sql);
+//        
+//        while (rs.next()) {
+//        	str_list.add(rs.getString(1));
+//        }
+//        
+//        rs.close();
+//
+//		sql = "select VIEW_NAME from ALL_VIEWS where OWNER = '" + schema + "' and VIEW_NAME not like '%$' order by VIEW_NAME";
+//        rs = st.executeQuery(sql);
+//        
+//        while (rs.next()) {
+//        	str_list.add(rs.getString(1));
+//        }
+//        
+//        rs.close();
+//        st.close();
+//        
+//		return (String[]) str_list.toArray(new String[0]);
+//	}
+
 
 
 }
 
+// [eiel-gestion-conexiones]
 
