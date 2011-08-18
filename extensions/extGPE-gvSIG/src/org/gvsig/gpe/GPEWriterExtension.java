@@ -146,15 +146,9 @@ public class GPEWriterExtension extends Extension{
 		}
 
 		IView view = (IView)window;
-		LayersIterator it = new LayersIterator(
-				view.getMapControl().getMapContext().getLayers());
-		while(it.hasNext()){
-			FLayer layer = it.nextLayer();
-			if (layer instanceof FLyrVect){
-				return true;
-			}
-		}		
-		return false;
+		
+		FLayer[] acc = view.getMapControl().getMapContext().getLayers().getActives();
+		return (acc != null && acc.length == 1 && acc[0] instanceof FLyrVect);
 	}
 
 	/*
