@@ -41,7 +41,7 @@
 
 /* CVS MESSAGES:
 *
-* $Id: WMSLayerNode.java 34406 2011-01-17 12:47:11Z fdiaz $
+* $Id: WMSLayerNode.java 35751 2011-07-14 19:01:25Z jvhigon $
 * $Log$
 * Revision 1.11  2007-01-08 07:57:34  jaume
 * *** empty log message ***
@@ -567,7 +567,7 @@ public class WMSLayerNode {
 		}
 
 		public String toString(){
-            return title;
+            return name;
         }
 
         public Object clone() {
