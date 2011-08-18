@@ -70,7 +70,7 @@ public class FPolyline2DM extends FPolyline2D implements FShapeM{
 	private static final String NAME = "MULTILINESTRINGM";
 	double[] pM = null;
 
-	FPolyline2DM(GeneralPathX gpx, double[] pM) {
+	public FPolyline2DM(GeneralPathX gpx, double[] pM) {
 		super(gpx);	
 		this.pM = pM;
 	}

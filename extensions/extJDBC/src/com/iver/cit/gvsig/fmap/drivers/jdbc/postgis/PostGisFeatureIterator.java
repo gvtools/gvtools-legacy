@@ -57,6 +57,7 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.WKBParser2;
+import com.iver.cit.gvsig.fmap.drivers.WKBParser3;
 import com.iver.cit.gvsig.fmap.drivers.XTypes;
 
 /**
@@ -68,7 +69,7 @@ import com.iver.cit.gvsig.fmap.drivers.XTypes;
 public class PostGisFeatureIterator implements IFeatureIterator {
 	private static int FETCH_SIZE = 5000;
 
-	private WKBParser2 parser = new WKBParser2();
+	private WKBParser3 parser = new WKBParser3();
 
 	private ResultSetMetaData metaData = null;
 

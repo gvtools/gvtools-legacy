@@ -40,6 +40,10 @@
  */
 package com.iver.cit.gvsig.fmap.core;
 
+import java.awt.geom.PathIterator;
+
+import com.iver.cit.gvsig.fmap.core.v02.FConverter;
+
 /**
  * Polilinea 3D.
  *
@@ -81,4 +85,58 @@ public class FPolyline3D extends FPolyline2D implements FShape3D {
 	public FShape cloneFShape() {
 		return new FPolyline3D((GeneralPathX) gp.clone(), (double[]) pZ);
 	}
+
+	
+	//
+	public String toText(){		
+		StringBuffer str = new StringBuffer();
+		//Ojo eldriver postgis no tiene en cuenta capas
+		//de tipo no multi.Cambiar a static.
+		str.append("MULTILINESTRING");
+		str.append(" ((");
+		int theType;		
+		double[] theData = new double[6];		
+
+		PathIterator theIterator = getPathIterator(null, FConverter.FLATNESS);
+		int i = 0;
+
+		while (!theIterator.isDone()) {
+			//while not done
+			theType = theIterator.currentSegment(theData);
+
+			double m = 0.0;
+			if (i < pZ.length){
+				m = pZ[i]; 
+			}
+			
+			switch (theType) {
+			case PathIterator.SEG_MOVETO:					
+				str.append(theData[0] + " " + theData[1] + " " + m + ",");
+				break;
+
+			case PathIterator.SEG_LINETO:
+				str.append(theData[0] + " " + theData[1] + " " + m + ",");
+
+				break;
+
+			case PathIterator.SEG_QUADTO:
+				System.out.println("Not supported here");
+
+				break;
+
+			case PathIterator.SEG_CUBICTO:
+				System.out.println("Not supported here");
+
+				break;
+
+			case PathIterator.SEG_CLOSE:
+				break;
+			} //end switch
+
+			theIterator.next();
+			i++;
+		} //end while loop		
+		return str.delete(str.length()-1, str.length()) + "))";
+	}
+	
 }

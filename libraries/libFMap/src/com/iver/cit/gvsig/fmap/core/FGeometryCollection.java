@@ -414,10 +414,12 @@ public class FGeometryCollection extends AbstractGeometry {
 		return this;
 	}
 
-	public void drawInts(Graphics2D graphics2D, ViewPort viewPort, double dpi,
+	public void drawInts(Graphics2D graphics2D, ViewPort vp, double dpi,
 			CartographicSupport cartographicSymbol, Cancellable cancel) {
-		// TODO Auto-generated method stub
-		throw new Error("Not yet implemented!");
+        for (int i = 0; i < geometries.size(); i++)
+            ((IGeometry)geometries.get(i)).drawInts(graphics2D, vp, dpi, 
+            		cartographicSymbol, cancel);
+
 
 	}
 }

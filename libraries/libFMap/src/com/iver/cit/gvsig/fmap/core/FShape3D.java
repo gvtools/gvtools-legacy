@@ -54,4 +54,6 @@ public interface FShape3D extends FShape {
 	 * @return an array with all the third coordinate values of this shape.
 	 */
 	double[] getZs();
+	
+	public String toText();	
 }

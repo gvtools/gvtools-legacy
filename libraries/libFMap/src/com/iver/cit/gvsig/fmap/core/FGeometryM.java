@@ -60,7 +60,7 @@ import com.vividsolutions.jts.geom.Geometry;
 public class FGeometryM extends FGeometry implements IGeometryM {
 	private static final long serialVersionUID = -7259723180192528478L;
 
-	FGeometryM(FShapeM shp) {
+	public FGeometryM(FShapeM shp) {
 		super(shp);
 	}
 

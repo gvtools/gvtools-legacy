@@ -85,7 +85,7 @@ import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.WKBParser2;
-// import com.iver.cit.gvsig.fmap.drivers.WKBParser3;
+import com.iver.cit.gvsig.fmap.drivers.WKBParser3;
 import com.iver.cit.gvsig.fmap.drivers.XTypes;
 import com.iver.cit.gvsig.fmap.edition.IWriteable;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
@@ -114,7 +114,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 	private PostGISWriter writer = new PostGISWriter();
 
 	// private WKBParser3 parser = new WKBParser3();
-	private WKBParser2 parser = new WKBParser2();
+	private WKBParser3 parser = new WKBParser3();
 
 	private int fetch_min = -1;
 
@@ -371,6 +371,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 			}
 
 		}
+
 		return fullExtent;
 	}
 
@@ -718,6 +719,17 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		// TODO: USAR LIMIT Y ORDER BY, Y HACERLO TAMBIÉN PARA
 		// MYSQL
 
+		if (rs == null) {
+			// ha habido un error previo. Es mejor poner un error y no seguir.
+			try {
+				reload();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				throw new SQLException(e);
+			}
+		}
+			
 		// EL ABSOLUTE NO HACE QUE SE VUELVAN A LEER LAS
 		// FILAS, ASI QUE MONTAMOS ESTA HISTORIA PARA QUE
 		// LO HAGA
@@ -727,6 +739,12 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		if ((index >= fetch_min) && (index <= fetch_max)) {
 			// Está en el intervalo, así que lo podemos posicionar
 
+//				
+//				
+//				//jomarlla
+//				int dimension  = rs.getInt("COORD_DIMENSION");
+//				dbld.setDimension(dimension);
+				
 		} else {
 			// calculamos el intervalo correcto
 			fetch_min = (index / FETCH_SIZE) * FETCH_SIZE;

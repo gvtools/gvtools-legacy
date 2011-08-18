@@ -40,6 +40,10 @@
  */
 package com.iver.cit.gvsig.fmap.core;
 
+import java.awt.geom.PathIterator;
+
+import com.iver.cit.gvsig.fmap.core.v02.FConverter;
+
 /**
  * Polilinea 3D.
  *
@@ -82,5 +86,56 @@ public class FPolygon3D extends FPolygon2D implements FShape3D {
 	 */
 	public int getShapeType() {
 		return FShape.POLYGON | FShape.Z;
+	}
+
+	public String toText() {
+		//TODO: its not writing rings or multielements properly
+		StringBuffer str = new StringBuffer();
+		str.append("MULTIPOLYGON");
+		str.append(" ((");
+		int theType;		
+		double[] theData = new double[6];		
+
+		PathIterator theIterator = getPathIterator(null, FConverter.FLATNESS);
+		int i = 0;
+
+		while (!theIterator.isDone()) {
+			//while not done
+			theType = theIterator.currentSegment(theData);
+
+			double z = 0.0;
+			if (i < pZ.length){
+				z = pZ[i]; 
+			}
+			
+			switch (theType) {
+			case PathIterator.SEG_MOVETO:					
+				str.append(theData[0] + " " + theData[1] + " " + z + ",");
+				break;
+
+			case PathIterator.SEG_LINETO:
+				str.append(theData[0] + " " + theData[1] + " " + z + ",");
+
+				break;
+
+			case PathIterator.SEG_QUADTO:
+				System.out.println("Not supported here");
+
+				break;
+
+			case PathIterator.SEG_CUBICTO:
+				System.out.println("Not supported here");
+
+				break;
+
+			case PathIterator.SEG_CLOSE:
+				break;
+			} //end switch
+
+			theIterator.next();
+			i++;
+		} //end while loop		
+		return str.delete(str.length()-1, str.length()) + "))";
+
 	}
 }

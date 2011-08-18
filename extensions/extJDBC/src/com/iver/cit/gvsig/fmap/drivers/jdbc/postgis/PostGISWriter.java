@@ -318,7 +318,21 @@ IFieldManager {
 		try {
 			// return !((ConnectionJDBC) conex).getConnection().isReadOnly();
 			boolean can_edit = false;
+	
+			
 			st = ((ConnectionJDBC) conex).getConnection().createStatement();
+			String sql2;
+			sql2 = "select * from GEOMETRY_COLUMNS WHERE F_TABLE_SCHEMA = '"
+						+ lyrDef.getSchema() + "' AND F_TABLE_NAME = '" + lyrDef.getTableName()
+						+ "'";
+
+			ResultSet rs2 = st.executeQuery(sql2);
+			int dim =0;
+			while (rs2.next()) {
+				dim = rs2.getInt("coord_dimension");
+			}
+			rs2.close();
+			
 			String sql = "SELECT has_table_privilege('"
 				+ lyrDef.getComposedTableName() + "', 'insert') "
 				+ "AND has_table_privilege('"
@@ -330,6 +344,12 @@ IFieldManager {
 			if (rs.next()) {
 				can_edit = rs.getBoolean("can_edit");
 			}
+			rs.close();
+			st.close();
+			if (dim > 2)
+				return false;
+			
+			
 			return can_edit
 			&& !((ConnectionJDBC) conex).getConnection().isReadOnly();
 

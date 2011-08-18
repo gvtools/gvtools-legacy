@@ -46,6 +46,8 @@ package com.iver.cit.gvsig.fmap.core;
  * @author Vicente Caballero Navarro
  */
 public class FPoint3D extends FPoint2D implements FShape3D {
+	private static final String NAME = "POINT";
+	
 	double z;
 
 	/**
@@ -69,6 +71,10 @@ public class FPoint3D extends FPoint2D implements FShape3D {
 	public double[] getZs() {
 		return new double[] { z };
 	}
+	
+	public double getZ() {
+		return z;
+	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#getShapeType()
@@ -82,5 +88,14 @@ public class FPoint3D extends FPoint2D implements FShape3D {
 	 */
 	public FShape cloneFShape() {
 		return new FPoint3D(p.getX(), p.getY(), z);
+	}
+
+	public String toText() {
+		StringBuffer str = new StringBuffer();
+		str.append(NAME);
+		str.append(" ((");
+		str.append(getX() + " " + getY() + " " + z);
+		str.append("))");
+		return str.toString();
 	}
 }

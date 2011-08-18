@@ -227,6 +227,8 @@ public abstract class MemoryDriver implements VectorialDriver, ObjectDriver,
 	    if (getRowCount() >= 1)
         {
             Value val = getFieldValue(0,i);
+            if (val == null)
+            	return Types.VARCHAR;
             if (val.getSQLType() == Types.INTEGER)
                 // Sabemos que es numérico, pero no sabemos
                 // si luego habrá otra cosa.

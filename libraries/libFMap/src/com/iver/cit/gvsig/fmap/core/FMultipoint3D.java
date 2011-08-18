@@ -61,6 +61,13 @@ public class FMultipoint3D extends FMultiPoint2D implements IGeometry3D {
 		super(x, y);
 		this.z = z;
 	}
+	
+	//jomarlla
+	public FMultipoint3D(FPoint2D[] points, double[] z) {
+		super(points);
+		this.z = z;
+	}
+	
 
 	/* (non-Javadoc)
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#cloneGeometry()
@@ -94,4 +101,10 @@ public class FMultipoint3D extends FMultiPoint2D implements IGeometry3D {
 	public int getGeometryType() {
 		return FShape.MULTIPOINT | FShape.Z;
 	}
+	
+	public String toText() {
+		//TODO
+		return null;
+	}
+	
 }
