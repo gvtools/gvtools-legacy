@@ -121,8 +121,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 	 */
 	private  void initialize() {
 		this.setLayout(null);
-		this.setSize(550, 200);
-//		this.setPreferredSize(new java.awt.Dimension(370,200));
+		this.setSize(555, 210);
 		this.add(getJLabel(), null);
 		this.add(getJList(), null);
 		this.add(getJBtnUp(), null);
@@ -445,7 +444,7 @@ public class FPanelLocConfig extends JPanel implements ActionListener,IWindow {
 	 */
 	public WindowInfo getWindowInfo() {
 		if (m_viewinfo==null){
-    		m_viewinfo=new WindowInfo(WindowInfo.MODALDIALOG);
+    			m_viewinfo=new WindowInfo(WindowInfo.MODELESSDIALOG);
 			m_viewinfo.setTitle(PluginServices.getText(this,"Configurar_localizador"));
 			m_viewinfo.setWidth(this.getWidth()+8);
 			m_viewinfo.setHeight(this.getHeight()+8);
