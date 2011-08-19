@@ -1,7 +1,7 @@
-#Mon Feb 14 15:58:17 CET 2011
+#Thu Aug 18 21:57:42 CEST 2011
 state=devel
 name=appgvSIG
-buildNumber=1300
+buildNumber=1305
 official=true
 code=org.gvsig.app
 operating-system=all
@@ -10,6 +10,6 @@ java-version=j1_5
 gvSIG-version=1.11.0
 version=1.11.0
 type=plugin
-build=1300
+build=1305
 description=gvSIG basic extensions
 model-version=1.0.0
