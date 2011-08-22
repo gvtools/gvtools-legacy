@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<RasterMetaFile>
+<Statistics>
+	<BandCount>1</BandCount>
+	<Band>
+		<Max>255.0</Max>
+		<Min>42.0</Min>
+		<SecondMax>254.0</SecondMax>
+		<SecondMin>43.0</SecondMin>
+		<MaxRGB>0.0</MaxRGB>
+		<MinRGB>0.0</MinRGB>
+		<SecondMaxRGB>0.0</SecondMaxRGB>
+		<SecondMinRGB>255.0</SecondMinRGB>
+		<Mean>85.47362428842504</Mean>
+		<Variance>428.3257409542184</Variance>
+	</Band>
+</Statistics>
+</RasterMetaFile>
