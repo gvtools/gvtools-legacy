@@ -6,11 +6,13 @@ import org.apache.log4j.Logger;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
+import com.iver.andami.plugins.IExtension;
 import com.iver.andami.preferences.IPreference;
 import com.iver.andami.preferences.IPreferenceExtension;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.layers.order.DefaultOrderManager;
 import com.iver.cit.gvsig.fmap.layers.order.OrderManager;
+import com.iver.cit.gvsig.fmap.layers.order.RasterPolLinePointOrderManager;
 import com.iver.cit.gvsig.gui.preferencespage.LayerOrderPage;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.extensionPoints.ExtensionPoint;
@@ -24,10 +26,31 @@ public class LayerOrderExtension extends Extension
 
 	public void initialize() {
 		registerIcons();
-//		registerPrefPage();
+
 		registerDefaultManager();
+		
+		// register second order manager (raster-point)
+		registerRasterPointManager();
+	}
+	
+	public void postInitialize() {
 		initDefaultOrderManager();
 		
+		// if there is no default Order Manager, set our manager as default
+		OrderManager manager = new RasterPolLinePointOrderManager();
+		if (!existsDefaultOrderManager()) {
+			setDefaultOrderManager(manager);
+		}
+	}
+	
+	private void registerRasterPointManager() {
+		
+		ExtensionPoint ep = 
+			(ExtensionPoint) ExtensionPointsSingleton.getInstance().
+			get(DefaultOrderManager.getExtensionPointName());
+
+		OrderManager manager = new RasterPolLinePointOrderManager();
+		ep.put(manager.getCode(), manager);
 	}
 
 	public boolean isEnabled() {
