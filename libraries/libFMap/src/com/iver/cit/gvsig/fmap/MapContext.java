@@ -76,6 +76,7 @@ import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.Classifiable;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.Selectable;
+import com.iver.cit.gvsig.fmap.layers.name.LayerNameUtils;
 import com.iver.cit.gvsig.fmap.layers.order.DefaultOrderManager;
 import com.iver.cit.gvsig.fmap.layers.order.OrderManager;
 import com.iver.cit.gvsig.fmap.operations.selection.Record;
@@ -1538,6 +1539,30 @@ public class MapContext implements Projected {
 		 */
 		public void layerAdding(LayerCollectionEvent e)
 				throws CancelationException {
+			
+	    	// before layer is added: ckeck name
+	    	FLayer lyr = e.getAffectedLayer();
+	    	String name = lyr.getName();
+	    	name = LayerNameUtils.normalizeName(name);
+	    	if (LayerNameUtils.nameExists(getLayers(), name)) {
+	    		
+	    		if (LayerNameUtils.getIndexFromName(name) != null) {
+	    			name = LayerNameUtils.removeIndex(name);
+	    		}
+	    		
+	    		long high_ind =
+	    			LayerNameUtils.findHighestIndex(getLayers(), name);
+	    		
+	    		if (high_ind == 0) {
+	    			high_ind = 2;
+	    		} else {
+	    			high_ind++;
+	    		}
+	    		
+	    		name = LayerNameUtils.composeWithIndex(name, high_ind);
+	    		lyr.setName(name);
+	    	}
+
 		}
 
 		/*
