@@ -271,7 +271,7 @@ public class GraphicLayer extends FLyrDefault {
 
 //        	spatialIndex.insert(g.getGeom().getBounds2D())
             if (fullExtent == null) {
-                fullExtent = g.getGeom().getBounds2D();
+                fullExtent = (Rectangle2D) g.getGeom().getBounds2D().clone();
             } else {
                 fullExtent.add(g.getGeom().getBounds2D());
             }
@@ -295,7 +295,7 @@ public class GraphicLayer extends FLyrDefault {
     public void insertGraphic(int position, FGraphic g) {
     	graphics.add(position, g);
         if (fullExtent == null) {
-            fullExtent = g.getGeom().getBounds2D();
+            fullExtent = (Rectangle2D) g.getGeom().getBounds2D().clone();
         } else {
             fullExtent.add(g.getGeom().getBounds2D());
         }
@@ -445,7 +445,7 @@ public class GraphicLayer extends FLyrDefault {
 			fullExtent = g.getGeom().getBounds2D();
 			for (int i = 1; i < graphics.size(); i++) {
 				g = (FGraphic) graphics.get(i);
-				Rectangle2D rAux = g.getGeom().getBounds2D();
+				Rectangle2D rAux = (Rectangle2D) g.getGeom().getBounds2D().clone();
 
 				fullExtent.add(rAux);
 			}

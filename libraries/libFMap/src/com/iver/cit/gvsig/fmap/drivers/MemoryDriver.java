@@ -104,7 +104,7 @@ public abstract class MemoryDriver implements VectorialDriver, ObjectDriver,
 			 memShapeInfo.addShapeInfo (boundsShp, geom.getGeometryType());
 			 arrayGeometries.add(geom);
 			if (fullExtent == null) {
-				fullExtent = boundsShp;
+				fullExtent = (Rectangle2D) boundsShp.clone();
 			} else {
 				fullExtent.add(boundsShp);
 			}
