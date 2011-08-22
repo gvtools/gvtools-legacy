@@ -7,11 +7,10 @@
 # PURPOSE:      Spline-based smoothing for raster maps.
 #
 # USAGE NOTES:  This module is a "Swiss Army Knife" tool for data smoothing.
-#		Given the right set of options, it should be possible to cure
-#		almost any distortions, such as stripes, staggering effects,
+#		Given the right set of options, it should be possible to "smooth away"
+#		almost any type distortion, such as striping, staggering effects,
 #		local trends, etc. Compared to a median or mean (low-pass) filter,
-#		the output may lose some contrast, but it will also be much
-#		more clean of distortion effects.
+#		the output may lose some contrast, though.
 #
 #		Use the "smoothing" option to control the global smoothness
 #		of splines. Smaller settings will give less smoothing.

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# v.in.mapinfo
+
+# MapInfo is a common GIS and this module is a simple solution for importing
+# its vector format (binary and raster).
+
