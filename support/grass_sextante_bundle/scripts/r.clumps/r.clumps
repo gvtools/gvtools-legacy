@@ -1,0 +1,81 @@
+#!/usr/bin/perl -w
+use strict;
+use lib ("/home/jachym/bin/grass");
+use grass;
+
+# #    LICENCE
+# #    This script creates new map, which category values will represent 
+# #    area of grouped cells
+# #    Copyright (C) 2005 Jachym Cepicky
+# #
+# #    This program is free software; you can redistribute it and/or modify
+# #    it under the terms of the GNU General Public License as published by
+# #    the Free Software Foundation; either version 2 of the License, or
+# #    (at your option) any later version.
+# #
+# #    This program is distributed in the hope that it will be useful,
+# #    but WITHOUT ANY WARRANTY; without even the implied warranty of
+# #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# #    GNU General Public License for more details.
+# #
+# #    You should have received a copy of the GNU General Public License
+# #    along with this program; if not, write to the Free Software
+# #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+# autor Jachym Cepicky  jachym.cepicky [at] centrum [dot] cz
+# URL: http://les-ejk.cz
+# 
+
+my $grass = new GRASS ("Creates new raster map, in which each cell's category label will
+represent area of the grouped cells");
+my $arg = $grass->LoadArgs({'input'=>{'required'=>1,
+                               'type'=>"raster",
+                               'help'=>'Name of input vectorfile, containing points'},
+                    'output'=>{'required'=>1,
+                               'type'=>"raster",
+                               'help'=>'Name of resulting vector file'},
+                    'units'=>{'required'=>1,
+                              'type'=>"raster",
+                              'help'=>'mi(les),me(ters),k(ilometers),a(cres),h(ectares),c(ell_counts),p(ercent_cover)'}
+                          });
+
+### @ mapcalc_str will be used in system()
+my @mapcalc_str = &reclass();
+
+###print $mapcalc_str;
+open (TMP,">/tmp/grass.r.area.txt") or die "Could not open file /tmp/grass.r.area.txt: $!\n";
+
+print TMP @mapcalc_str;
+close TMP;
+
+system("cat /tmp/grass.r.area.txt|r.reclass in=$arg->{'input'} out=$arg->{'output'}; rm /tmp/grass.r.area.txt");
+
+#
+# building the reclass table for r.reclass
+# 
+sub reclass 
+{
+    my $line = ""; # line with category from r.report
+    my $cat = 0; # category number
+    my $area = 0; # category area
+    my @mapcalc_str = ();
+    
+    foreach $line (`r.report -heqnN map=$arg->{'input'} units=$arg->{'units'}`) {
+        next unless ($line =~ m/(\. )+/);
+        
+#|   13| . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .|      1.00|
+        # searching for category
+        $cat = $line;
+        $cat =~ s/^\|\s*([0-9]+)\|.*$/$1/;
+        chomp $cat;
+        # searching for area
+        $line =~ m/\. ?\|\s*(([0-9]+,)?[0-9]+(\.[0-9]+))\|$/;
+        $area = $1;
+        $area =~ s/,//g;
+
+        #print "$area\n";
+        push @mapcalc_str, "$cat = $area\n";
+    }
+    push @mapcalc_str, "end\n";
+    return @mapcalc_str;
+}

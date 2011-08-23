@@ -1,0 +1,161 @@
+#!/bin/sh
+############################################################################
+#
+# script:	r.fragstats
+# author:	Jachym Cepicky <jachym.cepicky [at] centrum [dot] cz>
+# description:	GRASS front-end for program Fragtsats
+# copyright:	This program is free software under the GNU General Public
+#		License (>=v2). 
+#               (c) Jachym Cepicky 2005
+# needs:        - 
+#############################################################################
+
+if test "$GISBASE" = ""; then
+ echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+#%Module
+#% description: Fragstats 2.0 - program to calculate landscape fragmentation indices
+#%End
+#%option
+#% key: input
+#% type: string
+#% description: input raster file
+#% required : yes
+#%End
+#%option
+#% key: output
+#% type: string
+#% description: output text file
+#% required : yes
+#%End
+#%option
+#% key: background
+#% type: integer
+#% description: value of background cells (positive) 
+#% required: no
+#%End
+#%option
+#% key: max_classes
+#% type: integer
+#% description: max possible classes in landscape
+#% required: no
+#%End
+#%option
+#% key: wt_file
+#% type: string
+#% description: name of file containing weights for each combination of patch type
+#% required: no
+#%End
+#%option
+#% key: desc_file
+#% type: string
+#% description: name of file containing character descriptors for each patch type
+#% required: no
+#%End
+#%option
+#% key: bound_wght
+#% type: double
+#% description: proportion of landscape boundary and background class edges to be considered edge
+#% required: no
+#% answer: 0.0
+#%End
+#%option
+#% key: prox_dist
+#% type: double
+#% description: search radius in meters for proximit
+#% required: no
+#%End
+#%flag
+#%  key: i
+#%  description: create and output ID image
+#%End
+#%flag
+#%  key: d
+#%  description: do not use diagonals in patch finding
+#%End
+#%flag
+#%  key: n
+#%  description: do not calculate nearest neighbor
+#%End
+#%flag
+#%  key: p
+#%  description: do not print patch level stats
+#%End
+#%flag
+#%  key: c
+#%  description: do not print class level stats
+#%End
+
+
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+# kontrola fragstats
+if [ -z "`which fragstats`" ] ; then
+   echo "ERROR: Script needs fragstats."
+   exit 1
+else
+    fragstats=`which fragstats`;       
+fi
+
+background="$"
+if [ "$GIS_OPT_background" != "" ]; then
+    background=$GIS_OPT_background;
+fi
+
+max_classes="$"
+if [ "$GIS_OPT_max_classes" != "" ]; then
+    max_classes=$GIS_OPT_max_classes;
+fi
+
+wt_file="$"
+if [ "$GIS_OPT_wt_file" != "" ]; then
+    wt_file=$GIS_OPT_wt_file;
+fi
+
+desc_file="$"
+if [ "$GIS_OPT_desc_file" != "" ]; then
+    desc_file=$GIS_OPT_desc_file
+fi
+
+bound_wght="$"
+if [ "$GIS_OPT_bound_wght" != "" ]; then
+    bound_wght=$GIS_OPT_bound_wght;
+fi
+
+prox_dist="$"
+if [ "$GIS_OPT_prox_dist" != "" ]; then
+    prox_dist=$GIS_OPT_prox_dist;
+fi
+
+id_image="2"
+if [ $GIS_FLAG_i -eq 1 ]; then
+    id_image="1"
+fi
+
+diags="YES"
+if [ $GIS_FLAG_d -eq 1 ]; then
+    diags="NO"
+fi
+
+nndist="YES"
+if [ $GIS_FLAG_n -eq 1 ]; then
+    nndist="NO"
+fi
+
+patch_stats="YES"
+if [ $GIS_FLAG_p -eq 1 ]; then
+    patch_stats="NO"
+fi
+
+class_stats="YES"
+if [ $GIS_FLAG_c -eq 1 ]; then
+    class_stats="NO"
+fi
+
+fragstats $GIS_OPT_input $GIS_OPT_output $ $ 7 $ $ $background $max_classes $wt_file $id_image $desc_file $bound_wght $diags $prox_dist $nndist $patch_stats $class_stats 
+

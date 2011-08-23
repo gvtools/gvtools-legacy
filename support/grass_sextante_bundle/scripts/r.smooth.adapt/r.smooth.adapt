@@ -1,0 +1,179 @@
+#!/usr/bin/perl -w
+# #    LICENCE
+# #    This script proceses the adaptive smoothing on 3x3 matrix
+# #    (Barash, D., Comaniciu, D.: A Common Framework for Nonlinear Diffusion, 
+# #     Adaptive Smoothing, Bilateral Filtering and Mean Shift)
+# #
+# #    Copyright (C) 2005 Jachym Cepicky
+# #
+# #    This program is free software; you can redistribute it and/or modify
+# #    it under the terms of the GNU General Public License as published by
+# #    the Free Software Foundation; either version 2 of the License, or
+# #    (at your option) any later version.
+# #
+# #    This program is distributed in the hope that it will be useful,
+# #    but WITHOUT ANY WARRANTY; without even the implied warranty of
+# #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# #    GNU General Public License for more details.
+# #
+# #    You should have received a copy of the GNU General Public License
+# #    along with this program; if not, write to the Free Software
+# #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+# author Jachym Cepicky  jachym.cepicky [at] centrum [dot] cz
+# URL: http://les-ejk.cz
+# 
+#########################################################################x####
+# Are we in GRASS session?
+unless($ENV{GISBASE}){
+    print STDERR "\n\nYou have to run GRASS first!\n\n";
+    exit;
+}
+
+# load arguments
+my @arg = &load_arguments();
+my %arg = ();
+
+# if there is no argument 
+if (!@arg || $arg[0] eq '0') {
+    &print_help();
+}
+
+else {
+    %arg = @arg;
+}
+
+###########################################################################
+# text string for r.mapcalc
+###########################################################################
+my $mapcalc_str = " $arg{'out'} = eval (\\\n";
+$mapcalc_str .= &gradient();
+$mapcalc_str .= &weight(3);
+$mapcalc_str .= &result();
+$mapcalc_str .= ")"; # eval()
+
+#print $mapcalc_str;
+#open (TMP,">/tmp/grass.r.area.txt") or die "Could not open file /tmp/grass.r.area.txt: $!\n";
+
+#print TMP @mapcalc_str;
+#close TMP;
+
+`echo \'$mapcalc_str\'| r.mapcalc`;
+`r.colors map=$arg{'out'} col=grey`;
+
+
+##############################################################################
+# function:     gradient
+# returns string, which containts formula for gradient in adaptive
+# smoothing
+##############################################################################
+sub gradient
+{
+    return qq|dt = sqrt((($arg{'in'}\[-1,0\] - $arg{'in'}\[1,0\])/3)^2 + \\
+                  (($arg{'in'}\[0,-1\] - $arg{'in'}\[0,1\])/3)^2),\\\n|;
+}
+##############################################################################
+# function:     weight
+# returns a string containgin weight
+##############################################################################
+sub weight
+{
+    return qq|w = exp(-(dt^2)/(2*$arg{'k'}^2)),\\\n|;
+}
+
+
+##############################################################################
+# function:     result
+# returns a string containgin result formula
+##############################################################################
+sub result
+{
+    my $i = 0;
+    my $j = 0;
+    my $mapstr = "(";
+
+    for ($i = -1; $i <= 1; $i++ ) {
+        for ($j = -1; $j <= 1; $j++ ) {
+           $mapstr .= "$arg{'in'}\[$i,$j\]*w";
+           
+           if ($j + $i < 2) {
+               $mapstr .= " + ";
+           }
+        }
+    }
+
+    return "$mapstr)/9*w";
+}
+
+
+##############################################################################
+# function:     load_arguments
+# reads command line parameters and stores them into hash %arg
+##############################################################################
+sub load_arguments{
+
+    my $in="";
+    my $out="";
+    my $t="";
+    my $k="";
+    
+    # arguments of command line
+    foreach(@ARGV){
+        if(m/help/i){
+         
+            return 0;
+        
+        } elsif(m/in(put)?=/i){ s/^.*=//;$in = $_;
+        } elsif(m/out(put)?=/i){ s/^.*=//;$out = $_;
+        } elsif(m/t=/i){ s/^.*=//;$t = $_;
+        } elsif(m/k=/i){ s/^.*=//;$k = $_;
+        }
+
+     }
+
+     # testing of parameters
+    if ($in eq ""){ 
+        print STDERR "\nERROR: Parameter 'input' not defined\n"; 
+        return 0;
+    }
+    if ($out eq ""){ 
+        print STDERR "\nERROR: Parameter 'output' not defined\n"; 
+        return 0;
+    }
+    if ($t eq ""){ 
+        print STDERR "\nERROR: Parameter 't' not defined\n"; 
+        return 0;
+    }
+    if ($k eq ""){ 
+        print STDERR "\nERROR: Parameter 'k' not defined\n"; 
+        return 0;
+    }
+    # all arguments back
+    
+    return ('in', $in,'out', $out, 't', $t, 'k', $k);
+}
+
+
+
+##############################################################################
+# function:     load_arguments
+# reads command line parameters and stores them into hash %arg
+##############################################################################
+sub print_help 
+{
+       print qq(
+\nDescription:\n
+This skript provides adaptive smoothing on 3x3 matrix
+
+Usage:
+ r.adsmooth in=name out=name t=number k=number
+
+Parameters:
+ in      Name of input raster map
+ output  Name of resulting raster map
+ t       Scale -- number of iterations
+ k       Parametr
+);
+
+exit;
+}

@@ -1,0 +1,162 @@
+#!/bin/sh
+
+############################################################################
+#
+# skript:	upravads.sh
+# autor:	Jachym Cepicky
+# popis:	upravuje zadane druzicove snimky, histogram stretch atd..
+#               do aktualni lokace
+# copyright:	This program is free software under the GNU General Public
+#		License (>=v2). 
+# pozadavky:    - sed
+#               - grep
+#               - R
+#############################################################################
+
+if test "$GISBASE" = ""; then
+ echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+#%Module
+#% description: Provides histogram stretch
+#%End
+#%option
+#% key: raster
+#% type: string
+#% description: raster file
+#% required : yes
+#%End
+#%option
+#% key: suffix
+#% type: string
+#% description: suffix for the result map
+#% required : yes
+#%End
+#%option
+#% key: resmult
+#% type: integer
+#% description: multiplicator for the raster resolution. usefull for faster R calculations, the result raster will be untouched
+#% required: no
+#%End
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+#####################################################################
+# global variables
+#####################################################################
+cat="$GIS_OPT_raster"
+suff="$GIS_OPT_suffix"
+resol="$GIS_OPT_resmult"
+
+#####################################################################
+# KONTROLY
+#####################################################################
+# kontrola sed
+if [ -z "`which sed`" ] ; then
+   echo "ERROR: Script needs sed."
+   exit 1
+fi
+
+# kontrola grep
+if [ -z "`which grep`" ] ; then
+   echo "ERROR: Script needs grep."
+   exit 1
+fi
+
+
+# kontrola R
+if [ -z "`which R`" ] ; then
+   echo "ERROR: Script needs R (www.r-project.org)."
+   exit 1
+fi
+
+
+#####################################################################
+# FUNKCE PROGRAMU
+#####################################################################
+
+##
+## Provides histogram stretch using R statitstick package
+##
+## Jachym Cepicky 2005
+function histogram_stretch()
+{
+    ds=$1
+    suff=$2;
+    resol=$3
+
+    # nelze delat s celym vyrezem, resolution = 2*res
+    #g.region rast=$ds; 
+
+    res=`g.region -p |grep wres:|sed -e s/.*res\:\ *//` # aktuální rozli¹ení
+    res=`echo $res | sed -e "s/\([0-9]*\)\..*/\1/"`; # bez desetinné teèky
+    if [ "$res" == "0" ]; then
+        res=1;
+    fi
+    res=$(( ${res} * ${resol} )); # výsledné rozli¹ení
+
+    #echo "Nastavuji region na ${resol}xrozli¹ení rastru";
+    echo "Setting region to ${resol}xraster resolution";
+    
+    g.region res=$res   # nastavíme
+    g.region -p |grep res       # pro jistotu vytiskneme
+
+    
+    #echo "Spou¹tím statistický program R";
+    echo "Running R";
+    rout=`echo "library(GRASS); g<-gmeta(interp=TRUE);
+          ds<-rast.get(g, \"$ds\",c(F), interp=T);
+          attach(ds);
+          stats<-boxplot.stats($ds,  do.conf = TRUE, do.out = FALSE);
+          stats$stats[1];
+          " | R --vanilla --no-save -q --slave|grep [1]`;
+          
+    #echo "Rko probìhlo, seduju výsledky";
+    echo "R calculations are over, I'm seding out the results";
+    rout=`echo $rout | sed -e s/.*gisrc\ .1.\ //`;  # tady jsou èísla
+    min=`echo $rout  |sed -e "s/\([0-9]*\).*/\1/"`; # pouze minimum
+    max=`echo $rout  |sed -e "s/.*\ \([0-9]*\)$/\1/"`; # pouze maximum
+
+    #echo "Provedu nata¾ení histogramu: minimum: $min->0, maximum: $max->255"
+    #echo "Nastavuji region"
+    echo "Setting region"
+    g.region rast=$ds;
+
+    #echo "Provádím rozta¾ení histogramu";
+    echo "Providing histogram stretch: minimum: $min->0, maximum: $max->255"
+    r.mapcalc $ds.$suff="eval(out=($ds-$min)*255/($max-$min),if( out>255, 255, if (out < 0, 0, out)))"
+
+    #echo "Nastavuji barevnou paletu na grey.eq"
+    echo "Setting color palet to grey.eq"
+    r.colors map=$ds.$suff color=grey.eq
+    return 0;
+}
+
+
+
+#####################################################################
+# TELO PROGRAMU
+#####################################################################
+if [ "${resol}" == "" ]; then
+    resol=2;
+fi
+
+if [ "${cat}" == "" ]; then
+    echo "ERROR: Input raster <raster> not set"
+    exit 1;
+fi
+if [ "${suff}" == "" ]; then
+    echo "ERROR: Output suffix <suff> not set"
+    exit 1;
+fi
+
+
+
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+
+histogram_stretch $cat $suff $resol;
+

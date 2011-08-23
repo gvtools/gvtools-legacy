@@ -1,0 +1,63 @@
+#!/usr/bin/perl -w
+###############################################################################
+# Local maxima filter for  r.mapcalc
+# 
+# Jachym Cepicky jachym.cepicky@centrum.cz
+# 2005
+#
+# GNU/GPL
+# 
+use strict;
+use Getopt::Std;
+our(%opt);
+
+if(!getopts('i:m:o:r',\%opt))
+{
+    &print_help();
+} elsif(
+    !$opt{'o'} or !$opt{'i'}
+){
+    &print_help();
+}
+
+my $i=0;
+my $j=0;
+if(!$opt{'m'}){ $opt{'m'}=3;}
+my $max=($opt{'m'}-1)/2;
+
+
+my $mapcalc_string = "$opt{'o'} = if($opt{'i'} == max(";
+
+    for($i=0;$i<$opt{'m'};$i++)
+    {
+        for($j=0;$j<$opt{'m'};$j++)
+        {
+           $mapcalc_string.=sprintf("$opt{'i'}\[%d,%d\]",-$max+$i,-$max+$j);
+           if(($i+1)*($j+1)<$opt{'m'}**2)
+           {
+               $mapcalc_string.=",";
+           }
+       }
+    }
+
+    $mapcalc_string.="),1,null())\n";
+
+
+print $mapcalc_string;
+
+
+sub print_help
+{
+    print qq(
+        local_max.pl -i input -o output [-m matrix_size]
+    
+        where
+        
+        input       - input raster map
+        output      - output raster map
+        matrix_size - odd number
+
+        jachym.cepicky\@centrum.cz 8.12.2004
+);
+    exit;
+}
