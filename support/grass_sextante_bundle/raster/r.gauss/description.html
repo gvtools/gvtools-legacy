@@ -1,0 +1,37 @@
+<H2>DESCRIPTION</H2>
+<h3>Gaussian filter</h3>
+The Gaussian smoothing operator is a 2-D convolution operator that is used to `blur' images and remove detail and noise. In this sense it is similar to the mean filter, but it uses a different kernel that represents the shape of a Gaussian (`bell-shaped') hump. This kernel has some special properties which are detailed below.
+
+In 2-D, an isotropic (i.e. circularly symmetric) Gaussian has the form:
+<br>
+<img alt="Gaussian equotation" src="eqngaus2.png"  valign="top">
+<p>
+Which results to<br>
+<img alt="Gaussian bell" src="gauss2.png" valign="middle">
+
+<h3>The LoG (Laplacian of Gaussian filter)</h3>
+The Laplacian is a 2-D isotropic measure of the 2nd spatial derivative of an image. The Laplacian of an image highlights regions of rapid intensity change and is therefore often used for edge detection (see zero crossing edge detectors). The Laplacian is often applied to an image that has first been smoothed with something approximating a Gaussian smoothing filter in order to reduce its sensitivity to noise, and hence the two variants will be described together here. The operator normally takes a single graylevel image as input and produces another graylevel image as output.
+
+<p>
+The 2-D LoG function centered on zero and with Gaussian standard deviation has
+the form:<br>
+<img src="eqnlog2.png" alt="LoG formula"><p>
+which results to<br>
+<img src="logcont.png" alt="LoG form"><p>
+
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="http://homepages.inf.ed.ac.uk/rbf/HIPR2/gsmooth.htm">Gaussian
+Smoothing</A></EM><br>
+<EM><A HREF="http://homepages.inf.ed.ac.uk/rbf/HIPR2/log.htm">Laplacian of
+Gaussian</A></EM><br>
+<EM><A HREF="r.neighbors.html">r.neighbors</A></EM><BR>
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM><br>
+<EM><A HREF="r.mask.html">r.mask</A></EM><br>
+<EM><A HREF="r.mfilter.html">r.mfilter</A></EM><BR>
+
+<H2>AUTHOR</H2>
+Jachym Cepicky, Ustav geoinformacnich technologii, Brno
+
+<p><i>Last changed: $Date: 2009-01-27 20:48:14 $</i>

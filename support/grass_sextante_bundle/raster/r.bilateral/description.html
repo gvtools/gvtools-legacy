@@ -1,0 +1,32 @@
+<H2>DESCRIPTION</H2>
+The basic idea underlying bilateral filtering is to do in the 
+range of an image what traditional filters do in its domain. 
+Two pixels can be close to one another, that is, occupy nearby spatial location, 
+or they can be similar to one another, that is, have nearby values, 
+possibly in a perceptually meaningful fashion.
+<p>
+Bilateral filter takes both into count: the spatial and the color part. Both are
+weighted by Gaussian distribution. 
+<p>
+<img src="vzorec.png" alt="Equotation of the filter"><p>
+where<br>
+w(q) -- weight of this pixel<br>
+q, p -- position of the central pixel and of calculated pixel in neighborhood<br>
+f(q), f(p) -- values of the central and neighborhood pixel<br>
+Ss, Sc -- spatial and color (value) sigma<br>
+<p>
+NOTE: Part <code>1/(S*sqrt(2*pi))</code> is not taken into count<br> (is set to
+1)
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/MANDUCHI1/Bilateral_Filtering.html">Bilateral Filtering for Gray and Color Images</A></EM><br>
+<EM><A HREF="r.neighbors.html">r.neighbors</A></EM><BR>
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM><br>
+<EM><A HREF="r.mask.html">r.mask</A></EM><br>
+<EM><A HREF="r.mfilter.html">r.mfilter</A></EM><BR>
+
+<H2>AUTHOR</H2>
+Jachym Cepicky, Ustav geoinformacnich technologii, Brno
+
+<p><i>Last changed: $Date: 2009-01-27 20:48:14 $</i>

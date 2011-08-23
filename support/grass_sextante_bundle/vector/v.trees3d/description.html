@@ -1,0 +1,52 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.trees3d</em> makes 3D trees from point vector file
+
+<h2>EXAMPLES</h2>
+
+<h3>Spruce forest</h3>
+
+<div class="code"><pre>
+v.trees3d input=points output=spruce
+</pre></div>
+
+<h3>Spruce, Beech and Fir forest with variable height and position</h3>
+
+<div class="code"><pre>
+v.trees3d in=points out=forest spruce=50 beech=25 fir=25 height=25 hvar=5 vvar=20 diam=6
+</pre></div>
+
+<h3>Simulation of your research area: get values from database</h3>
+
+<div class="code"><pre>
+v.trees3d in=points out=forest specolumn=species hcolumn=height dcolumn=diam
+</pre></div>
+
+<h3>Spearfish example</h3>
+
+<div class="code"><pre>
+g.region n=4919040 s=4917090 w=597630 e=600540 res=30 -p
+r.mapcalc "ded_forest=if(landcover.30m == 41,1,null())"
+r.random input=ded_forest vector_output=trees n=275
+v.trees3d in=trees out=forest dia=8 height=30 elevation=elevation.10m \
+          spruce=70 larch=30 vvar=20 clength=50
+nviz elevation.10m vect=forest
+</pre></div>
+
+<h3>Other Spearfish example</h3>
+
+<div class="code"><pre>
+g.region n=4919040 s=4917090 w=597630 e=600540 res=30 -p
+r.mapcalc "ded_forest=if(landcover.30m == 41,1,null())"
+g.region res=5
+r.to.vect in=ded_forest out=ded_forest use=val val=1
+v.trees3d in=trees out=forest dia=8 height=30 elevation=elevation.10m \
+          spruce=70 larch=30 hvar=5 vvar=20 clength=50
+nviz elevation.10m vect=forest
+</pre></div>
+<h2>AUTHOR</h2>
+
+Jachym Cepicky, jachym.cepicky _at_ centrum _dot_ cz, http://les-ejk.cz<br>
+<em>Department of Geoinformation Technologies, http://mapserver.mendelu.cz</em>
+
+<p><i>Last changed: $Date: 2009-01-27 20:48:15 $</i>
