@@ -11,16 +11,15 @@
 </FONT>
 </P>
 <P>
-Genera una capa con una topolog&iacute;a de l&iacute;neas y pol&iacute;gonos correcta. Para conseguirlo,
-corrige errores geom&eacute;tricos, ensambla polil&iacute;neas en pol&iacute;gonos, y crea las tablas necesarias
-con la informaci&oacute;n pertinente de pol&iacute;gonos o polil&iacute;neas.
+Generates a layer with topologically valid lines and polygons by correcting geometry errors, converting
+polylines to polygons and updating attribute table schemas where necessary.  
 </P>
 <P>
-Los procesos que lleva a cabo son:
+In addition, the following clean-up processes are applied:
 <ol>
-<li>Fusiona nodos que se encuentren dentro de la tolerancia fuzzy a especificar</li>
-<li>Elimina los nodos colgantes (parametro <i>dangle length</i>)</li>
-<li>Encuentra intersecciones entre l&iacute;neas (pseudonodos), las parte y crea los nodos en dichas intersecciones</li>
+<li>Fusion of nodes that are closer than the specified fuzzy tolerance.</li>
+<li>Elimination of overshooting (dangling) line nodes (parameter <i>dangle length</i>)</li>
+<li>Identification of line node intersections (pseudo nodes), and creation of missing vertices at intersections.</li>
 </ol>
 </P>
 </BODY>

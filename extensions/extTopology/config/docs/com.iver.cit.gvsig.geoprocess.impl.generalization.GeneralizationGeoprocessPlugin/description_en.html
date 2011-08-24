@@ -1,4 +1,4 @@
-!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
@@ -7,22 +7,29 @@
 <BODY LANG="es-ES" DIR="LTR">
 <P>
 <FONT COLOR="#800000">
-<B>Linear Generalization</B>
+<B>Generalize</B>
 </FONT>
 </P>
-<P>Linear Generalization is a kind of data compression algorithm. Consist in reduce the number of vertices needed to represent a linear geometry
-without modify its spatial identity.
-
-</P>
+<P>This tool simplifies geometries by using one of a number of linear generalization algorithms.
+Generalization reduces the number of vertices that make up a feature without altering it's shape (too much).
+Ideally, the result layer will provide a smaller data volume without compromising on visual quality.
+  </P>
 <P>
 <IMG SRC="generalization_desc.png" NAME="Imagen1" ALIGN=LEFT BORDER=0>
 </P>
-<P>
-gvSIG supports two types of linear generalization: topologic and non-topologic. In topologic generalization geometry topology is preserved
-(closed polylines will remain closed, polygon's holes will be contained in polygon's shell, etc.)
-Non-topologic generalization is implemented with Douglas-Peucker algorithm.
-Distance tolerance is a parameter to specify the compression level of the resulting geometries.
+<p>
+Two types of linear generalization are supported: topological and non-topological.
+</p> 
+<p>
+Topological generalization
+preserves key geometric properties (closed polylines will remain closed, polygon holes will be contained within 
+polygon boundaries, etc.)
+</p>
+<p>
+Non-topological generalization is implemented by the Douglas-Peucker algorithm.
+The <i>distance tolerance</i> parameter can be used to specify the generalization level. Higher settings will
+produce smaller datasets but alter shapes more significantly.
+</p>
 
-</P>
 </BODY>
 </HTML>

@@ -5,21 +5,23 @@
 	<TITLE>Construir polígonos</TITLE>
 </HEAD>
 <BODY LANG="es-ES" DIR="LTR">
-<P><FONT COLOR="#800000"><B>Build</B></FONT>
+<P><FONT COLOR="#800000"><B>Clean</B></FONT>
 </P>
 <P>Este geoproceso genera una capa de polígonos a partir de aquellos elementos de una capa de líneas
 que encierren superficies cerradas.
 </P>
 <P>
-Se da la opción de añadir geometrías de error:Son aquellas geometrías que no forman parte de lineas 
-cerradas y por tanto se les considera como geometrias de erroneas.
-</P>
-<P>
-Puede ejecutar el geoproceso LineClean desde dentro del geoproceso Build,
-indicando las toleracias "fuzzy" y "dangle" que intervienen en el geoproceso LineClean.
+Puesto que es posible que no todas las líneas de la capa de entrada participen en la formación de polígonos
+cerrados, opcionalmente se pueden construir capas auxiliares con líneas sueltas y con líneas colgantes.
+<br>
+
 </P>
 <P>
 <IMG SRC="polybuilddesc.png" NAME="Imagen1" ALIGN=LEFT BORDER=0 WIDTH=600 HEIGHT=500>
+</P>
+<P>
+Se puede especificar una <b>tolerancia de líneas colgantes</b>, de forma que aquellas líneas cuya longitud
+sea inferior a esta tolerancia no sean consideradas.
 </P>
 </BODY>
 </HTML>

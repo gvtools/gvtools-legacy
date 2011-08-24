@@ -7,32 +7,39 @@
 <BODY LANG="es-ES" DIR="LTR">
 <P>
 <FONT COLOR="#800000">
-<B>Spatial adjust</B>
+<B>Transform</B>
 </FONT>
 </P>
 <P>
-Spatial adjust geoprocess applies a spatial transform on features of a vectorial layer.<br>
-Transforms actually supported by gvSIG are:
+This geoprocess applies a spatial transformation to all features of a layer.
+</P>
+The supported transformation methods are:
 <ul>
-<li>Projective.</li>
-<li>Affine.</li>
-<li>Similarity.</li>
-<li>Bursa Wolf.</li>
-<li>Differential Rubber sheeting.</li>
-<li>Affine with constrainst.</li>
+<li>Projective</li>
+<li>Affine</li>
+<li>Similarity</li>
+<li>Bursa-Wolf</li>
+<li>Differential Rubber Sheeting</li>
+<li>Constrained Affine</li>
 </ul>
-The number of supported transformations could be extended by using gvSIG API.
+<P>
+<P>
+Required input consists of a set of source and target control point coordinates.
 </P>
 <P>
+Source and target points are introduced into the table of error vectors
+by dragging a vector interactively from source to target in the current View.
+</p>
 <IMG SRC="spatial_adjust_desc.gif" NAME="Imagen1" ALIGN=LEFT BORDER=0>
 </P>
 <P>
-This geoprocess needs a set of control points, with the coordinates of a point before and after the transformation.
-<br>Each transformation will require a minimum number of control points. Usually we are going to use more points than the minimum,
-improving the quality of the transformation by a root mean square adjust.
-To give an idea of the quality of the transformation the geoprocess will provide a root mean square error for each control point,
-and a global root mean square error.
-
+Each transformation method requires a specific minimum number of control points. 
+If more than the minimum number of points are available, then the quality of the transformation 
+can usually by improved by a root mean square adjustment.
+</p>
+<P>
+To allow assessment of transformation quality, A root mean square error will be provided for each control point, 
+as well as for the whole set.
 </P>
 </BODY>
 </HTML>

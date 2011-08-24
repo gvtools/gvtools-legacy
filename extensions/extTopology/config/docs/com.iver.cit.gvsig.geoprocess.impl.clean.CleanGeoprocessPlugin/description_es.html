@@ -11,15 +11,16 @@
 </FONT>
 </P>
 <P>
-Genera una capa con una topolog&iacute;a correcta. Esto lo hace corrigiendo errores 
-geom&eacute;tricos, vi&eacute;ndose reflejada la correcci&oacute;n tambi&eacute;n en la tabla de atributos.
+Genera una capa con una topolog&iacute;a de l&iacute;neas y pol&iacute;gonos correcta. Para conseguirlo,
+corrige errores geom&eacute;tricos, ensambla polil&iacute;neas en pol&iacute;gonos, y crea las tablas necesarias
+con la informaci&oacute;n pertinente de pol&iacute;gonos o polil&iacute;neas.
 </P>
 <P>
-Los procesos de correci&oacute;n geomtr&eacute;trica que lleva a cabo son:
+Los procesos que lleva a cabo son:
 <ol>
-<li>Fusionar nodos dentro de la tolerancia fuzzy establecida por el usuario.</li>
-<li>Eliminar nodos colgantes si est&aacute;n dentro de la tolerancia Dangle.</li>
-<li>En las intersecciones que encuentra un pseudonodo lo convierte en nodo.</li>
+<li>Fusiona nodos que se encuentren dentro de la tolerancia fuzzy a especificar</li>
+<li>Elimina los nodos colgantes (parametro <i>dangle length</i>)</li>
+<li>Encuentra intersecciones entre l&iacute;neas (pseudonodos), las parte y crea los nodos en dichas intersecciones</li>
 </ol>
 </P>
 </BODY>
