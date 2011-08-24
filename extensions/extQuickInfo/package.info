@@ -1,0 +1,16 @@
+
+state=devel
+name=org.gvsig.quickInfo
+official=true
+code=org.gvsig.quickInfo
+operating-system=all
+architecture=all
+java-version=j1_5
+gvSIG-version=1.11.0
+version=1.11.0
+type=plugin
+description=gvSIG basic extensions
+build=1305
+buildNumber=1305
+model-version=1.0.0
+		
