@@ -1,0 +1,96 @@
+Index: src/com/iver/cit/gvsig/fmap/rendering/FInterval.java
+===================================================================
+--- src/com/iver/cit/gvsig/fmap/rendering/FInterval.java	(revision 32356)
++++ src/com/iver/cit/gvsig/fmap/rendering/FInterval.java	(working copy)
+@@ -40,6 +40,9 @@
+  */
+ package com.iver.cit.gvsig.fmap.rendering;
+ 
++import java.util.regex.Matcher;
++import java.util.regex.Pattern;
++
+ import com.hardcode.gdbms.engine.values.DateValue;
+ import com.hardcode.gdbms.engine.values.DoubleValue;
+ import com.hardcode.gdbms.engine.values.FloatValue;
+@@ -124,23 +127,17 @@
+ 	 * @return FInterval nuevo.
+ 	 */
+ 	public static IInterval create(String s) {
+-		String[] str = s.split("-");
+-		if (s.startsWith("-")) {
+-			str[0]="-"+str[1];
+-			s.replaceFirst("-","");
+-			str[1]=str[2];
+-		}
+-		if (s.contentEquals(new StringBuffer("--"))) {
+-			str[1]=s.substring(s.indexOf('-')+1,s.length()-1);
++		Pattern pattern = Pattern.compile("(-?[^-]*)-(-?.*)");
++		Matcher matcher = pattern.matcher(s);
++		IInterval inter=new NullIntervalValue(); // temporal pessimism
++		if (matcher.find()) {
++			try{
++				inter = new FInterval(Double.parseDouble(matcher.group(1)),
++						Double.parseDouble(matcher.group(2)));
++			}catch (NumberFormatException e) {
++			}
+ 		}
+ 
+-		IInterval inter=null;
+-		try{
+-		inter = new FInterval(Double.parseDouble(str[0]),
+-				Double.parseDouble(str[1]));
+-		}catch (NumberFormatException e) {
+-			return new NullIntervalValue();
+-		}
+ 		return inter;
+ 	}
+ }
+Index: src-test/com/iver/cit/gvsig/fmap/AllTests.java
+===================================================================
+--- src-test/com/iver/cit/gvsig/fmap/AllTests.java	(revision 32356)
++++ src-test/com/iver/cit/gvsig/fmap/AllTests.java	(working copy)
+@@ -25,6 +25,7 @@
+ import com.iver.cit.gvsig.fmap.layers.FLayer;
+ import com.iver.cit.gvsig.fmap.layers.LayerFactory;
+ import com.iver.cit.gvsig.fmap.layers.LayersIteratorTest;
++import com.iver.cit.gvsig.fmap.rendering.FIntervalTest;
+ import com.iver.cit.gvsig.fmap.spatialindex.SpatialIndexTest;
+ import com.iver.cit.gvsig.fmap.tools.AreaListenerTest;
+ import com.vividsolutions.jts.operation.overlay.SnappingOverlayOperationTest;
+@@ -95,6 +96,8 @@
+ 		suite.addTestSuite(SpatialIndexTest.class);
+ 		suite.addTestSuite(TestDbf.class);
+ 		suite.addTestSuite(TestDgn.class);
++		
++		suite.addTestSuite(FIntervalTest.class);
+ 
+ 		//$JUnit-END$
+ 		return suite;
+Index: src-test/com/iver/cit/gvsig/fmap/rendering/FIntervalTest.java
+===================================================================
+--- src-test/com/iver/cit/gvsig/fmap/rendering/FIntervalTest.java	(revision 0)
++++ src-test/com/iver/cit/gvsig/fmap/rendering/FIntervalTest.java	(revision 0)
+@@ -0,0 +1,22 @@
++package com.iver.cit.gvsig.fmap.rendering;
++
++import junit.framework.TestCase;
++
++public class FIntervalTest extends TestCase {
++
++	private static final double DELTA = 0.000001;
++
++	public void testNegativeIntervals() throws Exception {
++		testNegativeInterval("-2.1--1.1", -2, -1.1);
++		testNegativeInterval("-2.1-1.1", -2.1, 1.1);
++		testNegativeInterval("2.1--1", 2.1, -1);
++		testNegativeInterval("1.1-2", 1.1, 2);
++	}
++
++	private void testNegativeInterval(String intervalString, double min,
++			double max) {
++		FInterval interval = (FInterval) FInterval.create(intervalString);
++		assertTrue(interval.getMin() - min < DELTA);
++		assertTrue(interval.getMax() - max < DELTA);
++	}
++}
+

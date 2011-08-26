@@ -1,0 +1,68 @@
+diff -r -u -w --strip-trailing-cr 
+a/src/include/c.h 
+b/src/include/c.h
+--- a/src/include/c.h    
+2011-04-15 03:15:53 +0000
++++ b/src/include/c.h        
+2011-05-06 11:39:13 +0000
+@@ -58,17 +58,21 @@
+ #endif
+ #include "postgres_ext.h"
+ 
+-#if _MSC_VER >= 1400 || defined(WIN64)
+-#define errcode __msvc_errcode
+-#include <crtdefs.h>
+-#undef errcode
+-#endif
+-
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stddef.h>
+ #include <stdarg.h>
++
++/* note: __MINGW64_VERSION_MAJOR is related to both 32/bit gcc compiles by mingw-w64
++ * however it gots defined only after #include <any standard mingw header>
++ */
++#if _MSC_VER >= 1400 || defined(WIN64) || defined(__MINGW64_VERSION_MAJOR)
++#define errcode __msvc_errcode
++#include <crtdefs.h>
++#undef errcode
++#endif
++
+ #ifdef HAVE_STRINGS_H
+ #include <strings.h>
+ #endif
+diff -r -u -w --strip-trailing-cr 
+a/src/include/port/win32.h
+b/src/include/port/win32.h
+--- a/src/include/port/win32.h
+   2011-04-15 03:15:53 +0000
++++ b/src/include/port/win32.h   
+    2011-05-06 11:46:54 +0000
+@@ -31,7 +31,7 @@
+  * The Mingw64 headers choke if this is already defined - they
+  * define it themselves.
+  */
+-#if !defined(WIN64) || defined(WIN32_ONLY_COMPILER)
++#if (!defined(WIN64) || defined(WIN32_ONLY_COMPILER)) && !defined(__MINGW64_VERSION_MAJOR)
+ #define _WINSOCKAPI_
+ #endif
+ #include <winsock2.h>
+diff -r -u -w --strip-trailing-cr 
+a/src/port/getaddrinfo.c 
+b/src/port/getaddrinfo.c
+--- a/src/port/getaddrinfo.c 
+    2011-04-15 03:15:53 +0000
++++ b/src/port/getaddrinfo.c 
+2011-05-06 11:20:18 +0000
+@@ -329,7 +329,7 @@
+			return "Not enough memory";
+ #endif
+ #ifdef EAI_NODATA
+-#if !defined(WIN64) && !defined(WIN32_ONLY_COMPILER) /* MSVC/WIN64 duplicate */
++#if !defined(WIN64) && !defined(WIN32_ONLY_COMPILER) && !defined(__MINGW64_VERSION_MAJOR) /* MSVC/WIN64 duplicate */
+		case EAI_NODATA:
+			return "No host data of that type was found";
+ #endif
+
