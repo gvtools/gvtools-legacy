@@ -112,15 +112,21 @@ public class VectorialFileOpen extends AbstractFileOpen{
 
 		// Show file extension when adding layers on ToC
 		XMLEntity xml = PluginServices.getPluginServices("com.iver.cit.gvsig").getPersistentXML();
+		
+		boolean showFileExtension;
+		
 		if (!xml.contains("ShowFileExtensions")) {
-			//Do nothing
+			//not show by def
+			showFileExtension = false;
 		} else {
-			boolean showFileExtension= xml.getBooleanProperty("ShowFileExtensions");
-			int dot_index = layerName.lastIndexOf(".");
-			if (!showFileExtension && dot_index > 0) {
-				layerName = layerName.substring(0, dot_index);
-			}
+			showFileExtension = xml.getBooleanProperty("ShowFileExtensions");
 		}
+		
+		int dot_index = layerName.lastIndexOf(".");
+		if (!showFileExtension && dot_index > 0) {
+			layerName = layerName.substring(0, dot_index);
+		}
+
 		
 		try {
 

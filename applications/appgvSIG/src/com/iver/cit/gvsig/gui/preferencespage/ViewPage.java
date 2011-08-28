@@ -41,7 +41,7 @@
 
 /* CVS MESSAGES:
 *
-* $Id: ViewPage.java 34491 2011-02-10 08:43:06Z fdiaz $
+* $Id: ViewPage.java 36209 2011-08-24 09:49:00Z jldominguez $
 * $Log$
 * Revision 1.27  2007-09-17 09:22:10  jaume
 * view draw frame rate now customizable
@@ -431,7 +431,7 @@ public class ViewPage extends AbstractPreferencePage {
 			chkShowFileExtensions.setSelected(
 				xml.getBooleanProperty(SHOW_FILE_EXTENSIONS_KEY_NAME));
 		} else {
-			chkShowFileExtensions.setSelected(true);
+			chkShowFileExtensions.setSelected(false);
 		}
 
 		// Keep scale on resizing
