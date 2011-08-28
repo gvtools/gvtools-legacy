@@ -215,7 +215,7 @@ public class FPanelAbout extends JPanel implements IWindow {
 	 */
 	public WindowInfo getWindowInfo() {
 		WindowInfo m_ViewInfo = new WindowInfo(WindowInfo.MODALDIALOG|WindowInfo.RESIZABLE);
-		m_ViewInfo.setTitle(PluginServices.getText(this,"acerca_de"));
+		m_ViewInfo.setTitle(PluginServices.getText(this,"acerca_de")+" Community Edition");
 
 		return m_ViewInfo;
 	}
