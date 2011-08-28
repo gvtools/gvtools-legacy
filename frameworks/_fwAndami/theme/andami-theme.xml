@@ -2,11 +2,10 @@
 	<ApplicationImages>
 		<SplashImages>
 			<!--Splash path="theme/logoIver.png" timer="1000"/-->
-			<Splash path="theme/splash.png" timer="10000" version="1.9" x="270" y="240" fontsize="18" color="80,170,240"/>
-		</SplashImages>
-		<!--BackgroundImage path="theme/logo_es.png"/-->
-		<!--WallpaperType value="CENTERED"/-->
+			<Splash path="theme/splash.png" timer="10000" version="CD 1.0.svn" x="290" y="178" fontsize="12" color="0,20,50"/>		</SplashImages>
+		<BackgroundImage path="theme/steel-blue.png"/>
+		<WallpaperType value="EXPAND"/>
 		<Icon path="theme/icon.png"/>
 	</ApplicationImages>
-	<ApplicationName value="gvSIG 1.9"/>
+	<ApplicationName value="gvSIG Community Edition"/>
 </AndamiProperties>
