@@ -363,7 +363,8 @@ public class FFrameView extends FFrame implements ViewPortListener,
 					// Dibujamos en pantalla
 					
 					double scale1_1 = MapContext.getScreenDPI() / 2.54;
-					double visible__factor = at.getScaleX() / scale1_1;
+					// compute zoom factor
+					double zf = at.getScaleX() / scale1_1;
 					
 					Rectangle rclip = null;
 					if (g.getClipBounds()!=null)
@@ -373,8 +374,9 @@ public class FFrameView extends FFrame implements ViewPortListener,
 
 					if (getQuality() == PRESENTACION) {
 						if (rv.intersects(r)) {
-							ViewPort viewPort = this.getMapContext()
-							.getViewPort();
+							ViewPort viewPort = this.getMapContext().getViewPort();
+							viewPort.setZoomFactor(zf);
+							
 							Color theBackColor = viewPort.getBackColor();
 
 							if (origin != null
@@ -434,6 +436,8 @@ public class FFrameView extends FFrame implements ViewPortListener,
 										e.printStackTrace();
 									}
 									g.translate(r.getX(), r.getY());
+									
+									viewp.setZoomFactor(1);
 
 								} else {
 									viewPort.setOffset(
@@ -452,8 +456,7 @@ public class FFrameView extends FFrame implements ViewPortListener,
 									try {
 										MapContext mapContext = getMapContext();
 										mapContext.getMapContextDrawer().clean();
-										mapContext.draw(m_image, gimg, getScale(),
-												MapContext.getScreenDPI() * visible__factor);
+										mapContext.draw(m_image, gimg, getScale());
 									} catch (ReadDriverException e) {
 										e.printStackTrace();
 									}
@@ -472,6 +475,8 @@ public class FFrameView extends FFrame implements ViewPortListener,
 								origin = (Point) getLayout().getLayoutControl().getRectOrigin();
 								setRefresh(false);
 							}
+							
+							viewPort.setZoomFactor(1);
 						}
 					} else {
 						drawDraft(g);

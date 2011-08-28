@@ -1278,6 +1278,7 @@ public class ViewPort {
 		}
 
 		xml.putProperty("scale", scale);
+		xml.putProperty("zoomFactor", getZoomFactor());
 
 		return xml;
 	}
@@ -1412,6 +1413,10 @@ public class ViewPort {
 			vp.proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
 		}
 
+		if (xml.contains("zoomFactor")) {
+			vp.setZoomFactor(xml.getDoubleProperty("zoomFactor"));
+		}
+
 		//vp.setScale(xml.getDoubleProperty("scale"));
 		vp.refreshExtent();
 		return vp;
@@ -1509,5 +1514,17 @@ public class ViewPort {
 	protected void updateDrawVersion(){
 		this.drawVersion++;
 	}
+	
+	
+	private double zoomFactor = 1d;
+
+	public double getZoomFactor() {
+		return zoomFactor;
+	}
+
+	public void setZoomFactor(double z) {
+		this.zoomFactor = z;
+	}
+	
 
 }

@@ -62,9 +62,16 @@ public class CartographicSupportToolkit {
 	 * (printer, screen, etc)
 	 * @return The distance in pixels corresponding to the provided length
 	 */
-	public static double getCartographicLength(CartographicSupport cartographicElement, double length, ViewPort viewPort, double dpi) {
+	public static double getCartographicLength(
+			CartographicSupport cartographicElement,
+			double length,
+			ViewPort viewPort,
+			double _dpi) {
+		
 		int unit = cartographicElement.getUnit();
 		double lengthInPixel = length;
+		
+		double zoomed_dpi = viewPort.getZoomFactor() * _dpi;
 
 		if (unit != -1) {
 			double[] trans2Meter=MapContext.getDistanceTrans2Meter();
@@ -74,10 +81,12 @@ public class CartographicSupportToolkit {
 				lengthInPixel = realWidthMeter/dist1PixelInMeters;
 			} else if (cartographicElement.getReferenceSystem() == CartographicSupport.PAPER) {
 				double lengthInInches = 1/trans2Meter[7]*trans2Meter[unit]*length;
-				lengthInPixel = lengthInInches*dpi;
+				lengthInPixel = lengthInInches*zoomed_dpi;
+				// double physical_dpi = getDpiFromViewPort(viewPort); 
+				// lengthInPixel = lengthInInches*physical_dpi;
 			}
 		} else{
-			double scale=dpi/72;
+			double scale=zoomed_dpi/72;
 			lengthInPixel=lengthInPixel*scale;
 		}
 		return  (lengthInPixel);

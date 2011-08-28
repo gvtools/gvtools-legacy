@@ -1117,75 +1117,6 @@ public class MapContext implements Projected {
 		System.gc();
 	}
 	
-	
-	
-	/**
-	 * <p>Draws this map if its {@link ViewPort ViewPort} has an extent defined:<br>
-	 * <ol>
-	 * <li>Selects only the layers that have to be drawn: {@linkplain #prepareDrawing(BufferedImage, Graphics2D, double)}.
-	 * <li>Sets quality: antialiasing by text and images, and quality rendering.
-	 * <li>Draws the layers.
-	 * <li>Fires a <code>LayerDrawEvent.GRAPHICLAYER_BEFORE_DRAW</code>.
-	 * <li>Draws the graphic layer.
-	 * <li>Fires a <code>LayerDrawEvent.GRAPHICLAYER_AFTER_DRAW</code>.
-	 * <li>Invokes the garbage collector and memory clean.
-	 * </ol></p>
-	 *
-	 * @param image buffer used sometimes instead <code>g</code> to accelerate the draw. For example, if two points are as closed that can't be distinguished, draws only one.
-	 * @param g for rendering 2-dimensional shapes, text and images on the Java(tm) platform
-	 * @param cancel shared object that determines if this layer can continue being drawn
-	 * @param scale the scale of the view. Must be between {@linkplain FLayer#getMinScale()} and {@linkplain FLayer#getMaxScale()}.
-	 * @throws ReadDriverException if fails reading with the driver.
-	 */
-	public void draw(BufferedImage image, Graphics2D g, Cancellable cancel,
-			double scale, double _dpi) throws ReadDriverException {
-		if (viewPort.getExtent() == null) {
-			// System.err.println("viewPort.getExtent() = null");
-			return;
-		}
-		System.out.println("Viewport despues: " + viewPort.toString());
-		/*
-		 * if ((viewPort.getImageWidth() <=0) || (viewPort.getImageHeight() <=
-		 * 0)) { return; }
-		 */
-
-//		prepareDrawing(image, g, scale);
-
-		// M�s c�lidad al texto
-		RenderingHints renderHints = new RenderingHints(
-				RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		renderHints.put(RenderingHints.KEY_RENDERING,
-				RenderingHints.VALUE_RENDER_QUALITY);
-		renderHints.put(RenderingHints.KEY_TEXT_ANTIALIASING,
-				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g.setRenderingHints(renderHints);
-
-		long t1 = System.currentTimeMillis();
-//		layers.draw(image, g, viewPort, cancel, scale);
-
-		this.getMapContextDrawer().draw(this.layers, image, g, cancel, scale, _dpi);
-
-		LayerDrawEvent beforeTracLayerEvent = new LayerDrawEvent(tracLayer,
-				g, viewPort, LayerDrawEvent.GRAPHICLAYER_BEFORE_DRAW);
-		fireLayerDrawingEvent(beforeTracLayerEvent);
-		tracLayer.draw(image, g, viewPort, cancel, scale);
-		LayerDrawEvent afterTracLayerEvent = new LayerDrawEvent(tracLayer,
-				g, viewPort, LayerDrawEvent.GRAPHICLAYER_AFTER_DRAW);
-		fireLayerDrawingEvent(afterTracLayerEvent);
-
-		//layers.setDirty(false);
-		long t2 = System.currentTimeMillis();
-		System.err.println("Tiempo de dibujado:" + (t2 - t1) +
-				" mseg. Memoria libre:" + Runtime.getRuntime().freeMemory() / 1024  + " KB");
-		/*
-		 * g.setColor(Color.BLUE); GeneralPath shpR = new
-		 * GeneralPath(viewPort.getExtent());
-		 * shpR.transform(viewPort.getAffineTransform()); g.draw(shpR);
-		 */
-		System.gc();
-	}
-
 	/**
 	 * <p>Draws only the internal graphic layer using the information of the {@link ViewPort ViewPort} of this map.</p>
 	 *
@@ -1234,38 +1165,7 @@ public class MapContext implements Projected {
 		}, scale);
 	}
 
-	
-	/**
-	 * <p>Like {@linkplain MapContext#draw(BufferedImage, Graphics2D, Cancellable, double)}, but creating
-	 *  the task as cancellable.</p>
-	 *
-	 * @param image buffer used sometimes instead <code>g</code> to accelerate the draw. For example, if two points are as closed that can't be distinguished, draws only one.
-	 * @param g for rendering 2-dimensional shapes, text and images on the Java(tm) platform
-	 * @param scale the scale of the view. Must be between {@linkplain FLayer#getMinScale()} and {@linkplain FLayer#getMaxScale()}.
-	 *
-	 * @throws ReadDriverException if the driver fails reading.
-	 *
-	 * @see #draw(BufferedImage, Graphics2D, Cancellable, double)
-	 */
-	public void draw(BufferedImage image, Graphics2D g, double scale, double _dpi)
-			throws ReadDriverException {
-//		layers.setDirty(true);
-		draw(image, g, new Cancellable() {
-			/**
-			 * @see com.iver.utiles.swing.threads.Cancellable#isCanceled()
-			 */
-			public boolean isCanceled() {
-				return false;
-			}
 
-			public void setCanceled(boolean canceled) {
-				// TODO Auto-generated method stub
-
-			}
-		}, scale, _dpi);
-	}
-	
-	
 	/**
 	 * <p>Gets the {@link ViewPort ViewPort} associated to this map.</p>
 	 *
