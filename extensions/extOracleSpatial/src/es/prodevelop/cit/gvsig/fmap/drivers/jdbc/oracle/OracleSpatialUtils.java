@@ -108,6 +108,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.impl.CoordinateArraySequence;
+import com.vividsolutions.jts.linearref.LinearIterator;
 
 
 /**
@@ -257,11 +258,12 @@ public class OracleSpatialUtils {
      * @throws SQLException
      */
     public static STRUCT fShapeToSTRUCT(Object fshp, IConnection c, int srid,
-        boolean agu_b, boolean hasSrid, boolean is_geodet) throws SQLException {
+        boolean agu_b, boolean hasSrid, boolean is_geodet, int forced_shptype) throws SQLException {
+    	
         boolean three = false;
 
-        if (fshp instanceof FShape3D) {
-            three = true;
+        if (fshp instanceof FShape3D || (forced_shptype > FShape.Z)) {
+            three = true; 
         }
 
         STRUCT resp = null;
@@ -287,7 +289,7 @@ public class OracleSpatialUtils {
         else {
             if (fshp instanceof FPolygon2D) { // polygon 2/3d
 
-                if ((fshp instanceof FCircle2D) && (!is_geodet)) {
+                if ((fshp instanceof FCircle2D) && (!is_geodet) && (!three)) {
                     resp = getCircleAsStruct((FCircle2D) fshp, srid, c, hasSrid);
                 } else {
                     // also FEllipse2D
@@ -297,11 +299,18 @@ public class OracleSpatialUtils {
                     // ArrayList polys = getPolygonsEasily(fshp);
                     // resp = getMultiPolygonAsStruct(polys, srid, three, c);
                 }
-            }
-            else { // line 2/3d
+            } else { // line 2/3d
 
-                ArrayList _lines = getLineStrings((FShape) fshp, is_geodet);
-                resp = getMultiLineAsStruct(_lines, srid, three, c, hasSrid);
+            	if (forced_shptype % FShape.Z == FShape.POLYGON) {
+            		
+            		// force line to polygon
+            		resp = multiLineToMultiPolygonStruct((FShape) fshp, srid, three,
+                            c, agu_b, hasSrid, is_geodet);
+            		
+            	} else {
+                    ArrayList _lines = getLineStrings((FShape) fshp, is_geodet);
+                    resp = getMultiLineAsStruct(_lines, srid, three, c, hasSrid);
+            	}
             }
         }
 
@@ -887,10 +896,12 @@ public class OracleSpatialUtils {
         Coordinate[] cc = ls.getLs().getCoordinates();
         double[] z = ls.getZc();
         int size = cc.length;
+        double _z = 0;
 
         if (threed) {
             for (int i = 0; i < size; i++) {
-                resp = resp + cc[i].x + " " + cc[i].y + " " + z[i] + ", ";
+            	_z = (z==null) ? 0 : z[i]; 
+                resp = resp + cc[i].x + " " + cc[i].y + " " + _z + ", ";
             }
 
             resp = resp.substring(0, resp.length() - 2);
@@ -1017,14 +1028,16 @@ public class OracleSpatialUtils {
 
     private static boolean lineString3DIsContainedBy(LineString3D contained,
         LineString3D container) {
-        int samples = 10;
+    	
+        int samples = 25;
+        
         LineString _in = contained.getLs();
         LineString _out = container.getLs();
         Coordinate[] inc = _in.getCoordinates();
         Coordinate aux;
         int size = inc.length;
 
-        if (size <= 10) {
+        if (size <= samples) {
             for (int i = 0; i < size; i++) {
                 aux = inc[i];
 
@@ -1073,6 +1086,7 @@ public class OracleSpatialUtils {
 
         int _ind = 0;
         NUMBER[] ords = new NUMBER[acum];
+        double _z = 0;
 
         for (int i = 0; i < size; i++) {
             LineString3D ls = (LineString3D) pols.get(i);
@@ -1083,7 +1097,8 @@ public class OracleSpatialUtils {
                 ords[_ind + 1] = new NUMBER(ls.getLs().getCoordinateN(j).y);
 
                 if (threed) {
-                    ords[_ind + 2] = new NUMBER(ls.getZc()[j]);
+                	_z = (ls.getZc() == null) ? 0 : ls.getZc()[j]; 
+                    ords[_ind + 2] = new NUMBER(_z);
                 }
 
                 _ind = _ind + dim;
@@ -1123,6 +1138,7 @@ public class OracleSpatialUtils {
         int geotype = 2006;
         int dim = 2;
         int acum = 0;
+        double _z = 0;
 
         if (threed) {
             geotype = 3006;
@@ -1151,7 +1167,8 @@ public class OracleSpatialUtils {
                 ords[_ind + 1] = new NUMBER(ls.getLs().getCoordinateN(j).y);
 
                 if (threed) {
-                    ords[_ind + 2] = new NUMBER(ls.getZc()[j]);
+                	_z = (ls.getZc() == null) ? 0 : ls.getZc()[j]; 
+                    ords[_ind + 2] = new NUMBER(_z);
                 }
 
                 _ind = _ind + dim;
@@ -1532,7 +1549,7 @@ public class OracleSpatialUtils {
 
         for (int i = 0; i < shells.length; i++) {
             resp_shells.add(all_ls.get(shells[i]));
-            aux_holes = getHolesOf(i, final_cont, all_ls);
+            aux_holes = getHolesOf(shells[i], final_cont, all_ls);
             resp_holes_for_shells.add(aux_holes);
         }
 
@@ -1564,8 +1581,22 @@ public class OracleSpatialUtils {
         ArrayList ho = reverseHoles(_ho);
 
         return getMultiPolygonAsStruct(sh, ho, srid, threed, _conn, agu_bien, hasSrid);
-
     }
+    
+    private static STRUCT multiLineToMultiPolygonStruct(FShape mpol, int srid,
+            boolean threed, IConnection _conn, boolean agu_bien, boolean hasSrid, boolean isgeo)
+            throws SQLException {
+            ArrayList all_ls = getPolygonsEasily(mpol, isgeo);
+            
+            ArrayList no_holes = new ArrayList();
+            int n_sh = all_ls.size(); 
+            for (int i=0; i<n_sh; i++) no_holes.add(new ArrayList());
+
+            return getMultiPolygonAsStruct(
+            		all_ls,
+            		no_holes,
+            		srid, threed, _conn, agu_bien, hasSrid);
+        }
 
     private static ArrayList reverseHoles(ArrayList hh) {
         ArrayList resp = new ArrayList();
@@ -1633,6 +1664,7 @@ public class OracleSpatialUtils {
 
         int _ind = 0;
         NUMBER[] ords = new NUMBER[acum];
+        double _z = 0;
 
         for (int i = 0; i < shells.size(); i++) {
             // --------------------------------
@@ -1644,9 +1676,9 @@ public class OracleSpatialUtils {
                 ords[_ind + 1] = new NUMBER(ls.getLs().getCoordinateN(j).y);
 
                 if (threed) {
-                    ords[_ind + 2] = new NUMBER(ls.getZc()[j]);
+                	_z = (ls.getZc() == null) ? 0 : ls.getZc()[j]; 
+                    ords[_ind + 2] = new NUMBER(_z);
                 }
-
                 _ind = _ind + dim;
             }
 
@@ -1662,7 +1694,8 @@ public class OracleSpatialUtils {
                     ords[_ind + 1] = new NUMBER(ls.getLs().getCoordinateN(k).y);
 
                     if (threed) {
-                        ords[_ind + 2] = new NUMBER(ls.getZc()[k]);
+                    	_z = (ls.getZc() == null) ? 0 : ls.getZc()[k]; 
+                        ords[_ind + 2] = new NUMBER(_z);
                     }
 
                     _ind = _ind + dim;
@@ -1983,6 +2016,7 @@ public class OracleSpatialUtils {
         int[] start_ind;
         int[] end_ind;
         
+        
         int dims = 0;
         boolean next_must_do_first = true;
 
@@ -2004,6 +2038,7 @@ public class OracleSpatialUtils {
 
             info_array = (Datum[]) infoARRAY.getOracleArray();
             ords_array = (Datum[]) ordsARRAY.getOracleArray();
+            
             info_array_size = info_array.length / 3;
 
             int last_index = ords_array.length - dims + 1;
@@ -2022,23 +2057,26 @@ public class OracleSpatialUtils {
 
             int lineType = PathIterator.SEG_LINETO;
 
+            
             if (end_ind[0] == 0) { // collection of paths
 
                 for (int i = 1; i < info_array_size; i++) {
                     lineType = getLineToType(info_array, i);
 
                     // -----------------------
-                    if (end_ind[i] == (start_ind[i] - 1))
+                    if (end_ind[i] == (start_ind[i] - 1)) 
+                    		// ((i>0) && (start_ind[i] == (start_ind[i-1])))
+                    		 //first(?)
                     	lineType = PathIterator.SEG_MOVETO;
                     // -----------------------
 
                     next_must_do_first = addOrdsToGPX(resp, start_ind[i] - 1,
                             end_ind[i] - 1, ords_array, dims, lineType,
-                            (i == 1) || (lineType == PathIterator.SEG_MOVETO),
+                            (i == 1) || (lineType == PathIterator.SEG_MOVETO)
+                            || firstInSubgroup(start_ind, i),
                             next_must_do_first);
                 }
             } else {
-            	
                 // standard case, do the moveto always
                 for (int i = 0; i < info_array_size; i++) {
                     lineType = getLineToType(info_array, i);
@@ -2054,15 +2092,53 @@ public class OracleSpatialUtils {
         return resp;
     }
 
-    private static int getLineToType(Datum[] infos, int i) {
+    private static int getPos(double[] da, double x, double y, int _d) {
+    	int len = da.length / _d;
+    	for (int i=0; i<len; i=i+_d) {
+    		if (veryClose(da[i*_d],da[i*_d+1],x,y,1)) {
+    			return i;
+    		}
+    	}
+		return -1;
+	}
+
+	private static boolean veryClose(
+			double x1, double y1,
+			double x2, double y2,
+			double tol) {
+		double d = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1); 
+		return d < (tol*tol);
+	}
+
+	private static boolean firstInSubgroup(int[] s_i, int i) {
+    	 return (i>0) && (s_i[i] == s_i[i-1]);
+	}
+
+	private static int getLineToType(Datum[] infos, int i) {
         int resp = PathIterator.SEG_LINETO;
 
+        
         try {
-            if (((NUMBER) infos[(3 * i) + 2]).intValue() == 2) {
+            if (
+            		(((NUMBER) infos[(3 * i) + 2]).intValue() == 2)
+            		&&
+           			(((NUMBER) infos[(3 * i) + 1]).intValue() == 2)
+            ) {
                 resp = PathIterator.SEG_QUADTO;
+            } else {
+                if (
+                		(((NUMBER) infos[(3 * i) + 1]).intValue() == 1003)
+                		||
+               			(((NUMBER) infos[(3 * i) + 1]).intValue() == 2003)
+                		||
+               			(((NUMBER) infos[(3 * i) + 1]).intValue() == 1005)
+                		||
+               			(((NUMBER) infos[(3 * i) + 1]).intValue() == 2005)
+                ) {
+                    resp = PathIterator.SEG_MOVETO;
+                }
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             logger.error("While getting line-to type: " + e.getMessage() +
                 " (returned SEG_LINETO)");
         }
@@ -2402,7 +2478,7 @@ public class OracleSpatialUtils {
 		} catch (Exception ex) {
 			logger.error("While reprojecting: " + ex.getMessage());
 			return fromStruct;
-		}
+		} 
 
         if (resp == null) {
         	return fromStruct;
@@ -2638,7 +2714,7 @@ public class OracleSpatialUtils {
                 if (gpx.isLinearized()) {
                 	int count = countCoords(gpx);
                 	z = new double[count];
-                	logger.warn("Linearized a 3D GPX, z[i] = 0");
+                	// logger.warn("Linearized a 3D GPX, z[i] = 0");
                 } else {
                 	z = getIndBigDecimalModule(ords, 2, dim);
                 }
@@ -2856,13 +2932,17 @@ public class OracleSpatialUtils {
 
         int _first = info[1] % 1000;
         int second = info[4] % 1000;
-        int item = 0;
+        int _item = 0;
+        int _item_mod = 0;
+        
         
         for (int i = 2; i < size; i++) {
-        	item = info[(i * 3) + 1] % 1000;
-            if ((item != second) &&
-            		( ! ((item == 5) && (second == 2)) ) && 
-            		( ! ((item == 2) && (second == 5)) )
+        	_item = info[(i * 3) + 1];
+        	_item_mod = _item % 1000;
+            if ((_item_mod != second) &&
+            		( ! ((_item == 2003) && (second == 2)) ) && 
+            		( ! ((_item_mod == 5) && (second == 2)) ) && 
+            		( ! ((_item_mod == 2) && (second == 5)) )
             		) {
                 return COLLECTION_VALUE_YES_COLLECTION;
             }

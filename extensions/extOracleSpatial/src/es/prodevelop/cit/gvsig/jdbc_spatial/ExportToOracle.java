@@ -197,8 +197,20 @@ public class ExportToOracle {
             boolean savesrs = (opt == JOptionPane.YES_OPTION);
             writer.setStoreWithSrid(savesrs);
 
-            String orasrid = OracleSpatialDriver.epsgSridToOracleSrid(strSRID);
-            boolean geo_cs = OracleSpatialUtils.getIsGCS(orasrid, savesrs);
+            String orasrid = "";
+            boolean geo_cs = false;
+            
+            try {
+            	orasrid = OracleSpatialDriver.epsgSridToOracleSrid(strSRID);
+            	geo_cs = OracleSpatialUtils.getIsGCS(orasrid, savesrs);
+            } catch (Exception ex) {
+            	// not found: same
+            	orasrid = strSRID;
+            	geo_cs = false;
+            }
+            
+            
+            
             writer.setGeoCS(geo_cs);
 
             OracleSpatialDriver oDriver = new OracleSpatialDriver();

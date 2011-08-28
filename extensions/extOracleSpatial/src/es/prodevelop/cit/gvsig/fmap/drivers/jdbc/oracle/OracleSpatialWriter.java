@@ -50,6 +50,8 @@ import oracle.sql.STRUCT;
 
 import org.apache.log4j.Logger;
 
+import sun.print.PSPrinterJob.EPSPrinter;
+
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.driver.exceptions.WriteDriverException;
 import com.iver.cit.gvsig.exceptions.visitors.StartWriterVisitorException;
@@ -158,8 +160,9 @@ public class OracleSpatialWriter extends AbstractWriter
             try {
 				_ora_srid = OracleSpatialDriver.epsgSridToOracleSrid(srid_epsg);
 			} catch (Exception e1) {
-				logger.error("Unknown EPSG code: " + srid_epsg);
-				with_srid = false;
+				logger.error("Unknown EPSG code: " + srid_epsg + ", using it as oracle code in empty table");
+				// with_srid = false;
+				_ora_srid = srid_epsg;
 			}
 
 			boolean table_exists = true;
@@ -267,8 +270,9 @@ public class OracleSpatialWriter extends AbstractWriter
 				oracleSRID = OracleSpatialDriver.epsgSridToOracleSrid(srid_epsg);
 			} catch (Exception e1) {
 				// not found
-				logger.error("unknown EPSG code: " + srid_epsg);
-				storeWithSrid = false;
+				oracleSRID = srid_epsg;
+				logger.warn("unknown EPSG code: " + srid_epsg + ", using it as ora code");
+				// storeWithSrid = false;
 			}
 
             String _sql_rem_meta =
@@ -426,11 +430,13 @@ public class OracleSpatialWriter extends AbstractWriter
             	_ig = OracleSpatialUtils.makeLinear((FPolygon2D) shp);
             }
             
-            
-            // STRUCT st = driver.shapeToStruct(shp, lyrShapeType, conn, oracleSRID, false);
+            // STRUCT st = driver.shapeToStruct(shp, lyrShapeType, conn, oracleSRID, false)
             STRUCT st;
 
-            if ((oracleSRID == null) || (driver.getDestProjectionOracleCode().compareToIgnoreCase(oracleSRID) == 0)) {
+            if ((oracleSRID == null) ||
+            		!differentSRS(driver.getDestProjectionOracleCode(), oracleSRID)
+            		// (driver.getDestProjectionOracleCode().compareToIgnoreCase(oracleSRID) == 0)
+            		) {
 
                 st = OracleSpatialDriver.iGeometryToSTRUCT(_ig,
                         lyrShapeType, conn, oracleSRID, storeWithSrid, aguBien,
@@ -467,7 +473,45 @@ public class OracleSpatialWriter extends AbstractWriter
         }
     }
 
-    private void deleteRow(IRowEdited irow) throws VisitorException {
+    private boolean differentSRS(String srsa, String srsb) {
+    	
+    	if (srsa == null || srsb == null || srsa.length() == 0 || srsb.length() == 0) {
+    		return false; 
+    	} else {
+    		if (srsa.compareToIgnoreCase(srsb) == 0) return false; 
+    		String aux = "";
+    		try { aux = OracleSpatialDriver.oracleSridToEpsgSrid(srsa); } catch (Exception ex) { }
+    		if (aux.compareToIgnoreCase(srsb) == 0 ||
+    				corrToSameOracleCode(aux, srsb)) { return false; }
+    		try { aux = OracleSpatialDriver.epsgSridToOracleSrid(srsa); } catch (Exception ex) { }
+    		if (aux.compareToIgnoreCase(srsb) == 0 ||
+    				corrToSameEpsgCode(aux, srsb)) { return false; }
+    		return true;
+    	}
+    	
+	}
+
+	private boolean corrToSameEpsgCode(String a, String b) {
+		try {
+			String aa = OracleSpatialDriver.oracleSridToEpsgSrid(a);
+			String bb = OracleSpatialDriver.oracleSridToEpsgSrid(b);
+			return (aa.compareToIgnoreCase(bb) == 0);
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	private boolean corrToSameOracleCode(String a, String b) {
+		try {
+			String aa = OracleSpatialDriver.epsgSridToOracleSrid(a);
+			String bb = OracleSpatialDriver.epsgSridToOracleSrid(b);
+			return (aa.compareToIgnoreCase(bb) == 0);
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	private void deleteRow(IRowEdited irow) throws VisitorException {
         DefaultRowEdited _row = (DefaultRowEdited) irow;
         DefaultRow row = (DefaultRow) _row.getLinkedRow();
 
@@ -523,7 +567,7 @@ public class OracleSpatialWriter extends AbstractWriter
         String _sql_update = OracleSpatialDriver.getRowUpdateSql(ifeat,
                 (DBLayerDefinition) tableDef, rowIndex, geoColName);
         
-        logger.debug("############ SQL UPDATE = " + _sql_update);
+        logger.debug("# SQL UPDATE = " + _sql_update);
 
         IConnection conn = ((DBLayerDefinition) tableDef).getConnection();
 
@@ -534,11 +578,10 @@ public class OracleSpatialWriter extends AbstractWriter
             IGeometry _ig = ifeat.getGeometry();
             STRUCT st;
             
-            logger.debug("############ driver.getDestProjectionOracleCode() = "
-            		+ driver.getDestProjectionOracleCode());
-            logger.debug("############ oracleSRID = " + oracleSRID);
-
-            if ((oracleSRID == null) || (driver.getDestProjectionOracleCode().compareToIgnoreCase(oracleSRID) == 0)) {
+            if ((oracleSRID == null) ||
+            		!differentSRS(driver.getDestProjectionOracleCode(), oracleSRID)
+            		// (driver.getDestProjectionOracleCode().compareToIgnoreCase(oracleSRID) == 0)
+            		) {
 
                 st = OracleSpatialDriver.iGeometryToSTRUCT(_ig,
                         lyrShapeType, conn, oracleSRID, storeWithSrid, aguBien,
@@ -546,6 +589,10 @@ public class OracleSpatialWriter extends AbstractWriter
 
             } else {
             	
+            	logger.debug("# Update + Reproj: driver.getDestProjectionOracleCode() = "
+            		+ driver.getDestProjectionOracleCode());
+            	logger.debug("# Update + Reproj: oracleSRID = " + oracleSRID);
+
             	String viewSrid = driver.getDestProjectionOracleCode();
             	boolean isViewSridGedetic = driver.getIsDestProjectionGeog();
                 st = OracleSpatialDriver.iGeometryToSTRUCT(_ig,

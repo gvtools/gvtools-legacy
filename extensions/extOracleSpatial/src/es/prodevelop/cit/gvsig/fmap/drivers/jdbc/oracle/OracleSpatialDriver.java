@@ -154,6 +154,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
     public static final String DEFAULT_GEO_FIELD = "GEOMETRY";
     // public static final String DEFAULT_GEO_FIELD = "MERGEDGEOMETRY";
 
+    
     public static final String ORACLE_ID_FIELD = "ROWID";
     public static final String DEFAULT_ID_FIELD_CASE_SENSITIVE = "GID";
     public static final String ORACLE_GEO_SCHEMA = "MDSYS";
@@ -191,7 +192,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
     // switch variable
     private boolean use_geotools = false;
-    private boolean tableHasSrid = true;
+    private boolean table_HasSrid = true;
 
     // ------------------------------------------------
     private boolean isNotAvailableYet = true;
@@ -209,7 +210,6 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
     private String idFieldNames;
     private int oneBasedGeoColInd = 0;
     private int shapeType = -1;
-    private boolean needsCollectionLayer = true;
 
     // ----------------------------------------------
     // one feature is cached to avoid querying for each attribute request:
@@ -223,7 +223,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
     private String fullTableName = "";
     private String geoColName = "";
     private String oracleSRID;
-    private String epsgSRID;
+    private String epsg_SRID;
     private String destProj = "";
     private Rectangle2D full_Extent = null;
     private boolean emptyWhereClause = true;
@@ -344,7 +344,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
         
         if (tn.indexOf(".") == -1) {
         	
-        	if (lyrDef.getSchema() == null) {
+        	if (lyrDef.getSchema() == null || lyrDef.getSchema().length() == 0) {
         		fullTableName = _cwp.getUser().toUpperCase() + "." + tn;
         	} else {
         		fullTableName = lyrDef.getSchema() + "." + tn;
@@ -362,18 +362,24 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
         // getMetaDataInThisThread();
         cleanWhereClause();
         loadSdoMetadata();
-        oneRowMetadata();
+        oneRowMetadata(); 
 
         setDestProjection(lyrDef.getSRID_EPSG());
         workingAreaInViewsCS = lyrDef.getWorkingArea();
         
-        if ((workingAreaInViewsCS != null) && (epsgSRID != null)) {
+        if ((workingAreaInViewsCS != null) && isTableHasSrid() && (getEpsgSRID() != null)) {
             IProjection viewProj = CRSFactory.getCRS(destProj);
-            IProjection tableProj = CRSFactory.getCRS("EPSG:" + epsgSRID);
+            IProjection tableProj = CRSFactory.getCRS("EPSG:" + getEpsgSRID());
             ICoordTrans reprojecter = viewProj.getCT(tableProj);
         	workingAreaInTablesCS = reprojecter.convert(workingAreaInViewsCS);
             workingAreaInTablesCSStruct = shapeToStruct(workingAreaInTablesCS,
-                    FShape.NULL, tableHasSrid, false, true);
+                    FShape.NULL, isTableHasSrid(), false, true);
+        } else {
+            if (workingAreaInViewsCS != null) {
+            	workingAreaInTablesCS = (Rectangle2D) workingAreaInViewsCS.clone();
+                workingAreaInTablesCSStruct = shapeToStruct(workingAreaInTablesCS,
+                        FShape.NULL, isTableHasSrid(), false, true);
+            }
         }
 
         cancelIDLoad = false;
@@ -421,7 +427,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
         if (obj == null) {
             logger.warn("No SRID found for this table.");
-            tableHasSrid = false;
+            setTableHasSrid(false);
 
             return null;
         }
@@ -492,19 +498,25 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
             }
 
-            ResultSet _rs = _st.executeQuery(qry);
+            ResultSet _rs = _st.executeQuery(qry); 
 
             if (_rs.next()) {
                 oracleSRID = getOracleSridFromCurrentRecord(_rs);
 
-                isGeogCS = OracleSpatialUtils.getIsGCS(oracleSRID, tableHasSrid);
+                isGeogCS = OracleSpatialUtils.getIsGCS(oracleSRID, isTableHasSrid());
 
-                try {
-					epsgSRID = oracleSridToEpsgSrid(oracleSRID);
-				} catch (Exception e) {
-					logger.error("Unknown oracle SRID: " + oracleSRID);
-					tableHasSrid = false;
-				}
+                if (oracleSRID == null) {
+					setTableHasSrid(false);
+                } else {
+                    try {
+    					setEpsgSRID( oracleSridToEpsgSrid(oracleSRID) );
+    				} catch (Exception e) {
+    					// logger.error("Unknown oracle SRID: " + oracleSRID);
+    					setTableHasSrid(true);
+    					setEpsgSRID( oracleSRID );
+    				}
+                }
+                
                 full_Extent = getFullExtentFromCurrentRecord(_rs);
 
                 hasRealiableExtent = realiableExtent(full_Extent, isGeogCS);
@@ -789,20 +801,31 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
         	logger.warn("Assumed MULTI");
         }
         
-        return resp;
+        return resp; 
 	}
 
 	private int getShapeTypeFromArray(ArrayList arrlist) {
 		
-		int resp = ((Integer) arrlist.get(0)).intValue();
-		
 		int sz = arrlist.size();
+		
+		if (sz == 0) {
+			return FShape.MULTI;
+		}
+		
+		int resp = ((Integer) arrlist.get(0)).intValue();
+		boolean needs3d = (resp > FShape.Z) ? true : false;
+		
 		int aux = 0;
 		for (int i=1; i<sz; i++) {
 			aux = ((Integer) arrlist.get(i)).intValue();
-			if (aux != resp) return FShape.MULTI;
+			if (aux != resp) {
+				resp = FShape.MULTI;
+			}
+			if (aux > FShape.Z) {
+				needs3d = true;
+			}
 		}
-		return resp;
+		return needs3d ? ((resp % FShape.Z) + FShape.Z) : (resp % FShape.Z);
 	}
 
 	private String getIdFieldNames() {
@@ -852,7 +875,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
         singleCachedFeatureRowNum = -1;
 
-        Object[] rs_st = getViewResultSet(null, sql, tableHasSrid);
+        Object[] rs_st = getViewResultSet(null, sql, isTableHasSrid());
 
         ResultSet localrs = (ResultSet) rs_st[0];
         Statement _st = (Statement) rs_st[1];
@@ -893,8 +916,8 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
         singleCachedFeatureRowNum = -1;
         
-        STRUCT local_st = shapeToStruct(r, FShape.NULL, tableHasSrid, false, true);
-        Object[] rs_st = getViewResultSet(local_st, null, tableHasSrid);
+        STRUCT local_st = shapeToStruct(r, FShape.NULL, isTableHasSrid(), false, true);
+        Object[] rs_st = getViewResultSet(local_st, null, isTableHasSrid());
         ResultSet localrs = (ResultSet) rs_st[0];
         Statement _st = (Statement) rs_st[1];
 
@@ -924,8 +947,8 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
             return getFeatureIterator(r, strEPSG);
         } else {
 
-            STRUCT local_st = shapeToStruct(r, FShape.NULL, tableHasSrid, false, true);
-            Object[] rs_st = getViewResultSet(local_st, null, tableHasSrid);
+            STRUCT local_st = shapeToStruct(r, FShape.NULL, isTableHasSrid(), false, true);
+            Object[] rs_st = getViewResultSet(local_st, null, isTableHasSrid());
             ResultSet localrs = (ResultSet) rs_st[0];
             Statement _st = (Statement) rs_st[1];
 
@@ -1096,11 +1119,13 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
             st.close();
             numReg = row;
 
-            needsCollectionLayer = OracleSpatialUtils.hasSeveralGeometryTypes(types, false);
+            /*
+            boolean needsCollectionLayer = OracleSpatialUtils.hasSeveralGeometryTypes(types, false);
 
             if (needsCollectionLayer) {
                 shapeType = FShape.MULTI;
             }
+            */
         }
         catch (SQLException e) {
         	logger.error("While setting id-row hashmap: " + e.getMessage());
@@ -1366,7 +1391,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
                 gtype = new NUMBER((dim * 1000) +
                         (item_info_array[1].intValue() % 1000));
 
-                if (tableHasSrid) {
+                if (isTableHasSrid()) {
                 	_srid = new NUMBER(Integer.parseInt(oracleSRID));
                 }
             }
@@ -1379,7 +1404,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
             STRUCT itemst = null;
 
-            if (tableHasSrid) {
+            if (isTableHasSrid()) {
 
                 itemst = OracleSpatialUtils.createStruct(gtype, _srid,
                         item_info_array, item_ords, ((ConnectionJDBC)conn).getConnection());
@@ -1655,7 +1680,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 			}
 		} else {
 			String waqry = getValidViewConstructor(workingAreaInTablesCSStruct,
-					oracleSRID, tableHasSrid, isGeogCS);
+					oracleSRID, isTableHasSrid(), isGeogCS);
 
 			if (emptyWhereClause) {
 				resp = resp + _where + "(sdo_relate(" + geoColName + ", " + waqry
@@ -2220,9 +2245,9 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
             }
 
             if (ds.getRowCount() > 1) {
-                logger.error("===============");
-                logger.error(
-                    "DBF file is wrong: More than one preferred Oracle Spatial code found for EPSG code: " +
+                // logger.error("===============");
+                logger.warn(
+                    "DBF file is wrong?: More than one preferred Oracle Spatial code found for EPSG code: " +
                     epsg);
 
                 for (int i = 0; i < ds.getRowCount(); i++) {
@@ -2231,20 +2256,17 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
                     if (i == 0) {
                         resp = "" + aux;
                     }
-
-                    logger.error("" + aux);
+                    // logger.error("" + aux);
                 }
-
-                logger.error("===============");
-
+                // logger.error("===============");
                 return resp;
             }
 
             resp = "" +
                 Math.round(((DoubleValue) ds.getRow(0)[0]).doubleValue());
-        }
-        catch (Exception pe) {
-            logger.error("Error with SQL statement. " + pe.getMessage());
+        } catch (Exception pe) {
+        	throw pe;
+            // logger.error("Error with SQL statement. " + pe.getMessage());
         }
 
         return resp;
@@ -2274,14 +2296,14 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
                     DataSourceFactory.AUTOMATIC_OPENING);
 
             if (ds.getRowCount() == 0) {
-                logger.error("Oracle Spatial code not found in table: " + ora);
+                logger.warn("Oracle Spatial code not found in table: " + ora);
                 throw new Exception("Unknown Oracle code: " + ora);
             }
 
             if (ds.getRowCount() > 1) {
-                logger.error("===============");
-                logger.error(
-                    "DBF file is wrong: More than one EPSG code found for Oracle Spatial code: " +
+                // logger.error("===============");
+                logger.warn(
+                    "DBF file is wrong?: More than one EPSG code found for Oracle Spatial code: " +
                     ora);
 
                 for (int i = 0; i < ds.getRowCount(); i++) {
@@ -2292,19 +2314,19 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
                         resp = aux;
                     }
 
-                    logger.error("" + aux);
+                 // logger.error("" + aux);
                 }
 
-                logger.error("===============");
+             // logger.error("===============");
 
                 return resp;
             }
 
             resp = "" +
                 Math.round(((DoubleValue) ds.getRow(0)[0]).doubleValue());
-        }
-        catch (Exception pe) {
-            logger.error("Error with SQL statement. " + pe.getMessage());
+        } catch (Exception pe) {
+        	throw pe;
+            // logger.warn("Error with SQL statement. " + pe.getMessage());
         }
 
         return resp;
@@ -2867,7 +2889,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 
         try {
             STRUCT the_struct = OracleSpatialUtils.fShapeToSTRUCT(shp, _conn,
-                    _srid, agu_bien, hasSrid, _isGeoCS);
+                    _srid, agu_bien, hasSrid, _isGeoCS, forced_type);
 
             return the_struct;
         }
@@ -3271,7 +3293,7 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
                 logger.error("While initializing OS Writer: " + e.getMessage(), e);
             }
 
-            writer.setStoreWithSrid(tableHasSrid);
+            writer.setStoreWithSrid(isTableHasSrid());
         }
 
         return writer;
@@ -3865,8 +3887,22 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
 	public void setAdaptedFetchSize(int v) {
 		adaptedFetchSize = v;
 	}
-        
-    
+
+	private boolean isTableHasSrid() {
+		return table_HasSrid;
+	}
+
+	private void setTableHasSrid(boolean b) {
+		this.table_HasSrid = b;
+	}
+
+	private String getEpsgSRID() {
+		return epsg_SRID; 
+	}
+
+	private void setEpsgSRID(String e) {
+		this.epsg_SRID = e;
+	}
 
 }
 
