@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#
+# Remove one or more bands from a GeoTIFF dataset.
+# Replace existing dataset or create a new result.
+# NOTE: r.out.gdal can export groups of GRASS raster maps!
+# NOTE: Replacement occurs if the user does not specify an output map.

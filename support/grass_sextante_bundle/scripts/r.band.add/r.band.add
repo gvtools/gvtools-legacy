@@ -1,0 +1,8 @@
+#!/bin/sh
+
+#
+# Add one or more bands to a new or existing multi-band GeoTIFF.
+# Replace existing dataset or create a new result.
+# NOTE: r.out.gdal can export groups of GRASS raster maps!
+# NOTE: Replacement occurs if the user does not specify an output map.
+

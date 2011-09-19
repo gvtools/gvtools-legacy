@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#
+# Move one band in an existing GeoTIFF dataset to a new slot.
+# Replace existing dataset or create a new result.
+# NOTE: r.out.gdal can export groups of GRASS raster maps!
+# NOTE: Replacement occurs if the user does not specify an output map.

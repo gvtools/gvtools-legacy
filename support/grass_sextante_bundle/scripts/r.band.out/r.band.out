@@ -1,0 +1,5 @@
+#!/bin/sh
+
+#
+# Export one or more bands from an existing GeoTIFF dataset to a new raster map.
+# NOTE: r.out.gdal can export groups of GRASS raster maps!

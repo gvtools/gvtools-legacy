@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Export a GRASS 3D raster volume to a multi-band GeoTIFF.
+# Each band in the output represents one depth slice.
+# NOTE: r.out.gdal can export groups of GRASS raster maps!
+# NOTE: add a flag to set the X/Y/Z extents to match the input data.
