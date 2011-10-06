@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#
+# r.clumps.remove
+#
+# Remove clumps that are smaller or larger than a threshold.
+
+# Base on this: http://grass.osgeo.org/gdp/html_grass64/r.reclass.area.html
+
