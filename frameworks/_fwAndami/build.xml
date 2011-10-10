@@ -58,7 +58,7 @@
                 <fileset dir="config" includes="*.properties" />
         </copy>
     	<mkdir dir="${appDir}" />
-		<jar destfile="${jarName}" basedir="${build}" />
+		<jar manifest="MANIFEST.MF" destfile="${jarName}" basedir="${build}" />
 	</target>
 
 	  <target name="clean" description="delete binaries and jar files" >
