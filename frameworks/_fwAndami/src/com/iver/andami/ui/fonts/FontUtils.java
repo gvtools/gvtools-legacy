@@ -48,6 +48,7 @@ import java.util.Locale;
 
 import javax.swing.UIManager;
 
+import com.iver.andami.Launcher;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.Messages;
 
@@ -112,11 +113,18 @@ public class FontUtils {
 		}
 	}
 	
+
+
 	/**
 	 * Inits the UIManager fonts, so that it can display current's language
 	 * symbols. The font is only changed when necessary.
 	 */
 	public static void initFonts() {
+		
+		if (Launcher.getAndamiConfig().getLocaleLanguage().equals("km")) {
+			FontUtils.initKhmerFonts();
+			return;
+		}
 		// conservative behaviour: we just change the font, if the default one
 		// can't correctly display the current language
 		Font defaultFont = UIManager.getFont("Label.font");
@@ -157,6 +165,32 @@ public class FontUtils {
 		}
 	}
 	
+	private static void initKhmerFonts() {
+		// Buscar la fuente de sistema para jemer "Khmer OS System" y instalarla
+		// Si no se encuentra, instalar la primera fuente que se encuentre que 
+		// contenga caracteres khmeres.
+
+		Font[] allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+
+		for (int i = allfonts.length - 1; i >= 0; i--) {
+			if (allfonts[i].getName().equals("Khmer OS System")) {
+				setFont("Khmer OS System");
+				return;
+			}
+		}
+
+
+		for (int i = allfonts.length - 1; i >= 0; i--) {
+			if (allfonts[i].canDisplayUpTo("\u1785\u17C1\u1789\u200B\u1796\u17B8 gvSIG ?") == -1) {
+				setFont(allfonts[i].getName());
+				return;
+			}
+
+		}
+	}
+
+
+
 	/**
 	 * Returns an ordered list of preferred fonts for the provided language.
 	 * As there is several fonts which can be used to display each language,
