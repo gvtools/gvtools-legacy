@@ -530,7 +530,7 @@ public class DBConnectionManagerDialog extends JPanel implements IWindow,
             editButton.addActionListener(this);
             editButton.setBounds(new java.awt.Rectangle(84, 350, 32, 26));
             
-            newButton.setToolTipText(
+            editButton.setToolTipText(
         			PluginServices.getText(this, "edit_settings")
         			);
             ImageIcon ico = PluginServices.getIconTheme().get("conn-mod");
