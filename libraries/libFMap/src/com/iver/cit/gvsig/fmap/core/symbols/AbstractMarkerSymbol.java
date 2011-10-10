@@ -41,7 +41,7 @@
 
 /* CVS MESSAGES:
 *
-* $Id: AbstractMarkerSymbol.java 29132 2009-06-02 09:57:46Z vcaballero $
+* $Id: AbstractMarkerSymbol.java 36362 2011-09-05 14:21:40Z fpuga $
 * $Log$
 * Revision 1.14  2007-09-21 12:25:32  jaume
 * cancellation support extended down to the IGeometry and ISymbol level
@@ -280,25 +280,5 @@ public abstract class AbstractMarkerSymbol extends AbstractSymbol implements IMa
 										  getSize(),
 										  viewPort,
 										  dpi);
-	}
-
-	private int unit;
-	private int referenceSystem;
-
-	public void setUnit(int unitIndex) {
-		this.unit = unitIndex;
-	}
-
-	public int getUnit() {
-		return this.unit;
-	}
-
-	public int getReferenceSystem() {
-		return this.referenceSystem;
-	}
-
-	public void setReferenceSystem(int system) {
-		this.referenceSystem = system;
-
 	}
 }
