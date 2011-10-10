@@ -648,7 +648,7 @@ public class General extends AbstractThemeManagerPage {
 						}
 
 						info = info +
-						PluginServices.getText(this,"Tabla") +": " + dbdef.getTableName() + "\n";
+						PluginServices.getText(this,"Tabla") +": " + dbdef.getComposedTableName() + "\n";
 					} else if (rv instanceof VectorialAdapter){
 						info = info + "\n" + rv.getDriver().getName() + "\n";
 					}
