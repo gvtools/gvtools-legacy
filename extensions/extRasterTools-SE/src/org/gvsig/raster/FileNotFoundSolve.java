@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.fmap.raster.layers.ISolveErrorListener;
+import org.gvsig.raster.util.RasterToolsUtil;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.gdbms.driver.exceptions.FileNotFoundDriverException;
@@ -42,7 +43,8 @@ public class FileNotFoundSolve implements ISolveErrorListener {
 	 */
 	public void createLayer(File file){
 		try {
-			layer = FLyrRasterSE.createLayer(file.getName(), file.getAbsolutePath(), null);
+			String lyr_name = RasterToolsUtil.getLayerNameFromFile(file);
+			layer = FLyrRasterSE.createLayer(lyr_name, file.getAbsolutePath(), null);
 		} catch (LoadLayerException e) {
 			solved = false;
 		}

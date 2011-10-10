@@ -42,6 +42,7 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
+import com.iver.utiles.XMLEntity;
 
 /**
  * Herramientas de uso general y que son dependientes de gvSIG, FMap o de
@@ -520,4 +521,35 @@ public class RasterToolsUtil {
 		}
 		return null;
 	}
+	
+	/**
+	 * Returns layer name from raster file, checking user
+	 * layer naming preferences
+	 * 
+	 * @param raster_file
+	 * @return
+	 */
+	public static String getLayerNameFromFile(File raster_file) {
+		
+		String layerName = raster_file.getName();
+
+		XMLEntity xml = PluginServices.getPluginServices("com.iver.cit.gvsig").getPersistentXML();
+		
+		boolean showFileExtension;
+		
+		if (!xml.contains("ShowFileExtensions")) {
+			//not show by def
+			showFileExtension = false;
+		} else {
+			showFileExtension = xml.getBooleanProperty("ShowFileExtensions");
+		}
+		
+		int dot_index = layerName.lastIndexOf(".");
+		if (!showFileExtension && dot_index > 0) {
+			layerName = layerName.substring(0, dot_index);
+		}
+		return layerName;
+	}
+	
+	
 }

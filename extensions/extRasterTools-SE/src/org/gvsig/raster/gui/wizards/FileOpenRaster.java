@@ -108,7 +108,9 @@ public class FileOpenRaster extends AbstractFileOpen {
 		
 		try {
 			FLyrRasterSE lyrRaster = null;
-			lyrRaster = FLyrRasterSE.createLayer(file.getName(), file, null);
+			
+			String lyr_name = RasterToolsUtil.getLayerNameFromFile(file);
+			lyrRaster = FLyrRasterSE.createLayer(lyr_name, file, null);
 			
 			// Si hay que generar las overviews por el panel de preferencias
 //			if (Configuration.getValue("overviews_ask_before_loading", Boolean.FALSE).booleanValue() == true) {
@@ -174,7 +176,8 @@ public class FileOpenRaster extends AbstractFileOpen {
 	public Rectangle2D createLayer(File file, MapControl mapControl, String driverName, IProjection proj) {
 		this.mapControl = mapControl;
 		FLyrRasterSE lyr = null;
-		String layerName = file.getName();
+		
+		String layerName = RasterToolsUtil.getLayerNameFromFile(file);
 		int nLayer = -1;
 
 		// Si hay capas en la lista la buscamos allí
