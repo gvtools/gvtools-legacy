@@ -6,17 +6,12 @@ import java.util.Iterator;
 
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
-import org.gvsig.gui.beans.incrementabletask.IIncrementable;
-import org.gvsig.gui.beans.incrementabletask.IncrementableEvent;
-import org.gvsig.gui.beans.incrementabletask.IncrementableListener;
-import org.gvsig.gui.beans.incrementabletask.IncrementableTask;
-import org.gvsig.gui.beans.progresspanel.LogControl;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.gui.FieldExpressionPage;
 import com.iver.cit.gvsig.project.documents.table.IOperator;
+import com.iver.cit.gvsig.project.documents.table.gui.EvalExpression;
 import com.iver.cit.gvsig.project.documents.table.gui.EvalExpressionDialog;
 import com.iver.cit.gvsig.project.documents.table.gui.Table;
 import com.iver.cit.gvsig.project.documents.table.operators.Abs;
@@ -78,31 +73,69 @@ import com.iver.cit.gvsig.project.documents.table.operators.Trim;
 import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
-import com.iver.utiles.swing.threads.AbstractMonitorableTask;
+
 /**
  * @author Vicente Caballero Navarro
  */
 public class ExpressionFieldExtension extends Extension{
-	//private static Interpreter interpreter=new Interpreter();
 	public static final String JYTHON="jython";
-	private static BSFManager interpreter=new BSFManager();
+    private static BSFManager interpreter;
 	private Table table=null;
-	private static ArrayList<IOperator> operators=new ArrayList<IOperator>();
+    private static ArrayList<IOperator> operators;
 	public void initialize() {
 		registerOperations();
 		registerIcons();
 	}
 
+    // TODO: fpuga: Maybe, interpreter and operators should be instantiated
+    // in its own class, not in EvalExpression, EvalExpressionDialog or
+    // ExpressionFieldExtension. I think that if that class was singleton we
+    // will get the same behavior that we have now, and the code will more
+    // encapsulate without need of get ExpressionFieldExtension to use this
+    public BSFManager getInterpreter() {
+	if (interpreter == null) {
+	    interpreter = new BSFManager();
+	}
+	return interpreter;
+    }
+
+    public ArrayList<IOperator> getOperators() {
+	if (operators == null) {
+	    operators = new ArrayList<IOperator>();
+	    // getInterpreter() is only to avoid a possible NullPointerException
+	    getInterpreter();
+	    ExtensionPoint extensionPoint = (ExtensionPoint) ExtensionPointsSingleton
+		    .getInstance().get("ColumnOperators");
+	    Iterator<String> iterator = extensionPoint.keySet().iterator();
+	    while (iterator.hasNext()) {
+		try {
+		    IOperator operator = (IOperator) extensionPoint
+			    .create(iterator.next());
+		    operator.eval(interpreter);
+		    operators.add(operator);
+		} catch (BSFException e) {
+		    e.printStackTrace();
+		} catch (InstantiationException e) {
+		    e.printStackTrace();
+		} catch (IllegalAccessException e) {
+		    e.printStackTrace();
+		}
+	    }
+	}
+	return operators;
+    }
+
 	public void execute(String actionCommand) {
 		com.iver.andami.ui.mdiManager.IWindow window = PluginServices.getMDIManager().getActiveWindow();
 		table=(Table)window;
-		if (operators.isEmpty()) {
-			PluginServices.cancelableBackgroundExecution(new EvalOperatorsTask());
-        }else{
-        	 EvalExpressionDialog eed=new EvalExpressionDialog(table,interpreter,operators);
-		     PluginServices.getMDIManager().addWindow(eed);
-        }
+
+
+	EvalExpression ee = new EvalExpression(getInterpreter(), getOperators());
+	ee.setTable(table);
+	EvalExpressionDialog eed = new EvalExpressionDialog(ee);
+	PluginServices.getMDIManager().addWindow(eed);
 	}
+
 	public void postInitialize() {
 
 	}
@@ -200,53 +233,5 @@ public class ExpressionFieldExtension extends Extension{
 					"field-expression-kcalc",
 					this.getClass().getClassLoader().getResource("images/FieldExpression.png")
 				);
-	 }
-
-	 private class EvalOperatorsTask extends AbstractMonitorableTask{
-	    	private ExtensionPoint extensionPoint;
-	    	public EvalOperatorsTask(){
-				setInitialStep(0);
-				setDeterminatedProcess(true);
-				setStatusMessage(PluginServices.getText(this, "charging_operators")+"...");
-				ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-				extensionPoint =(ExtensionPoint)extensionPoints.get("ColumnOperators");
-				setFinalStep(extensionPoint.size()+1);
-	    	}
-			public void run() throws Exception {
-				NotificationManager.addInfo(PluginServices.getText(this,"charging_operators"));
-				long t1=System.currentTimeMillis();
-			        Iterator iterator = extensionPoint.keySet().iterator();
-			        while (iterator.hasNext()) {
-			            try {
-			            	if (isCanceled())
-								return;
-			                IOperator operator = (IOperator)extensionPoint.create((String)iterator.next());
-
-			                operator.eval(interpreter);
-			                operators.add(operator);
-			                reportStep();
-			                setNote(operator.getClass().getName());
-			            } catch (InstantiationException e) {
-			                e.printStackTrace();
-			            } catch (IllegalAccessException e) {
-			                e.printStackTrace();
-			            } catch (ClassCastException e) {
-			                e.printStackTrace();
-			            }
-			        }
-			        long t2=System.currentTimeMillis();
-			        System.out.println("Tiempo en evaluar y crear del extension point = "+(t2-t1) );
-			        long t3=System.currentTimeMillis();
-			        System.out.println("Tiempo en añadir los operadores correctos = "+(t3-t2) );
-			        reportStep();
-			}
-			public void finished() {
-				if (isCanceled())
-					return;
-				NotificationManager.addInfo(PluginServices.getText(this,"charged_operators"));
-				EvalExpressionDialog eed=new EvalExpressionDialog(table,interpreter,operators);
-		        PluginServices.getMDIManager().addWindow(eed);
-			}
-
 	 }
 }
