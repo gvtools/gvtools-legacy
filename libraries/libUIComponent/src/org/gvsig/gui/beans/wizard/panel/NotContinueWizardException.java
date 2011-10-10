@@ -28,6 +28,7 @@
 package org.gvsig.gui.beans.wizard.panel;
 
 import java.awt.Component;
+import java.util.Map;
 
 import org.gvsig.tools.exception.BaseException;
 
@@ -63,6 +64,12 @@ public class NotContinueWizardException extends BaseException{
 	
 	public boolean displayMessage(){
 	    return displayMessage;
+	}
+
+	@Override
+	protected Map values() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
