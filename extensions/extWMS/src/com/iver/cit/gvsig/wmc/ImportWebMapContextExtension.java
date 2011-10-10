@@ -151,7 +151,7 @@ public class ImportWebMapContextExtension extends Extension {
 				}
 
 				public String getDescription() {
-					return PluginServices.getText(this, "ogc_mapcontext_file")+" (*.cml)";
+					return PluginServices.getText(this, "ogc_mapcontext_file");
 				}
 			});
 			IWindow v = PluginServices.getMDIManager().getActiveWindow();

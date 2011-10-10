@@ -454,7 +454,7 @@ public class WebMapContextSettingsPanel extends JPanel implements SingletonWindo
 						}
 
 						public String getDescription() {
-							return PluginServices.getText(this, "ogc_mapcontext_file")+" (*.cml)";
+							return PluginServices.getText(this, "ogc_mapcontext_file");
 						}
 					});
 					if (fc.showOpenDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION){
