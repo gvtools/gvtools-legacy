@@ -125,7 +125,7 @@ public class Export extends Extension {
 		cmsExtensionsSupported = new Hashtable<String, MyFileFilter>();
 		jimiExtensionsSupported = new Hashtable<String, MyFileFilter>();
 		cmsExtensionsSupported.put("jpg", new MyFileFilter("jpg",
-				PluginServices.getText(this, "jpg"), "cms"));
+				PluginServices.getText(this, "jpg"), "jimi"));
 		jimiExtensionsSupported.put("png",new MyFileFilter("png",
 				PluginServices.getText(this, "png"), "jimi"));
 		jimiExtensionsSupported.put("bmp",new MyFileFilter("bmp",
