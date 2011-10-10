@@ -1,11 +1,17 @@
 package com.iver.cit.gvsig.project.documents.table.gui;
 
+import java.awt.Component;
+import java.io.UnsupportedEncodingException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Date;
 import java.util.prefs.Preferences;
 
+import javax.swing.JOptionPane;
+
 import org.apache.bsf.BSFException;
+import org.apache.bsf.BSFManager;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -14,6 +20,7 @@ import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.EditionUtilities;
+import com.iver.cit.gvsig.ExpressionFieldExtension;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileWriteException;
 import com.iver.cit.gvsig.exceptions.validate.ValidateRowException;
@@ -30,38 +37,107 @@ import com.iver.cit.gvsig.fmap.edition.ISpatialWriter;
 import com.iver.cit.gvsig.fmap.edition.IWriteable;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.fmap.edition.VectorialEditableAdapter;
+import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
+import com.iver.cit.gvsig.project.documents.table.IOperator;
+import com.iver.cit.gvsig.project.documents.table.Index;
+
 /**
+ * This class implements the logic of a expression and fill a field of the table
+ * 
+ * To use this class to evaluate and execute an expression something like this
+ * can be done:
+ * 
+ * ExpressionFieldExtension efe = (ExpressionFieldExtension)
+ * PluginServices.getExtension(ExpressionFieldExtension.class);
+ * 
+ * EvalExpression ee = new EvalExpression(efe.getInterpreter(), efe.getOperators());
+ * ToggleEditing te = new ToggleEditing();
+ *  // put the layer in edition mode
+ * te.startEditing(layer); 
+ * ee.setLayer(layer, 7);
+ * ee.evalExpression("toUpperCase([NOME_MAPA])");
+ *  // close edition mode and save the layer
+ * te.stopEditing(layer, false);
+ * 
  * @author Vicente Caballero Navarro
  */
 public class EvalExpression {
 	private FieldDescription[] fieldDescriptors;
-	private int selectedIndex;
 	private FieldDescription fieldDescriptor;
-	private FLyrVect lv;
+    private FLyrVect layer;
 	private  IEditableSource ies =null;
-	private Table table=null;
 	private static Preferences prefs = Preferences.userRoot().node( "fieldExpressionOptions" );
 	private int limit;
+	private SelectableDataSource sds;
+	private BSFManager interpreter;
+	private Index indexRow;
+    private int selectedIndex;
+    private Table table;
+    private ArrayList<IOperator> operators = new ArrayList<IOperator>();
+
+	/**
+	 * @deprecated
+	 */
 	public EvalExpression() {
+        limit=prefs.getInt("limit_rows_in_memory",-1);
+    }
+
+
+    public EvalExpression(BSFManager interpreter, ArrayList<IOperator> operators) {
 		limit=prefs.getInt("limit_rows_in_memory",-1);
+	this.interpreter = interpreter;
+	this.operators = operators;
 	}
-	public void setTable(Table table) {
+	
+    /**
+     * 
+     * @param layer
+     *            Must be in edition or a ClassCastException will be thrown
+     * @param selectedIndex
+     *            The index of the field in the FieldDescription which will be
+     *            filled by the expression
+     */
+	public void setLayer(FLyrVect layer, int selectedIndex) {
+	this.layer = layer;
+	ies = (VectorialEditableAdapter) layer.getSource();
+		this.selectedIndex = selectedIndex;
+		init();
+		
+	}
+	
+    public void setTable(Table table) {
+	// TODO: table is only needed to make table.refresh on the dialog.
+	// Probably a fireevent can be done to avoid this
+	this.table = table;
+	layer = (FLyrVect) table.getModel().getAssociatedTable();
+	if (layer == null)
+			ies=table.getModel().getModelo();
+		else
+	    ies = (VectorialEditableAdapter) layer.getSource();
 		BitSet columnSelected = table.getSelectedFieldIndices();
-        fieldDescriptors = table.getModel().getModelo().getFieldsDescription();
-        selectedIndex = columnSelected.nextSetBit(0);
-        fieldDescriptor = fieldDescriptors[selectedIndex];
-        this.table=table;
-        lv=(FLyrVect)table.getModel().getAssociatedTable();
-        if (lv ==null)
-            ies=table.getModel().getModelo();
-        else
-            ies = (VectorialEditableAdapter) lv.getSource();
+		selectedIndex = columnSelected.nextSetBit(0);
+		init();
+    }
+	
+	private void init() {
+		try {
+			sds = ies.getRecordset();
+			fieldDescriptors = sds.getFieldsDescription();
+			fieldDescriptor = fieldDescriptors[selectedIndex];
+			interpreter.declareBean("sds", sds,SelectableDataSource.class);
+			indexRow=new Index();
+			interpreter.declareBean("indexRow", indexRow,Index.class);
+		} catch (BSFException e) {
+			e.printStackTrace();
+		} catch (ReadDriverException e) {
+			e.printStackTrace();
+		}
 	}
 	 public void setValue(Object obj,int i) {
 	    	//VectorialEditableAdapter vea = (VectorialEditableAdapter) lv.getSource();
 	    	 Value value = getValue(obj);
-	    	 //System.out.println("num = "+i);
 	    	 IRow feat=null;
 			try {
 				feat = ies.getRow(i).getLinkedRow().cloneRow();
@@ -100,13 +176,6 @@ public class EvalExpression {
 	 }
 
 
-	 /**
-	     * Returns the value created from object.
-	     *
-	     * @param obj value.
-	     *
-	     * @return Value.
-	     */
 	    private Value getValue(Object obj) {
 	        int typeField = fieldDescriptor.getFieldType();
 	        Value value = null;//ValueFactory.createNullValue();
@@ -167,28 +236,22 @@ public class EvalExpression {
 	public FieldDescription[] getFieldDescriptors() {
 		return fieldDescriptors;
 	}
-//	public void setFieldValue(Object obj,int i) {
-//    	try {
-//			((DBFDriver)table.getModel().getModelo().getOriginalDriver()).setFieldValue(i,selectedIndex,obj);
-//		} catch (DriverLoadException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//    }
+
 	public void saveEdits(int numRows) throws ReadDriverException, InitializeWriterException, StopWriterVisitorException {
 		if (limit==-1 || numRows == 0 || (numRows % limit)!=0) {
 			return;
 		}
 		ies.endComplexRow(PluginServices.getText(this, "expression"));
-		if ((lv != null) &&
-                lv.getSource() instanceof VectorialEditableAdapter) {
-                VectorialEditableAdapter vea = (VectorialEditableAdapter) lv.getSource();
+	if ((layer != null)
+		&& layer.getSource() instanceof VectorialEditableAdapter) {
+	    VectorialEditableAdapter vea = (VectorialEditableAdapter) layer
+		    .getSource();
                 ISpatialWriter spatialWriter = (ISpatialWriter) vea.getDriver();
                 vea.cleanSelectableDatasource();
-         		lv.setRecordset(vea.getRecordset()); // Queremos que el recordset del layer
-         		// refleje los cambios en los campos.
-         		ILayerDefinition lyrDef = EditionUtilities.createLayerDefinition(lv);
+                // We want that the recordset of the layer shows the changes of the fields
+	    layer.setRecordset(vea.getRecordset());
+	    ILayerDefinition lyrDef = EditionUtilities
+		    .createLayerDefinition(layer);
          		spatialWriter.initialize(lyrDef);
          		vea.saveEdits(spatialWriter,EditionEvent.ALPHANUMERIC);
          		vea.getCommandRecord().clearAll();
@@ -208,6 +271,97 @@ public class EvalExpression {
               ies.getCommandRecord().clearAll();
          }
 		ies.startComplexRow();
-    	 table.refresh();
+    }
+	
+	
+	
+	 	/**
+		 * Evaluate the expression.
+	     * @throws ReadDriverException
+	     * @throws BSFException
+		 */
+	    public boolean evalExpression(String expression) throws ReadDriverException, BSFException{
+	        long rowCount = sds.getRowCount();
+	        byte[] expressionBytes;
+	        String encoding = System.getProperty("file.encoding");
+			try {
+				expressionBytes = expression.getBytes(encoding);
+				expression = new String(expressionBytes, "ISO-8859-1");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+	        expression=expression.replaceAll("\\[","field(\"").replaceAll("\\]","\")");
+
+	        interpreter.declareBean("ee",this,EvalExpression.class);
+	        interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"def expression():\n" +
+	        		"  return " +expression+ "");
+	        if (rowCount > 0) {
+	            try {
+	            	interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"def isCorrect():\n" +
+	    					"    ee.isCorrectValue(expression())\n");
+	                interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"isCorrect()");
+	            } catch (BSFException ee) {
+	            	String message=ee.getMessage();
+	            	if (message.length()>200){
+	            		message=message.substring(0,200);
+	            	}
+	                int option=JOptionPane.showConfirmDialog((Component) PluginServices.getMainFrame(),
+	                    PluginServices.getText(this,
+	                        "error_expression")+"\n"+message+"\n"+PluginServices.getText(this,"continue?"));
+	                if (option!=JOptionPane.OK_OPTION) {
+	                	return false;
+	                }
+	            }
+	        }
+	        ies.startComplexRow();
+
+	        ArrayList exceptions=new ArrayList();
+	        interpreter.declareBean("exceptions",exceptions,ArrayList.class);
+	        FBitSet selection=sds.getSelection();
+	        if (selection.cardinality() > 0) {
+				interpreter.declareBean("selection", selection, FBitSet.class);
+				interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"def p():\n" +
+						"  i=selection.nextSetBit(0)\n" +
+						"  while i >=0:\n" +
+						"    indexRow.set(i)\n" +
+						"    obj=expression()\n" +
+						"    ee.setValue(obj,i)\n" +
+						"    ee.saveEdits(i)\n" +
+						"    i=selection.nextSetBit(i+1)\n");
+			} else {
+				interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"def p():\n" +
+						"  for i in xrange("+rowCount +"):\n" +
+						"    indexRow.set(i)\n" +
+//						"    print i , expression() , repr (expression())\n" +
+						"    ee.setValue(expression(),i)\n" +
+						"    ee.saveEdits(i)\n");
+			}
+	        try {
+	        	interpreter.eval(ExpressionFieldExtension.JYTHON,null,-1,-1,"p()");
+	        } catch (BSFException ee) {
+
+	        	 JOptionPane.showMessageDialog((Component) PluginServices.getMainFrame(),
+	                     PluginServices.getText(this, "evaluate_expression_with_errors")+" "+(rowCount-indexRow.get())+"\n"+ee.getMessage());
+	        }
+
+	        ies.endComplexRow(PluginServices.getText(this, "expression"));
+	        
+	        return true;
+	    }
+
+    public Table getTable() {
+	return this.table;
+    }
+
+    public ArrayList<IOperator> getOperators() {
+	return this.operators;
+    }
+
+    public FLyrVect getLayer() {
+	return this.layer;
+    }
+
+    public BSFManager getInterpreter() {
+	return this.interpreter;
     }
 }

@@ -11,8 +11,6 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
 import javax.swing.BoxLayout;
@@ -32,34 +30,24 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import org.apache.bsf.BSFException;
-import org.apache.bsf.BSFManager;
 import org.gvsig.gui.beans.AcceptCancelPanel;
 import org.gvsig.gui.beans.swing.JButton;
 
-import bsh.EvalError;
-
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.ExpressionFieldExtension;
-import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
-import com.iver.cit.gvsig.fmap.edition.IEditableSource;
-import com.iver.cit.gvsig.fmap.layers.FBitSet;
-import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.project.documents.table.GraphicOperator;
 import com.iver.cit.gvsig.project.documents.table.IOperator;
-import com.iver.cit.gvsig.project.documents.table.Index;
 import com.iver.cit.gvsig.project.documents.table.operators.Field;
 import com.iver.utiles.GenericFileFilter;
 
 
 /**
- * DOCUMENT ME!
+ * This dialog allows the user create expressions to fill a field of the table
  *
  * @author Vicente Caballero Navarro
  */
@@ -69,9 +57,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
     private JScrollPane jScrollPane = null;
     private JTextArea txtExp = null;
     private AcceptCancelPanel acceptCancel;
-    private Table table;
-    private FLyrVect lv;
-    private JLabel lblColumn = null;
     private JPanel pNorthEast = null;
     private JPanel pNorthCenter = null;
     private JPanel pNorthWest = null;
@@ -82,36 +67,29 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
     private JRadioButton rbDate = null;
     private JScrollPane jScrollPane2 = null;
     private JList listCommand = null;
-    private BSFManager interpreter = null; // Construct an interpreter
-    private Index indexRow = null;
-    private SelectableDataSource sds = null;
-    private EvalExpression evalExpression=null;
-    private IEditableSource ies=null;
-	private JPanel pMessage;
-	//private JTextArea txtMessage;
-    private static ArrayList operators=new ArrayList();
-    public EvalExpressionDialog(Table table,BSFManager interpreter, ArrayList operators) {
-        super();
-        this.operators=operators;
-        this.interpreter=interpreter;
-        this.table = table;
-        initialize();
+    private JPanel pMessage;
+    private EvalExpression evalExpression;
+    int lastType = -1;
+    private JButton bClear = null;
+    private JTabbedPane tabPrincipal = null;
+    private JPanel pPrincipal = null;
+    private JPanel pAdvanced = null;
+    private JPanel pAdvancedNorth = null;
+    private JTextField jTextField = null;
+    private JButton bFile = null;
+    private JPanel pAdvancedCenter = null;
+    private JLabel lblLeng = null;
+    private JButton bEval = null;
+    private JScrollPane jScrollPane3 = null;
+    private JTextArea txtMessage2 = null;
+	
 
+    public EvalExpressionDialog(EvalExpression ee) {
+	this.evalExpression = ee;
+	initialize();
     }
-    /**
-     * This method initializes this
-     */
+
     private void initialize() {
-    	try {
-	        evalExpressions();
-        } catch (BSFException e) {
-        	NotificationManager.addError(e);
-		} catch (ReadDriverException e) {
-			NotificationManager.addError(e);
-		}
-	    evalExpression=new EvalExpression();
-	    evalExpression.setTable(table);
-	    lv = (FLyrVect) table.getModel().getAssociatedTable();
         ButtonGroup bg = new ButtonGroup();
         bg.add(getRbNumber());
         bg.add(getRbString());
@@ -126,9 +104,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         constr.ipady=5;
         constr.weightx=1;
         constr.weighty=0.3;
-//        this.add(getTabPrincipal(), java.awt.BorderLayout.CENTER);
-//        this.add(getPMessage(), java.awt.BorderLayout.NORTH);
-//        this.add(getAcceptCancel(), java.awt.BorderLayout.SOUTH);
+
         this.add(getPMessage(), constr);
         constr.gridheight = 5;
         constr.weighty=1;
@@ -144,11 +120,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         this.add(getAcceptCancel(), constr2);
 
     }
-    /**
-     * This method initializes pCentral
-     *
-     * @return javax.swing.JPanel
-     */
+
     private JPanel getPNorth() {
         if (pNorth == null) {
             pNorth = new JPanel();
@@ -173,26 +145,18 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 
             pNorth.add(getPNorthEast(), contr);
 
-
-
-//            pNorth.add(getPNorthEast(), java.awt.BorderLayout.EAST);
-//            pNorth.add(getPNorthCenter(), java.awt.BorderLayout.CENTER);
-//            pNorth.add(getPNorthWest(), java.awt.BorderLayout.WEST);
         }
 
         return pNorth;
     }
 
-    /**
-     * This method initializes pNorth
-     *
-     * @return javax.swing.JPanel
-     */
     private JPanel getPCentral() {
         if (pCentral == null) {
         	StringBuilder tit = new StringBuilder();
+        	tit.append(PluginServices.getText(this,"expression"));
+        	tit.append(" ");
         	tit.append(PluginServices.getText(this, "column"));
-        	tit.append(": ");
+        	tit.append(" : ");
         	tit.append(evalExpression.getFieldDescriptorSelected().getFieldAlias());
             pCentral = new JPanel();
             pCentral.setLayout(new GridBagLayout());
@@ -200,9 +164,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
                     null, tit.toString(),
                     javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                     javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-//            lblColumn = new JLabel();
-//            pCentral.add(lblColumn, null);
-//
+
             GridBagConstraints contr = new GridBagConstraints();
             contr.gridwidth = GridBagConstraints.REMAINDER;
             contr.gridheight = 1;
@@ -212,8 +174,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
             contr.weightx=1;
             contr.weighty=1;
             pCentral.add(getJScrollPane(), contr);
-//            lblColumn.setText(PluginServices.getText(this, "column") + " : " +
-//                evalExpression.getFieldDescriptorSelected().getFieldAlias());
+
             GridBagConstraints contr1 = new GridBagConstraints();
             contr1.gridwidth = 1;
             contr1.gridheight = 1;
@@ -227,11 +188,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return pCentral;
     }
 
-    /**
-     * This method initializes pSouth
-     *
-     * @return javax.swing.JPanel
-     */
     private AcceptCancelPanel getAcceptCancel() {
 		if (this.acceptCancel == null) {
 			this.acceptCancel = new AcceptCancelPanel(
@@ -243,25 +199,20 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 							int limit;
 							limit = prefs.getInt("limit_rows_in_memory", -1);
 							if (limit != -1) {
-								int option = JOptionPane
-										.showConfirmDialog(
-												(Component) PluginServices
-														.getMainFrame(),
-												PluginServices
-														.getText(
-																this,
-																"it_has_established_a_limit_of_rows_will_lose_the_possibility_to_undo_wants_to_continue"));
+								int option = JOptionPane.showConfirmDialog(
+												(Component) PluginServices.getMainFrame(),
+												PluginServices.getText(
+														this,
+														"it_has_established_a_limit_of_rows_will_lose_the_possibility_to_undo_wants_to_continue"));
 								if (option != JOptionPane.OK_OPTION) {
 									return;
 								}
 							}
 							try {
-								long t1 = System.currentTimeMillis();
-								isAccepted=evalExpression();
-								long t2 = System.currentTimeMillis();
-								System.out
-										.println("Tiempo evaluar expresiones = "
-												+ (t2 - t1));
+								isAccepted=evalExpression.evalExpression(getTxtExp().getText());
+				if (evalExpression.getTable() != null) {
+				    evalExpression.getTable().refresh();
+				}
 							} catch (BSFException e1) {
 								NotificationManager.addError(e1);
 							} catch (ReadDriverException e1) {
@@ -282,163 +233,46 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 
 		return this.acceptCancel;
 	}
-    /**
-	 * Evaluate the expression.
-     * @throws ReadDriverException
-     * @throws BSFException
-	 *
-	 * @throws EvalError
-	 * @throws DriverException
-	 * @throws DriverIOException
-	 * @throws IOException
-	 * @throws DriverIOException
-	 * @throws IOException
-	 * @throws BSFException
-	 */
-    private boolean evalExpression() throws ReadDriverException, BSFException{
-        long rowCount = sds.getRowCount();
-        String expression=getTxtExp().getText();
-        byte[] expressionBytes;
-        String encoding = System.getProperty("file.encoding");
-		try {
-			expressionBytes = expression.getBytes(encoding);
-			expression = new String(expressionBytes, "ISO-8859-1");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        expression=expression.replaceAll("\\[","field(\"").replaceAll("\\]","\")");
-
-        interpreter.declareBean("ee",evalExpression,EvalExpression.class);
-        interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"def expression():\n" +
-        		"  return " +expression+ "");
-        if (rowCount > 0) {
-            try {
-            	interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"def isCorrect():\n" +
-    					"    ee.isCorrectValue(expression())\n");
-                interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"isCorrect()");
-            } catch (BSFException ee) {
-            	String message=ee.getMessage();
-            	if (message.length()>200){
-            		message=message.substring(0,200);
-            	}
-                int option=JOptionPane.showConfirmDialog((Component) PluginServices.getMainFrame(),
-                    PluginServices.getText(this,
-                        "error_expression")+"\n"+message+"\n"+PluginServices.getText(this,"continue?"));
-                if (option!=JOptionPane.OK_OPTION) {
-                	return false;
-                }
-            }
-        }
-        ies.startComplexRow();
-
-        ArrayList exceptions=new ArrayList();
-        interpreter.declareBean("exceptions",exceptions,ArrayList.class);
-        FBitSet selection=sds.getSelection();
-        if (selection.cardinality() > 0) {
-			interpreter.declareBean("selection", selection, FBitSet.class);
-			interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"def p():\n" +
-					"  i=selection.nextSetBit(0)\n" +
-					"  while i >=0:\n" +
-					"    indexRow.set(i)\n" +
-					"    obj=expression()\n" +
-					"    ee.setValue(obj,i)\n" +
-					"    ee.saveEdits(i)\n" +
-					"    i=selection.nextSetBit(i+1)\n");
-		} else {
-			interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"def p():\n" +
-					"  for i in xrange("+rowCount +"):\n" +
-					"    indexRow.set(i)\n" +
-//					"    print i , expression() , repr (expression())\n" +
-					"    ee.setValue(expression(),i)\n" +
-					"    ee.saveEdits(i)\n");
-		}
-        try {
-        	interpreter.eval(ExpressionFieldExtension.JYTHON,null,-1,-1,"p()");
-//        	interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,"p()");
-        } catch (BSFException ee) {
-
-        	 JOptionPane.showMessageDialog((Component) PluginServices.getMainFrame(),
-                     PluginServices.getText(this, "evaluate_expression_with_errors")+" "+(rowCount-indexRow.get())+"\n"+ee.getMessage());
-        }
-
-        ies.endComplexRow(PluginServices.getText(this, "expression"));
-        table.refresh();
-        return true;
-    }
-    /**
-	 * This method initializes pMessage
-	 *
-	 * @return javax.swing.JPanel
-	 */
+   
 	private JPanel getPMessage() {
 		if (pMessage == null) {
 
 			pMessage = new JPanel();
 			pMessage.setLayout(new GridLayout());
 			pMessage.setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this,"information"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
-//			pMessage.setPreferredSize(new java.awt.Dimension(550,120));
 			pMessage.add(getJScrollPane3(), null);
 		}
 		return pMessage;
 	}
-    private void evalExpressions() throws BSFException, ReadDriverException {
-        ies = table.getModel().getModelo();
-        sds = ies.getRecordset();
-        interpreter.declareBean("sds", sds,SelectableDataSource.class);
-        indexRow=new Index();
-        interpreter.declareBean("indexRow", indexRow,Index.class);
-    }
-    /**
-     * Evaluate the fields.
-     *
-     * @param interpreter
-     *
-     * @throws EvalError
-     */
-    int lastType=-1;
-	private JButton bClear = null;
-	private JTabbedPane tabPrincipal = null;
-	private JPanel pPrincipal = null;
-	private JPanel pAdvanced = null;
-	private JPanel pAdvancedNorth = null;
-	private JTextField jTextField = null;
-	private JButton bFile = null;
-	private JPanel pAdvancedCenter = null;
-	private JLabel lblLeng = null;
-	private JButton bEval = null;
-	private JScrollPane jScrollPane3 = null;
-	private JTextArea txtMessage2 = null;
+    
+
+	
 	private void refreshOperators(int type) {
         if (lastType!=-1 && lastType==type)
         	return;
         lastType=type;
     	ListOperatorsModel lom=(ListOperatorsModel)getListCommand().getModel();
         lom.clear();
-           for (int i=0;i<operators.size();i++) {
-            IOperator operator = (IOperator)operators.get(i);
+
+	for (IOperator operator : evalExpression.getOperators()) {
             operator.setType(type);
-            //Comprobar si tiene una capa asociada y pasarsela al GraphicOperator.
-            if ((lv != null) && operator instanceof GraphicOperator) {
-                GraphicOperator igo = (GraphicOperator) operator;
-                igo.setLayer(lv);
+	    if ((evalExpression.getLayer() != null) && operator instanceof GraphicOperator) {
+		GraphicOperator igo = (GraphicOperator) operator;
+		igo.setLayer(evalExpression.getLayer());
             }
             if (operator.isEnable()) {
-                   lom.addOperator(operator);
-                   //System.out.println("Operator = "+operator.toString());
+		lom.addOperator(operator);
             }
+
         }
+
         getListCommand().repaint();
         getJScrollPane2().repaint();
         getJScrollPane2().doLayout();
         this.doLayout();
 
     }
-    /**
-     * This method initializes jScrollPane
-     *
-     * @return javax.swing.JScrollPane
-     */
+    
     private JScrollPane getJScrollPane() {
         if (jScrollPane == null) {
             jScrollPane = new JScrollPane();
@@ -449,11 +283,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return jScrollPane;
     }
 
-    /**
-     * This method initializes txtExp
-     *
-     * @return javax.swing.JTextArea
-     */
+    
     private JTextArea getTxtExp() {
         if (txtExp == null) {
             txtExp = new JTextArea();
@@ -464,10 +294,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 					else
 						getAcceptCancel().setOkButtonEnabled(false);
 				}
-
-
-
-
 			});
         }
 
@@ -482,11 +308,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return wi;
     }
 
-    /**
-     * This method initializes pNorthEast
-     *
-     * @return javax.swing.JPanel
-     */
     private JPanel getPNorthEast() {
         if (pNorthEast == null) {
             pNorthEast = new JPanel(new GridLayout());
@@ -500,11 +321,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return pNorthEast;
     }
 
-    /**
-     * This method initializes pNorthCenter
-     *
-     * @return javax.swing.JPanel
-     */
     private JPanel getPNorthCenter() {
         if (pNorthCenter == null) {
             pNorthCenter = new JPanel();
@@ -522,11 +338,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return pNorthCenter;
     }
 
-    /**
-     * This method initializes pNorthWest
-     *
-     * @return javax.swing.JPanel
-     */
     private JPanel getPNorthWest() {
         if (pNorthWest == null) {
             pNorthWest = new JPanel(new GridLayout());
@@ -540,11 +351,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return pNorthWest;
     }
 
-    /**
-     * This method initializes jScrollPane1
-     *
-     * @return javax.swing.JScrollPane
-     */
     private JScrollPane getJScrollPane1() {
         if (jScrollPane1 == null) {
             jScrollPane1 = new JScrollPane();
@@ -555,11 +361,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return jScrollPane1;
     }
 
-    /**
-     * This method initializes listFields
-     *
-     * @return javax.swing.JList
-     */
     private JList getListFields() {
         if (listFields == null) {
             listFields = new JList();
@@ -571,7 +372,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
                 Field field=new Field();
                 field.setFieldDescription(fds[i]);
                 try {
-                	field.eval(interpreter);
+		    field.eval(evalExpression.getInterpreter());
                 } catch (BSFException e) {
 					e.printStackTrace();
 				}
@@ -585,10 +386,10 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
                     		getTxtMessage2().setText(operator.getTooltip());
                     		if (e.getClickCount() == 2) {
                         		String text = getTxtExp().getText();
-                        		int caretPos = getTxtExp().getCaretPosition();
                         		int selStart = getTxtExp().getSelectionStart();
                         		int selEnd = getTxtExp().getSelectionEnd();
                         		
+			    // int caretPos = getTxtExp().getCaretPosition();
 //                        		if (caretPos == text.length()){
 //                        			getTxtExp().setText(operator.addText(text));
 //                        		} else {
@@ -621,11 +422,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return listFields;
     }
 
-    /**
-     * This method initializes rbNumber
-     *
-     * @return javax.swing.JRadioButton
-     */
     private JRadioButton getRbNumber() {
         if (rbNumber == null) {
             rbNumber = new JRadioButton();
@@ -642,11 +438,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return rbNumber;
     }
 
-    /**
-     * This method initializes rbString
-     *
-     * @return javax.swing.JRadioButton
-     */
     private JRadioButton getRbString() {
         if (rbString == null) {
             rbString = new JRadioButton();
@@ -662,11 +453,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return rbString;
     }
 
-    /**
-     * This method initializes rbData
-     *
-     * @return javax.swing.JRadioButton
-     */
     private JRadioButton getRbDate() {
         if (rbDate == null) {
             rbDate = new JRadioButton();
@@ -682,11 +468,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return rbDate;
     }
 
-    /**
-     * This method initializes jScrollPane2
-     *
-     * @return javax.swing.JScrollPane
-     */
     private JScrollPane getJScrollPane2() {
         if (jScrollPane2 == null) {
             jScrollPane2 = new JScrollPane();
@@ -697,9 +478,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return jScrollPane2;
     }
 
-    /**
-     * Refresh the commands.
-     */
     private void refreshCommands() {
         int type=IOperator.NUMBER;
         if (getRbNumber().isSelected()) {
@@ -713,11 +491,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 
     }
 
-    /**
-     * This method initializes ListCommand
-     *
-     * @return javax.swing.JList
-     */
     private JList getListCommand() {
         if (listCommand == null) {
             listCommand = new JList();
@@ -730,8 +503,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
                     		if (e.getClickCount() == 2) {
                     			if (listCommand.getSelectedValue()==null)
                     				return;
-//                    			getTxtExp().setText(operator.addText(
-//                    					getTxtExp().getText()));
                     		
                     		String text = getTxtExp().getText();
                     		int caretPos = getTxtExp().getCaretPosition();
@@ -771,12 +542,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
         return listCommand;
     }
 
-    /**
-	 * This method initializes bClear
-	 *
-	 * @return javax.swing.JButton
-	 */
-	private JButton getBClear() {
+    private JButton getBClear() {
 		if (bClear == null) {
 			bClear = new JButton();
 			bClear.setText(PluginServices.getText(this,"clear_expression"));
@@ -788,11 +554,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 		}
 		return bClear;
 	}
-	/**
-	 * This method initializes tabPrincipal
-	 *
-	 * @return javax.swing.JTabbedPane
-	 */
+	
 	private JTabbedPane getTabPrincipal() {
 		if (tabPrincipal == null) {
 			tabPrincipal = new JTabbedPane();
@@ -801,27 +563,18 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 		}
 		return tabPrincipal;
 	}
-	/**
-	 * This method initializes pPrincipal
-	 *
-	 * @return javax.swing.JPanel
-	 */
+	
 	private JPanel getPPrincipal() {
 		if (pPrincipal == null) {
 			pPrincipal = new JPanel();
 			pPrincipal.setLayout(new BorderLayout());
-//			pPrincipal.setPreferredSize(new java.awt.Dimension(540,252));
 			pPrincipal.add(getPNorth(), java.awt.BorderLayout.NORTH);
 			pPrincipal.add(getPCentral(), java.awt.BorderLayout.CENTER);
 
 		}
 		return pPrincipal;
 	}
-	/**
-	 * This method initializes pAdvanced
-	 *
-	 * @return javax.swing.JPanel
-	 */
+
 	private JPanel getPAdvanced() {
 		if (pAdvanced == null) {
 			pAdvanced = new JPanel();
@@ -831,15 +584,10 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 		}
 		return pAdvanced;
 	}
-	/**
-	 * This method initializes pAdvancedNorth
-	 *
-	 * @return javax.swing.JPanel
-	 */
+
 	private JPanel getPAdvancedNorth() {
 		if (pAdvancedNorth == null) {
 			pAdvancedNorth = new JPanel(new GridBagLayout());
-//			pAdvancedNorth.setPreferredSize(new java.awt.Dimension(873,100));
 			pAdvancedNorth.setBorder(javax.swing.BorderFactory.createTitledBorder(null, PluginServices.getText(this,"expressions_from_file"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 			GridBagConstraints contr = new GridBagConstraints();
 			contr.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -859,11 +607,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 		}
 		return pAdvancedNorth;
 	}
-	/**
-	 * This method initializes jTextField
-	 *
-	 * @return javax.swing.JTextField
-	 */
+
 	private JTextField getJTextField() {
 		if (jTextField == null) {
 			jTextField = new JTextField();
@@ -871,11 +615,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 		}
 		return jTextField;
 	}
-	/**
-	 * This method initializes bFile
-	 *
-	 * @return javax.swing.JButton
-	 */
+
 	private JButton getBFile() {
 		if (bFile == null) {
 			bFile = new JButton();
@@ -906,11 +646,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 		fileReader.close();
 		return fileContents.toString();
 	}
-	/**
-	 * This method initializes pAdvancedCenter
-	 *
-	 * @return javax.swing.JPanel
-	 */
+
 	private JPanel getPAdvancedCenter() {
 		if (pAdvancedCenter == null) {
 			lblLeng = new JLabel();
@@ -921,11 +657,6 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 		return pAdvancedCenter;
 	}
 
-	/**
-	 * This method initializes bEval
-	 *
-	 * @return javax.swing.JButton
-	 */
 	private JButton getBEval() {
 		if (bEval == null) {
 			bEval = new JButton();
@@ -938,7 +669,9 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 						return;
 					}
 					try {
-						interpreter.exec(ExpressionFieldExtension.JYTHON,null,-1,-1,readFile(file));
+			evalExpression.getInterpreter().exec(
+				ExpressionFieldExtension.JYTHON,
+				null, -1, -1, readFile(file));
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					} catch (BSFException e1) {
@@ -949,11 +682,7 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 		}
 		return bEval;
 	}
-	/**
-	 * This method initializes jScrollPane3
-	 *
-	 * @return javax.swing.JScrollPane
-	 */
+
 	private JScrollPane getJScrollPane3() {
 		if (jScrollPane3 == null) {
 			jScrollPane3 = new JScrollPane();
@@ -962,22 +691,19 @@ public class EvalExpressionDialog extends JPanel implements IWindow {
 		}
 		return jScrollPane3;
 	}
-	/**
-	 * This method initializes txtMessage2
-	 *
-	 * @return javax.swing.JTextArea
-	 */
+
 	private JTextArea getTxtMessage2() {
 		if (txtMessage2 == null) {
 			txtMessage2 = new JTextArea();
 			txtMessage2.setText(PluginServices.getText(this,"eval_expression_will_be_carried_out_right_now_with_current_values_in_table"));
-			//txtMessage2.setSize(new java.awt.Dimension(550,100));
 			txtMessage2.setEditable(false);
 			txtMessage2.setBackground(UIManager.getColor(this));
+	    txtMessage2.setLineWrap(true);
+	    txtMessage2.setWrapStyleWord(true);
 		}
 		return txtMessage2;
 	}
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;
 	}
-} //  @jve:decl-index=0:visual-constraint="10,10"
+}
