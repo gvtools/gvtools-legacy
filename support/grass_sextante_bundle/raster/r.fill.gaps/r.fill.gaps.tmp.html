@@ -1,0 +1,323 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>GRASS GIS manual: r.fill.gaps</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<h2>NAME</h2>
+<em><b>r.fill.gaps</b></em>  - Rapidly fills 'no data' cells of a raster map with interpolated values (IDW).
+<h2>KEYWORDS</h2>
+raster,interpolation,IDW
+<h2>SYNOPSIS</h2>
+<b>r.fill.gaps</b><br>
+<b>r.fill.gaps help</b><br>
+<b>r.fill.gaps</b> [-<b>wmpcs</b>] <b>input</b>=<em>name</em> <b>output</b>=<em>name</em>  [<b>uncertainty</b>=<em>name</em>]  <b>distance</b>=<em>value</em> <b>method</b>=<em>name</em>  [<b>minimum</b>=<em>value</em>]   [<b>maximum</b>=<em>value</em>]   [<b>include</b>=<em>value</em>[,<i>value</i>,...]]  <b>power</b>=<em>value</em> <b>points</b>=<em>value</em>  [--<b>overwrite</b>]  [--<b>verbose</b>]  [--<b>quiet</b>] 
+
+<h3>Flags:</h3>
+<DL>
+<DT><b>-w</b></DT>
+<DD>Just print the spatial weights matrix</DD>
+
+<DT><b>-m</b></DT>
+<DD>Just print estimated memory usage</DD>
+
+<DT><b>-p</b></DT>
+<DD>Preserve original input data</DD>
+
+<DT><b>-c</b></DT>
+<DD>Include value of center cell (not for 'wmean')</DD>
+
+<DT><b>-s</b></DT>
+<DD>Single precision floating point output</DD>
+
+<DT><b>--overwrite</b></DT>
+<DD>Allow output files to overwrite existing files</DD>
+<DT><b>--verbose</b></DT>
+<DD>Verbose module output</DD>
+<DT><b>--quiet</b></DT>
+<DD>Quiet module output</DD>
+</DL>
+
+<h3>Parameters:</h3>
+<DL>
+<DT><b>input</b>=<em>name</em></DT>
+<DD>Raster map with data gaps to fill</DD>
+
+<DT><b>output</b>=<em>name</em></DT>
+<DD>Name of result output map</DD>
+
+<DT><b>uncertainty</b>=<em>name</em></DT>
+<DD>Name of uncertainty output map</DD>
+
+<DT><b>distance</b>=<em>value</em></DT>
+<DD>Maximum distance (in map units) for interpolation</DD>
+
+<DT><b>method</b>=<em>name</em></DT>
+<DD>Statistic for interpolated cell values</DD>
+<DD>Options: <em>wmean,mean,median,medoid,mode</em></DD>
+<DD>Default: <em>wmean</em></DD>
+
+<DT><b>minimum</b>=<em>value</em></DT>
+<DD>Minimum input data value to include in interpolation</DD>
+
+<DT><b>maximum</b>=<em>value</em></DT>
+<DD>Maximum input data value to include in interpolation</DD>
+
+<DT><b>include</b>=<em>value[,<i>value</i>,...]</em></DT>
+<DD>List of values to include in interpolation (exclude rest)</DD>
+
+<DT><b>power</b>=<em>value</em></DT>
+<DD>Power coefficient for IDW interpolation</DD>
+<DD>Default: <em>2.0</em></DD>
+
+<DT><b>points</b>=<em>value</em></DT>
+<DD>Minimum number of points for interpolation</DD>
+<DD>Default: <em>12</em></DD>
+
+</DL>
+<h2>DESCRIPTION</h2>
+
+
+<em>r.fill.gaps</em> performs flexible data gap filling and interpolation 
+for dense input raster datasets.
+
+<p>
+
+This tool is meant to close relatively small data gaps in otherwise complete
+raster maps. As a rule of thumb, "relatively small" means that there are at
+least as many data cells as there are "no data" cells in the areas where data
+gaps are to be closed. It works directly on the raster input and performs interpolation
+to fill "no data" cells only if there are enough data points within a user-definable 
+maximum distance from the cell to be filled/interpolated.
+
+<p>
+
+Available interpolators (replacement modes) are:
+<ul>
+<li>(spatially) weighted mean</li>
+<li>simple mean</li>
+<li>simple median</li>
+<li>simple medoid</li>
+<li>simple mode</li>
+</ul>
+
+<p>
+
+The spatially weighted mean is equivalent to an Inverse Distance Weighting (IDW; see
+also <em><a href="r.surf.idw.html">r.surf.idw</a></em>) interpolation. The simple
+mean is equivalent to a low-pass filter. Median and mode replacements can also be
+achieved using <em><a href="r.neighbors.html">r.neighbors</a></em>.
+ 
+<p> 
+
+However, this tool has been optimized for fast processing of <em>very</em> large raster datasets.
+It sacrifices spatial accuracy for speed and a small memory foot print. It also prevents 
+unreliable interpolation in areas with no reasonably close data points (rather, it will 
+retain any "no data" cells in such areas). Processing time will increase exponentially 
+with higher distance settings.
+
+<p>
+
+Applications where <em>r.fill.gaps</em>' properties are advantageous include the processing of
+very high resolution close range scanning or remote sensing datasets. These are characterized by densely spaced
+measurements that show data gaps after rasterization, due to blind spots, instrument failures,
+and mismatches between the GIS' raster cell grid and the original measurement locations.<br>
+In these cases, <em>r.fill.gaps</em> should typically be run using the "weighted mean" method
+and with a relatively small distance setting, that reflects the maximum acceptable distance to 
+a given measurement's location.
+<p>
+The images below show a gradiometer dataset with gaps, and its interpolated equivalent, using
+the spatially weighted mean operator.
+<p>
+
+<img src="r.fill.gaps.01.png" width="499" height="464" alt=""> <img src="r.fill.gaps.02.png" width="499" height="464" alt="">
+
+<p>
+
+<em>r.fill.gaps</em> can also be useful in raster map generalization. Often, this includes removing small 
+clumps of categorized cells and then filling the resulting data gaps without "inventing" any new values.
+In these and similar cases, where relatively small data gaps have to be closed without modifying the input 
+data range, the "-p" flag should be used in conjunction with the "mode" or "medoid" interpolators.
+
+<p>
+
+For optimal interpolation from a small number of (vector) data points, use a different,
+vector points based, tool, such as <em><a href="v.surf.idw.html">v.surf.idw</a></em>
+or <em><a href="v.surf.rst.html">v.surf.rst</a></em>.
+
+<h2>USAGE</h2>
+
+The most important options are the choice of interpolation/gap filling method (<em>"method="</em>)
+and the maximum distance, up to which <em>"r.fill.gaps"</em> will scan for given data points
+when attempting to fill/interpolate a value.
+The distance is expressed in the current region's units. These are typically meters, but
+can be any other units within a <em>Cartesian</em> coordinate system. Geodetic coordinates
+are currently not supported.  
+
+<p>
+
+The <em>"distance="</em> setting will be honored as accurately as the current region's resolution
+settings allow. The program will warn if the distance cannot be expressed as whole
+cells at the current resolution. In this case, the number of cells in the neighborhood
+will be rounded up. If <em>"distance="</em> is set to a relatively large value, processing time
+will quickly approach and eventually exceed that of vector-based interpolation techniques such
+as <em><a href="v.surf.rst.html">v.surf.rst</a></em>.
+
+<p>
+
+In any case, due to the rounding effect introduced by using cells as spatial units,
+the actual maximum distance considered by the interpolation may be up to half a cell diagonal 
+larger than the one specified by the user.
+
+<p>
+
+The interpolator type "wmean" (spatially weighted mean) is Inverse Distance Weighting (IDW).
+To speed up computation, a pre-computed matrix of spatial weights is used. This matrix can
+be examined before running the interpolation, by setting the <em>"-p"</em> flag. <br>
+In mode "wmean", the <em>"power="</em> option has the standard function: higher values mean
+that further away points will lose their influence on the interpolation point more rapidly.</br>
+Another way of explaining this effect is to state that larger "power" settings result in more
+localized interpolation, smaller ones in more globalized interpolation.</br>
+The standard setting is <em>"power=2.0"</em>.
+
+<p>
+
+The interpolators "mean", "median", "medoid" and "mode" are simply calculated from all cell values 
+within the search radius. No spatial weighting is applied in these cases. 
+<p>
+The "medoid" interpolator is very similar to "median", but it will always choose a value that is part 
+of the original input data. If there is an odd number of input data (interpolating) cells in the neighborhood, 
+then the medoid will be the same as the median. If the number is even, then the medoid will be either the lower 
+(smaller) one of the two center values in the sorted list of elements.
+
+<p>
+
+Likewise, the "mode" of the input data may not always be unique. In that case, the mode will be the smallest 
+value with the highest frequency.
+
+<p>
+
+Often, input data will contain spurious extreme measurements (spikes, outliers, noise) caused by the limits
+of sensor sensitivity, device defects, environmental influences, etc. If the normal, valid
+range of input data is known beforehand, then the <em>"minimum="</em> and <em>"maximum="</em> options can be used
+to exclude those input cells whose values are below or above that range, respectively.
+This will prevent the influence of spikes and outliers from spreading through the interpolation.
+
+<p>
+
+In addition, a range list of values can be passed via the <em>"include="</em> option to limit 
+the input data values that will be considered for gap filling/interpolation. If both a min-max 
+range and an include list are been specified, then first the values which are outside the range 
+will be discarded, followed by those which are inside the range but not on the include list.
+
+<p>
+
+If the <em>"-p"</em> (preserve) flag is given, then the interpolation will not replace existing input cell values.
+Thus, the given cells will always be copied through to the result.
+
+Besides the result of the interpolation/gap filling, a second output can be specified via the
+<em>"uncertainty="</em> option. The cell values in this map represent a simple measure of how
+much uncertainty was involved in interpolating each cell value of the primary output map, with
+"0" being the lowest and "1" being the theoretic highest uncertainty. Uncertainty is measured
+by summing up all cells in the neighborhood that contain a value in the <em>input</em> map,
+multiplied by their weights, and dividing the result by the sum of all weights in the neighborhood.<br>
+For IDW interpolation with <em>"mode=wmean"</em>, this means that interpolated output cells that
+were computed from many nearby given input cells have very low uncertainty and vice versa.<br>
+For all other modes, all weights in the neighborhood are constant "1" and the uncertainty measure
+is a simple measure of how many input data cells were present in the neightborhood. 
+
+
+<h2>NOTES</h2>
+
+This tool has been optimized for efficiency and speed. Accuracy will suffer increasingly with
+less dense data, larger gaps and larger cell sizes (relative to the "distance" setting).
+<p>
+This tool can handle cells with different X and Y resolutions. However, note that the weight matrix
+will be skewed, with higher weights occurring close to the center and along the axis with the higher resolution.<br>
+This is because weights on the lower resolution axis are less accurately calculated.<br>
+The skewing effect will be stronger if the difference between the X and Y axis resolution 
+is greater and a larger "power" setting is chosen.
+<br>
+For example, this is the weights distribution for a region with a resolution of 0.25 m on the W-E axis, 0.125 m on the S-N axis, a radius of 1.0 m and a power setting of 2.0:
+<pre>
+              0.80  0.94  1.00  0.94  0.80
+              0.98  1.21  1.31  1.21  0.98
+        0.89  1.23  1.60  1.78  1.60  1.23  0.89
+        1.05  1.56  2.21  2.56  2.21  1.56  1.05
+  0.80  1.23  2.00  3.20  4.00  3.20  2.00  1.23  0.80
+  0.88  1.42  2.56  4.92  7.11  4.92  2.56  1.42  0.88
+  0.94  1.60  3.20  8.00  16.00 8.00  3.20  1.60  0.94
+  0.98  1.73  3.76  12.80 64.00 12.80 3.76  1.73  0.98
+  1.00  1.78  4.00  16.00       16.00 4.00  1.78  1.00
+  0.98  1.73  3.76  12.80 64.00 12.80 3.76  1.73  0.98
+  0.94  1.60  3.20  8.00  16.00 8.00  3.20  1.60  0.94
+  0.88  1.42  2.56  4.92  7.11  4.92  2.56  1.42  0.88
+  0.80  1.23  2.00  3.20  4.00  3.20  2.00  1.23  0.80
+        1.05  1.56  2.21  2.56  2.21  1.56  1.05
+        0.89  1.23  1.60  1.78  1.60  1.23  0.89
+              0.98  1.21  1.31  1.21  0.98
+              0.80  0.94  1.00  0.94  0.80
+					
+</pre>
+
+This property of the weights matrix directly reflects the better information density along the higher resolution axis.
+If this leads to bad results, then the only way to work against it (assuming that the cell dimensions should not be adjusted) is to choose a smaller "power" coefficient.
+<p>
+
+Normally, the value of the center cell will not be considered when calculating the chosen neighborhood statistic.
+This can be changed by using the <em>"-c"</em> ("include center") flag. Note that the center cell will always be excluded
+if <em>"method=wmean"</em> is used: The center cell has "0" distance from (is identical with) the cell to be interpolated, 
+so that its weight would be infinitely large; this would have the same effect as using the <em>"-p"</em> flag.
+<p>
+Note on printing the weights matrix (using the <em>"-w"</em> flag): the matrix cannot be printed if it is very large.
+Likewise, individual weights that result in very large number will be printed as "[????]".
+<p>
+The memory estimate provided by the <em>"-m"</em> flag is a lower limit of the amount of RAM that will be needed.
+
+<h2>EXAMPLES</h2>
+
+Interpolate geophysical or remote sensing datasets with spatially weighted mean (IDW) and a maximum search radius of 3.0 map units;
+also produce uncertainty estimation map:
+
+<pre>
+r.fill.gaps input=measurements output=result dist=3.0 method=wmean uncertainty=uncert_map
+</pre>
+
+Run a fast low-pass filter on an input map: 
+<pre>
+r.fill.gaps input=measurements output=result dist=10.0 method=mean
+</pre>
+
+Fill some data gaps in a categorized raster map; replace "no data" cells only with values that are already present in the neighborhood: 
+<pre>
+r.fill.gaps input=categories output=result dist=100.0 method=medoid -p
+</pre>
+
+<h2>SEE ALSO</h2>
+
+<em><a href="http://en.wikipedia.org/wiki/Inverse_distance_weighting">Wikipedia on Inverse Distance Weighting</a></em>,<br>
+<em><a href="r.neighbors.html">r.neighbors</a></em>,<br>
+<em><a href="r.surf.idw2.html">r.surf.idw</a></em>,<br>
+<em><a href="v.surf.idw.html">v.surf.idw</a></em>,<br>
+<em><a href="v.surf.rst.html">v.surf.rst</a></em>
+
+
+<h2>AUTHOR</h2>
+
+Benjamin Ducke <br>
+for German Archaeological Institute (DAI),<br>
+Romano-Germamic Commission (RGK)<br>
+2011 
+
+<p>
+<i>Last changed: Tue Nov  1 16:08:21 CET 2011</i>
+<HR>
+<P><a href="index.html">Main index</a> - <a href="raster.html">raster index</a> - <a href="full_index.html">Full index</a></P>
+<P>&copy; 2003-2011 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+</body>
+</html>
