@@ -1,8 +1,11 @@
 #!/bin/sh
 
+# AUTHOR(S):		Andrew Bevan, University College London 
+# 			(a.bevan@ucl.ac.uk)
 #TODO:
 # - add a GRASS GIS interface
 # - turn this into a universally useful module for cost neighborhood filtering
+
 
 # Create loop using START and END variables
 START=1
