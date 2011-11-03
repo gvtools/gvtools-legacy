@@ -215,7 +215,7 @@ r.fill.gaps input=measurements output=result dist=10.0 method=mean
 
 Fill some data gaps in a categorized raster map; replace "no data" cells only with values that are already present in the neighborhood: 
 <pre>
-r.fill.gaps input=categories output=result dist=100.0 method=medoid -p
+r.fill.gaps input=categories output=result dist=100.0 method=mode -p
 </pre>
 
 <h2>SEE ALSO</h2>
