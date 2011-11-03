@@ -1,0 +1,36 @@
+What's needed is a GRASS tool to fill the gaps left by te SLC failure
+in all Landsat 7 images since May 31, 2003.
+
+Basically, all methods suggested require additional, overlapping input
+data to fill the gaps, such as older Landsat 7 with SLC On, or Landsat 5
+scenes. The former will produce more spatially accurate, the later more
+up-to-date reconstructions.
+
+There is a mailing list thread here:
+
+  http://osgeo-org.1803224.n2.nabble.com/Landsat-SLC-Off-gap-filling-td1885256.html
+
+Some suggestions here:
+
+  http://grass.osgeo.org/wiki/MODIS#Removing_holes
+
+The officially suggested method here:
+
+  http://landsat.usgs.gov/documents/SLC_Gap_Fill_Methodology.pdf
+
+There is an SF.net project here:
+
+  http://l7gapfill.sourceforge.net/#
+  http://www.geojune.org/news/open-source-software-fill-landsat-etm-slc-image-gaps
+
+.. but no files and no code (?)
+
+Description of another implementation here:
+
+  http://www.pancroma.com/Landsat%20Gap%20Fill.html
+
+An approach using Landsat 5 images:
+
+  http://landsat.usgs.gov/documents/BU_Workshop_2010_B.pdf
+
+
