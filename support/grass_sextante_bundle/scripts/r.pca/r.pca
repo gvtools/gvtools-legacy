@@ -24,6 +24,28 @@
 #   path in double quotes, like so: output="C:\Documents\File.tif"
 #   the bug is documented here: http://trac.osgeo.org/grass/ticket/1280
 
+
+# TODO: Include recent fixes by M. Metz (Nov 4th 2011)
+# Hi all,
+# 
+# based on the wiki for Principal Components Analysis [0], numerous
+# discussions in the mailing lists [1,2,3,4], particularly a comment by
+# Edzer Pebesma [5], and personal demand, I have fixed a few issues in
+# i.pca in trunk r49090.
+# 
+# - the faulty or missing centering of the input bands described in [0]
+# for should be fixed
+# - i.pca has a new flag -n to normalize input bands with (x - mean) / stddev
+# - values of the output maps are now calculated depending on the input
+# band transformation (centering or normalization). Is this OK?
+# - Eigen values, (vectors), and [percent importance] are now written to
+# stdout instead of stderr
+# 
+# The results of i.pca for the examples using SPOT imagery in the wiki
+# [0] are now identical to R's princomp() results. If the new -n flag is
+# used, the results of i.pca are identical to princomp(center = TRUE,
+# scale = TRUE).
+
 # Usage:
 # - output is a GeoTIFF file with n bands
 # - minimum input is two rasters
