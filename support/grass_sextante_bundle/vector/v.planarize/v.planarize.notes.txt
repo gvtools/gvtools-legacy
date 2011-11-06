@@ -1,0 +1,23 @@
+By definition, all of a polygon's vertices must lie on the same
+plane (co-planarity). This is also true for 3D polygons.
+Currently, GRASS does not have a tool to enfore co-planarity
+for the vertices that make up a polygon. This means that invalid
+polygons that are not co-planar slip past the topology check and
+create problems later on (e.g. in 3D visualization).
+
+[v.clean should also have the ability to at least check for co-planarity]
+
+Enforcing co-planarity might also be an interesting option for
+line strings and even point sets in some applications.
+
+Once a polygon is co-planar, it is also straight-forward to assign
+it a proper 3D centroid, which can be advantageous for 3D labeling.
+
+This algorithm finds the plane equation for a set of vertices:
+
+http://tog.acm.org/resources/GraphicsGems/gemsiii/newell.c
+
+Once the plane equation is known, enforcing co-planarity is
+a simple matter of reprojecting all original vertices to
+the plane defined by the plane equation.
+
