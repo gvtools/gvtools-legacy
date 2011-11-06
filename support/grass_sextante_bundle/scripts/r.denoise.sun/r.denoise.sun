@@ -1,0 +1,7 @@
+Implement Sun's algorithm for noise reduction
+
+Articles on noise and denoising, including GPL'd software (r.denoise! --> needs renaming):
+
+http://www.cs.cf.ac.uk/meshfiltering/index_files/Page342.htm
+http://grass.osgeo.org/wiki/GRASS_AddOns#r.denoise
+
