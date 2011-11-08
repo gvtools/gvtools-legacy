@@ -45,6 +45,7 @@
 # [0] are now identical to R's princomp() results. If the new -n flag is
 # used, the results of i.pca are identical to princomp(center = TRUE,
 # scale = TRUE).
+# UPDATE (Nov. 8/2011): Fixes above are now in 'devbr6' (GRASS 6.5), r49129
 
 # Usage:
 # - output is a GeoTIFF file with n bands
