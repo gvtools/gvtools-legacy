@@ -1,0 +1,17 @@
+PLY is a simple format for point clouds and triangle
+meshes
+
+http://en.wikipedia.org/wiki/PLY_%28file_format%29
+
+There are already two shell scripts "v.in.ply" and
+"v.out.ply" in the GRASS Add-ons repository. They
+import/export basic ASCII pointclouds:
+
+http://trac.osgeo.org/grass/browser/grass-addons/vector
+
+However, the PLY format also has a binary version,
+and it supports triangles, normals and RGB as attributes.
+
+So to make full use of this format, a re-implementation
+using one of the open source PLY C libraries is required.
+
