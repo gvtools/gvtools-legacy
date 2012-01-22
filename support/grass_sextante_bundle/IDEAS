@@ -1,3 +1,11 @@
 A module for localized covariance/covariation within a neighborhood (extent r.neighbors)?
 
 
+Some Add-ons:
+- ANN classification framework
+- Elsa Map (DTM visualization)
+- Geoserver export for raster and vector layers
+http://www.wgug.org/index.php?option=com_content&view=article&id=56&Itemid=9
+
+
+

@@ -46,6 +46,12 @@
 # used, the results of i.pca are identical to princomp(center = TRUE,
 # scale = TRUE).
 # UPDATE (Nov. 8/2011): Fixes above are now in 'devbr6' (GRASS 6.5), r49129
+#
+# More information:
+# http://grass.osgeo.org/wiki/Principal_Components_Analysis
+# http://grass.fbk.eu/grass64/manuals/html64_user/r.covar.html
+# http://grass.fbk.eu/grass64/manuals/html64_user/i.pca.html
+
 
 # Usage:
 # - output is a GeoTIFF file with n bands
