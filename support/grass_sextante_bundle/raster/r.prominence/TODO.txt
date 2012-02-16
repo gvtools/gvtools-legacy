@@ -1,0 +1,16 @@
+- Change radius units
+	- expressing the radius in cells is not a good idea, because
+          the diagonal distance through a cell is larger then the
+          horiz or vert, so this introduces counter-intuitive
+          inaccuracies
+ 	- better let user specify radius in map units
+	- respect lat/lon regions
+
+- Speed-up
+	- pre-calculate a raster mask that indicate thos cells in
+	  the neighborhood which are within the radius
+          (same as r.fill.gaps)
+	- replace "if" logics in main loop with function pointers
+	  (same as r.fill.gaps)
+	- look for further optimization opportunities
+
