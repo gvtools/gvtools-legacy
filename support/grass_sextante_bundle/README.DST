@@ -1,0 +1,27 @@
+The package "DST_grass6.tar.bz2" contains modules for
+multi-criteria decisions support using Dempster-Shafer's
+Theory (of Evidence; DST).
+
+They will compile with GRASS 6.4.3. 
+However, they have not been updated for a long time and
+are flawed in several respects.
+
+Work needs to be done in the following areas:
+
+- rename m.* to g.*
+- update the knowledge base XML structure so that
+  external data sources (GeoTIFFs, XML files) can
+  be used directly
+- get rid of libXML2 and use a leaner XML C API (Expat)
+  for reading XML _only_. Once read into mem, the XML
+  document can be managed in a custom C record and
+  written without a fancy XML API
+- rewrite all m.* modules to use the new, more robust 
+  XML parsing functions as explained above
+- get rid of the double declaration for all evidence
+  maps (once via m.dst update and then again via
+  m.dst.source); allow user to attach evidence to
+  a particular hypothesis in one go
+- allow using vector map evidence
+- update documentation
+
