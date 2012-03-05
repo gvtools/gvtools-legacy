@@ -1,0 +1,42 @@
+The v.out.ogr code in the GRASS SVN (all versions)
+contains a call to the SQL SELECT in the mk_atts()
+function. This means that the SELECT statement will
+be issued once for each feature to export.
+
+This makes v.out.ogr, very, very, very slow.
+
+A quick fix is to move the SELECT statement
+into the main loop, as done here.
+
+However, there are potential problems with this:
+
+- "cat" is not the same as a feature ID in GRASS,
+since GRASS has 1:m object:table relationships.
+Comment by Markus M:
+"The feature order in the output file depends on the feature
+order of the GRASS input vector, and the feature order of the GRASS
+input vector has absolutely nothing to do with the category order.
+There was a good reason why I wrote "the cursor really needs to be
+opened for each cat separately".
+
+- this means that the patch could cause trouble
+with complex input maps, where "cat" is not
+continuous and always increasing; object:feature
+order may be destroyed!
+
+- also, it's not memory-safe to SELECT all
+features in a very large output map
+
+Suggested approach:
+
+- SELECT in chunks of 1000 objects (default;
+  user-definable)
+
+- test with complex vector maps: multi-table
+  maps, as well as those created by r.stream.extract
+
+--> if this works, then v.out.ogr.fast is good
+enough for the purposes of SEXTANTE/GRASS (but
+not for GRASS in general), which means that we
+must keep a fork of v.out.ogr!
+
