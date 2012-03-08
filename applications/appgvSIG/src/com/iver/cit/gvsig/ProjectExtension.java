@@ -70,8 +70,8 @@ import org.gvsig.gui.beans.swing.JFileChooser;
 import org.gvsig.tools.file.PathGenerator;
 
 import com.iver.andami.Launcher;
-import com.iver.andami.Launcher.TerminationProcess;
 import com.iver.andami.PluginServices;
+import com.iver.andami.Launcher.TerminationProcess;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.plugins.IExtension;
@@ -137,23 +137,7 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 	public static String PROJECTENCODING = "UTF-8";
 
 	/**
-	 * <p>Identifier of the extension point used by <code>ProjectExtension</code> to manage {@link LoadListener}s.</p>
-	 */
-	public static final String AFTER_LOADING_ID = "After_Loading_PrjExt";
-
-	/**
-	 * <p>
-	 * Identifier of the extension point used by <code>ProjectExtension</code>
-	 * to manage {@link NewProjectListener}s.
-	 * </p>
-	 */
-	public static final String NEW_PROJECT_ID = "New_Project_PrjExt";
-
-	/**
-	 * <p>
-	 * Identifier of the extension point used by <code>ProjectExtension</code>
-	 * to manage {@link BeforeSavingListener BeforeSavingListener}s.
-	 * </p>
+	 * <p>Identifier of the extension point used by <code>ProjectExtension</code> to manage {@link BeforeSavingListener BeforeSavingListener}s.</p>
 	 */
 	public static final String BEFORE_SAVING_ID = "Before_Saving_PrjExt";
 
@@ -378,7 +362,6 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 			getProjectFrame().setProject(p);
 			showProjectWindow();
 			PluginServices.getMainFrame().setTitle(PluginServices.getText(this, "sin_titulo"));
-			fireNewProjectEvent();
 		} else if (actionCommand.equals("ABRIR")) {
 			if (!askSave())
 				return;
@@ -693,7 +676,6 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				}else{
 					proj = Project.createFromXML03(new XMLEntity(tag));
 				}
-				fireAfterLoadingEvent(new LoadEvent(proj));
 				if (!VERSION.equals(Version.format())){
 					NotificationManager.showMessageInfo(PluginServices.getText(this, "this_project_is_a_previous_version"),null);
 				}
@@ -876,46 +858,6 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 		return false;
 	}
 
-	public void addNewProjectListener(NewProjectListener listener) {
-		if (listener == null) {
-			return;
-		}
-
-		ExtensionPoints ePs = ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance());
-
-		if (ePs.get(NEW_PROJECT_ID) == null) {
-			ArrayList aL = new ArrayList();
-			aL.add(listener);
-
-			ePs.add(NEW_PROJECT_ID, "", aL);
-			return;
-		}
-
-		((ArrayList) ((ExtensionPoint) ePs.get(NEW_PROJECT_ID)).get(""))
-				.add(listener);
-	}
-
-	public void addLoadListener(LoadListener listener) {
-		if (listener == null) {
-			return;
-		}
-
-		ExtensionPoints ePs = ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance());
-
-		if (ePs.get(AFTER_LOADING_ID) == null) {
-			ArrayList aL = new ArrayList();
-			aL.add(listener);
-
-			ePs.add(AFTER_LOADING_ID, "", aL);
-			return;
-		}
-
-		((ArrayList) ((ExtensionPoint) ePs.get(AFTER_LOADING_ID)).get(""))
-				.add(listener);
-	}
-
     /**
      * Adds the specified before saving listener to receive "before saving file events" from
      * this component.
@@ -1077,31 +1019,6 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
         	((ArrayList)eP.get("")).remove(l);
         }
     }
-
-	private void fireAfterLoadingEvent(LoadEvent e) {
-		ExtensionPoint eP = (ExtensionPoint) ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance()).get(AFTER_LOADING_ID);
-
-		if (eP != null) {
-			ArrayList listeners = ((ArrayList) eP.get(""));
-
-			for (int i = 0; i < listeners.size(); i++)
-				((LoadListener) listeners.get(i)).afterLoading(e);
-		}
-	}
-
-	private void fireNewProjectEvent() {
-		ExtensionPoint eP = (ExtensionPoint) ((ExtensionPoints) ExtensionPointsSingleton
-				.getInstance()).get(NEW_PROJECT_ID);
-
-		if (eP != null) {
-			ArrayList listeners = ((ArrayList) eP.get(""));
-
-			for (int i = 0; i < listeners.size(); i++)
-				((NewProjectListener) listeners.get(i))
-						.onCreate(new CreateEvent());
-		}
-	}
 
     /**
      * Reports a before saving file event.

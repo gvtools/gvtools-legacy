@@ -44,12 +44,12 @@ import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -79,6 +79,7 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.Version;
 import com.iver.cit.gvsig.fmap.MapContext;
+import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -170,8 +171,6 @@ public class Project implements Serializable, PropertyChangeListener {
 	// Lista de objetos del tipo camera. Necesarios para almacenar la posicion
 	// del usuario haciendo uso de los marcadores
 	private List cameras = new ArrayList();
-
-	private HashMap<String, XMLEntity> entities = new HashMap<String, XMLEntity>();
 
 	/**
 	 * this is a runtime-calculated value, do NOT persist it!
@@ -653,14 +652,6 @@ public class Project implements Serializable, PropertyChangeListener {
 		delDocument((ProjectDocument) list.get(i));
 	}
 
-	public void putUserXMLEntity(String key, XMLEntity entity) {
-		entities.put(key, entity);
-	}
-
-	public XMLEntity getUserXMLEntity(String key) {
-		return entities.get(key);
-	}
-
 	/**
 	 * DOCUMENT ME!
 	 *
@@ -682,15 +673,6 @@ public class Project implements Serializable, PropertyChangeListener {
 
 		for (int i = 0; i < numExtents; i++) {
 			xml.addChild(((ProjectExtent) extents.get(i)).getXMLEntity());
-		}
-
-		xml.putProperty("numUserEntities", entities.size());
-		Iterator<String> keys = entities.keySet().iterator();
-		while (keys.hasNext()) {
-			String key = keys.next();
-			XMLEntity entity = entities.get(key);
-			entity.putProperty("___key", key);
-			xml.addChild(entity);
 		}
 
 		// Guardando propiedades de las camaras
@@ -1169,17 +1151,6 @@ public class Project implements Serializable, PropertyChangeListener {
 
 			// Leemos el ultiom hijo recogido
 			childNumber = numExtents;
-
-			// user persistence
-			if (xml.contains("numUserEntities")) {
-				int numUserEntities = xml.getIntProperty("numUserEntities");
-				for (int i = childNumber; i < numUserEntities + childNumber; i++) {
-					XMLEntity entity = xml.getChild(i);
-					String key = entity.getStringProperty("___key");
-					p.entities.put(key, entity);
-				}
-				childNumber += numUserEntities;
-			}
 
 			// Recogiendo el numero de cameras
 			int numCameras = 0;
