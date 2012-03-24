@@ -1,0 +1,12 @@
+This is a module for redistribution vector points with
+aggregated coordinates. Sometimes, objects are represented
+as points with coordinates at the center of quadrants.
+This tools takes such points as input and assigns them
+random coordinates within the quadrant. This can be done
+by either providing a maximum X and Y distance from the
+origin or by supplying a vector polygons map that represents
+the original sampling units. In any case, the user needs
+to also specify an attribute table integer column that holds
+the original amount of individual items that have been
+aggregated at that each point position.
+
