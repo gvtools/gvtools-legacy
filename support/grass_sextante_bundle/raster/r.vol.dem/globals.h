@@ -1,3 +1,6 @@
+#ifndef GLOBAL_H
+#define GLOBAL_H
+
 #define PROGVERSION 0.55
 #define PROGNAME "r.vol.dem"
 
@@ -24,4 +27,6 @@ int VERBOSE;
 
 /* number of DEMs in the input */
 int NSLICES;
+
+#endif /* GLOBAL_H */
 
