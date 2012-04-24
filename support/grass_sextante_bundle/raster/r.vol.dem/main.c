@@ -85,6 +85,8 @@ in a second pass, to be optionally enabled by user:
   	
 */
 
+#define MAIN
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>

@@ -19,6 +19,7 @@
 
 #define TMPFILE "voxeltmp.tmp"
 
+#ifdef MAIN
 /* number of decimal places with which coordinates are stored */
 double PRECISION;
 
@@ -27,6 +28,14 @@ int VERBOSE;
 
 /* number of DEMs in the input */
 int NSLICES;
+
+#else
+
+extern double PRECISION;
+extern int VERBOSE;
+extern int NSLICES;
+
+#endif /* MAIN */
 
 #endif /* GLOBAL_H */
 
