@@ -267,16 +267,12 @@ Output is in GRASS ASCII file format.
 void	Dump ( FILE *tmpfile )
 {
    /* Pointers to vertices, edges, faces. */
-   tVertex  v;
-   tEdge    e;
    tFace    f;
    double dx,dy,dz;
-   long int a[3], b[3];  /* used to compute normal vector */
    /* Counters for Euler's formula. */
    long int 	V = 0, E = 0 , F = 0;
    /* Note: lowercase==pointer, uppercase==counter. */
    long int cat;
-
    f = faces;
    do {
       ++F;                              
@@ -509,9 +505,8 @@ void    SubVec( long int a[3], long int b[3], long int c[3])
 
 int    DoubleTriangle( void )
 {
-   tVertex  v0, v1, v2, v3, t;
+   tVertex  v0, v1, v2, v3;
    tFace    f0, f1 = NULL;
-   tEdge    e0, e1, e2, s;
    long int      vol;
 	
    /* Find 3 noncollinear points. */
@@ -576,7 +571,6 @@ vertices are those in the list marked as onhull.
 void	ConstructHull( void )
 {
    tVertex  v, vnext;
-   long int 	    vol;
    bool	    changed;	/* T if addition changes hull; not used. */
    int i;
    int numVertices;
@@ -718,7 +712,7 @@ int  Volumei( tFace f, tVertex p )
 {
    double  vol;
    long int     voli;
-   double  ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz;
+   double  ax, ay, az, bx, by, bz, cx, cy, cz;
 
    ax = f->vertex[0]->v[X] - p->v[X];
    ay = f->vertex[0]->v[Y] - p->v[Y];
@@ -1146,17 +1140,17 @@ void	Checks( void )
 
    Consistency();
    Convexity();
-   if ( v = vertices )
+   if ( (v = vertices) )
       do {
          if (v->mark) V++;
 	 v = v->next;
       } while ( v != vertices );
-   if ( e = edges )
+   if ( (e = edges) )
       do {
          E++;
 	 e = e->next;
       } while ( e != edges );
-   if ( f = faces )
+   if ( (f = faces) )
       do {
          F++;
 	 f  = f ->next;
