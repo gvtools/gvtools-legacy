@@ -38,8 +38,6 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.core.v02.FLabel;
-import com.iver.cit.gvsig.fmap.drivers.ConnectionFactory;
-import com.iver.cit.gvsig.fmap.drivers.DBException;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.DriverAttributes;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
@@ -72,8 +70,6 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.VectorialFileAdapter;
 import com.iver.cit.gvsig.project.documents.view.IProjectView;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
-import com.iver.cit.gvsig.vectorialdb.ConnectionSettings;
-import com.iver.cit.gvsig.vectorialdb.DlgConnection;
 import com.iver.utiles.PostProcessSupport;
 import com.iver.utiles.SimpleFileFilter;
 import com.iver.utiles.swing.threads.AbstractMonitorableTask;
@@ -320,22 +316,39 @@ public class ExportTo extends Extension {
 			FLayers layers = mapa.getLayers();
 			FLayer[] actives = layers.getActives();
 			try {
-				// NOTA: SI HAY UNA SELECCIÓN, SOLO SE SALVAN LOS SELECCIONADOS
+				// NOTE: IF THERE IS SOME SELECTION, ONLY SELECTED RECORDS ARE
+				// SAVED
 				for (int i = 0; i < actives.length; i++) {
 					if (actives[i] instanceof FLyrVect) {
+						// Get number of selected and total features
 						FLyrVect lv = (FLyrVect) actives[i];
-						int numSelec = lv.getRecordset().getSelection()
-						.cardinality();
-						if (numSelec > 0) {
-							int resp = JOptionPane.showConfirmDialog(
-									(Component) PluginServices.getMainFrame(),
-									PluginServices.getText(this,"se_van_a_guardar_") + numSelec
-									+ PluginServices.getText(this,"features_desea_continuar"),
-									PluginServices.getText(this,"export_to"), JOptionPane.YES_NO_OPTION);
-							if (resp != JOptionPane.YES_OPTION) {
-								continue;
-							}
-						} // if numSelec > 0
+						int numSelected = lv.getRecordset().getSelection()
+								.cardinality();
+						long total = lv.getRecordset().getRowCount();
+
+						// Create message
+						String layerName = PluginServices.getText(this,
+								"LayerName") + ": " + lv.getName() + "\n";
+						String numSavedFeatures = PluginServices.getText(this,
+								"se_van_a_guardar_");
+						numSavedFeatures += (numSelected > 0) ? numSelected
+								: total;
+						numSavedFeatures += "/" + total;
+						String message = layerName
+								+ numSavedFeatures
+								+ PluginServices.getText(this,
+										"features_desea_continuar");
+
+						// Show dialog
+						int resp = JOptionPane.showConfirmDialog(
+								(Component) PluginServices.getMainFrame(),
+								message,
+								PluginServices.getText(this, "export_to"),
+								JOptionPane.YES_NO_OPTION);
+						if (resp != JOptionPane.YES_OPTION) {
+							continue;
+						}
+
 						if (actionCommand.equals("SHP")) {
 							saveToShp(mapa, lv);
 						}
@@ -374,7 +387,7 @@ public class ExportTo extends Extension {
 				}
 			} while (tableNameNotFilled);
 
-			CharSequence seq = "\\/=.:,;¿?*{}´$%&()@#|!¬";
+			CharSequence seq = "\\/=.:,;ï¿½?*{}ï¿½$%&()@#|!ï¿½";
 			for (int i = 0; i < seq.length(); i++) {
 				char c = seq.charAt(i);
 				if(tableName != null && tableName.indexOf(c) != -1) {
@@ -408,11 +421,11 @@ public class ExportTo extends Extension {
 
 			DBLayerDefinition dbLayerDef = new DBLayerDefinition();
 			// Fjp:
-			// Cambio: En Postgis, el nombre de catálogo está siempre vacío. Es algo heredado de Oracle, que no se usa.
+			// Cambio: En Postgis, el nombre de catï¿½logo estï¿½ siempre vacï¿½o. Es algo heredado de Oracle, que no se usa.
 			// dbLayerDef.setCatalogName(cs.getDb());
 			dbLayerDef.setCatalogName("");
 
-			// Añadimos el schema dentro del layer definition para poder tenerlo en cuenta.
+			// Aï¿½adimos el schema dentro del layer definition para poder tenerlo en cuenta.
 			dbLayerDef.setSchema(cwp.getSchema());
 
 			dbLayerDef.setTableName(tableName);
@@ -422,8 +435,8 @@ public class ExportTo extends Extension {
 
 			FieldDescription[] fieldsDescrip = sds.getFieldsDescription();
 			dbLayerDef.setFieldsDesc(fieldsDescrip);
-			// Creamos el driver. OJO: Hay que añadir el campo ID a la
-			// definición de campos.
+			// Creamos el driver. OJO: Hay que aï¿½adir el campo ID a la
+			// definiciï¿½n de campos.
 
 			if (originalDef != null){
 				dbLayerDef.setFieldID(originalDef.getFieldID());
@@ -510,7 +523,7 @@ public class ExportTo extends Extension {
 
 	/**
 	 * Lanza un thread en background que escribe las features. Cuando termina, pregunta al usuario si quiere
-	 * añadir la nueva capa a la vista. Para eso necesita un driver de lectura ya configurado.
+	 * aï¿½adir la nueva capa a la vista. Para eso necesita un driver de lectura ya configurado.
 	 * @param mapContext
 	 * @param layer
 	 * @param writer
@@ -638,7 +651,7 @@ public class ExportTo extends Extension {
 				writer.initialize(lyrDef);
 				writer.setProjection(layer.getProjection());
 				DxfFieldsMapping fieldsMapping = new DxfFieldsMapping();
-				// TODO: Recuperar aquí los campos del cuadro de diálogo.
+				// TODO: Recuperar aquï¿½ los campos del cuadro de diï¿½logo.
 				writer.setFieldMapping(fieldsMapping);
 				DXFMemoryDriver dxfDriver=new DXFMemoryDriver();
 				dxfDriver.open(newFile);
@@ -728,7 +741,7 @@ public class ExportTo extends Extension {
 
 					ShpWriter writer3 = (ShpWriter) LayerFactory.getWM().getWriter(
 					"Shape Writer");
-					// Polígonos
+					// Polï¿½gonos
 					String auxPolygon = path.replaceFirst("\\.shp", "_polygons.shp");
 					SHPLayerDefinition lyrDefPolygon = new SHPLayerDefinition();
 					lyrDefPolygon.setFieldsDesc(fieldsDescrip);
