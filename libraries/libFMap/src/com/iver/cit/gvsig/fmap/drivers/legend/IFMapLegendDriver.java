@@ -24,5 +24,6 @@ public interface IFMapLegendDriver {
 	
 	void write(FLayers layers, FLayer layer, ILegend legend, File file, String version) throws LegendDriverException;
 	
-	Hashtable<FLayer, ILegend> read(FLayers layers, FLayer layer, File file) throws LegendDriverException;
+	Hashtable<FLayer, ? extends ILegend> read(FLayers layers, FLayer layer,
+			File file) throws LegendDriverException;
 }

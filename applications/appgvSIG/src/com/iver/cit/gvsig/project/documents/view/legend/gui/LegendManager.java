@@ -1,7 +1,7 @@
 /*
  * Created on 08-feb-2005
  *
- * gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+ * gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -23,7 +23,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -76,8 +76,6 @@ import org.gvsig.gui.beans.swing.JButton;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
-import com.iver.cit.gvsig.fmap.core.FShape;
-import com.iver.cit.gvsig.fmap.core.FShapeM;
 import com.iver.cit.gvsig.fmap.drivers.gvl.FMapGVLDriver;
 import com.iver.cit.gvsig.fmap.drivers.legend.IFMapLegendDriver;
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
@@ -121,7 +119,7 @@ public class LegendManager extends AbstractThemeManagerPage {
 	private boolean isTreeListenerDisabled;
 	private JButton btnSaveLegend;
 	private JButton btnLoadLegend;
-	private Hashtable<FLayer, ILegend> table = null;
+	private Hashtable<FLayer, ? extends ILegend> table = null;
 	private boolean empty = true;
 	private JLabel iconLabel;
 
@@ -778,7 +776,8 @@ public class LegendManager extends AbstractThemeManagerPage {
 		}
 	}
 
-	private void applyRestOfLegends(Hashtable<FLayer, ILegend> table2,FLayers layers) {
+	private void applyRestOfLegends(
+			Hashtable<FLayer, ? extends ILegend> table2, FLayers layers) {
 
 		for(int i = 0; i < layers.getLayersCount(); i++) {
 			FLayer my_layer= layers.getLayer(i);

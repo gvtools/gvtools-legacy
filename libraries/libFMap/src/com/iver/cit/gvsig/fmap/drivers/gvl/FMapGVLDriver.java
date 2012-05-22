@@ -12,7 +12,6 @@ import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.ValidationException;
 
-
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.drivers.legend.IFMapLegendDriver;
@@ -40,7 +39,7 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 		String fName = f.getAbsolutePath();
 		if (fName!=null) {
 			fName = fName.toLowerCase();
-			return fName.endsWith(".gvl");
+			return fName.endsWith("." + FILE_EXTENSION);
 		}
 		return false;
 	}
@@ -54,9 +53,10 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 		return FILE_EXTENSION;
 	}
 
-	public Hashtable read(FLayers layers,FLayer layer, File file) throws LegendDriverException {
+	public Hashtable<FLayer, IVectorLegend> read(FLayers layers,
+			FLayer layer, File file) throws LegendDriverException {
 
-		Hashtable table = new Hashtable();
+		Hashtable<FLayer, IVectorLegend> table = new Hashtable<FLayer, IVectorLegend>();
 		File xmlFile = new File(file.getAbsolutePath());
 		FileReader reader = null;
 
@@ -64,7 +64,8 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 			reader = new FileReader(xmlFile);
 
 			XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
-			ILegend myLegend = LegendFactory.createFromXML(new XMLEntity(tag));
+			IVectorLegend myLegend = LegendFactory.createFromXML(new XMLEntity(
+					tag));
 
 			if(myLegend != null ) {
 				//CAPA DE LINEAS
