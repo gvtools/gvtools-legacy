@@ -387,7 +387,7 @@ public class ExportTo extends Extension {
 				}
 			} while (tableNameNotFilled);
 
-			CharSequence seq = "\\/=.:,;ï¿½?*{}ï¿½$%&()@#|!ï¿½";
+			CharSequence seq = "\\/=.:,;¿?*{}´$%&()@#|!¬";
 			for (int i = 0; i < seq.length(); i++) {
 				char c = seq.charAt(i);
 				if(tableName != null && tableName.indexOf(c) != -1) {
@@ -421,11 +421,11 @@ public class ExportTo extends Extension {
 
 			DBLayerDefinition dbLayerDef = new DBLayerDefinition();
 			// Fjp:
-			// Cambio: En Postgis, el nombre de catï¿½logo estï¿½ siempre vacï¿½o. Es algo heredado de Oracle, que no se usa.
+			// Cambio: En Postgis, el nombre de catálogo está siempre vacío. Es algo heredado de Oracle, que no se usa.
 			// dbLayerDef.setCatalogName(cs.getDb());
 			dbLayerDef.setCatalogName("");
 
-			// Aï¿½adimos el schema dentro del layer definition para poder tenerlo en cuenta.
+			// Añadimos el schema dentro del layer definition para poder tenerlo en cuenta.
 			dbLayerDef.setSchema(cwp.getSchema());
 
 			dbLayerDef.setTableName(tableName);
@@ -435,8 +435,8 @@ public class ExportTo extends Extension {
 
 			FieldDescription[] fieldsDescrip = sds.getFieldsDescription();
 			dbLayerDef.setFieldsDesc(fieldsDescrip);
-			// Creamos el driver. OJO: Hay que aï¿½adir el campo ID a la
-			// definiciï¿½n de campos.
+			// Creamos el driver. OJO: Hay que añadir el campo ID a la
+			// definición de campos.
 
 			if (originalDef != null){
 				dbLayerDef.setFieldID(originalDef.getFieldID());
@@ -523,7 +523,7 @@ public class ExportTo extends Extension {
 
 	/**
 	 * Lanza un thread en background que escribe las features. Cuando termina, pregunta al usuario si quiere
-	 * aï¿½adir la nueva capa a la vista. Para eso necesita un driver de lectura ya configurado.
+	 * añadir la nueva capa a la vista. Para eso necesita un driver de lectura ya configurado.
 	 * @param mapContext
 	 * @param layer
 	 * @param writer
@@ -651,7 +651,7 @@ public class ExportTo extends Extension {
 				writer.initialize(lyrDef);
 				writer.setProjection(layer.getProjection());
 				DxfFieldsMapping fieldsMapping = new DxfFieldsMapping();
-				// TODO: Recuperar aquï¿½ los campos del cuadro de diï¿½logo.
+				// TODO: Recuperar aquí los campos del cuadro de diálogo.
 				writer.setFieldMapping(fieldsMapping);
 				DXFMemoryDriver dxfDriver=new DXFMemoryDriver();
 				dxfDriver.open(newFile);
@@ -741,7 +741,7 @@ public class ExportTo extends Extension {
 
 					ShpWriter writer3 = (ShpWriter) LayerFactory.getWM().getWriter(
 					"Shape Writer");
-					// Polï¿½gonos
+					// Polígonos
 					String auxPolygon = path.replaceFirst("\\.shp", "_polygons.shp");
 					SHPLayerDefinition lyrDefPolygon = new SHPLayerDefinition();
 					lyrDefPolygon.setFieldsDesc(fieldsDescrip);
