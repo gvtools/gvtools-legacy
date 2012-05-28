@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# v.points.connect
+
+# Use v.edit to build polygons or lines from all points that share a common ID field value.
+# Process the result to build topologically correct polygons with islands and shared boundaries.
+
+
