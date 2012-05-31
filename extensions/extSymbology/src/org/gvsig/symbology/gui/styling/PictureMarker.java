@@ -68,7 +68,6 @@ import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SymbolDrawingException;
 import com.iver.cit.gvsig.gui.styling.AbstractTypeSymbolEditor;
 import com.iver.cit.gvsig.gui.styling.EditorTool;
-import com.iver.cit.gvsig.gui.styling.Mask;
 import com.iver.cit.gvsig.gui.styling.SymbolEditor;
 
 /**
@@ -136,7 +135,7 @@ ActionListener {
 					return PluginServices.getText(this, "bitmap_and_svg_image_files");
 				}
 			};
-			JUrlFileChooser jfc = new JUrlFileChooser(getName(), null);
+			JUrlFileChooser jfc = new JUrlFileChooser(getName());
 			jfc.setFileFilter(ff);
 			jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			jfc.setSelectedFile(picFile);
@@ -144,9 +143,9 @@ ActionListener {
 			int returnVal = jfc.showOpenDialog(PictureMarker.this.owner);
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
 
-				URL url = jfc.getSelectedURL();
+				String url = jfc.getSelectedURLPath();
 				if (url == null) return;
-				targetLbl.setText(url.toString());
+				targetLbl.setText(url);
 				fireSymbolChangedEvent();
 			}
 //			if(returnVal == JFileChooser.APPROVE_OPTION) {

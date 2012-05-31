@@ -59,7 +59,6 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import org.apache.log4j.Logger;
 import org.gvsig.symbology.fmap.styles.BackgroundFileStyle;
 import org.gvsig.symbology.fmap.styles.SimpleMarkerFillPropertiesStyle;
-import org.gvsig.tools.file.PathGenerator;
 
 import com.iver.cit.gvsig.fmap.Messages;
 import com.iver.cit.gvsig.fmap.ViewPort;
@@ -93,7 +92,6 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 	private BackgroundFileStyle bgImage;
 	private BackgroundFileStyle bgSelImage;
 	private PrintRequestAttributeSet properties;
-	private PathGenerator pathGenerator=PathGenerator.getInstance();
 
 	public void draw(Graphics2D g, AffineTransform affineTransform, FShape shp, Cancellable cancel) {
  		Color fillColor = getFillColor();
@@ -240,8 +238,10 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 		xml.putProperty("angle", angle);
 		xml.putProperty("scaleX", xScale);
 		xml.putProperty("scaleY", yScale);
-		xml.putProperty("imagePath", pathGenerator.getURLPath(imagePath));
-		xml.putProperty("selImagePath", pathGenerator.getURLPath(selImagePath));
+		xml.putProperty("imagePath",
+				PicturePathGeneratorUtils.getURLPath(imagePath));
+		xml.putProperty("selImagePath",
+				PicturePathGeneratorUtils.getURLPath(selImagePath));
 		if (getFillColor()!=null)
 			xml.putProperty("fillColor", StringUtilities.color2String(getFillColor()));
 
@@ -260,8 +260,10 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 
 	public void setXMLEntity(XMLEntity xml) {
 
-		imagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("imagePath"));
-		selImagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("selImagePath"));
+		imagePath = PicturePathGeneratorUtils.getAbsoluteURLPath(xml
+				.getStringProperty("imagePath"));
+		selImagePath = PicturePathGeneratorUtils.getAbsoluteURLPath(xml
+				.getStringProperty("selImagePath"));
 		setDescription(xml.getStringProperty("desc"));
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
 		setAngle(xml.getDoubleProperty("angle"));
@@ -280,7 +282,9 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 				setImage(new URL(imagePath));
 			} catch (MalformedURLException e) {
 				try{
-					setImage(new URL(pathGenerator.getAbsoluteURLPath(imagePath)));
+					setImage(new URL(
+							PicturePathGeneratorUtils
+									.getAbsoluteURLPath(imagePath)));
 				} catch (MalformedURLException e1) {
 					setImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +imagePath));
 				}
@@ -289,7 +293,9 @@ public class PictureFillSymbol extends AbstractFillSymbol {
 				setSelImage(new URL(selImagePath));
 			} catch (MalformedURLException e) {
 				try{
-					setSelImage(new URL(pathGenerator.getAbsoluteURLPath(selImagePath)));
+					setSelImage(new URL(
+							PicturePathGeneratorUtils
+									.getAbsoluteURLPath(selImagePath)));
 				} catch (MalformedURLException e1) {
 					setSelImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +selImagePath));
 				}

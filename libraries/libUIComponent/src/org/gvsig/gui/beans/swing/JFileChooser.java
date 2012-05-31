@@ -78,25 +78,7 @@ public class JFileChooser extends javax.swing.JFileChooser {
 	 *        means the user's home directory. 
 	 */
 	public JFileChooser(String fileChooserID, File defaultDirectory) {
-		super();
-		setDragEnabled(true);
-		if (fileChooserID == null) 
-			throw new IllegalArgumentException("JFileChooser's ID cannot be null");
-		
-		this.fileChooserID = fileChooserID;
-
-		setCurrentDirectory(getLastPath(fileChooserID, defaultDirectory));
-
-//		if (defaultDirectory == null)
-//			defaultDirectory = new File(System.getProperty("user.home"));
-//		File currentDirectory;
-//		if (jfcLastPaths.get(fileChooserID) != null)
-//			currentDirectory = new File(jfcLastPaths.get(fileChooserID));
-//		else
-//			currentDirectory = defaultDirectory;
-//		setCurrentDirectory(currentDirectory);
-//		if (defaultDirectory != null)
-//			jfcLastPaths.put(fileChooserID, currentDirectory.getAbsolutePath());
+		this(fileChooserID, defaultDirectory, null);
 	}
 
 	/**
@@ -107,6 +89,12 @@ public class JFileChooser extends javax.swing.JFileChooser {
 	 * @return
 	 */
 	static public File getLastPath(String fileChooserID, File defaultDirectory) {
+		return getLastPath(fileChooserID, defaultDirectory,
+				FileSystemView.getFileSystemView());
+	}
+
+	private static File getLastPath(String fileChooserID,
+			File defaultDirectory, FileSystemView fsv) {
 		File path = jfcLastPaths.get(fileChooserID);
 
 		if (path != null)
@@ -115,7 +103,11 @@ public class JFileChooser extends javax.swing.JFileChooser {
 		if (defaultDirectory != null)
 			return defaultDirectory;
 
-		return FileSystemView.getFileSystemView().getHomeDirectory();
+		if (fsv != null) {
+			return fsv.getDefaultDirectory();
+		} else {
+			return FileSystemView.getFileSystemView().getDefaultDirectory();
+		}
 	}
 
 	/**
@@ -125,7 +117,7 @@ public class JFileChooser extends javax.swing.JFileChooser {
 	 * @return
 	 */
 	public File getLastPath(File defaultDirectory) {
-		return getLastPath(fileChooserID, defaultDirectory);
+		return getLastPath(fileChooserID, defaultDirectory, getFileSystemView());
 	}
 
 	/**
@@ -133,7 +125,7 @@ public class JFileChooser extends javax.swing.JFileChooser {
 	 * @return
 	 */
 	public File getLastPath() {
-		return getLastPath(fileChooserID, null);
+		return getLastPath(fileChooserID, null, getFileSystemView());
 	}
 
 	/**
@@ -177,8 +169,15 @@ public class JFileChooser extends javax.swing.JFileChooser {
      * and <code>FileSystemView</code>.
      */
     public JFileChooser(String fileChooserID, File defaultDirectory, FileSystemView fsv) {
-    	this(fileChooserID, defaultDirectory);
-		setup(fsv);
+		super(fsv);
+		setDragEnabled(true);
+		if (fileChooserID == null)
+			throw new IllegalArgumentException(
+					"JFileChooser's ID cannot be null");
+
+		this.fileChooserID = fileChooserID;
+
+		setCurrentDirectory(getLastPath(fileChooserID, defaultDirectory, fsv));
     }
 
     /**
@@ -186,8 +185,9 @@ public class JFileChooser extends javax.swing.JFileChooser {
      * path and <code>FileSystemView</code>.
      */
     public JFileChooser(String fileChooserID, String defaultDirectoryPath, FileSystemView fsv) {
-	this(fileChooserID, new File(defaultDirectoryPath), fsv);
-		}
+		this(fileChooserID, defaultDirectoryPath == null ? null : new File(
+				defaultDirectoryPath), fsv);
+	}
 
 	@Override
 	public int showDialog(Component parent, String approveButtonText) throws HeadlessException {

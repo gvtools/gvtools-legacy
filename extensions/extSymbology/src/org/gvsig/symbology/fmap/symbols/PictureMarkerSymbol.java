@@ -118,7 +118,6 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.gvsig.symbology.fmap.styles.BackgroundFileStyle;
-import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.Messages;
@@ -148,7 +147,6 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 
 	private BackgroundFileStyle bgImage;
 	private BackgroundFileStyle bgSelImage;
-	private PathGenerator pathGenerator=PathGenerator.getInstance();
 
 	/**
 	 * Constructor method
@@ -239,8 +237,10 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 		xml.putProperty("className", getClassName());
 		xml.putProperty("isShapeVisible", isShapeVisible());
 		xml.putProperty("desc", getDescription());
-		xml.putProperty("imagePath", pathGenerator.getURLPath(imagePath));
-		xml.putProperty("selImagePath", pathGenerator.getURLPath(selImagePath));
+		xml.putProperty("imagePath",
+				PicturePathGeneratorUtils.getURLPath(imagePath));
+		xml.putProperty("selImagePath",
+				PicturePathGeneratorUtils.getURLPath(selImagePath));
 		xml.putProperty("size", getSize());
 		xml.putProperty("offsetX", getOffset().getX());
 		xml.putProperty("offsetY", getOffset().getY());
@@ -262,8 +262,10 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 	public void setXMLEntity(XMLEntity xml) {
 		setDescription(xml.getStringProperty("desc"));
 		setIsShapeVisible(xml.getBooleanProperty("isShapeVisible"));
-		imagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("imagePath"));
-		selImagePath = pathGenerator.getAbsoluteURLPath(xml.getStringProperty("selImagePath"));
+		imagePath = PicturePathGeneratorUtils.getAbsoluteURLPath(xml
+				.getStringProperty("imagePath"));
+		selImagePath = PicturePathGeneratorUtils.getAbsoluteURLPath(xml
+				.getStringProperty("selImagePath"));
 		setSize(xml.getDoubleProperty("size"));
 		double offsetX = 0.0;
 		double offsetY = 0.0;
@@ -284,7 +286,9 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 				setImage(new URL(imagePath));
 			} catch (MalformedURLException e) {
 				try{
-					setImage(new URL(pathGenerator.getAbsoluteURLPath(imagePath)));
+					setImage(new URL(
+							PicturePathGeneratorUtils
+									.getAbsoluteURLPath(imagePath)));
 				} catch (MalformedURLException e1) {
 					setImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +imagePath));
 				}
@@ -299,7 +303,9 @@ public class PictureMarkerSymbol extends AbstractMarkerSymbol {
 				setSelImage(new URL(selImagePath));
 			} catch (MalformedURLException e) {
 				try{
-					setSelImage(new URL(pathGenerator.getAbsoluteURLPath(selImagePath)));
+					setSelImage(new URL(
+							PicturePathGeneratorUtils
+									.getAbsoluteURLPath(selImagePath)));
 				} catch (MalformedURLException e1) {
 					setSelImage(new URL("file://"+ rootDir.getAbsolutePath() + File.separator +selImagePath));
 				}

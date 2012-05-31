@@ -45,17 +45,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileSystemView;
 
 import org.gvsig.gui.beans.swing.JFileChooser;
 
 import com.iver.andami.PluginServices;
+import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 
 public class JUrlFileChooser extends JFileChooser {
 
 	private static final long serialVersionUID = 1844355534608274984L;
 
-	public JUrlFileChooser(String fileChooserID, String defaultDirectory) {
-		super(fileChooserID, defaultDirectory);
+	public JUrlFileChooser(String fileChooserID) {
+		super(fileChooserID, new SymbolFileSystemView());
 		this.setFileFilter(ff);
 		this.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		this.setMultiSelectionEnabled(false);
@@ -83,38 +85,40 @@ public class JUrlFileChooser extends JFileChooser {
 		}
 	};
 
-	public URL getSelectedURL() {
-		String path;
-		File f = getSelectedFile();  
-
+	public String getSelectedURLPath() {
 		try {
-			if(f.canRead()) {
-				return f.toURL();
-			}
-			else {
-				path = f.toString();
-
-				if (!path.startsWith("http"))
-					if(path.contains("http") && 
-							(path.endsWith(".png")
-									|| path.endsWith(".gif")
-									|| path.endsWith(".jpg")
-									|| path.endsWith(".jpeg")
-									|| path.endsWith(".bmp")
-									|| path.endsWith(".svg"))) {
-
-						path = path.substring(path.indexOf("http"), path.length());
-						path = path.replace('\\', '/');
-						path = path.replaceFirst("/", "//");
-
-						return new URL(path);
-					}
-			}
+			return new URL("file", null, getSelectedFile().getAbsolutePath())
+					.toExternalForm();
 		} catch (MalformedURLException e) {
 			return null;
 		}
-		return null;
 	}
 
+	private static class SymbolFileSystemView extends FileSystemView {
+		private File root = new File(SymbologyFactory.SymbolLibraryPath);
+		private File[] roots = new File[] { root };
 
+		@Override
+		public File createNewFolder(File containingDir) {
+			File folder = new File(containingDir, "New Folder");
+			folder.mkdir();
+			return folder;
+		}
+
+		@Override
+		public File getDefaultDirectory() {
+			return root;
+		}
+
+		@Override
+		public File getHomeDirectory() {
+			return root;
+		}
+
+
+		@Override
+		public File[] getRoots() {
+			return roots;
+		}
+	}
 }

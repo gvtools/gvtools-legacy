@@ -41,8 +41,6 @@
 package org.gvsig.symbology.gui.styling;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -66,7 +64,6 @@ import org.gvsig.gui.beans.swing.JIncrementalNumberField;
 import org.gvsig.symbology.fmap.symbols.PictureFillSymbol;
 
 import com.iver.andami.PluginServices;
-import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.ILineSymbol;
@@ -153,7 +150,7 @@ ActionListener {
 					return PluginServices.getText(this, "bitmap_and_svg_image_files");
 				}
 			};
-			JUrlFileChooser jfc = new JUrlFileChooser(getName(), null);
+			JUrlFileChooser jfc = new JUrlFileChooser(getName());
 			jfc.setFileFilter(ff);
 			jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			jfc.setSelectedFile(picFile);
@@ -179,9 +176,9 @@ ActionListener {
 //			}
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
 
-				URL url = jfc.getSelectedURL();
+				String url = jfc.getSelectedURLPath();
 				if (url == null) return;
-				targetLbl.setText(url.toString());
+				targetLbl.setText(url);
 				fireSymbolChangedEvent();
 			}
 			boolean enabled = (lblFileName.getText()!="");
@@ -393,9 +390,6 @@ ActionListener {
 
 	public void refreshControls(ISymbol layer) {
 		PictureFillSymbol sym = (PictureFillSymbol) layer;
-
-		File imageFile = new File(sym.getImagePath());
-		File selImageFile =  new File (sym.getSelImagePath());
 
 //		boolean enabled = imageFile.exists();
 //		setControlsEnabled(enabled);
