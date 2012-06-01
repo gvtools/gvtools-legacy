@@ -230,7 +230,7 @@ ContainerListener, ActionListener, MainFrame {
 	 * @see java.awt.Frame.setTitle(String title)
 	 */
 	public void setTitle(String title) {
-		super.setTitle(titlePrefix + ":" + title);
+		super.setTitle(title + " - " + titlePrefix);
 	}
 
 	/**

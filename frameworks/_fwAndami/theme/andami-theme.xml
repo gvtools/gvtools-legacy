@@ -7,5 +7,5 @@
 		<WallpaperType value="EXPAND"/>
 		<Icon path="theme/icon.png"/>
 	</ApplicationImages>
-	<ApplicationName value="gvSIG Community Edition"/>
+	<ApplicationName value="gvSIG CE"/>
 </AndamiProperties>
