@@ -40,6 +40,7 @@
  */
 package com.iver.cit.gvsig.fmap.layers;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -74,7 +75,6 @@ import com.iver.cit.gvsig.fmap.ProgressListener;
 import com.iver.cit.gvsig.fmap.drivers.ConnectionFactory;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
-import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialJDBCDriver;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
@@ -138,7 +138,13 @@ public class LayerFactory {
 	 * @throws DriverException @throws DriverIOException
 	 */
 	public static FLayer createLayer(String layerName, String driverName,
-			File f, IProjection proj) throws LoadLayerException  {
+			File f, IProjection proj) throws LoadLayerException {
+		return createLayer(layerName, driverName, f, proj, null);
+	}
+
+	public static FLayer createLayer(String layerName, String driverName,
+			File f, IProjection proj, Color background)
+			throws LoadLayerException {
 		// Se obtiene el driver que lee
 		DriverManager dm = getDM();
 
@@ -146,7 +152,8 @@ public class LayerFactory {
 			Driver d = dm.getDriver(driverName);
 
 			if (d instanceof VectorialFileDriver) {
-				return createLayer(layerName, (VectorialFileDriver) d, f, proj);
+				return createLayer(layerName, (VectorialFileDriver) d, f, proj,
+						background);
 			}
 		} catch (DriverLoadException e) {
 			//hay un poco de lio sobre que excepciones se dejan subir
@@ -185,9 +192,12 @@ public class LayerFactory {
 	 * @throws DriverException
 	 */
 	public static FLayer createLayer(String layerName, VectorialFileDriver d,
-			File f, IProjection proj)
+			File f, IProjection proj) {
+		return createLayer(layerName, d, f, proj, null);
+	}
 
-	/*throws DriverException*/ {
+	public static FLayer createLayer(String layerName, VectorialFileDriver d,
+			File f, IProjection proj, Color background) {
 		
 		FLyrVect layer = null;
 		try {
@@ -234,8 +244,8 @@ public class LayerFactory {
 					adapter.stop();
 
 			} else {
-				IVectorLegend leg = LegendFactory.createSingleSymbolLegend(layer
-						.getShapeType());
+				IVectorLegend leg = LegendFactory.createSingleSymbolLegend(
+						layer.getShapeType(), background);
 				layer.setLegend(leg);
 
 			}
@@ -425,6 +435,11 @@ public class LayerFactory {
 
 	public static FLayer createDBLayer(IVectorialDatabaseDriver driver,
 			String layerName, IProjection proj) {
+		return createDBLayer(driver, layerName, proj, null);
+	}
+
+	public static FLayer createDBLayer(IVectorialDatabaseDriver driver,
+			String layerName, IProjection proj, Color background) {
 
 		FLyrVect layer = null;
 		try {
@@ -458,8 +473,8 @@ public class LayerFactory {
 
 				dbAdapter.stop();
 			} else {
-				layer.setLegend(LegendFactory.createSingleSymbolLegend(layer
-						.getShapeType()));
+				layer.setLegend(LegendFactory.createSingleSymbolLegend(
+						layer.getShapeType(), background));
 			}
 			if (driver instanceof IDelayedDriver){
 				// Por defecto, los drivers están listos para entregar
@@ -516,10 +531,10 @@ public class LayerFactory {
 	 * @throws
 	 */
 	public static FLayer createDisconnectedDBLayer(IVectorialJDBCDriver driver,
-			String layerName, IProjection proj, ProgressListener listener)
-			throws DBException,
-			DriverLoadException, NoSuchTableException,
-			ClassNotFoundException, ReadDriverException, IOException, WriteDriverException {
+			String layerName, IProjection proj, Color background,
+			ProgressListener listener) throws DBException, DriverLoadException,
+			NoSuchTableException, ClassNotFoundException, ReadDriverException,
+			IOException, WriteDriverException {
 		VectorialDisconnectedDBAdapter dbAdapter = new VectorialDisconnectedDBAdapter();
 		dbAdapter.setDriver(driver);
 		dbAdapter.setProjection(proj);
@@ -604,7 +619,7 @@ public class LayerFactory {
 		cacheDriver.setData(ConnectionFactory.createConnection(
 				"jdbc:hsqldb:file:" + database, "sa", ""), lyrDef);
 		cacheDriver.setWorkingArea(driver.getWorkingArea());
-		return createDBLayer(cacheDriver, layerName, proj);
+		return createDBLayer(cacheDriver, layerName, proj, background);
 	}
 
 	/**

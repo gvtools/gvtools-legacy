@@ -729,7 +729,8 @@ public class WFSWizard extends WizardPanel {
 		URL host = getHost();
 		String onlineResource = dataSource.getOnlineResource();
 		FMapWFSDriver driver = dataSource.getDriver();
-		return new FLyrWFSFactory().getFLyrWFS(layer,host,onlineResource,driver,true,true);
+		return new FLyrWFSFactory().getFLyrWFS(layer, host, onlineResource,
+				driver, true, true, getMapCtrl().getViewPort().getBackColor());
 	}
 
 	/**

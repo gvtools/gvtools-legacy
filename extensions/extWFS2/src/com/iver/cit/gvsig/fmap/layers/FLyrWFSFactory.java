@@ -1,5 +1,6 @@
 package com.iver.cit.gvsig.fmap.layers;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.net.URL;
 
@@ -12,6 +13,7 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 import com.iver.cit.gvsig.fmap.drivers.wfs.FMapWFSDriver;
+import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
@@ -98,12 +100,9 @@ public class FLyrWFSFactory {
 	 * If is the first time that the layer is loaded
 	 * @return
 	 */
-	public FLyrWFS getFLyrWFS(FLayer layer, 
-			URL host,
-			String onlineResource,
-			FMapWFSDriver driver,
-			boolean loadLayer,
-			boolean firstLoad){
+	public FLyrWFS getFLyrWFS(FLayer layer, URL host, String onlineResource,
+			FMapWFSDriver driver, boolean loadLayer, boolean firstLoad,
+			Color background) {
 		FLyrWFS wfsLayer = (FLyrWFS)layer;
 		wfsLayer.setHost(host);
 		wfsLayer.setWfsDriver(driver);
@@ -124,6 +123,8 @@ public class FLyrWFSFactory {
 							PluginServices.getText(this,"wfs_srs_unknown"));	
 				}
 				wfsLayer.load();
+				wfsLayer.setLegend(LegendFactory.createSingleSymbolLegend(
+						wfsLayer.getShapeType(), background));
 				if (wfsLayer.getNumfeatures() == wfsLayer.getWfsDriver().getRowCount()) {
 					JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
 							PluginServices.getText(this,"maxFeatures_aviso"));	

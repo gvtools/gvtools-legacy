@@ -127,8 +127,14 @@ public class WFSPropertiesDialogListener implements ActionListener {
 			URL host = new URL(dialog.getWizardData().getHost());
 			String onlineResource = dialog.getWizardData().getOnlineResource();
 
+			BaseView activeView = (BaseView) PluginServices.getMDIManager()
+					.getActiveWindow();
+			MapControl mapCtrl = activeView.getMapControl();
+
 			// Tries to get the new layer
-			newLayer = new FLyrWFSFactory().getFLyrWFS(newLayer, host, onlineResource, driver, true, false);
+			newLayer = new FLyrWFSFactory().getFLyrWFS(newLayer, host,
+					onlineResource, driver, true, false, mapCtrl.getViewPort()
+							.getBackColor());
 
 	    	// If can load the layer, update all data
 			if (newLayer != null) {
@@ -139,8 +145,6 @@ public class WFSPropertiesDialogListener implements ActionListener {
 				dialog.updateReference(newLayer);
 				
 				// Replace the old layer entry at the TOC with the new one
-				BaseView activeView = (BaseView) PluginServices.getMDIManager().getActiveWindow();
-				MapControl mapCtrl = activeView.getMapControl();
 				mapCtrl.getMapContext().getLayers().replaceLayer(oldLayerName, newLayer);
 				//mapCtrl.getMapContext().zoomToExtent(newLayer.getFullExtent());
 

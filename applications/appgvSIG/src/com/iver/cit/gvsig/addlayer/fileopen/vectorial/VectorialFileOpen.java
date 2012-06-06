@@ -137,7 +137,9 @@ public class VectorialFileOpen extends AbstractFileOpen{
 		try {
 
 			if (driver instanceof VectorialFileDriver) {
-				lyr = LayerFactory.createLayer(layerName, (VectorialFileDriver) driver, file, proj);
+				lyr = LayerFactory.createLayer(layerName,
+						(VectorialFileDriver) driver, file, proj, mapControl
+								.getViewPort().getBackColor());
 			}
 
 			if (lyr != null) {

@@ -1,5 +1,6 @@
 package com.iver.cit.gvsig.fmap.layers;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 
@@ -83,7 +84,13 @@ public class Annotation_LayerFactory {
 
 	}
 
-	public static Annotation_Layer createLayer(String layerName, File file, IProjection proj, int units) {
+	public static Annotation_Layer createLayer(String layerName, File file,
+			IProjection proj, int units) {
+		return createLayer(layerName, file, proj, units, null);
+	}
+
+	public static Annotation_Layer createLayer(String layerName, File file,
+			IProjection proj, int units, Color background) {
 		if (file == null) {
 			return null;
 		}
@@ -100,7 +107,7 @@ public class Annotation_LayerFactory {
 		}
 
 		lyr = LayerFactory.createLayer(layerName, (VectorialFileDriver) driver,
-				file, proj);
+				file, proj, background);
 
 		Annotation_Layer al = new Annotation_Layer();
 		LayerListener[] layerListeners = lyr.getLayerListeners();

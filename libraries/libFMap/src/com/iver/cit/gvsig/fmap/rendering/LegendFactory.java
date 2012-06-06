@@ -41,7 +41,6 @@
 package com.iver.cit.gvsig.fmap.rendering;
 
 import java.awt.Color;
-import java.util.Random;
 
 import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
@@ -64,21 +63,60 @@ public class LegendFactory {
 	 * @return VectorialLegend.
 	 */
 	public static IVectorLegend createSingleSymbolLegend(int shapeType) {
-		Random rand = new Random();
+		return createSingleSymbolLegend(shapeType, null);
+	}
 
-		int numreg = rand.nextInt(255/2);
-		double div = (1-rand.nextDouble()*0.66)*0.9;
-		Color randomColor = new Color(
-				((int) (255*div + (numreg * rand.nextDouble()))) % 255,
-				((int) (255*div + (numreg * rand.nextDouble()))) % 255,
-				((int) (255*div + (numreg * rand.nextDouble()))) % 255);
+	public static IVectorLegend createSingleSymbolLegend(int shapeType,
+			Color background) {
+		if (!SymbologyFactory.DefaultAleatoryFillColor) {
+			return new SingleSymbolLegend(
+					SymbologyFactory.createDefaultSymbolByShapeType(shapeType,
+							SymbologyFactory.DefaultFillSymbolColor));
+		}
 
-		if(!SymbologyFactory.DefaultAleatoryFillColor)
-			randomColor = SymbologyFactory.DefaultFillSymbolColor;
+		if (background == null) {
+			background = Color.white;
+		}
+
+		float[] backHSB = Color.RGBtoHSB(background.getRed(),
+				background.getGreen(), background.getBlue(), null);
+		Color randomColor = randomColor(backHSB);
 
 		return new SingleSymbolLegend(
-				SymbologyFactory.createDefaultSymbolByShapeType(shapeType, randomColor));
+				SymbologyFactory.createDefaultSymbolByShapeType(shapeType,
+						randomColor));
+	}
 
+	private static Color randomColor(float[] hsb) {
+		/*
+		 * Don't return too dark colors. consider the input color to have 0.5
+		 * brightness at most.
+		 */
+		hsb[2] = (float) Math.min(hsb[2], 0.5);
+
+		/*
+		 * Vary hue at least 0.3
+		 */
+		float minimumHueVariation = 0.3f;
+		float newHue = hsb[0];
+		do {
+			newHue = (float) Math.random();
+		} while (Math.abs(hsb[0] - newHue) < minimumHueVariation);
+
+		/*
+		 * Get brightness at the opposite side of 0.5. If the difference is less
+		 * than minimumBrightnessVariation, increase it
+		 */
+		float minimumBrightnessVariation = 0.3f;
+		float newBrightness = 1 - hsb[2];
+		if (Math.abs(newBrightness - hsb[2]) < minimumBrightnessVariation) {
+			if (hsb[2] > 0.5) {
+				newBrightness -= minimumBrightnessVariation;
+			} else {
+				newBrightness += minimumBrightnessVariation;
+			}
+		}
+		return Color.getHSBColor(newHue, 1f, newBrightness);
 	}
 
 	/**

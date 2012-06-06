@@ -458,7 +458,10 @@ public class Annotation_Open extends WizardPanel {
      */
     private boolean loadFileAnnotationLayer(MapControl mapControl, File file) {
     	try {
-    		Annotation_Layer al = Annotation_LayerFactory.createLayer(file.getName(), file, AddLayerDialog.getLastProjection(), getCmbUnits().getSelectedUnitIndex());
+			Annotation_Layer al = Annotation_LayerFactory.createLayer(file
+					.getName(), file, AddLayerDialog.getLastProjection(),
+					getCmbUnits().getSelectedUnitIndex(), mapControl
+							.getViewPort().getBackColor());
 
             // Añadir capas al mapControl se trata como una transaccion
             mapControl.getMapContext().beginAtomicEvent();

@@ -66,7 +66,6 @@ import org.gvsig.gui.beans.swing.JButton;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
-import com.hardcode.gdbms.engine.data.driver.AlphanumericDBDriver;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -310,7 +309,9 @@ ListSelectionListener {
 					if (driver instanceof ICanReproject) {
 						proj = userTableSettingsPanel.getProjection();
 					}
-					unchecked_list.add(LayerFactory.createDBLayer(driver, layerName, proj));
+					unchecked_list.add(LayerFactory.createDBLayer(driver,
+							layerName, proj, getMapCtrl().getViewPort()
+									.getBackColor()));
 
 				} catch (Exception ex) {
 					NotificationManager.addError(
