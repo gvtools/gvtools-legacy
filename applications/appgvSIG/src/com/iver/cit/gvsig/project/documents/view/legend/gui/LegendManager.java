@@ -119,7 +119,7 @@ public class LegendManager extends AbstractThemeManagerPage {
 	private boolean isTreeListenerDisabled;
 	private JButton btnSaveLegend;
 	private JButton btnLoadLegend;
-	private Hashtable<FLayer, ? extends ILegend> table = null;
+	private Hashtable<FLayer, ILegend> table = null;
 	private boolean empty = true;
 	private JLabel iconLabel;
 
@@ -776,8 +776,7 @@ public class LegendManager extends AbstractThemeManagerPage {
 		}
 	}
 
-	private void applyRestOfLegends(
-			Hashtable<FLayer, ? extends ILegend> table2, FLayers layers) {
+	private void applyRestOfLegends(Hashtable<FLayer, ILegend> table2,FLayers layers) {
 
 		for(int i = 0; i < layers.getLayersCount(); i++) {
 			FLayer my_layer= layers.getLayer(i);

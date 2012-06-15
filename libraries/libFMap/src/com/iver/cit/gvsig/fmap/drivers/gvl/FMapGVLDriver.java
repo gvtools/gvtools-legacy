@@ -53,10 +53,9 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 		return FILE_EXTENSION;
 	}
 
-	public Hashtable<FLayer, IVectorLegend> read(FLayers layers,
-			FLayer layer, File file) throws LegendDriverException {
+	public Hashtable read(FLayers layers,FLayer layer, File file) throws LegendDriverException {
 
-		Hashtable<FLayer, IVectorLegend> table = new Hashtable<FLayer, IVectorLegend>();
+		Hashtable table = new Hashtable();
 		File xmlFile = new File(file.getAbsolutePath());
 		FileReader reader = null;
 
@@ -64,8 +63,7 @@ public class FMapGVLDriver implements IFMapLegendDriver{
 			reader = new FileReader(xmlFile);
 
 			XmlTag tag = (XmlTag) XmlTag.unmarshal(reader);
-			IVectorLegend myLegend = LegendFactory.createFromXML(new XMLEntity(
-					tag));
+			ILegend myLegend = LegendFactory.createFromXML(new XMLEntity(tag));
 
 			if(myLegend != null ) {
 				//CAPA DE LINEAS
