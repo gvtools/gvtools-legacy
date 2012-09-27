@@ -57,7 +57,7 @@ import org.gvsig.fmap.tools.listeners.VectorListener;
 import org.gvsig.referencing.DisactivableMappedPosition;
 import org.gvsig.referencing.MappedPositionContainer;
 import org.gvsig.referencing.ReferencingUtil;
-import org.opengis.spatialschema.geometry.DirectPosition;
+import org.opengis.geometry.DirectPosition;
 
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;

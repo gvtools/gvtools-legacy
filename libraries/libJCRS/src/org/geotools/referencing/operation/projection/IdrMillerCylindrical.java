@@ -19,15 +19,11 @@ package org.geotools.referencing.operation.projection;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 
-import javax.units.SI;
-import javax.units.NonSI;
-import javax.units.Unit;
+import javax.measure.unit.NonSI;
 
 import org.geotools.metadata.iso.citation.CitationImpl;
+import org.geotools.metadata.iso.citation.Citations;
 import org.geotools.referencing.NamedIdentifier;
-import org.geotools.resources.XMath;
-import org.geotools.resources.cts.ResourceKeys;
-import org.geotools.resources.cts.Resources;
 import org.opengis.parameter.ParameterDescriptor;
 import org.opengis.parameter.ParameterDescriptorGroup;
 import org.opengis.parameter.ParameterNotFoundException;
@@ -126,12 +122,12 @@ public class IdrMillerCylindrical extends MapProjection {
          */
         public static final ParameterDescriptor LATITUDE_OF_CENTER = createDescriptor(
                 new NamedIdentifier[] {
-                    new NamedIdentifier(CitationImpl.OGC,     "latitude_of_center"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Latitude of projection center"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Latitude of projection centre"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Spherical latitude of origin"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Latitude of natural origin"),
-                    new NamedIdentifier(CitationImpl.GEOTIFF, "CenterLat")
+                    new NamedIdentifier(Citations.OGC,     "latitude_of_center"),
+                    new NamedIdentifier(Citations.EPSG,    "Latitude of projection center"),
+                    new NamedIdentifier(Citations.EPSG,    "Latitude of projection centre"),
+                    new NamedIdentifier(Citations.EPSG,    "Spherical latitude of origin"),
+                    new NamedIdentifier(Citations.EPSG,    "Latitude of natural origin"),
+                    new NamedIdentifier(Citations.GEOTIFF, "CenterLat")
                 }, 0.0, -90, 90, NonSI.DEGREE_ANGLE);
 
         /**
@@ -141,19 +137,19 @@ public class IdrMillerCylindrical extends MapProjection {
          */
         public static final ParameterDescriptor LONGITUDE_OF_CENTER = createDescriptor(
                 new NamedIdentifier[] {
-                    new NamedIdentifier(CitationImpl.OGC,     "longitude_of_center"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Longitude of projection center"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Longitude of projection centre"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Spherical longitude of origin"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Longitude of natural origin"),
-                    new NamedIdentifier(CitationImpl.GEOTIFF, "CenterLong")
+                    new NamedIdentifier(Citations.OGC,     "longitude_of_center"),
+                    new NamedIdentifier(Citations.EPSG,    "Longitude of projection center"),
+                    new NamedIdentifier(Citations.EPSG,    "Longitude of projection centre"),
+                    new NamedIdentifier(Citations.EPSG,    "Spherical longitude of origin"),
+                    new NamedIdentifier(Citations.EPSG,    "Longitude of natural origin"),
+                    new NamedIdentifier(Citations.GEOTIFF, "CenterLong")
                 }, 0.0, -180, 180, NonSI.DEGREE_ANGLE);
 
 
         static final ParameterDescriptorGroup PARAMETERS = createDescriptorGroup(new NamedIdentifier[] {
-            new NamedIdentifier(CitationImpl.OGC,     "Miller_Cylindrical"),
-            new NamedIdentifier(CitationImpl.GEOTIFF, "MillerCylindrical"),
-            new NamedIdentifier(CitationImpl.EPSG,    "Miller Cylindrical"),
+            new NamedIdentifier(Citations.OGC,     "Miller_Cylindrical"),
+            new NamedIdentifier(Citations.GEOTIFF, "MillerCylindrical"),
+            new NamedIdentifier(Citations.EPSG,    "Miller Cylindrical"),
             new NamedIdentifier(new CitationImpl("IDR"), "IDR")//,
                 },
                 new ParameterDescriptor[] {
@@ -172,7 +168,7 @@ public class IdrMillerCylindrical extends MapProjection {
         /**
          * Returns the operation type for this map projection.
          */
-        protected Class getOperationType() {
+        public Class getOperationType() {
             return CylindricalProjection.class;
         }
 

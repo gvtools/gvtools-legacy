@@ -53,11 +53,11 @@ import java.awt.Rectangle;
 import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
 
+import org.geotools.renderer.lite.StyledShapePainter;
 import org.geotools.renderer.style.LineStyle2D;
 import org.geotools.renderer.style.PolygonStyle2D;
 import org.geotools.renderer.style.Style2D;
 
-import com.iver.cit.gvsig.fmap.rendering.FStyledShapePainter;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 
@@ -151,7 +151,7 @@ public class FStyle2D {
 	 */
 	private Style2D textStyle2D;
 	private static BufferedImage img = new BufferedImage(1,1,BufferedImage.TYPE_INT_ARGB);
-	private static FStyledShapePainter shpPainter = new FStyledShapePainter();
+	private static StyledShapePainter shpPainter = new StyledShapePainter();
 	private static Rectangle rect = new Rectangle(0,0,1,1);
 		
 	/**
@@ -190,82 +190,84 @@ public class FStyle2D {
 	public synchronized LineStyle2D getLineStyle2D() {
 		return lineStyle2D;
 	}
-	/**
-	 * @param style2D  The style2D to set.
-	 * @uml.property  name="lineStyle2D"
-	 */
-	public synchronized void setLineStyle2D(LineStyle2D style2D) {
-		lineStyle2D = style2D;
-		// Recalculamos el RGB
-		Graphics2D g2 = img.createGraphics();
-		
-		shpPainter.paint(g2,rect,style2D,0);		
-		rgbLine = img.getRGB(0,0);
-		
-	}
-	
-	/**
-	 * @return  Returns the style2D.
-	 * @uml.property  name="polygonStyle2D"
-	 */
-	public synchronized PolygonStyle2D getPolygonStyle2D() {
-		return polygonStyle2D;
-	}
-	/**
-	 * @param style2D  The style2D to set.
-	 * @uml.property  name="polygonStyle2D"
-	 */
-	public synchronized void setPolygonStyle2D(PolygonStyle2D style2D) {
-		polygonStyle2D = style2D;
-		// Recalculamos el RGB
-		Graphics2D g2 = img.createGraphics();
-		
-		shpPainter.paint(g2,rect,style2D,0);		
-		rgbPolygon = img.getRGB(0,0);
-		
-	}
-	
-	/**
-	 * @return  Returns the style2D.
-	 * @uml.property  name="pointStyle2D"
-	 */
-	public synchronized Style2D getPointStyle2D() {
-		return pointStyle2D;
-	}
-	/**
-	 * @param style2D  The style2D to set.
-	 * @uml.property  name="pointStyle2D"
-	 */
-	public synchronized void setPointStyle2D(Style2D style2D) {
-		pointStyle2D = style2D;
-		// Recalculamos el RGB
-		Graphics2D g2 = img.createGraphics();
-		
-		shpPainter.paint(g2,rect,style2D,0);		
-		rgbPoint = img.getRGB(0,0);
-		
-	}
-	
-	/**
-	 * @return  Returns the style2D.
-	 * @uml.property  name="textStyle2D"
-	 */
-	public synchronized Style2D getTextStyle2D() {
-		return textStyle2D;
-	}
-	/**
-	 * @param style2D  The style2D to set.
-	 * @uml.property  name="textStyle2D"
-	 */
-	public synchronized void setTextStyle2D(Style2D style2D) {
-		textStyle2D = style2D;
-		// Recalculamos el RGB
-		Graphics2D g2 = img.createGraphics();
-		
-		shpPainter.paint(g2,rect,style2D,0);		
-		rgbText = img.getRGB(0,0);
-		
-	}
+
+	// TODO geotools refactoring
+	// /**
+	// * @param style2D The style2D to set.
+	// * @uml.property name="lineStyle2D"
+	// */
+	// public synchronized void setLineStyle2D(LineStyle2D style2D) {
+	// lineStyle2D = style2D;
+	// // Recalculamos el RGB
+	// Graphics2D g2 = img.createGraphics();
+	//
+	// shpPainter.paint(g2,rect,style2D,0);
+	// rgbLine = img.getRGB(0,0);
+	//
+	// }
+	//
+	// /**
+	// * @return Returns the style2D.
+	// * @uml.property name="polygonStyle2D"
+	// */
+	// public synchronized PolygonStyle2D getPolygonStyle2D() {
+	// return polygonStyle2D;
+	// }
+	// /**
+	// * @param style2D The style2D to set.
+	// * @uml.property name="polygonStyle2D"
+	// */
+	// public synchronized void setPolygonStyle2D(PolygonStyle2D style2D) {
+	// polygonStyle2D = style2D;
+	// // Recalculamos el RGB
+	// Graphics2D g2 = img.createGraphics();
+	//
+	// shpPainter.paint(g2,rect,style2D,0);
+	// rgbPolygon = img.getRGB(0,0);
+	//
+	// }
+	//
+	// /**
+	// * @return Returns the style2D.
+	// * @uml.property name="pointStyle2D"
+	// */
+	// public synchronized Style2D getPointStyle2D() {
+	// return pointStyle2D;
+	// }
+	// /**
+	// * @param style2D The style2D to set.
+	// * @uml.property name="pointStyle2D"
+	// */
+	// public synchronized void setPointStyle2D(Style2D style2D) {
+	// pointStyle2D = style2D;
+	// // Recalculamos el RGB
+	// Graphics2D g2 = img.createGraphics();
+	//
+	// shpPainter.paint(g2,rect,style2D,0);
+	// rgbPoint = img.getRGB(0,0);
+	//
+	// }
+	//
+	// /**
+	// * @return Returns the style2D.
+	// * @uml.property name="textStyle2D"
+	// */
+	// public synchronized Style2D getTextStyle2D() {
+	// return textStyle2D;
+	// }
+	// /**
+	// * @param style2D The style2D to set.
+	// * @uml.property name="textStyle2D"
+	// */
+	// public synchronized void setTextStyle2D(Style2D style2D) {
+	// textStyle2D = style2D;
+	// // Recalculamos el RGB
+	// Graphics2D g2 = img.createGraphics();
+	//
+	// shpPainter.paint(g2,rect,style2D,0);
+	// rgbText = img.getRGB(0,0);
+	//
+	// }
 public XMLEntity getXMLEntity(){
 	XMLEntity xml = new XMLEntity();
 	xml.putProperty("className",this.getClass().getName());

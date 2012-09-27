@@ -3,10 +3,11 @@ package com.iver.cit.gvsig.fmap.crs;
 import org.cresques.cts.ICRSFactory;
 import org.cresques.cts.IProjection;
 import org.cresques.cts.ProjectionPool;
+import org.cresques.geo.Geodetic;
 
 /**
  * Fabrica de CRS.
- * Centraliza las peticiones de creación de objetos CRS de todo fmap.
+ * Centraliza las peticiones de creaciï¿½n de objetos CRS de todo fmap.
  * @author luisw
  *
  */

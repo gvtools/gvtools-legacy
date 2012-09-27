@@ -51,7 +51,7 @@ package com.iver.cit.gvsig.referencing;
 import java.util.List;
 
 import org.cresques.cts.IProjection;
-import org.geotools.referencefork.referencing.operation.builder.MappedPosition;
+import org.geotools.referencing.operation.builder.MappedPosition;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.referencing.LineLyrAdapter;
 import org.gvsig.referencing.MappedPositionContainer;

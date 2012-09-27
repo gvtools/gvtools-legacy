@@ -1,20 +1,9 @@
 package es.idr.test;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.units.Unit;
-
-import org.geotools.referencing.CRS;
-import org.geotools.referencing.crs.DefaultGeographicCRS;
-import org.geotools.referencing.crs.DefaultProjectedCRS;
-import org.geotools.referencing.datum.DefaultGeodeticDatum;
-import org.geotools.referencing.factory.epsg.HSQLDataSource;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import es.idr.teledeteccion.connection.EpsgConnection;

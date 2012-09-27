@@ -51,7 +51,7 @@ package com.iver.cit.gvsig.drivers;
 import java.awt.geom.Rectangle2D;
 import java.sql.Types;
 
-import org.geotools.referencefork.referencing.operation.builder.MappedPosition;
+import org.geotools.referencing.operation.builder.MappedPosition;
 import org.gvsig.referencing.MappedPositionContainer;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -141,8 +141,8 @@ public class VectorErrorMemoryDriver implements VectorialDriver, ObjectDriver,
 	public IGeometry getShape(int index) throws ReadDriverException {
 		if (index < mappedPositionContainer.getCount()){
 			MappedPosition mappedPosition = mappedPositionContainer.getMappedPosition(index);
-			double[] sourceCoords = mappedPosition.getSource().getCoordinates();
-			double[] targetCoords = mappedPosition.getTarget().getCoordinates();
+			double[] sourceCoords = mappedPosition.getSource().getCoordinate();
+			double[] targetCoords = mappedPosition.getTarget().getCoordinate();
 			GeneralPathX gpx = new GeneralPathX();
 			gpx.moveTo(sourceCoords[0], sourceCoords[1]);
 			gpx.lineTo(targetCoords[0], targetCoords[1]);

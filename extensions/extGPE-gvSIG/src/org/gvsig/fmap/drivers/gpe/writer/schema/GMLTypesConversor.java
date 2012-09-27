@@ -1,19 +1,13 @@
 package org.gvsig.fmap.drivers.gpe.writer.schema;
 
-import java.awt.Point;
-import java.awt.Polygon;
 import java.sql.Types;
 
-import org.geotools.feature.AttributeType;
-import org.geotools.feature.AttributeTypeFactory;
-import org.geotools.feature.FeatureType;
-import org.geotools.feature.FeatureTypeBuilder;
+import org.opengis.feature.type.AttributeType;
+import org.opengis.feature.type.FeatureType;
 
-import com.hardcode.gdbms.engine.spatial.Geometry;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.LayerDefinition;
-import com.vividsolutions.jts.geom.GeometryCollection;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -88,40 +82,40 @@ import com.vividsolutions.jts.geom.GeometryCollection;
  */
 public class GMLTypesConversor {
 
-	 /**
-	  * Make a conversion between the gvSIG LayerDefinition and a geotools
-	  * FeatureType.
-	  * @param schema
-	  * gvSIG feature schema that contains a list of attributes
-	  * @return
-	 * @throws SchemaException 
-	 * @throws  
-	  */
-	 public static FeatureType featureTypefromGvSIGToGeotools(LayerDefinition lyrDef) throws Exception{
-		 FieldDescription[] fDescription = lyrDef.getFieldsDesc();
-		 AttributeType[] types = new AttributeType[fDescription.length];
-		 for(int i=0 ; i<fDescription.length ; i++){
-			 types[i] = attributteTypefromGvSIGToGeotools(fDescription[i]);
-		 }
-		 String typeName = lyrDef.getName();
-		 FeatureType featureType = FeatureTypeBuilder.newFeatureType(types,typeName);					
-		 return featureType;
-	 }	 
+//	 /**
+//	  * Make a conversion between the gvSIG LayerDefinition and a geotools
+//	  * FeatureType.
+//	  * @param schema
+//	  * gvSIG feature schema that contains a list of attributes
+//	  * @return
+//	 * @throws SchemaException 
+//	 * @throws  
+//	  */
+//	 public static FeatureType featureTypefromGvSIGToGeotools(LayerDefinition lyrDef) throws Exception{
+//		 FieldDescription[] fDescription = lyrDef.getFieldsDesc();
+//		 AttributeType[] types = new AttributeType[fDescription.length];
+//		 for(int i=0 ; i<fDescription.length ; i++){
+//			 types[i] = attributteTypefromGvSIGToGeotools(fDescription[i]);
+//		 }
+//		 String typeName = lyrDef.getName();
+//		 FeatureType featureType = FeatureTypeFacBuilder.newFeatureType(types,typeName);					
+//		 return featureType;
+//	 }	 
 	 
 	 
-	/**
-	 * Make a conversion between the gvSIG FieldDescription and a geotools
-	 * AttributeType.
-	 * @param fDescription
-	 * gvSIG field description
-	 * @return
-	 */
-	 private static AttributeType attributteTypefromGvSIGToGeotools(FieldDescription fDescrition){
-		 AttributeType type = AttributeTypeFactory.newAttributeType(fDescrition.getFieldName(),
-				 typesFromgvSIGtoGeotools(fDescrition.getFieldType()));
-		 
-		 return type;
-	 }	
+//	/**
+//	 * Make a conversion between the gvSIG FieldDescription and a geotools
+//	 * AttributeType.
+//	 * @param fDescription
+//	 * gvSIG field description
+//	 * @return
+//	 */
+//	 private static AttributeType attributteTypefromGvSIGToGeotools(FieldDescription fDescrition){
+//		 AttributeType type = AttributeTypeFactory.newAttributeType(fDescrition.getFieldName(),
+//				 typesFromgvSIGtoGeotools(fDescrition.getFieldType()));
+//		 
+//		 return type;
+//	 }	
 	 
 	 
 	 /**

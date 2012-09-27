@@ -56,19 +56,19 @@ import java.util.Map;
 
 import javax.vecmath.MismatchedSizeException;
 
-import org.geotools.referencefork.geometry.DirectPosition2D;
-import org.geotools.referencefork.referencing.operation.builder.AdvancedAffineBuilder;
-import org.geotools.referencefork.referencing.operation.builder.AffineTransformBuilder;
-import org.geotools.referencefork.referencing.operation.builder.BursaWolfTransformBuilder;
-import org.geotools.referencefork.referencing.operation.builder.MappedPosition;
-import org.geotools.referencefork.referencing.operation.builder.MathTransformBuilder;
-import org.geotools.referencefork.referencing.operation.builder.ProjectiveTransformBuilder;
-import org.geotools.referencefork.referencing.operation.builder.RubberSheetBuilder;
-import org.geotools.referencefork.referencing.operation.builder.SimilarTransformBuilder;
+import org.geotools.geometry.DirectPosition2D;
+import org.geotools.referencing.operation.builder.AdvancedAffineBuilder;
+import org.geotools.referencing.operation.builder.AffineTransformBuilder;
+import org.geotools.referencing.operation.builder.BursaWolfTransformBuilder;
+import org.geotools.referencing.operation.builder.MappedPosition;
+import org.geotools.referencing.operation.builder.MathTransformBuilder;
+import org.geotools.referencing.operation.builder.ProjectiveTransformBuilder;
+import org.geotools.referencing.operation.builder.RubberSheetBuilder;
+import org.geotools.referencing.operation.builder.SimilarTransformBuilder;
+import org.opengis.geometry.DirectPosition;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.geometry.MismatchedReferenceSystemException;
 import org.opengis.referencing.FactoryException;
-import org.opengis.spatialschema.geometry.DirectPosition;
-import org.opengis.spatialschema.geometry.MismatchedDimensionException;
-import org.opengis.spatialschema.geometry.MismatchedReferenceSystemException;
 
 import com.iver.andami.PluginServices;
 
@@ -241,7 +241,7 @@ public class TransformationsRegistry {
 		for (int i = 0; i < mappedPositions.size(); i++) {
 			MappedPosition position = mappedPositions.get(i);
 			DirectPosition source = position.getSource();
-			double[] sourceCoords = source.getCoordinates();
+			double[] sourceCoords = source.getCoordinate();
 			if(sourceCoords[0] > maxX)
 				maxX = sourceCoords[0];
 			if(sourceCoords[0] < minX)
@@ -254,7 +254,7 @@ public class TransformationsRegistry {
 			
 			
 			DirectPosition target = position.getTarget();
-			double[] targetCoords = target.getCoordinates();
+			double[] targetCoords = target.getCoordinate();
 			if(targetCoords[0] > maxX)
 				maxX = targetCoords[0];
 			if(targetCoords[0] < minX)

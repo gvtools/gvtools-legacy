@@ -65,15 +65,15 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EtchedBorder;
 import javax.vecmath.MismatchedSizeException;
 
-import org.geotools.referencefork.math.Statistics;
-import org.geotools.referencefork.referencing.operation.builder.MathTransformBuilder;
+import org.geotools.math.Statistics;
+import org.geotools.referencing.operation.builder.MathTransformBuilder;
 import org.gvsig.referencing.MappedPositionContainer;
 import org.gvsig.topology.ui.util.GUIUtil;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.geometry.MismatchedReferenceSystemException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
-import org.opengis.spatialschema.geometry.MismatchedDimensionException;
-import org.opengis.spatialschema.geometry.MismatchedReferenceSystemException;
 
 import sun.awt.VerticalBagLayout;
 

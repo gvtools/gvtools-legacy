@@ -16,7 +16,6 @@
 	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar" sourcepath="/libDriverManager"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extGeoprocessingExtensions"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extJCRS"/>
-	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar" sourcepath="/libUIComponent/src"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/JWizardComponent.jar"/>
@@ -28,5 +27,6 @@
 	<classpathentry kind="lib" path="lib/swing-layout-1.0.3.jar"/>
 	<classpathentry kind="lib" path="/appgvSIG/lib/org.gvsig.printing.cups-support.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

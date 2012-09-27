@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import org.geotools.renderer.style.Java2DMark;
 import org.geotools.renderer.style.MarkStyle2D;
 import org.geotools.renderer.style.PolygonStyle2D;
 
@@ -45,7 +44,7 @@ public class DrawingTests extends DataSourceTestCase {
                 AlphaComposite.SRC_OVER, 1.0f));
         markStyle.setSize(6);
         markStyle.setRotation(0f);
-        markStyle.setShape(Java2DMark.getWellKnownMark("square"));
+//        markStyle.setShape(Java2DMark.getWellKnownMark("square"));
 	    
 	    
 	    for (int i = 0; i < d.getRowCount(); i++) {

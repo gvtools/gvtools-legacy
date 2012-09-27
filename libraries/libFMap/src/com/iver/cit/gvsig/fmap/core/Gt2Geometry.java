@@ -82,40 +82,9 @@ import com.vividsolutions.jts.geom.Geometry;
          *
          * @param shp DOCUMENT ME!
          */
-        Gt2Geometry(FLiteShape shp) {
+        public Gt2Geometry(FLiteShape shp) {
             this.shp = shp;
         }
-
-        /* (non-Javadoc)
-         * @see com.iver.cit.gvsig.fmap.core.IGeometry#draw(java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort, org.geotools.renderer.style.Style2D)
-         */
-//        public void draw(Graphics2D g, ViewPort vp, ISymbol symbol) {
-//            // OJO CON LA PRECISION. DEBERIAMOS USAR: ((GeneralPathX) shp.m_Polyline).transform(mT);
-//            // O HACER UNA FUNCION DE TRANSFORMACIÓN QUE USE LOS DOUBLES DEL
-//            // SHAPE
-//            // Shape shpTrans = vp.getAffineTransform().createTransformedShape(shp);
-//            transform(vp.getAffineTransform());
-//
-//            switch (shp.getShapeType()) {
-//                case FShape.POINT:
-//                    shpPainter.paint(g, shp, symbol.getPointStyle2D(), 0);
-//
-//                    break;
-//
-//                case FShape.LINE:
-//                    shpPainter.paint(g, shp, symbol.getLineStyle2D(), 0);
-//
-//                    break;
-//
-//                case FShape.POLYGON:
-//                    shpPainter.paint(g, shp, symbol.getPolygonStyle2D(), 0);
-//
-//                    break;
-//
-//                case FShape.TEXT:
-//                    shpPainter.paint(g, shp, symbol.getTextStyle2D(), 0);
-//            }
-//        }
 
         /**
          * Dibuja la geometria actual en el graphics que se le pasa como parámetro,

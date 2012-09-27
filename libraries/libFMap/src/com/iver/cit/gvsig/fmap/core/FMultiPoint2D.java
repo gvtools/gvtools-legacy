@@ -51,7 +51,6 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
 import org.cresques.cts.ICoordTrans;
-import org.geotools.data.postgis.attributeio.WKBEncoder;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
@@ -61,6 +60,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.MultiPoint;
+import com.vividsolutions.jts.io.WKBWriter;
 
 
 /**
@@ -69,6 +69,8 @@ import com.vividsolutions.jts.geom.MultiPoint;
  * @author Vicente Caballero Navarro
  */
 public class FMultiPoint2D extends AbstractGeometry {
+	private static final WKBWriter writer = new WKBWriter();
+	
 	FGeometry[] points = null;
 
 	/**
@@ -324,7 +326,7 @@ public class FMultiPoint2D extends AbstractGeometry {
 
 	}
 	public byte[] toWKB() throws IOException {
-		return WKBEncoder.encodeGeometry(toJTSGeometry());
+		return writer.write(toJTSGeometry());
 	}
 	public PathIterator getPathIterator(AffineTransform at, double flatness) {
 		GeneralPathX gpx=new GeneralPathX();

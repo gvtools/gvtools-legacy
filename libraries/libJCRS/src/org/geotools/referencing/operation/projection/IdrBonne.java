@@ -3,18 +3,15 @@ package org.geotools.referencing.operation.projection;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 
-import javax.units.NonSI;
+import javax.measure.unit.NonSI;
 
+import org.geotools.metadata.iso.citation.CitationImpl;
+import org.geotools.metadata.iso.citation.Citations;
+import org.geotools.referencing.NamedIdentifier;
+import org.opengis.parameter.ParameterDescriptor;
 import org.opengis.parameter.ParameterDescriptorGroup;
 import org.opengis.parameter.ParameterNotFoundException;
 import org.opengis.parameter.ParameterValueGroup;
-
-import org.geotools.metadata.iso.citation.CitationImpl;
-import org.geotools.referencing.NamedIdentifier;
-import org.geotools.resources.XMath;
-import org.geotools.resources.cts.ResourceKeys;
-import org.geotools.resources.cts.Resources;
-import org.opengis.parameter.ParameterDescriptor;
 import org.opengis.referencing.operation.CylindricalProjection;
 import org.opengis.referencing.operation.MathTransform;
 
@@ -71,10 +68,10 @@ public class IdrBonne extends MapProjection {
 	         */
 	    public static final ParameterDescriptor STANDARD_PARALLEL = createDescriptor(
 	                new NamedIdentifier[] {
-	                    new NamedIdentifier(CitationImpl.OGC,      "standard_parallel_1"),
-	                    new NamedIdentifier(CitationImpl.EPSG,     "Latitude of 1st standard parallel"),
-	                    new NamedIdentifier(CitationImpl.EPSG,     "Latitude of natural origin"),
-	                    new NamedIdentifier(CitationImpl.GEOTIFF,  "StdParallel1")
+	                    new NamedIdentifier(Citations.OGC,      "standard_parallel_1"),
+	                    new NamedIdentifier(Citations.EPSG,     "Latitude of 1st standard parallel"),
+	                    new NamedIdentifier(Citations.EPSG,     "Latitude of natural origin"),
+	                    new NamedIdentifier(Citations.GEOTIFF,  "StdParallel1")
 	                },
 	                0, -90, 90, NonSI.DEGREE_ANGLE);
 
@@ -83,8 +80,8 @@ public class IdrBonne extends MapProjection {
 	         * of "standard_parallel_1". I have sided with ESRI and Snyder in this case.
 	         */
 	        static final ParameterDescriptorGroup PARAMETERS = createDescriptorGroup(new NamedIdentifier[] {
-	                new NamedIdentifier(CitationImpl.OGC,      "Bonne"),
-        			new NamedIdentifier(CitationImpl.EPSG,     "Bonne"),
+	                new NamedIdentifier(Citations.OGC,      "Bonne"),
+        			new NamedIdentifier(Citations.EPSG,     "Bonne"),
                     new NamedIdentifier(new CitationImpl("IDR"), "IDR")
  	                //new NamedIdentifier(CitationImpl.EPSG,     "9823")//,
 	            }, new ParameterDescriptor[] {
@@ -112,7 +109,7 @@ public class IdrBonne extends MapProjection {
 	        /**
 	         * Returns the operation type for this map projection.
 	         */
-	        protected Class getOperationType() {
+	        public Class getOperationType() {
 	        	return CylindricalProjection.class;
 	        }
 
@@ -137,10 +134,10 @@ public class IdrBonne extends MapProjection {
          */
     public static final ParameterDescriptor STANDARD_PARALLEL = createDescriptor(
                 new NamedIdentifier[] {
-                    new NamedIdentifier(CitationImpl.OGC,      "standard_parallel_1"),
-                    new NamedIdentifier(CitationImpl.EPSG,     "Latitude of 1st standard parallel"),
-                    new NamedIdentifier(CitationImpl.EPSG,     "Latitude of natural origin"),
-                    new NamedIdentifier(CitationImpl.GEOTIFF,  "StdParallel1")
+                    new NamedIdentifier(Citations.OGC,      "standard_parallel_1"),
+                    new NamedIdentifier(Citations.EPSG,     "Latitude of 1st standard parallel"),
+                    new NamedIdentifier(Citations.EPSG,     "Latitude of natural origin"),
+                    new NamedIdentifier(Citations.GEOTIFF,  "StdParallel1")
                 },
                 0, -90, 90, NonSI.DEGREE_ANGLE);
 
@@ -149,8 +146,8 @@ public class IdrBonne extends MapProjection {
          * of "standard_parallel_1". I have sided with ESRI and Snyder in this case.
          */
         static final ParameterDescriptorGroup PARAMETERS = createDescriptorGroup(new NamedIdentifier[] {
-                new NamedIdentifier(CitationImpl.OGC,      "Bonne_(South_Orientated)"),
-    			new NamedIdentifier(CitationImpl.EPSG,     "Bonne (South Orientated)"),
+                new NamedIdentifier(Citations.OGC,      "Bonne_(South_Orientated)"),
+    			new NamedIdentifier(Citations.EPSG,     "Bonne (South Orientated)"),
                 new NamedIdentifier(new CitationImpl("IDR"), "IDR")
                 //new NamedIdentifier(CitationImpl.EPSG,     "9823")//,
 //                new NamedIdentifier(CitationImpl.GEOTOOLS, Vocabulary.formatInternational(
@@ -178,7 +175,7 @@ public class IdrBonne extends MapProjection {
         /**
          * Returns the operation type for this map projection.
          */
-        protected Class getOperationType() {
+        public Class getOperationType() {
         	return CylindricalProjection.class;
         }
 

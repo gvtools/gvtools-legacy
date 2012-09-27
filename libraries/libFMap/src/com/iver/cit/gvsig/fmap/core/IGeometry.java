@@ -49,11 +49,11 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import org.cresques.cts.ICoordTrans;
+import org.geotools.renderer.lite.StyledShapePainter;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.v02.FLabel;
-import com.iver.cit.gvsig.fmap.rendering.FStyledShapePainter;
 import com.iver.utiles.swing.threads.Cancellable;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -76,7 +76,7 @@ public interface IGeometry extends Shape, Serializable {
 
 	public static int SELECTHANDLER=0;
 	public static int STRETCHINGHANDLER=1;
-	public final static FStyledShapePainter shpPainter = new FStyledShapePainter();
+	public final static StyledShapePainter shpPainter = new StyledShapePainter();
 
 	/**
 	 * Dibujará esta Shape en el Graphics con el símbolo que se pasa como

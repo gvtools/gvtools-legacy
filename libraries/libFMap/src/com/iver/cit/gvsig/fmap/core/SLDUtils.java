@@ -12,6 +12,7 @@ import org.geotools.styling.PolygonSymbolizer;
 import org.geotools.styling.StrokeImpl;
 import org.geotools.styling.StyleBuilder;
 import org.geotools.styling.StyleFactory;
+import org.geotools.styling.StyleFactoryImpl;
 import org.geotools.styling.Symbolizer;
 
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
@@ -75,7 +76,7 @@ public class SLDUtils {
     public static Symbolizer toGeotoolsSymbol(ISymbol sym)
     {
     	FSymbol symbol = (FSymbol) sym;
-    	StyleFactory styleFactory = StyleFactory.createStyleFactory();
+    	StyleFactory styleFactory = new StyleFactoryImpl();
 		StyleBuilder styleBuilder = new StyleBuilder();
 		StrokeImpl theStroke = (StrokeImpl)styleBuilder.createStroke();
 		GraphicImpl graphic = (GraphicImpl)styleBuilder.createGraphic();

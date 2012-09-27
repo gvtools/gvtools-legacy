@@ -57,14 +57,14 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.vecmath.MismatchedSizeException;
 
-import org.geotools.referencefork.referencing.operation.builder.RubberSheetBuilder;
+import org.geotools.referencing.operation.builder.RubberSheetBuilder;
 import org.gvsig.referencing.MappedPositionContainer;
 import org.gvsig.referencing.ReferencingUtil;
 import org.gvsig.topology.ui.util.GUIUtil;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.geometry.MismatchedReferenceSystemException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.MathTransform;
-import org.opengis.spatialschema.geometry.MismatchedDimensionException;
-import org.opengis.spatialschema.geometry.MismatchedReferenceSystemException;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;

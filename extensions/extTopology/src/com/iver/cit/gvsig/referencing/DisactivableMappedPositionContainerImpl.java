@@ -51,7 +51,7 @@ package com.iver.cit.gvsig.referencing;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.geotools.referencefork.referencing.operation.builder.MappedPosition;
+import org.geotools.referencing.operation.builder.MappedPosition;
 import org.gvsig.referencing.DisactivableMappedPosition;
 /**
  * MappedPositionContainer which works with DisactivableMappedPosition

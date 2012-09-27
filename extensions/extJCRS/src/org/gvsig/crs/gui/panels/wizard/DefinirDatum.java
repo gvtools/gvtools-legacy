@@ -57,6 +57,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.measure.unit.Unit;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -68,7 +69,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.units.ConversionException;
-import javax.units.Unit;
 
 import org.geotools.referencing.crs.AbstractSingleCRS;
 import org.geotools.referencing.datum.DefaultEllipsoid;
@@ -1048,8 +1048,8 @@ public class DefinirDatum extends JPanel implements ActionListener, FocusListene
 	}
 	
 	/**
-	 * Convierte una valor en las unidades indicadas a grados sexagesimales según los factores 
-	 * de conversión obtenidos de la base de datos de la EPSG.
+	 * Convierte una valor en las unidades indicadas a grados sexagesimales segï¿½n los factores 
+	 * de conversiï¿½n obtenidos de la base de datos de la EPSG.
 	 * 
 	 * @param unit Unidad de entrada.
 	 * @param value Valor a convertir
@@ -1057,7 +1057,7 @@ public class DefinirDatum extends JPanel implements ActionListener, FocusListene
 	 */
 	public double convert2Degree(String unit, double value) {
 		//*************************************
-		//Se realiza la conversión a radianes:
+		//Se realiza la conversiï¿½n a radianes:
 		double factor_b = 0;
 		double factor_c = 0;
 		String sentence = "SELECT factor_b, factor_c " +
@@ -1079,7 +1079,7 @@ public class DefinirDatum extends JPanel implements ActionListener, FocusListene
 		value = ((value*factor_b)/factor_c);
 		//**********************************************
 		
-		//Conversió de radianes a grados sexagesimales:
+		//Conversiï¿½ de radianes a grados sexagesimales:
 		//return ((value * 180.0) / 200.0);
 		return ((value * 180.0) / Math.PI);
 	}

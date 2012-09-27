@@ -11,15 +11,15 @@ public class ProvidersTest {
 
 	public static void main(String[] args) {
 		final Class[] categories = {org.geotools.referencing.operation.MathTransformProvider.class};
-		FactoryRegistry registry = new FactoryRegistry(Arrays.asList(categories));
-		Iterator providers = registry.getServiceProviders(MathTransformProvider.class);
+		FactoryRegistry registry = new FactoryRegistry(categories);
+		Iterator providers = registry.getServiceProviders(MathTransformProvider.class, false);
 		Iterator providers2 = null;
 		MathTransformProvider provider = null;
 		MathTransformProvider provider2 = null;
 		while (providers.hasNext()){
 			provider = (MathTransformProvider) providers.next(); 
 			if(provider.nameMatches("IDR")){
-				providers2 = registry.getServiceProviders(MathTransformProvider.class);
+				providers2 = registry.getServiceProviders(MathTransformProvider.class, false);
 				while (providers2.hasNext()){
 					provider2 = (MathTransformProvider) providers2.next();
 					if(provider2.nameMatches(provider.getName().toString()) && !provider2.nameMatches("IDR"))
@@ -27,7 +27,7 @@ public class ProvidersTest {
 				}
 			}
 		}
-		providers = registry.getServiceProviders(MathTransformProvider.class);
+		providers = registry.getServiceProviders(MathTransformProvider.class, false);
 		while (providers.hasNext()) {
             provider = (MathTransformProvider) providers.next();
             if (provider.nameMatches("IDR"))

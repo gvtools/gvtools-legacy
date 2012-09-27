@@ -144,24 +144,10 @@ public class Renderer {
             double x = 0;
             double y = 0;
 
-            if (ts2d.isAbsoluteLineDisplacement()) {
-                double offset = ts2d.getDisplacementY();
-
-                if (offset > 0.0) { // to the left of the line
-                    y = -offset;
-                } else if (offset < 0) {
-                    y = -offset + bounds.getHeight();
-                } else {
-                    y = bounds.getHeight() / 2;
-                }
-
-                x = -bounds.getWidth() / 2;
-            } else {
-                x = (ts2d.getAnchorX() * (-bounds.getWidth())) +
-                    ts2d.getDisplacementX();
-                y = (ts2d.getAnchorY() * (bounds.getHeight())) +
-                    ts2d.getDisplacementY();
-            }
+			x = (ts2d.getAnchorX() * (-bounds.getWidth()))
+					+ ts2d.getDisplacementX();
+			y = (ts2d.getAnchorY() * (bounds.getHeight()))
+					+ ts2d.getDisplacementY();
 
             temp.rotate(ts2d.getRotation());
             temp.translate(x, y);
@@ -219,29 +205,24 @@ public class Renderer {
                 if (ls2d.getStroke() != null) {
                     // see if a graphic stroke is to be used, the drawing method is completely
                     // different in this case
-                    if (ls2d.getGraphicStroke() != null) {
-                        drawWithGraphicsStroke(graphics, shape,
-                            ls2d.getGraphicStroke());
-                    } else {
-                        Paint paint = ls2d.getContour();
+					Paint paint = ls2d.getContour();
 
-                        if (paint instanceof TexturePaint) {
-                            TexturePaint tp = (TexturePaint) paint;
-                            BufferedImage image = tp.getImage();
-                            Rectangle2D rect = tp.getAnchorRect();
-                            AffineTransform at = graphics.getTransform();
-                            double width = rect.getWidth() * at.getScaleX();
-                            double height = rect.getHeight() * at.getScaleY();
-                            Rectangle2D scaledRect = new Rectangle2D.Double(0,
-                                    0, width, height);
-                            paint = new TexturePaint(image, scaledRect);
-                        }
+					if (paint instanceof TexturePaint) {
+						TexturePaint tp = (TexturePaint) paint;
+						BufferedImage image = tp.getImage();
+						Rectangle2D rect = tp.getAnchorRect();
+						AffineTransform at = graphics.getTransform();
+						double width = rect.getWidth() * at.getScaleX();
+						double height = rect.getHeight() * at.getScaleY();
+						Rectangle2D scaledRect = new Rectangle2D.Double(0, 0,
+								width, height);
+						paint = new TexturePaint(image, scaledRect);
+					}
 
-                        graphics.setPaint(paint);
-                        graphics.setStroke(ls2d.getStroke());
-                        graphics.setComposite(ls2d.getContourComposite());
-                        graphics.draw(shape);
-                    }
+					graphics.setPaint(paint);
+					graphics.setStroke(ls2d.getStroke());
+					graphics.setComposite(ls2d.getContourComposite());
+					graphics.draw(shape);
                 }
             }
         }

@@ -51,7 +51,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.cresques.cts.ICoordTrans;
-import org.geotools.data.postgis.attributeio.WKBEncoder;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
@@ -60,6 +59,7 @@ import com.iver.utiles.swing.threads.Cancellable;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.io.WKBWriter;
 
 
 /**
@@ -68,6 +68,8 @@ import com.vividsolutions.jts.geom.GeometryFactory;
  * @author Vicente Caballero Navarro
  */
 public class FGeometryCollection extends AbstractGeometry {
+	private static final WKBWriter writer = new WKBWriter();
+	
 	private ArrayList geometries = new ArrayList();
 
 	/**
@@ -278,7 +280,7 @@ public class FGeometryCollection extends AbstractGeometry {
      * @see com.iver.cit.gvsig.fmap.core.IGeometry#toWKB()
      */
     public byte[] toWKB() throws IOException {
-        return WKBEncoder.encodeGeometry(toJTSGeometry());
+        return writer.write(toJTSGeometry());
     }
 
     /* (non-Javadoc)

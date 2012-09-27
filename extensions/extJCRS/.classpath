@@ -2,18 +2,21 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry excluding="org/gvsig/crs/test/" kind="src" path="src-test"/>
+	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/Utiles/src"/>
-	<classpathentry kind="lib" path="/libFMap/lib/geoapi-2.0.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/units-0.01.jar"/>
-	<classpathentry kind="lib" path="/libFMap/lib/gt2-main.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libJCRS"/>
 	<classpathentry kind="src" path="/_fwAndami"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
 	<classpathentry kind="lib" path="lib/jGridShiftApi.jar"/>
-	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/hsqldb.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/jsr-275-1.0-beta-2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt-epsg-wkt-8.0.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt-metadata-8.0.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt-opengis-8.0.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt-referencing-8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

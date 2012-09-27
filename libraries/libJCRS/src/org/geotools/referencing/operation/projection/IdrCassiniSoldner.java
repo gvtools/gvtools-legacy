@@ -3,12 +3,11 @@ package org.geotools.referencing.operation.projection;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 
-import javax.units.NonSI;
+import javax.measure.unit.NonSI;
 
 import org.geotools.metadata.iso.citation.CitationImpl;
+import org.geotools.metadata.iso.citation.Citations;
 import org.geotools.referencing.NamedIdentifier;
-import org.geotools.referencing.operation.projection.IdrKrovak.Provider;
-import org.geotools.referencing.operation.projection.MapProjection.AbstractProvider;
 import org.opengis.parameter.ParameterDescriptor;
 import org.opengis.parameter.ParameterDescriptorGroup;
 import org.opengis.parameter.ParameterNotFoundException;
@@ -65,15 +64,15 @@ public class IdrCassiniSoldner extends MapProjection {
 
         public static final ParameterDescriptor LATITUDE_OF_ORIGIN = createDescriptor(
                 new NamedIdentifier[] {
-                    new NamedIdentifier(CitationImpl.OGC,     "latitude_of_origin"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "CenterLat"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Latitude of projection centre"),
-                    new NamedIdentifier(CitationImpl.GEOTIFF, "NatOriginLat"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "FalseOriginLat"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Latitude of false origin"),		
-                    new NamedIdentifier(CitationImpl.EPSG,    "Latitude of natural origin"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Latitude of projection centre"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "ProjCenterLat")
+                    new NamedIdentifier(Citations.OGC,     "latitude_of_origin"),
+                    new NamedIdentifier(Citations.EPSG,    "CenterLat"),
+                    new NamedIdentifier(Citations.EPSG,    "Latitude of projection centre"),
+                    new NamedIdentifier(Citations.GEOTIFF, "NatOriginLat"),
+                    new NamedIdentifier(Citations.EPSG,    "FalseOriginLat"),
+                    new NamedIdentifier(Citations.EPSG,    "Latitude of false origin"),		
+                    new NamedIdentifier(Citations.EPSG,    "Latitude of natural origin"),
+                    new NamedIdentifier(Citations.EPSG,    "Latitude of projection centre"),
+                    new NamedIdentifier(Citations.EPSG,    "ProjCenterLat")
                 }, 0.0, -90.0, 90.0, NonSI.DEGREE_ANGLE);
 
         /**
@@ -81,11 +80,11 @@ public class IdrCassiniSoldner extends MapProjection {
          * of "standard_parallel_1". I have sided with ESRI and Snyder in this case.
          */
         static final ParameterDescriptorGroup PARAMETERS = createDescriptorGroup(new NamedIdentifier[] {
-                new NamedIdentifier(CitationImpl.OGC,      "Cassini_Soldner"),
-    			new NamedIdentifier(CitationImpl.EPSG,     "Cassini-Soldner"),
-                new NamedIdentifier(CitationImpl.EPSG,     "Peters (approximated by Gall Orthographic)"),
-                new NamedIdentifier(CitationImpl.EPSG,     "9806"),
-    			new NamedIdentifier(CitationImpl.EPSG,     "Cassini"),
+                new NamedIdentifier(Citations.OGC,      "Cassini_Soldner"),
+    			new NamedIdentifier(Citations.EPSG,     "Cassini-Soldner"),
+                new NamedIdentifier(Citations.EPSG,     "Peters (approximated by Gall Orthographic)"),
+                new NamedIdentifier(Citations.EPSG,     "9806"),
+    			new NamedIdentifier(Citations.EPSG,     "Cassini"),
                 new NamedIdentifier(new CitationImpl("IDR"), "IDR")//,
 //                new NamedIdentifier(CitationImpl.GEOTOOLS, Vocabulary.formatInternational(
 //                                    VocabularyKeys.EQUIDISTANT_CYLINDRICAL_PROJECTION))
@@ -115,7 +114,7 @@ public class IdrCassiniSoldner extends MapProjection {
         /**
          * Returns the operation type for this map projection.
          */
-        protected Class getOperationType() {
+        public Class getOperationType() {
         	return CylindricalProjection.class;
         }
 
@@ -138,15 +137,15 @@ public class IdrCassiniSoldner extends MapProjection {
  
 	       public static final ParameterDescriptor LATITUDE_OF_ORIGIN = createDescriptor(
 	                new NamedIdentifier[] {
-	                    new NamedIdentifier(CitationImpl.OGC,     "latitude_of_origin"),
-	                    new NamedIdentifier(CitationImpl.EPSG,    "CenterLat"),
-	                    new NamedIdentifier(CitationImpl.EPSG,    "Latitude of projection centre"),
-	                    new NamedIdentifier(CitationImpl.GEOTIFF, "NatOriginLat"),
-	                    new NamedIdentifier(CitationImpl.EPSG,    "FalseOriginLat"),
-	                    new NamedIdentifier(CitationImpl.EPSG,    "Latitude of false origin"),		
-	                    new NamedIdentifier(CitationImpl.EPSG,    "Latitude of natural origin"),
-	                    new NamedIdentifier(CitationImpl.EPSG,    "Latitude of projection centre"),
-	                    new NamedIdentifier(CitationImpl.EPSG,    "ProjCenterLat")
+	                    new NamedIdentifier(Citations.OGC,     "latitude_of_origin"),
+	                    new NamedIdentifier(Citations.EPSG,    "CenterLat"),
+	                    new NamedIdentifier(Citations.EPSG,    "Latitude of projection centre"),
+	                    new NamedIdentifier(Citations.GEOTIFF, "NatOriginLat"),
+	                    new NamedIdentifier(Citations.EPSG,    "FalseOriginLat"),
+	                    new NamedIdentifier(Citations.EPSG,    "Latitude of false origin"),		
+	                    new NamedIdentifier(Citations.EPSG,    "Latitude of natural origin"),
+	                    new NamedIdentifier(Citations.EPSG,    "Latitude of projection centre"),
+	                    new NamedIdentifier(Citations.EPSG,    "ProjCenterLat")
 	                }, 0.0, -90.0, 90.0, NonSI.DEGREE_ANGLE);
 
 	        /**
@@ -154,10 +153,10 @@ public class IdrCassiniSoldner extends MapProjection {
 	         * of "standard_parallel_1". I have sided with ESRI and Snyder in this case.
 	         */
 	        static final ParameterDescriptorGroup PARAMETERS = createDescriptorGroup(new NamedIdentifier[] {
-	                new NamedIdentifier(CitationImpl.OGC,      "Hyperbolic Cassini-Soldner"),
-	    			new NamedIdentifier(CitationImpl.EPSG,     "Hyperbolic_Cassini-Soldner"),
-	                new NamedIdentifier(CitationImpl.EPSG,     "Cassini-Soldner (Hyperbolic)"),
-	                new NamedIdentifier(CitationImpl.EPSG,     "Cassini-Soldner_(Hyperbolic)"),
+	                new NamedIdentifier(Citations.OGC,      "Hyperbolic Cassini-Soldner"),
+	    			new NamedIdentifier(Citations.EPSG,     "Hyperbolic_Cassini-Soldner"),
+	                new NamedIdentifier(Citations.EPSG,     "Cassini-Soldner (Hyperbolic)"),
+	                new NamedIdentifier(Citations.EPSG,     "Cassini-Soldner_(Hyperbolic)"),
 	                new NamedIdentifier(new CitationImpl("IDR"), "IDR")//,
 //	                new NamedIdentifier(CitationImpl.GEOTOOLS, Vocabulary.formatInternational(
 //	                                    VocabularyKeys.EQUIDISTANT_CYLINDRICAL_PROJECTION))
@@ -178,7 +177,7 @@ public class IdrCassiniSoldner extends MapProjection {
 	        /**
 	         * Returns the operation type for this map projection.
 	         */
-	        protected Class getOperationType() {
+	        public Class getOperationType() {
 	        	return CylindricalProjection.class;
 	        }
 

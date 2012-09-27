@@ -50,8 +50,8 @@ package org.gvsig.referencing;
 
 import java.awt.geom.Point2D;
 
-import org.geotools.referencefork.geometry.DirectPosition2D;
-import org.geotools.referencefork.referencing.operation.builder.MappedPosition;
+import org.geotools.geometry.DirectPosition2D;
+import org.geotools.referencing.operation.builder.MappedPosition;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.jts.voronoi.VoronoiAndTinInputLyr;
 

@@ -84,7 +84,6 @@ import com.iver.cit.gvsig.fmap.core.FSpline2D;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.core.gt2.FLiteShape;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
@@ -159,10 +158,6 @@ public class FGeometryUtil {
 			return false;
 		} else if (geometry instanceof FNullGeometry) {
 			return false;
-		} else if (geometry instanceof FLiteShape) {
-			FLiteShape fgeo = (FLiteShape) geometry;
-			Geometry jtsGeo = fgeo.getGeometry();
-			return JtsUtil.isClosed(jtsGeo, snapTolerance);
 		}
 		return false;
 	}
@@ -300,12 +295,6 @@ public class FGeometryUtil {
 				|| (unclosedGeometry instanceof FMultipoint3D)
 				|| (unclosedGeometry instanceof FNullGeometry)) {
 			return null;
-		} else if (unclosedGeometry instanceof FLiteShape) {
-			FLiteShape fgeo = (FLiteShape) unclosedGeometry;
-			Geometry jtsGeo = fgeo.getGeometry();
-			Geometry jtsGeo2close = JtsUtil.getGeometryToClose(jtsGeo,
-					snapTolerance);
-			return ShapeFactory.createGeometry(new FLiteShape(jtsGeo2close));
 		}
 		return null;
 	}
@@ -496,10 +485,6 @@ public class FGeometryUtil {
 			return 1;
 		} else if (shape instanceof FSpline2D) {
 			return 1;
-		} else if (shape instanceof FLiteShape) {
-			FLiteShape liteShape = (FLiteShape) shape;
-			Geometry jtsGeo = liteShape.getGeometry();
-			return jtsGeo.getDimension();
 		} else {
 			return -1;
 		}

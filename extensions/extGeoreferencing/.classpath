@@ -9,14 +9,14 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry sourcepath="/extRasterTools-SE" kind="lib" path="/libFMap/lib/org.gvsig.fmap.raster.jar"/>
-	<classpathentry sourcepath="/extRasterTools-SE/src" kind="lib" path="/libFMap/lib/org.gvsig.raster.gui.jar"/>
-	<classpathentry sourcepath="/libUIComponent/src" kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.gvsig.fmap.raster.jar" sourcepath="/extRasterTools-SE"/>
+	<classpathentry kind="lib" path="/libFMap/lib/org.gvsig.raster.gui.jar" sourcepath="/extRasterTools-SE/src"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar" sourcepath="/libUIComponent/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libRaster"/>
-	<classpathentry sourcepath="/libIverUtiles/src" kind="lib" path="/_fwAndami/lib/iver-utiles.jar"/>
-	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar"/>
-	<classpathentry sourcepath="/libExceptions/src" kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar"/>
-	<classpathentry sourcepath="/libGDBMS" kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/libIverUtiles/src"/>
+	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar" sourcepath="/libExceptions/src"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
 	<classpathentry kind="lib" path="lib/flanagan.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

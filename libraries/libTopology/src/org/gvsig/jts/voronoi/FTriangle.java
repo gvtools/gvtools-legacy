@@ -50,7 +50,7 @@ package org.gvsig.jts.voronoi;
 
 import java.awt.geom.Point2D;
 
-import org.geotools.referencefork.referencing.operation.builder.TriangulationException;
+import org.geotools.referencing.operation.builder.TriangulationException;
 import org.gvsig.jts.JtsUtil;
 
 import com.iver.cit.gvsig.fmap.core.FPolygon2D;

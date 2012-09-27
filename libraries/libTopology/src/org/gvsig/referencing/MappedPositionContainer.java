@@ -51,7 +51,7 @@ package org.gvsig.referencing;
 import java.util.List;
 
 import org.cresques.cts.IProjection;
-import org.geotools.referencefork.referencing.operation.builder.MappedPosition;
+import org.geotools.referencing.operation.builder.MappedPosition;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 

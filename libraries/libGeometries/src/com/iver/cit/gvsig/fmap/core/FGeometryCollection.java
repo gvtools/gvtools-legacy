@@ -10,7 +10,6 @@ import java.io.IOException;
 
 import org.cresques.cts.ICoordTrans;
 import org.cresques.cts.IProjection;
-import org.geotools.data.postgis.attributeio.WKBEncoder;
 import org.gvsig.fmap.geometries.iso.aggregate.MultiGeometry;
 import org.gvsig.fmap.geometries.iso.primitive.AbstractGeometryPrimitive;
 import org.gvsig.fmap.geometries.iso.primitive.Box;
@@ -18,9 +17,10 @@ import org.gvsig.fmap.geometries.iso.primitive.Box;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.io.WKBWriter;
 
 
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -42,7 +42,7 @@ import com.vividsolutions.jts.geom.LineString;
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -73,9 +73,11 @@ import com.vividsolutions.jts.geom.LineString;
  *
  */
 /**
- * @author Jorge Piera Llodrá (jorge.piera@iver.es)
+ * @author Jorge Piera Llodrï¿½ (jorge.piera@iver.es)
  */
 public class FGeometryCollection extends AbstractGeometry implements MultiGeometry{
+	private static final WKBWriter writer = new WKBWriter();
+	
 	protected IGeometry[] geometries = null;
 		
 	public FGeometryCollection(String id, IProjection projection, IGeometry[] geometries) {
@@ -349,7 +351,7 @@ public class FGeometryCollection extends AbstractGeometry implements MultiGeomet
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#toWKB()
 	 */
 	public byte[] toWKB() throws IOException {
-		return WKBEncoder.encodeGeometry(toJTSGeometry());		
+		return writer.write(toJTSGeometry());		
 	}
 
 	/*

@@ -3,11 +3,11 @@ package org.geotools.referencing.operation.projection;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 
-import javax.units.NonSI;
+import javax.measure.unit.NonSI;
 
 import org.geotools.metadata.iso.citation.CitationImpl;
+import org.geotools.metadata.iso.citation.Citations;
 import org.geotools.referencing.NamedIdentifier;
-import org.geotools.referencing.operation.projection.MapProjection.AbstractProvider;
 import org.opengis.parameter.ParameterDescriptor;
 import org.opengis.parameter.ParameterDescriptorGroup;
 import org.opengis.parameter.ParameterNotFoundException;
@@ -64,13 +64,13 @@ public class IdrEckertIII extends MapProjection {
 
         public static final ParameterDescriptor LONGITUDE_OF_CENTER = createDescriptor(
                 new NamedIdentifier[] {
-                    new NamedIdentifier(CitationImpl.OGC,     "longitude_of_center"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Longitude of origin"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "Longitude of false origin"),
-                    new NamedIdentifier(CitationImpl.GEOTIFF, "ProjCenterLong"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "NatOriginLong"),
-                    new NamedIdentifier(CitationImpl.EPSG,    "central_meridian"),		
-                    new NamedIdentifier(CitationImpl.EPSG,    "CenterLong")
+                    new NamedIdentifier(Citations.OGC,     "longitude_of_center"),
+                    new NamedIdentifier(Citations.EPSG,    "Longitude of origin"),
+                    new NamedIdentifier(Citations.EPSG,    "Longitude of false origin"),
+                    new NamedIdentifier(Citations.GEOTIFF, "ProjCenterLong"),
+                    new NamedIdentifier(Citations.EPSG,    "NatOriginLong"),
+                    new NamedIdentifier(Citations.EPSG,    "central_meridian"),		
+                    new NamedIdentifier(Citations.EPSG,    "CenterLong")
                 }, 0.0, -360.0, 360.0, NonSI.DEGREE_ANGLE);
 
         /**
@@ -78,9 +78,9 @@ public class IdrEckertIII extends MapProjection {
          * of "standard_parallel_1". I have sided with ESRI and Snyder in this case.
          */
         static final ParameterDescriptorGroup PARAMETERS = createDescriptorGroup(new NamedIdentifier[] {
-                new NamedIdentifier(CitationImpl.OGC,      "Eckert III"),
-    			new NamedIdentifier(CitationImpl.EPSG,     "Eckert-III"),
-    			new NamedIdentifier(CitationImpl.EPSG,     "Eckert_III"),
+                new NamedIdentifier(Citations.OGC,      "Eckert III"),
+    			new NamedIdentifier(Citations.EPSG,     "Eckert-III"),
+    			new NamedIdentifier(Citations.EPSG,     "Eckert_III"),
                 new NamedIdentifier(new CitationImpl("IDR"), "IDR")//,
 //                new NamedIdentifier(CitationImpl.GEOTOOLS, Vocabulary.formatInternational(
 //                                    VocabularyKeys.EQUIDISTANT_CYLINDRICAL_PROJECTION))
@@ -106,7 +106,7 @@ public class IdrEckertIII extends MapProjection {
         /**
          * Returns the operation type for this map projection.
          */
-        protected Class getOperationType() {
+        public Class getOperationType() {
         	return CylindricalProjection.class;
         }
 

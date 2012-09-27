@@ -44,6 +44,7 @@ import java.util.TreeMap;
 
 import org.cresques.cts.ICRSFactory;
 import org.cresques.cts.IProjection;
+import org.cresques.geo.Geodetic;
 import org.gvsig.crs.repository.EpsgRepository;
 import org.gvsig.crs.repository.EpsgRepositoryGT;
 import org.gvsig.crs.repository.EsriRepository;
@@ -74,92 +75,94 @@ public class CrsFactory implements ICRSFactory {
 	 * @throws CrsException
 	 */
 	public ICrs getCRS(String code) throws CrsException {
+    	// TODO geotools refactoring
+    	return new Crs("EPSG:23030");
 
 		/*if (data.containsKey(code))
 			return (ICrs) data.get(code);*/
 
-		String repoId = "";
-		String crsCode = "";
-		ICrs crs = null;
-
-		if(code.indexOf(":", code.indexOf(":")+1)<0){
-			repoId = code.substring(0, code.indexOf(":"));
-			crsCode = code.substring(code.indexOf(":")+1);
-
-			ICrsRepository repo = null;
-
-			if(repoId.equals("EPSG")){
-				repo = new EpsgRepositoryGT();
-				crs = repo.getCrs(crsCode);
-				if (crs==null) {
-					repo = new EpsgRepository();
-					crs = repo.getCrs(crsCode);
-				}
-			}else if (repoId.equals("IAU2000")){
-				repo = new Iau2000RepositoryGT();
-				crs = repo.getCrs(crsCode);
-				if (crs==null) {
-					repo = new Iau2000Repository();
-					crs = repo.getCrs(crsCode);
-				}
-			}else if (repoId.equals("ESRI")){
-				repo = new EsriRepositoryGT();
-				crs = repo.getCrs(crsCode);
-				if (crs==null) {
-					repo = new EsriRepository();
-					crs = repo.getCrs(crsCode);
-				}
-			}else if (repoId.equals("USR")){
-				repo = new UsrRepositoryGT();
-				crs = repo.getCrs(crsCode);
-				if (crs==null) {
-					repo = new UsrRepository();
-					crs = repo.getCrs(crsCode);
-				}
-			}
-		}
-		else{
-			String sourceParams = null;
-			String targetParams = null;
-
-			crsCode = code.substring(0,code.indexOf(":",code.indexOf(":")+1));
-			if (code.indexOf("@")==-1){
-				crsCode=crsCode.substring(0, crsCode.indexOf(","));
-			}else{
-				sourceParams = code.substring(code.indexOf("@")+1,code.lastIndexOf("@"));
-				targetParams = code.substring(code.lastIndexOf("@")+1);
-
-				if (sourceParams.equals(""))
-					sourceParams = null;
-				else if (targetParams.equals("1")){ // Compativilidad con versiones de libJCrs sin soporte para transf. compuestas.
-					targetParams = sourceParams;
-					sourceParams = "";
-				}
-				if (targetParams.equals("")||targetParams.equals("0")) // Compativilidad con versiones de libJCrs sin soporte para transf. compuestas.
-					targetParams = null;
-			}
-			crs = getCRS(crsCode);
-			crs.setTransformationParams(sourceParams,targetParams);
-		}
-
-		/*code = crs.getAbrev();
-
-		data.put(code, crs);*/
-
-		return crs;
-
-		/*if (data.containsKey(code))
-			return (Crs) data.get(code);
-
-		Crs crs = new Crs(code);
-
-		// LWS Esta línea sobra, cuando el cuadro de diálogo esté
-		// mejor hecho.
-		code = crs.getAbrev();
-
-		data.put(code, crs);
-
-		return crs;*/
+//		String repoId = "";
+//		String crsCode = "";
+//		ICrs crs = null;
+//
+//		if(code.indexOf(":", code.indexOf(":")+1)<0){
+//			repoId = code.substring(0, code.indexOf(":"));
+//			crsCode = code.substring(code.indexOf(":")+1);
+//
+//			ICrsRepository repo = null;
+//
+//			if(repoId.equals("EPSG")){
+//				repo = new EpsgRepositoryGT();
+//				crs = repo.getCrs(crsCode);
+//				if (crs==null) {
+//					repo = new EpsgRepository();
+//					crs = repo.getCrs(crsCode);
+//				}
+//			}else if (repoId.equals("IAU2000")){
+//				repo = new Iau2000RepositoryGT();
+//				crs = repo.getCrs(crsCode);
+//				if (crs==null) {
+//					repo = new Iau2000Repository();
+//					crs = repo.getCrs(crsCode);
+//				}
+//			}else if (repoId.equals("ESRI")){
+//				repo = new EsriRepositoryGT();
+//				crs = repo.getCrs(crsCode);
+//				if (crs==null) {
+//					repo = new EsriRepository();
+//					crs = repo.getCrs(crsCode);
+//				}
+//			}else if (repoId.equals("USR")){
+//				repo = new UsrRepositoryGT();
+//				crs = repo.getCrs(crsCode);
+//				if (crs==null) {
+//					repo = new UsrRepository();
+//					crs = repo.getCrs(crsCode);
+//				}
+//			}
+//		}
+//		else{
+//			String sourceParams = null;
+//			String targetParams = null;
+//
+//			crsCode = code.substring(0,code.indexOf(":",code.indexOf(":")+1));
+//			if (code.indexOf("@")==-1){
+//				crsCode=crsCode.substring(0, crsCode.indexOf(","));
+//			}else{
+//				sourceParams = code.substring(code.indexOf("@")+1,code.lastIndexOf("@"));
+//				targetParams = code.substring(code.lastIndexOf("@")+1);
+//
+//				if (sourceParams.equals(""))
+//					sourceParams = null;
+//				else if (targetParams.equals("1")){ // Compativilidad con versiones de libJCrs sin soporte para transf. compuestas.
+//					targetParams = sourceParams;
+//					sourceParams = "";
+//				}
+//				if (targetParams.equals("")||targetParams.equals("0")) // Compativilidad con versiones de libJCrs sin soporte para transf. compuestas.
+//					targetParams = null;
+//			}
+//			crs = getCRS(crsCode);
+//			crs.setTransformationParams(sourceParams,targetParams);
+//		}
+//
+//		/*code = crs.getAbrev();
+//
+//		data.put(code, crs);*/
+//
+//		return crs;
+//
+//		/*if (data.containsKey(code))
+//			return (Crs) data.get(code);
+//
+//		Crs crs = new Crs(code);
+//
+//		// LWS Esta línea sobra, cuando el cuadro de diálogo esté
+//		// mejor hecho.
+//		code = crs.getAbrev();
+//
+//		data.put(code, crs);
+//
+//		return crs;*/
 	}
 
 	/**
@@ -211,7 +214,6 @@ public class CrsFactory implements ICRSFactory {
 	 *
 	 */
 	public IProjection get(String name) {
-		// TODO Auto-generated method stub
 		try {
 			return getCRS(name);
 		} catch (CrsException e) {

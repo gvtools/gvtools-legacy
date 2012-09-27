@@ -53,7 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cresques.cts.IProjection;
-import org.geotools.referencefork.referencing.operation.builder.MappedPosition;
+import org.geotools.referencing.operation.builder.MappedPosition;
 import org.gvsig.referencing.MappedPositionContainer;
 import org.gvsig.referencing.ReferencingUtil;
 

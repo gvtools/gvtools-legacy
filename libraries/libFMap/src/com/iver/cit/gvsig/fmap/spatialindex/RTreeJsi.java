@@ -64,6 +64,8 @@
 */
 package com.iver.cit.gvsig.fmap.spatialindex;
 
+import gnu.trove.TIntProcedure;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -71,7 +73,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-import com.infomatiq.jsi.IntProcedure;
 import com.infomatiq.jsi.Rectangle;
 import com.infomatiq.jsi.rtree.RTree;
 
@@ -112,7 +113,7 @@ public class RTreeJsi implements ISpatialIndex, INearestNeighbourFinder {
 		rtree.init(props);
 	}
 
-	class ListIntProcedure implements IntProcedure{
+	class ListIntProcedure implements TIntProcedure{
 		ArrayList solution = new ArrayList();
 
 		public boolean execute(int arg0) {
@@ -162,7 +163,7 @@ public class RTreeJsi implements ISpatialIndex, INearestNeighbourFinder {
 		com.infomatiq.jsi.Rectangle jsiRect =
 			toJsiRect(rect);
 
-		rtree.nearest(jsiRect, solution, Float.POSITIVE_INFINITY);
+		rtree.nearest(jsiRect.centre(), solution, Float.POSITIVE_INFINITY);
 		return solution.getSolution();
 	}
 
@@ -175,11 +176,6 @@ public class RTreeJsi implements ISpatialIndex, INearestNeighbourFinder {
 //			new com.infomatiq.jsi.Point((float)point.getX(), (float)point.getY());
 //		return (List) rtree.nearest(jsiPoint, numberOfNearest);
 //	}
-
-	//FIXME Add this method to spatial index interface
-	public Iterator iterator(){
-		return rtree.iterator();
-	}
 
 	public static void main(String[] args){
 		RTreeJsi q = new RTreeJsi();

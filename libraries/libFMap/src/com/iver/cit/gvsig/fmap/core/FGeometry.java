@@ -56,7 +56,6 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
 import org.cresques.cts.ICoordTrans;
-import org.geotools.data.postgis.attributeio.WKBEncoder;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
@@ -64,6 +63,7 @@ import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.core.v02.FLabel;
 import com.iver.utiles.swing.threads.Cancellable;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.WKBWriter;
 
 
 /**
@@ -72,6 +72,8 @@ import com.vividsolutions.jts.geom.Geometry;
  * @author FJP
  */
 public class FGeometry extends AbstractGeometry implements IGeometry3D {
+	private static final WKBWriter writer = new WKBWriter(); 
+	
 	/**
 	 *
 	 */
@@ -236,7 +238,7 @@ public class FGeometry extends AbstractGeometry implements IGeometry3D {
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#getPathIterator(AffineTransform)
 	 */
 	public PathIterator getPathIterator(AffineTransform at) {
-		return (GeneralPathXIterator)shp.getPathIterator(null);
+		return shp.getPathIterator(null);
 	}
 
 
@@ -249,7 +251,7 @@ public class FGeometry extends AbstractGeometry implements IGeometry3D {
     }
 
     public byte[] toWKB() throws IOException{
-        return WKBEncoder.encodeGeometry(toJTSGeometry());
+        return writer.write(toJTSGeometry());
     }
     /**
 	 * Devuelve un array con todos los valores de Z.

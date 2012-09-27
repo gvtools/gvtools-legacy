@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -47,12 +47,12 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
 import org.cresques.cts.IProjection;
-import org.geotools.data.postgis.attributeio.WKBEncoder;
 import org.gvsig.fmap.geometries.iso.aggregate.MultiPoint;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.io.WKBWriter;
 
 
 /**
@@ -61,7 +61,8 @@ import com.vividsolutions.jts.geom.GeometryFactory;
  * @author Vicente Caballero Navarro
  */
 public class FMultiPoint2D extends FGeometryCollection implements MultiPoint{
-			
+	private static final WKBWriter writer = new WKBWriter();
+	
 	public FMultiPoint2D(IProjection projection, FPoint2D[] points) {
 		this(null, projection, points);		
 	}
@@ -259,14 +260,8 @@ public class FMultiPoint2D extends FGeometryCollection implements MultiPoint{
 		}
 
 	}
+
 	public byte[] toWKB() throws IOException {
-		return WKBEncoder.encodeGeometry(toJTSGeometry());
+		return writer.write(toJTSGeometry());
 	}
-
-
-
-
-
-	
-
 }

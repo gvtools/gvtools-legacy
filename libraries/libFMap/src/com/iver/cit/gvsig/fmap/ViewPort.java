@@ -51,7 +51,6 @@ import java.util.ArrayList;
 
 import org.cresques.cts.GeoCalc;
 import org.cresques.cts.IProjection;
-import org.cresques.cts.gt2.CSUTM;
 
 import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.utiles.StringUtilities;

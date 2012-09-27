@@ -48,8 +48,8 @@
 */
 package org.gvsig.referencing;
 
-import org.geotools.referencefork.referencing.operation.builder.MappedPosition;
-import org.opengis.spatialschema.geometry.DirectPosition;
+import org.geotools.referencing.operation.builder.MappedPosition;
+import org.opengis.geometry.DirectPosition;
 
 /**
  * A MappedPosition which could be marked as innactive

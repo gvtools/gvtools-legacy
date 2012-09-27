@@ -52,31 +52,11 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
-import com.iver.cit.gvsig.CADExtension;
-import com.iver.cit.gvsig.EditionUtilities;
 import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.core.FArc2D;
-import com.iver.cit.gvsig.fmap.core.FCircle2D;
-import com.iver.cit.gvsig.fmap.core.FEllipse2D;
-import com.iver.cit.gvsig.fmap.core.FGeometry;
-import com.iver.cit.gvsig.fmap.core.FGeometryCollection;
-import com.iver.cit.gvsig.fmap.core.FMultiPoint2D;
-import com.iver.cit.gvsig.fmap.core.FMultipoint3D;
-import com.iver.cit.gvsig.fmap.core.FNullGeometry;
-import com.iver.cit.gvsig.fmap.core.FPoint2D;
-import com.iver.cit.gvsig.fmap.core.FPoint3D;
-import com.iver.cit.gvsig.fmap.core.FPolygon2D;
-import com.iver.cit.gvsig.fmap.core.FPolygon3D;
-import com.iver.cit.gvsig.fmap.core.FPolyline2D;
-import com.iver.cit.gvsig.fmap.core.FPolyline3D;
 import com.iver.cit.gvsig.fmap.core.FShape;
-import com.iver.cit.gvsig.fmap.core.FSpline2D;
-import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.gt2.FLiteShape;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.gui.cad.tools.SplitGeometryCADTool;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
-import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * CAD extension to split geometries from a digitized linear geometry.

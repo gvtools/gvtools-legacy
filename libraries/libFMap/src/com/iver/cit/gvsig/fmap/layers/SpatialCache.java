@@ -10,7 +10,7 @@ import com.vividsolutions.jts.index.ItemVisitor;
 import com.vividsolutions.jts.index.quadtree.Quadtree;
 
 public class SpatialCache  {
-	int maxFeatures = 1000; // Por defecto, pero se puede cambiar
+	public int maxFeatures = 1000; // Por defecto, pero se puede cambiar
 	int fastNumTotalRegs=0;
 	Quadtree quadTree = new Quadtree();
 

@@ -70,9 +70,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.vecmath.MismatchedSizeException;
 
 import org.cresques.cts.IProjection;
-import org.geotools.referencefork.geometry.DirectPosition2D;
-import org.geotools.referencefork.referencing.operation.builder.MappedPosition;
-import org.geotools.referencefork.referencing.operation.builder.MathTransformBuilder;
+import org.geotools.geometry.DirectPosition2D;
+import org.geotools.referencing.operation.builder.MappedPosition;
+import org.geotools.referencing.operation.builder.MathTransformBuilder;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.fmap.tools.VectorListenerImpl;
 import org.gvsig.fmap.tools.behavior.VectorBehavior;
@@ -84,12 +84,11 @@ import org.gvsig.topology.ui.LayerJComboBox;
 import org.gvsig.topology.ui.LayerJComboBox.LayerFilter;
 import org.gvsig.topology.ui.util.BoxLayoutPanel;
 import org.gvsig.topology.ui.util.GUIUtil;
+import org.opengis.geometry.DirectPosition;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.geometry.MismatchedReferenceSystemException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.MathTransform;
-import org.opengis.referencing.operation.TransformException;
-import org.opengis.spatialschema.geometry.DirectPosition;
-import org.opengis.spatialschema.geometry.MismatchedDimensionException;
-import org.opengis.spatialschema.geometry.MismatchedReferenceSystemException;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -230,19 +229,19 @@ public class VectorErrorTable extends BoxLayoutPanel {
 				break;
 			case 1:// x0
 				position = mappedPosition.getSource();
-				solution = position.getCoordinates()[0] + "";
+				solution = position.getCoordinate()[0] + "";
 				break;
 			case 2:// y0
 				position = mappedPosition.getSource();
-				solution = position.getCoordinates()[1] + "";
+				solution = position.getCoordinate()[1] + "";
 				break;
 			case 3:// x1
 				position = mappedPosition.getTarget();
-				solution = position.getCoordinates()[0] + "";
+				solution = position.getCoordinate()[0] + "";
 				break;
 			case 4:// y1
 				position = mappedPosition.getTarget();
-				solution = position.getCoordinates()[1] + "";
+				solution = position.getCoordinate()[1] + "";
 				break;
 			case 5:// RMS
 				try {
@@ -262,14 +261,11 @@ public class VectorErrorTable extends BoxLayoutPanel {
 							break;
 						}
 					}
-					solution = mappedPosition.getError(mathTransform, buffer)
-					+ "";
-				} catch (TransformException e) {
-					solution = "";
-					getRmsLabel()
-					.setText(
-							PluginServices.getText(this,
-									"Error_computing_RMS"));
+					// TODO geotools refactoring
+					solution = "mappedPosition.getError(mathTransform, buffer)";
+					// solution =
+					// "mappedPosition.getError(mathTransform, buffer)"
+					// + "";
 				} catch (MismatchedSizeException e) {
 					solution = "";
 					getRmsLabel()

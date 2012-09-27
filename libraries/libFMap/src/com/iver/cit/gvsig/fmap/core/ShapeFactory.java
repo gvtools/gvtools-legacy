@@ -44,7 +44,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Point2D;
 
-import com.iver.cit.gvsig.fmap.core.gt2.FLiteShape;
 import com.iver.cit.gvsig.fmap.edition.UtilFunctions;
 
 
@@ -175,9 +174,6 @@ public class ShapeFactory {
 		return new FGeometry(shp);
 	}
 
-    public static IGeometry createGeometry(FLiteShape gt2geometry) {
-        return new Gt2Geometry(gt2geometry);
-    }
     public static IGeometry createCircle(Point2D center, Point2D r){
 		double radio = center.distance(r);
 		return createCircle(center, radio);

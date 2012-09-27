@@ -55,7 +55,6 @@ import javax.print.attribute.standard.PrintQuality;
 
 import org.apache.log4j.Logger;
 import org.cresques.cts.ICoordTrans;
-import org.gvsig.exceptions.BaseException;
 import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -88,7 +87,6 @@ import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 import com.iver.cit.gvsig.fmap.drivers.WithDefaultLegend;
-import com.iver.cit.gvsig.fmap.drivers.featureiterators.DefaultFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.featureiterators.JoinFeatureIterator;
 import com.iver.cit.gvsig.fmap.edition.AfterFieldEditEvent;
 import com.iver.cit.gvsig.fmap.edition.AfterRowEditEvent;
@@ -124,14 +122,11 @@ import com.iver.cit.gvsig.fmap.rendering.SymbolLegendEvent;
 import com.iver.cit.gvsig.fmap.rendering.ZSort;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.AttrInTableLabelingStrategy;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
-import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelingFactory;
 import com.iver.cit.gvsig.fmap.spatialindex.IPersistentSpatialIndex;
 import com.iver.cit.gvsig.fmap.spatialindex.ISpatialIndex;
-import com.iver.cit.gvsig.fmap.spatialindex.QuadtreeGt2;
 import com.iver.cit.gvsig.fmap.spatialindex.QuadtreeJts;
 import com.iver.cit.gvsig.fmap.spatialindex.SpatialIndexException;
-import com.iver.utiles.FileUtils;
 import com.iver.utiles.IPersistence;
 import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.PostProcessSupport;
@@ -238,13 +233,12 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 
         try {
             source.start();
-            spatialIndex = new QuadtreeGt2(FileUtils.getFileWithoutExtension(sptFile),
-                    "NM", source.getFullExtent(), source.getShapeCount(), false);
+            // TODO geotools refactoring
+			spatialIndex = new QuadtreeJts();
+			// spatialIndex = new
+			// QuadtreeGt2(FileUtils.getFileWithoutExtension(sptFile),
+			// "NM", source.getFullExtent(), source.getShapeCount(), false);
             source.setSpatialIndex(spatialIndex);
-        } catch (SpatialIndexException e) {
-            spatialIndex = null;
-            e.printStackTrace();
-            return;
         } catch (ReadDriverException e) {
             spatialIndex = null;
             e.printStackTrace();
@@ -993,27 +987,10 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
         ISpatialIndex localCopy = null;
         try {
             va.start();
-            localCopy = new QuadtreeGt2(fileName, "NM", va.getFullExtent(),
-                    va.getShapeCount(), true);
-
-        } catch (SpatialIndexException e1) {
-            // Probably we dont have writing permissions
-            String directoryName = System.getProperty("java.io.tmpdir");
-            File newFile = new File(directoryName +
-                    File.separator +
-                    file.getName());
-            String newFileName = newFile.getName();
-            try {
-                localCopy = new QuadtreeGt2(newFileName, "NM", va.getFullExtent(),
-                        va.getShapeCount(), true);
-            } catch (SpatialIndexException e) {
-                // if we cant build a file based spatial index, we'll build
-                // a pure memory spatial index
-                localCopy = new QuadtreeJts();
-            } catch (ReadDriverException e) {
-                localCopy = new QuadtreeJts();
-            }
-
+			// TODO geotools refactoring
+			localCopy = new QuadtreeJts();
+//			localCopy = new QuadtreeGt2(fileName, "NM", va.getFullExtent(),
+//					va.getShapeCount(), true);
         } catch(Exception e){
             e.printStackTrace();
         }//try

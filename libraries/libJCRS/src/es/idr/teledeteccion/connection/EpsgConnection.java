@@ -41,16 +41,11 @@
 package es.idr.teledeteccion.connection;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.geotools.referencing.factory.epsg.HSQLDataSource;
 import org.hsqldb.jdbc.jdbcDataSource;
 
 /**
@@ -76,10 +71,12 @@ public class EpsgConnection extends jdbcDataSource {
 	}
 	
 	public void setConnectionEPSG() {
-		HSQLDataSource ds = new HSQLDataSource();
-				
+		// TODO geotools refactoring
+		// HSQLDataSource ds = new HSQLDataSource();
+
 		try {
-			connect = ds.getConnection();
+			super.getConnection();
+			// connect = ds.getConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

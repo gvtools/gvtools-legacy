@@ -4,12 +4,12 @@ import java.awt.Shape;
 import java.io.IOException;
 
 import org.cresques.cts.IProjection;
-import org.geotools.data.postgis.attributeio.WKBEncoder;
 import org.gvsig.fmap.geometries.iso.primitive.AbstractGeometryPrimitive;
 
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.vividsolutions.jts.geom.Geometry;
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+import com.vividsolutions.jts.io.WKBWriter;
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -31,7 +31,7 @@ import com.vividsolutions.jts.geom.Geometry;
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -62,9 +62,10 @@ import com.vividsolutions.jts.geom.Geometry;
  *
  */
 /**
- * @author Jorge Piera Llodrá (jorge.piera@iver.es)
+ * @author Jorge Piera Llodrï¿½ (jorge.piera@iver.es)
  */
 public abstract class FGeometry extends AbstractGeometry implements FShape, AbstractGeometryPrimitive {
+	private static final WKBWriter writer = new WKBWriter();
 	
 	public FGeometry(String id, IProjection projection) {
 		super(id, projection);		
@@ -79,7 +80,7 @@ public abstract class FGeometry extends AbstractGeometry implements FShape, Abst
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#toWKB()
 	 */
 	public byte[] toWKB() throws IOException {
-		return WKBEncoder.encodeGeometry(toJTSGeometry());
+		return writer.write(toJTSGeometry());
 	}
 
 	/*

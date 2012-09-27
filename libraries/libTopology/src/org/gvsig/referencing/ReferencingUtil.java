@@ -48,37 +48,25 @@
  */
 package org.gvsig.referencing;
 
-import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.IllegalPathStateException;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
-import java.rmi.server.UID;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.cresques.cts.IProjection;
-import org.geotools.referencefork.geometry.GeneralDirectPosition;
-import org.geotools.referencefork.geometry.ShapeUtilities;
-import org.geotools.referencefork.referencing.operation.builder.RubberSheetBuilder;
-import org.geotools.referencefork.referencing.operation.builder.TINTriangle;
+import org.geotools.geometry.GeneralDirectPosition;
+import org.geotools.referencing.operation.builder.RubberSheetBuilder;
+import org.geotools.resources.geometry.ShapeUtilities;
 import org.gvsig.fmap.core.FGeometryUtil;
 import org.gvsig.fmap.core.ShapePointExtractor;
-import org.gvsig.jts.voronoi.FTriangle;
-import org.gvsig.jts.voronoi.TriangleFeature;
-import org.gvsig.topology.Messages;
+import org.opengis.geometry.DirectPosition;
+import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
-import org.opengis.spatialschema.geometry.DirectPosition;
-import org.opengis.spatialschema.geometry.MismatchedDimensionException;
 
-import com.hardcode.gdbms.engine.values.Value;
-import com.hardcode.gdbms.engine.values.ValueFactory;
-import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.core.FGeometry;
 import com.iver.cit.gvsig.fmap.core.FGeometryCollection;
 import com.iver.cit.gvsig.fmap.core.FMultiPoint2D;
@@ -88,19 +76,9 @@ import com.iver.cit.gvsig.fmap.core.FPolygon2D;
 import com.iver.cit.gvsig.fmap.core.FPolyline2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
-import com.iver.cit.gvsig.fmap.core.Gt2Geometry;
-import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
-import com.iver.cit.gvsig.fmap.core.gt2.FLiteShape;
-import com.iver.cit.gvsig.fmap.drivers.FeatureCollectionMemoryDriver;
-import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
-import com.iver.cit.gvsig.fmap.drivers.LayerDefinition;
-import com.iver.cit.gvsig.fmap.layers.FLayerGenericVectorial;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
-import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 
 
 /**
@@ -230,12 +208,6 @@ public class ReferencingUtil {
 //		}
 		else if(clazz.isAssignableFrom(FNullGeometry.class)){
 			solution = geometry;
-		}else if(clazz.isAssignableFrom(Gt2Geometry.class)){
-			Gt2Geometry gt2 = (Gt2Geometry) geometry;
-			FLiteShape shp = (FLiteShape) gt2.getInternalShape();
-			FLiteShape transformedShp = new FLiteShape(shp.getGeometry(), preTransform, trans, false);
-			transformedShp.transform(postTransform);
-			solution = ShapeFactory.createGeometry(transformedShp);
 		}
 		
 		return solution;
@@ -432,7 +404,7 @@ public class ReferencingUtil {
 		double[] newCoordinates = new double[desiredDimensions];
 		int pointDim = directPosition.getDimension();
 		if(pointDim < desiredDimensions){
-			double[] src = directPosition.getCoordinates();
+			double[] src = directPosition.getCoordinate();
 			System.arraycopy(src, 0, newCoordinates, 0, pointDim);
 //	    	for (int i = directPosition.getCoordinates().length; i < newCoordinates.length; i++) {
 //				newCoordinates[i] = 0d;
@@ -442,7 +414,7 @@ public class ReferencingUtil {
 		else if (pointDim == desiredDimensions)
 			return directPosition;
 		else{
-	    	System.arraycopy(directPosition.getCoordinates(), 0, newCoordinates, 0, desiredDimensions);
+	    	System.arraycopy(directPosition.getCoordinate(), 0, newCoordinates, 0, desiredDimensions);
 	    	
 		}
 		solution = new GeneralDirectPosition(newCoordinates);
@@ -452,58 +424,62 @@ public class ReferencingUtil {
 	
 	
 	public Point2D convert(DirectPosition position){
-		double[] coordinates = position.getCoordinates();
+		double[] coordinates = position.getCoordinate();
 		return new Point2D.Double(coordinates[0], coordinates[1]);
 	}
 	public FLyrVect getTinAsFMapLyr(RubberSheetBuilder rbBuilder, IProjection projection){
-		FLyrVect solution = null;
-		List<IFeature> features = new ArrayList<IFeature>();
-		Set tinCollection = rbBuilder.getMapTriangulation().keySet();
-		if(tinCollection.size() > 0){
-			Iterator triangles = tinCollection.iterator();	
-			while(triangles.hasNext()){
-				TINTriangle t = (TINTriangle) triangles.next();
-				FTriangle ftriangle = new FTriangle(convert(t.p0), convert(t.p1), convert(t.p2));
-				Value fid = ValueFactory.createValue(features.size());
-				Value[] values = new Value[] { fid };
-				TriangleFeature feature = new TriangleFeature(ftriangle, values, new UID().toString());
-				features.add(feature);
-			}
-			
-			String lyrName = Messages.getText("RUBBER_SHEET_TIN_LAYER");
-			LayerDefinition def = new LayerDefinition(){
-				public int getShapeType(){
-					return FShape.POLYGON;
-				}	
-			};
-			
-			FieldDescription fidDescription = new FieldDescription();
-			fidDescription.setFieldName("fid");
-			fidDescription.setFieldType(FieldDescription.stringToType("Integer"));
-			fidDescription.setFieldLength(10);
-			FieldDescription[] fields = {fidDescription};
-			def.setFieldsDesc(fields);
-			
-			
-			FeatureCollectionMemoryDriver driver = 
-				new FeatureCollectionMemoryDriver(lyrName, features, def );
-		
-			solution =  new FLayerGenericVectorial();
-			solution.setName(lyrName);
-			solution.setProjection(projection);
-			((FLayerGenericVectorial)solution).setDriver(driver);
-			try {
-				solution.load();
-				IVectorLegend defaultLegend = 
-					LegendFactory.createSingleSymbolLegend(FShape.POLYGON);
-				defaultLegend.setDefaultSymbol(SymbologyFactory.
-						createDefaultSymbolByShapeType(FShape.POLYGON, Color.GREEN));
-				solution.setLegend(defaultLegend);
-				
-			} catch (LoadLayerException e) {
-				e.printStackTrace();
-			}
-		}//if
-		return solution;
+		// TODO geotools refactoring
+		throw new UnsupportedOperationException();
+		// FLyrVect solution = null;
+		// List<IFeature> features = new ArrayList<IFeature>();
+		// Set tinCollection = rbBuilder.getMapTriangulation().keySet();
+		// if(tinCollection.size() > 0){
+		// Iterator triangles = tinCollection.iterator();
+		// while(triangles.hasNext()){
+		// TINTriangle t = (TINTriangle) triangles.next();
+		// FTriangle ftriangle = new FTriangle(convert(t.p0), convert(t.p1),
+		// convert(t.p2));
+		// Value fid = ValueFactory.createValue(features.size());
+		// Value[] values = new Value[] { fid };
+		// TriangleFeature feature = new TriangleFeature(ftriangle, values, new
+		// UID().toString());
+		// features.add(feature);
+		// }
+		//
+		// String lyrName = Messages.getText("RUBBER_SHEET_TIN_LAYER");
+		// LayerDefinition def = new LayerDefinition(){
+		// public int getShapeType(){
+		// return FShape.POLYGON;
+		// }
+		// };
+		//
+		// FieldDescription fidDescription = new FieldDescription();
+		// fidDescription.setFieldName("fid");
+		// fidDescription.setFieldType(FieldDescription.stringToType("Integer"));
+		// fidDescription.setFieldLength(10);
+		// FieldDescription[] fields = {fidDescription};
+		// def.setFieldsDesc(fields);
+		//
+		//
+		// FeatureCollectionMemoryDriver driver =
+		// new FeatureCollectionMemoryDriver(lyrName, features, def );
+		//
+		// solution = new FLayerGenericVectorial();
+		// solution.setName(lyrName);
+		// solution.setProjection(projection);
+		// ((FLayerGenericVectorial)solution).setDriver(driver);
+		// try {
+		// solution.load();
+		// IVectorLegend defaultLegend =
+		// LegendFactory.createSingleSymbolLegend(FShape.POLYGON);
+		// defaultLegend.setDefaultSymbol(SymbologyFactory.
+		// createDefaultSymbolByShapeType(FShape.POLYGON, Color.GREEN));
+		// solution.setLegend(defaultLegend);
+		//
+		// } catch (LoadLayerException e) {
+		// e.printStackTrace();
+		// }
+		// }//if
+		// return solution;
 	}
 }

@@ -79,7 +79,6 @@ import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.geotools.resources.NIOUtilities;
-import org.geotools.resources.NumberParser;
 
 import com.iver.cit.gvsig.fmap.drivers.dbf.DbfEncodings;
 
@@ -138,7 +137,6 @@ public class DbaseFileReaderNIO {
   int[] fieldLengths;
   int cnt = 1;
   Row row;
-  NumberParser numberParser = new NumberParser();
 
   /** Creates a new instance of DBaseFileReader
    * @param channel The readable channel to use.
@@ -386,6 +384,8 @@ public class DbaseFileReaderNIO {
     Object object = null;
 
     //System.out.println( charBuffer.subSequence(fieldOffset,fieldOffset + fieldLen));
+		String str = charBuffer.subSequence(fieldOffset,
+				fieldOffset + fieldLen - 1).toString();
 
     if(fieldLen > 0) {
 
@@ -464,7 +464,7 @@ public class DbaseFileReaderNIO {
         case 'N':
           try {
             if (header.getFieldDecimalCount(fieldNum) == 0) {
-              object = new Integer(numberParser.parseInt(charBuffer, fieldOffset, fieldOffset + fieldLen - 1));
+              object = new Integer(Integer.parseInt(str));
               break;
             }
             // else will fall through to the floating point number
@@ -478,7 +478,7 @@ public class DbaseFileReaderNIO {
 
             // Lets try parsing a long instead...
             try {
-                object = new Long(numberParser.parseLong(charBuffer,fieldOffset,fieldOffset + fieldLen - 1));
+                object = new Long(Long.parseLong(str));
                 break;
             } catch (NumberFormatException e2) {
 
@@ -490,7 +490,7 @@ public class DbaseFileReaderNIO {
           try {
 
 
-            object = new Double(numberParser.parseDouble(charBuffer,fieldOffset, fieldOffset + fieldLen - 1));
+            object = new Double(Double.parseDouble(str));
           } catch (NumberFormatException e) {
               // todo: use progresslistener, this isn't a grave error, though it
               // does indicate something is wrong

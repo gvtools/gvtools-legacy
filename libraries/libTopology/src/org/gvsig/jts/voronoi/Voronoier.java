@@ -56,7 +56,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.geotools.referencefork.referencing.operation.builder.TriangulationException;
+import org.geotools.referencing.operation.builder.TriangulationException;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.jts.JtsUtil;
 import org.gvsig.topology.Messages;
@@ -92,10 +92,13 @@ public class Voronoier {
 	static{
 		ChewVoronoiStrategy chew = new ChewVoronoiStrategy();
 		strategies.put(chew.getName(), chew);
-//		IncrementalTinVoronoiStrategy triangleDt = new IncrementalTinVoronoiStrategy();
-//		strategies.put(triangleDt.getName(), triangleDt );
-		IncrementalRectBoundsVoronoiStrategy rectangleDt = new IncrementalRectBoundsVoronoiStrategy();
-		strategies.put(rectangleDt.getName(), rectangleDt);
+		// IncrementalTinVoronoiStrategy triangleDt = new
+		// IncrementalTinVoronoiStrategy();
+		// strategies.put(triangleDt.getName(), triangleDt );
+		// TODO geotools refactoring
+		// IncrementalRectBoundsVoronoiStrategy rectangleDt = new
+		// IncrementalRectBoundsVoronoiStrategy();
+		// strategies.put(rectangleDt.getName(), rectangleDt);
 	}
 	
 	public static void registerVoronoiStrategy(VoronoiStrategy voronoi, String name){

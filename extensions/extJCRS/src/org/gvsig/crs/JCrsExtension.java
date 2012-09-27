@@ -41,15 +41,12 @@
 
 package org.gvsig.crs;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 import org.geotools.factory.FactoryRegistry;
 import org.geotools.referencing.operation.MathTransformProvider;
 import org.gvsig.crs.gui.panels.CrsUIFactory;
 import org.gvsig.crs.gui.panels.ProjChooserPanel;
-import org.gvsig.crs.persistence.RecentCRSsPersistence;
-import org.gvsig.crs.persistence.RecentTrsPersistence;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
@@ -69,11 +66,11 @@ public class JCrsExtension extends Extension {
 		
 		/*
 		 * Se eliminan del registro de geotools las proyecciones que aporta libJCrs para asegurar que 
-		 * son estas últimas las que se utilizan. 
+		 * son estas ï¿½ltimas las que se utilizan. 
 		 */
 		final Class[] categories = {org.geotools.referencing.operation.MathTransformProvider.class};
-		FactoryRegistry registry = new FactoryRegistry(Arrays.asList(categories));
-		Iterator providers = registry.getServiceProviders(MathTransformProvider.class);
+		FactoryRegistry registry = new FactoryRegistry(categories);
+		Iterator providers = registry.getServiceProviders(MathTransformProvider.class, false);
 		Iterator providers2 = null;
 		MathTransformProvider provider = null;
 		MathTransformProvider provider2 = null;
@@ -81,7 +78,7 @@ public class JCrsExtension extends Extension {
 		while (providers.hasNext()){
 			provider = (MathTransformProvider) providers.next(); 
 			if(provider.nameMatches("IDR")){
-				providers2 = registry.getServiceProviders(MathTransformProvider.class);
+				providers2 = registry.getServiceProviders(MathTransformProvider.class, false);
 				while (providers2.hasNext()){
 					provider2 = (MathTransformProvider) providers2.next();
 					if(provider2.nameMatches(provider.getName().toString()) && !provider2.nameMatches("IDR"))
@@ -91,7 +88,7 @@ public class JCrsExtension extends Extension {
 		}
 		
 		//TODO: Solo para depurar: BORRAR
-		providers = registry.getServiceProviders(MathTransformProvider.class);
+		providers = registry.getServiceProviders(MathTransformProvider.class, false);
 		while (providers.hasNext()) {
             provider = (MathTransformProvider) providers.next();    
             System.out.println(provider.toString());
@@ -114,7 +111,15 @@ public class JCrsExtension extends Extension {
 		} else {
 			projCode = FACTORY_DEFAULT_PROJECTION;
 		}
-		Project.setDefaultProjection(CRSFactory.getCRS(projCode));
+		
+		// TODO geotools refactoring
+//		Project.setDefaultProjection(CRSFactory.getCRS(projCode));
+		try {
+			Project.setDefaultProjection(new Crs(23030, 1));
+		} catch (CrsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		About about=(About)PluginServices.getExtension(About.class); 
 		FPanelAbout panelAbout=about.getAboutPanel(); 

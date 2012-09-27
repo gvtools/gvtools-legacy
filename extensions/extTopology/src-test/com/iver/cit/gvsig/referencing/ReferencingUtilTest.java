@@ -50,9 +50,9 @@ package com.iver.cit.gvsig.referencing;
 
 import junit.framework.TestCase;
 
-import org.geotools.referencefork.geometry.GeneralDirectPosition;
+import org.geotools.geometry.GeneralDirectPosition;
 import org.gvsig.referencing.ReferencingUtil;
-import org.opengis.spatialschema.geometry.DirectPosition;
+import org.opengis.geometry.DirectPosition;
 
 public class ReferencingUtilTest extends TestCase {
 	public void testTruncateMethod(){

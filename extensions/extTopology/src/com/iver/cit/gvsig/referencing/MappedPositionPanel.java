@@ -58,7 +58,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.geotools.referencefork.referencing.operation.builder.MappedPosition;
+import org.geotools.referencing.operation.builder.MappedPosition;
 import org.gvsig.fmap.core.FGeometryUtil;
 import org.gvsig.fmap.tools.VectorListenerImpl;
 import org.gvsig.fmap.tools.behavior.VectorBehavior;
@@ -67,7 +67,7 @@ import org.gvsig.referencing.MappedPositionContainer;
 import org.gvsig.referencing.ReferencingUtil;
 import org.gvsig.topology.ui.util.BoxLayoutPanel;
 import org.gvsig.topology.ui.util.GUIUtil;
-import org.opengis.spatialschema.geometry.DirectPosition;
+import org.opengis.geometry.DirectPosition;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -174,11 +174,11 @@ public class MappedPositionPanel extends BoxLayoutPanel {
 		DirectPosition source = mappedPosition.getSource();
 		DirectPosition dest = mappedPosition.getTarget();
 		
-		this.originPtTextFieldX.setText(source.getCoordinates()[0]+"");
-		this.originPtTextFieldY.setText(source.getCoordinates()[1]+"");
+		this.originPtTextFieldX.setText(source.getCoordinate()[0]+"");
+		this.originPtTextFieldY.setText(source.getCoordinate()[1]+"");
 		
-		this.destPtTextFieldX.setText(dest.getCoordinates()[0]+"");
-		this.destPtTextFieldY.setText(dest.getCoordinates()[1]+"");
+		this.destPtTextFieldX.setText(dest.getCoordinate()[0]+"");
+		this.destPtTextFieldY.setText(dest.getCoordinate()[1]+"");
 		
 	}
 	
@@ -298,9 +298,9 @@ public class MappedPositionPanel extends BoxLayoutPanel {
 
 								if(mappedPosition != null){
 									DirectPosition source = mappedPosition.getSource();
-									double[] sourceCoords = source.getCoordinates();
+									double[] sourceCoords = source.getCoordinate();
 									DirectPosition dest = mappedPosition.getTarget();
-									double[] destCoords = dest.getCoordinates();
+									double[] destCoords = dest.getCoordinate();
 									
 									Envelope envelope = new Envelope(sourceCoords[0], 
 																	   destCoords[0], 

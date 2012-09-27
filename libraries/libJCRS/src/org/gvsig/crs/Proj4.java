@@ -43,8 +43,8 @@ package org.gvsig.crs;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.measure.unit.Unit;
 import javax.units.ConversionException;
-import javax.units.Unit;
 
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.geotools.referencing.crs.DefaultProjectedCRS;

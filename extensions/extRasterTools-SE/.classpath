@@ -15,8 +15,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/libRaster"/>
 	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar" sourcepath="/libDriverManager"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS/src"/>
-	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar" sourcepath="/libProjection/src"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar" sourcepath="/libExceptions/src"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jgdal-0.9.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
