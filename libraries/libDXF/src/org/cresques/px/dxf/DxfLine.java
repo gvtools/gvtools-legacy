@@ -28,11 +28,12 @@ import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.ViewPortData;
 import org.cresques.io.DxfGroup;
 import org.cresques.px.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -53,8 +54,9 @@ public class DxfLine extends DxfEntity {
      * @param p1, punto inicial de la línea.
      * @param p2, punto final de la línea.
      */
-    public DxfLine(IProjection proj, DxfLayer layer, Point2D p1, Point2D p2) {
-        super(proj, layer);
+	public DxfLine(CoordinateReferenceSystem crs, DxfLayer layer, Point2D p1,
+			Point2D p2) {
+        super(crs, layer);
         extent = new Extent(p1, p2);
         pts = new Point2D[2];
         pts[0] = p1;
@@ -84,7 +86,7 @@ public class DxfLine extends DxfEntity {
      * Permite reproyectar una DxfLine dado un conjunto de coordenadas de transformación.
      * @param rp, coordenadas de transformación.
      */
-    public void reProject(ICoordTrans rp) {
+    public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         Point2D[] savePts = pts;
 
         pts = new Point2D[2];
@@ -93,13 +95,12 @@ public class DxfLine extends DxfEntity {
         Point2D ptDest = null;
 
         for (int i = 0; i < savePts.length; i++) {
-            ptDest = rp.getPDest().createPoint(0.0, 0.0);
-            ptDest = rp.convert((Point2D) savePts[i], ptDest);
+            ptDest = ProjectionUtils.transform(savePts[i], trans);
             pts[i] = ptDest;
             extent.add(ptDest);
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
 
     /**

@@ -61,8 +61,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -224,7 +225,7 @@ ListSelectionListener {
 	 */
 	public FLayer getLayer() {
 		try {
-			IProjection proj = null;
+			CoordinateReferenceSystem crs = null;
 			TablesListItem[] selected = getSelectedTables();
 			int count = selected.length;
 			String groupName = selectedDataSource.getDb() + " (" +
@@ -232,16 +233,16 @@ ListSelectionListener {
 
 			// AFLayer[] all_layers = new FLayer[count];
 			ArrayList unchecked_list = new ArrayList();
-			String strEPSG = getMapCtrl().getViewPort().getProjection()
-			.getAbrev();
+			String strEPSG = ProjectionUtils.getAbrev(getMapCtrl().getViewPort().getCrs());
 
 			for (int i = 0; i < count; i++) {
 				TablesListItem item = selected[i];
 
 				IVectorialDatabaseDriver driver = null;
 				driver = getDriverFromName(selectedDataSource.getDrvName());
-				UserTableSettingsPanel userTableSettingsPanel=item.getUserTableSettingsPanel(getMapCtrl().getViewPort().getProjection()
-						.getAbrev());
+				UserTableSettingsPanel userTableSettingsPanel = item
+						.getUserTableSettingsPanel(ProjectionUtils.getAbrev(getMapCtrl()
+								.getViewPort().getCrs()));
 				Rectangle2D _wa = userTableSettingsPanel.getWorkingArea();
 
 				if (_wa != null) {
@@ -307,10 +308,10 @@ ListSelectionListener {
 					
 					driver.setData(conex, lyrDef);
 					if (driver instanceof ICanReproject) {
-						proj = userTableSettingsPanel.getProjection();
+						crs = userTableSettingsPanel.getCrs();
 					}
 					unchecked_list.add(LayerFactory.createDBLayer(driver,
-							layerName, proj, getMapCtrl().getViewPort()
+							layerName, crs, getMapCtrl().getViewPort()
 									.getBackColor()));
 
 				} catch (Exception ex) {
@@ -743,8 +744,8 @@ ListSelectionListener {
 			 return;
 		 }
 
-		 settingsPanel = actTable.getUserTableSettingsPanel(getMapCtrl().getViewPort().getProjection()
-				 .getAbrev());
+		settingsPanel = actTable.getUserTableSettingsPanel(ProjectionUtils
+				.getAbrev(getMapCtrl().getViewPort().getCrs()));
 		 fieldsPanel = actTable.getUserSelectedFieldsPanel();
 
 		 removeFieldPanels();
@@ -799,7 +800,7 @@ ListSelectionListener {
 		int count = selected.length;
 		ArrayList unchecked_list = new ArrayList();
 
-		String strEPSG = getMapCtrl().getViewPort().getProjection().getAbrev();
+		String strEPSG = ProjectionUtils.getAbrev(getMapCtrl().getViewPort().getCrs());
 
 		String layerName = "[Unknown]";
 		for (int i = 0; i < count; i++) {
@@ -810,8 +811,8 @@ ListSelectionListener {
 			UserTableSettingsPanel utsp = null;
 
 			try {
-				utsp = item.getUserTableSettingsPanel(getMapCtrl()
-						.getViewPort().getProjection().getAbrev());
+				utsp = item.getUserTableSettingsPanel(ProjectionUtils.getAbrev(getMapCtrl()
+						.getViewPort().getCrs()));
 				layerName = utsp.getUserLayerName();
 				_driver = getDriverFromName(selectedDataSource.getDrvName());
 			} catch (Exception ex) {

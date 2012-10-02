@@ -53,13 +53,13 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Enumeration;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.postgresql.fastpath.Fastpath;
 
 import com.iver.cit.gvsig.fmap.core.ICanReproject;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.ConnectionFactory;
 import com.iver.cit.gvsig.fmap.drivers.ConnectionJDBC;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
@@ -480,13 +480,15 @@ public class testPostGis {
 	            ((ICanReproject)driver).setDestProjection(strEPSG);
 	        }
 	        driver.setData(conn, lyrDef);
-	        IProjection proj = null;
+	        CoordinateReferenceSystem crs = null;
 	        if (driver instanceof ICanReproject)
 	        {
-	        	proj = CRSFactory.getCRS("EPSG:" + ((ICanReproject)driver).getSourceProjection(null,lyrDef));
+				crs = ProjectionUtils.getCRS("EPSG:"
+						+ ((ICanReproject) driver).getSourceProjection(null,
+								lyrDef));
 	        }
 
-	        FLayer lyr = LayerFactory.createDBLayer(driver, layerName, proj);
+	        FLayer lyr = LayerFactory.createDBLayer(driver, layerName, crs);
 	        Rectangle2D rectAux = lyr.getFullExtent();
 	        return (FLyrVect) lyr;
 		}

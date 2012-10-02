@@ -51,7 +51,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -225,16 +224,16 @@ public class GeneralLabeling extends JPanel implements ILabelingStrategyPanel, A
 
 				VectorialDriver vd = (VectorialDriver) ((FLyrVect) layer).getSource().getDriver();
 
-				auxLayer = (FLyrVect) LayerFactory.createLayer(layer.getName(),vd, layer.getProjection());
+				auxLayer = (FLyrVect) LayerFactory.createLayer(layer.getName(),vd, layer.getCrs());
 				auxLayer.setParentLayer(layer.getParentLayer());
 				auxLayer.setLegend((IVectorLegend)targetLayer.getLegend());
 
 				
-				if (auxLayer.getProjection() == null) {
+				if (auxLayer.getCrs() == null) {
 					Logger.getLogger(getClass()).debug("Possible bug detected in " +
 							"FLyrVect.cloneLayer() (missing projection in cloned layer)");
 					// this line should be unnecessary (and included in cloneLayer) method);
-					auxLayer.setProjection(targetLayer.getProjection());
+					auxLayer.setCrs(targetLayer.getCrs());
 				}
 				//
 

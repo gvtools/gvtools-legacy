@@ -109,7 +109,7 @@ public class OnSelectionLabeled extends DefaultLabelingMethod {
 		}
 		sql.append(";");
 
-		return layer.getSource().getFeatureIterator(sql.toString(), layer.getProjection(),true);
+		return layer.getSource().getFeatureIterator(sql.toString(), layer.getCrs(),true);
 
 
 	}

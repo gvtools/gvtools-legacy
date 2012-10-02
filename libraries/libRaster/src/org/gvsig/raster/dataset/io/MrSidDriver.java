@@ -22,8 +22,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.dataset.BandAccessException;
 import org.gvsig.raster.dataset.BandList;
 import org.gvsig.raster.dataset.FileNotOpenException;
@@ -38,6 +36,8 @@ import org.gvsig.raster.datastruct.Transparency;
 import org.gvsig.raster.process.RasterTask;
 import org.gvsig.raster.process.RasterTaskQueue;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import es.gva.cit.jmrsid.MrSIDException;
 /**
@@ -64,11 +64,11 @@ public class MrSidDriver extends RasterDataset {
 		
 	/**
 	 * Contructor. Abre el fichero mrsid
-	 * @param proj Proyección
+	 * @param crs Proyección
 	 * @param fName Nombre del fichero mrsid
 	 */
-	public MrSidDriver(IProjection proj, Object param) {
-		super(proj, ((String) param));
+	public MrSidDriver(CoordinateReferenceSystem crs, Object param) {
+		super(crs, ((String) param));
 		setParam(param);
 		try {
 			file = new MrSidNative(((String) param));
@@ -139,7 +139,8 @@ public class MrSidDriver extends RasterDataset {
 		return file.height;
 	}
 
-	public void reProject(ICoordTrans rp) {}
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
+	}
 
 	/**
 	 * Asigna al objeto Image los valores con los dato de la imagen contenidos en

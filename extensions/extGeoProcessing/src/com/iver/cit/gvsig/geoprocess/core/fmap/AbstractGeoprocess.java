@@ -103,10 +103,6 @@ package com.iver.cit.gvsig.geoprocess.core.fmap;
 import java.io.File;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
-import org.cresques.cts.IProjection;
-
 import com.hardcode.gdbms.driver.exceptions.SchemaEditionException;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapContext;
@@ -169,7 +165,6 @@ public abstract class AbstractGeoprocess implements IGeoprocess {
 			fileNameStart = 0;
 		layerName = fileName.substring(fileNameStart, fileName.length() /*-1*/);
 		File file = new File(fileName);
-		IProjection proj = firstLayer.getProjection();
 		//TODO La proyeccion se deberia leer del WRITER
 		try {
 			IndexedShpDriver driver = new IndexedShpDriver();
@@ -178,7 +173,7 @@ public abstract class AbstractGeoprocess implements IGeoprocess {
 			solution = (FLyrVect) LayerFactory.createLayer(layerName,
 									driver,
 									file,
-									proj);
+									firstLayer.getCrs());
 			return solution;
 		} catch (Exception e) {
 			throw new GeoprocessException("Problemas al cargar la capa resultado", e);

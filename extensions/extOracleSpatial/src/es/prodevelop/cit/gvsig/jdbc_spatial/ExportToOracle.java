@@ -47,6 +47,8 @@ import java.sql.Types;
 
 import javax.swing.JOptionPane;
 
+import org.cresques.cts.ProjectionUtils;
+
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.exceptions.commands.EditionCommandException;
 import com.iver.cit.gvsig.fmap.MapContext;
@@ -176,8 +178,8 @@ public class ExportToOracle {
 
             dbLayerDef.setWhereClause("");
 
-            String strSRID = layer.getProjection().getAbrev().substring(5);
-            strSRID = mapContext.getProjection().getAbrev().substring(5);
+            String strSRID = ProjectionUtils.getAbrev(layer.getCrs()).substring(5);
+            strSRID = ProjectionUtils.getAbrev(mapContext.getCrs()).substring(5);
             dbLayerDef.setSRID_EPSG(strSRID);
             dbLayerDef.setConnection(conex);
 

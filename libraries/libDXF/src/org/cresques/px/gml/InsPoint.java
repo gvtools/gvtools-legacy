@@ -29,10 +29,10 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.cresques.geo.Point3D;
 import org.cresques.geo.ViewPortData;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 /**
  * Punto de inserción. Se trata de un Point al que se le han añadido los atributos
@@ -46,7 +46,7 @@ public class InsPoint extends Geometry {
     String blockName;
     Point3D scaleFactor;
     double rotAngle;
-    private FeatureCollection block = new FeatureCollection(proj);
+    private FeatureCollection block = new FeatureCollection(crs);
     Vector blkList;
     boolean blockFound = false;
     private Color fColor = null; //new Color(255,222,165,64);
@@ -235,16 +235,16 @@ public class InsPoint extends Geometry {
      * Devuelve la proyección cartográfica en la que se encuentra el InsPoint.
      * @return IProjection, proyección cartográfica.
      */
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
     
     /**
      * Establece la proyección cartográfica en la que se encuentra el InsPoint.
      * @param p, proyección cartográfica.
      */
-    public void setProjection(IProjection p) {
-        proj = p;
+    public void setCrs(CoordinateReferenceSystem crs) {
+        this.crs = crs;
     }
     
     /**
@@ -252,7 +252,7 @@ public class InsPoint extends Geometry {
      * coordenadas de transformación.
      * @param rp, coordenadas de transformación.
      */
-    public void reProject(ICoordTrans rp) {
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         // TODO metodo reProject pendiente de implementar
     }
     

@@ -46,7 +46,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
@@ -246,13 +246,12 @@ IWindowListener, IWindowTransform, SingletonWindow, IDocumentWindow {
 		return m_MapControl.getImage();
 	}
 
-	public void setProjection(IProjection proj)
-	{
-		getMapControl().setProjection(proj);
+	public void setCrs(CoordinateReferenceSystem proj) {
+		getMapControl().setCrs(proj);
 	}
-	public IProjection getProjection()
-	{
-		return getMapControl().getProjection();
+
+	public CoordinateReferenceSystem getCrs() {
+		return getMapControl().getCrs();
 	}
 
 	public WindowData getWindowData() {

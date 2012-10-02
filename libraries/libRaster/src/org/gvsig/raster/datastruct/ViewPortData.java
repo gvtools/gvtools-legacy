@@ -24,9 +24,9 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-import org.cresques.geo.Projected;
+import org.cresques.geo.Georeferenced;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -37,16 +37,16 @@ import org.cresques.geo.Projected;
  *
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
-public class ViewPortData implements Projected {
+public class ViewPortData implements Georeferenced {
     /**
      * Tipo de proyección de la vista.
      */
-    IProjection proj = null;
+    CoordinateReferenceSystem crs = null;
 
     /**
      * Sistema de coordenadas de la vista.
      */
-    IProjection cs = null;
+    CoordinateReferenceSystem cs = null;
 
     /**
      * Amplitud de la vista, en coordenadas proyectadas.
@@ -80,27 +80,27 @@ public class ViewPortData implements Projected {
     	mat.scale(1.0, -1.0);
     }
 
-    public ViewPortData(IProjection proj, Extent extent, Dimension2D size) {
-        this.proj = proj;
+    public ViewPortData(CoordinateReferenceSystem crs, Extent extent, Dimension2D size) {
+        this.crs = crs;
         this.extent = extent;
         this.viewSize = size;
         mat = new AffineTransform();
         mat.scale(1.0, -1.0);
     }
 
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
 
-    public void setProjection(IProjection proj) {
-        this.proj = proj;
+    public void setCrs(CoordinateReferenceSystem proj) {
+        this.crs = proj;
     }
 
-    public void reProject(ICoordTrans rp) {
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         // TODO metodo reProject pendiente de implementar
     }
 
-    public void setCoordSys(IProjection cs) {
+    public void setCoordSys(CoordinateReferenceSystem cs) {
         this.cs = cs;
     }
 
@@ -124,7 +124,7 @@ public class ViewPortData implements Projected {
             vp.extent = new Extent(extent);
         }
 
-        vp.proj = proj;
+        vp.crs = crs;
         vp.viewSize = viewSize;
         vp.dpi = dpi;
 

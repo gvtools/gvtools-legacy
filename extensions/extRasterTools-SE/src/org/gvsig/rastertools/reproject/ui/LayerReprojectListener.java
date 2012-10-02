@@ -94,8 +94,8 @@ public class LayerReprojectListener implements ButtonsPanelListener, IProcessAct
 			process.setCancelable(false);
 			process.addParam("layer", lyr);
 			process.addParam("path", path);
-			process.addParam("projection", dialog.getProjectionDst());
-			process.addParam("srcprojection", dialog.getProjectionSrc());
+			process.addParam("projection", dialog.getTargetCrs());
+			process.addParam("srcprojection", dialog.getSourceCrs());
 			process.addParam("isintoc", isInTOC);
 			process.setActions(this);
 			

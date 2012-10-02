@@ -54,7 +54,6 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.util.List;
 
-import org.cresques.cts.IProjection;
 import org.geotools.geometry.GeneralDirectPosition;
 import org.geotools.referencing.operation.builder.RubberSheetBuilder;
 import org.geotools.resources.geometry.ShapeUtilities;
@@ -427,59 +426,61 @@ public class ReferencingUtil {
 		double[] coordinates = position.getCoordinate();
 		return new Point2D.Double(coordinates[0], coordinates[1]);
 	}
-	public FLyrVect getTinAsFMapLyr(RubberSheetBuilder rbBuilder, IProjection projection){
-		// TODO geotools refactoring
+	public FLyrVect getTinAsFMapLyr(RubberSheetBuilder rbBuilder, CoordinateReferenceSystem crs){
+		// TODO GT: lost functionality getTinAsFMapLyr
 		throw new UnsupportedOperationException();
 		// FLyrVect solution = null;
 		// List<IFeature> features = new ArrayList<IFeature>();
 		// Set tinCollection = rbBuilder.getMapTriangulation().keySet();
-		// if(tinCollection.size() > 0){
+		// if (tinCollection.size() > 0) {
 		// Iterator triangles = tinCollection.iterator();
-		// while(triangles.hasNext()){
+		// while (triangles.hasNext()) {
 		// TINTriangle t = (TINTriangle) triangles.next();
-		// FTriangle ftriangle = new FTriangle(convert(t.p0), convert(t.p1),
-		// convert(t.p2));
+		// FTriangle ftriangle = new FTriangle(convert(t.p0),
+		// convert(t.p1), convert(t.p2));
 		// Value fid = ValueFactory.createValue(features.size());
 		// Value[] values = new Value[] { fid };
-		// TriangleFeature feature = new TriangleFeature(ftriangle, values, new
-		// UID().toString());
+		// TriangleFeature feature = new TriangleFeature(ftriangle,
+		// values, new UID().toString());
 		// features.add(feature);
 		// }
 		//
 		// String lyrName = Messages.getText("RUBBER_SHEET_TIN_LAYER");
-		// LayerDefinition def = new LayerDefinition(){
-		// public int getShapeType(){
+		// LayerDefinition def = new LayerDefinition() {
+		// public int getShapeType() {
 		// return FShape.POLYGON;
 		// }
 		// };
 		//
 		// FieldDescription fidDescription = new FieldDescription();
 		// fidDescription.setFieldName("fid");
-		// fidDescription.setFieldType(FieldDescription.stringToType("Integer"));
+		// fidDescription.setFieldType(FieldDescription
+		// .stringToType("Integer"));
 		// fidDescription.setFieldLength(10);
-		// FieldDescription[] fields = {fidDescription};
+		// FieldDescription[] fields = { fidDescription };
 		// def.setFieldsDesc(fields);
 		//
-		//
-		// FeatureCollectionMemoryDriver driver =
-		// new FeatureCollectionMemoryDriver(lyrName, features, def );
+		// FeatureCollectionMemoryDriver driver = new
+		// FeatureCollectionMemoryDriver(
+		// lyrName, features, def);
 		//
 		// solution = new FLayerGenericVectorial();
 		// solution.setName(lyrName);
-		// solution.setProjection(projection);
-		// ((FLayerGenericVectorial)solution).setDriver(driver);
+		// solution.setCrs(crs);
+		// ((FLayerGenericVectorial) solution).setDriver(driver);
 		// try {
 		// solution.load();
-		// IVectorLegend defaultLegend =
-		// LegendFactory.createSingleSymbolLegend(FShape.POLYGON);
-		// defaultLegend.setDefaultSymbol(SymbologyFactory.
-		// createDefaultSymbolByShapeType(FShape.POLYGON, Color.GREEN));
+		// IVectorLegend defaultLegend = LegendFactory
+		// .createSingleSymbolLegend(FShape.POLYGON);
+		// defaultLegend.setDefaultSymbol(SymbologyFactory
+		// .createDefaultSymbolByShapeType(FShape.POLYGON,
+		// Color.GREEN));
 		// solution.setLegend(defaultLegend);
 		//
 		// } catch (LoadLayerException e) {
 		// e.printStackTrace();
 		// }
-		// }//if
+		// }// if
 		// return solution;
 	}
 }

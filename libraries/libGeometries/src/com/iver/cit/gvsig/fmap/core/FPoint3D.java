@@ -40,8 +40,8 @@
  */
 package com.iver.cit.gvsig.fmap.core;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.Point;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Punto 3D.
@@ -58,8 +58,9 @@ public class FPoint3D extends FPoint2D implements FShape3D, Point{
 	 * @param y Coordenada y.
 	 * @param z Coordenada z.
 	 */
-	public FPoint3D(String id, IProjection projection, double x, double y, double z) {
-		super(id, projection, x, y);
+	public FPoint3D(String id, CoordinateReferenceSystem crs, double x,
+			double y, double z) {
+		super(id, crs, x, y);
 		this.z = z;
 	}
 	
@@ -88,7 +89,7 @@ public class FPoint3D extends FPoint2D implements FShape3D, Point{
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {
-		return new FPoint3D(id, projection, p.getX(), p.getY(), z);
+		return new FPoint3D(id, crs, p.getX(), p.getY(), z);
 	}
 
 	/* (non-Javadoc)

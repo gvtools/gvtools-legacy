@@ -429,7 +429,7 @@ public class NoSupervisedClassificationProcess extends ClassificationGeneralProc
 			lyr = FLyrRasterSE.createLayer(
 					filename.substring(filename.lastIndexOf(File.separator) + 1, endIndex),
 					filename,
-					view.getMapControl().getProjection()
+					view.getMapControl().getCrs()
 					);
 			
 			ArrayList colorItems = new ArrayList();

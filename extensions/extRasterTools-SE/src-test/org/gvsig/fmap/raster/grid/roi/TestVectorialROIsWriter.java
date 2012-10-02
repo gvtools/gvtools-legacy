@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import junit.framework.TestCase;
 
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.raster.buffer.RasterBufferInvalidException;
 import org.gvsig.raster.dataset.IBuffer;
 import org.gvsig.raster.grid.Grid;
@@ -13,7 +14,6 @@ import org.gvsig.raster.grid.OutOfGridException;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 
 public class TestVectorialROIsWriter extends TestCase {
 	
@@ -136,7 +136,8 @@ public class TestVectorialROIsWriter extends TestCase {
 		
 		rois[2].addGeometry(geometry);
 		
-		VectorialROIsWriter roisWriter = new VectorialROIsWriter("./test-images/rois",CRSFactory.getCRS("EPSG:23030"));
+		VectorialROIsWriter roisWriter = new VectorialROIsWriter(
+				"./test-images/rois", ProjectionUtils.getCRS("EPSG:23030"));
 		roisWriter.write(rois);
 	}
 

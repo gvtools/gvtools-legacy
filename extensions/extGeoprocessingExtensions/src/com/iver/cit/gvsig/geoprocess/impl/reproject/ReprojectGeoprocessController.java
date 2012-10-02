@@ -71,7 +71,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
@@ -144,15 +144,15 @@ public class ReprojectGeoprocessController extends AbstractGeoprocessController 
 		HashMap params = new HashMap();
 		boolean onlySelected = panel.isFirstOnlySelected();
 		params.put("firstlayerselection", new Boolean(onlySelected));
-		IProjection projection = panel.getTargetProjection();
-		IProjection previousProj = inputLayer.getProjection();
-		if(previousProj.equals(projection)){
+		CoordinateReferenceSystem crs = panel.getTargetCrs();
+		CoordinateReferenceSystem previousCrs = inputLayer.getCrs();
+		if(previousCrs.equals(crs)){
 			String error = PluginServices.getText(this, "Error_entrada_datos");
 			String errorDesc = PluginServices.getText(this, "Error_proyecciones_iguales");
 			panel.error(errorDesc, error);
 			return false;
 		}
-		params.put("targetProjection", projection);
+		params.put("targetProjection", crs);
 		
 		try {
 			reproject.setParameters(params);

@@ -23,8 +23,8 @@
  */
 package org.cresques.ui.cts;
 
-import org.cresques.cts.IProjection;
-import org.cresques.cts.ProjectionPool;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
 /**
@@ -197,8 +197,8 @@ public class CSSelectionModel {
         return selectedZone;
     }
 
-    public void setProjection(IProjection proj) {
-        String key = proj.getAbrev();
+    public void setCrs(CoordinateReferenceSystem crs) {
+        String key = ProjectionUtils.getAbrev(crs);
         // Para usos posteriores.
         // String db = key.split(":")[0];
         key = key.split(":")[1];
@@ -295,122 +295,122 @@ public class CSSelectionModel {
         }
     }
 
-    public IProjection getProjection() {
-        IProjection proj = null;
+    public CoordinateReferenceSystem getCrs() {
+    	CoordinateReferenceSystem crs = null;
         String datum = "326";
 
         if (selectedDatum == 0) {
             datum = "326";
             if (selectedProj == 0)
-                return new ProjectionPool().get("EPSG:4"+datum);
+                return ProjectionUtils.getCRS("EPSG:4"+datum);
             else if (selectedProj == 1) {
                 String zone = Integer.toString(selectedZone + 1);
                 if (selectedZone < 9) zone = "0" + zone;
-                return new ProjectionPool().get("EPSG:" + datum + zone);
+                return ProjectionUtils.getCRS("EPSG:" + datum + zone);
             } else if (selectedProj == 2)
-                return new ProjectionPool().get("EPSG:42101");
+                return ProjectionUtils.getCRS("EPSG:42101");
             else if (selectedProj == 3)
-                return new ProjectionPool().get("EPSG:9804");
+                return ProjectionUtils.getCRS("EPSG:9804");
             
         } else if (selectedDatum == 1) {
             datum = "230";
             if (selectedProj == 0)
-                return new ProjectionPool().get("EPSG:4"+datum);
+                return ProjectionUtils.getCRS("EPSG:4"+datum);
             else if (selectedProj == 1) {
                 String zone = Integer.toString(selectedZone + 1);
                 if (selectedZone < 9) zone = "0" + zone;
-                return new ProjectionPool().get("EPSG:" + datum + zone);
+                return ProjectionUtils.getCRS("EPSG:" + datum + zone);
             } 
             
         } else if (selectedDatum == 2) { // Lisboa 73
             datum = "274";
             if (selectedProj == 0)
-                return new ProjectionPool().get("EPSG:4"+datum);
+                return ProjectionUtils.getCRS("EPSG:4"+datum);
             else if (selectedProj == 1)
-                return new ProjectionPool().get("EPSG:"+datum+"92");
+                return ProjectionUtils.getCRS("EPSG:"+datum+"92");
             
        } else if (selectedDatum == 3) {
             datum = "267";
             if (selectedProj == 0)
-                return new ProjectionPool().get("EPSG:4"+datum);
+                return ProjectionUtils.getCRS("EPSG:4"+datum);
             else if (selectedProj == 1) {
                 String zone = Integer.toString(selectedZone + 3);
                 if (selectedZone+3 <= 9) zone = "0" + zone;
-                return new ProjectionPool().get("EPSG:" + datum + zone);
+                return ProjectionUtils.getCRS("EPSG:" + datum + zone);
             }
             
         } else if (selectedDatum == 4) {
             datum = "269";
             if (selectedProj == 0)
-                return new ProjectionPool().get("EPSG:4"+datum);
+                return ProjectionUtils.getCRS("EPSG:4"+datum);
             else if (selectedProj == 1) {
                 String zone = Integer.toString(selectedZone + 3);
                 if (selectedZone+3 <= 9) zone = "0" + zone;
-                return new ProjectionPool().get("EPSG:" + datum + zone);
+                return ProjectionUtils.getCRS("EPSG:" + datum + zone);
             } else if (selectedProj == 2)
-                return new ProjectionPool().get("EPSG:42304");
+                return ProjectionUtils.getCRS("EPSG:42304");
             
         } else if (selectedDatum == 5) {
             datum = "247";
             if (selectedProj == 0)
-                return new ProjectionPool().get("EPSG:4"+datum);
+                return ProjectionUtils.getCRS("EPSG:4"+datum);
             else if (selectedProj == 1) {
                 String zone = Integer.toString(selectedZone + 18);
-                return new ProjectionPool().get("EPSG:" + datum + zone);
+                return ProjectionUtils.getCRS("EPSG:" + datum + zone);
             }
             
         } else if (selectedDatum == 6) {
             datum = "807";
             if (selectedProj == 0)
-                return new ProjectionPool().get("EPSG:4"+datum);
+                return ProjectionUtils.getCRS("EPSG:4"+datum);
             else if (selectedProj == 1)
-            	return new ProjectionPool().get("EPSG:27582");
+            	return ProjectionUtils.getCRS("EPSG:27582");
             
         } else if (selectedDatum == 7) {
             datum = "258";
             if (selectedProj == 0)
-                return new ProjectionPool().get("EPSG:4"+datum);
+                return ProjectionUtils.getCRS("EPSG:4"+datum);
             else if (selectedProj == 1) {
                 String zone = Integer.toString(selectedZone + 28);
-                return new ProjectionPool().get("EPSG:" + datum + zone);
+                return ProjectionUtils.getCRS("EPSG:" + datum + zone);
             }
             
         } else if (selectedDatum == 8) {
             datum = "30100";
-            return new ProjectionPool().get("IAU2000:" + datum);
+            return ProjectionUtils.getCRS("IAU2000:" + datum);
             
         } else if (selectedDatum == 9) {
             datum = "49900";
-            return new ProjectionPool().get("IAU2000:" + datum);
+            return ProjectionUtils.getCRS("IAU2000:" + datum);
             
         } else if (selectedDatum == 10) {
             datum = "221";
             if (selectedProj == 0)
-                return new ProjectionPool().get("EPSG:4"+datum);
+                return ProjectionUtils.getCRS("EPSG:4"+datum);
             else if (selectedProj == 1) {
                 String zone = Integer.toString(selectedZone + 1);
-                return new ProjectionPool().get("EPSG:" + datum + "9"+ zone);
+                return ProjectionUtils.getCRS("EPSG:" + datum + "9"+ zone);
             } 
             
         } else if (selectedDatum == 11) {
         	if (selectedProj == 0)
-                return new ProjectionPool().get("EPSG:4171");
+                return ProjectionUtils.getCRS("EPSG:4171");
             else if (selectedProj == 1)
-                return new ProjectionPool().get("EPSG:2154");
+                return ProjectionUtils.getCRS("EPSG:2154");
         }
 
         if (selectedProj == 2) {
-            return new ProjectionPool().get("EPSG:27492");
+            return ProjectionUtils.getCRS("EPSG:27492");
         } else if (selectedProj == 3) {
-            return new ProjectionPool().get("EPSG:42101");
+            return ProjectionUtils.getCRS("EPSG:42101");
         } else if (selectedProj == 4) {
-            return new ProjectionPool().get("EPSG:42304");
+            return ProjectionUtils.getCRS("EPSG:42304");
         } else if (selectedProj == 5) {
-            return new ProjectionPool().get("EPSG:27582");
+            return ProjectionUtils.getCRS("EPSG:27582");
         } else if (selectedProj == 6) {
-            return new ProjectionPool().get("EPSG:2154");
+            return ProjectionUtils.getCRS("EPSG:2154");
         } else if (selectedProj == 7) {
-            return new ProjectionPool().get("EPSG:9804");
+            return ProjectionUtils.getCRS("EPSG:9804");
         } else if (selectedProj == 8) {
         	datum = "221";
       	   String zone = "9";
@@ -422,12 +422,12 @@ public class CSSelectionModel {
                  } else
                  	zone += (selectedZone+1)+"";
             // }
-             return new ProjectionPool().get("EPSG:" + datum + zone);
+             return ProjectionUtils.getCRS("EPSG:" + datum + zone);
          }
 
 
         if (selectedProj == 0) {
-            return new ProjectionPool().get("EPSG:4" + datum);
+            return ProjectionUtils.getCRS("EPSG:4" + datum);
         } else if (selectedProj == 1) {
             String Zone = Integer.toString(selectedZone + 1);
 
@@ -464,9 +464,9 @@ public class CSSelectionModel {
                     Zone = "38";
                 }
             }
-            return new ProjectionPool().get("EPSG:" + datum + Zone);
+            return ProjectionUtils.getCRS("EPSG:" + datum + Zone);
         } 
 
-        return proj;
+        return crs;
     }
 }

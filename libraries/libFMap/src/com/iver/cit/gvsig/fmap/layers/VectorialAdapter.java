@@ -43,7 +43,7 @@ package com.iver.cit.gvsig.fmap.layers;
 import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
@@ -75,7 +75,7 @@ public abstract class VectorialAdapter implements ReadableVectorial {
 	/**
 	 * Projection of the data in the data source
 	 */
-	protected IProjection projection;
+	protected CoordinateReferenceSystem crs;
 
 	/**
 	 * Establece el driver sobre el que actúa el adaptador
@@ -172,12 +172,12 @@ public abstract class VectorialAdapter implements ReadableVectorial {
 	}
 
 	public IFeatureIterator getFeatureIterator() throws ReadDriverException{
-		return new DefaultFeatureIterator(this, projection, null, null);
+		return new DefaultFeatureIterator(this, crs, null, null);
 	}
 
-	public IFeatureIterator getFeatureIterator(String[] fields, IProjection newProjection)
-	throws ReadDriverException{
-		return new DefaultFeatureIterator(this, projection, newProjection, fields);
+	public IFeatureIterator getFeatureIterator(String[] fields,
+			CoordinateReferenceSystem newCrs) throws ReadDriverException {
+		return new DefaultFeatureIterator(this, crs, newCrs, fields);
 	}
 
 	/**
@@ -189,9 +189,8 @@ public abstract class VectorialAdapter implements ReadableVectorial {
 	* @return feature iterator
 	* */
 	public IFeatureIterator getFeatureIterator(String sql,
-								IProjection newProjection) throws ReadDriverException{
-
-		return new AttrQueryFeatureIterator(this, projection, newProjection, sql);
+			CoordinateReferenceSystem newCrs) throws ReadDriverException {
+		return new AttrQueryFeatureIterator(this, crs, newCrs, sql);
 	}
 
 
@@ -204,19 +203,19 @@ public abstract class VectorialAdapter implements ReadableVectorial {
 	* @return
 	 * @throws ReadDriverException
 	*/
-	public IFeatureIterator getFeatureIterator(Rectangle2D rect, String[] fields,
-												IProjection newProjection,
-												boolean fastIteration) throws ReadDriverException{
+	public IFeatureIterator getFeatureIterator(Rectangle2D rect,
+			String[] fields, CoordinateReferenceSystem newCrs,
+			boolean fastIteration) throws ReadDriverException {
 		if(spatialIndex != null){
 			try {
 				if(isSpatialIndexNecessary(rect))
-					return new IndexedSptQueryFeatureIterator(this, projection, newProjection, fields, rect, spatialIndex, fastIteration);
+					return new IndexedSptQueryFeatureIterator(this, crs, newCrs, fields, rect, spatialIndex, fastIteration);
 			} catch (ExpansionFileReadException e) {
 				e.printStackTrace();
 				throw new ReadDriverException("Error al iterar la capa", e);
 			}
 		}//if
-		return new SpatialQueryFeatureIterator(this, projection, newProjection, fields, rect, fastIteration);
+		return new SpatialQueryFeatureIterator(this, crs, newCrs, fields, rect, fastIteration);
 
 
 	}
@@ -248,19 +247,21 @@ public abstract class VectorialAdapter implements ReadableVectorial {
     	this.spatialIndex = spatialIndex;
     }
 
-    public void setProjection(IProjection projection){
-    	this.projection = projection;
-    }
+	public void setCrs(CoordinateReferenceSystem crs) {
+		this.crs = crs;
+	}
 
-    public IProjection getProjection(){
-    	return projection;
-    }
+	public CoordinateReferenceSystem getCrs() {
+		return crs;
+	}
 
-    public IFeatureIterator getFeatureIterator(String sql, IProjection newProjection, boolean withSelection) throws ReadDriverException {
+	public IFeatureIterator getFeatureIterator(String sql,
+			CoordinateReferenceSystem newCrs, boolean withSelection)
+			throws ReadDriverException {
 		if (withSelection)
-			return new AttrQuerySelectionFeatureIterator(this, projection, newProjection, sql);
+			return new AttrQuerySelectionFeatureIterator(this, crs, newCrs, sql);
 		else
-			return getFeatureIterator(sql,newProjection);
+			return getFeatureIterator(sql, newCrs);
 	}
 	/*
 	 * (non-Javadoc)

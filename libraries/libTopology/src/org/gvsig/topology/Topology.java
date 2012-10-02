@@ -58,8 +58,8 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.IProjection;
 import org.gvsig.topology.topologyrules.MustBeLargerThanClusterTolerance;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
@@ -1007,14 +1007,14 @@ public class Topology extends FLayers implements ITopologyStatus,
 	}
 
 	private void setErrorLyr() {
-		IProjection proj = this.getProjection();
+		CoordinateReferenceSystem crs = getCrs();
 		int idx = 0;
-		while (proj == null && idx < this.getLayerCount()) {
-			proj = this.getLayer(idx).getProjection();
+		while (crs == null && idx < this.getLayerCount()) {
+			crs = this.getLayer(idx).getCrs();
 			idx++;
 		}
 		errorLayer = this.errorContainer.getAsFMapLayer(this.name + "_error",
-				proj);
+				crs);
 	}
 
 	public int getLayerCount() {
@@ -1172,23 +1172,21 @@ public class Topology extends FLayers implements ITopologyStatus,
 	}
 
 	public List<TopologyError> getTopologyErrorsByLyr(FLyrVect layer,
-			IProjection desiredProjection, boolean includeExceptions) {
-
-		return errorContainer.getTopologyErrorsByLyr(layer, desiredProjection,
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
+		return errorContainer.getTopologyErrorsByLyr(layer, desiredCrs,
 				includeExceptions);
 	}
 
 	public List<TopologyError> getTopologyErrorsByRule(String ruleName,
-			IProjection desiredProjection, boolean includeExceptions) {
-
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
 		return errorContainer.getTopologyErrorsByRule(ruleName,
-				desiredProjection, includeExceptions);
+				desiredCrs, includeExceptions);
 	}
 
 	public List<TopologyError> getTopologyErrorsByShapeType(int shapeType,
-			IProjection desiredProjection, boolean includeExceptions) {
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
 		return errorContainer.getTopologyErrorsByShapeType(shapeType,
-				desiredProjection, includeExceptions);
+				desiredCrs, includeExceptions);
 	}
 
 	/**
@@ -1196,11 +1194,11 @@ public class Topology extends FLayers implements ITopologyStatus,
 	 * was violtated by this error.
 	 */
 	public List<TopologyError> getTopologyErrors(String ruleName,
-			int shapeType, FLyrVect sourceLayer, IProjection desiredProjection,
+			int shapeType, FLyrVect sourceLayer,
+			CoordinateReferenceSystem desiredCrs,
 			boolean includeExceptions) {
-
 		return errorContainer.getTopologyErrors(ruleName, shapeType,
-				sourceLayer, desiredProjection, includeExceptions);
+				sourceLayer, desiredCrs, includeExceptions);
 	}
 
 	/**
@@ -1516,15 +1514,15 @@ public class Topology extends FLayers implements ITopologyStatus,
 		
 		to.setErrorContainer((ITopologyErrorContainer) from.getErrorContainer().clone());
 		
-		to.errorLayer = to.errorContainer.getAsFMapLayer(from.errorLayer.getName(), from.errorLayer.getProjection());
+		to.errorLayer = to.errorContainer.getAsFMapLayer(from.errorLayer.getName(), from.errorLayer.getCrs());
 		
 		to.updateErrorLyr();
 
 		
 	}
 
-	public FLyrVect getAsFMapLayer(String name, IProjection proj) {
-		return errorContainer.getAsFMapLayer(name, proj);
+	public FLyrVect getAsFMapLayer(String name, CoordinateReferenceSystem crs) {
+		return errorContainer.getAsFMapLayer(name, crs);
 	}
 
 	/*

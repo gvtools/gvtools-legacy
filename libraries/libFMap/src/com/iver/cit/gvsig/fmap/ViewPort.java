@@ -43,16 +43,17 @@ package com.iver.cit.gvsig.fmap;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.GeoCalc;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 
@@ -286,10 +287,10 @@ public class ViewPort {
 	/**
 	 * <p>Information about the map projection used in this view.</p>
 	 *
-	 * @see #getProjection()
-	 * @see #setProjection(IProjection)
+	 * @see #getCrs()
+	 * @see #setCRS(IProjection)
 	 */
-	private IProjection proj;
+	private CoordinateReferenceSystem crs;
 
 	/**
 	 * <p>Represents the distance in <i>world coordinates</i> equivalent to 1 pixel in the view with the current extent.</p>
@@ -350,9 +351,9 @@ public class ViewPort {
 	 *
 	 * @param proj information of the projection for this view port
 	 */
-	public ViewPort(IProjection proj) {
+	public ViewPort(CoordinateReferenceSystem crs) {
 		// Por defecto
-		this.proj = proj;
+		this.crs = crs;
 	}
 
 	/**
@@ -567,9 +568,10 @@ public class ViewPort {
 		double dist = -1;
 		dist = pt1.distance(pt2);
 
-		if ((proj != null) && !(proj.isProjected())) {
-			dist = new GeoCalc(proj).distanceVincenty(proj.toGeo(pt1),
-					proj.toGeo(pt2));
+		if (crs != null && !(crs instanceof ProjectedCRS)) {
+			// TODO GT: should not it be fromGeo instead of toGeo?
+			// dist = new GeoCalc(crs).distanceVincenty(crs.toGeo(pt1),
+			// crs.toGeo(pt2));
 			return dist;
 		}
 		return (dist*MapContext.getDistanceTrans2Meter()[getMapUnits()]);
@@ -693,8 +695,8 @@ public class ViewPort {
 	 * @deprecated since 07/09/07, use {@linkplain MapContext#getScaleView()}
 	 */
 	public double getScale() {
-		return proj.getScale(extent.getMinX(), extent.getMaxX(),
-			imageSize.getWidth(), dpi);
+		return ProjectionUtils.getScale(crs, extent.getMinX(),
+				extent.getMaxX(), imageSize.getWidth(), dpi);
 	}
 
 	/**
@@ -783,14 +785,14 @@ public class ViewPort {
 	 * <p>Notifies to all view port listeners registered, that the projection of this view port
 	 *  has changed.</p>
 	 *
-	 * @param projection the new projection
+	 * @param crs the new projection
 	 *
-	 * @see #setProjection(IProjection)
+	 * @see #setCRS(IProjection)
 	 * @see ProjectionEvent
 	 * @see ViewPortListener
 	 */
-	private void callProjectionChanged(IProjection projection) {
-		ProjectionEvent ev = ProjectionEvent.createProjectionEvent(projection);
+	private void callCRSChanged(CoordinateReferenceSystem crs) {
+		ProjectionEvent ev = ProjectionEvent.createCrsEvent(crs);
 
 		for (int i = 0; i < listeners.size(); i++) {
 			ViewPortListener listener = (ViewPortListener) listeners.get(i);
@@ -1137,24 +1139,24 @@ public class ViewPort {
 	 *
 	 * @return projection used in this view port
 	 *
-	 * @see #setProjection(IProjection)
+	 * @see #setCRS(IProjection)
 	 */
-	public IProjection getProjection() {
-		return proj;
+	public CoordinateReferenceSystem getCrs() {
+		return crs;
 	}
 
 	/**
 	 * <p>Sets the projection to this view port.</p>
 	 *
-	 * @param proj the new projection
+	 * @param crs the new projection
 	 *
-	 * @see #getProjection()
+	 * @see #getCrs()
 	 */
-	public void setProjection(IProjection proj) {
-		if(this.proj == null || !this.proj.getAbrev().equals(proj.getAbrev())) {
+	public void setCrs(CoordinateReferenceSystem crs) {
+		if(this.crs == null || !this.crs.getName().equals(crs.getName())) {
 			this.updateDrawVersion();
-			this.proj = proj;
-			callProjectionChanged(proj);
+			this.crs = crs;
+			callCRSChanged(crs);
 		}
 	}
 
@@ -1272,8 +1274,8 @@ public class ViewPort {
 		xml.putProperty("offsetX", offset.getX());
 		xml.putProperty("offsetY", offset.getY());
 
-		if (proj != null) {
-			xml.putProperty("proj", proj.getAbrev());
+		if (crs != null) {
+			xml.putProperty("proj", ProjectionUtils.getAbrev(crs));
 		}
 
 		xml.putProperty("scale", scale);
@@ -1338,7 +1340,7 @@ public class ViewPort {
 				xml.getDoubleProperty("offsetY")));
 
 		if (xml.contains("proj")) {
-			vp.proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
+			vp.crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
 		}
 
 		//vp.setScale(xml.getDoubleProperty("scale"));
@@ -1409,7 +1411,7 @@ public class ViewPort {
 				xml.getDoubleProperty("offsetY")));
 
 		if (xml.contains("proj")) {
-			vp.proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
+			vp.crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
 		}
 
 		if (xml.contains("zoomFactor")) {

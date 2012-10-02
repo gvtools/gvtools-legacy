@@ -26,8 +26,8 @@ package org.cresques.px.dxf;
 import java.awt.geom.Point2D;
 import java.util.Iterator;
 
-import org.cresques.geo.Projection;
 import org.cresques.io.DxfGroup;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
 /**
@@ -41,8 +41,8 @@ public class DxfSpline extends DxfPolyline {
      * @param proj, proyección cartográfica en la que se encuentra el DxfSpline.
      * @param layer, capa del DXF en la que se encuentra el DxfSpline.
      */
-    public DxfSpline(Projection proj, DxfLayer layer) {
-        super(proj, layer);
+	public DxfSpline(CoordinateReferenceSystem crs, DxfLayer layer) {
+        super(crs, layer);
     }
 
     /* (non-Javadoc)

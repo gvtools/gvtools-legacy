@@ -69,9 +69,7 @@ import org.apache.batik.ext.awt.geom.PathLength;
 
 import com.hardcode.gdbms.engine.spatial.fmap.FShapeGeneralPathX;
 import com.iver.cit.gvsig.fmap.Messages;
-import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.v02.FConstant;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.vividsolutions.jts.algorithm.Angle;
 /**
  * <p>Class that represents baseline of a string and allows the baseline to

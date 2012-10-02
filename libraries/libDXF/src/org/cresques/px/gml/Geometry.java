@@ -27,20 +27,20 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-import org.cresques.geo.Projected;
+import org.cresques.geo.Georeferenced;
 import org.cresques.geo.ViewPortData;
 import org.cresques.px.Extent;
 import org.cresques.px.PxObj;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
  * Clase base para geometrías.
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
-abstract public class Geometry extends PxObj implements Projected {
-    protected IProjection proj;
+abstract public class Geometry extends PxObj implements Georeferenced {
+    protected CoordinateReferenceSystem crs;
 
     //	protected Extent extent = null;
     Vector data = null;
@@ -99,13 +99,14 @@ abstract public class Geometry extends PxObj implements Projected {
      * Devuelve la proyección cartográfica en la que se encuentra la Geometry.
      * @return IProjection, la proyección cartográfica.
      */
-    abstract public IProjection getProjection();
+    abstract public CoordinateReferenceSystem getCrs();
     
     /**
      * Permite reproyectar la Geometry en función de unas coordenadas de transformación.
      * @param rp, Coordenadas de transformación.
      */
-    abstract public void reProject(ICoordTrans rp);
+	abstract public void reProject(MathTransform trans,
+			CoordinateReferenceSystem target);
     
     /**
      * Permite dibujar la Geometry.

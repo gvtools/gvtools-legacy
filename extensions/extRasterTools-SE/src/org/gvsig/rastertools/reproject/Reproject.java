@@ -20,11 +20,12 @@ package org.gvsig.rastertools.reproject;
 
 import java.io.File;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.raster.dataset.GeoRasterWriter;
 import org.gvsig.raster.dataset.NotSupportedExtensionException;
 import org.gvsig.raster.dataset.io.RasterDriverException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import es.gva.cit.jgdal.GdalWarp;
 /**
@@ -51,24 +52,25 @@ public class Reproject {
 	
 	/**
 	 * Método para la transformación del raster.
-	 * @param proj Proyección destino
+	 * @param crs Proyección destino
 	 */
-	public int warp(IProjection proj, IProjection sourceSrs) throws ReprojectException {
+	public int warp(CoordinateReferenceSystem crs,
+			CoordinateReferenceSystem sourceCrs) throws ReprojectException {
 		if (lyr == null)
 			throw new ReprojectException("Capa no valida.");
 		if (!lyr.isReproyectable())
 			throw new ReprojectException("Esta capa no se puede reproyectar.");
-		if (proj == null || proj.getAbrev() == null)
+		if (crs == null || crs.getName() == null)
 			throw new ReprojectException("Proyección de destino no valida.");
 
-		String epsg = proj.getAbrev();
+		String epsg = ProjectionUtils.getAbrev(crs);
 		String s_srs = null;
-		if (sourceSrs != null) {
-			s_srs = sourceSrs.getAbrev();
+		if (sourceCrs != null) {
+			s_srs = ProjectionUtils.getAbrev(sourceCrs);
 		}
-		if (sourceSrs == null) {
-			if (lyr.getProjection() != null) {
-				s_srs = lyr.getProjection().getAbrev();
+		if (sourceCrs == null) {
+			if (lyr.getCrs() != null) {
+				s_srs = ProjectionUtils.getAbrev(lyr.getCrs());
 			} else {
 				throw new ReprojectException("No se encuentra la proyeccion de origen.");
 			}

@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.remoteClient.gml.schemas.XMLElement;
 import org.gvsig.remoteClient.gml.types.IXMLType;
 import org.gvsig.remoteClient.gml.types.XMLComplexType;
@@ -18,9 +19,7 @@ import org.gvsig.remoteClient.wfs.WFSStatus;
 import org.gvsig.remoteClient.wfs.filters.FilterEncoding;
 
 import com.hardcode.gdbms.engine.data.driver.DriverException;
-import com.hardcode.gdbms.engine.instruction.Adapter;
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 import com.iver.cit.gvsig.fmap.drivers.WFSDriverException;
@@ -310,7 +309,7 @@ public class FLyrWFS extends FLyrVect{
 		setNumfeatures(10000);
 		setTimeout(10000);
 		setWfsDriver(driver);			
-		setProjection(CRSFactory.getCRS(projection));
+		setCrs(ProjectionUtils.getCRS(projection));
 
 		load();    	
 	}
@@ -658,7 +657,7 @@ public class FLyrWFS extends FLyrVect{
 		xml.putProperty("buffer", getNumfeatures());
 
 		//Projection
-		xml.putProperty("projection",getProjection().getAbrev());
+		xml.putProperty("projection", ProjectionUtils.getAbrev(getCrs()));
 
 		//Filter
 		xml.putProperty("filterEncoding",getFieldsQuery());
@@ -713,7 +712,7 @@ public class FLyrWFS extends FLyrVect{
 
 		//Projection
 		if (xml.contains("projection")){
-			setProjection(CRSFactory.getCRS(xml.getStringProperty("projection")));
+			setCrs(ProjectionUtils.getCRS(xml.getStringProperty("projection")));
 		}       
 
 		//Filter

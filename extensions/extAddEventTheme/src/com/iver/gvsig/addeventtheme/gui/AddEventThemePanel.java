@@ -51,8 +51,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.AcceptCancelPanel;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
@@ -106,8 +107,10 @@ public class AddEventThemePanel extends JPanel implements IWindow {
     }
 
     private void initializeCoordinates() {
-        IProjection proj = mapContext.getProjection();
-        if (!proj.isProjected() || MapContext.getDistanceNames()[mapContext.getViewPort().getDistanceUnits()].equals("Grados")) {
+    	CoordinateReferenceSystem crs = mapContext.getCrs();
+		if (!(crs instanceof ProjectedCRS)
+				|| MapContext.getDistanceNames()[mapContext.getViewPort()
+						.getDistanceUnits()].equals("Grados")) {
             firstCoordinate = "Lon";
             secondCoordinate = "Lat";
         } else{
@@ -196,7 +199,7 @@ public class AddEventThemePanel extends JPanel implements IWindow {
 	        AddEventThemeDriver addEventThemeDriver = new AddEventThemeDriver();
 	        addEventThemeDriver.setData(ds, xFieldIndex, yFieldIndex);
 	        FLayer capa = null;
-            capa = LayerFactory.createLayer(tableName, addEventThemeDriver, mapContext.getProjection());
+            capa = LayerFactory.createLayer(tableName, addEventThemeDriver, mapContext.getCrs());
 	        capa.addLayerListener(new AddEventThemListener());
 	        
 	        //Guardamos el nombre del fichero asociado a la capa de eventos 

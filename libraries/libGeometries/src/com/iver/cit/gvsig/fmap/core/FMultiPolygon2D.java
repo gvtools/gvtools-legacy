@@ -1,7 +1,7 @@
 package com.iver.cit.gvsig.fmap.core;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.aggregate.MultiSurface;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -63,12 +63,13 @@ import com.vividsolutions.jts.geom.Polygon;
  */
 public class FMultiPolygon2D extends FGeometryCollection implements MultiSurface{
 	
-	public FMultiPolygon2D(String id, IProjection projection) {
-		super(id, projection);
+	public FMultiPolygon2D(String id, CoordinateReferenceSystem crs) {
+		super(id, crs);
 	}
 
-	public FMultiPolygon2D(String id, IProjection projection, FPolygon2D[] polygons) {
-		super(id, projection, polygons);		
+	public FMultiPolygon2D(String id, CoordinateReferenceSystem crs,
+			FPolygon2D[] polygons) {
+		super(id, crs, polygons);		
 	}
 
 	/* (non-Javadoc)
@@ -79,7 +80,7 @@ public class FMultiPolygon2D extends FGeometryCollection implements MultiSurface
 		for (int i=0; i < getPrimitivesNumber(); i++){
 			aux[i] = (FPolygon2D) geometries[i].cloneGeometry();
 		}
-		return new FMultiPolygon2D(id, projection, aux);
+		return new FMultiPolygon2D(id, crs, aux);
 	}
 
 	/* (non-Javadoc)

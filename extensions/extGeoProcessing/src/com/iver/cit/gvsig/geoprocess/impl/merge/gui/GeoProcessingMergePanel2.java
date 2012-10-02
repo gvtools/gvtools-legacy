@@ -90,9 +90,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionListener;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -312,7 +312,7 @@ public class GeoProcessingMergePanel2
       }
 
       // sin florituras. cogemos la primera que haya
-      final IProjection projection = layers.getLayer(0).getProjection();
+		final CoordinateReferenceSystem crs = layers.getLayer(0).getCrs();
       DgnMemoryDriver dgnDriver = null;
       IndexedShpDriver shpDriver = null;
       DXFMemoryDriver dxfDriver = null;
@@ -341,7 +341,8 @@ public class GeoProcessingMergePanel2
                dgnDriver.initialize();
                driver = dxfDriver;
             }
-            newLyrList.add(LayerFactory.createLayer(fileName, driver, afile, projection));
+				newLyrList.add(LayerFactory.createLayer(fileName, driver,
+						afile, crs));
          }
          catch (final Exception e) {
             final String errorText = fullPath + "\n";

@@ -458,7 +458,7 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 		extractor.closeFiles();
 
 		FLyrVect lyrPol = extractor.getPolygonLayer();
-		lyrPol.setProjection(map.getProjection());
+		lyrPol.setCrs(map.getCrs());
 		IVectorialUniqueValueLegend defaultLegend = LegendFactory.createVectorialUniqueValueLegend(FShape.POLYGON);
 		defaultLegend.setClassifyingFieldNames(new String[] {"COST"} );
 		ISymbol myDefaultSymbol = SymbologyFactory.
@@ -489,7 +489,7 @@ public class ServiceAreaControlPanel extends RouteControlPanel {
 		lyrPol.setLegend(defaultLegend);
 		
 		FLyrVect lyrLine = extractor.getLineLayer();
-		lyrLine.setProjection(map.getProjection());
+		lyrLine.setCrs(map.getCrs());
 
 		solver.removeDestinationsFromNetwork(net.getFlags());
 		map.beginAtomicEvent();

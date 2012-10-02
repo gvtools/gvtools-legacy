@@ -27,16 +27,16 @@ import java.util.Stack;
 
 import javax.swing.JFrame;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gui.beans.imagenavigator.IClientImageNavigator;
 import org.gvsig.gui.beans.imagenavigator.ImageNavigator;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.ILabelable;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.operations.Cancel;
@@ -55,7 +55,7 @@ public class LayerPreview extends ImageNavigator implements IClientImageNavigato
 	public void setLayer(FLayer layer) throws ExpansionFileReadException, ReadDriverException {
 		this.layer = layer;
 		if (layer != null) {
-			vp = new ViewPort(layer.getProjection());
+			vp = new ViewPort(layer.getCrs());
 			Rectangle2D b = layer.getFullExtent();
 			setViewDimensions(b.getMinX(), b.getMaxY(), b.getMaxX(), b.getMinY());
 		}
@@ -66,7 +66,7 @@ public class LayerPreview extends ImageNavigator implements IClientImageNavigato
 	public static void main(String[] args) {
 		JFrame jFrame = new JFrame("test");
 		String fwAndamiDriverPath = "../_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers";
-		IProjection PROJ = CRSFactory.getCRS("EPSG:23030");
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 		try {
 			LayerFactory.setDriversPath(new File(fwAndamiDriverPath).getAbsolutePath());
 			LayerPreview prev = new LayerPreview();
@@ -76,7 +76,7 @@ public class LayerPreview extends ImageNavigator implements IClientImageNavigato
 							"line",
 							"gvSIG shp driver",
 							new File("/home/jaume/Documents/Cartografia/cv_300_polygons.shp"),
-							PROJ));
+							crs));
 
 			jFrame.setSize(new Dimension(598, 167));
 

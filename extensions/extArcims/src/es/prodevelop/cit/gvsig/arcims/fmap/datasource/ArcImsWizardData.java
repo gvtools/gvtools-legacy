@@ -90,7 +90,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.remoteClient.arcims.ArcImsFeatureClient;
 import org.gvsig.remoteClient.arcims.ArcImsProtImageHandler;
 import org.gvsig.remoteClient.arcims.ArcImsStatus;
@@ -98,6 +98,7 @@ import org.gvsig.remoteClient.arcims.utils.MyCancellable;
 import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformation;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformationLayerFeatures;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.cit.gvsig.fmap.MapControl;
@@ -105,7 +106,6 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.utiles.swing.threads.DefaultCancellableMonitorable;
 
 import es.prodevelop.cit.gvsig.arcims.fmap.drivers.ArcImsDriver;
-import es.prodevelop.cit.gvsig.arcims.fmap.drivers.ArcImsInMemoryAttsTableDriver;
 import es.prodevelop.cit.gvsig.arcims.fmap.drivers.ArcImsVectorialAdapter;
 import es.prodevelop.cit.gvsig.arcims.fmap.drivers.ArcImsVectorialEditableAdapter;
 import es.prodevelop.cit.gvsig.arcims.fmap.drivers.FMapFeatureArcImsDriver;
@@ -309,9 +309,9 @@ public class ArcImsWizardData {
      * @return the new layer (of class FRasterLyrArcIMS, which is a
      * subclass of _FLyrArcIMS which is a subclass of FLayer)
      */
-    public FRasterLyrArcIMS createArcImsRasterLayer(String host,
-        String service, String sLayer, String name, IProjection srs,
-        String imgFormat) throws Exception {
+	public FRasterLyrArcIMS createArcImsRasterLayer(String host,
+			String service, String sLayer, String name,
+			CoordinateReferenceSystem crs, String imgFormat) throws Exception {
         FMapRasterArcImsDriver drv = new FMapRasterArcImsDriver(host, service,
                 this.serviceType);
 
@@ -332,9 +332,8 @@ public class ArcImsWizardData {
         if ((si.getFeaturecoordsys() == null) ||
                 (si.getFeaturecoordsys().equals(""))) {
             missingSrs = true;
-            si.setFeaturecoordsys(srs.getAbrev()
-                                     .substring(ServiceInfoTags.vINI_SRS.length())
-                                     .trim());
+			si.setFeaturecoordsys(ProjectionUtils.getAbrev(crs)
+					.substring(ServiceInfoTags.vINI_SRS.length()).trim());
             logger.warn("Server provides no SRS. ");
         }
         else {
@@ -342,14 +341,14 @@ public class ArcImsWizardData {
         }
 
         flyr.setFullExtent(((ArcImsProtImageHandler) drv.getClient().getHandler()).getServiceExtent(
-                srs, flyr.getArcimsStatus()));
+                crs, flyr.getArcimsStatus()));
 
         // we *dont* use PNG always
         // flyr.setFormat("image/png");
         flyr.setFormat(imgFormat);
         flyr.setTransparency(0);
         flyr.setLayerQuery(sLayer);
-        flyr.setProjection(srs);
+        flyr.setCrs(crs);
         flyr.setName(name);
 
         // ----------- service info ---------------
@@ -371,14 +370,14 @@ public class ArcImsWizardData {
      * @param service service name
      * @param sLayer comma-separated list of selected layers
      * @param name new gvSIG layer's name
-     * @param srs project's coordinate system
+     * @param crs project's coordinate system
      * @param sep whether it'a grouped set of layers (false) or not (true)
      * @return the new layer (of class FRasterLyrArcIMS, which is a
      * subclass of FRasterLyrArcIMS, which is a subclass of FLayer)
      */
-    public FFeatureLyrArcIMSCollection createArcImsFeatureLayer(String host,
-        String service, String sLayer, String name, IProjection srs, boolean sep)
-        throws Exception {
+	public FFeatureLyrArcIMSCollection createArcImsFeatureLayer(String host,
+			String service, String sLayer, String name,
+			CoordinateReferenceSystem crs, boolean sep) throws Exception {
         String[] selectedLayerIds = sLayer.split(",");
         int count = selectedLayerIds.length;
 
@@ -407,7 +406,8 @@ public class ArcImsWizardData {
             ServiceInformationLayerFeatures silf = (ServiceInformationLayerFeatures) si.getLayerById(item);
             String lyrname = silf.getName();
 
-            individualLayers[i].setProjectionInStatus(srs.getAbrev());
+			individualLayers[i].setProjectionInStatus(ProjectionUtils
+					.getAbrev(crs));
             individualLayers[i].setHostInStatus(new URL(host));
             individualLayers[i].setServiceInStatus(service);
 
@@ -441,7 +441,7 @@ public class ArcImsWizardData {
             individualLayers[i].setServiceType(ServiceInfoTags.vFEATURESERVICE);
             individualLayers[i].setTransparency(0);
             individualLayers[i].setLayerQuery(item);
-            individualLayers[i].setProjection(srs);
+            individualLayers[i].setCrs(crs);
             individualLayers[i].setName(lyrname);
 
             Rectangle2D fext = ((ArcImsFeatureClient) drv.getClient()).getLayerExtent(individualLayers[i].getArcimsStatus());
@@ -464,9 +464,8 @@ public class ArcImsWizardData {
             if ((si.getFeaturecoordsys() == null) ||
                     (si.getFeaturecoordsys().equals(""))) {
                 missingSrs = true;
-                si.setFeaturecoordsys(srs.getAbrev()
-                                         .substring(ServiceInfoTags.vINI_SRS.length())
-                                         .trim());
+				si.setFeaturecoordsys(ProjectionUtils.getAbrev(crs)
+						.substring(ServiceInfoTags.vINI_SRS.length()).trim());
                 logger.warn("Server provides no SRS. ");
             }
             else {
@@ -477,7 +476,7 @@ public class ArcImsWizardData {
         FFeatureLyrArcIMSCollection collection = new FFeatureLyrArcIMSCollection(mapControl.getMapContext(),
                 null, sep);
         collection.setName(name);
-        collection.setProjection(srs);
+        collection.setCrs(crs);
 
         for (int i = 0; i < count; i++) {
             collection.addLayer(individualLayers[i]);

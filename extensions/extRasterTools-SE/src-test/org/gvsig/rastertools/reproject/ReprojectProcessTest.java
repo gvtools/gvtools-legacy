@@ -20,10 +20,9 @@ package org.gvsig.rastertools.reproject;
 
 import java.io.File;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.rastertools.BaseTest;
-
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 /**
  * Test para comprobar que funciona correctamente la reproyeccion
  * 
@@ -49,18 +48,19 @@ public class ReprojectProcessTest extends BaseTest {
 	 * @param onePerBand
 	 * @param interp
 	 */
-	protected ReprojectProcess reprojectingProcess(String path, IProjection projection, IProjection srcprojection) {
+	protected ReprojectProcess reprojectingProcess(String path,
+			CoordinateReferenceSystem crs, CoordinateReferenceSystem sourceCrs) {
 		ReprojectProcess reprojectProcess = new ReprojectProcess();
 		reprojectProcess.addParam("layer", lyr);
 		reprojectProcess.addParam("path", path);
-		reprojectProcess.addParam("projection", projection);
-		reprojectProcess.addParam("srcprojection", srcprojection);
+		reprojectProcess.addParam("projection", crs);
+		reprojectProcess.addParam("srcprojection", sourceCrs);
 		return reprojectProcess;
 	}
 	
-	private IProjection getProjection(String code) {
+	private CoordinateReferenceSystem getProjection(String code) {
 		try {
-			return CRSFactory.getCRS(code);
+			return ProjectionUtils.getCRS(code);
 		} catch (NumberFormatException ex) {
 			return null;
 		}

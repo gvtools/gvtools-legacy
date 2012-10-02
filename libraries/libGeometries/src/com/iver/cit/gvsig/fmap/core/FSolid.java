@@ -6,9 +6,9 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.Solid;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -67,12 +67,12 @@ import org.gvsig.fmap.geometries.iso.primitive.Solid;
  */
 public class FSolid extends FGeometry implements Solid{
 		
-	public FSolid(IProjection projection) {
-		super(projection);		
+	public FSolid(CoordinateReferenceSystem crs) {
+		super(crs);		
 	}
 
-	public FSolid(String id, IProjection projection) {
-		super(id, projection);	
+	public FSolid(String id, CoordinateReferenceSystem crs) {
+		super(id, crs);	
 	}
 
 	public FShape cloneFShape() {
@@ -95,7 +95,7 @@ public class FSolid extends FGeometry implements Solid{
 		return null;
 	}
 
-	public void reProject(ICoordTrans ct) {
+	public void reProject(MathTransform trans) {
 		// TODO Auto-generated method stub
 		
 	}

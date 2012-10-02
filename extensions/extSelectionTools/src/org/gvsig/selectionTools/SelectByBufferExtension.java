@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import org.gvsig.selectionTools.tools.buffer.gui.BufferConfigurationPanel;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -67,15 +69,17 @@ public class SelectByBufferExtension extends Extension {
 	 */
 	public void execute(String actionCommand) {
 		if (actionCommand.equals("SELBUFFER") ) {
-			IWindow view = PluginServices.getMDIManager().getActiveWindow();
+			IWindow window = PluginServices.getMDIManager().getActiveWindow();
 
-			if (view instanceof View) {
-				IProjectView model = ((View)view).getModel();
+			if (window instanceof View) {
+				View view = (View) window; 
+				IProjectView model = ((View)window).getModel();
 
 				/*
 				 * Unavaliable tool with views in geographic projections
 				 */
-				if (! ((View)view).getMapControl().getProjection().isProjected()) {
+				CoordinateReferenceSystem crs = view.getMapControl().getCrs();
+				if (!(crs instanceof ProjectedCRS)) {
 					JOptionPane.showMessageDialog(null, PluginServices.getText(null, "Tool_unavaliable_with_view_in_geographic_projection"), PluginServices.getText(this, "Warning"), JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -112,7 +116,7 @@ public class SelectByBufferExtension extends Extension {
 				}
 
 				// Creates and displays the configuration panel
-				PluginServices.getMDIManager().addWindow(new BufferConfigurationPanel((FLyrVect[])usefulLayers.toArray(new FLyrVect[0]), (View)view));
+				PluginServices.getMDIManager().addWindow(new BufferConfigurationPanel((FLyrVect[])usefulLayers.toArray(new FLyrVect[0]), (View)window));
 			}
 		}
 	}
@@ -155,7 +159,7 @@ public class SelectByBufferExtension extends Extension {
 			/*
 			 * Unavaliable tool with views in geographic projections
 			 */
-			if (! (vista.getMapControl().getProjection().isProjected())) {
+			if (!(vista.getMapControl().getCrs() instanceof ProjectedCRS)) {
 				return false;
 			}
 

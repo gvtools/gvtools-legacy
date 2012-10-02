@@ -47,7 +47,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-import org.cresques.cts.ICoordTrans;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.NoninvertibleTransformException;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -96,10 +98,10 @@ public class DBStrategy extends DefaultStrategy {
 		try {
 			dbAdapter.start();
 			Selectable selectable=lyr.getRecordset();
-			ICoordTrans ct = lyr.getCoordTrans();
+			MathTransform trans = lyr.getCrsTransform();
 			FBitSet bitSet = selectable.getSelection();
 
-			String strEPSG = viewPort.getProjection().getAbrev();
+			String strEPSG = ProjectionUtils.getAbrev(viewPort.getCrs());
 			// TODO: EXPLORAR LAS LEYENDAS PARA SABER LOS CAMPOS QUE VAMOS
 			// A NECESITAR RECUPERAR, PARA INCLUIR EN LA CONSULTA SOLO
 			// AQUELLOS QUE VAMOS A NECESITAR. CON ESO GANAREMOS VELOCIDAD.
@@ -120,9 +122,8 @@ public class DBStrategy extends DefaultStrategy {
 			}
 
 			Rectangle2D rectAux = viewPort.getAdjustedExtent();
-			if (ct != null) {
-				ICoordTrans invertedCT = ct.getInverted();
-				rectAux = invertedCT.convert(rectAux);
+			if (trans != null) {
+				rectAux = ProjectionUtils.transform(rectAux, trans.inverse());
 			}
 
 
@@ -165,10 +166,10 @@ public class DBStrategy extends DefaultStrategy {
 
 				// System.out.println("PINTANDO FEATURE " + feat.getID());
 
-				if (ct != null) {
+				if (trans != null) {
 					if (bMustClone)
 						geom = geom.cloneGeometry();
-					geom.reProject(ct);
+					geom.reProject(trans);
 				}
 
 				i = dbAdapter.getRowIndexByFID(feat);
@@ -194,7 +195,9 @@ public class DBStrategy extends DefaultStrategy {
 			}
 			dbAdapter.stop();
 		} catch (InitializeDriverException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
+		} catch (NoninvertibleTransformException e) {
+			throw new ReadDriverException(getCapa().getName(), e);
 		}
 
 	}
@@ -225,12 +228,15 @@ public class DBStrategy extends DefaultStrategy {
 			} catch (InitializeDriverException e) {
 				throw new ReadDriverException(getCapa().getName(),e);
 			}
-			ICoordTrans ct = lyr.getCoordTrans();
-			String strEPSG = lyr.getProjection().getAbrev();
+			MathTransform trans = lyr.getCrsTransform();
+			String strEPSG = ProjectionUtils.getAbrev(lyr.getCrs());
 			Rectangle2D rectAux = rect;
-			if (ct != null) {
-				ICoordTrans invertedCT = ct.getInverted();
-				rectAux = invertedCT.convert(rectAux);
+			if (trans != null) {
+				try {
+					rectAux = ProjectionUtils.transform(rectAux, trans.inverse());
+				} catch (NoninvertibleTransformException e) {
+					throw new ReadDriverException(getCapa().getName(), e);
+				}
 			}
 			IFeatureIterator geomIt = dbAdapter.getFeatureIterator(rectAux, strEPSG, null);
 			if (geomIt == null){
@@ -253,11 +259,11 @@ public class DBStrategy extends DefaultStrategy {
 				}
 				IFeature feat = geomIt.next();
 				IGeometry geom = feat.getGeometry();
-				if (ct != null) {
+				if (trans != null) {
 					if (bMustClone){
 						geom = geom.cloneGeometry();
 					}//if
-					geom.reProject(ct);
+					geom.reProject(trans);
 				}//if
 				i = dbDriver.getRowIndexByFID(feat);
 				if (geom.intersects(rect)){
@@ -280,12 +286,11 @@ public class DBStrategy extends DefaultStrategy {
 		//        IVectorialDatabaseDriver dbDriver = (IVectorialDatabaseDriver) dbAdapter.getDriver();
 		try {
 			dbAdapter.start();
-			ICoordTrans ct = lyr.getCoordTrans();
-			String strEPSG = lyr.getProjection().getAbrev();
+			MathTransform trans = lyr.getCrsTransform();
+			String strEPSG = ProjectionUtils.getAbrev(lyr.getCrs());
 			Rectangle2D rectAux = rect;
-			if (ct != null) {
-				ICoordTrans invertedCT = ct.getInverted();
-				rectAux = invertedCT.convert(rectAux);
+			if (trans != null) {
+				rectAux = ProjectionUtils.transform(rectAux, trans.inverse());
 			}
 
 			FBitSet selection = new FBitSet();
@@ -324,10 +329,10 @@ public class DBStrategy extends DefaultStrategy {
 				IFeature feat = geomIt.next();
 				IGeometry geom = feat.getGeometry();
 
-				if (ct != null) {
+				if (trans != null) {
 					if (bMustClone)
 						geom = geom.cloneGeometry();
-					geom.reProject(ct);
+					geom.reProject(trans);
 				}
 
 				i = dbAdapter.getRowIndexByFID(feat);
@@ -338,6 +343,8 @@ public class DBStrategy extends DefaultStrategy {
 
 			return selection;
 		} catch (InitializeDriverException e) {
+			throw new ReadDriverException(getCapa().getName(),e);
+		} catch (NoninvertibleTransformException e) {
 			throw new ReadDriverException(getCapa().getName(),e);
 		}
 	}

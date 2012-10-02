@@ -50,7 +50,7 @@ import java.util.BitSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -150,7 +150,7 @@ public class DefaultStrategy implements Strategy {
 		Cancellable cancel) throws ReadDriverException {
 		try {
 			ReadableVectorial adapter = ((SingleLayer) capa).getSource();
-			ICoordTrans ct = getCapa().getCoordTrans();
+			MathTransform trans = getCapa().getCrsTransform();
 //			logger.info("adapter.start()");
 			adapter.start();
 
@@ -193,10 +193,10 @@ public class DefaultStrategy implements Strategy {
 					continue;
 				}
 
-				if (ct != null) {
+				if (trans != null) {
 				    if (bMustClone)
 				        geom = geom.cloneGeometry();
-					geom.reProject(ct);
+					geom.reProject(trans);
 				}
 
 				// if (geom.intersects(extent)) {
@@ -377,7 +377,7 @@ public class DefaultStrategy implements Strategy {
 
 			if (visitor.start(capa)) {
 				ReadableVectorial va = ((SingleLayer) capa).getSource();
-				ICoordTrans ct = getCapa().getCoordTrans();
+				MathTransform trans = getCapa().getCrsTransform();
 				va.start();
 				for (int i = 0; i < va.getShapeCount(); i++) {
 					if(cancel != null){
@@ -389,9 +389,13 @@ public class DefaultStrategy implements Strategy {
 				    if (geom == null) {
 						continue;
 					}
-				    if (ct != null) {
-				    	if (!capa.getProjection().getAbrev().equals(capa.getMapContext().getViewPort().getProjection().getAbrev())){
-				    		geom.reProject(ct);
+				    if (trans != null) {
+						if (!capa
+								.getCrs()
+								.getName()
+								.equals(capa.getMapContext().getViewPort()
+										.getCrs().getName())) {
+				    		geom.reProject(trans);
 				    	}
 				    }
 

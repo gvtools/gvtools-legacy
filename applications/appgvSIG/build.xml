@@ -51,8 +51,6 @@
 		libGPE-GML,
 		libGPE-KML,
 		appgvSIG,
-		libJCRS,
-		extJCRS,
 		libTopology,
 		libDwg,
 		extDwg,
@@ -99,7 +97,6 @@
 		extLayerLoadingOrder,
 		extTableImport,
 		extTableExport,
-		org.gvsig.installer.app.extension,
 		binaries
 	"/>
 

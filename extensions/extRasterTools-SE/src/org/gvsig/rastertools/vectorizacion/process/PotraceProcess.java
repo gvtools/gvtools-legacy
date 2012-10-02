@@ -23,7 +23,7 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.sql.Types;
 
-import org.cresques.cts.ProjectionPool;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.raster.RasterProcess;
 import org.gvsig.raster.dataset.io.RasterDriverException;
@@ -149,8 +149,7 @@ public class PotraceProcess extends RasterProcess {
 		if (fileName.endsWith(".dxf")) {
 			writer = new DxfWriter();
 			((DxfWriter) writer).setFile(new File(fileName));
-			ProjectionPool pool = new ProjectionPool();
-			((DxfWriter) writer).setProjection(pool.get("EPSG:23030"));
+			((DxfWriter) writer).setCrs(ProjectionUtils.getCRS("EPSG:23030"));
 			tableDef = new DXFLayerDefinition();
 
 			DxfFieldsMapping fieldsMapping = new DxfFieldsMapping();

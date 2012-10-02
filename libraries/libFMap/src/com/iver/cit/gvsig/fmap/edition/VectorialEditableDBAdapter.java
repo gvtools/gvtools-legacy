@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -20,7 +21,6 @@ import com.iver.cit.gvsig.exceptions.visitors.StartWriterVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StopWriterVisitorException;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IRow;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
@@ -70,27 +70,28 @@ public class VectorialEditableDBAdapter extends VectorialEditableAdapter
 		 * azo: these new constructors must be tested
 		 * */
 
-		public MyIterator(String[] fields, IProjection newProjection) throws ReadDriverException{
-			epsg = newProjection.getAbrev();
+		public MyIterator(String[] fields, CoordinateReferenceSystem newCrs) throws ReadDriverException{
+			epsg = ProjectionUtils.getAbrev(newCrs);
 			orig = (VectorialDBAdapter) ova;
-			featIt = orig.getFeatureIterator(fields, newProjection);
+			featIt = orig.getFeatureIterator(fields, newCrs);
 			dbDriver = (IVectorialDatabaseDriver) getOriginalDriver();
 			getFeaturesFromExpansionFile();
 		}
 
-		public MyIterator(String sql, IProjection newProjection) throws ReadDriverException{
-			epsg = newProjection.getAbrev();
+		public MyIterator(String sql, CoordinateReferenceSystem newCrs) throws ReadDriverException{
+			epsg = ProjectionUtils.getAbrev(newCrs);
 			orig = (VectorialDBAdapter) ova;
-			featIt = orig.getFeatureIterator(sql, newProjection);
+			featIt = orig.getFeatureIterator(sql, newCrs);
 			dbDriver = (IVectorialDatabaseDriver) getOriginalDriver();
 			getFeaturesFromExpansionFile();
 		}
 
-		public MyIterator(Rectangle2D rect, String[] fields, IProjection newProjection) throws ReadDriverException{
+		public MyIterator(Rectangle2D rect, String[] fields,
+				CoordinateReferenceSystem newCrs) throws ReadDriverException {
 			extent = rect;
-			epsg = newProjection.getAbrev();
+			epsg = ProjectionUtils.getAbrev(newCrs);
 			orig = (VectorialDBAdapter) ova;
-			featIt = orig.getFeatureIterator(extent, fields, newProjection, true);
+			featIt = orig.getFeatureIterator(extent, fields, newCrs, true);
 			dbDriver = (IVectorialDatabaseDriver) getOriginalDriver();
 			getFeaturesFromExpansionFile();
 		}
@@ -345,21 +346,22 @@ public class VectorialEditableDBAdapter extends VectorialEditableAdapter
 
 	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG,
 			String[] alphaNumericFieldsNeeded) throws ReadDriverException {
-		return new MyIterator(r, alphaNumericFieldsNeeded, CRSFactory.getCRS(strEPSG));
+		return new MyIterator(r, alphaNumericFieldsNeeded, ProjectionUtils.getCRS(strEPSG));
 	}
 
-	public IFeatureIterator getFeatureIterator(String[] fields, IProjection newProjection)
-	throws ReadDriverException{
+	public IFeatureIterator getFeatureIterator(String[] fields,
+			CoordinateReferenceSystem newCrs) throws ReadDriverException{
 		//TODO make tests with these (unit test of vectorialeditableadapter)
-		return new MyIterator(fields, newProjection);
+		return new MyIterator(fields, newCrs);
 //		return new DefaultFeatureIterator(this, projection, newProjection, fields);
 	}
 
 	//TODO test this (azo)
 	public IFeatureIterator getFeatureIterator(Rectangle2D rect, String[] fields,
-			IProjection newProjection,
+			CoordinateReferenceSystem newCrs,
 			boolean fastIteration) throws ReadDriverException{
-		return getFeatureIterator(rect, newProjection.getAbrev(), fields);
+		return getFeatureIterator(rect, ProjectionUtils.getAbrev(newCrs),
+				fields);
 	}
 
 	/**
@@ -371,9 +373,8 @@ public class VectorialEditableDBAdapter extends VectorialEditableAdapter
 	* @return feature iterator
 	* */
 	public IFeatureIterator getFeatureIterator(String sql,
-								IProjection newProjection) throws ReadDriverException{
-
-		return new AttrQueryFeatureIterator(this, projection, newProjection, sql);
+			CoordinateReferenceSystem newCrs) throws ReadDriverException{
+		return new AttrQueryFeatureIterator(this, crs, newCrs, sql);
 	}
 
 	public DBLayerDefinition getLyrDef() {

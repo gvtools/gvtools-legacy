@@ -8,9 +8,9 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.OrientablePrimitive;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 
@@ -74,8 +74,9 @@ public abstract class FOrientablePrimitive2D extends FGeometry implements Orient
 	 *
 	 * @param gpx GeneralPathX.
 	 */
-	public FOrientablePrimitive2D(String id, IProjection projection, GeneralPathX gpx) {
-		super(id, projection);
+	public FOrientablePrimitive2D(String id, CoordinateReferenceSystem crs,
+			GeneralPathX gpx) {
+		super(id, crs);
 		gp = gpx;
 	}
 
@@ -228,8 +229,8 @@ public abstract class FOrientablePrimitive2D extends FGeometry implements Orient
 	/* (non-Javadoc)
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#reProject(org.cresques.cts.ICoordTrans)
 	 */
-	public void reProject(ICoordTrans ct) {
-		gp.reProject(ct);
+	public void reProject(MathTransform trans) {
+		gp.reProject(trans);
 	}
 
 	/* (non-Javadoc)

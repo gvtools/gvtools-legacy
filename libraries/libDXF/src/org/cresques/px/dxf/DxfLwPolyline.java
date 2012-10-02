@@ -26,8 +26,8 @@ package org.cresques.px.dxf;
 import java.awt.geom.Point2D;
 import java.util.Vector;
 
-import org.cresques.cts.IProjection;
 import org.cresques.io.DxfGroup;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
 /**
@@ -42,8 +42,8 @@ public class DxfLwPolyline extends DxfPolyline {
      * @param proj, proyección cartográfica en la que se encuentra la DxfLwPolyline.
      * @param layer, capa del DXF en la que se encuentra la DxfLwPolyline.
      */
-    public DxfLwPolyline(IProjection proj, DxfLayer layer) {
-        super(proj, layer);
+	public DxfLwPolyline(CoordinateReferenceSystem crs, DxfLayer layer) {
+        super(crs, layer);
     }
 
     /**

@@ -72,6 +72,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.ViewPortData;
 import org.cresques.px.Extent;
 import org.exolab.castor.xml.ValidationException;
@@ -108,7 +109,6 @@ import com.iver.cit.gvsig.fmap.ConnectionErrorExceptionType;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.WMSDriverExceptionType;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.drivers.wms.FMapWMSDriver;
 import com.iver.cit.gvsig.fmap.drivers.wms.FMapWMSDriverFactory;
@@ -918,7 +918,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			Rectangle2D.intersect(vp.getAdjustedExtent(), bBox, extent);
 
 			ViewPortData vpData = new ViewPortData(
-				vp.getProjection(), new Extent(extent), fixedSize );
+				vp.getCrs(), new Extent(extent), fixedSize );
 			vpData.setMat(vp.getAffineTransform());
 
 			String filePath = f.getAbsolutePath();
@@ -989,7 +989,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 	 */
 	private void rasterProcess(String filePath, Graphics2D g, ViewPort vp, double scale, Cancellable cancel, int nLyr) throws ReadDriverException, LoadLayerException, FilterTypeException {
 		//Cargamos el dataset con el raster de disco.
-		layerRaster[nLyr] = FLyrRasterSE.createLayer("", filePath, vp.getProjection());
+		layerRaster[nLyr] = FLyrRasterSE.createLayer("", filePath, vp.getCrs());
 		//layerRaster[nLyr].getRender().setBufferFactory(layerRaster[nLyr].getBufferFactory());
 		layerRaster[nLyr].setNoDataValue(getNoDataValue());
 		layerRaster[nLyr].setNoDataType(getNoDataType());
@@ -1184,7 +1184,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			com.iver.andami.Utilities.createTemp(nameWordFile, this.getDataWorldFile(bBox, sz));
 
 			ViewPortData vpData = new ViewPortData(
-				vp.getProjection(), new Extent(bBox), sz );
+				vp.getCrs(), new Extent(bBox), sz );
 			vpData.setMat(vp.getAffineTransform());
 
 			String filePath = f.getAbsolutePath();
@@ -1571,7 +1571,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 		}
 		m_SRS = m_srs;
 		this.updateDrawVersion();
-		setProjection(CRSFactory.getCRS(getSRS()));
+		setCrs(ProjectionUtils.getCRS(getSRS()));
 	}
 
 	/**
@@ -2217,7 +2217,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 			FLyrRasterSE ly = null;
 			if(lastNColumns == 0 && lastNRows == 0) {
 				try {
-					ly = createLayer(layerRaster[0].getName(), layerRaster[0].getLoadParams(), layerRaster[0].getProjection());
+					ly = createLayer(layerRaster[0].getName(), layerRaster[0].getLoadParams(), layerRaster[0].getCrs());
 				} catch (LoadLayerException e) {
 					return null;
 				}
@@ -2231,7 +2231,7 @@ public class FLyrWMS extends FLyrRasterSE implements IHasImageLegend{
 					}
 				}
 				try {
-					ly = createLayer("preview", s, getProjection());
+					ly = createLayer("preview", s, getCrs());
 				} catch (LoadLayerException e) {
 					return null;
 				}

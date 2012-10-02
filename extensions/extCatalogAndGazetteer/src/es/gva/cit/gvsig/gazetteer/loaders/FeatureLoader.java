@@ -46,8 +46,9 @@ import java.awt.Toolkit;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -58,7 +59,6 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.GraphicLayer;
 import com.iver.cit.gvsig.fmap.rendering.FGraphicLabel;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
@@ -74,10 +74,7 @@ import es.gva.cit.gvsig.gazetteer.DeleteSearchesExtension;
  * @author Jorge Piera Llodra (piera_jor@gva.es)
  */
 public class FeatureLoader {     
-	/**
-	 * Coordinates Transformer
-	 */
-	private ICoordTrans coordTrans;	
+	private MathTransform crsTransform;	
 
 	/**
 	 * @param projection
@@ -90,12 +87,13 @@ public class FeatureLoader {
 				(BaseView) PluginServices.getMDIManager().getActiveWindow();
 
 
-			IProjection projection = CRSFactory.getCRS(sProjection);
-			if (projection == null){
-				projection = activeView.getMapControl().getViewPort().getProjection();
+			CoordinateReferenceSystem crs = ProjectionUtils.getCRS(sProjection);
+			if (crs == null){
+				crs = activeView.getMapControl().getViewPort().getCrs();
 			}
 
-			coordTrans=  projection.getCT(activeView.getMapControl().getViewPort().getProjection());
+			crsTransform = ProjectionUtils.getCrsTransform(crs, activeView
+					.getMapControl().getViewPort().getCrs());
 		}
 	}
 	/**
@@ -134,7 +132,7 @@ public class FeatureLoader {
 		BaseView activeView = 
 			(BaseView) PluginServices.getMDIManager().getActiveWindow();
 
-		IProjection projection = activeView.getProjection();
+		CoordinateReferenceSystem crs = activeView.getCrs();
 		ViewPort viewPort = activeView.getMapControl().getViewPort();
 		Point2D point = getReprojectedPoint(feature.getCoordinates());
 
@@ -144,13 +142,13 @@ public class FeatureLoader {
 		}else{
 			Toolkit kit = Toolkit.getDefaultToolkit();
 			double dpi = kit.getScreenResolution();
-			Rectangle2D extent = projection.getExtent(viewPort.getAdjustedExtent(),
+			Rectangle2D extent = ProjectionUtils.getExtent(crs,
+					viewPort.getAdjustedExtent(),
 					new Double(25000).doubleValue(),
 					new Double(viewPort.getImageWidth()).doubleValue(),
 					new Double(viewPort.getImageHeight()).doubleValue(),
 					MapContext.CHANGE[viewPort.getMapUnits()],
-					MapContext.CHANGE[viewPort.getDistanceUnits()],
-					dpi);				
+					MapContext.CHANGE[viewPort.getDistanceUnits()], dpi);				
 			if (extent != null){
 				zoomExtent = new Rectangle2D.Double(point.getX() - extent.getWidth()/2,
 						point.getY() - extent.getHeight()/2,
@@ -222,14 +220,13 @@ public class FeatureLoader {
 	 * FPoint2D
 	 */
 	private Point2D getReprojectedPoint(Point2D ptOrigin){
-		Point2D ptDest = null;
-		return getCoordTrans().convert(ptOrigin, ptDest);
+		return ProjectionUtils.transform(ptOrigin, getCrsTransform());
 	}
 	/**
 	 * @return the coordTrans
 	 */
-	public ICoordTrans getCoordTrans() {
-		return coordTrans;
+	public MathTransform getCrsTransform() {
+		return crsTransform;
 	}
 
 

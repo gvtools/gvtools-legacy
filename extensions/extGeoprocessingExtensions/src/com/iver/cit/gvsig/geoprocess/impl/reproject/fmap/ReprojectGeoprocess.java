@@ -69,9 +69,9 @@ package com.iver.cit.gvsig.geoprocess.impl.reproject.fmap;
 
 import java.util.Map;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
@@ -123,7 +123,7 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 	/**
 	 * Target projection for features of the input layer
 	 */
-	private IProjection targetProjection;
+	private CoordinateReferenceSystem targetCrs;
 
 	ReprojectTask task = null;
 
@@ -140,7 +140,8 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 				.get("firstlayerselection");
 		if (firstLayerSelection != null)
 			this.onlyInputLayerSelection = firstLayerSelection.booleanValue();
-		this.targetProjection = (IProjection) params.get("targetProjection");
+		this.targetCrs = (CoordinateReferenceSystem) params
+				.get("targetProjection");
 
 	}
 
@@ -149,7 +150,7 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 			throw new GeoprocessException(
 					"Operacion de reproyección sin especificar capa de resultados");
 		}
-		if (this.targetProjection == null)
+		if (this.targetCrs == null)
 			throw new GeoprocessException(
 					"Geoproceso reproyección sin proyección destino");
 	}
@@ -187,16 +188,16 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 
 		FBitSet selection;
 
-		ICoordTrans ct;
+		MathTransform transform;
 
 		ReprojectVisitor(ILayerDefinition layerDefinition,
 				FeaturePersisterProcessor2 processor, FBitSet selection,
-				ICoordTrans coordTrans) {
+				MathTransform transform) {
 
 			this.layerDefinition = layerDefinition;
 			this.processor = processor;
 			this.selection = selection;
-			this.ct = coordTrans;
+			this.transform = transform;
 		}
 
 		public void visit(IGeometry g, int index) throws VisitorException, StopWriterVisitorException, ProcessVisitorException {
@@ -206,7 +207,7 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 				if (!selection.get(index))
 					return;
 			}// if
-			g.reProject(ct);
+			g.reProject(transform);
 			IFeature feature = null;
 			try {
 				feature = createFeature(g, index);
@@ -294,13 +295,12 @@ public class ReprojectGeoprocess extends AbstractGeoprocess {
 			FBitSet selection = null;
 			if(onlyInputLayerSelection)
 				selection = firstLayer.getRecordset().getSelection();
-			IProjection from = firstLayer.getProjection();
-			IProjection to = targetProjection;
+			CoordinateReferenceSystem from = firstLayer.getCrs();
+			CoordinateReferenceSystem to = targetCrs;
 
-//			ICoordTrans ct = new CoordTrans((CoordSys) to, (CoordSys) from);
-			ICoordTrans ct = from.getCT((IProjection)to);
+			MathTransform trans = ProjectionUtils.getCrsTransform(from, to);
 			ReprojectVisitor visitor = new ReprojectVisitor(resultLayerDefinition,
-					processor, selection, ct);
+					processor, selection, trans);
 			Strategy strategy = StrategyManager.getStrategy(firstLayer);
 			try {
 				strategy.process(visitor, this);

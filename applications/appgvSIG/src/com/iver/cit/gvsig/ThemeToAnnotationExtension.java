@@ -185,7 +185,7 @@ public class ThemeToAnnotationExtension extends Extension {
             }
 
             la.setSource(lv.getSource());
-            la.setProjection(lv.getProjection());
+            la.setCrs(lv.getCrs());
 
             SelectAnnotationLayerNameAndField panel1 = new SelectAnnotationLayerNameAndField(wizard.getWizardComponents(),la);
             ConfigureLabel panel2 = new ConfigureLabel(wizard.getWizardComponents(),la);

@@ -42,8 +42,6 @@ package com.iver.cit.gvsig.fmap.operations.strategies;
 
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.ICoordTrans;
-
 import com.iver.cit.gvsig.exceptions.visitors.ProcessVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
@@ -60,7 +58,6 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 public class QueryByRectVisitor implements FeatureVisitor {
 	private Rectangle2D rect = null;
 	private FBitSet bitset = null;
-	private ICoordTrans ct = null;
 
 	/**
 	 * Inserta el Rectángulo para realizar la consulta.

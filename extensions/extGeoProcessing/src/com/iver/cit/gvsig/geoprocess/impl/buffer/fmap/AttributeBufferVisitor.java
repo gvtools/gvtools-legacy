@@ -94,16 +94,12 @@
 */
 package com.iver.cit.gvsig.geoprocess.impl.buffer.fmap;
 
-import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
 import com.hardcode.gdbms.engine.values.NumericValue;
-import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.VectorialData;
 import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.util.UnitUtils;
 /**
@@ -123,7 +119,7 @@ public class AttributeBufferVisitor extends BufferVisitor {
 	 * projection of the active view. Useful to convert linear distances in angular arcs
 	 * (approach for buffering geometries in geographic coordinates)
 	 */
-	private IProjection projection;
+	private CoordinateReferenceSystem crs;
 	private int distanceUnits;
 	private int mapUnits;
 	
@@ -131,17 +127,15 @@ public class AttributeBufferVisitor extends BufferVisitor {
 	/**
 	 * Constructor
 	 * @param attributeName
-	 * @param projection 
+	 * @param crs 
 	 * @param mapUnits 
 	 * @param distanceUnits 
 	 * @param recordset
 	 */
-	public AttributeBufferVisitor(String attributeName, 
-								IProjection projection, 
-								int distanceUnits, 
-								int mapUnits) throws GeoprocessException{
+	public AttributeBufferVisitor(String attributeName,
+			CoordinateReferenceSystem crs, int distanceUnits, int mapUnits) throws GeoprocessException{
 		this.attributeName = attributeName;
-		this.projection = projection;
+		this.crs = crs;
 		this.distanceUnits = distanceUnits;
 		this.mapUnits = mapUnits;
 	}
@@ -166,7 +160,7 @@ public class AttributeBufferVisitor extends BufferVisitor {
 		if(value == null)
 			return 0d;
 		
-		return UnitUtils.getInInternalUnits(value.doubleValue(), projection, distanceUnits, mapUnits);
+		return UnitUtils.getInInternalUnits(value.doubleValue(), crs, distanceUnits, mapUnits);
 	}
 
 	public String getProcessDescription() {

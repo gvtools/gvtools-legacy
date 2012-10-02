@@ -10,8 +10,7 @@ import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.drivers.gpe.handlers.DefaultFmapContentHandler;
 import org.gvsig.fmap.drivers.gpe.handlers.FmapErrorHandler;
 import org.gvsig.fmap.drivers.gpe.handlers.FmapHandlerFactory;
@@ -20,6 +19,8 @@ import org.gvsig.fmap.drivers.gpe.model.GPEFeature;
 import org.gvsig.fmap.drivers.gpe.model.GPEGeometry;
 import org.gvsig.gpe.GPERegister;
 import org.gvsig.gpe.parser.GPEParser;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
 import com.hardcode.gdbms.engine.data.driver.ObjectDriver;
@@ -30,7 +31,6 @@ import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.BoundedShapes;
 import com.iver.cit.gvsig.fmap.drivers.DriverAttributes;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
@@ -91,7 +91,7 @@ BoundedShapes{
 	private HashMap features = null;
 	private int numFeatures = 0; 
 	private ArrayList parsers = null;
-	private IProjection projection = null;
+	private CoordinateReferenceSystem crs = null;
 	private File m_Fich;
 	private boolean isWarningShowed = false;
 	private DriverAttributes attributes = null;
@@ -120,15 +120,15 @@ BoundedShapes{
 	/**
 	 * @return the projection
 	 */
-	public IProjection getProjection() {
-		return projection;
+	public CoordinateReferenceSystem getCrs() {
+		return crs;
 	}
 
 	/**
-	 * @param projection the projection to set
+	 * @param crs the projection to set
 	 */
-	public void setProjection(IProjection projection) {
-		this.projection = projection;
+	public void setCrs(CoordinateReferenceSystem crs) {
+		this.crs = crs;
 	}
 
 	/**
@@ -163,26 +163,28 @@ BoundedShapes{
 	private IGeometry getGeometry(GPEFeature feature){
 		GPEGeometry gpeGeometry = ((GPEFeature)feature).getGeometry();
 		if (gpeGeometry != null){
-			IProjection geomProj = null;
+			CoordinateReferenceSystem geomCrs = null;
 			if (gpeGeometry.getSrs() != null){
 				try{
-					geomProj = CRSFactory.getCRS(gpeGeometry.getSrs());
+					geomCrs = ProjectionUtils.getCRS(gpeGeometry.getSrs());
 				}catch(Exception e){
 					//If the CRS factory has an error.
 				}				
 			}
-			if (geomProj == null){
+			if (geomCrs == null){
 				return gpeGeometry.getIGeometry();
 			}else{
-				if (projection == null){
+				if (crs == null){
 					return gpeGeometry.getIGeometry();
 				}else{
-					if (geomProj.getAbrev().compareTo(projection.getAbrev()) == 0){
+					if (geomCrs.getName().equals(crs.getName())){
 						return gpeGeometry.getIGeometry();
 					}else{
-						ICoordTrans coordTrans = geomProj.getCT(projection);
-						FShape shape = (FShape)gpeGeometry.getIGeometry().getInternalShape();
-						shape.reProject(coordTrans);
+						MathTransform trans = ProjectionUtils.getCrsTransform(
+								geomCrs, crs);
+						FShape shape = (FShape) gpeGeometry.getIGeometry()
+								.getInternalShape();
+						shape.reProject(trans);
 						return ShapeFactory.createGeometry(shape);
 					}
 				}

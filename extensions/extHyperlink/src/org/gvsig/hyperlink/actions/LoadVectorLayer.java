@@ -57,29 +57,29 @@ public class LoadVectorLayer extends AbstractActionManager implements Serializab
 				FLayer newLayer = null;
 				if (fileName.toLowerCase().endsWith(".shp")) {
 					newLayer = LayerFactory.createLayer(fileName, "gvSIG shp driver",
-							new File(fileName), view.getProjection());					
+							new File(fileName), view.getCrs());					
 				}
 				else if (fileName.toLowerCase().endsWith(".dgn")) {
 					newLayer = LayerFactory.createLayer(fileName, "gvSIG DGN Memory Driver",
-							new File(fileName), view.getProjection());	
+							new File(fileName), view.getCrs());	
 				}
 				else if (fileName.toLowerCase().endsWith(".dwg")) {
 					newLayer = LayerFactory.createLayer(fileName, "gvSIG DWG Memory Driver",
-							new File(fileName), view.getProjection());	
+							new File(fileName), view.getCrs());	
 					
 				}
 				else if (fileName.toLowerCase().endsWith(".dxf")) {
 					newLayer = LayerFactory.createLayer(fileName, "gvSIG DXF Memory Driver",
-							new File(fileName), view.getProjection());	
+							new File(fileName), view.getCrs());	
 
 				}
 				else if (fileName.toLowerCase().endsWith(".gml")) {
 					newLayer = LayerFactory.createLayer(fileName, "gvSIG GML Memory Driver",
-							new File(fileName), view.getProjection());
+							new File(fileName), view.getCrs());
 				}
 				else if (fileName.toLowerCase().endsWith(".kml")) {
 					newLayer = LayerFactory.createLayer(fileName, "gvSIG KML Memory Driver",
-							new File(fileName), view.getProjection());
+							new File(fileName), view.getCrs());
 				}
 				if (newLayer!=null) {
 					view.getMapControl().getMapContext().getLayers().addLayer(newLayer);

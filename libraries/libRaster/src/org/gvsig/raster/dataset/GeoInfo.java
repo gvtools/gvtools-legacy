@@ -21,16 +21,16 @@ package org.gvsig.raster.dataset;
 import java.awt.geom.AffineTransform;
 import java.util.Date;
 
-import org.cresques.cts.IProjection;
-import org.cresques.geo.Projected;
+import org.cresques.geo.Georeferenced;
 import org.gvsig.raster.dataset.io.IRegistrableRasterFormat;
 import org.gvsig.raster.datastruct.Extent;
 import org.gvsig.raster.util.RasterUtilities;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 /**
  * Ancestro de todos los formatos geográficos
  */
-public abstract class GeoInfo implements Projected {
-	protected IProjection     proj                   = null;
+public abstract class GeoInfo implements Georeferenced {
+	protected CoordinateReferenceSystem crs = null;
 	protected long            fileSize               = 0;
 	protected long            bytesReaded            = 0;
 	protected long            lineCnt                = 0;
@@ -51,9 +51,9 @@ public abstract class GeoInfo implements Projected {
 
 	public GeoInfo() {}
 
-	public GeoInfo(IProjection p, Object param) {
+	public GeoInfo(CoordinateReferenceSystem crs, Object param) {
 		openParam = param;
-		proj = p;
+		this.crs = crs;
 		if (param instanceof String)
 			name = translateFileName((String) param);
 		else
@@ -101,12 +101,12 @@ public abstract class GeoInfo implements Projected {
 		fileSize = sz;
 	}
 
-	public IProjection getProjection() {
-		return proj;
+	public CoordinateReferenceSystem getCrs() {
+		return crs;
 	}
 
-	public void setProjection(IProjection p) {
-		proj = p;
+	public void setCrs(CoordinateReferenceSystem crs) {
+		this.crs = crs;
 	}
 
 	/**

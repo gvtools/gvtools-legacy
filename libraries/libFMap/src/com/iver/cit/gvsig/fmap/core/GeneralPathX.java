@@ -67,10 +67,10 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.cresques.cts.ICoordTrans;
-
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.geoutils.sun.awt.geom.Crossings;
 import org.gvsig.geoutils.sun.awt.geom.Curve;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.vividsolutions.jts.algorithm.CGAlgorithms;
@@ -561,13 +561,13 @@ public class GeneralPathX implements Shape, Cloneable, Serializable {
 	at.transform(pointCoords, 0, pointCoords, 0, numCoords / 2);
     }
 
-    public void reProject(ICoordTrans ct)
+    public void reProject(MathTransform trans)
     {
     	Point2D pt = new Point2D.Double();
     	for (int i = 0; i < numCoords; i+=2)
     	{
     		pt.setLocation(pointCoords[i], pointCoords[i+1]);
-    		pt = ct.convert(pt,null);
+    		pt = ProjectionUtils.transform(pt, trans);
     		pointCoords[i] = pt.getX();
     		pointCoords[i+1] = pt.getY();
     	}

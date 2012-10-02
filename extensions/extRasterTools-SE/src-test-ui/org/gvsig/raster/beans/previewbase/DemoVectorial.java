@@ -24,14 +24,14 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gui.beans.imagenavigator.IClientImageNavigator;
 import org.gvsig.gui.beans.imagenavigator.ImageNavigator;
 import org.gvsig.rastertools.TestUI;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.operations.Cancel;
@@ -42,9 +42,10 @@ public class DemoVectorial implements IClientImageNavigator {
 
 	public DemoVectorial() {
 		try {
-			IProjection PROJ = CRSFactory.getCRS("EPSG:23030");
+			CoordinateReferenceSystem crs = ProjectionUtils
+					.getCRS("EPSG:23030");
 			LayerFactory.setDriversPath(new File(fwAndamiDriverPath).getAbsolutePath());
-			layer = LayerFactory.createLayer("line", "gvSIG shp driver", new File("C:\\Documents and Settings\\borja\\Escritorio\\images_gvsig\\vectorial\\t_areas.shp"), PROJ);
+			layer = LayerFactory.createLayer("line", "gvSIG shp driver", new File("C:\\Documents and Settings\\borja\\Escritorio\\images_gvsig\\vectorial\\t_areas.shp"), crs);
 			TestUI jFrame = new TestUI("DemoVectorial");
 			jFrame.setSize(new Dimension(598, 167));
 			ImageNavigator imNav = new ImageNavigator(this);

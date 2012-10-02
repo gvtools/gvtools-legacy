@@ -34,14 +34,14 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-import org.cresques.geo.Projected;
+import org.cresques.geo.Georeferenced;
 import org.cresques.px.Extent;
 import org.cresques.px.IObjList;
 import org.cresques.px.dxf.DxfEntityMaker;
 import org.cresques.px.dxf.DxfHeaderManager;
 import org.cresques.px.dxf.DxfHeaderVariables;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 /**
  * Clase que representa un fichero en formato DXF. Contiene los interfaces y métodos
@@ -70,7 +70,7 @@ public class DxfFile extends GeoFile {
 	 * Crea los objetos en el Modelo correspondiente.
 	 * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
 	 */
-	public interface EntityFactory extends Projected {
+	public interface EntityFactory extends Georeferenced {
 
 		/**
          * Permite saber si se están añadiendo elementos a un bloque
@@ -288,8 +288,8 @@ public class DxfFile extends GeoFile {
      * @param name, el path absoluto hasta el fichero DXF
      * @param maker, el interface que permite la construcción de las entidades procedentes del DXF
      */
-	public DxfFile(IProjection proj, String name, EntityFactory maker) {
-		super(proj, name);
+	public DxfFile(CoordinateReferenceSystem crs, String name, EntityFactory maker) {
+		super(crs, name);
 		entityMaker = maker;
 		headerManager = new DxfHeaderManager();
 	}
@@ -301,8 +301,9 @@ public class DxfFile extends GeoFile {
      * @param maker, el interface que permite la construcción de las entidades procedentes del DXF
      * @param dxfVars, el interface que permite la lectura del HEADER de un DXF
      */
-    public DxfFile(IProjection proj, String name, EntityFactory maker, VarSettings dxfVars) {
-		super(proj, name);
+	public DxfFile(CoordinateReferenceSystem crs, String name,
+			EntityFactory maker, VarSettings dxfVars) {
+		super(crs, name);
 		entityMaker = maker;
 		headerManager = dxfVars;
 	}
@@ -1625,9 +1626,9 @@ public class DxfFile extends GeoFile {
     /**
      * Habilita la reproyección cartográfica
      */
-	public void reProject(ICoordTrans rp) {
+	public void reProject(MathTransform rp, CoordinateReferenceSystem target) {
 		System.out.println("Dxf: reproyectando ...");
-		entityMaker.reProject(rp);
+		entityMaker.reProject(rp, target);
 	}
 
 	/* (non-Javadoc)

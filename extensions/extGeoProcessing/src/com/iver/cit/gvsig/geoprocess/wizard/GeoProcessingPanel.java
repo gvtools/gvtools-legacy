@@ -51,8 +51,8 @@ import java.awt.Window;
 
 import javax.swing.JPanel;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -137,7 +137,7 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 	/**
 	 * FIXME No se esta utilizando. Revisar si es necesario
 	 */
-	private IProjection proj;
+	private CoordinateReferenceSystem crs;
 
 	private JPanel mainPanel = null;
 
@@ -159,13 +159,14 @@ public class GeoProcessingPanel extends JPanel implements IWindow,
 
 	/**
 	 * Constructor
+	 * 
 	 * @param layers
-	 * @param proj
+	 * @param crs
 	 */
-	public GeoProcessingPanel(FLayers layers, IProjection proj) {
+	public GeoProcessingPanel(FLayers layers, CoordinateReferenceSystem crs) {
 		super();
 		this.layers = layers;
-		this.proj = proj;
+		this.crs = crs;
 		initialize();
 	}
 

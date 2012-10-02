@@ -574,7 +574,7 @@ public class CleanGeoprocess extends AbstractGeoprocess {
 			
 			MapContext mc = getMapContext();
 			FLayers root = mc.getLayers();
-			auxLayer.setProjection(mc.getProjection());
+			auxLayer.setCrs(mc.getCrs());
 			
 			root.addLayer(auxLayer);
 			
@@ -810,7 +810,7 @@ public class CleanGeoprocess extends AbstractGeoprocess {
 				va.stop();
 				
 				ILayerDefinition lyDef = (ILayerDefinition) writer.getTableDefinition();
-				auxLayer = (FLyrVect)LayerFactory.createLayer(lyDef.getName(), drv, layer.getProjection());
+				auxLayer = (FLyrVect)LayerFactory.createLayer(lyDef.getName(), drv, layer.getCrs());
 				
 			} catch (DriverLoadException e) {
 				e.printStackTrace();

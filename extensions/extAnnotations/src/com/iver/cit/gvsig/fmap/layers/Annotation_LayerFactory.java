@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -53,7 +53,10 @@ public class Annotation_LayerFactory {
 		return fieldsDescriptions;
 	}
 
-	public static void createEmptyLayer(File file, IProjection proj) throws DriverLoadException, InitializeWriterException, StartWriterVisitorException, StopWriterVisitorException, LoadLayerException {
+	public static void createEmptyLayer(File file, CoordinateReferenceSystem crs)
+			throws DriverLoadException, InitializeWriterException,
+			StartWriterVisitorException, StopWriterVisitorException,
+			LoadLayerException {
 		if (!file.exists())
 		{
 			SHPLayerDefinition lyrDef = new SHPLayerDefinition();
@@ -85,12 +88,12 @@ public class Annotation_LayerFactory {
 	}
 
 	public static Annotation_Layer createLayer(String layerName, File file,
-			IProjection proj, int units) {
-		return createLayer(layerName, file, proj, units, null);
+			CoordinateReferenceSystem crs, int units) {
+		return createLayer(layerName, file, crs, units, null);
 	}
 
 	public static Annotation_Layer createLayer(String layerName, File file,
-			IProjection proj, int units, Color background) {
+			CoordinateReferenceSystem crs, int units, Color background) {
 		if (file == null) {
 			return null;
 		}
@@ -107,7 +110,7 @@ public class Annotation_LayerFactory {
 		}
 
 		lyr = LayerFactory.createLayer(layerName, (VectorialFileDriver) driver,
-				file, proj, background);
+				file, crs, background);
 
 		Annotation_Layer al = new Annotation_Layer();
 		LayerListener[] layerListeners = lyr.getLayerListeners();
@@ -116,7 +119,7 @@ public class Annotation_LayerFactory {
 			al.addLayerListener(layerListeners[i]);
 		}
 		al.setSource(((FLyrVect) lyr).getSource());
-		al.setProjection(lyr.getProjection());
+		al.setCrs(lyr.getCrs());
 		al.setName(layerName);
 
 		try {

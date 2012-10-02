@@ -7,19 +7,20 @@ import java.util.NoSuchElementException;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 
 public class LayersIteratorTest extends TestCase {
 	static final String fwAndamiDriverPath = "../_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers";
 	private File baseDataPath;
 	private File baseDriversPath;
 	private String shpDriverName = "gvSIG shp driver";
-	private IProjection projectionDefault = CRSFactory.getCRS("EPSG:23030");
+	private CoordinateReferenceSystem defaultCrs = ProjectionUtils
+			.getCRS("EPSG:23030");
 
 
 	protected void setUp() throws Exception {
@@ -43,7 +44,7 @@ public class LayersIteratorTest extends TestCase {
 
 
 	private MapContext newMapContext() {
-		ViewPort vp = new ViewPort(projectionDefault);
+		ViewPort vp = new ViewPort(defaultCrs);
 		return new MapContext(vp);
 	}
 
@@ -57,7 +58,7 @@ public class LayersIteratorTest extends TestCase {
 			e2.printStackTrace();
 		}
 		try {
-			layerResult.setProjection(projectionDefault);
+			layerResult.setCrs(defaultCrs);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			return null;

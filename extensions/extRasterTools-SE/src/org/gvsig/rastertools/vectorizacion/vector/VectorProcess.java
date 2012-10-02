@@ -20,7 +20,6 @@ package org.gvsig.rastertools.vectorizacion.vector;
 
 import java.io.File;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.raster.IProcessActions;
 import org.gvsig.raster.RasterLibrary;
@@ -30,6 +29,7 @@ import org.gvsig.raster.util.RasterToolsUtil;
 import org.gvsig.raster.util.RasterUtilities;
 import org.gvsig.rastertools.vectorizacion.process.ContourLinesProcess;
 import org.gvsig.rastertools.vectorizacion.process.PotraceProcess;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -45,16 +45,17 @@ public class VectorProcess implements IProcessActions {
 	private FLyrRasterSE                  sourceLayer       = null;
 	private IProcessActions               endActions        = null;
 	private String                        shapeName         = null;
-	private IProjection                   proj              = null;
+	private CoordinateReferenceSystem crs = null;
 	
 	/**
 	 * Constructor que asigna el nombre de capa
 	 * @param lyrPath
 	 */
-	public VectorProcess(FLyrRasterSE lyr, IProcessActions endActions, IProjection proj) {
+	public VectorProcess(FLyrRasterSE lyr, IProcessActions endActions,
+			CoordinateReferenceSystem crs) {
 		this.sourceLayer = lyr;
 		this.endActions = endActions;
-		this.proj = proj;
+		this.crs = crs;
 	}
 
 	/**
@@ -104,7 +105,7 @@ public class VectorProcess implements IProcessActions {
 		FLayer shpLyr = null;
 		try {
 			String layerName = RasterUtilities.getFileNameFromCanonical(shapeName);
-			shpLyr = LayerFactory.createLayer(layerName, "gvSIG shp driver", new File(shapeName), proj);
+			shpLyr = LayerFactory.createLayer(layerName, "gvSIG shp driver", new File(shapeName), crs);
 		} catch (LoadLayerException e) {
 			RasterToolsUtil.messageBoxError("error_generating_layer", null, e);
 		}

@@ -24,6 +24,7 @@ import java.awt.geom.Point2D;
 import org.gvsig.fmap.raster.tools.SaveRasterListenerImpl;
 import org.gvsig.rastertools.saveraster.ui.SaveRasterDialog;
 import org.gvsig.rastertools.saveraster.ui.SaveRasterPanel;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -83,12 +84,12 @@ public class SaveRasterListener extends SaveRasterListenerImpl {
 		if(Math.abs(fin.getY()-ini.getY())>10 && Math.abs(fin.getX()-ini.getX())>10){
 			SaveRasterPanel dialog = saveRaster.getControlsPanel();
 			dialog.getBProperties().setEnabled(false);
-			dialog.setProjection(vp.getProjection());
+			dialog.setCrs(vp.getCrs());
 			//dialog.setWidthInPixelsGeodesicas((int)Math.abs(fin.getX()-ini.getX()));
 			//dialog.setHeightInPixelsGeodesicas((int)Math.abs(fin.getY()-ini.getY()));
 
 			int dec = 2;
-			if(!vp.getProjection().isProjected())
+			if (!(vp.getCrs() instanceof ProjectedCRS))
 				dec = 6;
 
 			int indexPoint = String.valueOf(rect.getMaxX()).indexOf('.');

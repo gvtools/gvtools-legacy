@@ -27,11 +27,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.datainput.DataInputContainer;
 import org.gvsig.rastertools.saveraster.ui.panels.SelectFilePanel;
 import org.gvsig.rastertools.saveraster.ui.panels.SelectionParamsPanel;
 import org.gvsig.rastertools.saveraster.ui.panels.WCCoordsInputPanel;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Panel General de salvar a raster.
@@ -44,7 +44,7 @@ public class SaveRasterPanel extends JPanel {
 	private WCCoordsInputPanel      wcCoordsPanel = null;
 	private SelectionParamsPanel    paramsPanel = null;
 	private SelectFilePanel         filePanel = null;
-	private IProjection				proj = null;
+	private CoordinateReferenceSystem crs = null;
 	  
 	/**
 	 * This is the default constructor
@@ -237,15 +237,15 @@ public class SaveRasterPanel extends JPanel {
 	 * Asigna la proyección 
 	 * @param proj Interfaz IProjection
 	 */
-	public void setProjection(IProjection proj) {
-		this.proj = proj;
+	public void setCrs(CoordinateReferenceSystem proj) {
+		this.crs = proj;
 	}
 	
 	/**
 	 * Obtiene la proyección
 	 * @return Interfaz IProjection
 	 */
-	public IProjection getProjection() {
-		return proj;
+	public CoordinateReferenceSystem getCrs() {
+		return crs;
 	}
 }

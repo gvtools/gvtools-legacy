@@ -6,14 +6,12 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.dataset.FileNotExistsException;
 import org.gvsig.raster.grid.Grid;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.NumericValue;
-import com.iver.andami.PluginServices;
-import com.iver.andami.config.generate.Plugin;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -24,19 +22,21 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 public class VectorialROIsReader {
 	
 	private String 			filename 			= null;
-	private IProjection 	projection 			= null;
+	private CoordinateReferenceSystem 	crs 			= null;
 	private FLyrVect		fLyrVect			= null;
 	private HashMap			rois				= null;
 	private Grid			grid				= null;
 
 	
-	public VectorialROIsReader(String filename, Grid grid, IProjection projection) throws LoadLayerException, FileNotExistsException {
+	public VectorialROIsReader(String filename, Grid grid,
+			CoordinateReferenceSystem crs) throws LoadLayerException,
+			FileNotExistsException {
 		this.filename = filename;
-		this.projection = projection;
+		this.crs = crs;
 		this.grid = grid;
 		File file = new File(filename);
 		if(file.exists()){
-			fLyrVect = (FLyrVect)LayerFactory.createLayer("layer1", "gvSIG shp driver", file, projection);
+			fLyrVect = (FLyrVect)LayerFactory.createLayer("layer1", "gvSIG shp driver", file, crs);
 		}else
 			throw new FileNotExistsException("file not found");
 	}

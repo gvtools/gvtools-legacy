@@ -42,7 +42,7 @@ package com.iver.cit.gvsig.fmap.layers;
 
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.OpenDriverException;
@@ -166,7 +166,7 @@ public interface ReadableVectorial {
      * @param fields fields we are intested in of the data source
      * @return feature iterator whose features has as attributes the specified fields
      */
-    public IFeatureIterator getFeatureIterator(String[] fields, IProjection newProjection)
+    public IFeatureIterator getFeatureIterator(String[] fields, CoordinateReferenceSystem newCrs)
     				throws ReadDriverException;
 
     /**
@@ -178,12 +178,12 @@ public interface ReadableVectorial {
      * @param sql statement which define a filter. SQL sintax is very extrict, and must
      *  be suported by GDBMS
      *
-     * @param newProjection new projection for the returned features (if not null)
+     * @param newCrs new projection for the returned features (if not null)
      * @return feature iterator
      * */
-    public IFeatureIterator getFeatureIterator(String sql, IProjection newProjection) throws ReadDriverException;
+    public IFeatureIterator getFeatureIterator(String sql, CoordinateReferenceSystem newCrs) throws ReadDriverException;
 
-    public IFeatureIterator getFeatureIterator(String sql, IProjection newProjection, boolean withSelection) throws ReadDriverException;
+    public IFeatureIterator getFeatureIterator(String sql, CoordinateReferenceSystem newCrs, boolean withSelection) throws ReadDriverException;
 
     /**
      * Makes an spatial query returning a feature iterator over the features which intersects
@@ -207,7 +207,7 @@ public interface ReadableVectorial {
      * @return
      */
     public IFeatureIterator getFeatureIterator(Rectangle2D rect, String[] fields,
-    			IProjection newProjection, boolean fastResult) throws ReadDriverException;
+    		CoordinateReferenceSystem newCrs, boolean fastResult) throws ReadDriverException;
 
 
     public IFeatureIterator getFeatureIterator() throws ReadDriverException;
@@ -225,11 +225,7 @@ public interface ReadableVectorial {
      */
     public void setSpatialIndex(ISpatialIndex spatialIndex);
 
-    /**
-     * Sets the projection of the data readed by the associated driver
-     * @param projection
-     */
-    public void setProjection(IProjection projection);
+    public void setCrs(CoordinateReferenceSystem crs);
 
-    public IProjection getProjection();
+    public CoordinateReferenceSystem getCrs();
 }

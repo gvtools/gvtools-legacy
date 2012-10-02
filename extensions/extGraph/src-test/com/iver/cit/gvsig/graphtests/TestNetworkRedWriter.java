@@ -5,11 +5,11 @@ import java.io.File;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.graph.core.writers.NetworkFileRedWriter;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
@@ -37,10 +37,10 @@ public class TestNetworkRedWriter extends TestCase {
 	protected void setUp() throws Exception {
 		LayerFactory
 				.setDriversPath("../_fwAndami/gvSIG/extensiones/org.gvsig/drivers");
-		IProjection prj = CRSFactory.getCRS("EPSG:23030");
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 		File shpFile = new File("c:/ejes.shp");
 		lyr = (FLyrVect) LayerFactory.createLayer("Ejes",
-				"gvSIG shp driver", shpFile, prj);
+				"gvSIG shp driver", shpFile, crs);
 
 		String redFilePath = lyr.getName().replaceFirst("\\Q.shp\\E", "");
 		redFile = new File("c:/" + redFilePath + ".red");

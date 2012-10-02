@@ -7,14 +7,13 @@ import java.net.URL;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 import com.iver.cit.gvsig.fmap.drivers.wfs.FMapWFSDriver;
 import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
-import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -111,14 +110,13 @@ public class FLyrWFSFactory {
     	adapter.setDriver((VectorialDriver) driver);
     	wfsLayer.setSource(adapter);
 		wfsLayer.setOnlineResource(onlineResource);
-		BaseView activeView = 
-			(BaseView) PluginServices.getMDIManager().getActiveWindow();
 		//The SRS original
-		IProjection projection = CRSFactory.getCRS(getSRS(wfsLayer.getSrs()));
-		wfsLayer.setProjection(projection);
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS(getSRS(wfsLayer
+				.getSrs()));
+		wfsLayer.setCrs(crs);
 		if (loadLayer){
 			try {
-				if ((projection == null) && (firstLoad)){
+				if ((crs == null) && (firstLoad)){
 					JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),
 							PluginServices.getText(this,"wfs_srs_unknown"));	
 				}

@@ -56,7 +56,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.ColorEvent;
@@ -274,7 +274,7 @@ public class MapOverview extends MapControl implements ViewPortListener {
 	 */
 	public void setModel(MapContext model) {
 		this.setMapContext(model);
-		model.setProjection(m_MapAssoc.getMapContext().getProjection());
+		model.setCrs(m_MapAssoc.getMapContext().getCrs());
 		m_MapAssoc.getMapContext().getViewPort().addViewPortListener(this);
 		getMapContext().getViewPort().addViewPortListener(this);
 	}
@@ -299,10 +299,10 @@ public class MapOverview extends MapControl implements ViewPortListener {
 	/**
 	 * @see ViewPortListener#projectionChanged(ProjectionEvent)
 	 *
-	 * @see MapControl#setProjection(IProjection)
+	 * @see MapControl#setCRS(IProjection)
 	 */
 	public void projectionChanged(ProjectionEvent e) {
-		super.setProjection(e.getNewProjection());
+		super.setCrs(e.getNewCrs());
 
 	}
 
@@ -312,7 +312,7 @@ public class MapOverview extends MapControl implements ViewPortListener {
 	 * <p>Can't change the projection, because must be the same as the one of the
 	 *  associated <code>MapControl</code> instance.</p>
 	 */
-	public void setProjection(IProjection proj) {
+	public void setCrs(CoordinateReferenceSystem crs) {
 		//No permitimos cambiar la proyeccion
 		//ya que debe ser la misma que la del
 		//MapControl asociado

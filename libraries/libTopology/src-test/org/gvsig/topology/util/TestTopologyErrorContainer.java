@@ -46,10 +46,10 @@ package org.gvsig.topology.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.topology.ITopologyErrorContainer;
 import org.gvsig.topology.Topology;
 import org.gvsig.topology.TopologyError;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
@@ -68,18 +68,18 @@ public class TestTopologyErrorContainer implements ITopologyErrorContainer{
 			return null;
 		}
 
-		public List<TopologyError> getTopologyErrors(String ruleName, int shapeType, FLyrVect sourceLayer, IProjection desiredProjection, boolean includeExceptions) {
+		public List<TopologyError> getTopologyErrors(String ruleName, int shapeType, FLyrVect sourceLayer, CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
 			return null;
 		}
-		public List<TopologyError> getTopologyErrorsByRule(String ruleName, IProjection desiredProjection, boolean includeExceptions) {
-			return null;
-		}
-
-		public List<TopologyError> getTopologyErrorsByShapeType(int shapeType, IProjection desiredProjection, boolean includeExceptions) {
+		public List<TopologyError> getTopologyErrorsByRule(String ruleName, CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
 			return null;
 		}
 
-		public List<TopologyError> getTopologyErrorsByLyr(FLyrVect layer, IProjection desiredProjection, boolean includeExceptions) {
+		public List<TopologyError> getTopologyErrorsByShapeType(int shapeType, CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
+			return null;
+		}
+
+		public List<TopologyError> getTopologyErrorsByLyr(FLyrVect layer, CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
 			return null;
 		}
 
@@ -138,7 +138,7 @@ public class TestTopologyErrorContainer implements ITopologyErrorContainer{
 			return null;
 		}
 
-		public FLyrVect getAsFMapLayer(String name, IProjection projection) {
+		public FLyrVect getAsFMapLayer(String name, CoordinateReferenceSystem crs) {
 			// TODO Auto-generated method stub
 			return null;
 		}

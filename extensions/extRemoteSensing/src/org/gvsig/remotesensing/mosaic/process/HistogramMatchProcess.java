@@ -207,7 +207,12 @@ public class HistogramMatchProcess  extends RasterProcess{
 				return null;
 			GeoRasterWriter grw = null;
 			writerBufferServer = new WriterBufferServer(rasterResult);
-			grw = GeoRasterWriter.getWriter(writerBufferServer, path, rasterResult.getBandCount(),inputRasterLayers[i].getAffineTransform(), rasterResult.getWidth(), rasterResult.getHeight(), rasterResult.getDataType(), GeoRasterWriter.getWriter(path).getParams(), inputRasterLayers[i].getProjection());
+			grw = GeoRasterWriter.getWriter(writerBufferServer, path,
+					rasterResult.getBandCount(), inputRasterLayers[i]
+							.getAffineTransform(), rasterResult.getWidth(),
+					rasterResult.getHeight(), rasterResult.getDataType(),
+					GeoRasterWriter.getWriter(path).getParams(),
+					inputRasterLayers[i].getCrs());
 			
 			grw.dataWrite();
 			grw.setWkt(inputRasterLayers[i].getWktProjection());

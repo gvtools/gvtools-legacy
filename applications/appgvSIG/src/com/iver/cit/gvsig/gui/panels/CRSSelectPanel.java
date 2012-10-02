@@ -46,15 +46,13 @@ import java.lang.reflect.InvocationTargetException;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.gui.panels.crs.CrsUIFactory;
 import com.iver.cit.gvsig.gui.panels.crs.ICrsUIFactory;
 import com.iver.cit.gvsig.gui.panels.crs.ISelectCRSButton;
-import com.iver.cit.gvsig.gui.panels.crs.ISelectCrsPanel;
-import com.iver.cit.gvsig.project.documents.view.info.gui.CSSelectionDialog;
 
 /**
  * 
@@ -76,10 +74,10 @@ public abstract class CRSSelectPanel extends JPanel
 		CRSSelectPanel.uiFactory = uiFactory;
 	}
 	
-	public static CRSSelectPanel getPanel(IProjection proj) {
+	public static CRSSelectPanel getPanel(CoordinateReferenceSystem crs) {
 		CRSSelectPanel panel = null;
-		Class [] args = {IProjection.class};
-		Object [] params = {proj};
+		Class[] args = { CoordinateReferenceSystem.class };
+		Object [] params = {crs};
 		try {
 			panel = (CRSSelectPanel) panelClass.getConstructor(args).newInstance(params);
 		} catch (IllegalArgumentException e) {
@@ -98,7 +96,7 @@ public abstract class CRSSelectPanel extends JPanel
 		return panel;
 	}
 	
-	public CRSSelectPanel(IProjection proj) {
+	public CRSSelectPanel(CoordinateReferenceSystem crs) {
 		super();
 	}
 	
@@ -106,7 +104,7 @@ public abstract class CRSSelectPanel extends JPanel
 	
 	abstract public JLabel getJLabel();
 	
-	abstract public IProjection getCurProj();
+	abstract public CoordinateReferenceSystem getCurrentCrs();
 	
 	abstract public boolean isOkPressed();
 	/**

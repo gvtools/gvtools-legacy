@@ -106,14 +106,14 @@ public class ContourLinesProcess extends RasterProcess {
 		sFields[1] = lyr.getName();
 		
 		LayerDefinition tableDef = null;
-		if(fileName.endsWith(".dxf")) {
+		if (fileName.endsWith(".dxf")) {
 			writer = new DxfWriter();
-			((DxfWriter)writer).setFile(new File(fileName));
-			((DxfWriter)writer).setProjection(lyr.getProjection());
+			((DxfWriter) writer).setFile(new File(fileName));
+			((DxfWriter) writer).setCrs(lyr.getCrs());
 			tableDef = new DXFLayerDefinition();
 
 			DxfFieldsMapping fieldsMapping = new DxfFieldsMapping();
-			((DxfWriter)writer).setFieldMapping(fieldsMapping);
+			((DxfWriter) writer).setFieldMapping(fieldsMapping);
 		}
 		if(fileName.endsWith(".shp")) {
 			writer = new ShpWriter();

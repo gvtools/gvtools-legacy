@@ -50,7 +50,7 @@ package org.gvsig.topology;
 
 import java.util.List;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
@@ -105,7 +105,9 @@ public interface ITopologyErrorContainer extends Cloneable{
 	 *will be reprojected, filtered by rule, geometry type,
 	 *etc.
 	 */
-	public List<TopologyError> getTopologyErrors(String ruleName, int shapeType, FLyrVect sourceLayer, IProjection desiredProjection, boolean includeExceptions);
+	public List<TopologyError> getTopologyErrors(String ruleName,
+			int shapeType, FLyrVect sourceLayer,
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions);
 	
 	/**
 	 * Returns the contained errors filtered by violated rule.
@@ -114,7 +116,8 @@ public interface ITopologyErrorContainer extends Cloneable{
 	 * @param includeExceptions
 	 * @return
 	 */
-	public List<TopologyError> getTopologyErrorsByRule(String ruleName, IProjection desiredProjection, boolean includeExceptions);
+	public List<TopologyError> getTopologyErrorsByRule(String ruleName,
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions);
 	
 	/**
 	 * Returns the contained errors filtered by type of error geometry.
@@ -123,7 +126,8 @@ public interface ITopologyErrorContainer extends Cloneable{
 	 * @param includeExceptions
 	 * @return
 	 */
-	public List<TopologyError> getTopologyErrorsByShapeType(int shapeType, IProjection desiredProjection, boolean includeExceptions);
+	public List<TopologyError> getTopologyErrorsByShapeType(int shapeType,
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions);
 	
 	/**
 	 * Returns the contained errors filtered by layer that causes the error.
@@ -132,7 +136,8 @@ public interface ITopologyErrorContainer extends Cloneable{
 	 * @param includeExceptions
 	 * @return
 	 */
-	public List<TopologyError> getTopologyErrorsByLyr(FLyrVect layer, IProjection desiredProjection, boolean includeExceptions);
+	public List<TopologyError> getTopologyErrorsByLyr(FLyrVect layer,
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions);
 	
 	/**
 	 * Marks an error as an exception.
@@ -177,7 +182,7 @@ public interface ITopologyErrorContainer extends Cloneable{
 	public Object clone();
 	
 	
-	public FLyrVect getAsFMapLayer(String name, IProjection projection);
+	public FLyrVect getAsFMapLayer(String name, CoordinateReferenceSystem crs);
 	
 	public void setTopology(Topology topology);
 	

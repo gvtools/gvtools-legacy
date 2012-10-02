@@ -44,13 +44,15 @@ import java.awt.Cursor;
 import java.awt.geom.Point2D;
 import java.text.NumberFormat;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiFrame.MainFrame;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.PointEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PointListener;
@@ -169,7 +171,8 @@ public class StatusBarListener implements PointListener {
             // la vista que no es).
             // mF.getStatusBar().setControlValue("scale",String.valueOf(mapControl.getMapContext().getScaleView()));
             // Fin
-			mF.getStatusBar().setMessage("projection", mapControl.getViewPort().getProjection().getAbrev());
+			mF.getStatusBar().setMessage("projection",
+					ProjectionUtils.getAbrev(mapControl.getViewPort().getCrs()));
 
 			String[] coords=getCoords(p);
 			mF.getStatusBar().setMessage("x", axisText[0] + coords[0]);
@@ -196,8 +199,8 @@ public class StatusBarListener implements PointListener {
 	 * @author jmorell.
 	 */
 	public void setFractionDigits(Point2D p) {
-		IProjection iProj = mapControl.getMapContext().getProjection();
-		if (!iProj.isProjected()) {
+		CoordinateReferenceSystem crs = mapControl.getMapContext().getCrs();
+		if (!(crs instanceof ProjectedCRS)) {
 			nf.setMaximumFractionDigits(8);
 		} else {
 			nf.setMaximumFractionDigits(2);
@@ -235,8 +238,10 @@ public class StatusBarListener implements PointListener {
 	 * @author jmorell
 	 */
 	public String[] setCoorDisplayText(String[] axisText) {
-		IProjection iProj = mapControl.getMapContext().getProjection();
-		if (!iProj.isProjected() || MapContext.getDistanceNames()[mapControl.getMapContext().getViewPort().getDistanceUnits()].equals("Grados")) {
+		CoordinateReferenceSystem crs = mapControl.getMapContext().getCrs();
+		if (!(crs instanceof ProjectedCRS)
+				|| MapContext.getDistanceNames()[mapControl.getMapContext()
+						.getViewPort().getDistanceUnits()].equals("Grados")) {
 			axisText[0] = "Lon = ";
 			axisText[1] = "Lat = ";
 		} else {
@@ -295,14 +300,17 @@ public class StatusBarListener implements PointListener {
 	 */
 	public String[] getCoords(Point2D p) {
 		String[] coords=new String[2];
-		IProjection iProj = mapControl.getMapContext().getProjection();
-		if (!iProj.isProjected()) {
+		CoordinateReferenceSystem crs = mapControl.getMapContext().getCrs();
+		if (!(crs instanceof ProjectedCRS)) {
 			coords[0]=String.valueOf(formatDegrees(p.getX()));
 			coords[1]=String.valueOf(formatDegrees(p.getY()));
 		} else {
+			ProjectedCRS projected = (ProjectedCRS) crs;
 			double[] trans2Meter=MapContext.getDistanceTrans2Meter();
 			if (PluginServices.getText(this,MapContext.getDistanceNames()[mapControl.getViewPort().getDistanceUnits()]).equals(PluginServices.getText(this,"Grados"))) {
-				Point2D pgeo=iProj.toGeo(p);
+				MathTransform trans = ProjectionUtils.getCrsTransform(
+						projected, projected.getBaseCRS());
+				Point2D pgeo = ProjectionUtils.transform(p, trans);
 				coords[0]=String.valueOf(formatDegrees(pgeo.getX()));
 				coords[1]=String.valueOf(formatDegrees(pgeo.getY()));
 			}else {

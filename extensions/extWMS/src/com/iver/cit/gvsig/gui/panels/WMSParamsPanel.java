@@ -57,7 +57,6 @@ import java.util.TreeSet;
 import java.util.Vector;
 import java.util.prefs.Preferences;
 
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -67,16 +66,16 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.tree.TreePath;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gui.beans.controls.dnd.JDnDListModel;
 import org.gvsig.gui.beans.listeners.BeanListener;
 import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.exceptions.layers.ProjectionLayerException;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.wms.FMapWMSDriver;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
@@ -896,12 +895,14 @@ public class WMSParamsPanel extends WizardPanel {
 			if(getSRS() == null)
 				throw new ProjectionLayerException(getName(),null);
 			
-			IProjection reqProj = CRSFactory.getCRS(getSRS());
-			IProjection latLonProj = CRSFactory.getCRS(latLonID);
+			CoordinateReferenceSystem reqProj = ProjectionUtils
+					.getCRS(getSRS());
+			CoordinateReferenceSystem latLonProj = ProjectionUtils.getCRS(latLonID);
 			if ((reqProj != null) && (latLonProj != null)) {
-				ICoordTrans ct = latLonProj.getCT(reqProj);
+				MathTransform trans = ProjectionUtils.getCrsTransform(
+						latLonProj, reqProj);
 				Rectangle2D reprojectedRect;
-				reprojectedRect = ct.convert(rect);
+				reprojectedRect = ProjectionUtils.transform(rect, trans);
 				rect = reprojectedRect;
 			} else {
 //				throw new ProjectionLayerException(PluginServices.getText(this,

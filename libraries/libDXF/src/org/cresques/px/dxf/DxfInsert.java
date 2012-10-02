@@ -27,10 +27,10 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.cresques.geo.ViewPortData;
 import org.cresques.px.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -42,7 +42,7 @@ public class DxfInsert extends DxfEntity {
     String blockName;
     Point2D scaleFactor;
     double rotAngle;
-    DxfBlock block = new DxfBlock(proj);
+    DxfBlock block = new DxfBlock(crs);
     Vector blkList;
     boolean blockFound = false;
 
@@ -51,8 +51,8 @@ public class DxfInsert extends DxfEntity {
      * @param proj, proyección cartográfica en la que se encuentra el DxfInsert.
      * @param layer, capa del DXF en la que se encuentra el DxfInsert.
      */
-    public DxfInsert(IProjection proj, DxfLayer layer) {
-        super(proj, layer);
+    public DxfInsert(CoordinateReferenceSystem crs, DxfLayer layer) {
+        super(crs, layer);
         extent = new Extent();
     }
 
@@ -199,7 +199,7 @@ public class DxfInsert extends DxfEntity {
     /* (non-Javadoc)
      * @see org.cresques.px.dxf.DxfEntity#reProject(org.cresques.geo.ReProjection)
      */
-    public void reProject(ICoordTrans rp) {
+    public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         // TODO Auto-generated method stub
     }
 

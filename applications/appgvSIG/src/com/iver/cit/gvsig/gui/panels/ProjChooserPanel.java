@@ -8,19 +8,18 @@ import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.gui.panels.crs.ICrsUIFactory;
 import com.iver.cit.gvsig.gui.panels.crs.ISelectCrsPanel;
-import com.iver.cit.gvsig.project.documents.view.info.gui.CSSelectionDialog;
 
 /**
  * @author Luis W. Sevilla (sevilla_lui@gva.es)
  */
 public class ProjChooserPanel extends CRSSelectPanel {
-    private IProjection curProj=null;
+	private CoordinateReferenceSystem currentCrs = null;
 	private JLabel jLblProj = null;
 	private JLabel jLblProjName = null;
 	private JButton jBtnChangeProj = null;
@@ -30,9 +29,9 @@ public class ProjChooserPanel extends CRSSelectPanel {
 	/**
 	 *
 	 */
-	public ProjChooserPanel(IProjection proj) {
-		super(proj);
-		setCurProj(proj);
+	public ProjChooserPanel(CoordinateReferenceSystem crs) {
+		super(crs);
+		setCurrentCrs(crs);
 		initialize();
 	}
 
@@ -56,13 +55,13 @@ public class ProjChooserPanel extends CRSSelectPanel {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				okPressed = false;
 				
-				ISelectCrsPanel csSelect = getUIFactory().getSelectCrsPanel(curProj, true);
+				ISelectCrsPanel csSelect = getUIFactory().getSelectCrsPanel(currentCrs, true);
 
 		        PluginServices.getMDIManager().addWindow(csSelect);
 
 		        if (csSelect.isOkPressed()) {
-		        	curProj = csSelect.getProjection();
-		        	jLblProj.setText(curProj.getAbrev());
+		        	currentCrs = csSelect.getCrs();
+		        	jLblProj.setText(ProjectionUtils.getAbrev(currentCrs));
 		        	okPressed = true;
 		        	if (actionListener != null) {
 		        		actionListener.actionPerformed(e);
@@ -87,8 +86,8 @@ public class ProjChooserPanel extends CRSSelectPanel {
 	public JLabel getJLblProj() {
 		if (jLblProj == null) {
 	        jLblProj = new JLabel();
-	        if (curProj!=null)
-				jLblProj.setText(curProj.getAbrev());
+	        if (currentCrs!=null)
+				jLblProj.setText(ProjectionUtils.getAbrev(currentCrs));
 		}
 		return jLblProj;
 	}
@@ -112,14 +111,14 @@ public class ProjChooserPanel extends CRSSelectPanel {
 	/**
 	 * @return Returns the curProj.
 	 */
-	public IProjection getCurProj() {
-		return curProj;
+	public CoordinateReferenceSystem getCurrentCrs() {
+		return currentCrs;
 	}
 	/**
 	 * @param curProj The curProj to set.
 	 */
-	public void setCurProj(IProjection curProj) {
-		this.curProj = curProj;
+	public void setCurrentCrs(CoordinateReferenceSystem curProj) {
+		this.currentCrs = curProj;
 	}
 	/**
 	 * @return Returns the okPressed.

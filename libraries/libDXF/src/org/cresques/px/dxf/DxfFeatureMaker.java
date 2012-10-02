@@ -29,10 +29,8 @@ import java.awt.geom.Point2D;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.geo.Georeferenced;
 import org.cresques.geo.Point3D;
-import org.cresques.geo.Projected;
 import org.cresques.geo.ViewPortData;
 import org.cresques.io.DxfFile;
 import org.cresques.io.DxfGroup;
@@ -46,6 +44,8 @@ import org.cresques.px.gml.LineString;
 import org.cresques.px.gml.LineString3D;
 import org.cresques.px.gml.Polygon;
 import org.cresques.px.gml.Polygon3D;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -53,8 +53,8 @@ import org.cresques.px.gml.Polygon3D;
  * GIS. La creación se realiza partiendo de las entidades obtenidas de un fichero DXF.
  * @author jmorell
  */
-public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
-    IProjection proj = null;
+public class DxfFeatureMaker implements DxfFile.EntityFactory, Georeferenced {
+    CoordinateReferenceSystem proj = null;
 
     //Feature lastFeature = null;
     Feature lastFeaBordes = null;
@@ -87,7 +87,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
      * @param proj, proyección cartográfica en la que se encontrarán las entidades
      * que creemos.
      */
-    public DxfFeatureMaker(IProjection proj) {
+    public DxfFeatureMaker(CoordinateReferenceSystem proj) {
         this.proj = proj;
         layers = new DxfTable();
         features = new FeatureCollection(proj);
@@ -302,7 +302,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                             Point2D ptAux = new Point2D.Double();
                             double z = ((Point3D) lineString3D.get(lineString3D.pointNr() -
                                                                    2)).getZ();
-                            ptAux = proj.createPoint(((Point2D) arc.get(i)).getX(),
+                            ptAux = new Point2D.Double(((Point2D) arc.get(i)).getX(),
                                                      ((Point2D) arc.get(i)).getY());
 
                             Point3D ptAux3D = new Point3D(ptAux.getX(),
@@ -319,7 +319,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                             Point2D ptAux = new Point2D.Double();
                             double z = ((Point3D) lineString3D.get(lineString3D.pointNr() -
                                                                    2)).getZ();
-                            ptAux = proj.createPoint(((Point2D) arc.get(i)).getX(),
+                            ptAux = new Point2D.Double(((Point2D) arc.get(i)).getX(),
                                                      ((Point2D) arc.get(i)).getY());
 
                             Point3D ptAux3D = new Point3D(ptAux.getX(),
@@ -464,7 +464,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                             Point2D ptAux = new Point2D.Double();
                             double z = ((Point3D) lineString3D.get(lineString3D.pointNr() -
                                                                    2)).getZ();
-                            ptAux = proj.createPoint(((Point2D) arc.get(i)).getX(),
+                            ptAux = new Point2D.Double(((Point2D) arc.get(i)).getX(),
                                                      ((Point2D) arc.get(i)).getY());
 
                             Point3D ptAux3D = new Point3D(ptAux.getX(),
@@ -480,7 +480,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                             Point2D ptAux = new Point2D.Double();
                             double z = ((Point3D) lineString3D.get(lineString3D.pointNr() -
                                                                    2)).getZ();
-                            ptAux = proj.createPoint(((Point2D) arc.get(i)).getX(),
+                            ptAux = new Point2D.Double(((Point2D) arc.get(i)).getX(),
                                                      ((Point2D) arc.get(i)).getY());
 
                             Point3D ptAux3D = new Point3D(ptAux.getX(),
@@ -667,8 +667,8 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                 // Son vertices que se trataran cuando se implementen
                 // los splines. En principio no se hace nada con ellos.
             } else {
-                Point3D pt = new Point3D(proj.createPoint(x, y).getX(),
-                                         proj.createPoint(x, y).getY(), z);
+                Point3D pt = new Point3D(new Point2D.Double(x, y).getX(),
+                                         new Point2D.Double(x, y).getY(), z);
                 lineString3D.add(pt);
                 polygon3D.add(pt);
 
@@ -706,7 +706,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                         if (bulge > 0) {
                             for (int i = 0; i < arc.size(); i++) {
                                 Point2D ptAux = new Point2D.Double();
-                                ptAux = proj.createPoint(((Point2D) arc.get(i)).getX(),
+                                ptAux = new Point2D.Double(((Point2D) arc.get(i)).getX(),
                                                          ((Point2D) arc.get(i)).getY());
 
                                 Point3D ptAux3D = new Point3D(ptAux.getX(),
@@ -721,7 +721,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                         } else {
                             for (int i = arc.size() - 1; i >= 0; i--) {
                                 Point2D ptAux = new Point2D.Double();
-                                ptAux = proj.createPoint(((Point2D) arc.get(i)).getX(),
+                                ptAux = new Point2D.Double(((Point2D) arc.get(i)).getX(),
                                                          ((Point2D) arc.get(i)).getY());
 
                                 Point3D ptAux3D = new Point3D(ptAux.getX(),
@@ -787,8 +787,8 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
             } else if ((vFlags & 16) == 16) {
                 // no se hace nada.
             } else {
-                Point3D pt = new Point3D(proj.createPoint(x, y).getX(),
-                                         proj.createPoint(x, y).getY(), z);
+                Point3D pt = new Point3D(new Point2D.Double(x, y).getX(),
+                                         new Point2D.Double(x, y).getY(), z);
                 lineString3D.add(pt);
 
                 //System.out.println("addVertex: pt = " + pt);
@@ -829,7 +829,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                         if (bulge > 0) {
                             for (int i = 0; i < arc.size(); i++) {
                                 Point2D ptAux = new Point2D.Double();
-                                ptAux = proj.createPoint(((Point2D) arc.get(i)).getX(),
+                                ptAux = new Point2D.Double(((Point2D) arc.get(i)).getX(),
                                                          ((Point2D) arc.get(i)).getY());
 
                                 Point3D ptAux3D = new Point3D(ptAux.getX(),
@@ -843,7 +843,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                         } else {
                             for (int i = arc.size() - 1; i >= 0; i--) {
                                 Point2D ptAux = new Point2D.Double();
-                                ptAux = proj.createPoint(((Point2D) arc.get(i)).getX(),
+                                ptAux = new Point2D.Double(((Point2D) arc.get(i)).getX(),
                                                          ((Point2D) arc.get(i)).getY());
 
                                 Point3D ptAux3D = new Point3D(ptAux.getX(),
@@ -1032,7 +1032,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                         if (bulgeLwp > 0) {
                             for (int k = 0; k < arc.size(); k++) {
                                 Point2D ptAux = new Point2D.Double();
-                                ptAux = proj.createPoint(((Point2D) arc.get(k)).getX(),
+                                ptAux = new Point2D.Double(((Point2D) arc.get(k)).getX(),
                                                          ((Point2D) arc.get(k)).getY());
 
                                 //System.out.println("createLwPolyline: ptAux = " + ptAux);
@@ -1053,7 +1053,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                         } else {
                             for (int k = arc.size() - 1; k >= 0; k--) {
                                 Point2D ptAux = new Point2D.Double();
-                                ptAux = proj.createPoint(((Point2D) arc.get(k)).getX(),
+                                ptAux = new Point2D.Double(((Point2D) arc.get(k)).getX(),
                                                          ((Point2D) arc.get(k)).getY());
 
                                 Point3D ptAux3D = new Point3D(ptAux.getX(),
@@ -1076,8 +1076,8 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
                     bulgeLwp = 0.0;
                 } else {
                     //System.out.println("createLwPolyline: hasBulge siempre es false");
-                    Point3D ptAux3D = new Point3D(proj.createPoint(x, y).getX(),
-                                                  proj.createPoint(x, y).getY(),
+                    Point3D ptAux3D = new Point3D(new Point2D.Double(x, y).getX(),
+                                                  new Point2D.Double(x, y).getY(),
                                                   elev);
                     lineString3D.add(ptAux3D);
 
@@ -1101,9 +1101,9 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
         }
 
         if (isDoubleFeatured) {
-            //geometria.add(proj.createPoint(firstX, firstY));
-            Point3D ptAux3D = new Point3D(proj.createPoint(firstX, firstY).getX(),
-                                          proj.createPoint(firstX, firstY).getY(),
+            //geometria.add(new Point2D.Double(firstX, firstY));
+            Point3D ptAux3D = new Point3D(new Point2D.Double(firstX, firstY).getX(),
+                                          new Point2D.Double(firstX, firstY).getY(),
                                           elev);
             lineString3D.add(ptAux3D);
             polygon3D.add(ptAux3D);
@@ -1196,7 +1196,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
             String string = doub.toString();
             //feature.setProp("elevation", string);
         }*/
-        pt1 = proj.createPoint(x, y);
+        pt1 = new Point2D.Double(x, y);
         x = grp.getDataAsDouble(11);
         y = grp.getDataAsDouble(21);
         z2 = grp.getDataAsDouble(31);
@@ -1209,7 +1209,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
             Double doub = new Double(0.0);
             //feature.setProp("elevation", doub.toString());
         }*/
-        pt2 = proj.createPoint(x, y);
+        pt2 = new Point2D.Double(x, y);
 
         if (grp.hasCode(210)) {
             extx = grp.getDataAsDouble(210);
@@ -1774,7 +1774,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
             dxf3DFile = true;
         }
 
-        Point2D c = proj.createPoint(x, y);
+        Point2D c = new Point2D.Double(x, y);
         Point3D center = new Point3D(c.getX(), c.getY(), z);
         Point3D[] pts = new Point3D[360];
         int angulo = 0;
@@ -1917,7 +1917,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
             dxf3DFile = true;
         }
 
-        Point2D c = proj.createPoint(x, y);
+        Point2D c = new Point2D.Double(x, y);
         Point3D center = new Point3D(c.getX(), c.getY(), z);
 
         //System.out.println("empieza = " + empieza + ", acaba = " + acaba);
@@ -2232,19 +2232,19 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
             feaBordes.setProp("elevation", doub.toString());
             feaFondos.setProp("elevation", doub.toString());
         }*/
-        Point2D pto = proj.createPoint(x, y);
+        Point2D pto = new Point2D.Double(x, y);
         Point3D pto3D = new Point3D(pto.getX(), pto.getY(), z1);
         pts[0] = pto3D;
         x = grp.getDataAsDouble(11);
         y = grp.getDataAsDouble(21);
         z2 = grp.getDataAsDouble(31);
-        pto = proj.createPoint(x, y);
+        pto = new Point2D.Double(x, y);
         pto3D = new Point3D(pto.getX(), pto.getY(), z2);
         pts[1] = pto3D;
         x = grp.getDataAsDouble(12);
         y = grp.getDataAsDouble(22);
         z3 = grp.getDataAsDouble(32);
-        pto = proj.createPoint(x, y);
+        pto = new Point2D.Double(x, y);
         pto3D = new Point3D(pto.getX(), pto.getY(), z3);
         pts[2] = pto3D;
 
@@ -2260,7 +2260,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
             z4 = grp.getDataAsDouble(33);
         }
 
-        pto = proj.createPoint(x, y);
+        pto = new Point2D.Double(x, y);
         pto3D = new Point3D(pto.getX(), pto.getY(), z4);
         pts[3] = pto3D;
 
@@ -2463,7 +2463,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
             } else if (g.getCode() == 30) {
                 z = ((Double) g.getData()).doubleValue();
 
-                Point2D p = proj.createPoint(x, y);
+                Point2D p = new Point2D.Double(x, y);
                 Point3D p3d = new Point3D(p.getX(), p.getY(), z);
                 lineString3D.add(p3d);
 
@@ -2490,7 +2490,7 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
         //feaBordes.setProp("elevation", string);
         //feaFondos.setProp("elevation", string);
         if (isDoubleFeatured) {
-            Point2D p = proj.createPoint(firstX, firstY);
+            Point2D p = new Point2D.Double(firstX, firstY);
             Point3D p3d = new Point3D(p.getX(), p.getY(), z);
             lineString3D.add(p3d);
             polygon3D.add(p3d);
@@ -3352,31 +3352,31 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
      * Establece la proyección cartográfica en la que se van a crear las features.
      * @param p, Proyección cartográfica.
      */
-    public void setProjection(IProjection p) {
+    public void setCrs(CoordinateReferenceSystem p) {
         proj = p;
     }
 
     /* (non-Javadoc)
      * @see org.cresques.io.DxfFile.EntityFactory#reProject(org.cresques.geo.ReProjection)
      */
-    public void reProject(ICoordTrans rp) {
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         Feature feature = new Feature();
         Extent extent = new Extent();
         Iterator iter = features.iterator();
 
         while (iter.hasNext()) {
             feature = (Feature) iter.next();
-            ((Projected) feature).reProject(rp);
+            ((Georeferenced) feature).reProject(trans, target);
             extent.add(feature.getExtent());
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
 
     /* (non-Javadoc)
      * @see org.cresques.geo.Projected#getProjection()
      */
-    public IProjection getProjection() {
+    public CoordinateReferenceSystem getCrs() {
         return proj;
     }
 
@@ -3535,8 +3535,8 @@ public class DxfFeatureMaker implements DxfFile.EntityFactory, Projected {
         if (grp.hasCode(40)) {
         	ratio_minor_to_major_axis = grp.getDataAsDouble(40);
         }
-        Point2D c = proj.createPoint(cx, cy);
-        // Point2D end_major = proj.createPoint(x_end_point_major_axis, y_end_point_major_axis);
+        Point2D c = new Point2D.Double(cx, cy);
+        // Point2D end_major = new Point2D.Double(x_end_point_major_axis, y_end_point_major_axis);
         // double r_major_axis_2D = c.distance(end_major)/2.0;
         double r_major_axis_2D = Math.sqrt(x_end_point_major_axis*
         		x_end_point_major_axis +

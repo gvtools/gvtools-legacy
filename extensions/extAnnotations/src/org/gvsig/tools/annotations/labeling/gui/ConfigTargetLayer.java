@@ -323,7 +323,7 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 				if (!file.exists()) {
 					try {
 						// create new layer
-						Annotation_LayerFactory.createEmptyLayer(file, sourceView.getProjection());
+						Annotation_LayerFactory.createEmptyLayer(file, sourceView.getCrs());
 					} catch (StartWriterVisitorException e) {
 						NotificationManager.showMessageError(
 								PluginServices.getText(this, "Error_creating_annotation_layer"),
@@ -353,7 +353,7 @@ public class ConfigTargetLayer extends DefaultButtonsPanel
 				}
 				// open the layer
 				try {
-					Annotation_Layer layer = Annotation_LayerFactory.createLayer(file.getName(), file, sourceView.getProjection(), CartographicSupportToolkit.DefaultMeasureUnit);
+					Annotation_Layer layer = Annotation_LayerFactory.createLayer(file.getName(), file, sourceView.getCrs(), CartographicSupportToolkit.DefaultMeasureUnit);
 					if (layer!=null) {
 						sourceView.getMapControl().getMapContext().getLayers().addLayer(layer);
 						toolUI.setTargetLayer(layer);

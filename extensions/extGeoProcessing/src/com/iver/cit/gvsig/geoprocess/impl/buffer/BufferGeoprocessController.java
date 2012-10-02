@@ -97,7 +97,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
@@ -249,17 +250,17 @@ public class BufferGeoprocessController
       params.put("cap", new Byte(cap));
 
       final ProjectView view = ViewTools.getViewFromLayer(inputLayer);
-      final IProjection proj = view.getMapContext().getViewPort().getProjection();
-      params.put("projection", proj);
+		final CoordinateReferenceSystem crs = view.getMapContext()
+				.getViewPort().getCrs();
+      params.put("projection", crs);
 
 
       final int distanceUnits = view.getMapContext().getViewPort().getDistanceUnits();
       params.put("distanceunits", new Integer(distanceUnits));
 
 
-      final boolean isProjected = proj.isProjected();
       int mapUnits = -1;
-      if (isProjected) {
+      if (crs instanceof ProjectedCRS) {
          mapUnits = view.getMapContext().getViewPort().getMapUnits();
       }
       else {

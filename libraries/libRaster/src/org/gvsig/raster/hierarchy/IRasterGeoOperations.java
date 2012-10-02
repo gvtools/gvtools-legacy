@@ -2,9 +2,9 @@ package org.gvsig.raster.hierarchy;
 
 import java.awt.geom.AffineTransform;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.dataset.io.RasterDriverException;
 import org.gvsig.raster.datastruct.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Interfaz que representa operaciones de imagenes con georreferenciación.
@@ -66,7 +66,7 @@ public interface IRasterGeoOperations extends IRasterOperations{
 	 * Obtiene la proyección en la que está el raster
 	 * @return IProjection
 	 */
-	public IProjection getProjection();
+	public CoordinateReferenceSystem getCrs();
 	
 	/**
 	 * Obtiene la proyección asociada al dataset.

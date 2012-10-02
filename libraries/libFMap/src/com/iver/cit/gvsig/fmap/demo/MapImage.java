@@ -48,9 +48,10 @@ import java.io.File;
 
 import javax.swing.JFrame;
 
+import org.cresques.cts.ProjectionUtils;
+
 import com.hardcode.driverManager.DriverLoadException;
 import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.layers.CancelationException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -107,7 +108,7 @@ public class MapImage extends JFrame {
 				FLayer l = LayerFactory.createLayer("Vias",
 					(VectorialFileDriver) LayerFactory.getDM().getDriver("gvSIG shp driver"),
 					new File("C:/Documents and Settings/fernando/Mis documentos/vias.shp"),
-					CRSFactory.getCRS("EPSG:23030"));
+					ProjectionUtils.getCRS("EPSG:23030"));
 				newMapControl.getMapContext().getLayers().addLayer(l);
 				newMapControl.addMapTool("zoom", new RectangleBehavior(new ZoomInListenerImpl(newMapControl)));
 				newMapControl.setTool("zoom");

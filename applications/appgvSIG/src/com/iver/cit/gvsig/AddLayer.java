@@ -24,8 +24,9 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.driverManager.DriverManager;
 import com.hardcode.driverManager.WriterManager;
@@ -139,16 +140,16 @@ public class AddLayer extends Extension {
 		}
 		if (lyr instanceof FLyrVect) {
 			FLyrVect lyrVect = (FLyrVect) lyr;
-			IProjection proj = lyr.getProjection();
+			CoordinateReferenceSystem crs = lyr.getCrs();
 			// Comprobar que la projecci�n es la misma que la vista
-			if (proj == null) {
+			if (crs == null) {
 				// SUPONEMOS que la capa est� en la proyecci�n que
 				// estamos pidiendo (que ya es mucho suponer, ya).
-				lyrVect.setProjection(viewPort.getProjection());
+				lyrVect.setCrs(viewPort.getCrs());
 				return;
 			}
 			int option = JOptionPane.YES_OPTION;
-			if (!viewPort.getProjection().getAbrev().equals(proj.getAbrev())) {
+			if (!viewPort.getCrs().getName().equals(crs.getName())) {
 				option = JOptionPane.showConfirmDialog((Component)PluginServices.getMainFrame(), PluginServices
 						.getText(AddLayer.class, "reproyectar_aviso")+"\n"+ PluginServices.getText(AddLayer.class,"Capa")+": "+lyrVect.getName(), PluginServices
 						.getText(AddLayer.class, "reproyectar_pregunta"),
@@ -158,10 +159,11 @@ public class AddLayer extends Extension {
 					return;
 				}
 
-				ICoordTrans ct = proj.getCT(viewPort.getProjection());
-				lyrVect.setCoordTrans(ct);
-				System.err.println("coordTrans = " + proj.getAbrev() + " "
-						+ viewPort.getProjection().getAbrev());
+				MathTransform trans = ProjectionUtils.getCrsTransform(crs,
+						viewPort.getCrs());
+				lyrVect.setCrsTransform(trans);
+				System.err.println("coordTrans = " + crs.getName() + " "
+						+ viewPort.getCrs().getName());
 			}
 		}
 

@@ -6,16 +6,15 @@ import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.drivers.gpe.reader.GPEDriverFactory;
 import org.gvsig.fmap.drivers.gpe.reader.GPEVectorialDriver;
-import org.gvsig.gpe.GPEDefaults;
 import org.gvsig.gpe.GPERegister;
 import org.gvsig.gpe.exceptions.ParserCreationException;
-import org.gvsig.gpe.gml.utils.GMLUtilsParser;
 import org.gvsig.gpe.parser.GPEParser;
 import org.gvsig.gpe.utils.StringUtils;
 import org.gvsig.gpe.writer.GPEWriterHandler;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -26,7 +25,6 @@ import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.ExportTo;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -105,11 +103,11 @@ public class ExportTask extends AbstractMonitorableTask{
 		this.mapContext = mapContext;
 		this.eGeometry = new ExportGeometry(writer);
 		this.file = file;
-		eGeometry.setProjOrig(layer.getProjection());
+		eGeometry.setSourceCrs(layer.getCrs());
 		if (writer.getFormat().equals("text/xml; subtype=kml/2.1")){
-			eGeometry.setProjDest(CRSFactory.getCRS("EPSG:4326"));			
+			eGeometry.setTargetCrs(ProjectionUtils.getCRS("EPSG:4326"));			
 		}else{
-			eGeometry.setProjDest(layer.getProjection());
+			eGeometry.setTargetCrs(layer.getCrs());
 		}
 		setInitialStep(0);
 		setDeterminatedProcess(true);
@@ -134,11 +132,11 @@ public class ExportTask extends AbstractMonitorableTask{
 		GPEParser parser = GPERegister.createParser(file.toURI());
 		GPEVectorialDriver driver = GPEDriverFactory.createDriver(parser);
 		driver.open(file);
-		IProjection proj = driver.getProjection();
-		if(proj == null)
-			proj = eGeometry.getProjDest();
+		CoordinateReferenceSystem crs = driver.getCrs();
+		if(crs == null)
+			crs = eGeometry.getTargetCrs();
 		FLayer layer = LayerFactory.createLayer(file.getAbsolutePath(),
-				driver, proj);
+				driver, crs);
 		((IView)PluginServices.getMDIManager().getActiveWindow()).
 		getMapControl().getMapContext().getLayers().addLayer(layer);
 	}
@@ -164,15 +162,22 @@ public class ExportTask extends AbstractMonitorableTask{
 	 * The layer to write
 	 */
 	private void exportLayer(FLayer layer){
-		String projection = eGeometry.getProjDest().getAbrev();
+		String projection = ProjectionUtils.getAbrev(eGeometry.getTargetCrs());
 		
 		writer.startLayer(null, null, layer.getName(), null, projection);
 		//Sets the extent
 		try {
-			if (layer.getProjection().getAbrev().compareTo(mapContext.getViewPort().getProjection().getAbrev())==0)
-				writer.startBbox(null,new CoordinatesSequenceBbox(eGeometry.getExtent(layer.getFullExtent())), eGeometry.getProjDest().getAbrev());
+			if (layer.getCrs().getName()
+					.equals(mapContext.getViewPort().getCrs().getName()))
+				writer.startBbox(
+						null,
+						new CoordinatesSequenceBbox(eGeometry.getExtent(layer
+								.getFullExtent())), ProjectionUtils
+								.getAbrev(eGeometry.getTargetCrs()));
 			else
-				writer.startBbox(null,new CoordinatesSequenceBbox(layer.getFullExtent()),eGeometry.getProjDest().getAbrev());
+				writer.startBbox(null,
+						new CoordinatesSequenceBbox(layer.getFullExtent()),
+						ProjectionUtils.getAbrev(eGeometry.getTargetCrs()));
 			writer.endBbox();
 		} catch (Exception e) {
 			writer.getErrorHandler().addWarning(new ExtentExportWarning(layer,e));

@@ -50,7 +50,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
@@ -217,15 +217,14 @@ public class FMultiPoint2D extends AbstractGeometry {
 		return new FMultiPoint2D(aux);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#reProject(org.cresques.cts.ICoordTrans)
-	 */
-	public void reProject(ICoordTrans ct) {
+	@Override
+	public void reProject(MathTransform trans) {
 		for (int i=0; i < getNumPoints(); i++)
 		{
-			points[i].reProject(ct);
+			points[i].reProject(trans);
 		}
 	}
+	
 	public int getNumPoints(){
 		return points.length;
 	}

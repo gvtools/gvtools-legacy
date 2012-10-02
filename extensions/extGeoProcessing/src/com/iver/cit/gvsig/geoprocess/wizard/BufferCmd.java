@@ -71,8 +71,6 @@
 package com.iver.cit.gvsig.geoprocess.wizard;
 
 
-import org.cresques.cts.IProjection;
-
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.geoprocess.core.gui.GeoprocessPaneContainer;
@@ -92,8 +90,6 @@ public class BufferCmd implements AndamiCmd {
 				getActiveWindow();
         final FLayers layers = vista.getModel().
         	getMapContext().getLayers();
-        IProjection proj = vista.getModel().
-        	getMapContext().getProjection();
 		GeoProcessingBufferPanel geoProcessingBufferPanel = new
 			GeoProcessingBufferPanel(layers);
 		GeoprocessPaneContainer container = new 

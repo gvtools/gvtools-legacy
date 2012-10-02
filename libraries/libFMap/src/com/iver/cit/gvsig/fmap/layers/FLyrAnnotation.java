@@ -11,8 +11,9 @@ import java.util.Iterator;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -34,7 +35,6 @@ import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ITextSymbol;
 import com.iver.cit.gvsig.fmap.core.v02.FLabel;
 import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.BoundedShapes;
 import com.iver.cit.gvsig.fmap.drivers.DriverAttributes;
 import com.iver.cit.gvsig.fmap.edition.AnnotationEditableAdapter;
@@ -148,12 +148,12 @@ public class FLyrAnnotation extends FLyrVect {
 			// logger.debug("source.stop()");
 		getSource().stop();
 			// Si existe reproyección, reproyectar el extent
-		ICoordTrans ct = getCoordTrans();
-		if (ct != null) {
+		MathTransform transform = getCrsTransform();
+		if (transform != null) {
 			Point2D pt1 = new Point2D.Double(rAux.getMinX(), rAux.getMinY());
 			Point2D pt2 = new Point2D.Double(rAux.getMaxX(), rAux.getMaxY());
-			pt1 = ct.convert(pt1, null);
-			pt2 = ct.convert(pt2, null);
+			pt1 = ProjectionUtils.transform(pt1, transform);
+			pt2 = ProjectionUtils.transform(pt2, transform);
 			rAux = new Rectangle2D.Double();
 			rAux.setFrameFromDiagonal(pt1, pt2);
 		}
@@ -253,10 +253,10 @@ public class FLyrAnnotation extends FLyrVect {
 		}
 		setInPixels(xml.getBooleanProperty("isInPixels"));
 
-		IProjection proj = null;
+		CoordinateReferenceSystem crs = null;
 
 		if (xml.contains("proj")) {
-			proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
+			crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
 		}
 
 //		VectorialAdapter adapter=null;
@@ -339,7 +339,7 @@ public class FLyrAnnotation extends FLyrVect {
 					bMustClone = attr.isLoadedInMemory();
 				}
 			}
-			ICoordTrans ct = getCoordTrans();
+			MathTransform transform = getCrsTransform();
 			FSymbol defaultSym = (FSymbol) getLegend().getDefaultSymbol();
 			for (int i = 0; i < sc; i++) {
 				IGeometry geom = adapter.getShape(i);
@@ -348,10 +348,10 @@ public class FLyrAnnotation extends FLyrVect {
 					m_labels.add(null);
 					continue;
 				}
-				if (ct != null) {
+				if (transform != null) {
 					if (bMustClone)
 						geom = geom.cloneGeometry();
-					geom.reProject(ct);
+					geom.reProject(transform);
 				}
 
 				// TODO: El método contenedor (createLabelLayer) debe recoger
@@ -491,7 +491,7 @@ public class FLyrAnnotation extends FLyrVect {
 		//de JTS (QuadtreeJts es un adapter a nuestra api de indices)
 		spatialIndex = new QuadtreeJts();
 		ReadableVectorial va = getSource();
-		ICoordTrans ct = getCoordTrans();
+		MathTransform transform = getCrsTransform();
 		BoundedShapes shapeBounds = (BoundedShapes) va.getDriver();
 		try {
 			va.start();
@@ -505,8 +505,8 @@ public class FLyrAnnotation extends FLyrVect {
 					r = shapeBounds.getShapeBounds(i);
 				}
 				// TODO: MIRAR COMO SE TRAGARÍA ESTO LO DE LAS REPROYECCIONES
-				if (ct != null) {
-					r = ct.convert(r);
+				if (transform != null) {
+					r = ProjectionUtils.transform(r, transform);
 				}
 				if (r != null) {
 //					Coordinate c1 = new Coordinate(r.getMinX(), r.getMinY());
@@ -584,7 +584,7 @@ public class FLyrAnnotation extends FLyrVect {
 		FLyrAnnotation la=new FLyrAnnotation();
 		la.setSource(layer.getSource());
 		la.setRecordset(layer.getRecordset());
-		la.setProjection(layer.getProjection());
+		la.setCrs(layer.getCrs());
 		la.setLegend((IVectorLegend)layer.getLegend());
 		return la;
 	}

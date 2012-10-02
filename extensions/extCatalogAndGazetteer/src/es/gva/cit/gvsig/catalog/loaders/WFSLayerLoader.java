@@ -44,6 +44,7 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.i18n.Messages;
 
 import com.iver.andami.PluginServices;
@@ -104,7 +105,7 @@ public class WFSLayerLoader extends LayerLoader{
 		args.put("pwd","");
 		BaseView activeView = 
 			(BaseView) PluginServices.getMDIManager().getActiveWindow();
-		args.put("projection",activeView.getProjection().getAbrev());
+		args.put("projection", ProjectionUtils.getAbrev(activeView.getCrs()));
 		try {
 			return (FLayer)extensionPoint.create("OGC:WFS", args  );
 		} catch(Exception e) {

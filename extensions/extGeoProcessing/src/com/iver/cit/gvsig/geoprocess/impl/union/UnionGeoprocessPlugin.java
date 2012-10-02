@@ -73,8 +73,6 @@ package com.iver.cit.gvsig.geoprocess.impl.union;
 
 import java.net.URL;
 
-import org.cresques.cts.IProjection;
-
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
@@ -102,7 +100,6 @@ public class UnionGeoprocessPlugin extends GeoprocessPluginAbstract  implements 
 		View vista = (View)PluginServices.getMDIManager().getActiveWindow();
 		MapContext mapContext = vista.getModel().getMapContext();
         FLayers layers = mapContext.getLayers();
-        IProjection proj = mapContext.getProjection();
         String titleText = PluginServices.getText(this,
 		"Union._Introduccion_de_datos");
         GeoProcessingOverlayPanel2 dataSelectionPanel = 

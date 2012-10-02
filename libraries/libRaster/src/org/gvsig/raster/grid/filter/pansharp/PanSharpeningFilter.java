@@ -79,7 +79,13 @@ public class PanSharpeningFilter  extends RasterFilter {
 		WriterBufferServer writerBufferServer = new WriterBufferServer(rasterResult);
 	
 		try {
-			grw = GeoRasterWriter.getWriter(writerBufferServer, fileNameOutput, rasterResult.getBandCount(),dataset.getDataSource().getDataset(pancrName).getAffineTransform(), rasterResult.getWidth(), rasterResult.getHeight(), rasterResult.getDataType(), GeoRasterWriter.getWriter(fileNameOutput).getParams(), dataset.getDataSource().getDataset(pancrName).getProjection());
+			grw = GeoRasterWriter.getWriter(writerBufferServer, fileNameOutput,
+					rasterResult.getBandCount(), dataset.getDataSource()
+							.getDataset(pancrName).getAffineTransform(),
+					rasterResult.getWidth(), rasterResult.getHeight(),
+					rasterResult.getDataType(),
+					GeoRasterWriter.getWriter(fileNameOutput).getParams(),
+					dataset.getDataSource().getDataset(pancrName).getCrs());
 			grw.setWkt(dataset.getDataSource().getWktProjection());
 			grw.dataWrite();
 		

@@ -67,8 +67,9 @@
  */
 package com.iver.cit.gvsig.fmap.drivers.featureiterators;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
@@ -95,12 +96,12 @@ public class DefaultFeatureIterator implements IFeatureIterator {
 	 * Projection of the layer on which this iterator iterates.
 	 * TODO Move projection from layer to adapter or driver
 	 * */
-	protected IProjection sourceProjection;
+	protected CoordinateReferenceSystem sourceCrs;
 	/**
 	 * If its setted, all features returned by this iterator
 	 * will be previously reprojected to this target projection
 	 */
-	protected IProjection targetProjection;
+	protected CoordinateReferenceSystem targetCrs;
 	/**
 	 * If its setted, returned features only will have these alphanumeric attributes
 	 */
@@ -143,17 +144,17 @@ public class DefaultFeatureIterator implements IFeatureIterator {
 	 * and with the specified attribute fields.
 	 * */
 	public DefaultFeatureIterator(ReadableVectorial source, 
-			IProjection sourceProj, 
-			IProjection targetProj, 
+			CoordinateReferenceSystem sourceCrs, 
+			CoordinateReferenceSystem targetCrs, 
 			String[] fieldNames) throws ReadDriverException{
 		this(source);
-		this.sourceProjection = sourceProj;
+		this.sourceCrs = sourceCrs;
 		//check to avoid reprojections with the same projection
-		if(targetProj != null){
+		if(targetCrs != null){
 			// FJP: Si la capa original no sabemos qué proyección tiene, no hacemos nada
-			if (sourceProj != null) {
-				if(!(targetProj.getAbrev().equalsIgnoreCase(sourceProjection.getAbrev())))
-					this.targetProjection = targetProj;
+			if (sourceCrs != null) {
+				if(!(targetCrs.getName().equals(sourceCrs.getName())))
+					this.targetCrs = targetCrs;
 			}
 		}
 		this.fieldNames = fieldNames;
@@ -197,20 +198,20 @@ public class DefaultFeatureIterator implements IFeatureIterator {
 		this.fieldNames = fieldNames;
 	}
 
-	public IProjection getTargetProjection() {
-		return targetProjection;
+	public CoordinateReferenceSystem getTargetCrs() {
+		return targetCrs;
 	}
 
-	public void setTargetProjection(IProjection targetProjection) {
-		this.targetProjection = targetProjection;
+	public void setTargetCrs(CoordinateReferenceSystem targetCrs) {
+		this.targetCrs = targetCrs;
 	}
 
-	public IProjection getSourceProjection() {
-		return sourceProjection;
+	public CoordinateReferenceSystem getSourceCrs() {
+		return sourceCrs;
 	}
 
-	public void setSourceProjection(IProjection sourceProjection) {
-		this.sourceProjection = sourceProjection;
+	public void setSourceCrs(CoordinateReferenceSystem sourceCrs) {
+		this.sourceCrs = sourceCrs;
 	}
 
 	/**
@@ -220,10 +221,10 @@ public class DefaultFeatureIterator implements IFeatureIterator {
 	 * @param geom
 	 */
 	protected void reprojectIfNecessary(IGeometry geom){
-		if (this.targetProjection != null && 
-				this.sourceProjection != null &&
-				this.targetProjection.getAbrev() != this.sourceProjection.getAbrev()){
-			ICoordTrans trans = sourceProjection.getCT(targetProjection);
+		if (targetCrs != null && sourceCrs != null
+				&&	!targetCrs.getName().equals(sourceCrs.getName())){
+			MathTransform trans = ProjectionUtils.getCrsTransform(sourceCrs,
+					targetCrs);
 			geom.reProject(trans);
 		}
 	}

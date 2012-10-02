@@ -1,16 +1,16 @@
 package com.iver.cit.gvsig.gui.panels.crs;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.project.documents.view.info.gui.CSSelectionDialog;
 
 public class CrsUIFactory implements ICrsUIFactory {
 
 
-	public ISelectCrsPanel getSelectCrsPanel(IProjection projection,
+	public ISelectCrsPanel getSelectCrsPanel(CoordinateReferenceSystem crs,
 			boolean isTransPanelActive) {
 		CSSelectionDialog panel = new CSSelectionDialog();
-		panel.setProjection(projection);
+		panel.setCrs(crs);
 		return panel;
 	}
 

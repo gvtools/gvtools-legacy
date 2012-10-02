@@ -5,7 +5,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.io.Serializable;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -93,9 +93,9 @@ public interface FShape extends Shape, Serializable {
 	/**
 	 * Re-projects this shape using transformation coordinates. 
 	 *
-	 * @param ct the transformation coordinates
+	 * @param trans the transformation coordinates
 	 */
-	public void reProject(ICoordTrans ct);
+	public void reProject(MathTransform trans);
 
 	/**
 	 * Returns the handlers they utilized to stretch the geometries.

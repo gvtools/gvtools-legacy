@@ -49,12 +49,15 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.AcceptCancelPanel;
 import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.SingletonWindow;
@@ -68,9 +71,6 @@ import com.iver.cit.gvsig.project.documents.ProjectDocument;
 import com.iver.cit.gvsig.project.documents.layout.Attributes;
 import com.iver.cit.gvsig.project.documents.view.ProjectView;
 import com.iver.cit.gvsig.project.documents.view.ProjectViewFactory;
-
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
 /**
  * Dialogo donde se muestran las propiedades de una vista
  *
@@ -295,8 +295,8 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 
 //			cmbMapUnits = new javax.swing.JComboBox(getUnitsNames());
 			cmbMapUnits.setPreferredSize(new java.awt.Dimension(200, 20));
-			IProjection proj=view.getProjection();
-			if (!proj.isProjected()) {
+			CoordinateReferenceSystem crs = view.getCrs();
+			if (!(crs instanceof ProjectedCRS)) {
 //				if (cmbMapUnits.getItemCount()==MapContext.NAMES.length) {
 //					cmbMapUnits.addItem(PluginServices.getText(this, Attributes.DEGREES));
 //				}
@@ -635,13 +635,12 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 	 */
 	private CRSSelectPanel getJPanelProj() {
 		if (jPanelProj == null) {
-			IProjection proj=view.getProjection();
-			jPanelProj = CRSSelectPanel.getPanel(proj);
+			jPanelProj = CRSSelectPanel.getPanel(view.getCrs());
 			jPanelProj.setPreferredSize(new java.awt.Dimension(330,35));
 			jPanelProj.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (jPanelProj.isOkPressed()) {
-						if (!jPanelProj.getCurProj().isProjected()) {
+						if (!(jPanelProj.getCurrentCrs() instanceof ProjectedCRS)) {
 //							if (getCmbMapUnits().getItemCount()==MapContext.NAMES.length) {
 //								getCmbMapUnits().addItem(PluginServices.getText(this, Attributes.DEGREES));
 //							}
@@ -656,7 +655,7 @@ public class ViewProperties extends JPanel implements SingletonWindow{
 //								getCmbMapUnits().removeItem(PluginServices.getText(this, Attributes.DEGREES));
 //							}
 						}
-						view.setProjection(jPanelProj.getCurProj());
+						view.setCrs(jPanelProj.getCurrentCrs());
 					}
 				}
 			});

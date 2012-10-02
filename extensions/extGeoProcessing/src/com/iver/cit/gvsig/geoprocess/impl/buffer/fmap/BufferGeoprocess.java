@@ -122,8 +122,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.OpenDriverException;
@@ -236,7 +236,8 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 			bufferOnlySelection = onlySelection.booleanValue();
 
 		
-		IProjection projection = (IProjection) params.get("projection");
+		CoordinateReferenceSystem crs = (CoordinateReferenceSystem) params
+				.get("projection");
 		int distanceUnits = ((Integer)params.get("distanceunits")).intValue();
 		int mapUnits = ((Integer)params.get("mapunits")).intValue();
 		Byte strategy_flat = (Byte) params.get("strategy_flag");
@@ -245,7 +246,8 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 			// must check attribute name not null
 			String attributeName = (String) params.get("attr_name");
 			if (attributeName != null) {
-				bufferVisitor = new AttributeBufferVisitor(attributeName, projection, distanceUnits, mapUnits);
+				bufferVisitor = new AttributeBufferVisitor(attributeName,
+						crs, distanceUnits, mapUnits);
 			} else {
 				throw new GeoprocessException(
 						"Buffer por atributo sin nombre de atributo");
@@ -256,7 +258,8 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 			Double dist = (Double) params.get("buffer_distance");
 			if (dist != null) {
 				double distance = dist.doubleValue();
-				bufferVisitor = new ConstantDistanceBufferVisitor(distance, projection, distanceUnits, mapUnits);
+				bufferVisitor = new ConstantDistanceBufferVisitor(distance,
+						crs, distanceUnits, mapUnits);
 			} else {
 				throw new GeoprocessException(
 						"Buffer por dist constante sin distancia");
@@ -324,12 +327,12 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 		FLyrVect solution = null;
 		String fileName = ((ShpWriter) writer).getShpPath();
 		File file = new File(fileName);
-		IProjection proj = firstLayer.getProjection();
+		CoordinateReferenceSystem crs = firstLayer.getCrs();
 		IndexedShpDriver driver = new IndexedShpDriver();
 		driver.open(file);
 		driver.initialize();
 		solution = (FLyrVect) LayerFactory.createLayer(fileName, driver, file,
-				proj);
+				crs);
 		return solution;
 
 	}
@@ -388,7 +391,7 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 				resultLayerDefinition = new SHPLayerDefinition();
 				try {
 					resultLayerDefinition.setShapeType(FShape.POLYGON);
-					resultLayerDefinition.setProjection(firstLayer.getProjection());
+					resultLayerDefinition.setCrs(firstLayer.getCrs());
 					resultLayerDefinition.setName(firstLayer.getName());
 					resultLayerDefinition.setFieldsDesc(firstLayer.getRecordset().getFieldsDescription());
 				} catch (ReadDriverException e) {
@@ -595,7 +598,7 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 						}
 //						secondPassStrategy.process(dissolveVisitor, cancelMonitor);
 					     ReadableVectorial source = tempLayer.getSource();
-						 ICoordTrans ct = tempLayer.getCoordTrans();
+						MathTransform trans = tempLayer.getCrsTransform();
 						
 						 if(dissolveVisitor.start(tempLayer)){
 							 source.start();
@@ -607,8 +610,8 @@ public class BufferGeoprocess extends AbstractGeoprocess implements
 									if(dissolveVisitor.getDissolvedGeometries().get(i))
 										continue;
 									IGeometry geom = source.getShape(i);
-								    if (ct != null) {
-										geom.reProject(ct);
+								if (trans != null) {
+									geom.reProject(trans);
 									}
 								    dissolveVisitor.visit(geom, i);
 							}//for

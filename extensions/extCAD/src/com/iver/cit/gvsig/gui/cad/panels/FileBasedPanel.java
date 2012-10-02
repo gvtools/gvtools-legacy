@@ -152,7 +152,7 @@ public class FileBasedPanel extends JWizardPanel {
 	 */
 	private CRSSelectPanel getChooserPanel() {
 		if (crsSelectPanel == null) {
-			crsSelectPanel = CRSSelectPanel.getPanel(AddLayerDialog.getLastProjection());
+			crsSelectPanel = CRSSelectPanel.getPanel(AddLayerDialog.getLastCrs());
 			crsSelectPanel.setBounds(new java.awt.Rectangle(16,98,348,44));
 			IWindow view= PluginServices.getMDIManager().getActiveWindow();
 			if (view instanceof com.iver.cit.gvsig.project.documents.view.gui.View){
@@ -163,7 +163,7 @@ public class FileBasedPanel extends JWizardPanel {
 			crsSelectPanel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 			        if (crsSelectPanel.isOkPressed()) {
-			        	AddLayerDialog.setLastProjection(crsSelectPanel.getCurProj());
+			        	AddLayerDialog.setLastCrs(crsSelectPanel.getCurrentCrs());
 			        }
 				}
 			});

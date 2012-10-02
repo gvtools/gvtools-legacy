@@ -1,7 +1,7 @@
 package com.iver.cit.gvsig.fmap.core;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.OrientableSurface;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -57,8 +57,9 @@ import org.gvsig.fmap.geometries.iso.primitive.OrientableSurface;
  */
 public abstract class FOrientablePolygon2D extends FOrientablePrimitive2D implements OrientableSurface {
 
-	public FOrientablePolygon2D(String id, IProjection projection, GeneralPathX gpx) {
-		super(id, projection, gpx);		
+	public FOrientablePolygon2D(String id, CoordinateReferenceSystem crs,
+			GeneralPathX gpx) {
+		super(id, crs, gpx);		
 	}
 
 }

@@ -4,15 +4,15 @@ import java.io.File;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.graph.core.GraphException;
 import org.gvsig.graph.core.GvFlag;
 import org.gvsig.graph.core.IGraph;
 import org.gvsig.graph.core.Network;
 import org.gvsig.graph.core.loaders.NetworkRedLoader;
 import org.gvsig.graph.solvers.ReverseOneToManySolver;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
@@ -31,10 +31,10 @@ public class TestReverseOneToMany extends TestCase {
 
 		// Setup del factory de DataSources
 
-		IProjection prj = CRSFactory.getCRS("EPSG:23030");
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 		File shpFile = new File("test_files/ejes.shp");
 		lyr = (FLyrVect) LayerFactory.createLayer("Ejes", "gvSIG shp driver",
-				shpFile, prj);
+				shpFile, crs);
 		
 		NetworkRedLoader netLoader = new NetworkRedLoader();
 		netLoader.setNetFile(new File("test_files/ejes.net"));

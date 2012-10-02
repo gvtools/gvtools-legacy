@@ -89,8 +89,9 @@ import java.util.prefs.Preferences;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.geotools.resources.geometry.XRectangle2D;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
@@ -100,7 +101,6 @@ import com.iver.cit.gvsig.fmap.core.ICanReproject;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.ConnectionJDBC;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.DefaultJDBCDriver;
@@ -124,10 +124,10 @@ public class FeatureIteratorTest extends TestCase {
 	public  static String DXF_DRIVER_NAME = "gvSIG DXF Memory Driver";
 
 	//TODO MOVER TODO LO ESTATICO A UNA CLASE AUXILIAR QUE NO SEA JUNIT
-	static IProjection PROJECTION_DEFAULT =
-		CRSFactory.getCRS("EPSG:23030");
-	static IProjection newProjection =
-		CRSFactory.getCRS("EPSG:23029");
+	static CoordinateReferenceSystem PROJECTION_DEFAULT = ProjectionUtils
+			.getCRS("EPSG:23030");
+	static CoordinateReferenceSystem newProjection = ProjectionUtils
+			.getCRS("EPSG:23029");
 
 	static{
 		try {
@@ -211,13 +211,13 @@ public class FeatureIteratorTest extends TestCase {
 		            ((ICanReproject)driver).setDestProjection(strEPSG);
 		        }
 		        ((DefaultJDBCDriver)driver).setData(conn, lyrDef);
-		        IProjection proj = newProjection;//ahora, si no reproyecta la bbdd reproyecta el iterador
+		        CoordinateReferenceSystem crs = newProjection;//ahora, si no reproyecta la bbdd reproyecta el iterador
 //		        if (driver instanceof ICanReproject)
 //		        {
 //		            proj = CRSFactory.getCRS("EPSG:" + ((ICanReproject)driver).getSourceProjection());
 //		        }
 
-		        return (FLyrVect) LayerFactory.createDBLayer(driver, layerName, proj);
+		        return (FLyrVect) LayerFactory.createDBLayer(driver, layerName, crs);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -519,20 +519,21 @@ public class FeatureIteratorTest extends TestCase {
 		Preferences prefsResolution = Preferences.userRoot().node( "gvsig.configuration.screen" );
 		Toolkit kit = Toolkit.getDefaultToolkit();
 		double dpi = prefsResolution.getInt("dpi",kit.getScreenResolution());
-		IProjection proj = viewPort.getProjection();
+		CoordinateReferenceSystem crs = viewPort.getCrs();
 		if (viewPort.getImageSize() == null)
 			return -1;
 		if (viewPort.getAdjustedExtent() == null) {
 			return 0;
 		}
-		if (proj == null) {
+		if (crs == null) {
 			double w = ((viewPort.getImageSize().getWidth() / dpi) * 2.54);
 			return (long) (viewPort.getAdjustedExtent().getWidth() / w * CHANGE[viewPort.getMapUnits()]);
 		}
 
-		return Math.round(proj.getScale(viewPort.getAdjustedExtent().getMinX(),
-				viewPort.getAdjustedExtent().getMaxX(), viewPort.getImageSize()
-						.getWidth(), dpi));
+		
+		return (long) ProjectionUtils.getScale(crs, viewPort
+				.getAdjustedExtent().getMinX(), viewPort.getAdjustedExtent()
+				.getMaxX(), viewPort.getImageSize().getWidth(), dpi);
 	}
 
 }

@@ -23,17 +23,14 @@
  */
 package org.cresques.geo;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-
-import org.cresques.px.Extent;
-
 import java.awt.Dimension;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 
-import java.text.DecimalFormat;
+import org.cresques.px.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -44,16 +41,16 @@ import java.text.DecimalFormat;
  *
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
-public class ViewPortData implements Projected {
+public class ViewPortData implements Georeferenced {
     /**
      * Tipo de proyección de la vista.
      */
-    IProjection proj = null;
+	CoordinateReferenceSystem crs = null;
 
     /**
      * Sistema de coordenadas de la vista.
      */
-    IProjection cs = null;
+	CoordinateReferenceSystem cs = null;
 
     /**
      * Amplitud de la vista, en coordenadas proyectadas.
@@ -79,27 +76,27 @@ public class ViewPortData implements Projected {
     public ViewPortData() {
     }
 
-    public ViewPortData(IProjection proj, Extent extent, Dimension2D size) {
-        this.proj = proj;
+    public ViewPortData(CoordinateReferenceSystem crs, Extent extent, Dimension2D size) {
+        this.crs = crs;
         this.extent = extent;
         this.size = size;
         mat = new AffineTransform();
         mat.scale(1.0, -1.0);
     }
 
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
 
-    public void setProjection(IProjection proj) {
-        this.proj = proj;
+    public void setCrs(CoordinateReferenceSystem crs) {
+        this.crs = crs;
     }
 
-    public void reProject(ICoordTrans rp) {
+    public void reProject(MathTransform rp, CoordinateReferenceSystem target) {
         // TODO metodo reProject pendiente de implementar
     }
 
-    public void setCoordSys(IProjection cs) {
+    public void setCoordSys(CoordinateReferenceSystem cs) {
         this.cs = cs;
     }
 
@@ -123,7 +120,7 @@ public class ViewPortData implements Projected {
             vp.extent = new Extent(extent);
         }
 
-        vp.proj = proj;
+        vp.crs = crs;
         vp.size = size;
         vp.dpi = dpi;
 
@@ -222,17 +219,6 @@ public class ViewPortData implements Projected {
      *
      * @param scale
      */
-    public void zoomToGeoScale(double scale) {
-        double actual = getGeoScale();
-        double f = actual / scale;
-        zoomToCenter(f);
-    }
-
-    /**
-     * Zoom a una escala (geográfica);
-     *
-     * @param scale
-     */
     public void zoomToCenter(double f) {
         Point2D.Double ptCenter = new Point2D.Double(getWidth() / 2.0,
                                                      getHeight() / 2.0);
@@ -286,45 +272,5 @@ public class ViewPortData implements Projected {
         }
 
         return ptCenter;
-    }
-
-    /**
-     * Escala Geográfica.
-     *
-     * @param dpi resolucion en puntos por pulgada
-     */
-    public double getGeoScale() {
-        /* // TODO Actulizarlo para Geotools2
-        double scale = 0.0;
-        if (proj.getClass() == UtmZone.class) { // UTM;
-                scale = (extent.maxX()-extent.minX())*        // metros
-                        (dpi / 2.54 * 100.0)/                                // px / metro
-                        getWidth();                                                        // pixels
-        } else if (proj.getClass() == Geodetic.class) { // Geodetic
-                scale = (extent.maxX()-extent.minX())*                // grados
-                        // 1852.0 metros x minuto de meridiano
-                        (dpi / 2.54 * 100.0 * 1852.0 * 60.0)/        // px / metro
-                        getWidth();                                                                // pixels
-        } else if (proj.getClass() == Mercator.class) { // Mercator
-                Projection prj = Geodetic.getProjection((Ellipsoid) proj.getDatum());
-                GeoPoint pt1 = (GeoPoint) prj.createPoint(1.0,0.0);
-                GeoPoint pt2 = (GeoPoint) prj.createPoint(2.0,0.0);
-                ProjPoint ppt1 = (ProjPoint) proj.createPoint(0.0, 0.0);
-                ProjPoint ppt2 = (ProjPoint) proj.createPoint(0.0, 0.0);
-                ((Mercator) proj).fromGeo(pt1, ppt1);
-                ((Mercator) proj).fromGeo(pt2, ppt2);
-                //scale = ppt2.getX()-ppt1.getX();
-                scale =  ((extent.maxX()-extent.minX())/ (ppt2.getX()-ppt1.getX()) ) *
-                //scale = ((extent.maxX()-extent.minX())/ getWidth());// *
-                        (dpi / 2.54 * 100.0 * 1852.0 * 60.0) /
-                        getWidth();
-        } */
-        return proj.getScale(extent.minX(), extent.maxX(), getWidth(), dpi);
-    }
-
-    public String getGeoScaleAsString(String fmt) {
-        DecimalFormat format = new DecimalFormat(fmt);
-
-        return "1:" + format.format(getGeoScale());
     }
 }

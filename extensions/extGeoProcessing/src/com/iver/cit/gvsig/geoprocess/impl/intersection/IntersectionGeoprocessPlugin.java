@@ -76,8 +76,6 @@ package com.iver.cit.gvsig.geoprocess.impl.intersection;
 
 import java.net.URL;
 
-import org.cresques.cts.IProjection;
-
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
@@ -109,7 +107,6 @@ public class IntersectionGeoprocessPlugin extends GeoprocessPluginAbstract imple
 		View vista = (View)PluginServices.getMDIManager().getActiveWindow();
 		MapContext mapContext = vista.getModel().getMapContext();
         FLayers layers = mapContext.getLayers();
-        IProjection proj = mapContext.getProjection();
         String titleText = PluginServices.getText(this,
 		"Interseccion._Introduccion_de_datos");
         GeoProcessingOverlayPanel2 dataSelectionPanel = 

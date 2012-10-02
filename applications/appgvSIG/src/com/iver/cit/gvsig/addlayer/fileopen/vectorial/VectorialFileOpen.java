@@ -26,7 +26,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -99,7 +99,8 @@ public class VectorialFileOpen extends AbstractFileOpen{
 	 * (non-Javadoc)
 	 * @see org.gvsig.raster.gui.wizards.IFileOpen#execute(java.io.File[])
 	 */
-	public Rectangle2D createLayer(File file, MapControl mapControl, String driverName, IProjection proj) {
+	public Rectangle2D createLayer(File file, MapControl mapControl,
+			String driverName, CoordinateReferenceSystem crs) {
 		FLayer lyr = null;
 		Driver driver = null;
 
@@ -138,7 +139,7 @@ public class VectorialFileOpen extends AbstractFileOpen{
 
 			if (driver instanceof VectorialFileDriver) {
 				lyr = LayerFactory.createLayer(layerName,
-						(VectorialFileDriver) driver, file, proj, mapControl
+						(VectorialFileDriver) driver, file, crs, mapControl
 								.getViewPort().getBackColor());
 			}
 

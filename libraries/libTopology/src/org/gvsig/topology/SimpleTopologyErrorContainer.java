@@ -56,8 +56,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.cit.gvsig.drivers.TopologyErrorMemoryDriver;
@@ -140,10 +141,8 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 
 	//FIXME Redesign getTopologyErrorsByLyr to reduce code duplication
 	public List<TopologyError> getTopologyErrors(String ruleName,
-			int shapeType, FLyrVect sourceLayer, IProjection desiredProjection,
-			boolean includeExceptions) {
-		
-		
+			int shapeType, FLyrVect sourceLayer,
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {		
 		List<TopologyError> solution = new ArrayList<TopologyError>();
 		Iterator<TopologyError> iterator = topologyErrors.iterator();
 		while (iterator.hasNext()) {
@@ -165,7 +164,7 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 				continue;
 
 			// source layer or destination layer filter
-			IProjection errorProjection = null;
+			CoordinateReferenceSystem errorCrs = null;
 			FLyrVect originLayer = error.getOriginLayer();
 			if (!(originLayer != null && originLayer.equals(sourceLayer))) {
 				FLyrVect destinationLayer = error.getDestinationLayer();
@@ -173,19 +172,19 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 						.equals(sourceLayer))) {
 					continue;
 				} else {
-					errorProjection = destinationLayer.getSource()
-							.getProjection();
+					errorCrs = destinationLayer.getSource()
+							.getCrs();
 				}
 			} else {
-				errorProjection = originLayer.getSource().getProjection();
+				errorCrs = originLayer.getSource().getCrs();
 			}
 
 			// reprojection
-			if (errorProjection != null
-					&& desiredProjection != null
-					&& !(errorProjection.getAbrev()
-							.equalsIgnoreCase(desiredProjection.getAbrev()))) {
-				ICoordTrans trans = errorProjection.getCT(desiredProjection);
+			if (errorCrs != null
+					&& desiredCrs != null
+					&& !(errorCrs.getName()
+							.equals(desiredCrs.getName()))) {
+				MathTransform trans = ProjectionUtils.getCrsTransform(errorCrs, desiredCrs);
 				error.getGeometry().reProject(trans);
 			}
 
@@ -196,7 +195,7 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 	}
 
 	public List<TopologyError> getTopologyErrorsByLyr(FLyrVect layer,
-			IProjection desiredProjection, boolean includeExceptions) {
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
 		List<TopologyError> solution = new ArrayList<TopologyError>();
 		Iterator<TopologyError> iterator = topologyErrors.iterator();
 		while (iterator.hasNext()) {
@@ -208,24 +207,23 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 					continue;
 			}// if
 
-			IProjection errorProjection = null;
+			CoordinateReferenceSystem errorCrs = null;
 			FLyrVect originLayer = error.getOriginLayer();
 			FLyrVect destinationLayer = null;
 			if (originLayer == null) {
 				destinationLayer = error.getDestinationLayer();
 				if (destinationLayer != null) {
-					errorProjection = destinationLayer.getSource().getProjection();
+					errorCrs = destinationLayer.getSource().getCrs();
 				}
 			} else {
-				errorProjection = originLayer.getSource().getProjection();
+				errorCrs = originLayer.getSource().getCrs();
 			}
 
 			// reprojection
-			if (errorProjection != null
-					&& desiredProjection != null
-					&& !(errorProjection.getAbrev()
-							.equalsIgnoreCase(desiredProjection.getAbrev()))) {
-				ICoordTrans trans = errorProjection.getCT(desiredProjection);
+			if (errorCrs != null && desiredCrs != null
+					&& !(errorCrs.getName().equals(desiredCrs.getName()))) {
+				MathTransform trans = ProjectionUtils.getCrsTransform(errorCrs,
+						desiredCrs);
 				error.getGeometry().reProject(trans);
 			}
 			if(layer == originLayer || layer == destinationLayer)
@@ -236,7 +234,7 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 	}
 
 	public List<TopologyError> getTopologyErrorsByRule(String ruleName,
-			IProjection desiredProjection, boolean includeExceptions) {
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
 		List<TopologyError> solution = new ArrayList<TopologyError>();
 		Iterator<TopologyError> iterator = topologyErrors.iterator();
 		while (iterator.hasNext()) {
@@ -254,23 +252,22 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 			if (!rule.getName().equalsIgnoreCase(ruleName))
 				continue;
 
-			IProjection errorProjection = null;
+			CoordinateReferenceSystem errorCrs = null;
 			FLyrVect originLayer = error.getOriginLayer();
 			if (originLayer == null) {
 				FLyrVect destinationLayer = error.getDestinationLayer();
 				if (destinationLayer != null) {
-					errorProjection = destinationLayer.getSource().getProjection();
+					errorCrs = destinationLayer.getSource().getCrs();
 				}
 			} else {
-				errorProjection = originLayer.getSource().getProjection();
+				errorCrs = originLayer.getSource().getCrs();
 			}
 
 			// reprojection
-			if (errorProjection != null
-					&& desiredProjection != null
-					&& !(errorProjection.getAbrev()
-							.equalsIgnoreCase(desiredProjection.getAbrev()))) {
-				ICoordTrans trans = errorProjection.getCT(desiredProjection);
+			if (errorCrs != null && desiredCrs != null
+					&& !(errorCrs.getName().equals(desiredCrs.getName()))) {
+				MathTransform trans = ProjectionUtils.getCrsTransform(errorCrs,
+						desiredCrs);
 				error.getGeometry().reProject(trans);
 			}
 
@@ -281,7 +278,7 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 	}
 
 	public List<TopologyError> getTopologyErrorsByShapeType(int shapeType,
-			IProjection desiredProjection, boolean includeExceptions) {
+			CoordinateReferenceSystem desiredCrs, boolean includeExceptions) {
 		List<TopologyError> solution = new ArrayList<TopologyError>();
 		Iterator<TopologyError> iterator = topologyErrors.iterator();
 		while (iterator.hasNext()) {
@@ -297,23 +294,21 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 			if (error.getShapeType() != shapeType)
 				continue;
 			
-			IProjection errorProjection = null;
+			CoordinateReferenceSystem errorCrs = null;
 			FLyrVect originLayer = error.getOriginLayer();
 			if (originLayer == null) {
 				FLyrVect destinationLayer = error.getDestinationLayer();
 				if (destinationLayer != null) {
-					errorProjection = destinationLayer.getSource().getProjection();
+					errorCrs = destinationLayer.getSource().getCrs();
 				}
 			} else {
-				errorProjection = originLayer.getSource().getProjection();
+				errorCrs = originLayer.getSource().getCrs();
 			}
 
 			// reprojection
-			if (errorProjection != null
-					&& desiredProjection != null
-					&& !(errorProjection.getAbrev()
-							.equalsIgnoreCase(desiredProjection.getAbrev()))) {
-				ICoordTrans trans = errorProjection.getCT(desiredProjection);
+			if (errorCrs != null && desiredCrs != null
+					&& !(errorCrs.getName().equals(desiredCrs.getName()))) {
+				MathTransform trans = ProjectionUtils.getCrsTransform(errorCrs, desiredCrs);
 				error.getGeometry().reProject(trans);
 			}
 			solution.add(error);
@@ -413,11 +408,11 @@ public class SimpleTopologyErrorContainer implements ITopologyErrorContainer, Cl
 	 * @param name name of the layer
 	 * @projection projection of the layer
 	 */
-	public FLyrVect getAsFMapLayer(String name, IProjection projection) {
+	public FLyrVect getAsFMapLayer(String name, CoordinateReferenceSystem crs) {
 		FLayerGenericVectorial solution = new
 		 	FLayerGenericVectorial();
 		solution.setName(name);
-		solution.setProjection(projection);
+		solution.setCrs(crs);
 		solution.setDriver(new TopologyErrorMemoryDriver(name, this));
 		try {
 			solution.load();

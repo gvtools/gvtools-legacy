@@ -18,8 +18,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.PrintQuality;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureIterator;
@@ -27,6 +26,8 @@ import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.feature.collection.SimpleFeatureIteratorImpl;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.instruction.FieldNotFoundException;
@@ -45,7 +46,6 @@ import com.iver.cit.gvsig.fmap.core.DefaultFeature;
 import com.iver.cit.gvsig.fmap.core.FGeometry;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
-import com.iver.cit.gvsig.fmap.core.Gt2Geometry;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.IRow;
@@ -157,19 +157,18 @@ public class GTFLyrVect extends FLyrVect {
 		rAux = (Rectangle2D) computeFullExtent();
 
 		// Si existe reproyección, reproyectar el extent
-		if (!(this.getProjection() != null
-				&& this.getMapContext().getProjection() != null && this
-				.getProjection().getAbrev()
-				.equals(this.getMapContext().getProjection().getAbrev()))) {
-			ICoordTrans ct = getCoordTrans();
+		if (!(this.getCrs() != null && this.getMapContext().getCrs() != null && this
+				.getCrs().getName()
+				.equals(this.getMapContext().getCrs().getName()))) {
+			MathTransform transform = getCrsTransform();
 			try {
-				if (ct != null) {
+				if (transform != null) {
 					Point2D pt1 = new Point2D.Double(rAux.getMinX(),
 							rAux.getMinY());
 					Point2D pt2 = new Point2D.Double(rAux.getMaxX(),
 							rAux.getMaxY());
-					pt1 = ct.convert(pt1, null);
-					pt2 = ct.convert(pt2, null);
+					pt1 = ProjectionUtils.transform(pt1, transform);
+					pt2 = ProjectionUtils.transform(pt2, transform);
 					rAux = new Rectangle2D.Double();
 					rAux.setFrameFromDiagonal(pt1, pt2);
 				}
@@ -245,7 +244,7 @@ public class GTFLyrVect extends FLyrVect {
 				} else {
 					it = getFeatureIterator(viewPort.getAdjustedExtent(),
 							fieldList.toArray(new String[fieldList.size()]),
-							viewPort.getProjection());
+							viewPort.getCrs());
 				}
 
 				ZSort zSort = ((IVectorLegend) getLegend()).getZSort();
@@ -554,7 +553,7 @@ public class GTFLyrVect extends FLyrVect {
 						it = getFeatureIterator(
 								viewPort.getAdjustedExtent(),
 								fieldList.toArray(new String[fieldList.size()]),
-								viewPort.getProjection());
+								viewPort.getCrs());
 					}
 
 					// Iteration over each feature
@@ -1367,7 +1366,7 @@ public class GTFLyrVect extends FLyrVect {
 		clonedLayer.setVisible(isVisible());
 		clonedLayer.setISpatialIndex(getISpatialIndex());
 		clonedLayer.setName(getName());
-		clonedLayer.setCoordTrans(getCoordTrans());
+		clonedLayer.setCrsTransform(getCrsTransform());
 
 		clonedLayer.setLegend((IVectorLegend) getLegend().cloneLegend());
 
@@ -1672,9 +1671,9 @@ public class GTFLyrVect extends FLyrVect {
 	}
 
 	private IFeatureIterator getFeatureIterator(Rectangle2D adjustedExtent,
-			String[] array, IProjection projection) throws ReadDriverException {
+			String[] array, CoordinateReferenceSystem crs) throws ReadDriverException {
 		try {
-			return new GTFeatureIterator(adjustedExtent, array, projection);
+			return new GTFeatureIterator(adjustedExtent, array, crs);
 		} catch (IOException e) {
 			throw new ReadDriverException(getName(), e);
 		}
@@ -1684,7 +1683,7 @@ public class GTFLyrVect extends FLyrVect {
 		private SimpleFeatureIterator delegate;
 
 		private GTFeatureIterator(Rectangle2D extent, String[] array,
-				IProjection projection) throws IOException {
+				CoordinateReferenceSystem crs) throws IOException {
 			// TODO geotools refactoring: no extent/array/projection considered
 			delegate = new SimpleFeatureIteratorImpl(source.getFeatures());
 		}

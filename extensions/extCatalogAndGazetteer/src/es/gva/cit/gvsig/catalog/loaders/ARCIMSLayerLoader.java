@@ -3,6 +3,7 @@ package es.gva.cit.gvsig.catalog.loaders;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.i18n.Messages;
 
 import com.iver.andami.PluginServices;
@@ -106,7 +107,7 @@ public class ARCIMSLayerLoader extends LayerLoader {
 		String protocol = getResource().getProtocol();
 		BaseView activeView = 
 			(BaseView) PluginServices.getMDIManager().getActiveWindow();
-		String srs = activeView.getProjection().getAbrev();
+		String srs = ProjectionUtils.getAbrev(activeView.getCrs());
 		FLayer flayer = null;
 				
 		Map args = new HashMap();

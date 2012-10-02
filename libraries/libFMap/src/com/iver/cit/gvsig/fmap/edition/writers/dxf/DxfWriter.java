@@ -6,12 +6,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
-import org.cresques.cts.IProjection;
 import org.cresques.geo.Point3D;
 import org.cresques.io.DxfFile;
 import org.cresques.io.DxfGroup;
 import org.cresques.io.DxfGroupVector;
 import org.cresques.px.dxf.DxfEntityMaker;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -62,7 +62,7 @@ public class DxfWriter extends AbstractWriter implements ISpatialWriter {
 
 	private DxfFile.EntityFactory entityMaker;
 
-	private IProjection proj = null;
+	private CoordinateReferenceSystem crs = null;
 
 	private DxfFile dxfFile;
 
@@ -121,11 +121,11 @@ public void preProcess() throws StartWriterVisitorException {
 		// NOTA: La proyección no se usa absolutamente para nada (al menos
 		// por ahora). Las entidades se escribirán con las coordenadas con
 		// las que se crean.
-		if (proj == null) {
+		if (crs == null) {
 			throw new StartWriterVisitorException (getName(),null);
 		}
 
-		entityMaker = new DxfEntityMaker(proj);
+		entityMaker = new DxfEntityMaker(crs);
 		FieldDescription[] fieldDescriptions=getTableDefinition().getFieldsDesc();
 		for (int i=0;i<fieldDescriptions.length;i++){
 			if (fieldDescriptions[i].getFieldName().equals("Text")){
@@ -1344,8 +1344,8 @@ public void preProcess() throws StartWriterVisitorException {
 	/**
 	 * @return Returns the proj.
 	 */
-	public IProjection getProjection() {
-		return proj;
+	public CoordinateReferenceSystem getCrs() {
+		return crs;
 	}
 
 	/**
@@ -1353,11 +1353,11 @@ public void preProcess() throws StartWriterVisitorException {
 	 * ahora lo necesito para que funcione. TODO: Hablar con Luis para que lo
 	 * aclare.
 	 *
-	 * @param proj
+	 * @param crs
 	 *            The proj to set.
 	 */
-	public void setProjection(IProjection proj) {
-		this.proj = proj;
+	public void setCrs(CoordinateReferenceSystem crs) {
+		this.crs = crs;
 	}
 
 	public boolean canSaveEdits() {

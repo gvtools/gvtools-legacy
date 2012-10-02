@@ -57,10 +57,10 @@ import java.net.URL;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
@@ -73,10 +73,9 @@ public class DifferenceTest extends TestCase {
 	private String SHP_DRIVER_NAME = "gvSIG shp driver";
 	private String DXF_DRIVER_NAME = "gvSIG DXF Memory Driver";
 	
-	private IProjection PROJECTION_DEFAULT = 
-		CRSFactory.getCRS("EPSG:23030");
-	private IProjection newProjection = 
-		CRSFactory.getCRS("EPSG:23029");
+	private CoordinateReferenceSystem DEFAULT_CRS = ProjectionUtils
+			.getCRS("EPSG:23030");
+	private CoordinateReferenceSystem newCrs = ProjectionUtils.getCRS("EPSG:23029");
 	
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -104,7 +103,7 @@ public class DifferenceTest extends TestCase {
 		File file = new File(baseDataPath, fileName);
 		return LayerFactory.createLayer(fileName, 
 										driverName, 
-										file, PROJECTION_DEFAULT);
+										file, DEFAULT_CRS);
 	}
 	
 	

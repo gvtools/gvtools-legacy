@@ -8,8 +8,8 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.cresques.cts.ICoordTrans;
 import org.gvsig.fmap.geometries.iso.AbstractGeometry;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -134,9 +134,9 @@ public interface IGeometry extends Shape, Serializable, AbstractGeometry{
 	/**
 	 * Reproyecta la geometría a partir del transformador de coordenadas.
 	 *
-	 * @param ct Coordinate Transformer.
+	 * @param trans Coordinate Transformer.
 	 */
-	void reProject(ICoordTrans ct);
+	void reProject(MathTransform trans);
 
 	/**
 	 * Devuelve el GeneralPathXIterator con la información relativa a la geometría.

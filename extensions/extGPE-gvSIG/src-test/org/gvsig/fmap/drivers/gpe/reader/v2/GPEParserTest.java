@@ -6,16 +6,16 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.drivers.gpe.reader.GMLVectorialDriver;
 import org.gvsig.gpe.GPERegister;
 import org.gvsig.gpe.exceptions.ParserCreationException;
 import org.gvsig.gpe.parser.GPEParser;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
@@ -113,8 +113,8 @@ public abstract class GPEParserTest extends TestCase {
 	 * @throws Exception
 	 */
 	public void testParse() throws Exception{
-		IProjection proj = CRSFactory.getCRS("EPSG:23030");
-		ViewPort vp = new ViewPort(proj);
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
+		ViewPort vp = new ViewPort(crs);
 		MapContext mapContext = new MapContext(vp);
 		mapControl = new MapControl();
 		mapControl.setMapContext(mapContext);
@@ -152,7 +152,8 @@ public abstract class GPEParserTest extends TestCase {
 	 */
 	public FLyrVect getLayer(){
 		if (layer == null){
-			layer = (FLyrVect)LayerFactory.createLayer("Test", driver, CRSFactory.getCRS("EPSG:23030"));
+			layer = (FLyrVect) LayerFactory.createLayer("Test", driver,
+					ProjectionUtils.getCRS("EPSG:23030"));
 		}
 		return layer;
 	}

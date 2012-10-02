@@ -278,7 +278,7 @@ public class MappedPositionPanel extends BoxLayoutPanel {
 										mapCtrl.setPrevTool();
 										
 										if(!linksList.existsLinksLyr()){
-											FLyrVect linkLyr = linksList.getLinkLyr(currentView.getProjection());
+											FLyrVect linkLyr = linksList.getLinkLyr(currentView.getCrs());
 											MapContext mapContext = currentView.getMapContext();
 											mapContext.beginAtomicEvent();
 											mapContext.getLayers().addLayer(linkLyr);

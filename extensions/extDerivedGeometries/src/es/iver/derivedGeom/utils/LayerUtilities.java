@@ -24,7 +24,7 @@ package es.iver.derivedGeom.utils;
 
 import java.io.File;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.Driver;
 import com.iver.cit.gvsig.fmap.MapContext;
@@ -55,14 +55,16 @@ public class LayerUtilities {
 	 * @param path the path where create the shape layer files (included the file name and main shape extension).
 	 * @param name the name of the new layer.
 	 * @param geometryType type of geometries for the new layer. (See {@link FShape FShape}).
-	 * @param projection the projection of the new layer.
+	 * @param crs the projection of the new layer.
 	 * @param fieldsDesc properties of the fields of the new layer.
 	 *
 	 * @return the new layer created, or <code>null</code> if has happened any problem
 	 * 
 	 * @throws Exception if fails creating the layer
 	 */
-	public static FLyrVect createShapeLayer(MapContext mapContext, File path, String name, int geometryType, IProjection projection, FieldDescription[] fieldsDesc) throws Exception {
+	public static FLyrVect createShapeLayer(MapContext mapContext, File path,
+			String name, int geometryType, CoordinateReferenceSystem crs,
+			FieldDescription[] fieldsDesc) throws Exception {
 		/* Gets the shape driver */
 		Driver drv = LayerFactory.getDM().getDriver(SHAPE_DRIVER_ID);
 
@@ -85,7 +87,7 @@ public class LayerUtilities {
 		writer.postProcess();
 
 		/* Creates the layer */
-		FLyrVect layer =  (FLyrVect) LayerFactory.createLayer(name, (VectorialFileDriver) drv, path, projection);
+		FLyrVect layer =  (FLyrVect) LayerFactory.createLayer(name, (VectorialFileDriver) drv, path, crs);
 
 //		/* Sets the geometry layer rules if layer has polygons */
 //		VectorialEditableAdapter vea = (VectorialEditableAdapter) layer.getSource();
@@ -104,7 +106,7 @@ public class LayerUtilities {
 	 * 
 	 * @param path the path where the shape layer files are.
 	 * @param name the name of the layer, if <code>null</code> will have the file name.
-	 * @param projection the projection of the layer.
+	 * @param crs the projection of the layer.
 	 *
 	 * @return the new layer created, or <code>null</code> if has happened any problem
 	 * 
@@ -112,14 +114,15 @@ public class LayerUtilities {
 	 * 
 	 * @see LayerFactory#createLayer(String, VectorialFileDriver, File, IProjection)
 	 */
-	public static FLyrVect getShapeLayer(File path, String name, IProjection projection) throws Exception {
+	public static FLyrVect getShapeLayer(File path, String name,
+			CoordinateReferenceSystem crs) throws Exception {
 		FLyrVect layer = null;
 
 		/* Gets the shape driver */
 		Driver driver = LayerFactory.getDM().getDriver(SHAPE_DRIVER_ID);
 
 		/* Creates the layer */
-		layer = (FLyrVect) LayerFactory.createLayer(name, (VectorialFileDriver) driver, path, projection);
+		layer = (FLyrVect) LayerFactory.createLayer(name, (VectorialFileDriver) driver, path, crs);
 
 		/* Returns the layer got */
 		return layer;

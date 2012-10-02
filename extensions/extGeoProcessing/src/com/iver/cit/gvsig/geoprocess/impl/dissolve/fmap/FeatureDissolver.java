@@ -81,7 +81,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import org.cresques.cts.ICoordTrans;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.driver.DriverException;
@@ -133,7 +134,7 @@ public class FeatureDissolver {
 	 */
 	protected SelectableDataSource recordset;
 
-	protected ICoordTrans ct;
+	protected MathTransform ct;
 
 	/**
 	 * Is used to do spatial querys (looking for adjacent polygons to visited
@@ -198,7 +199,7 @@ public class FeatureDissolver {
 				dissolvedLayer = (FLyrVect) layer;
 				geometryType = dissolvedLayer.getShapeType();
 				recordset = ((AlphanumericData) layer).getRecordset();
-				ct = dissolvedLayer.getCoordTrans();
+				ct = dissolvedLayer.getCrsTransform();
 				featureProcessor.start();
 			} catch (ReadDriverException e) {
 				throw new GeoprocessException(
@@ -419,7 +420,7 @@ public class FeatureDissolver {
 			g1.reProject(ct);
 		geometries.add(g1.toJTSGeometry());
 		if(dissolveCriteria instanceof ISpatialDissolveCriteria){
-			((ISpatialDissolveCriteria)dissolveCriteria).setCoordTrans(ct);
+			((ISpatialDissolveCriteria)dissolveCriteria).setCrsTransform(ct);
 			((ISpatialDissolveCriteria)dissolveCriteria).setFirstGeometry(g1);
 		}
 		FunctionSummarizer sumarizer = new FunctionSummarizer(
@@ -595,7 +596,7 @@ public class FeatureDissolver {
 		geometries.add(jtsGeo);//it saves jts geometries
 
 		if(dissolveCriteria instanceof ISpatialDissolveCriteria){
-			((ISpatialDissolveCriteria)dissolveCriteria).setCoordTrans(ct);
+			((ISpatialDissolveCriteria)dissolveCriteria).setCrsTransform(ct);
 			((ISpatialDissolveCriteria)dissolveCriteria).setFirstGeometry(g1);
 		}
 		FunctionSummarizer sumarizer = new FunctionSummarizer(
@@ -621,7 +622,7 @@ public class FeatureDissolver {
 			 * */
 			Rectangle2D rect = sEntry.g.getBounds2D();
 			if(ct != null)
-				rect = ct.convert(rect);
+				rect = ProjectionUtils.transform(rect, ct);
 			double xmin = rect.getMinX();
 			double ymin = rect.getMinY();
 			double xmax = rect.getMaxX();

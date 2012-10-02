@@ -2,12 +2,7 @@ package org.gvsig.fmap.drivers.gpe.writer.schema;
 
 import java.sql.Types;
 
-import org.opengis.feature.type.AttributeType;
-import org.opengis.feature.type.FeatureType;
-
 import com.iver.cit.gvsig.fmap.core.FShape;
-import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
-import com.iver.cit.gvsig.fmap.drivers.LayerDefinition;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -81,67 +76,6 @@ import com.iver.cit.gvsig.fmap.drivers.LayerDefinition;
  * @author Jorge Piera Llodrá (piera_jor@gva.es)
  */
 public class GMLTypesConversor {
-
-//	 /**
-//	  * Make a conversion between the gvSIG LayerDefinition and a geotools
-//	  * FeatureType.
-//	  * @param schema
-//	  * gvSIG feature schema that contains a list of attributes
-//	  * @return
-//	 * @throws SchemaException 
-//	 * @throws  
-//	  */
-//	 public static FeatureType featureTypefromGvSIGToGeotools(LayerDefinition lyrDef) throws Exception{
-//		 FieldDescription[] fDescription = lyrDef.getFieldsDesc();
-//		 AttributeType[] types = new AttributeType[fDescription.length];
-//		 for(int i=0 ; i<fDescription.length ; i++){
-//			 types[i] = attributteTypefromGvSIGToGeotools(fDescription[i]);
-//		 }
-//		 String typeName = lyrDef.getName();
-//		 FeatureType featureType = FeatureTypeFacBuilder.newFeatureType(types,typeName);					
-//		 return featureType;
-//	 }	 
-	 
-	 
-//	/**
-//	 * Make a conversion between the gvSIG FieldDescription and a geotools
-//	 * AttributeType.
-//	 * @param fDescription
-//	 * gvSIG field description
-//	 * @return
-//	 */
-//	 private static AttributeType attributteTypefromGvSIGToGeotools(FieldDescription fDescrition){
-//		 AttributeType type = AttributeTypeFactory.newAttributeType(fDescrition.getFieldName(),
-//				 typesFromgvSIGtoGeotools(fDescrition.getFieldType()));
-//		 
-//		 return type;
-//	 }	
-	 
-	 
-	 /**
-	  * Type conversor from gvSIG types to geotools types
-	  * @param type
-	  * @return
-	  */
-	 private static Class typesFromgvSIGtoGeotools(int type){
-		 switch (type) {
-         case Types.SMALLINT:
-        	 return Integer.class;
-         case Types.BIT:
-        	 return Boolean.class;
-         case Types.BOOLEAN:
-        	 return Boolean.class;
-         case Types.VARCHAR:
-        	 return String.class;
-         case Types.DOUBLE:
-        	 return Double.class;
-         case Types.INTEGER:
-        	 return Integer.class;
-         default:
-        	 return String.class;        
-		 }
-	 } 
-	 
 		/**	
 		 * From gvSIG types to xlink types used in GML 
 		 * @param gmlType
@@ -217,55 +151,4 @@ public class GMLTypesConversor {
         	 return "gml:GeometryPropertyType";        
 		 }        	
 	 }	
-	
-	/**
-	 * From Java to gvSIG types
-	 * @param type
-	 * @return
-	 */
-	public static int javaToGvSIGTypes(Class type){
-		if (type == String.class){
-			return Types.VARCHAR;
-		}
-		if (type == Integer.class){
-			return Types.INTEGER;
-		}
-		if (type == Double.class){
-			return Types.DOUBLE;
-		}
-		if (type == Float.class){
-			return Types.FLOAT;
-		}
-		if (type == Long.class){
-			return Types.INTEGER;
-		}
-		return Types.VARCHAR;
-		
-	}
-
-
-	public static int gmlToGvSigType(String gmlType) {
-		if (gmlType.toUpperCase().compareTo("STRING") == 0){
-			return Types.VARCHAR;
-		}
-		if (gmlType.toUpperCase().compareTo("\"\"") == 0){
-			return Types.VARCHAR;
-		}
-		if (gmlType.toUpperCase().compareTo("INTEGER") == 0){
-			return  Types.INTEGER;
-		}
-		if (gmlType.toUpperCase().compareTo("INT") == 0){
-			return Types.INTEGER;
-		}
-		if (gmlType.toUpperCase().compareTo("LONG") == 0){
-			return Types.INTEGER;
-		}
-		if (gmlType.toUpperCase().compareTo("DOUBLE") == 0){
-			return Types.DOUBLE;
-		}
-		if (gmlType.toUpperCase().compareTo("FLOAT") == 0){
-			return Types.DOUBLE;
-		}
-		return Types.VARCHAR;		
-	}
 }

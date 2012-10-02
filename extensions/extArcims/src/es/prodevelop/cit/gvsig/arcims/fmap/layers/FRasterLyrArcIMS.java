@@ -69,7 +69,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.ViewPortData;
 import org.cresques.px.Extent;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
@@ -98,13 +98,13 @@ import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformation;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformationLayer;
 import org.gvsig.remoteClient.utils.Utilities;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.Tiling;
@@ -209,7 +209,7 @@ public class FRasterLyrArcIMS extends FLyrRasterSE {
             // ----------------------------
             URL _true_host = ArcImsProtocolHandler.getUrlWithServlet(new URL(
                         _host));
-            IProjection _true_srs = CRSFactory.getCRS(_srs);
+            CoordinateReferenceSystem _true_srs = ProjectionUtils.getCRS(_srs);
 
             FMapRasterArcImsDriver _drv = new FMapRasterArcImsDriver(_true_host.toString(),
                     _service_name, ServiceInfoTags.vIMAGESERVICE);
@@ -230,9 +230,8 @@ public class FRasterLyrArcIMS extends FLyrRasterSE {
 
             if ((_si.getFeaturecoordsys() == null) ||
                     (_si.getFeaturecoordsys().equals(""))) {
-                _si.setFeaturecoordsys(_true_srs.getAbrev()
-                                                .substring(ServiceInfoTags.vINI_SRS.length())
-                                                .trim());
+				_si.setFeaturecoordsys(ProjectionUtils.getAbrev(_true_srs)
+						.substring(ServiceInfoTags.vINI_SRS.length()).trim());
                 logger.warn("Server provides no SRS. ");
             }
 
@@ -264,7 +263,7 @@ public class FRasterLyrArcIMS extends FLyrRasterSE {
 
             // ===================================
             setLayerQuery(_layer_query);
-            setProjection(_true_srs);
+            setCrs(_true_srs);
             setName(_layer_name);
         } catch (Exception ex) {
         	throw new ConnectionException("While creating FRasterLyrArcIMS from Map", ex);
@@ -359,7 +358,7 @@ public class FRasterLyrArcIMS extends FLyrRasterSE {
             arcimsStatus.setLayerIds(Utilities.createVector(layerQuery, ","));
             arcimsStatus.setServer(host.toString());
             arcimsStatus.setService(service);
-            arcimsStatus.setSrs(this.getProjection().getAbrev());
+			arcimsStatus.setSrs(ProjectionUtils.getAbrev(getCrs()));
             arcimsStatus.setTransparency(this.arcImsTransparency);
 
             // We need to cast because driver returns an Object
@@ -374,7 +373,7 @@ public class FRasterLyrArcIMS extends FLyrRasterSE {
                 this.getDataWorldFile(bBox, sz));
 
             // ------------------------------ START
-            ViewPortData vpData = new ViewPortData(vp.getProjection(),
+            ViewPortData vpData = new ViewPortData(vp.getCrs(),
                     new Extent(bBox), sz);
             vpData.setMat(vp.getAffineTransform());
 
@@ -595,7 +594,7 @@ public class FRasterLyrArcIMS extends FLyrRasterSE {
 		}
 
 		//Cargamos el dataset con el raster de disco.
-		layerRaster = FLyrRasterSE.createLayer("", file.getAbsolutePath(), vp.getProjection());
+		layerRaster = FLyrRasterSE.createLayer("", file.getAbsolutePath(), vp.getCrs());
 		layerRaster.getRender().setBufferFactory(layerRaster.getBufferFactory());
 
 		//Obtenemos la tabla de color del raster abierto ya que se le va a sustituir la lista
@@ -1373,7 +1372,7 @@ public class FRasterLyrArcIMS extends FLyrRasterSE {
         layer.setLayerQuery(this.layerQuery);
         layer.setArcimsStatus(this.getArcimsStatus());
         layer.visualStatus = this.visualStatus;
-        layer.setProjection(this.getProjection());
+        layer.setCrs(this.getCrs());
         
 		ArrayList filters = getRender().getFilterList().getStatusCloned();
 		if(layer.getRender().getFilterList() == null)

@@ -69,7 +69,7 @@ public class VectorListener implements ActionListener, DataInputContainerListene
 	 */
 	private void setDataView(VectorPanel prepPanel) {
 		this.panel = prepPanel;
-		process = new VectorProcess(lyr, null, data.getProjLayer());
+		process = new VectorProcess(lyr, null, data.getLayerCrs());
 		panel.getContourLinesPanel().getDistance().addValueChangedListener(this);
 		panel.getPotracePanel().getPolicy().addItemListener(this);
 		panel.getAlgorithm().addItemListener(this);

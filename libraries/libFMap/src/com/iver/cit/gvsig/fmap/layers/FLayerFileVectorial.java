@@ -3,8 +3,10 @@ package com.iver.cit.gvsig.fmap.layers;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.geotools.referencing.CRS;
 import org.gvsig.tools.file.PathGenerator;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -15,7 +17,6 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.exceptions.layers.NameLayerException;
 import com.iver.cit.gvsig.exceptions.layers.ProjectionLayerException;
 import com.iver.cit.gvsig.exceptions.layers.XMLLayerException;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.drivers.WithDefaultLegend;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
@@ -34,26 +35,21 @@ public class FLayerFileVectorial extends FLyrVect{
 		super();
 	}
 
-	public FLayerFileVectorial(String name, String fileName,String driverName,String projectionName) throws Exception {
+	public FLayerFileVectorial(String name, String fileName,String driverName,String crsName) throws Exception {
 		super();
-
 		this.setName(name);
-
 		this.setFileName(fileName);
-
 		this.setDriverByName(driverName);
-
-		this.setProjectionByName(projectionName);
+		this.setCrs(crsName);
 	}
 
 	/* Esto deberia ir en el FLyrDefault */
-	public void setProjectionByName(String projectionName) throws Exception{
-		IProjection proj = CRSFactory.getCRS(projectionName);
-		if (proj == null) {
-			throw new Exception("No se ha encontrado la proyeccion: "+ projectionName);
+	public void setCrs(String crsName) throws Exception{
+		CoordinateReferenceSystem crs = CRS.decode(crsName);
+		if (crs == null) {
+			throw new Exception("No se ha encontrado la proyeccion: " + crsName);
 		}
-		this.setProjection(proj);
-
+		setCrs(crs);
 	}
 
 	public void setFileName(String filePath) throws FileNotFoundException{
@@ -125,7 +121,7 @@ public class FLayerFileVectorial extends FLyrVect{
 			this.setAvailable(false);
 			throw new DriverLayerException(getName(),null);
 		}
-		if (this.getProjection() == null) {
+		if (this.getCrs() == null) {
 			this.setAvailable(false);
 			throw new ProjectionLayerException(getName(),null);
 		}
@@ -174,16 +170,16 @@ public class FLayerFileVectorial extends FLyrVect{
 	}
 
 	public void setXMLEntity(XMLEntity xml) throws XMLException {
-        IProjection proj = null;
+        CoordinateReferenceSystem crs = null;
         if (xml.contains("proj")) {
-            proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
+            crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
         }
         else
         {
-            proj = this.getMapContext().getViewPort().getProjection();
+            crs = this.getMapContext().getViewPort().getCrs();
         }
 		this.setName(xml.getName());
-		this.setProjection(proj);
+		this.setCrs(crs);
 		try {
 			this.setDriver(
 				(VectorialFileDriver)LayerFactory.getDM().getDriver(

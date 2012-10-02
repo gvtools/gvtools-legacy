@@ -32,19 +32,18 @@ import java.util.Collection;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.fmap.algorithm.contouring.LoopRemover;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.operation.linemerge.LineSequencer;
 import com.vividsolutions.jts.operation.polygonize.Polygonizer;
 
 public class TestCreatePolygon extends TestCase {
@@ -59,10 +58,10 @@ public class TestCreatePolygon extends TestCase {
 
 		// Setup del factory de DataSources
 
-		IProjection prj = CRSFactory.getCRS("EPSG:23030");
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 		File shpFile = new File("test_files/contour3.shp");
 		lyr = (FLyrVect) LayerFactory.createLayer("Contour", "gvSIG shp driver",
-				shpFile, prj);
+				shpFile, crs);
 		
 	}
 

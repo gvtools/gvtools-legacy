@@ -68,8 +68,9 @@ import oracle.sql.STRUCT;
 import oracle.sql.TIMESTAMP;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.driverManager.IDelayedDriver;
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
@@ -82,14 +83,12 @@ import com.hardcode.gdbms.engine.values.DoubleValue;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.cit.gvsig.fmap.core.DefaultFeature;
-import com.iver.cit.gvsig.fmap.core.FGeometry;
 import com.iver.cit.gvsig.fmap.core.FGeometryCollection;
 import com.iver.cit.gvsig.fmap.core.FNullGeometry;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.ICanReproject;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.ConnectionJDBC;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
@@ -368,10 +367,14 @@ public class OracleSpatialDriver extends DefaultJDBCDriver
         workingAreaInViewsCS = lyrDef.getWorkingArea();
         
         if ((workingAreaInViewsCS != null) && isTableHasSrid() && (getEpsgSRID() != null)) {
-            IProjection viewProj = CRSFactory.getCRS(destProj);
-            IProjection tableProj = CRSFactory.getCRS("EPSG:" + getEpsgSRID());
-            ICoordTrans reprojecter = viewProj.getCT(tableProj);
-        	workingAreaInTablesCS = reprojecter.convert(workingAreaInViewsCS);
+			CoordinateReferenceSystem viewCrs = ProjectionUtils
+					.getCRS(destProj);
+			CoordinateReferenceSystem tableCrs = ProjectionUtils.getCRS("EPSG:"
+					+ getEpsgSRID());
+			MathTransform trans = ProjectionUtils.getCrsTransform(viewCrs,
+					tableCrs);
+			workingAreaInTablesCS = ProjectionUtils.transform(
+					workingAreaInViewsCS, trans);
             workingAreaInTablesCSStruct = shapeToStruct(workingAreaInTablesCS,
                     FShape.NULL, isTableHasSrid(), false, true);
         } else {

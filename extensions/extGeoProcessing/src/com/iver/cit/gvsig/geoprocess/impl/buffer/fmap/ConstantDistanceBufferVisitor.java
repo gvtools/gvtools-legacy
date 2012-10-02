@@ -103,15 +103,13 @@
 */
 package com.iver.cit.gvsig.geoprocess.impl.buffer.fmap;
 
-import com.iver.cit.gvsig.exceptions.visitors.StartVisitorException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
 import com.iver.cit.gvsig.geoprocess.core.fmap.GeoprocessException;
 import com.iver.cit.gvsig.geoprocess.core.util.UnitUtils;
-import org.cresques.cts.IProjection;
 
 /**
  * This FeatureVisitor computes buffers and saves
@@ -132,20 +130,20 @@ public class ConstantDistanceBufferVisitor extends BufferVisitor {
 	 * View projection (allow to convert, if needed, coordinates when working
 	 * with not projected (geographics) CRS's)
 	 */
-	private IProjection projection;
+	private CoordinateReferenceSystem crs;
 	private int distanceUnits;
 	private int mapUnits;
 	/**
 	 * Constructor
 	 * @param distance buffer distance to use
-	 * @param viewProj TODO
+	 * @param viewCrs TODO
 	 * @param mapUnits 
 	 * @param distanceUnits 
 	 * @throws GeoprocessException
 	 */
-	public ConstantDistanceBufferVisitor(double distance, IProjection viewProj, int distanceUnits, int mapUnits) throws GeoprocessException{
+	public ConstantDistanceBufferVisitor(double distance, CoordinateReferenceSystem viewCrs, int distanceUnits, int mapUnits) throws GeoprocessException{
 		this.distance = distance;
-		this.projection = viewProj;
+		this.crs = viewCrs;
 		this.distanceUnits = distanceUnits;
 		this.mapUnits = mapUnits;
 	}
@@ -157,7 +155,7 @@ public class ConstantDistanceBufferVisitor extends BufferVisitor {
 	
 	public double getBufferDistance(IGeometry g, int index) {
 		//first: pass the user entry to internal units
-		return UnitUtils.getInInternalUnits(distance, projection, distanceUnits, mapUnits);
+		return UnitUtils.getInInternalUnits(distance, crs, distanceUnits, mapUnits);
 	}
 
 

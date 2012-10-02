@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.drivers.gpe.writer.ExportTask;
 import org.gvsig.gpe.GPERegister;
 import org.gvsig.gpe.exceptions.WriterHandlerCreationException;
@@ -15,10 +15,10 @@ import org.gvsig.gpe.exceptions.WriterHandlerNotRegisteredException;
 import org.gvsig.gpe.parser.GPEErrorHandler;
 import org.gvsig.gpe.parser.GPEErrorHandlerTest;
 import org.gvsig.gpe.writer.GPEWriterHandler;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
@@ -173,8 +173,8 @@ public abstract class GPEWriterTest extends TestCase {
 	 */
 	protected MapContext getMapContext() {
 		if (mapContext == null){
-			IProjection proj = CRSFactory.getCRS(getSRS());
-			ViewPort vp = new ViewPort(proj);
+			CoordinateReferenceSystem crs = ProjectionUtils.getCRS(getSRS());
+			ViewPort vp = new ViewPort(crs);
 			mapContext = new MapContext(vp);
 		}
 		return mapContext;

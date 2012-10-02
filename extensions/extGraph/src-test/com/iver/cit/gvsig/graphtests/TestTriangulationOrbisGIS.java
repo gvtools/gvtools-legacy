@@ -32,17 +32,17 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.fmap.algorithm.triangulation.OrbisGisTriangulator;
 import org.gvsig.fmap.algorithm.triangulation.Triangle;
 import org.gvsig.fmap.algorithm.triangulation.Vertex;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.core.FMultiPoint2D;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
@@ -59,10 +59,10 @@ public class TestTriangulationOrbisGIS extends TestCase {
 
 		// Setup del factory de DataSources
 
-		IProjection prj = CRSFactory.getCRS("EPSG:23030");
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 		File shpFile = new File("test_files/pts_pirol.shp");
 		lyr = (FLyrVect) LayerFactory.createLayer("Puntos", "gvSIG shp driver",
-				shpFile, prj);
+				shpFile, crs);
 		
 	}
 

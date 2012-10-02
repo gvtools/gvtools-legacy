@@ -70,8 +70,6 @@
 */
 package com.iver.cit.gvsig.geoprocess.wizard;
 
-import org.cresques.cts.IProjection;
-
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
@@ -86,7 +84,6 @@ public class DissolveCmd implements AndamiCmd {
 		View vista = (View)PluginServices.getMDIManager().getActiveWindow();
 		MapContext mapContext = vista.getModel().getMapContext();
         FLayers layers = mapContext.getLayers();
-        IProjection proj = mapContext.getProjection();
         GeoProcessingDissolvePanel dataSelectionPanel = 
 			new GeoProcessingDissolvePanel(layers);
         GeoprocessPaneContainer container = new 

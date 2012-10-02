@@ -50,8 +50,10 @@ import java.util.List;
 import javax.print.attribute.PrintRequestAttributeSet;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
+import org.cresques.cts.ProjectionUtils;
 import org.geotools.resources.geometry.XRectangle2D;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.NoninvertibleTransformException;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -112,7 +114,7 @@ public class ShpStrategy extends DefaultStrategy {
 			}
 
 			Selectable selectable = lyr.getRecordset();
-			ICoordTrans ct = lyr.getCoordTrans();
+			MathTransform trans = lyr.getCrsTransform();
 			FBitSet bitSet = selectable.getSelection();
 			BoundedShapes shapeBounds;
 			if (adapter instanceof BoundedShapes)
@@ -186,11 +188,9 @@ public class ShpStrategy extends DefaultStrategy {
 					// If the layer is reprojected, spatial index was created
 					// in its own projection, so we must to apply an inverse
 					// transform
-					if (ct != null) {
-						Rectangle2D newExtent = ct.getInverted()
-								.convert(extent);
-						// Rectangle2D newExtent = ct.convert(extent);
-						// lstIndexes = lyr.getISpatialIndex().query(extent);
+					if (trans != null) {
+						Rectangle2D newExtent = ProjectionUtils.transform(
+								extent, trans.inverse());
 						lstIndexes = isi.query(newExtent);
 					} else {
 						lstIndexes = isi.query(extent);
@@ -244,8 +244,8 @@ public class ShpStrategy extends DefaultStrategy {
 				if (bounds==null)
 					continue;
 
-				if (ct != null) {
-					bounds = ct.convert(bounds);
+				if (trans != null) {
+					bounds = ProjectionUtils.transform(bounds, trans);
 				}
 
 
@@ -276,10 +276,10 @@ public class ShpStrategy extends DefaultStrategy {
 						// el FGeometry.drawInt (a diferencia del
 						// FGeometry.draw) clona siempre la geometria
 						// antes de pintarla (para transforma a enteros)
-						if (ct != null) {
+						if (trans != null) {
 							if (bMustClone)
 								geom = geom.cloneGeometry();
-							geom.reProject(ct);
+							geom.reProject(trans);
 						}
 						if (lyr.isSpatialCacheEnabled()) {
 							if (cache.getMaxFeatures() >= cache.size()) {
@@ -346,6 +346,8 @@ public class ShpStrategy extends DefaultStrategy {
 			throw new ReadDriverException(getCapa().getName(),e);
 		} catch (InitializeDriverException e) {
 			throw new ReadDriverException(getCapa().getName(),e);
+		} catch (NoninvertibleTransformException e) {
+			throw new ReadDriverException(getCapa().getName(),e);
 		}
 	}
 
@@ -374,7 +376,7 @@ public class ShpStrategy extends DefaultStrategy {
 
 
 			SelectableDataSource selectable = lyr.getRecordset();
-			ICoordTrans ct = lyr.getCoordTrans();
+			MathTransform trans = lyr.getCrsTransform();
 			BitSet bitSet = selectable.getSelection();
 			//BoundedShapes shapeBounds = (BoundedShapes) adapter.getDriver();
 			VectorialDriver driver = adapter
@@ -414,9 +416,9 @@ public class ShpStrategy extends DefaultStrategy {
 			if (isi != null) {
 				if (isSpatialIndexNecessary(extent)) {
 					lstIndexes = isi.query(extent);
-					if (ct != null) {
-						Rectangle2D newExtent = ct.getInverted()
-								.convert(extent);
+					if (trans != null) {
+						Rectangle2D newExtent = ProjectionUtils.transform(
+								extent, trans.inverse());
 						lstIndexes = isi.query(newExtent);
 					} else {
 						lstIndexes = isi.query(extent);
@@ -437,8 +439,8 @@ public class ShpStrategy extends DefaultStrategy {
 
 				bounds = ((BoundedShapes)driver).getShapeBounds(i);
 
-				if (ct != null) {
-					bounds = ct.convert(bounds);
+				if (trans != null) {
+					bounds = ProjectionUtils.transform(bounds, trans);
 				}
 
 				if (XRectangle2D.intersectInclusive(extent, bounds)) {
@@ -463,8 +465,8 @@ public class ShpStrategy extends DefaultStrategy {
 						if (bMustClone)
 							geom = geom.cloneGeometry();
 
-					if (ct != null) {
-						geom.reProject(ct);
+					if (trans != null) {
+						geom.reProject(trans);
 					}
 
 					geom.draw(g, viewPort, symbol, cancel);
@@ -480,9 +482,9 @@ public class ShpStrategy extends DefaultStrategy {
 			throw new ReadDriverException(getCapa().getName(),e);
 		} catch (InitializeDriverException e) {
 			throw new ReadDriverException(getCapa().getName(),e);
+		} catch (NoninvertibleTransformException e) {
+			throw new ReadDriverException(getCapa().getName(),e);
 		}
-
-
 	}
 
 	public FBitSet queryByShape(IGeometry g, int relationship)
@@ -505,7 +507,7 @@ public class ShpStrategy extends DefaultStrategy {
 			return super.queryByShape(g, relationship, null);
 
 		ReadableVectorial va = lyr.getSource();
-		ICoordTrans ct = lyr.getCoordTrans();
+		MathTransform trans = lyr.getCrsTransform();
 		Rectangle2D bounds = g.getBounds2D();
 		List lstRecs = lyr.getISpatialIndex().query(bounds);
 		Integer idRec;
@@ -528,8 +530,8 @@ public class ShpStrategy extends DefaultStrategy {
 				IGeometry geom = va.getShape(index);
 				if(geom == null)
 					continue;
-				if (ct != null) {
-					geom.reProject(ct);
+				if (trans != null) {
+					geom.reProject(trans);
 				}
 				Geometry jtsGeom = geom.toJTSGeometry();
 				switch (relationship) {
@@ -618,7 +620,7 @@ public class ShpStrategy extends DefaultStrategy {
 			return super.queryByRect(rect, cancel);
 
 		ReadableVectorial va = lyr.getSource();
-		ICoordTrans ct = lyr.getCoordTrans();
+		MathTransform trans = lyr.getCrsTransform();
 		Rectangle2D bounds = rect;
 		List lstRecs = lyr.getISpatialIndex().query(bounds);
 		Integer idRec;
@@ -647,10 +649,10 @@ public class ShpStrategy extends DefaultStrategy {
 				IGeometry geom = va.getShape(index);
 				if(geom == null)//azabala
 					continue;
-				if (ct != null) {
+				if (trans != null) {
 					if (bMustClone)
 						geom = geom.cloneGeometry();
-					geom.reProject(ct);
+					geom.reProject(trans);
 				}
 				if (geom.intersects(rect))
 					bitset.set(index, true);
@@ -693,7 +695,7 @@ public class ShpStrategy extends DefaultStrategy {
 				}
 
 			ReadableVectorial va = lyr.getSource();
-			ICoordTrans ct = lyr.getCoordTrans();
+			MathTransform trans = lyr.getCrsTransform();
 			Rectangle2D bounds = rectangle;
 			List lstRecs = lyr.getISpatialIndex().query(bounds);
 			Integer idRec;
@@ -722,10 +724,10 @@ public class ShpStrategy extends DefaultStrategy {
 					IGeometry geom = va.getShape(index);
 					if(geom == null)//azabala
 						continue;
-					if (ct != null) {
+					if (trans != null) {
 						if (bMustClone)
 							geom = geom.cloneGeometry();
-						geom.reProject(ct);
+						geom.reProject(trans);
 					}
 					if (geom.intersects(rectangle))
 						visitor.visit(geom, index);

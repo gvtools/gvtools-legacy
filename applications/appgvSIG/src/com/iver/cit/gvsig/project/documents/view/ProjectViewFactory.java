@@ -92,7 +92,7 @@ public class ProjectViewFactory extends ProjectDocumentFactory {
     private static ProjectView createView(String viewName) {
     	ProjectView v = new ProjectView();
 		MapContext viewMapContext = new MapContext(new ViewPort(Project
-				.getDefaultProjection()));
+				.getDefaultCrs()));
 		ViewPort vp = viewMapContext.getViewPort();
 		vp.setBackColor(View.getDefaultBackColor());
 		vp.setDistanceUnits(Project.getDefaultDistanceUnits());

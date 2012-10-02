@@ -52,10 +52,10 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cresques.cts.IProjection;
 import org.geotools.referencing.operation.builder.MappedPosition;
 import org.gvsig.referencing.MappedPositionContainer;
 import org.gvsig.referencing.ReferencingUtil;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.drivers.VectorErrorMemoryDriver;
@@ -113,7 +113,7 @@ public class MappedPositionContainerImpl implements MappedPositionContainer {
 	
 	//FIXME CUANDO AÑADO ESTA CAPA AL TOC, NO SE MUESTRA EL SIMBOLO
 	//HAY QUE AÑADIR ALGUNA EXTENSION AL TOC??
-	public FLyrVect getLinkLyr(IProjection projection){
+	public FLyrVect getLinkLyr(CoordinateReferenceSystem crs){
 		if(linksLyr == null){
 			ReferencingUtil ref = ReferencingUtil.getInstance();
 			int numberOfSessions = ref.getNumberOfSpatialAdjustSessions();
@@ -123,7 +123,7 @@ public class MappedPositionContainerImpl implements MappedPositionContainer {
 								numberOfSessions;
 			ref.incrementAdjustSessions();
 			linksLyr.setName(name);
-			linksLyr.setProjection(projection);
+			linksLyr.setCrs(crs);
 			((FLayerGenericVectorial)linksLyr).setDriver(new VectorErrorMemoryDriver(name, this));
 			try {
 				linksLyr.load();

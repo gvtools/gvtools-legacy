@@ -47,11 +47,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -60,9 +58,11 @@ import javax.print.attribute.standard.PrintQuality;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.geotools.referencing.CRS;
 import org.gvsig.tools.file.PathGenerator;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -76,7 +76,6 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.Messages;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.ILabelable;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DefaultJDBCDriver;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
@@ -242,8 +241,12 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 	private void doAddLayerSecure(int pos,FLayer layer) {
 		layers.add(pos,layer);
 		layer.setParentLayer(this);
-		if(layer.getProjection() != null && fmap != null)
-			layer.setCoordTrans(layer.getProjection().getCT(fmap.getProjection()));
+		if (layer.getCrs() != null && fmap != null) {
+			MathTransform transform = ProjectionUtils.getCrsTransform(
+					layer.getCrs(), fmap.getCrs());
+			layer.setCrsTransform(transform);
+		}
+		
 		this.updateDrawVersion();
 	}
 
@@ -891,7 +894,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 						layer = LayerFactory.createLayer(s[i],
 								(VectorialFileDriver)LayerFactory.getDM().getDriver(xml.getChild(i).getStringProperty("driverName")),
 								new File(xml.getChild(i).getStringProperty("file")),
-								this.getMapContext().getViewPort().getProjection());
+								this.getMapContext().getViewPort().getCrs());
 
 					} else if (true) {
 						//TODO falta por implementar
@@ -902,17 +905,16 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 					layer.setXMLEntity03(xml.getChild(i));
 					// Comprobar que la proyección es la misma que la de FMap
 					// Si no lo es, es una capa que está reproyectada al vuelo
-					IProjection proj = layer.getProjection();
-					if (proj != null)
-						if (proj != fmap.getProjection())
-						{
-							ICoordTrans ct = proj.getCT(fmap.getProjection());
-							layer.setCoordTrans(ct);
-							logger.info("coordTrans = " +
-									proj.getAbrev() + " " +
-									fmap.getProjection().getAbrev());
+					CoordinateReferenceSystem crs = layer.getCrs();
+					if (crs != null)
+						if (crs != fmap.getCrs()) {
+							MathTransform trans = ProjectionUtils
+									.getCrsTransform(crs, fmap.getCrs());
+							layer.setCrsTransform(trans);
+							logger.info("coordTrans = "
+									+ crs.getName().getCode() + " "
+									+ fmap.getCrs().getName().getCode());
 						}
-
 				} else {
 					try {
 						Class clazz = Class.forName(className);
@@ -1050,16 +1052,14 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 	public MapContext getMapContext() {
 		return fmap;
 	}
-	/*
-	 * (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#setCoordTrans(org.cresques.cts.ICoordTrans)
-	 */
-	public void setCoordTrans(ICoordTrans ct) {
-		super.setCoordTrans(ct);
+	
+	@Override
+	public void setCrsTransform(MathTransform ct) {
+		super.setCrsTransform(ct);
 
 		for (Iterator iter = layers.iterator(); iter.hasNext();) {
 			FLayer layer = (FLayer) iter.next();
-			layer.setCoordTrans(ct);
+			layer.setCrsTransform(ct);
 		}
 	}
 	/*
@@ -1256,11 +1256,12 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 				String type = xml.getStringProperty("type");
 				if ("vectorial".equals(type)){
 					//String recordsetName = xml.getChild(i).getStringProperty("recordset-name");
-					IProjection proj = null;
+					CoordinateReferenceSystem crs = null;
 					if (xml.contains("proj")) {
-						proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
+						crs = ProjectionUtils.getCRS(xml
+								.getStringProperty("proj"));
 					} else {
-						proj = this.getMapContext().getViewPort().getProjection();
+						crs = this.getMapContext().getViewPort().getCrs();
 					}
 					if (xml.contains("file")) {
 						Driver d;
@@ -1273,15 +1274,15 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 						if (path!=null){
 							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
 									new File(pathGenerator.getAbsolutePath((String)xml.getStringProperty("file"))),
-									proj);
+									crs);
 						}else if (xml.contains("absolutePath")){
 							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
 								new File(xml.getStringProperty("absolutePath")),
-								proj);
+								crs);
 						}else{
 							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
 								new File(xml.getStringProperty("file")),
-								proj);
+								crs);
 						}
 
 
@@ -1302,10 +1303,10 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 							try {
 								((DefaultJDBCDriver)driver).load();
 								//							loadOk = (((DefaultJDBCDriver)driver).getConnection() != null);
-								layer = LayerFactory.createDBLayer(driver, name, proj);
+								layer = LayerFactory.createDBLayer(driver, name, crs);
 								layer.setAvailable((((DefaultJDBCDriver)driver).getConnection() != null));
 							} catch (ReadDriverException e) {
-								layer = LayerFactory.createDBLayer(driver, name, proj);
+								layer = LayerFactory.createDBLayer(driver, name, crs);
 								layer.addError(e);
 								layer.setAvailable(false);
 							}
@@ -1366,7 +1367,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 							IPersistence persist = (IPersistence) driver;
 							persist.setXMLEntity(xml.getChild(classChild));
 						}
-						layer = LayerFactory.createLayer(name, driver, proj);
+						layer = LayerFactory.createLayer(name, driver, crs);
 					}
 
 				}
@@ -1399,16 +1400,16 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 			logger.debug("layer: "+ layer.getName() +" loaded");
 			// Comprobar que la proyección es la misma que la de FMap
 			// Si no lo es, es una capa que está reproyectada al vuelo
-			IProjection proj = layer.getProjection();
-			if ((proj != null))
-				if (!proj.getFullCode().equals(getMapContext().getProjection().getFullCode()))
+			CoordinateReferenceSystem crs = layer.getCrs();
+			if ((crs != null))
+				if (!crs.getName().equals(getMapContext().getCrs().getName()))
 				{
-					ICoordTrans ct = proj.getCT(getMapContext().getProjection());
+					MathTransform trans = ProjectionUtils.getCrsTransform(crs,
+							getMapContext().getCrs());
 					// TODO: REVISAR CON LUIS
 					// Se lo fijamos a todas, luego cada una que se reproyecte
 					// si puede, o que no haga nada
-
-					layer.setCoordTrans(ct);
+					layer.setCrsTransform(trans);
 				}
 		} catch (XMLException e) {
 			fmap.addLayerError(xml.getStringProperty("name"));
@@ -1501,15 +1502,16 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 			logger.debug("layer: "+ layer.getName() +" loaded");
 			// Comprobar que la proyección es la misma que la de FMap
 			// Si no lo es, es una capa que está reproyectada al vuelo
-			IProjection proj = layer.getProjection();
-			if ((proj != null))
-				if (proj != getMapContext().getProjection())
+			CoordinateReferenceSystem crs = layer.getCrs();
+			if ((crs != null))
+				if (crs != getMapContext().getCrs())
 				{
-					ICoordTrans ct = proj.getCT(getMapContext().getProjection());
+					MathTransform trans = CRS.findMathTransform(crs,
+							getMapContext().getCrs());
 					// TODO: REVISAR CON LUIS
 					// Se lo fijamos a todas, luego cada una que se reproyecte
 					// si puede, o que no haga nada
-					layer.setCoordTrans(ct);
+					layer.setCrsTransform(trans);
 
 				}
 		}catch (Exception e) {

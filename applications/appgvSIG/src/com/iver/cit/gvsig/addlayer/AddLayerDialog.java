@@ -31,8 +31,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.AcceptCancelPanel;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -47,7 +47,7 @@ import com.iver.cit.gvsig.project.Project;
  * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
  */
 public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiManager.IWindow {
-	static private IProjection proj           = null;
+	static private CoordinateReferenceSystem crs           = null;
 	private JTabbedPane        jTabbedPane    = null;
 	private AcceptCancelPanel  jPanel         = null;
 	
@@ -230,18 +230,18 @@ public class AddLayerDialog extends JPanel implements com.iver.andami.ui.mdiMana
 	 * Devuelve la ultima proyección usada
 	 * @return
 	 */
-	public static IProjection getLastProjection() {
-		if (proj == null)
-			proj = Project.getDefaultProjection();
-		return proj;
+	public static CoordinateReferenceSystem getLastCrs() {
+		if (crs == null)
+			crs = Project.getDefaultCrs();
+		return crs;
 	}
 
 	/**
 	 * Define la ultima proyeccion
-	 * @param proj
+	 * @param crs
 	 */
-	public static void setLastProjection(IProjection proj) {
-		AddLayerDialog.proj = proj;
+	public static void setLastCrs(CoordinateReferenceSystem crs) {
+		AddLayerDialog.crs = crs;
 	}
 
 	public Object getWindowProfile() {

@@ -28,13 +28,13 @@ import java.awt.geom.Point2D;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-import org.cresques.geo.Projected;
+import org.cresques.geo.Georeferenced;
 import org.cresques.geo.ViewPortData;
 import org.cresques.px.Extent;
 import org.cresques.px.IObjList;
 import org.cresques.px.PxObj;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -43,14 +43,14 @@ import org.cresques.px.PxObj;
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
 public class DxfEntityList extends PxObj implements IObjList.vector {
-    IProjection proj = null;
+    CoordinateReferenceSystem crs = null;
     private Vector data = null;
     
     /**
      * Constructor de DxfEntityList.
      * @param proj, Proyección cartográfica en la que se encuentra la DxfEntityList.
      */
-    public DxfEntityList(IProjection proj) {
+    public DxfEntityList(CoordinateReferenceSystem crs) {
         extent = new Extent();
         data = new Vector();
     }
@@ -82,7 +82,7 @@ public class DxfEntityList extends PxObj implements IObjList.vector {
      * @return IObjList, Conjunto de objetos gráficos que contienen a pt.
      */
     public IObjList getAt(Point2D pt) {
-        IObjList oList = new DxfEntityList(proj);
+        IObjList oList = new DxfEntityList(crs);
         Iterator iter = iterator();
 
         while (iter.hasNext()) {
@@ -130,18 +130,18 @@ public class DxfEntityList extends PxObj implements IObjList.vector {
     
     /**
      * Devuelve la proyección cartográfica en la que se encuentra la DxfEntityList.
-     * @return IProjection, proyección cartográfica.
+     * @return CoordinateReferenceSystem, proyección cartográfica.
      */
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
     
     /**
      * Establece la proyección cartográfica en la que se encuentra la DxfEntityList.
      * @param p, Proyección cartográfica.
      */
-    public void setProjection(IProjection p) {
-        proj = p;
+    public void setCrs(CoordinateReferenceSystem crs) {
+        this.crs = crs;
     }
     
     /**
@@ -149,7 +149,7 @@ public class DxfEntityList extends PxObj implements IObjList.vector {
      * través de un conjunto de coordenadas de transformación.
      * @param rp, Coordenadas de transformación.
      */
-    public void reProject(ICoordTrans rp) {
+    public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         extent = new Extent();
 
         PxObj o;
@@ -157,11 +157,11 @@ public class DxfEntityList extends PxObj implements IObjList.vector {
 
         while (iter.hasNext()) {
             o = (PxObj) iter.next();
-            ((Projected) o).reProject(rp);
+            ((Georeferenced) o).reProject(trans, target);
             extent.add(o.getExtent());
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
     
     /**

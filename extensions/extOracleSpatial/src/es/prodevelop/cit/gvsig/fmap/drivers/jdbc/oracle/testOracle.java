@@ -58,13 +58,10 @@ import oracle.sql.Datum;
 import oracle.sql.NUMBER;
 import oracle.sql.STRUCT;
 
-import org.cresques.cts.IProjection;
-
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.ICanReproject;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
@@ -479,14 +476,6 @@ public class testOracle {
             }
 
             driver.setData(conn, lyrDef);
-
-            IProjection proj = null;
-
-            if (driver instanceof ICanReproject) {
-                proj = CRSFactory.getCRS("EPSG:" +
-                        ((ICanReproject) driver).getSourceProjection(conn, lyrDef));
-            }
-
             return driver;
         }
         catch (Exception e) {

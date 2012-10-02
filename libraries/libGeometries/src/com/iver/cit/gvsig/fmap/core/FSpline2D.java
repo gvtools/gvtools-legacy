@@ -43,8 +43,8 @@ package com.iver.cit.gvsig.fmap.core;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.Curve;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
 /**
@@ -59,8 +59,8 @@ public class FSpline2D extends FPolyline2D implements Curve {
 	 *
 	 * @param gpx GeneralPathX.
 	 */
-	public FSpline2D(String id, IProjection projection, Point2D[] ps) {
-		super(id, projection, getGeneralPathX(ps));
+	public FSpline2D(String id, CoordinateReferenceSystem crs, Point2D[] ps) {
+		super(id, crs, getGeneralPathX(ps));
 		points=ps;
 	}
 
@@ -102,7 +102,7 @@ public class FSpline2D extends FPolyline2D implements Curve {
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {
-		return new FSpline2D(id, projection, points);
+		return new FSpline2D(id, crs, points);
 	}
 
 	/* (non-Javadoc)

@@ -254,7 +254,7 @@ public class ArcImsWizard extends WizardPanel {
         try {
             layer = dataSource.createArcImsFeatureLayer(host, serviceName,
                     layerQuery, nombreTema,
-                    getMapCtrl().getMapContext().getProjection(), sep);
+                    getMapCtrl().getMapContext().getCrs(), sep);
         }
         catch (Exception e1) {
             e1.printStackTrace();
@@ -276,7 +276,7 @@ public class ArcImsWizard extends WizardPanel {
             // the value of these parameters was set by other gui objects (panels, etc)
             layer = dataSource.createArcImsRasterLayer(host, serviceName,
                     layerQuery, nombreTema,
-                    getMapCtrl().getMapContext().getProjection(), imageFormat);
+                    getMapCtrl().getMapContext().getCrs(), imageFormat);
         }
         catch (Exception e1) {
             logger.error("While creating ArcImsRasterLayer ", e1);

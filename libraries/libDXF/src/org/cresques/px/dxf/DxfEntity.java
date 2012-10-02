@@ -23,10 +23,10 @@
  */
 package org.cresques.px.dxf;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-import org.cresques.geo.Projected;
+import org.cresques.geo.Georeferenced;
 import org.cresques.px.PxObj;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -34,8 +34,8 @@ import org.cresques.px.PxObj;
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  * @author jmorell
  */
-public abstract class DxfEntity extends PxObj implements Projected {
-    IProjection proj = null;
+public abstract class DxfEntity extends PxObj implements Georeferenced {
+	CoordinateReferenceSystem crs = null;
     DxfLayer layer = null;
 
     //int dxfColor = 256;
@@ -49,8 +49,8 @@ public abstract class DxfEntity extends PxObj implements Projected {
      * @param proj, proyección cartográfica en la que se encuentra la entidad.
      * @param layer, capa del DXF en la que se encuentra la entidad.
      */
-    public DxfEntity(IProjection proj, DxfLayer layer) {
-        setProjection(proj);
+    public DxfEntity(CoordinateReferenceSystem crs, DxfLayer layer) {
+        setCrs(crs);
         this.layer = layer;
     }
     
@@ -58,23 +58,24 @@ public abstract class DxfEntity extends PxObj implements Projected {
      * Establece la proyección cartográfica en la que se encuentra la entidad.
      * @param p, Proyección cartográfica.
      */
-    public void setProjection(IProjection p) {
-        proj = p;
+    public void setCrs(CoordinateReferenceSystem p) {
+        crs = p;
     }
     
     /**
      * Devuelve la proyección cartográfica en la que se encuentra la entidad.
      * @return IProjection, proyección cartográfica.
      */
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
     
     /**
      * Permite reproyectar una entidad dado un conjunto de coordenadas de transformación.
      * @param rp, coordenadas de transformación.
      */
-    abstract public void reProject(ICoordTrans ct);
+	abstract public void reProject(MathTransform trans,
+			CoordinateReferenceSystem target);
     
     /**
      * Devuelve el nombre de la capa en la que se encuentra la entidad.

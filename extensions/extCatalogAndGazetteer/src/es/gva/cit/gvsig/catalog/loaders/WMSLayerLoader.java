@@ -46,6 +46,7 @@ import java.net.ProtocolException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cresques.cts.ProjectionUtils;
 import org.exolab.castor.xml.ValidationException;
 import org.gvsig.i18n.Messages;
 
@@ -121,7 +122,7 @@ public class WMSLayerLoader extends LayerLoader{
 		args.put("layer",sLayer);
 		BaseView activeView = 
 			(BaseView) PluginServices.getMDIManager().getActiveWindow();
-		args.put("SRS",activeView.getProjection().getAbrev());
+		args.put("SRS", ProjectionUtils.getAbrev(activeView.getCrs()));
 		try {
 			return (FLayer)extensionPoint.create("OGC:WMS", args  );
 		} catch(Exception e) {

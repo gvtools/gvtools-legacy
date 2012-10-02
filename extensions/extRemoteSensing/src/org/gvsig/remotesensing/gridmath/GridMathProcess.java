@@ -167,7 +167,12 @@ public class GridMathProcess extends RasterProcess{
 		try {
 			writerBufferServer = new WriterBufferServer(rasterResult);
 			aTransform = new AffineTransform(resultExtent.getCellSizeX(), 0.0, 0.0, -resultExtent.getCellSizeY(), resultExtent.getMin().getX(), resultExtent.getMax().getY());
-			GeoRasterWriter grw = GeoRasterWriter.getWriter(writerBufferServer, filePath, rasterResult.getBandCount(), aTransform, resultExtent.getNX(), resultExtent.getNY(), rasterResult.getDataType(), GeoRasterWriter.getWriter(filePath).getParams(), mapContext.getProjection());
+			GeoRasterWriter grw = GeoRasterWriter.getWriter(writerBufferServer,
+					filePath, rasterResult.getBandCount(), aTransform,
+					resultExtent.getNX(), resultExtent.getNY(),
+					rasterResult.getDataType(),
+					GeoRasterWriter.getWriter(filePath).getParams(),
+					mapContext.getCrs());
 			grw.dataWrite();
 			grw.writeClose();
 		} catch (NotSupportedExtensionException e) {
@@ -191,7 +196,7 @@ public class GridMathProcess extends RasterProcess{
 			 lyr = FLyrRasterSE.createLayer(
 					 filePath.substring(filePath.lastIndexOf(File.separator) + 1, endIndex),
 					 new File(filePath),
-					 mapContext.getProjection());
+					 mapContext.getCrs());
 		} catch (LoadLayerException e) {
 			RasterToolsUtil.messageBoxError("error_cargar_capa", this, e);
 		}

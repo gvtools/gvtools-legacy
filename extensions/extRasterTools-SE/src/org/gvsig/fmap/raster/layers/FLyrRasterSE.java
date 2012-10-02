@@ -41,7 +41,7 @@ import java.util.Hashtable;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.ImageIcon;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.raster.legend.ColorTableLegend;
 import org.gvsig.raster.FileNotFoundSolve;
 import org.gvsig.raster.RasterLibrary;
@@ -82,19 +82,18 @@ import org.gvsig.raster.hierarchy.IRasterProperties;
 import org.gvsig.raster.hierarchy.IStatistics;
 import org.gvsig.raster.process.RasterTask;
 import org.gvsig.raster.process.RasterTaskQueue;
-import org.gvsig.raster.projection.CRS;
 import org.gvsig.raster.util.ColorConversion;
 import org.gvsig.raster.util.Historical;
 import org.gvsig.raster.util.MathUtils;
 import org.gvsig.raster.util.RasterToolsUtil;
 import org.gvsig.tools.file.PathGenerator;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.FShape;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrDefault;
@@ -182,16 +181,16 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 	 * @param params Parámetros de carga del formato. El caso más simple es la ruta de la capa en disco.
 	 * @param d RasterDriver.
 	 * @param f Fichero.
-	 * @param proj Proyección.
+	 * @param crs Proyección.
 	 * @return Nueva capa de tipo raster.
 	 * @throws DriverIOException
 	 */
 	public static FLyrRasterSE createLayer(String layerName, Object params,
-			IProjection proj) throws LoadLayerException {
+			CoordinateReferenceSystem crs) throws LoadLayerException {
 		FLyrRasterSE capa = new FLyrRasterSE();
 		capa.setLoadParams(params);
 		capa.setName(layerName);
-		capa.setProjection(proj);
+		capa.setCrs(crs);
 		capa.load();
 		return capa;
 	}
@@ -319,14 +318,14 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 				MultiRasterDataset[][] dt = new MultiRasterDataset[files.length][files[0].length];
 				for (int i = 0; i < files.length; i++)
 					for (int j = 0; j < files[i].length; j++)
-						dt[i][j] = MultiRasterDataset.open(getProjection(), files[i][j]);
+						dt[i][j] = MultiRasterDataset.open(getCrs(), files[i][j]);
 				dataset = new CompositeDataset(dt);
 			} else
 				if (params == null || params instanceof File) {
 					if (fName != null)
-						dataset = MultiRasterDataset.open(getProjection(), fName);
+						dataset = MultiRasterDataset.open(getCrs(), fName);
 				} else
-					dataset = MultiRasterDataset.open(getProjection(), params);
+					dataset = MultiRasterDataset.open(getCrs(), params);
 		} catch (NotSupportedExtensionException e) {
 			if(test == -1 && loadingFromProject) { 
 				FLyrRasterSE lyr = tryToSolveError(e, this);
@@ -375,12 +374,11 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 	 * Obtiene la proyección del fichero.
 	 * @return IProjection
 	 */
-	public IProjection readProjection() {
+	public CoordinateReferenceSystem readProjection() {
 		try {
-			CRS.setCRSFactory(CRSFactory.cp);
 			if( dataset == null )
 				return null;
-			return CRS.convertWktToIProjection(dataset.getWktProjection());
+			return ProjectionUtils.parseWKT(dataset.getWktProjection());
 		} catch (RasterDriverException e) {
 			RasterToolsUtil.messageBoxError("Problemas accediendo a getWktProjection. Driver no inicializado", this, e);
 		}
@@ -683,18 +681,13 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 		if (adjustedExtent == null) return;
 		Extent e = new Extent(adjustedExtent);
 		Dimension imgSz = vp.getImageSize();
-		ViewPortData vp2 = new ViewPortData(vp.getProjection(), e, imgSz );
+		ViewPortData vp2 = new ViewPortData(vp.getCrs(), e, imgSz );
 		vp2.setMat(vp.getAffineTransform());
 		getRender().draw(g, vp2);
 	}
 
-	/**
-	 * Inserta la proyección.
-	 *
-	 * @param proj Proyección.
-	 */
-	public void setProjection(IProjection proj) {
-		super.setProjection(proj);
+	public void setCrs(CoordinateReferenceSystem crs) {
+		super.setCrs(crs);
 	}
 
 	/*
@@ -1024,7 +1017,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 				enableStopped();
 
 			// Para notificar al adapter-driver cual es la proyección.
-			setProjection(super.getProjection());
+			setCrs(super.getCrs());
 
 			//Inicializamos la clase a la que se usa por defecto para
 			//compatibilidad con proyectos antiguos
@@ -1486,7 +1479,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 	 */
 	public void addFile(String fileName) throws NotSupportedExtensionException, RasterDriverException {
 		if (getRender() != null)
-			bufferFactory.addFile(RasterDataset.open(getProjection(), fileName));
+			bufferFactory.addFile(RasterDataset.open(getCrs(), fileName));
 	}
 
 	/*
@@ -2073,7 +2066,7 @@ public class FLyrRasterSE extends FLyrDefault implements IRasterProperties, IRas
 	 * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#cloneLayer()
 	 */
 	public FLayer cloneLayer() throws Exception {
-		FLyrRasterSE newLayer = FLyrRasterSE.createLayer(this.getName(), params, this.getProjection());
+		FLyrRasterSE newLayer = FLyrRasterSE.createLayer(this.getName(), params, this.getCrs());
 		for (int i = 0; i < dataset.getDatasetCount(); i++) {
 			String name = dataset.getDataset(i)[0].getOpenParameters();
 			if (!(dataset instanceof CompositeDataset) && !name.equals(this.getName()) && !isActionEnabled(IRasterLayerActions.REMOTE_ACTIONS))

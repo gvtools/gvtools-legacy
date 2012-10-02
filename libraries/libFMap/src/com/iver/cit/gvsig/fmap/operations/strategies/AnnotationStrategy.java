@@ -10,8 +10,8 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
 import org.geotools.resources.geometry.XRectangle2D;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -366,7 +366,7 @@ public class AnnotationStrategy extends DefaultStrategy {
 
         long t1 = System.currentTimeMillis();
         ReadableVectorial va = lyr.getSource();
-        ICoordTrans ct = lyr.getCoordTrans();
+        MathTransform trans = lyr.getCrsTransform();
         Rectangle2D bounds = g.getBounds2D();
 //        Coordinate c1 = new Coordinate(bounds.getMinX(), bounds.getMinY());
 //        Coordinate c2 = new Coordinate(bounds.getMaxX(), bounds.getMaxY());
@@ -389,8 +389,8 @@ public class AnnotationStrategy extends DefaultStrategy {
                 idRec = (Integer) lstRecs.get(i);
                 index = idRec.intValue();
                 IGeometry geom=getGeometry(((FLyrAnnotation)capa).getLabel(index).getBoundBox());
-                if (ct != null) {
-                    geom.reProject(ct);
+                if (trans != null) {
+                    geom.reProject(trans);
                 }
                 Geometry jtsGeom = geom.toJTSGeometry();
                 switch (relationship) {
@@ -471,7 +471,7 @@ public class AnnotationStrategy extends DefaultStrategy {
             return super.queryByRect(rect);
 
         ReadableVectorial va = lyr.getSource();
-        ICoordTrans ct = lyr.getCoordTrans();
+        MathTransform trans = lyr.getCrsTransform();
         Rectangle2D bounds = rect;
 //        Coordinate c1 = new Coordinate(bounds.getMinX(), bounds.getMinY());
 //        Coordinate c2 = new Coordinate(bounds.getMaxX(), bounds.getMaxY());
@@ -503,10 +503,10 @@ public class AnnotationStrategy extends DefaultStrategy {
                 idRec = (Integer) lstRecs.get(i);
                 index = idRec.intValue();
                 IGeometry geom=getGeometry(((FLyrAnnotation)capa).getLabel(index).getBoundBox());
-                if (ct != null) {
+                if (trans != null) {
                     if (bMustClone)
                         geom = geom.cloneGeometry();
-                    geom.reProject(ct);
+                    geom.reProject(trans);
                 }
                 //System.out.println("Rectángulo de selección = "+ rect);
                 //System.out.println("Rectángulo de la geometría = "+ geom.getBounds2D());

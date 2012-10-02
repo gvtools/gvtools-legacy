@@ -22,7 +22,6 @@ import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.dataset.GeoRasterWriter;
 import org.gvsig.raster.dataset.IDataWriter;
 import org.gvsig.raster.dataset.Params;
@@ -30,6 +29,7 @@ import org.gvsig.raster.dataset.io.features.PngFeatures;
 import org.gvsig.raster.dataset.io.features.WriteFileFormatFeatures;
 import org.gvsig.raster.util.RasterUtilities;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import es.gva.cit.jgdal.Gdal;
 import es.gva.cit.jgdal.GdalDriver;
@@ -95,16 +95,10 @@ public class PngWriter extends GeoRasterWriter {
 	 * @throws GdalException
 	 * @throws IOException
 	 */
-	public PngWriter(IDataWriter dataWriter,
-							String outFileName,
-							Integer nBands,
-							AffineTransform at,
-							Integer outSizeX,
-							Integer outSizeY,
-							Integer dataType,
-							Params params,
-							IProjection proj, 
-							Boolean geo)throws GdalException, IOException  {
+	public PngWriter(IDataWriter dataWriter, String outFileName,
+			Integer nBands, AffineTransform at, Integer outSizeX,
+			Integer outSizeY, Integer dataType, Params params,
+			CoordinateReferenceSystem crs, Boolean geo) throws GdalException, IOException  {
 		ident = RasterUtilities.getExtensionFromFileName(outFileName);
 		driver = ((WriteFileFormatFeatures) fileFeature.get(ident)).getDriverName();
 		outPng = outFileName;
@@ -112,7 +106,7 @@ public class PngWriter extends GeoRasterWriter {
 		outTif += ".tif";
 		this.at = at;
 
-		gdalWriter = new GdalWriter(dataWriter, outTif, nBands, at, outSizeX, outSizeY, dataType, params, proj, geo);
+		gdalWriter = new GdalWriter(dataWriter, outTif, nBands, at, outSizeX, outSizeY, dataType, params, crs, geo);
 		if (params == null)
 			loadParams(ident);
 		else
@@ -140,8 +134,8 @@ public class PngWriter extends GeoRasterWriter {
 	 * @throws IOException
 	 */
 	public static void createCopy(GdalDriver driverDst, String dst, String src,
-			boolean bstrict, String[] params, IProjection proj) throws IOException, GdalException {
-		GdalWriter.createCopy(driverDst, dst, src, bstrict, params, proj);
+			boolean bstrict, String[] params, CoordinateReferenceSystem crs) throws IOException, GdalException {
+		GdalWriter.createCopy(driverDst, dst, src, bstrict, params, crs);
 	}
 
 	/**

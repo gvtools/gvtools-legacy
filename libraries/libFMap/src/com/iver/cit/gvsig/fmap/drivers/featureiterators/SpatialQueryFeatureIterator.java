@@ -66,9 +66,10 @@ package com.iver.cit.gvsig.fmap.drivers.featureiterators;
 
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.geotools.resources.geometry.XRectangle2D;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
@@ -113,19 +114,19 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 	 *
 	 * @param source
 	 *            vectorial data source
-	 * @param sourceProj
+	 * @param srcCrs
 	 *            original projection of the data (it could be null)
-	 * @param targetProj
+	 * @param targetCrs
 	 *            projection of the returned features
 	 * @param fieldNames
 	 * @param spatialQuery
 	 * @throws ReadDriverException
 	 */
 	public SpatialQueryFeatureIterator(ReadableVectorial source,
-			IProjection sourceProj, IProjection targetProj,
+			CoordinateReferenceSystem srcCrs, CoordinateReferenceSystem targetCrs,
 			String[] fieldNames, Rectangle2D spatialQuery, boolean fastIteration)
 			throws ReadDriverException {
-		super(source, sourceProj, targetProj, fieldNames);
+		super(source, srcCrs, targetCrs, fieldNames);
 		setRect(spatialQuery);
 		if(fastIteration)
 			spatialChecker = new FastSpatialCheck();
@@ -142,12 +143,11 @@ public class SpatialQueryFeatureIterator extends DefaultFeatureIterator {
 		//if targetReprojection != sourceReprojection, we are going to reproject
 		//rect to the source reprojection (is faster).
 		//once spatial check is made, result features will be reprojected in the inverse direction
-		if(this.targetProjection != null &&
-		   this.sourceProjection != null &&
-		   this.targetProjection.getAbrev() != this.sourceProjection.getAbrev()){
-			ICoordTrans trans = targetProjection.getCT(sourceProjection);
+		if (this.targetCrs != null && this.sourceCrs != null
+				&& !this.targetCrs.getName().equals(this.sourceCrs.getName())) {
+			MathTransform trans = ProjectionUtils.getCrsTransform(targetCrs, sourceCrs);
 			try{
-				rect = trans.convert(rect);
+				rect = ProjectionUtils.transform(rect, trans);
 			} catch (Exception e) {
 				// if we get an exception during re-projection, that usually
 				// means that the provided rectangle coordinates exceed the

@@ -98,17 +98,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gui.beans.AcceptCancelPanel;
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import org.gvsig.gui.beans.swing.JBlank;
 import org.gvsig.gui.beans.swing.JButton;
 import org.gvsig.symbology.fmap.labeling.GeneralLabelingStrategy;
 import org.gvsig.symbology.fmap.labeling.PlacementManager;
-import org.gvsig.symbology.fmap.labeling.parse.LabelExpressionParser;
 import org.gvsig.symbology.fmap.labeling.placements.MultiShapePlacementConstraints;
 import org.gvsig.symbology.fmap.labeling.placements.PointPlacementConstraints;
 import org.gvsig.symbology.fmap.styles.PointLabelPositioneer;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -122,7 +122,6 @@ import com.iver.cit.gvsig.fmap.core.styles.IStyle;
 import com.iver.cit.gvsig.fmap.core.styles.SimpleLineStyle;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleLineSymbol;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.rendering.SingleSymbolLegend;
@@ -805,7 +804,7 @@ public class PlacementProperties extends JPanel implements IPlacementProperties,
 
 class MiniMapContext extends JComponent {
 	private static final long serialVersionUID = 229128782038834443L;
-	private static final IProjection PROJ = CRSFactory.getCRS("EPSG:23030");
+	private static final CoordinateReferenceSystem CRS = ProjectionUtils.getCRS("EPSG:23030");
 	private static final String DRIVER_NAME = "gvSIG shp driver";
 	private MapContext theMapContext;
 	private FLyrVect line;
@@ -832,7 +831,7 @@ class MiniMapContext extends JComponent {
 	private MapContext getMapContext() throws LoadLayerException, ReadDriverException {
 		if (theMapContext == null) {
 			String lineFile = getClass().getClassLoader().getResource("docs/line.shp").getFile();
-			line = (FLyrVect) LayerFactory.createLayer("line", DRIVER_NAME, new File(lineFile), PROJ);
+			line = (FLyrVect) LayerFactory.createLayer("line", DRIVER_NAME, new File(lineFile), CRS);
 
 			SimpleLineSymbol sym = new SimpleLineSymbol();
 			sym.setLineColor(Color.red);
@@ -847,9 +846,9 @@ class MiniMapContext extends JComponent {
 			line.setLegend(new SingleSymbolLegend(sym));
 
 			String backgroundPolygonFile = getClass().getClassLoader().getResource("docs/bg-polygon.shp").getFile();
-			backgroundPolygon = (FLyrVect) LayerFactory.createLayer("bg-polygon", DRIVER_NAME, new File(backgroundPolygonFile), PROJ);
+			backgroundPolygon = (FLyrVect) LayerFactory.createLayer("bg-polygon", DRIVER_NAME, new File(backgroundPolygonFile), CRS);
 			String polygonFile = getClass().getClassLoader().getResource("docs/polygon.shp").getFile();
-			polygon = (FLyrVect) LayerFactory.createLayer("polygon", DRIVER_NAME, new File(polygonFile), PROJ);
+			polygon = (FLyrVect) LayerFactory.createLayer("polygon", DRIVER_NAME, new File(polygonFile), CRS);
 
 			SimpleFillSymbol sym2 = new SimpleFillSymbol();
 			sym2.setFillColor(new Color(50, 245, 125));
@@ -890,7 +889,7 @@ class MiniMapContext extends JComponent {
 
 			polygon.setLabelingStrategy(labeling2);
 			polygon.setIsLabeled(true);
-			ViewPort theViewPort = new ViewPort(PROJ);
+			ViewPort theViewPort = new ViewPort(CRS);
 
 			theViewPort.setExtent(
 					new Rectangle2D.Double(

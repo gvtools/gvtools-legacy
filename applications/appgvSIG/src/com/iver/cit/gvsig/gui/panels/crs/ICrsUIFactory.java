@@ -1,7 +1,8 @@
 package com.iver.cit.gvsig.gui.panels.crs;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public interface ICrsUIFactory {
-	public ISelectCrsPanel getSelectCrsPanel(IProjection projection, boolean isTransPanelActive);
+	public ISelectCrsPanel getSelectCrsPanel(CoordinateReferenceSystem crs,
+			boolean isTransPanelActive);
 }

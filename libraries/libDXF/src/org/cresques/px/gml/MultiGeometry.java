@@ -27,10 +27,10 @@ import java.awt.Graphics2D;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.cresques.geo.ViewPortData;
 import org.cresques.px.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -50,15 +50,15 @@ public class MultiGeometry extends Geometry {
         data.add(geometry);
     }
 
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
 
-    public void setProjection(IProjection p) {
-        proj = p;
+    public void setCrs(CoordinateReferenceSystem crs) {
+        this.crs = crs;
     }
 
-    public void reProject(ICoordTrans rp) {
+    public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         extent = new Extent();
 
         Geometry geometry;
@@ -66,11 +66,11 @@ public class MultiGeometry extends Geometry {
 
         while (iter.hasNext()) {
             geometry = (Geometry) iter.next();
-            geometry.reProject(rp);
+            geometry.reProject(trans, target);
             extent.add(geometry.getExtent());
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
 
     public void draw(Graphics2D g, ViewPortData vp) {

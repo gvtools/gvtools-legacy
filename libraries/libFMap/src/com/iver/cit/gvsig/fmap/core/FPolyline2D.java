@@ -48,7 +48,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 
@@ -232,8 +232,8 @@ public class FPolyline2D implements FShape {
 	/* (non-Javadoc)
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#reProject(org.cresques.cts.ICoordTrans)
 	 */
-	public void reProject(ICoordTrans ct) {
-		gp.reProject(ct);
+	public void reProject(MathTransform transform) {
+		gp.reProject(transform);
 	}
 
 	/* (non-Javadoc)

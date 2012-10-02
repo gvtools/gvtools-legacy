@@ -46,8 +46,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.aggregate.MultiPoint;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -63,25 +63,25 @@ import com.vividsolutions.jts.io.WKBWriter;
 public class FMultiPoint2D extends FGeometryCollection implements MultiPoint{
 	private static final WKBWriter writer = new WKBWriter();
 	
-	public FMultiPoint2D(IProjection projection, FPoint2D[] points) {
-		this(null, projection, points);		
+	public FMultiPoint2D(CoordinateReferenceSystem crs, FPoint2D[] points) {
+		this(null, crs, points);		
 	}
 	
 	public FMultiPoint2D(FPoint2D[] points) {
 		this(null, null, points);		
 	}
 
-	public FMultiPoint2D(IProjection projection) {
+	public FMultiPoint2D(CoordinateReferenceSystem projection) {
 		this(null, projection, null);		
 	}
 
-	public FMultiPoint2D(String id, IProjection projection,
+	public FMultiPoint2D(String id, CoordinateReferenceSystem crs,
 			FPoint2D[] points) {
-		super(id, projection, points);
+		super(id, crs, points);
 	}
 
-	public FMultiPoint2D(String id, IProjection projection) {
-		this(id, projection, null);		
+	public FMultiPoint2D(String id, CoordinateReferenceSystem crs) {
+		this(id, crs, null);
 	}
 
 	public FMultiPoint2D(double[] x, double[] y) {
@@ -94,11 +94,12 @@ public class FMultiPoint2D extends FGeometryCollection implements MultiPoint{
 	 * @param x DOCUMENT ME!
 	 * @param y DOCUMENT ME!
 	 */
-	public FMultiPoint2D(String id, IProjection projection, double[] x, double[] y) {
-		super(id, projection);
+	public FMultiPoint2D(String id, CoordinateReferenceSystem crs, double[] x,
+			double[] y) {
+		super(id, crs);
 		geometries = new FPoint2D[x.length];
 		for (int i=0;i<x.length;i++){
-			geometries[i] = new FPoint2D(id, projection, x[i], y[i]);
+			geometries[i] = new FPoint2D(id, crs, x[i], y[i]);
 		}
 	}
 	
@@ -111,7 +112,7 @@ public class FMultiPoint2D extends FGeometryCollection implements MultiPoint{
 		for (int i=0; i < getNumgeometries(); i++){
 			aux[i] = (FPoint2D) geometries[i].cloneGeometry().getInternalShape();
 		}
-		return new FMultiPoint2D(id, projection, aux);
+		return new FMultiPoint2D(id, crs, aux);
 	}
 	
 	/*
@@ -190,7 +191,7 @@ public class FMultiPoint2D extends FGeometryCollection implements MultiPoint{
 		{
 			aux[i] = (FPoint2D) geometries[i].cloneGeometry().getInternalShape();
 		}
-		return (FShape)new FMultiPoint2D(id, projection, aux);
+		return (FShape)new FMultiPoint2D(id, crs, aux);
 	}
 
 	/**

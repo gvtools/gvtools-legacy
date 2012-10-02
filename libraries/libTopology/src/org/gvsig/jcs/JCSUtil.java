@@ -431,7 +431,7 @@ public class JCSUtil {
 	    											new FeatureSchemaLayerDefinitionAdapter(gapsCandidates.getFeatureSchema()));
 	    FLayerGenericVectorial solution = new FLayerGenericVectorial();
 		solution.setName(driver.getName());
-		solution.setProjection(lyr.getProjection());
+		solution.setCrs(lyr.getCrs());
 		solution.setDriver(driver);
 		try {
 			solution.load();

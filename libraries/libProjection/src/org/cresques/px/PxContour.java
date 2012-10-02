@@ -23,48 +23,41 @@
  */
 package org.cresques.px;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-
-import org.cresques.geo.Polygon2D;
-import org.cresques.geo.Projected;
-import org.cresques.geo.ViewPortData;
-import org.cresques.geo.cover.Hoja;
-
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-
 import java.util.Vector;
 
+import org.cresques.cts.ProjectionUtils;
+import org.cresques.geo.Georeferenced;
+import org.cresques.geo.Polygon2D;
+import org.cresques.geo.ViewPortData;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
-public class PxContour extends PxObj implements Projected {
+
+public class PxContour extends PxObj implements Georeferenced {
     final static Color colorBase = new Color(0, 64, 128, 255); //Color(255,214,132,255);
     final static Color fColorBase = new Color(64, 128, 192, 255); //Color(255,222,165,64);
-    IProjection proj = null;
+    CoordinateReferenceSystem crs = null;
     protected String name;
     protected String fName;
     private Color fColor = fColorBase;
     private Color pc = colorBase;
     private Polygon2D polygon = null;
 
-    public PxContour(Extent e, String fName, String name, IProjection proj) {
+    public PxContour(Extent e, String fName, String name, CoordinateReferenceSystem proj) {
         this.fName = fName;
         this.name = name;
-        this.proj = proj;
+        this.crs = proj;
 
         Point2D[] v = new Point2D[4];
-        v[0] = proj.createPoint(e.minX(), e.minY());
-        v[1] = proj.createPoint(e.maxX(), e.minY());
-        v[2] = proj.createPoint(e.maxX(), e.maxY());
-        v[3] = proj.createPoint(e.minX(), e.maxY());
+        v[0] = new Point2D.Double(e.minX(), e.minY());
+        v[1] = new Point2D.Double(e.maxX(), e.minY());
+        v[2] = new Point2D.Double(e.maxX(), e.maxY());
+        v[3] = new Point2D.Double(e.minX(), e.maxY());
         setContour(v);
-    }
-
-    public PxContour(Hoja h) {
-        name = h.getCode();
-        setContour(h.getVertex());
     }
 
     public PxContour(Point2D[] v, String name) {
@@ -84,12 +77,12 @@ public class PxContour extends PxObj implements Projected {
         setContour(v);
     }
 
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
 
-    public void setProjection(IProjection p) {
-        proj = p;
+    public void setCrs(CoordinateReferenceSystem crs) {
+        this.crs = crs;
     }
 
     private void setContour(Point2D[] v) {
@@ -159,7 +152,7 @@ public class PxContour extends PxObj implements Projected {
         return fColor;
     }
 
-    public void reProject(ICoordTrans rp) {
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         Polygon2D savePol = polygon;
 
         polygon = new Polygon2D();
@@ -168,26 +161,23 @@ public class PxContour extends PxObj implements Projected {
         Point2D ptDest = null;
 
         for (int i = 0; i < savePol.size(); i++) {
-            ptDest = rp.getPDest().createPoint(0.0, 0.0);
-            ptDest = rp.convert((Point2D) savePol.get(i), ptDest);
+			ptDest = ProjectionUtils.transform((Point2D) savePol.get(i), trans);
             polygon.addPoint(ptDest);
             extent.add(ptDest);
         }
-
-        setProjection(rp.getPDest());
     }
 
-    public void draw(Graphics2D g, ViewPortData vp, ICoordTrans rp) {
-        IProjection saveProj = proj;
+    public void draw(Graphics2D g, ViewPortData vp, MathTransform trans) {
+        CoordinateReferenceSystem saveProj = crs;
         Polygon2D savePol = polygon;
         Extent saveExt = extent;
 
-        reProject(rp);
+        reProject(trans, vp.getCrs());
         draw(g, vp);
 
         polygon = savePol;
         extent = saveExt;
-        proj = saveProj;
+        crs = saveProj;
     }
 
     public void draw(Graphics2D g, ViewPortData vp) {

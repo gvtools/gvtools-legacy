@@ -174,7 +174,7 @@ public class SaveRasterDialogListener implements ButtonsPanelListener {
 		Params params = getWriterParams(fName);
 		int blockSize = getBlockSize(params, layers);
 
-		ViewPort viewPort = new ViewPort(layers.getProjection());
+		ViewPort viewPort = new ViewPort(layers.getCrs());
 		viewPort.setBackColor(mapCtrl.getViewPort().getBackColor());
 		viewPort.setImageSize(dimension);
 		viewPort.setExtent(ext);

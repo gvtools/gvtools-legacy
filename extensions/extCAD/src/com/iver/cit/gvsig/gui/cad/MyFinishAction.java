@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.prefs.Preferences;
 
 import javax.swing.JOptionPane;
@@ -14,7 +13,8 @@ import javax.swing.JOptionPane;
 import jwizardcomponent.FinishAction;
 import jwizardcomponent.JWizardComponents;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -26,7 +26,6 @@ import com.iver.cit.gvsig.exceptions.layers.StartEditionLayerException;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.ICanReproject;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.ConnectionFactory;
 import com.iver.cit.gvsig.fmap.drivers.ConnectionJDBC;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
@@ -52,7 +51,6 @@ import com.iver.cit.gvsig.gui.cad.panels.ChooseGeometryType;
 import com.iver.cit.gvsig.gui.cad.panels.FileBasedPanel;
 import com.iver.cit.gvsig.gui.cad.panels.JPanelFieldDefinition;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
-import com.iver.cit.gvsig.vectorialdb.ConnectionSettings;
 import com.prodevelop.cit.gvsig.vectorialdb.wizard.NewVectorDBConnectionPanel;
 
 public class MyFinishAction extends FinishAction
@@ -123,7 +121,7 @@ public class MyFinishAction extends FinishAction
 
 
                 lyr = (FLyrVect) LayerFactory.createLayer(layerName,
-                        (VectorialFileDriver) drv, newFile, mapCtrl.getProjection());
+                        (VectorialFileDriver) drv, newFile, mapCtrl.getCrs());
 
 			}
 			else if (actionComand.equals("DXF"))
@@ -157,15 +155,14 @@ public class MyFinishAction extends FinishAction
     			fieldsMapping.setHeightText("HeightText");
     			fieldsMapping.setRotationText("RotationText");
     			writer.setFieldMapping(fieldsMapping);
-    			writer.setProjection(mapCtrl.getProjection());
+    			writer.setCrs(mapCtrl.getCrs());
     			writer.initialize(lyrDef);
     			writer.preProcess();
     			writer.postProcess();
     			Driver drv = LayerFactory.getDM().getDriver("gvSIG DXF Memory Driver");
 
-                lyr = (FLyrVect) LayerFactory.createLayer(layerName,
-                        (VectorialFileDriver) drv, newFile, mapCtrl.getProjection());
-
+				lyr = (FLyrVect) LayerFactory.createLayer(layerName,
+						(VectorialFileDriver) drv, newFile, mapCtrl.getCrs());
 			}
 			else if (actionComand.equals("POSTGIS"))
 			{
@@ -207,7 +204,7 @@ public class MyFinishAction extends FinishAction
 					dbLayerDef.setNewFieldID();
 	
 					dbLayerDef.setWhereClause("");
-					String strSRID = mapCtrl.getProjection().getAbrev()
+					String strSRID = ProjectionUtils.getAbrev(mapCtrl.getCrs())
 							.substring(5);
 					dbLayerDef.setSRID_EPSG(strSRID);
 					dbLayerDef.setConnection(conex);
@@ -227,13 +224,14 @@ public class MyFinishAction extends FinishAction
 	    	        }	
 
 	    	        dbDriver.setData(conex, dbLayerDef);
-	    	        IProjection proj = null;
-	    	        if (drv instanceof ICanReproject)
-	    	        {
-	    	        	 proj = CRSFactory.getCRS("EPSG:" + ((ICanReproject)dbDriver).getSourceProjection(null,null));
-	    	        }
+	    	        CoordinateReferenceSystem crs = null;
+					if (drv instanceof ICanReproject) {
+						crs = ProjectionUtils.getCRS("EPSG:"
+								+ ((ICanReproject) dbDriver)
+										.getSourceProjection(null, null));
+					}
 	
-	    			lyr = (FLyrVect) LayerFactory.createDBLayer(dbDriver, _layerName, proj);
+	    			lyr = (FLyrVect) LayerFactory.createDBLayer(dbDriver, _layerName, crs);
 	    			// postgisPanel.saveConnectionSettings();
     			
 				}

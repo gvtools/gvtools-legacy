@@ -429,12 +429,12 @@ public class RasterToolsUtil {
 				lyr = FLyrRasterSE.createLayer(
 						fileName.substring(fileName.lastIndexOf(File.separator) + 1, endIndex),
 						new File(fileName),
-						theView.getMapControl().getProjection());
+						theView.getMapControl().getCrs());
 			} else {
 				lyr = FLyrRasterSE.createLayer(
 						layerName,
 						new File(fileName),
-						theView.getMapControl().getProjection());
+						theView.getMapControl().getCrs());
 			}
 
 		} catch (LoadLayerException e) {

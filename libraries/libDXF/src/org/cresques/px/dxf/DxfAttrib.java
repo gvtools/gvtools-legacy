@@ -26,11 +26,12 @@ package org.cresques.px.dxf;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.ViewPortData;
 import org.cresques.io.DxfGroup;
 import org.cresques.px.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -45,8 +46,8 @@ public class DxfAttrib extends DxfEntity {
      * @param proj, proyección cartográfica en la que se encuentra el DxfAttrib.
      * @param layer, capa del DXF en la que se encuentra el DxfAttrib.
      */
-    public DxfAttrib(IProjection proj, DxfLayer layer) {
-        super(proj, layer);
+    public DxfAttrib(CoordinateReferenceSystem crs, DxfLayer layer) {
+        super(crs, layer);
         extent = new Extent();
         pt = new Point2D.Double();
     }
@@ -64,23 +65,23 @@ public class DxfAttrib extends DxfEntity {
      * Permite reproyectar un DxfAttrib dado un conjunto de coordenadas de transformación.
      * @param rp, coordenadas de transformación.
      */
-    public void reProject(ICoordTrans rp) {
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         Point2D savePt = pt;
 
         pt = new Point2D.Double();
         extent = new Extent();
 
-        Point2D ptDest = rp.getPDest().createPoint(0.0, 0.0);
+        Point2D ptDest;
 
         if (savePt == null) {
             ptDest = null;
         } else {
-            ptDest = rp.convert((Point2D) savePt, ptDest);
+            ptDest = ProjectionUtils.transform(savePt, trans);
             extent.add(ptDest);
         }
 
         pt = ptDest;
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
     
     /**

@@ -26,15 +26,15 @@ package org.cresques.px.dxf;
 import java.awt.geom.Point2D;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.geo.Georeferenced;
 import org.cresques.geo.Point3D;
-import org.cresques.geo.Projected;
 import org.cresques.io.DxfFile;
 import org.cresques.io.DxfGroup;
 import org.cresques.io.DxfGroupVector;
 import org.cresques.px.Extent;
 import org.cresques.px.IObjList;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -42,8 +42,8 @@ import org.cresques.px.IObjList;
  * CAD. La creación se realiza partiendo de las entidades obtenidas de un fichero DXF.
  * @author jmorell
  */
-public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
-    IProjection proj = null;
+public class DxfEntityMaker implements DxfFile.EntityFactory, Georeferenced {
+	CoordinateReferenceSystem crs = null;
     DxfEntity lastEntity = null;
     DxfEntityList entities = null;
     Vector blkList = null;
@@ -66,8 +66,8 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
      * @param proj, proyección cartográfica en la que se encontrarán las entidades
      * que creemos.
      */
-    public DxfEntityMaker(IProjection proj) {
-        this.proj = proj;
+    public DxfEntityMaker(CoordinateReferenceSystem proj) {
+        this.crs = proj;
         layers = new DxfTable();
         entities = new DxfEntityList(proj);
         blkList = new Vector();
@@ -138,7 +138,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
      */
     public void createPolyline(DxfGroupVector grp) throws Exception {
         DxfLayer layer = (DxfLayer) layers.getByName(grp.getDataAsString(8));
-        DxfPolyline entity = new DxfPolyline(proj, layer);
+        DxfPolyline entity = new DxfPolyline(crs, layer);
 
         if (grp.hasCode(5)) {
             String hexS = grp.getDataAsString(5);
@@ -236,8 +236,9 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                         ((DxfPolyline) lastEntity).pts.remove(cnt - 1);
 
                         for (int i = 0; i < arc.size(); i++) {
-                            Point2D pt = proj.createPoint(((Point2D) arc.get(i)).getX(),
-                                                          ((Point2D) arc.get(i)).getY());
+                            Point2D arci = (Point2D) arc.get(i);
+							Point2D pt = new Point2D.Double(arci.getX(),
+									arci.getY());
                             ((DxfPolyline) lastEntity).add(pt);
 
                             if (((DxfPolyline) lastEntity).pts.size() == 1) {
@@ -266,8 +267,9 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                         ((DxfPolyline) lastEntity).pts.remove(cnt - 1);
 
                         for (int i = arc.size() - 1; i >= 0; i--) {
-                            Point2D pt = proj.createPoint(((Point2D) arc.get(i)).getX(),
-                                                          ((Point2D) arc.get(i)).getY());
+                        	Point2D arci = (Point2D) arc.get(i);
+							Point2D pt = new Point2D.Double(arci.getX(),
+									arci.getY());
                             ((DxfPolyline) lastEntity).add(pt);
 
                             if (((DxfPolyline) lastEntity).pts.size() == 1) {
@@ -368,7 +370,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                 y = point_out.getY();
                 z = point_out.getZ();
 
-                Point2D ptaux = proj.createPoint(x, y);
+                Point2D ptaux = new Point2D.Double(x, y);
                 Point3D pt = new Point3D(ptaux.getX(), ptaux.getY(), z);
                 ((DxfPolyline) lastEntity).add(pt);
 
@@ -392,7 +394,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             y = point_out.getY();
             z = point_out.getZ();
 
-            Point2D ptaux = proj.createPoint(x, y);
+            Point2D ptaux = new Point2D.Double(x, y);
             Point3D pt = new Point3D(ptaux.getX(), ptaux.getY(), z);
             ((DxfPolyline) lastEntity).add(pt);
 
@@ -416,8 +418,9 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                 ((DxfPolyline) lastEntity).pts.remove(cnt - 1);
 
                 for (int i = 0; i < arc.size(); i++) {
-                    ptaux = proj.createPoint(((Point2D) arc.get(i)).getX(),
-                                          ((Point2D) arc.get(i)).getY());
+                	Point2D arci = (Point2D) arc.get(i);
+					ptaux = new Point2D.Double(arci.getX(),
+							arci.getY());
                     pt = new Point3D(ptaux.getX(), ptaux.getY(), z);
                     ((DxfPolyline) lastEntity).add(pt);
 
@@ -445,7 +448,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             y = point_out.getY();
             z = point_out.getZ();
 
-            Point2D ptaux = proj.createPoint(x, y);
+            Point2D ptaux = new Point2D.Double(x, y);
             Point3D pt = new Point3D(ptaux.getX(), ptaux.getY(), z);
             ((DxfPolyline) lastEntity).add(pt);
 
@@ -469,8 +472,8 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                 ((DxfPolyline) lastEntity).pts.remove(cnt - 1);
 
                 for (int i = arc.size() - 1; i >= 0; i--) {
-                    ptaux = proj.createPoint(((Point2D) arc.get(i)).getX(),
-                                          ((Point2D) arc.get(i)).getY());
+                	Point2D arci = (Point2D) arc.get(i);
+					ptaux = new Point2D.Double(arci.getX(),	arci.getY());
                     pt = new Point3D(ptaux.getX(), ptaux.getY(), z);
                     ((DxfPolyline) lastEntity).add(pt);
 
@@ -506,7 +509,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         double extz = 1.0;
 
         DxfLayer layer = (DxfLayer) layers.getByName(grp.getDataAsString(8));
-        DxfLwPolyline entity = new DxfLwPolyline(proj, layer);
+        DxfLwPolyline entity = new DxfLwPolyline(crs, layer);
         
         if (grp.hasCode(38)) {
             entity.setElevation(grp.getDataAsDouble(38));
@@ -556,7 +559,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
 
                 //
                 //if (y <= 1.0) throw new Exception("Y == "+y);
-                entity.add(proj.createPoint(x, y));
+                entity.add(new Point2D.Double(x, y));
                 entity.addBulge(new Double(0));
                 x = 0.0;
                 y = 0.0;
@@ -622,7 +625,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             z1 = grp.getDataAsDouble(30);
         }
 
-        pt1 = proj.createPoint(x, y);
+        pt1 = new Point2D.Double(x, y);
         x = grp.getDataAsDouble(11);
         y = grp.getDataAsDouble(21);
 
@@ -630,7 +633,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             z2 = grp.getDataAsDouble(31);
         }
 
-        pt2 = proj.createPoint(x, y);
+        pt2 = new Point2D.Double(x, y);
 
         if (grp.hasCode(210)) {
             extx = grp.getDataAsDouble(210);
@@ -652,7 +655,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         pt1.setLocation(point_out1);
         pt2.setLocation(point_out2);
 
-        DxfLine entity = new DxfLine(proj, layer, pt1, pt2);
+        DxfLine entity = new DxfLine(crs, layer, pt1, pt2);
 
         if (grp.hasCode(5)) {
             String hexS = grp.getDataAsString(5);
@@ -699,7 +702,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
 
         txt = grp.getDataAsString(1);
 
-        DxfText entity = new DxfText(proj, layer, txt);
+        DxfText entity = new DxfText(crs, layer, txt);
         double extx = 0.0;
         double exty = 0.0;
         double extz = 1.0;
@@ -727,13 +730,13 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         y = point_out.getY();
         z = point_out.getZ();
 
-        entity.setPt(proj.createPoint(x, y));
+        entity.setPt(new Point2D.Double(x, y));
 
         //entity.setPt1(proj.createPoint(x, y));
         if (grp.hasCode(11)) {
             entity.setTwoPointsFlag(true);
-            entity.setPt1(proj.createPoint(entity.getPt().getX(),
-                                           entity.getPt().getY()));
+			Point2D pt = entity.getPt();
+			entity.setPt1(new Point2D.Double(pt.getX(), pt.getY()));
             x = grp.getDataAsDouble(11);
             y = grp.getDataAsDouble(21);
             z = grp.getDataAsDouble(31);
@@ -744,7 +747,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             y = point_out.getY();
             z = point_out.getZ();
 
-            entity.setPt2(proj.createPoint(x, y));
+            entity.setPt2(new Point2D.Double(x, y));
         }
 
         entity.setHeight(grp.getDataAsDouble(40));
@@ -794,7 +797,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         double exty = 0.0;
         double extz = 1.0;
 
-        DxfPoint entity = new DxfPoint(proj, layer);
+        DxfPoint entity = new DxfPoint(crs, layer);
 
         if (grp.hasCode(5)) {
             String hexS = grp.getDataAsString(5);
@@ -835,7 +838,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         Point2D point_out = DxfCalXtru.CalculateXtru(point_in, xtru);
         x = point_out.getX();
         y = point_out.getY();
-        entity.setPt(proj.createPoint(x, y));
+        entity.setPt(new Point2D.Double(x, y));
 
         if (addingToBlock == false) {
             entities.add(entity);
@@ -893,7 +896,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         x = point_out.getX();
         y = point_out.getY();
 
-        Point2D center = proj.createPoint(x, y);
+        Point2D center = new Point2D.Double(x, y);
         Point2D[] pts = new Point2D[360];
         int angulo = 0;
 
@@ -909,7 +912,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             }
         }
 
-        DxfCircle entity = new DxfCircle(proj, layer, pts);
+        DxfCircle entity = new DxfCircle(crs, layer, pts);
 
         if (grp.hasCode(5)) {
             String hexS = grp.getDataAsString(5);
@@ -999,7 +1002,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         double majorAxisLength = pt1.distance(pt2);
         double minorAxisLength = majorAxisLength * mMAxisRatio;
 
-        DxfEllipse entity = new DxfEllipse(proj, layer, pt1, pt2,
+        DxfEllipse entity = new DxfEllipse(crs, layer, pt1, pt2,
                                            minorAxisLength);
 
         if (grp.hasCode(5)) {
@@ -1079,7 +1082,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         x = point_out.getX();
         y = point_out.getY();
 
-        Point2D center = proj.createPoint(x, y);
+        Point2D center = new Point2D.Double(x, y);
 
         //System.out.println("empieza = " + empieza + ", acaba = " + acaba);
         int iempieza = (int) empieza;
@@ -1144,7 +1147,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                                                                     (r * Math.sin((angulo * Math.PI) / (double) 180.0)));
         }
 
-        DxfArc entity = new DxfArc(proj, layer, pts);
+        DxfArc entity = new DxfArc(crs, layer, pts);
 
         if (grp.hasCode(5)) {
             String hexS = grp.getDataAsString(5);
@@ -1205,8 +1208,8 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
 
         DxfLayer layer = (DxfLayer) layers.getByName(grp.getDataAsString(8));
 
-        DxfInsert entity = new DxfInsert(proj, layer);
-        DxfPoint secondEntity = new DxfPoint(proj, layer);
+        DxfInsert entity = new DxfInsert(crs, layer);
+        DxfPoint secondEntity = new DxfPoint(crs, layer);
 
         // jmorell, 050406: implementación inicial de los ATTRIBS para el piloto ...
         int attributesFollowFlag = 0;
@@ -1285,8 +1288,8 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
 
         entity.encuentraBloque(blockName);
 
-        entity.setPt(proj.createPoint(x, y));
-        secondEntity.setPt(proj.createPoint(x, y));
+        entity.setPt(new Point2D.Double(x, y));
+        secondEntity.setPt(new Point2D.Double(x, y));
 
         if ((entity.getBlockFound() == true) && (attributesFollowFlag != 1)) {
             gestionaInsert(entity, layer);
@@ -1333,7 +1336,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             z1 = grp.getDataAsDouble(30);
         }
 
-        pts[0] = proj.createPoint(x, y);
+        pts[0] = new Point2D.Double(x, y);
         x = grp.getDataAsDouble(11);
         y = grp.getDataAsDouble(21);
 
@@ -1341,7 +1344,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             z2 = grp.getDataAsDouble(31);
         }
 
-        pts[1] = proj.createPoint(x, y);
+        pts[1] = new Point2D.Double(x, y);
         x = grp.getDataAsDouble(12);
         y = grp.getDataAsDouble(22);
 
@@ -1349,7 +1352,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             z3 = grp.getDataAsDouble(32);
         }
 
-        pts[2] = proj.createPoint(x, y);
+        pts[2] = new Point2D.Double(x, y);
         x = grp.getDataAsDouble(13);
         y = grp.getDataAsDouble(23);
 
@@ -1357,7 +1360,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             z2 = grp.getDataAsDouble(33);
         }
 
-        pts[3] = proj.createPoint(x, y);
+        pts[3] = new Point2D.Double(x, y);
 
         if (grp.hasCode(210)) {
             extx = grp.getDataAsDouble(210);
@@ -1385,7 +1388,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         pts[2].setLocation(point_out3);
         pts[3].setLocation(point_out4);
 
-        DxfSolid entity = new DxfSolid(proj, layer, pts);
+        DxfSolid entity = new DxfSolid(crs, layer, pts);
 
         if (grp.hasCode(62)) {
             entity.dxfColor = grp.getDataAsInt(62);
@@ -1417,7 +1420,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         DxfGroup g = null;
 
         DxfLayer layer = (DxfLayer) layers.getByName(grp.getDataAsString(8));
-        DxfLwPolyline entity = new DxfLwPolyline(proj, layer);
+        DxfLwPolyline entity = new DxfLwPolyline(crs, layer);
 
         for (int i = 0; i < grp.size(); i++) {
             g = (DxfGroup) grp.get(i);
@@ -1428,7 +1431,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                 y = ((Double) g.getData()).doubleValue();
 
                 //if (y <= 1.0) throw new Exception("Y == "+y);
-                entity.add(proj.createPoint(x, y));
+                entity.add(new Point2D.Double(x, y));
                 x = 0.0;
                 y = 0.0;
             }
@@ -1461,7 +1464,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
      */
     public void createBlock(DxfGroupVector grp) throws Exception {
         DxfLayer layer = (DxfLayer) layers.getByName(grp.getDataAsString(8));
-        blk = new DxfBlock(proj);
+        blk = new DxfBlock(crs);
 
         Point2D basePoint = new Point2D.Double();
         String blockName = "";
@@ -1568,16 +1571,16 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
      * Establece la proyección cartográfica en la que se van a crear las entidades.
      * @param p, Proyección cartográfica.
      */
-    public void setProjection(IProjection proj) {
-        this.proj = proj;
+    public void setCrs(CoordinateReferenceSystem proj) {
+        this.crs = proj;
     }
     
     /**
      * Devuelve la proyección cartográfica en la que se encuentran las entidades.
-     * @return IProjection, proyección cartográfica.
+     * @return CoordinateReferenceSystem, proyección cartográfica.
      */
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
     
     /**
@@ -1585,9 +1588,9 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
      * transformación.
      * @param rp, coordenadas de transformación.
      */
-    public void reProject(ICoordTrans rp) {
-        entities.reProject(rp);
-        setProjection(rp.getPDest());
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
+        entities.reProject(trans, target);
+        setCrs(target);
     }
     
     /**
@@ -1683,7 +1686,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                       ((pointAux.getY() * sFactorY) * Math.cos(rAngleRad)));
                 point22.setLocation(laX, laY);
 
-                DxfLine dxfLinee = new DxfLine(proj, layer, point11, point22);
+                DxfLine dxfLinee = new DxfLine(crs, layer, point11, point22);
 
                 if (addingToBlock == false) {
                     entities.add(dxfLinee);
@@ -1704,7 +1707,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                              ((pointAux.getY() * sFactorY) * Math.cos(rAngleRad)));
                 point11.setLocation(laX, laY);
 
-                DxfInsert dxfInsertt = new DxfInsert(proj, layer);
+                DxfInsert dxfInsertt = new DxfInsert(crs, layer);
 
                 dxfInsertt.pt = point11;
 
@@ -1713,7 +1716,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                 dxfInsertt.blockName = dxfInsert.blockName;
                 dxfInsertt.rotAngle = dxfInsert.rotAngle;
                 dxfInsertt.layer = dxfInsert.layer;
-                dxfInsertt.proj = dxfInsert.proj;
+                dxfInsertt.crs = dxfInsert.crs;
 
                 Point2D newScale = new Point2D.Double(dxfInsert.getScaleFactor()
                                                                .getX() * sFactorX,
@@ -1726,7 +1729,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             } else if (dxfEntity instanceof DxfPolyline) {
                 dxfPolyline = (DxfPolyline) dxfEntity;
 
-                DxfPolyline dxfPolylinee = new DxfPolyline(proj, layer);
+                DxfPolyline dxfPolylinee = new DxfPolyline(crs, layer);
 
                 if (dxfPolyline.closed) {
                     dxfPolylinee.closed = true;
@@ -1785,7 +1788,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                     //pointss[j].setLocation(entity.pt.getX() - (entity.block.bPoint.getX() * entity.getScaleFactor().getX()) + ((points[j].getX()*Math.cos((entity.rotAngle*Math.PI)/180.0) + points[j].getY()*(-1)*Math.sin((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getX()), entity.pt.getY() - (entity.block.bPoint.getY() * entity.getScaleFactor().getY()) + ((points[j].getX()*Math.sin((entity.rotAngle*Math.PI)/180.0) + points[j].getY()*Math.cos((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getY()));
                 }
 
-                DxfArc dxfArcc = new DxfArc(proj, layer, pointss);
+                DxfArc dxfArcc = new DxfArc(crs, layer, pointss);
 
                 // 050315, jmorell: Para que no se pierdan las propiedades en el
                 //					caso de objetos dentro de bloques.
@@ -1868,7 +1871,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                     //pointss[j].setLocation(entity.pt.getX() - (entity.block.bPoint.getX() * entity.getScaleFactor().getX()) + ((points[j].getX()*Math.cos((entity.rotAngle*Math.PI)/180.0) + points[j].getY()*(-1)*Math.sin((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getX()), entity.pt.getY() - (entity.block.bPoint.getY() * entity.getScaleFactor().getY()) + ((points[j].getX()*Math.sin((entity.rotAngle*Math.PI)/180.0) + points[j].getY()*Math.cos((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getY()));
                 }
 
-                DxfCircle dxfCirclee = new DxfCircle(proj, layer, pointss);
+                DxfCircle dxfCirclee = new DxfCircle(crs, layer, pointss);
 
                 // 050315, jmorell: Para que no se pierdan las propiedades en el
                 //					caso de objetos dentro de bloques.
@@ -1895,7 +1898,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
             } else if (dxfEntity instanceof DxfLwPolyline) {
                 dxfLwPolyline = (DxfLwPolyline) dxfEntity;
 
-                DxfLwPolyline dxfLwPolylinee = new DxfLwPolyline(proj, layer);
+                DxfLwPolyline dxfLwPolylinee = new DxfLwPolyline(crs, layer);
                 Point2D[] points = new Point2D[dxfLwPolyline.pts.size()];
                 Point2D[] pointss = new Point2D[dxfLwPolyline.pts.size()];
 
@@ -1939,7 +1942,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                 point11.setLocation(laX, laY);
 
                 //point11.setLocation(entity.pt.getX() - (entity.block.bPoint.getX() * entity.getScaleFactor().getX()) + ((point1.getX()*Math.cos((entity.rotAngle*Math.PI)/180.0) + point1.getY()*(-1)*Math.sin((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getX()), entity.pt.getY() - (entity.block.bPoint.getY() * entity.getScaleFactor().getY()) + ((point1.getX()*Math.sin((entity.rotAngle*Math.PI)/180.0) + point1.getY()*Math.cos((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getY()));
-                DxfPoint dxfPointt = new DxfPoint(proj, layer);
+                DxfPoint dxfPointt = new DxfPoint(crs, layer);
 
                 //dxfPointt.pt = point11;
                 dxfPointt.setPt(point11);
@@ -1976,7 +1979,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                     point22.setLocation(laX, laY);
 
                     //point22.setLocation(entity.pt.getX() - (entity.block.bPoint.getX() * entity.getScaleFactor().getX()) + ((point2.getX()*Math.cos((entity.rotAngle*Math.PI)/180.0) + point2.getY()*(-1)*Math.sin((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getX()), entity.pt.getY() - (entity.block.bPoint.getY() * entity.getScaleFactor().getY()) + ((point2.getX()*Math.sin((entity.rotAngle*Math.PI)/180.0) + point2.getY()*Math.cos((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getY()));
-                    DxfText dxfTextt = new DxfText(proj, layer,
+                    DxfText dxfTextt = new DxfText(crs, layer,
                                                    dxfText.getText());
                     dxfTextt.pts[0] = point11;
                     dxfTextt.pts[1] = point22;
@@ -1998,7 +2001,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                     point11.setLocation(laX, laY);
 
                     //point11.setLocation(entity.pt.getX() - (entity.block.bPoint.getX() * entity.getScaleFactor().getX()) + ((point1.getX()*Math.cos((entity.rotAngle*Math.PI)/180.0) + point1.getY()*(-1)*Math.sin((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getX()), entity.pt.getY() - (entity.block.bPoint.getY() * entity.getScaleFactor().getY()) + ((point1.getX()*Math.sin((entity.rotAngle*Math.PI)/180.0) + point1.getY()*Math.cos((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getY()));
-                    DxfText dxfTextt = new DxfText(proj, layer,
+                    DxfText dxfTextt = new DxfText(crs, layer,
                                                    dxfText.getText());
                     dxfTextt.setPt(point11);
 
@@ -2029,7 +2032,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
                     //pointss[j].setLocation(entity.pt.getX() - (entity.block.bPoint.getX() * entity.getScaleFactor().getX()) + ((points[j].getX()*Math.cos((entity.rotAngle*Math.PI)/180.0) + points[j].getY()*(-1)*Math.sin((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getX()), entity.pt.getY() - (entity.block.bPoint.getY() * entity.getScaleFactor().getY()) + ((points[j].getX()*Math.sin((entity.rotAngle*Math.PI)/180.0) + points[j].getY()*Math.cos((entity.rotAngle*Math.PI)/180.0)) * entity.scaleFactor.getY()));
                 }
 
-                DxfSolid dxfSolidd = new DxfSolid(proj, layer, pointss);
+                DxfSolid dxfSolidd = new DxfSolid(crs, layer, pointss);
                 Point2D aux = dxfSolidd.pts[2];
                 dxfSolidd.pts[2] = dxfSolidd.pts[3];
                 dxfSolidd.pts[3] = aux;
@@ -2108,7 +2111,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         double extz = 1.0;
 
         DxfLayer layer = (DxfLayer) layers.getByName(grp.getDataAsString(8));
-        DxfAttrib entity = new DxfAttrib(proj, layer);
+        DxfAttrib entity = new DxfAttrib(crs, layer);
 
         if (grp.hasCode(1)) {
             String strAux1 = grp.getDataAsString(1);
@@ -2164,7 +2167,7 @@ public class DxfEntityMaker implements DxfFile.EntityFactory, Projected {
         x = point_out.getX();
         y = point_out.getY();
         z = point_out.getZ();
-        entity.setPt(proj.createPoint(x, y));
+        entity.setPt(new Point2D.Double(x, y));
 
         if (grp.hasCode(40)) {
             Double heightD = new Double(grp.getDataAsDouble(40));

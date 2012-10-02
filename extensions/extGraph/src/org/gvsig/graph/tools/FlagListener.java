@@ -45,7 +45,6 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JOptionPane;
 
-import org.cresques.cts.GeoCalc;
 import org.gvsig.graph.core.GraphException;
 import org.gvsig.graph.core.GvFlag;
 import org.gvsig.graph.core.Network;

@@ -54,12 +54,12 @@ import java.util.HashMap;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.topology.ui.util.GUIUtil;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.fmap.edition.ShpSchemaManager;
@@ -77,7 +77,7 @@ public class PolyToLinesGeoprocessTest extends TestCase {
 	
 	private File baseDataPath;
 	private File baseDriversPath;
-	private IProjection PROJECTION_DEFAULT;
+	private CoordinateReferenceSystem DEFAULT_CRS;
 	private FLyrVect poly1;
 
 	public void setUp() throws Exception {
@@ -102,7 +102,7 @@ public class PolyToLinesGeoprocessTest extends TestCase {
 		if (LayerFactory.getDM().getDriverNames().length < 1)
 			throw new Exception("Can't find drivers in path: "
 					+ baseDriversPath);
-		PROJECTION_DEFAULT = CRSFactory.getCRS("EPSG:23030");
+		DEFAULT_CRS = ProjectionUtils.getCRS("EPSG:23030");
 		
 		poly1 = (FLyrVect) newLayer("poligonos.shp",
 				"gvSIG shp driver");
@@ -115,7 +115,7 @@ public class PolyToLinesGeoprocessTest extends TestCase {
 		FLayer solution = null;
 		File file = new File(baseDataPath, fileName);
 		solution = com.iver.cit.gvsig.fmap.layers.LayerFactory.createLayer(
-				fileName, driverName, file, PROJECTION_DEFAULT);
+				fileName, driverName, file, DEFAULT_CRS);
 		solution.setAvailable(true);
 		return solution;
 

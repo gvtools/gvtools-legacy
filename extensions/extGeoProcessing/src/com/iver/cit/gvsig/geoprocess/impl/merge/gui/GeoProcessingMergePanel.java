@@ -64,10 +64,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionListener;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -571,7 +570,7 @@ public class GeoProcessingMergePanel
 		else
 			solution = new FLyrVect[inputLayersToAdd.length];
 		//sin florituras. cogemos la primera que haya
-		IProjection projection = layers.getLayer(0).getProjection();
+		CoordinateReferenceSystem crs = layers.getLayer(0).getCrs();
 		DgnMemoryDriver dgnDriver = null;
 		IndexedShpDriver shpDriver = null;
 		DXFMemoryDriver dxfDriver = null;
@@ -601,9 +600,7 @@ public class GeoProcessingMergePanel
 					driver = dxfDriver;
 				}
 				solution[i] = (FLyrVect) LayerFactory.createLayer(fileName,
-												driver,
-												afile,
-												projection);
+						driver, afile, crs);
 			}  catch (ReadDriverException e) {
 				String errorText =  fullPath + "\n";
 				errors.add(errorText);

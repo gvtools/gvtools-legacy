@@ -3,8 +3,8 @@
  */
 package com.iver.cit.gvsig.project.documents.view.info.gui;
 
-import org.cresques.cts.IProjection;
 import org.cresques.ui.cts.CSSelectionDialogPanel;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -17,7 +17,7 @@ import com.iver.cit.gvsig.gui.panels.crs.ISelectCrsPanel;
 public class CSSelectionDialog
 	extends CSSelectionDialogPanel implements IWindow, ISelectCrsPanel {
 	private boolean okPressed = false;
-	private IProjection lastProj = null;
+	private CoordinateReferenceSystem lastCrs = null;
 
 	/**
 	 * 
@@ -41,7 +41,7 @@ public class CSSelectionDialog
         });
         getCancelButton().addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
-                setProjection(lastProj);
+                setCrs(lastCrs);
                 PluginServices.getMDIManager().closeWindow(CSSelectionDialog.this);
                 okPressed = false;
             }
@@ -61,15 +61,15 @@ public class CSSelectionDialog
 	/**
 	 * @return
 	 */
-	public IProjection getProjection() {
-		return getProjPanel().getProjection();
+	public CoordinateReferenceSystem getCrs() {
+		return getProjPanel().getCrs();
 	}
 	/**
-	 * @param proj
+	 * @param crs
 	 */
-	public void setProjection(IProjection proj) {
-		lastProj = proj;
-		getProjPanel().setProjection(proj);
+	public void setCrs(CoordinateReferenceSystem crs) {
+		lastCrs = crs;
+		getProjPanel().setCrs(crs);
 	}
 	public Object getWindowProfile() {
 		return WindowInfo.DIALOG_PROFILE;

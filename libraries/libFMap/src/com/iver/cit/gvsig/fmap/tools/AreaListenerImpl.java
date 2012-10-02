@@ -48,12 +48,14 @@ import java.awt.geom.Point2D;
 
 import javax.swing.ImageIcon;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
+import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener;
 import com.iver.cit.gvsig.fmap.tools.geo.Geo;
@@ -151,7 +153,7 @@ public class AreaListenerImpl implements PolylineListener {
 	protected double returnArea(Point2D point) {
 		Double[] xs=event.getXs();
 		Double[] ys=event.getYs();
-		if (mapCtrl.getProjection().isProjected()) {
+		if (mapCtrl.getCrs() instanceof ProjectedCRS) {
 			return returnCoordsArea(xs,ys,point);
 		}
 		return returnGeoCArea(xs,ys,point);
@@ -191,13 +193,15 @@ public class AreaListenerImpl implements PolylineListener {
 		elArea = Math.abs(elArea / 2.0);
 		return (elArea*(Math.pow(MapContext.getDistanceTrans2Meter()[vp.getMapUnits()],2)));
 	}
-	public static void main(String[] args) {
-		IProjection projectionUTM = CRSFactory.getCRS("EPSG:23030");
+	public static void main(String[] args) throws Exception {
+		CoordinateReferenceSystem projectionUTM = ProjectionUtils
+				.getCRS("EPSG:23030");
 		ViewPort vpUTM = new ViewPort(projectionUTM);
 		MapControl mcUTM=new MapControl();
 		mcUTM.setMapContext(new MapContext(vpUTM));
 		AreaListenerImpl areaListenerUTM=new AreaListenerImpl(mcUTM);
-		IProjection projectionGeo = CRSFactory.getCRS("EPSG:4230");
+		CoordinateReferenceSystem projectionGeo = ProjectionUtils
+				.getCRS("EPSG:4230");
 		ViewPort vpGeo = new ViewPort(projectionGeo);
 		MapControl mcGeo=new MapControl();
 		mcGeo.setMapContext(new MapContext(vpGeo));

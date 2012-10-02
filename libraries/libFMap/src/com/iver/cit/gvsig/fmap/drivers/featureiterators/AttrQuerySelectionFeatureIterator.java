@@ -57,7 +57,7 @@ package com.iver.cit.gvsig.fmap.drivers.featureiterators;
 
 import java.util.BitSet;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
@@ -89,10 +89,10 @@ public class AttrQuerySelectionFeatureIterator extends DefaultFeatureIterator {
 	private String sqlQuery;
 	private long[] indexes;
 	private BitSet selection=null;
+
 	public AttrQuerySelectionFeatureIterator(ReadableVectorial source,
-			IProjection sourceProj,
-			IProjection targetProj,
-			String sqlQuery) throws ReadDriverException {
+			CoordinateReferenceSystem sourceCrs,
+			CoordinateReferenceSystem targetCrs, String sqlQuery) throws ReadDriverException {
 		super(source);
 		this.sqlQuery = sqlQuery;
 		selection=source.getRecordset().getSelection();
@@ -114,11 +114,11 @@ public class AttrQuerySelectionFeatureIterator extends DefaultFeatureIterator {
 			}
 
 			//check to avoid reprojections with the same projection
-			if(targetProj != null){
+			if(targetCrs != null){
 				// FJP: Si la capa original no sabemos que proyeccion tiene, no hacemos nada
-				if (sourceProj != null) {
-					if(!(targetProj.getAbrev().equalsIgnoreCase(sourceProj.getAbrev())))
-						this.targetProjection = targetProj;
+				if (sourceCrs != null) {
+					if(!(targetCrs.getName().equals(sourceCrs.getName())))
+						this.targetCrs = targetCrs;
 				}
 			}
 

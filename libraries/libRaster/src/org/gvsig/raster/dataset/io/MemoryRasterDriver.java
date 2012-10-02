@@ -27,8 +27,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.dataset.BandAccessException;
 import org.gvsig.raster.dataset.BandList;
 import org.gvsig.raster.dataset.FileNotOpenException;
@@ -41,6 +39,8 @@ import org.gvsig.raster.datastruct.Extent;
 import org.gvsig.raster.datastruct.Transparency;
 import org.gvsig.raster.util.RasterUtilities;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 /**
  * Driver para datos cargados en un objeto IBuffer
@@ -74,7 +74,7 @@ public class MemoryRasterDriver extends RasterDataset {
 	 * @param buf Buffer
 	 * @throws NotSupportedExtensionException
 	 */
-	public MemoryRasterDriver(IProjection proj, Object buf)throws NotSupportedExtensionException {
+	public MemoryRasterDriver(CoordinateReferenceSystem crs, Object buf)throws NotSupportedExtensionException {
 		super(null, null);
 		setParam(buf);
 		if(!(buf instanceof MemoryRasterDriverParam))
@@ -151,7 +151,7 @@ public class MemoryRasterDriver extends RasterDataset {
 	 *  (non-Javadoc)
 	 * @see org.cresques.geo.Projected#reProject(org.cresques.cts.ICoordTrans)
 	 */
-	public void reProject(ICoordTrans rp) {
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
 	}
 	
 	/**

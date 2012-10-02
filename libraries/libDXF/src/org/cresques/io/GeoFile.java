@@ -26,11 +26,11 @@ package org.cresques.io;
 import java.awt.geom.AffineTransform;
 import java.util.Date;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-import org.cresques.geo.Projected;
+import org.cresques.geo.Georeferenced;
 import org.cresques.px.Extent;
 import org.cresques.px.IObjList;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -38,8 +38,8 @@ import org.cresques.px.IObjList;
  *
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>* @author administrador
  */
-public abstract class GeoFile implements Projected, Extent.Has {
-    IProjection proj = null;
+public abstract class GeoFile implements Georeferenced, Extent.Has {
+	CoordinateReferenceSystem crs = null;
     /**
      * Extent completo del raster. Este contiene las coordenadas reales tanto
      * para un raster rotado como sin rotar. Este extent coincide con requestExtent
@@ -77,8 +77,8 @@ public abstract class GeoFile implements Projected, Extent.Has {
     public GeoFile() {
     }
 
-    public GeoFile(IProjection p, String n) {
-        proj = p;
+    public GeoFile(CoordinateReferenceSystem crs, String n) {
+        this.crs = crs;
         name = n;
 
         if (name != null) {
@@ -105,15 +105,16 @@ public abstract class GeoFile implements Projected, Extent.Has {
         fileSize = sz;
     }
 
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
 
-    public void setProjection(IProjection p) {
-        proj = p;
+    public void setCrs(CoordinateReferenceSystem p) {
+        crs = p;
     }
 
-    abstract public void reProject(ICoordTrans rp);
+	abstract public void reProject(MathTransform trans,
+			CoordinateReferenceSystem target);
 
     /**
      * Extent completo del raster. Este contiene las coordenadas reales tanto

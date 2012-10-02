@@ -50,11 +50,11 @@ package com.iver.cit.gvsig.referencing;
 
 import java.util.List;
 
-import org.cresques.cts.IProjection;
 import org.geotools.referencing.operation.builder.MappedPosition;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.referencing.LineLyrAdapter;
 import org.gvsig.referencing.MappedPositionContainer;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
@@ -103,11 +103,11 @@ public class MappedPositionContainerLayerBased implements
 		return listOfMapped.size();
 	}
 
-	public FLyrVect getLinkLyr(IProjection proj) {
+	public FLyrVect getLinkLyr(CoordinateReferenceSystem crs) {
 		FLyrVect solution = null;
 		try {
 			solution = (FLyrVect) lineLyr.cloneLayer();
-			solution.setProjection(proj);
+			solution.setCrs(crs);
 			hasBeenAddedToToc = true;
 		} catch (Exception e) {
 			e.printStackTrace();

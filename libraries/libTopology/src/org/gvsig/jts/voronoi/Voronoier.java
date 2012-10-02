@@ -95,10 +95,8 @@ public class Voronoier {
 		// IncrementalTinVoronoiStrategy triangleDt = new
 		// IncrementalTinVoronoiStrategy();
 		// strategies.put(triangleDt.getName(), triangleDt );
-		// TODO geotools refactoring
-		// IncrementalRectBoundsVoronoiStrategy rectangleDt = new
-		// IncrementalRectBoundsVoronoiStrategy();
-		// strategies.put(rectangleDt.getName(), rectangleDt);
+		IncrementalRectBoundsVoronoiStrategy rectangleDt = new IncrementalRectBoundsVoronoiStrategy();
+		strategies.put(rectangleDt.getName(), rectangleDt);
 	}
 	
 	public static void registerVoronoiStrategy(VoronoiStrategy voronoi, String name){

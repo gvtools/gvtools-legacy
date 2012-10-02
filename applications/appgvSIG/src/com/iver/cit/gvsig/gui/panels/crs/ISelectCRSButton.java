@@ -1,13 +1,11 @@
 package com.iver.cit.gvsig.gui.panels.crs;
 
-import javax.swing.JButton;
-
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public interface ISelectCRSButton {
 	 public boolean isTransPanelActive();
 	 public void setTransPanelActive(boolean transPanelActive);
-	 public IProjection getCurProj();
+	 public CoordinateReferenceSystem getCurrentCrs();
 	 public boolean isOkPressed();
-	 public void setCurProj(IProjection curProj);
+	 public void setCurrentCrs(CoordinateReferenceSystem curProj);
 }

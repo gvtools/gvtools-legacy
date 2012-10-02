@@ -20,12 +20,11 @@ package com.iver.cit.gvsig.project.documents.table;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.engine.data.driver.FileDriver;
@@ -87,7 +86,8 @@ public class TableFileOpen extends AbstractFileOpen {
 	 * (non-Javadoc)
 	 * @see org.gvsig.raster.gui.wizards.IFileOpen#execute(java.io.File[])
 	 */
-	public Rectangle2D createLayer(File file, MapControl mapControl, String driverName, IProjection proj) {
+	public Rectangle2D createLayer(File file, MapControl mapControl,
+			String driverName, CoordinateReferenceSystem crs) {
 		return null;
 	}
 }

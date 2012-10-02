@@ -42,8 +42,9 @@ package com.iver.cit.gvsig.fmap.layers;
 
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -56,7 +57,6 @@ import com.iver.cit.gvsig.fmap.core.DefaultFeature;
 import com.iver.cit.gvsig.fmap.core.ICanReproject;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
@@ -103,7 +103,7 @@ public class VectorialDBAdapter extends VectorialAdapter implements ISpatialDB {
 	public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG) throws ReadDriverException
 	{
 
-		IProjection newProjection = CRSFactory.getCRS(strEPSG);
+		CoordinateReferenceSystem newCrs = ProjectionUtils.getCRS(strEPSG);
 		IFeatureIterator featureIterator = getFeatureIterator(r, strEPSG, null);
 		if(driver instanceof ICanReproject){
 			ICanReproject reprojectDriver = (ICanReproject)driver;
@@ -113,7 +113,7 @@ public class VectorialDBAdapter extends VectorialAdapter implements ISpatialDB {
 		}
 
 		return new ReprojectWrapperFeatureIterator(featureIterator,
-									getProjection(), newProjection);
+									getCrs(), newCrs);
 	}
 
     /* (non-Javadoc)
@@ -121,8 +121,8 @@ public class VectorialDBAdapter extends VectorialAdapter implements ISpatialDB {
 	 */
     public IFeatureIterator getFeatureIterator(Rectangle2D r, String strEPSG, String[] alphaNumericFieldsNeeded) throws ReadDriverException
     {
-    	IProjection newProjection = CRSFactory.getCRS(strEPSG);
-		Rectangle2D newRect = reprojectRectIfNecessary(r, newProjection);
+    	CoordinateReferenceSystem newCrs = ProjectionUtils.getCRS(strEPSG);
+		Rectangle2D newRect = reprojectRectIfNecessary(r, newCrs);
     	return ((IVectorialDatabaseDriver)driver).getFeatureIterator(newRect, strEPSG, alphaNumericFieldsNeeded);
     }
 
@@ -133,26 +133,26 @@ public class VectorialDBAdapter extends VectorialAdapter implements ISpatialDB {
      * can reproject, and some not
      * */
 	public IFeatureIterator getFeatureIterator(Rectangle2D rect,
-												String[] fields,
-												IProjection newProjection,
-												boolean fastIterator) throws ReadDriverException{
+			String[] fields, CoordinateReferenceSystem newCrs,
+			boolean fastIterator) throws ReadDriverException{
 		//TODO ver como incluir el concepto de fastIteration en bbdd
-		IProjection newProj=null;
-		if (newProjection!=null){
-			newProj=newProjection;
-		}else{
-			newProj=getProjection();
+		CoordinateReferenceSystem newProj = null;
+		if (newCrs != null) {
+			newProj = newCrs;
+		} else {
+			newProj = getCrs();
 		}
 
-		IFeatureIterator featureIterator = getFeatureIterator(rect, newProj.getAbrev(), fields);
+		String srs = ProjectionUtils.getAbrev(newProj);
+		IFeatureIterator featureIterator = getFeatureIterator(rect, srs, fields);
 		if(driver instanceof ICanReproject){
 			ICanReproject reprojectDriver = (ICanReproject)driver;
-			if(reprojectDriver.canReproject(newProj.getAbrev())){
+			if(reprojectDriver.canReproject(srs)){
 				return featureIterator;
 			}
 		}
 		return new ReprojectWrapperFeatureIterator(featureIterator,
-									getProjection(), newProj);
+									getCrs(), newProj);
 
 
 
@@ -252,16 +252,16 @@ public class VectorialDBAdapter extends VectorialAdapter implements ISpatialDB {
 		return ((IVectorialDatabaseDriver) driver).getRowIndexByFID(feat);
 	}
 	private Rectangle2D reprojectRectIfNecessary(Rectangle2D rect,
-			IProjection targetProjection) {
-
+			CoordinateReferenceSystem targetCrs) {
 		//by design, rect Rectangle2D must be in the target reprojection
 		//if targetReprojection != sourceReprojection, we are going to reproject
 		//rect to the source reprojection (is faster).
 		//once spatial check is made, result features will be reprojected in the inverse direction
-		if (targetProjection != null && getProjection() != null
-				&& targetProjection.getAbrev().compareTo(getProjection().getAbrev()) != 0 ) {
-			ICoordTrans trans = targetProjection.getCT(getProjection());
-			rect = trans.convert(rect);
+		if (targetCrs != null && getCrs() != null
+				&& !targetCrs.getName().equals(getCrs().getName())) {
+			MathTransform trans = ProjectionUtils.getCrsTransform(targetCrs,
+					getCrs());
+			rect = ProjectionUtils.transform(rect, trans);
 		}
 		return rect;
 	}

@@ -4,12 +4,12 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.DriverManager;
 import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.cit.gvsig.fmap.core.IFeature;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.edition.DefaultRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
@@ -22,7 +22,7 @@ import com.iver.cit.gvsig.fmap.layers.VectorialFileAdapter;
 public class testWriter {
 
 	public FLayer createLayer(String layerName, VectorialFileDriver d,
-			File f, IProjection proj) throws DriverException {
+			File f, CoordinateReferenceSystem crs) throws DriverException {
 			//TODO Comprobar si hay un adaptador ya
 			VectorialFileAdapter adapter = new VectorialFileAdapter(f);
 			adapter.setDriver(d);
@@ -30,7 +30,7 @@ public class testWriter {
 			capa.setName(layerName);
 
 			capa.setSource(adapter);
-			capa.setProjection(proj);
+			capa.setCrs(crs);
 
 
 			return capa;
@@ -55,7 +55,7 @@ public class testWriter {
 				FLyrVect layer= (FLyrVect) test.createLayer("prueba",
 						(VectorialFileDriver)driverManager.getDriver("gvSIG shp driver"),
 						original,
-						CRSFactory.getCRS("EPSG:23030"));
+						ProjectionUtils.getCRS("EPSG:23030"));
 
 
 				if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)

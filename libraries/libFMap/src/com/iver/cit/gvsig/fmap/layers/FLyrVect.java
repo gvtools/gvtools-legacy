@@ -54,8 +54,10 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.PrintQuality;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.tools.file.PathGenerator;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
@@ -126,7 +128,6 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelingFactory;
 import com.iver.cit.gvsig.fmap.spatialindex.IPersistentSpatialIndex;
 import com.iver.cit.gvsig.fmap.spatialindex.ISpatialIndex;
 import com.iver.cit.gvsig.fmap.spatialindex.QuadtreeJts;
-import com.iver.cit.gvsig.fmap.spatialindex.SpatialIndexException;
 import com.iver.utiles.IPersistence;
 import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.PostProcessSupport;
@@ -305,16 +306,16 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
             source.stop();
 
             // Si existe reproyección, reproyectar el extent
-            if (!(this.getProjection()!=null &&
-            		this.getMapContext().getProjection()!=null &&
-            		this.getProjection().getAbrev().equals(this.getMapContext().getProjection().getAbrev()))){
-            	ICoordTrans ct = getCoordTrans();
+		CoordinateReferenceSystem mapCrs = this.getMapContext().getCrs();
+		if (!(this.getCrs() != null && mapCrs != null && this.getCrs()
+				.getName().equals(mapCrs.getName()))){
+            	MathTransform trans = getCrsTransform();
             	try{
-            		if (ct != null) {
+            		if (trans != null) {
             			Point2D pt1 = new Point2D.Double(rAux.getMinX(), rAux.getMinY());
             			Point2D pt2 = new Point2D.Double(rAux.getMaxX(), rAux.getMaxY());
-            			pt1 = ct.convert(pt1, null);
-            			pt2 = ct.convert(pt2, null);
+            			pt1 = ProjectionUtils.transform(pt1, trans);
+            			pt2 = ProjectionUtils.transform(pt2, trans);
             			rAux = new Rectangle2D.Double();
             			rAux.setFrameFromDiagonal(pt1, pt2);
             		}
@@ -393,7 +394,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     				it = rv.getFeatureIterator(
     					viewPort.getAdjustedExtent(),
     					fieldList.toArray(new String[fieldList.size()]),
-    					viewPort.getProjection(),
+    					viewPort.getCrs(),
     					true);
 //    				rv.stop();
     			}
@@ -862,7 +863,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
         				it = getSource().getFeatureIterator(
         					viewPort.getAdjustedExtent(),
         					fieldList.toArray(new String[fieldList.size()]),
-        					viewPort.getProjection(),
+        					viewPort.getCrs(),
         					true);
         			}
 
@@ -1664,13 +1665,13 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
                 vea.setOriginalVectorialAdapter(getSource());
 //				azo: implementations of readablevectorial need
                 //references of projection and spatial index
-                vea.setProjection(getProjection());
+                vea.setCrs(getCrs());
                 vea.setSpatialIndex(spatialIndex);
 
 
                 // /vea.setSpatialIndex(getSpatialIndex());
                 // /vea.setFullExtent(getFullExtent());
-                vea.setCoordTrans(getCoordTrans());
+                vea.setCrsTransform(getCrsTransform());
                 vea.startEdition(EditionEvent.GRAPHIC);
                 setSource(vea);
                 getRecordset().setSelectionSupport(
@@ -1858,7 +1859,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
         clonedLayer.setVisible(isVisible());
         clonedLayer.setISpatialIndex(getISpatialIndex());
         clonedLayer.setName(getName());
-        clonedLayer.setCoordTrans(getCoordTrans());
+        clonedLayer.setCrsTransform(getCrsTransform());
 
         clonedLayer.setLegend((IVectorLegend)getLegend().cloneLegend());
 

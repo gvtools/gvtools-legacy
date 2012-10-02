@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import junit.framework.TestCase;
 
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.raster.buffer.RasterBufferInvalidException;
 import org.gvsig.raster.dataset.FileNotExistsException;
 import org.gvsig.raster.dataset.IBuffer;
@@ -16,7 +17,6 @@ import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
 public class TestVectorialROIsReader extends TestCase {
@@ -93,7 +93,8 @@ public class TestVectorialROIsReader extends TestCase {
 	public void testStack() {
 		String path = "./test-images/rois_polygons.shp";
 		try {
-			VectorialROIsReader reader = new VectorialROIsReader(path, grid, CRSFactory.getCRS("EPSG:23030"));
+			VectorialROIsReader reader = new VectorialROIsReader(path, grid,
+					ProjectionUtils.getCRS("EPSG:23030"));
 			rois = reader.read(null);
 		} catch (LoadLayerException e) {
 			// TODO Auto-generated catch block

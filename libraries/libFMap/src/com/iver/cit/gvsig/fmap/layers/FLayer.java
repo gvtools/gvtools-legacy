@@ -52,9 +52,9 @@ import java.util.Map;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.ImageIcon;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.geo.Projected;
+import org.cresques.geo.Georeferenced;
 import org.gvsig.exceptions.BaseException;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
@@ -63,6 +63,7 @@ import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
 import com.iver.cit.gvsig.exceptions.layers.StartEditionLayerException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
+import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.ComposedLayer;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
@@ -78,9 +79,9 @@ import com.iver.utiles.swing.threads.Cancellable;
  *
  * <p>Each particular implementation can add new properties, and limit or expand the functionality.</p>
  *
- * @see Projected
+ * @see Georeferenced
  */
-public interface FLayer extends Projected {
+public interface FLayer extends Georeferenced {
 	/**
 	 * <p>Returns an entity that represents this layer.</p>
 	 *
@@ -267,18 +268,18 @@ public interface FLayer extends Projected {
 	 *
 	 * @param ct transformation coordinates
 	 *
-	 * @see #getCoordTrans()
+	 * @see #getCrsTransform()
 	 */
-	void setCoordTrans(ICoordTrans ct);
+	void setCrsTransform(MathTransform ct);
 
 	/**
 	 * Returns the transformation coordinates.
 	 *
 	 * @return transformation coordinates
 	 *
-	 * @see #setCoordTrans(ICoordTrans)
+	 * @see #setCrsTransform(MathTransform)
 	 */
-	ICoordTrans getCoordTrans();
+	MathTransform getCrsTransform();
 
 	/**
 	 * Adds a <code>LayerListener</code> to the listener list.

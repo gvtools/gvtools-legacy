@@ -66,7 +66,7 @@ public class TestFLyrRasterSE extends TestCase {
 		LayerFactory.setDriversPath(driversPath);
 
 		try {
-			f = FLyrRasterSE.createLayer("Prueba", new File(path1), Project.getDefaultProjection());
+			f = FLyrRasterSE.createLayer("Prueba", new File(path1), Project.getDefaultCrs());
 		} catch (LoadLayerException e) {
 			e.printStackTrace();
 		}

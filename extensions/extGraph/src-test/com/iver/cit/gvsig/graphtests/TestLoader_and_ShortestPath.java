@@ -5,7 +5,7 @@ import java.io.File;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.graph.core.EdgeWeightLabeller;
 import org.gvsig.graph.core.FNode;
@@ -18,10 +18,10 @@ import org.gvsig.graph.core.loaders.NetworkRedLoader;
 import org.gvsig.graph.solvers.Route;
 import org.gvsig.graph.solvers.ShortestPathSolverAStar;
 import org.gvsig.graph.solvers.ShortestPathSolverDijkstra;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.engine.data.DataSource;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
@@ -174,10 +174,10 @@ public class TestLoader_and_ShortestPath extends TestCase {
 		dsf.addFileDataSource("gdbms dbf driver", "nodes", "c:/nodes.dbf");
 		dsf.addFileDataSource("gdbms dbf driver", "edges", "c:/edges.dbf");
 
-		IProjection prj = CRSFactory.getCRS("EPSG:23030");
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 		File shpFile = new File("test_files/ejes.shp");
 		lyr = (FLyrVect) LayerFactory.createLayer("Ejes", "gvSIG shp driver",
-				shpFile, prj);
+				shpFile, crs);
 
 	}
 

@@ -5,7 +5,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
@@ -36,7 +36,7 @@ public class VectorialROIsWriter {
 	private IWriter 		pointsWriter 		= null;
 	private IWriter 		linesWriter 		= null;
 	private IWriter 		polygonsWriter 		= null;
-	private IProjection 	projection 			= null;
+	private CoordinateReferenceSystem crs = null;
 	private int 			iPolygon;
 	private int 			iPoint;
 	private int 			iPolyline;
@@ -48,9 +48,10 @@ public class VectorialROIsWriter {
 	 * @param baseFilename ruta base para formar los nombres de fichero (ruta/prefijo)
 	 * @param projection CRS de las geometrías.
 	 */
-	public VectorialROIsWriter(String baseFilename, IProjection projection) {
+	public VectorialROIsWriter(String baseFilename,
+			CoordinateReferenceSystem crs) {
 		this.baseFilename = baseFilename;
-		this.projection = projection;
+		this.crs = crs;
 	}
 
 	/** 
@@ -84,15 +85,15 @@ public class VectorialROIsWriter {
 		if (monoType)
 			switch (geometryType){
 			case FShape.POLYGON:
-				create(baseFilename+".shp", projection, FShape.POLYGON);
+				create(baseFilename+".shp", crs, FShape.POLYGON);
 				break;
 				
 			case FShape.POINT:
-				create(baseFilename+".shp", projection, FShape.POINT);
+				create(baseFilename+".shp", crs, FShape.POINT);
 				break;
 				
 			case FShape.LINE:
-				create(baseFilename+".shp", projection, FShape.LINE);
+				create(baseFilename+".shp", crs, FShape.LINE);
 				break;
 			}
 		
@@ -109,17 +110,17 @@ public class VectorialROIsWriter {
 				switch (geometry.getGeometryType()) {
 				case FShape.POLYGON:
 					if (polygonsWriter == null)
-						create(baseFilename+"_polygons"+".shp", projection, FShape.POLYGON);
+						create(baseFilename+"_polygons"+".shp", crs, FShape.POLYGON);
 					break;
 					
 				case FShape.POINT:
 					if (pointsWriter == null)
-						create(baseFilename+"_points"+".shp", projection, FShape.POINT);
+						create(baseFilename+"_points"+".shp", crs, FShape.POINT);
 					break;
 					
 				case FShape.LINE:
 					if (linesWriter == null)
-						create(baseFilename+"_polylines"+".shp", projection, FShape.LINE);
+						create(baseFilename+"_polylines"+".shp", crs, FShape.LINE);
 					break;
 		
 				default:
@@ -183,14 +184,14 @@ public class VectorialROIsWriter {
 
 	}
 	
-	private void create(String filename, IProjection crs, int shapeType) {
+	private void create(String filename, CoordinateReferenceSystem crs, int shapeType) {
 
 		LayerDefinition tableDef;
 
 		iPoint = 0;
 		iPolygon = 0;
 		iPolyline = 0;
-		projection = (IProjection) crs;
+		this.crs = (CoordinateReferenceSystem) crs;
 		IWriter writer;
 		switch (shapeType) {
 			case FShape.POLYGON:

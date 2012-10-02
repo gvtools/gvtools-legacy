@@ -55,17 +55,17 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.jts.voronoi.TriangleFeature;
 import org.gvsig.jts.voronoi.VoronoiAndTinInputLyr;
 import org.gvsig.jts.voronoi.Voronoier;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
@@ -75,7 +75,7 @@ public class VoronoiGeoprocessTest extends TestCase {
 	
 	private File baseDataPath;
 	private File baseDriversPath;
-	private IProjection PROJECTION_DEFAULT;
+	private CoordinateReferenceSystem DEFAULT_CRS;
 	
 	private FLyrVect pointLyr;
 	
@@ -101,7 +101,7 @@ public class VoronoiGeoprocessTest extends TestCase {
 		if (LayerFactory.getDM().getDriverNames().length < 1)
 			throw new Exception("Can't find drivers in path: "
 					+ baseDriversPath);
-		PROJECTION_DEFAULT = CRSFactory.getCRS("EPSG:23030");
+		DEFAULT_CRS = ProjectionUtils.getCRS("EPSG:23030");
 		
 		
 		pointLyr = (FLyrVect) newLayer("SAIH.shp", "gvSIG shp driver");
@@ -114,7 +114,7 @@ public class VoronoiGeoprocessTest extends TestCase {
 		FLayer solution = null;
 		File file = new File(baseDataPath, fileName);
 		solution = com.iver.cit.gvsig.fmap.layers.LayerFactory.createLayer(
-				fileName, driverName, file, PROJECTION_DEFAULT);
+				fileName, driverName, file, DEFAULT_CRS);
 		solution.setAvailable(true);
 		return solution;
 	}

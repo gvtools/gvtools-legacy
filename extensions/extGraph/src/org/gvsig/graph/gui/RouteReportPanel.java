@@ -100,7 +100,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
-import java.awt.print.PrinterException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -112,12 +111,12 @@ import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.graph.core.DocumentRenderer;
 import org.gvsig.graph.core.TurnUtil;
 import org.gvsig.graph.solvers.Route;
 import org.gvsig.graph.solvers.RouteMemoryDriver;
 import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.engine.values.DoubleValue;
 import com.iver.andami.PluginServices;
@@ -285,9 +284,9 @@ public class RouteReportPanel extends JPanel implements IWindow {
 
 	protected void exportRoute() {
 		RouteMemoryDriver driver = new RouteMemoryDriver(route.getFeatureList());
-		IProjection projection = AddLayerDialog.getLastProjection();
+		CoordinateReferenceSystem crs = AddLayerDialog.getLastCrs();
 		FLyrVect routeLayer = (FLyrVect) LayerFactory.createLayer("Route",
-				driver, projection);
+				driver, crs);
 
 		FormatSelectionPanel selectionPanel = new FormatSelectionPanel(PluginServices.getText(null,
 		"Seleccione_un_formato_para_guardar_la_ruta"));

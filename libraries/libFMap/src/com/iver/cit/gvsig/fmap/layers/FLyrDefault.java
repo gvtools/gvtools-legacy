@@ -42,7 +42,6 @@ package com.iver.cit.gvsig.fmap.layers;
 
 import java.awt.Image;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -54,16 +53,17 @@ import java.util.Set;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.exceptions.BaseException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
 import com.iver.cit.gvsig.exceptions.layers.StartEditionLayerException;
 import com.iver.cit.gvsig.fmap.MapContext;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
+import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.ComposedLayer;
 import com.iver.cit.gvsig.fmap.operations.strategies.Strategy;
 import com.iver.cit.gvsig.fmap.rendering.LegendListener;
@@ -125,10 +125,10 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 	/**
 	 * Projection for this layer.
 	 *
-	 * @see #getProjection()
-	 * @see #setProjection(IProjection)
+	 * @see #getCrs()
+	 * @see #setCRS(IProjection)
 	 */
-	private IProjection projection;
+	private CoordinateReferenceSystem crs;
 
 	/**
 	 * Transparency level of this layer in the range 0-255. By default 255.
@@ -143,10 +143,10 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 	/**
 	 * Coordinate transformation.
 	 *
-	 * @see #getCoordTrans()
-	 * @see #setCoordTrans(ICoordTrans)
+	 * @see #getCrsTransform()
+	 * @see #setCrsTransform(ICoordTrans)
 	 */
-	private ICoordTrans ct;
+	private MathTransform crsTransform;
 
 	/**
 	 * Minimum scale, >= 0 or -1 if not defined. By default -1.
@@ -354,38 +354,37 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 	/**
 	 * <p>Inserts the projection to this layer.</p>
 	 *
-	 * @param proj information about the new projection
+	 * @param crs information about the new projection
 	 *
 	 * @see #isReprojectable()
 	 * @see #reProject(MapControl)
 	 */
-	public void setProjection(IProjection proj) {
-		if (this.projection == proj)
+	public void setCrs(CoordinateReferenceSystem crs) {
+		if (this.crs == crs)
 			return;
-		if (this.projection != null && this.projection.equals(proj)){
+		if (this.crs != null && this.crs.equals(crs)){
 			return;
 		}
-		projection = proj;
+		this.crs = crs;
 		this.updateDrawVersion();
 
 		// Comprobar que la proyección es la misma que la de FMap
 		// Si no lo es, es una capa que está reproyectada al vuelo
-		if ((proj != null) && (getMapContext() != null))
-			if (proj != getMapContext().getProjection()) {
-				ICoordTrans ct = proj.getCT(getMapContext().getProjection());
-				setCoordTrans(ct);
+		if ((crs != null) && (getMapContext() != null))
+			if (crs != getMapContext().getCrs()) {
+				MathTransform trans = ProjectionUtils.getCrsTransform(crs,
+						getMapContext().getCrs());
+				setCrsTransform(trans);
 				logger.debug("Cambio proyección: FMap con "
-						+ getMapContext().getProjection().getAbrev() + " y capa "
-						+ getName() + " con " + proj.getAbrev());
+						+ getMapContext().getCrs().getName().getCode()
+						+ " y capa " + getName() + " con "
+						+ crs.getName().getCode());
 			}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.cresques.geo.Projected#getProjection()
-	 */
-	public IProjection getProjection() {
-		return projection;
+	@Override
+	public CoordinateReferenceSystem getCrs() {
+		return crs;
 	}
 
 	/**
@@ -398,9 +397,9 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 	 *  if the load control logic of this layer is in the reprojection method
 	 *
 	 * @see #isReprojectable()
-	 * @see #setProjection(IProjection)
+	 * @see #setCRS(IProjection)
 	 */
-	public void reProject(ICoordTrans arg0) {
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
 	}
 
 	/**
@@ -490,8 +489,8 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 		// TODO xml.addChild(parentLayer.getXMLEntity());
 //		xml.putProperty("visible", visible);
 		xml.putProperty("visible", status.visible);
-		if (projection != null) {
-			xml.putProperty("proj", projection.getFullCode());
+		if (crs != null) {
+			xml.putProperty("proj", crs.getName().getCode());
 		}
 		xml.putProperty("transparency", transparency);
 //		xml.putProperty("isInTOC", isInTOC);
@@ -569,7 +568,7 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 //		visible = xml.getBooleanProperty("visible");
 		status.visible = xml.getBooleanProperty("visible");
 		if (xml.contains("proj")) {
-			setProjection(CRSFactory.getCRS(xml.getStringProperty("proj")));
+			setCrs(ProjectionUtils.getCRS(xml.getStringProperty("proj")));
 		}
 		if (xml.contains("transparency"))
 			transparency = xml.getIntProperty("transparency");
@@ -679,7 +678,7 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 //		visible = xml.getBooleanProperty("visible");
 		status.visible = xml.getBooleanProperty("visible");
 		if (xml.contains("proj")) {
-			setProjection(CRSFactory.getCRS(xml.getStringProperty("proj")));
+			setCrs(ProjectionUtils.getCRS(xml.getStringProperty("proj")));
 		}
 		if (xml.contains("transparency"))
 			transparency = xml.getIntProperty("transparency");
@@ -811,18 +810,18 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 	/**
 	 * Sets transformation coordinates for this layer.
 	 *
-	 * @param ct an object that implements the <code>ICoordTrans</code> interface, and with the transformation coordinates
+	 * @param trans an object that implements the <code>ICoordTrans</code> interface, and with the transformation coordinates
 	 *
-	 * @see #getCoordTrans()
+	 * @see #getCrsTransform()
 	 */
-	public void setCoordTrans(ICoordTrans ct) {
-		if (this.ct == ct){
+	public void setCrsTransform(MathTransform trans) {
+		if (this.crsTransform == trans){
 			return;
 		}
-		if (this.ct != null && this.ct.equals(ct)){
+		if (this.crsTransform != null && this.crsTransform.equals(trans)){
 			return;
 		}
-		this.ct = ct;
+		this.crsTransform = trans;
 		this.updateDrawVersion();
 	}
 
@@ -831,10 +830,10 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 	 *
 	 * @return an object that implements the <code>ICoordTrans</code> interface, and with the transformation coordinates
 	 *
-	 * @see #setCoordTrans(ICoordTrans)
+	 * @see #setCrsTransform(ICoordTrans)
 	 */
-	public ICoordTrans getCoordTrans() {
-		return ct;
+	public MathTransform getCrsTransform() {
+		return crsTransform;
 	}
 
 	/**

@@ -25,11 +25,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.dataset.io.IExternalCancellable;
 import org.gvsig.raster.dataset.io.RasterDriverException;
 import org.gvsig.raster.dataset.io.features.WriteFileFormatFeatures;
@@ -37,6 +36,7 @@ import org.gvsig.raster.dataset.properties.DatasetColorInterpretation;
 import org.gvsig.raster.dataset.serializer.RmfSerializerException;
 import org.gvsig.raster.util.RasterUtilities;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import es.gva.cit.jgdal.GdalException;
 import es.gva.cit.jgdal.GdalWarp;
@@ -67,7 +67,7 @@ public abstract class GeoRasterWriter {
 	protected AffineTransform at             = null;
 	protected int             percent        = 0;
 	protected int             dataType       = IBuffer.TYPE_BYTE;
-	protected IProjection     proj           = null;
+	protected CoordinateReferenceSystem crs = null;
 	protected DatasetColorInterpretation 
 	                          colorInterp    = null;
 	protected IExternalCancellable   
@@ -287,16 +287,12 @@ public abstract class GeoRasterWriter {
 	 * @param fName Nombre del fichero.
 	 * @return GeoRasterWriter, o null si hay problemas.
 	 */
-	public static GeoRasterWriter getWriter(IDataWriter dataWriter, 
-												 String outFileName, 
-												 int nBands,
-												 AffineTransform at,
-												 int outSizeX,
-												 int outSizeY,
-												 int dataType,
-												 Params params,
-												 IProjection proj) throws NotSupportedExtensionException, RasterDriverException {
-		return GeoRasterWriter.getWriter(dataWriter, outFileName, nBands, at, outSizeX, outSizeY, dataType, params, proj, true);
+	public static GeoRasterWriter getWriter(IDataWriter dataWriter,
+			String outFileName, int nBands, AffineTransform at, int outSizeX,
+			int outSizeY, int dataType, Params params,
+			CoordinateReferenceSystem crs)
+			throws NotSupportedExtensionException, RasterDriverException {
+		return GeoRasterWriter.getWriter(dataWriter, outFileName, nBands, at, outSizeX, outSizeY, dataType, params, crs, true);
 	}
 	
 	/**
@@ -305,16 +301,11 @@ public abstract class GeoRasterWriter {
 	 * @param fName Nombre del fichero.
 	 * @return GeoRasterWriter, o null si hay problemas.
 	 */
-	public static GeoRasterWriter getWriter(IDataWriter dataWriter, 
-												 String outFileName, 
-												 int nBands,
-												 AffineTransform at,
-												 int outSizeX,
-												 int outSizeY,
-												 int dataType,
-												 Params params,
-												 IProjection proj,
-												 boolean geo) throws NotSupportedExtensionException, RasterDriverException {
+	public static GeoRasterWriter getWriter(IDataWriter dataWriter,
+			String outFileName, int nBands, AffineTransform at, int outSizeX,
+			int outSizeY, int dataType, Params params,
+			CoordinateReferenceSystem crs, boolean geo)
+			throws NotSupportedExtensionException, RasterDriverException {
 		String ext = outFileName.toLowerCase().substring(outFileName.lastIndexOf('.') + 1);
 		
 		/* translate alternate extensions for known drivers */		
@@ -339,12 +330,15 @@ public abstract class GeoRasterWriter {
 			return grw;
 
 		Class clase = (Class) extensionPoint.getValue(ext);
-		Class[] args = { IDataWriter.class, String.class, Integer.class, AffineTransform.class, Integer.class, Integer.class, Integer.class, Params.class, IProjection.class, Boolean.class };
+		Class[] args = { IDataWriter.class, String.class, Integer.class,
+				AffineTransform.class, Integer.class, Integer.class,
+				Integer.class, Params.class, CoordinateReferenceSystem.class,
+				Boolean.class };
 		try {
 			Constructor hazNuevo = clase.getConstructor(args);
 			Object [] args2 = {dataWriter, outFileName, new Integer(nBands), at, 
 								new Integer(outSizeX), new Integer(outSizeY), new Integer(dataType), 
-								params, proj, new Boolean(geo)};
+								params, crs, new Boolean(geo)};
 			grw = (GeoRasterWriter) hazNuevo.newInstance(args2);
 		} catch (SecurityException e) {
 			throw new RasterDriverException("Error SecurityException in open");

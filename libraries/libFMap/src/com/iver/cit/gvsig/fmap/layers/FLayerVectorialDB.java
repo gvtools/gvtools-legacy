@@ -42,7 +42,9 @@
  */
 package com.iver.cit.gvsig.fmap.layers;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -52,7 +54,6 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.exceptions.layers.NameLayerException;
 import com.iver.cit.gvsig.exceptions.layers.ProjectionLayerException;
 import com.iver.cit.gvsig.exceptions.layers.XMLLayerException;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DefaultJDBCDriver;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 import com.iver.cit.gvsig.fmap.drivers.WithDefaultLegend;
@@ -68,16 +69,15 @@ public class FLayerVectorialDB extends FLyrVect {
     private IVectorialDatabaseDriver dbDriver = null;
 
     /* Esto deberia ir en el FLyrDefault */
-    public void setProjectionByName(String projectionName)
+    public void setCrs(String crsName)
         throws Exception {
-        IProjection proj = CRSFactory.getCRS(projectionName);
+        CoordinateReferenceSystem crs = CRS.decode(crsName);
 
-        if (proj == null) {
-            throw new Exception("No se ha encontrado la proyeccion: " +
-                projectionName);
+        if (crs == null) {
+			throw new Exception("No se ha encontrado la proyeccion: " + crsName);
         }
 
-        this.setProjection(proj);
+        this.setCrs(crs);
     }
 
     public void setDriver(IVectorialDatabaseDriver driver) {
@@ -117,7 +117,7 @@ public class FLayerVectorialDB extends FLyrVect {
 			//TODO: traducir???
 			throw new DriverLayerException(this.getName(),null);
 		}
-		if (this.getProjection() == null) {
+		if (this.getCrs() == null) {
 			this.setAvailable(false);
 			//TODO: traducir???
 			throw new ProjectionLayerException(this.getName(),null);
@@ -190,17 +190,17 @@ public class FLayerVectorialDB extends FLyrVect {
 
 
     public void setXMLEntity(XMLEntity xml) throws XMLException {
-        IProjection proj = null;
+        CoordinateReferenceSystem crs = null;
 
         if (xml.contains("proj")) {
-            proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
+            crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
         }
         else {
-            proj = this.getMapContext().getViewPort().getProjection();
+            crs = this.getMapContext().getViewPort().getCrs();
         }
 
         this.setName(xml.getName());
-        this.setProjection(proj);
+        this.setCrs(crs);
 
         String driverName = xml.getStringProperty("db");
         IVectorialDatabaseDriver driver;

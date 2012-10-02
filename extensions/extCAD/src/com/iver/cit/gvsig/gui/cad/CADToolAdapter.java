@@ -1,11 +1,8 @@
 package com.iver.cit.gvsig.gui.cad;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -21,7 +18,8 @@ import java.util.List;
 import java.util.Stack;
 import java.util.prefs.Preferences;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -57,12 +55,8 @@ import com.iver.cit.gvsig.project.documents.view.snapping.ISnapper;
 import com.iver.cit.gvsig.project.documents.view.snapping.ISnapperGeometriesVectorial;
 import com.iver.cit.gvsig.project.documents.view.snapping.ISnapperRaster;
 import com.iver.cit.gvsig.project.documents.view.snapping.ISnapperVectorial;
-import com.iver.cit.gvsig.project.documents.view.snapping.SnappingVisitor;
-import com.iver.cit.gvsig.project.documents.view.snapping.snappers.FinalPointSnapper;
-import com.iver.cit.gvsig.project.documents.view.snapping.snappers.NearestPointSnapper;
 import com.iver.cit.gvsig.project.documents.view.toolListeners.StatusBarListener;
 import com.iver.utiles.console.JConsole;
-import com.iver.utiles.swing.threads.Cancellable;
 import com.vividsolutions.jts.geom.Envelope;
 
 /**
@@ -554,7 +548,7 @@ public class CADToolAdapter extends Behavior {
 //		NumberFormat nf = NumberFormat.getInstance();
 		MapControl mapControl = getMapControl();
 		ViewPort vp = mapControl.getMapContext().getViewPort();
-		IProjection iProj = vp.getProjection();
+		CoordinateReferenceSystem crs = vp.getCrs();
 
 //		if (iProj.getAbrev().equals("EPSG:4326") || iProj.getAbrev().equals("EPSG:4230")) {
 //			axisText[0] = "Lon = ";
@@ -583,7 +577,7 @@ public class CADToolAdapter extends Behavior {
             mF.getStatusBar().setMessage("units",
             		PluginServices.getText(this, MapContext.getDistanceNames()[vp.getDistanceUnits()]));
             mF.getStatusBar().setControlValue("scale",String.valueOf(mapControl.getMapContext().getScaleView()));
-			mF.getStatusBar().setMessage("projection", iProj.getAbrev());
+			mF.getStatusBar().setMessage("projection", ProjectionUtils.getAbrev(crs));
 
 			String[] coords=sbl.getCoords(p);
 			mF.getStatusBar().setMessage("x",

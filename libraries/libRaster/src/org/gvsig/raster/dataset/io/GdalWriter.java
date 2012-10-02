@@ -23,15 +23,14 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.buffer.RasterBuffer;
 import org.gvsig.raster.dataset.GeoRasterWriter;
 import org.gvsig.raster.dataset.IDataWriter;
 import org.gvsig.raster.dataset.NotSupportedExtensionException;
 import org.gvsig.raster.dataset.Params;
-import org.gvsig.raster.dataset.RasterDataset;
 import org.gvsig.raster.dataset.Params.Param;
+import org.gvsig.raster.dataset.RasterDataset;
 import org.gvsig.raster.dataset.io.features.BMPFeatures;
 import org.gvsig.raster.dataset.io.features.GTiffFeatures;
 import org.gvsig.raster.dataset.io.features.HFAFeatures;
@@ -46,6 +45,7 @@ import org.gvsig.raster.process.RasterTask;
 import org.gvsig.raster.process.RasterTaskQueue;
 import org.gvsig.raster.util.RasterUtilities;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import es.gva.cit.jecwcompress.EcwException;
 import es.gva.cit.jgdal.Gdal;
@@ -149,16 +149,11 @@ public class GdalWriter extends GeoRasterWriter {
 	 * @throws GdalException
 	 * @throws IOException
 	 */
-	public GdalWriter(	IDataWriter dataWriter,
-			String outFileName,
-			Integer nBands,
-			AffineTransform at,
-			Integer outSizeX,
-			Integer outSizeY,
-			Integer dataType,
-			Params params, 
-			IProjection proj) throws GdalException, IOException {
-		this(dataWriter, outFileName, nBands, at, outSizeX, outSizeY, dataType, params, proj, new Boolean(true));
+	public GdalWriter(IDataWriter dataWriter, String outFileName,
+			Integer nBands, AffineTransform at, Integer outSizeX,
+			Integer outSizeY, Integer dataType, Params params,
+			CoordinateReferenceSystem crs) throws GdalException, IOException {
+		this(dataWriter, outFileName, nBands, at, outSizeX, outSizeY, dataType, params, crs, new Boolean(true));
 	}
 	
 	/**
@@ -175,18 +170,11 @@ public class GdalWriter extends GeoRasterWriter {
 	 * @throws GdalException
 	 * @throws IOException
 	 */
-	public GdalWriter(	IDataWriter dataWriter,
-			String outFileName,
-			Integer nBands,
-			AffineTransform at,
-			Integer outSizeX,
-			Integer outSizeY,
-			Integer dataType,
-			Params params, 
-			IProjection proj, 
-			Boolean geo)throws GdalException, IOException {
-		
-		this.proj = proj;
+	public GdalWriter(IDataWriter dataWriter, String outFileName,
+			Integer nBands, AffineTransform at, Integer outSizeX,
+			Integer outSizeY, Integer dataType, Params params,
+			CoordinateReferenceSystem crs, Boolean geo) throws GdalException, IOException {
+		this.crs = crs;
 		ident = outFileName.toLowerCase().substring(outFileName.lastIndexOf(".") + 1);
 		driver = ((WriteFileFormatFeatures)fileFeature.get(ident)).getDriverName();
 		this.dataType = dataType.intValue();
@@ -595,14 +583,15 @@ public class GdalWriter extends GeoRasterWriter {
 	 * Realiza una copia en el formato especificado.
 	 * @throws IOException
 	 */
-	public static void createCopy(es.gva.cit.jgdal.GdalDriver driverDst, String dst, String src,
-			boolean bstrict, String[] params, IProjection proj) throws IOException, GdalException {
+	public static void createCopy(es.gva.cit.jgdal.GdalDriver driverDst,
+			String dst, String src, boolean bstrict, String[] params,
+			CoordinateReferenceSystem crs) throws IOException, GdalException {
 		if (dst == null || src == null) 
 			throw new IOException("No se ha asignado un fichero de entrada.");
 		
 		GdalDriver gdalFile;
 		try {
-			gdalFile = new GdalDriver(proj, src);
+			gdalFile = new GdalDriver(crs, src);
 			Gdal dstDataset = driverDst.createCopy(dst, gdalFile.getNative(), bstrict, params);
 			if(	dst.endsWith(".jpg") || 
 				dst.endsWith(".jpeg") ||

@@ -28,11 +28,12 @@ import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.ViewPortData;
 import org.cresques.io.DxfGroup;
 import org.cresques.px.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -59,9 +60,9 @@ public class DxfEllipse extends DxfEntity {
      * @param pt2, segundo punto del semieje mayor.
      * @param minorAxisLength, longitud del semieje menor.
      */
-    public DxfEllipse(IProjection proj, DxfLayer layer, Point2D pt1,
+    public DxfEllipse(CoordinateReferenceSystem crs, DxfLayer layer, Point2D pt1,
                       Point2D pt2, double minorAxisLength) {
-        super(proj, layer);
+        super(crs, layer);
         pts = new Point2D[2];
         pts[0] = pt1;
         pts[1] = pt2;
@@ -105,7 +106,7 @@ public class DxfEllipse extends DxfEntity {
      * Permite reproyectar un DxfEllipse dado un conjunto de coordenadas de transformación.
      * @param rp, coordenadas de transformación.
      */
-    public void reProject(ICoordTrans rp) {
+    public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         Point2D[] savePts = pts;
 
         pts = new Point2D[savePts.length];
@@ -114,13 +115,12 @@ public class DxfEllipse extends DxfEntity {
         Point2D ptDest = null;
 
         for (int i = 0; i < savePts.length; i++) {
-            ptDest = rp.getPDest().createPoint(0.0, 0.0);
-            ptDest = rp.convert((Point2D) savePts[i], ptDest);
+        	ptDest = ProjectionUtils.transform(savePts[i], trans);
             this.pts[i] = ptDest;
             extent.add(ptDest);
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
     
     /**

@@ -221,7 +221,7 @@ public class GrayConversionProcess implements IProcessActions {
 		FLyrRasterSE grayConv = null;
 		try {
 			if(param instanceof String)
-				grayConv = FLyrRasterSE.createLayer(RasterLibrary.getOnlyLayerName(), (String)param, sourceLayer.getProjection());
+				grayConv = FLyrRasterSE.createLayer(RasterLibrary.getOnlyLayerName(), (String)param, sourceLayer.getCrs());
 		} catch (LoadLayerException e) {
 			RasterToolsUtil.messageBoxError("error_generating_layer", null, e);
 		}

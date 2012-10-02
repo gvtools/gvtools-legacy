@@ -40,7 +40,7 @@
  */
 package org.gvsig.symbology.fmap.drivers.featureiterators;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
@@ -65,11 +65,10 @@ public class FeatureSelectionIterator extends DefaultFeatureIterator {
 	FBitSet selection;
 
 	public FeatureSelectionIterator(ReadableVectorial source,
-										IProjection sourceProj, 
-										IProjection targetProj, 
-										String[] fieldNames)
+			CoordinateReferenceSystem sourceCrs,
+			CoordinateReferenceSystem targetCrs, String[] fieldNames)
 			throws ReadDriverException {
-		super(source, sourceProj, targetProj, fieldNames);
+		super(source, sourceCrs, targetCrs, fieldNames);
 		selection = this.source.getRecordset().getSelection();
 		this.currentFeature = selection.nextSetBit(0);
 	}

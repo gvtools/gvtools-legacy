@@ -30,12 +30,13 @@ import java.awt.geom.Point2D;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.Point3D;
 import org.cresques.geo.ViewPortData;
 import org.cresques.io.DxfGroup;
 import org.cresques.px.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -61,8 +62,8 @@ public class DxfPolyline extends DxfEntity {
      * @param proj, proyección cartográfica en la que se encuentra el DxfPolyline.
      * @param layer, capa del DXF en la que se encuentra el DxfPolyline.
      */
-    public DxfPolyline(IProjection proj, DxfLayer layer) {
-        super(proj, layer);
+    public DxfPolyline(CoordinateReferenceSystem crs, DxfLayer layer) {
+        super(crs, layer);
         extent = new Extent();
         pts = new Vector();
         bulges = new Vector();
@@ -127,7 +128,7 @@ public class DxfPolyline extends DxfEntity {
      * Permite reproyectar una DxfPolyline dado un conjunto de coordenadas de transformación.
      * @param rp, coordenadas de transformación.
      */
-    public void reProject(ICoordTrans rp) {
+    public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         Vector savePts = pts;
 
         pts = new Vector();
@@ -136,13 +137,12 @@ public class DxfPolyline extends DxfEntity {
         Point2D ptDest = null;
 
         for (int i = 0; i < savePts.size(); i++) {
-            ptDest = rp.getPDest().createPoint(0.0, 0.0);
-            ptDest = rp.convert((Point2D) savePts.get(i), ptDest);
+			ptDest = ProjectionUtils.transform((Point2D) savePts.get(i), trans);
             pts.add(ptDest);
             extent.add(ptDest);
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
 
     /**

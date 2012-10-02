@@ -20,8 +20,8 @@ package org.gvsig.rastertools.vectorizacion.vector;
 
 import java.util.Observable;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.vectorization.VectorizationBinding;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 /**
  * Modelo de datos correspondiente a la interfaz de vectorización
  * 
@@ -34,7 +34,7 @@ public class VectorData extends Observable {
 	public final static int POTRACE_LINES         = 2;
 	private int             algorithm             = CONTOUR_LINES;
 	private double          distance              = 255;
-	private IProjection     projLayer             = null;
+	private CoordinateReferenceSystem layerCrs = null;
 	private int             policy                = VectorizationBinding.POLICY_MINORITY;
 	private int             despeckle             = 0;
 	private double          cornerThreshold       = 1.0;
@@ -175,8 +175,8 @@ public class VectorData extends Observable {
 	 * vectorial.
 	 * @return IProjection
 	 */
-	public IProjection getProjLayer() {
-		return projLayer;
+	public CoordinateReferenceSystem getLayerCrs() {
+		return layerCrs;
 	}
 
 	/**
@@ -184,8 +184,8 @@ public class VectorData extends Observable {
 	 * vectorial.
 	 * @param IProjection
 	 */
-	public void setProjLayer(IProjection projLayer) {
-		this.projLayer = projLayer;
+	public void setProjLayer(CoordinateReferenceSystem layerCrs) {
+		this.layerCrs = layerCrs;
 		updateObservers();
 	}
 

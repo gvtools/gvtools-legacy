@@ -24,8 +24,6 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.dataset.BandAccessException;
 import org.gvsig.raster.dataset.BandList;
 import org.gvsig.raster.dataset.FileNotOpenException;
@@ -35,7 +33,6 @@ import org.gvsig.raster.dataset.InvalidSetViewException;
 import org.gvsig.raster.dataset.NotSupportedExtensionException;
 import org.gvsig.raster.dataset.RasterDataset;
 import org.gvsig.raster.dataset.io.RasterDriverException;
-import org.gvsig.raster.dataset.io.rmf.ParsingException;
 import org.gvsig.raster.dataset.properties.DatasetColorInterpretation;
 import org.gvsig.raster.datastruct.Extent;
 import org.gvsig.raster.datastruct.Transparency;
@@ -43,6 +40,8 @@ import org.gvsig.raster.process.RasterTask;
 import org.gvsig.raster.process.RasterTaskQueue;
 import org.gvsig.raster.util.RasterUtilities;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.ermapper.ecw.JNCSException;
 import com.ermapper.ecw.JNCSFile;
@@ -94,12 +93,12 @@ public class ErmapperDriver extends RasterDataset implements JNCSProgressiveUpda
 
 	/**
 	 * Constructor. Abre el dataset.
-	 * @param proj Proyección
+	 * @param crs Proyección
 	 * @param fName Nombre del fichero ecw
 	 * @throws NotSupportedExtensionException
 	 */
-	public ErmapperDriver(IProjection proj, Object param)throws NotSupportedExtensionException {
-		super(proj, ((String)param));
+	public ErmapperDriver(CoordinateReferenceSystem crs, Object param)throws NotSupportedExtensionException {
+		super(crs, ((String)param));
 		setParam(param);
 		try {
 			
@@ -555,7 +554,7 @@ public class ErmapperDriver extends RasterDataset implements JNCSProgressiveUpda
 
 	}
 
-	public void reProject(ICoordTrans rp) {
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
 	}
 
 	/*

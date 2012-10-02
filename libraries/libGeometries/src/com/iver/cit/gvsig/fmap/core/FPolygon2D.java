@@ -42,8 +42,8 @@ package com.iver.cit.gvsig.fmap.core;
 
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.Surface;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Polígono 2D.
@@ -56,8 +56,8 @@ public class FPolygon2D extends FOrientablePolygon2D implements Surface {
 	 *
 	 * @param gpx GeneralPathX.
 	 */
-	public FPolygon2D(String id, IProjection projection, GeneralPathX gpx) {
-		super(id, projection, gpx);
+	public FPolygon2D(String id, CoordinateReferenceSystem crs, GeneralPathX gpx) {
+		super(id, crs, gpx);
 	}
 	
 	public FPolygon2D(GeneralPathX gpx) {
@@ -77,7 +77,7 @@ public class FPolygon2D extends FOrientablePolygon2D implements Surface {
 	 * @return FShape clonado.
  	 */
 	public FShape cloneFShape() {
-		return new FPolygon2D(id, projection, (GeneralPathX) gp.clone());
+		return new FPolygon2D(id, crs, (GeneralPathX) gp.clone());
 	}
 	
     /* (non-Javadoc)

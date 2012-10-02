@@ -48,7 +48,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.driver.DriverException;
@@ -113,7 +113,7 @@ public class Annotation_Strategy extends DefaultStrategy {
 
         long t1 = System.currentTimeMillis();
         ReadableVectorial va = lyr.getSource();
-        ICoordTrans ct = lyr.getCoordTrans();
+        MathTransform trans = lyr.getCrsTransform();
         Rectangle2D bounds = g.getBounds2D();
 
         // Coordinate c1 = new Coordinate(bounds.getMinX(), bounds.getMinY());
@@ -141,8 +141,8 @@ public class Annotation_Strategy extends DefaultStrategy {
                 // IGeometry geom=aLegend.getTextWrappingGeometry(symbol,index);
                 // IGeometry
                 // geom=getGeometry(((Annotation_Layer)capa).getLabel(index).getBoundBox());
-                if (ct != null) {
-                    geom.reProject(ct);
+                if (trans != null) {
+                    geom.reProject(trans);
                 }
 
                 Geometry jtsGeom = geom.toJTSGeometry();
@@ -255,7 +255,7 @@ public class Annotation_Strategy extends DefaultStrategy {
         // Si hay un índice espacial, lo usamos para hacer el query.
         Annotation_Layer lyr = capa;
         ReadableVectorial va = lyr.getSource();
-        ICoordTrans ct = lyr.getCoordTrans();
+        MathTransform trans = lyr.getCrsTransform();
         Rectangle2D bounds = rect;
         // if (lyr.getSpatialIndex() == null)
         if (lyr.getISpatialIndex() == null) {
@@ -303,12 +303,12 @@ public class Annotation_Strategy extends DefaultStrategy {
                 IGeometry geom = va.getShape(i);
                 va.stop();
 
-                if (ct != null) {
+                if (trans != null) {
                     if (bMustClone) {
                         geom = geom.cloneGeometry();
                     }
 
-                    geom.reProject(ct);
+                    geom.reProject(trans);
                 }
                 geom.transform(vp.getAffineTransform());
                  Annotation_Legend aLegend=(Annotation_Legend)capa.getLegend();

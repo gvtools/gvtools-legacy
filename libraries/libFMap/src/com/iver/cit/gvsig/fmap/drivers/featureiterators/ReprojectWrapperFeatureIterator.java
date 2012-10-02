@@ -55,8 +55,9 @@
 */
 package com.iver.cit.gvsig.fmap.drivers.featureiterators;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.core.IFeature;
@@ -73,15 +74,15 @@ public class ReprojectWrapperFeatureIterator implements IFeatureIterator{
 
 
 	IFeatureIterator featureIterator;
-	protected IProjection sourceProjection;
-	protected IProjection targetProjection;
+	protected CoordinateReferenceSystem sourceCrs;
+	protected CoordinateReferenceSystem targetCrs;
 
 	public ReprojectWrapperFeatureIterator(IFeatureIterator featureIterator,
-											IProjection sourceProj,
-											IProjection targetProj){
+			CoordinateReferenceSystem sourceCrs,
+			CoordinateReferenceSystem targetCrs) {
 		this.featureIterator = featureIterator;
-		this.sourceProjection = sourceProj;
-		this.targetProjection = targetProj;
+		this.sourceCrs = sourceCrs;
+		this.targetCrs = targetCrs;
 	}
 
 	public boolean hasNext() throws ReadDriverException {
@@ -110,10 +111,9 @@ public class ReprojectWrapperFeatureIterator implements IFeatureIterator{
 	 * clase abstracta intermedia entre ambas
 	 */
 	protected void reprojectIfNecessary(IGeometry geom){
-		if(this.targetProjection != null &&
-		   this.sourceProjection != null &&
-		   !this.targetProjection.getAbrev().equals(this.sourceProjection.getAbrev())){
-			ICoordTrans trans = sourceProjection.getCT(targetProjection);
+		if (this.targetCrs != null && this.sourceCrs != null
+				&& !this.targetCrs.getName().equals(this.sourceCrs.getName())){
+			MathTransform trans = ProjectionUtils.getCrsTransform(sourceCrs,  targetCrs);
 			geom.reProject(trans);
 		}
 	}

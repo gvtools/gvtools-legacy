@@ -24,7 +24,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.raster.Configuration;
 import org.gvsig.raster.gui.wizards.projection.RasterProjectionActionsDialog;
@@ -36,6 +35,7 @@ import org.gvsig.rastertools.geolocation.ui.GeoLocationOpeningRasterDialog;
 import org.gvsig.rastertools.raw.ui.main.OpenRawFileDefaultView;
 import org.gvsig.rastertools.reproject.ui.LayerReprojectPanel;
 import org.kxml2.io.KXmlParser;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -173,7 +173,7 @@ public class FileOpenRaster extends AbstractFileOpen {
 	 * (non-Javadoc)
 	 * @see org.gvsig.raster.gui.wizards.IFileOpen#execute(java.io.File[])
 	 */
-	public Rectangle2D createLayer(File file, MapControl mapControl, String driverName, IProjection proj) {
+	public Rectangle2D createLayer(File file, MapControl mapControl, String driverName, CoordinateReferenceSystem crs) {
 		this.mapControl = mapControl;
 		FLyrRasterSE lyr = null;
 		
@@ -185,7 +185,7 @@ public class FileOpenRaster extends AbstractFileOpen {
 			for (int i = 0; i < lyrsRaster.size(); i++) {
 				if (((FLyrRasterSE) lyrsRaster.get(i)).getName().equals(layerName)) {
 					lyr = (FLyrRasterSE) lyrsRaster.get(i);
-					lyr.setProjection(proj);
+					lyr.setCrs(crs);
 					nLayer = i;
 				}
 			}
@@ -194,7 +194,7 @@ public class FileOpenRaster extends AbstractFileOpen {
 		// Si no hay capa la cargamos
 		if (lyr == null) {
 			try {
-				lyr = FLyrRasterSE.createLayer(layerName, file, proj);
+				lyr = FLyrRasterSE.createLayer(layerName, file, crs);
 				layerActions(defaultActionLayer, lyr);
 			} catch (LoadLayerException e) {
 				RasterToolsUtil.messageBoxError("error_carga_capa", this, e);
@@ -225,15 +225,15 @@ public class FileOpenRaster extends AbstractFileOpen {
 	 * @param mapControl
 	 */
 	private void compareProjections(FLyrRasterSE lyr) {
-		IProjection viewProj = getMapControl().getProjection();
-		IProjection lyrProj = lyr.readProjection();
-		if (lyrProj == null) {
-			lyr.setProjection(viewProj);
+		CoordinateReferenceSystem viewCrs = getMapControl().getCrs();
+		CoordinateReferenceSystem lyrCrs = lyr.readProjection();
+		if (lyrCrs == null) {
+			lyr.setCrs(viewCrs);
 			actionList.add(new Integer(defaultActionLayer));
 			return;
 		}
-		if(viewProj == null) {
-			getMapControl().setProjection(lyrProj);
+		if(viewCrs == null) {
+			getMapControl().setCrs(lyrCrs);
 			actionList.add(new Integer(defaultActionLayer));
 			return;
 		}
@@ -244,7 +244,7 @@ public class FileOpenRaster extends AbstractFileOpen {
 		 * ficheros no haya sido marcado. En este caso para el resto de ficheros de esa selección 
 		 * se hará la misma acción que se hizo para el primero.
 		 */
-		if (!viewProj.getAbrev().endsWith(lyrProj.getAbrev())) {
+		if (!viewCrs.getName().equals(lyrCrs.getName())) {
 			boolean showDialog = false;
 			if (!RasterProjectionActionsPanel.selectAllFiles)
 				showDialog = true;
@@ -274,7 +274,7 @@ public class FileOpenRaster extends AbstractFileOpen {
 		// Cambia la proyección de la vista y carga la capa
 		if (action == CHANGE_VIEW_PROJECTION) {
 			if (lyr != null) {
-				getMapControl().setProjection(lyr.readProjection());
+				getMapControl().setCrs(lyr.readProjection());
 				lyr.setVisible(true);
 				getMapControl().getMapContext().getLayers().addLayer(lyr);
 			}

@@ -40,8 +40,8 @@
  */
 package com.iver.cit.gvsig.fmap.core;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.Curve;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
 
@@ -52,8 +52,9 @@ import org.gvsig.fmap.geometries.iso.primitive.Curve;
  */
 public class FPolyline2D extends FOrientablePolyline2D implements Curve{
 	
-	public FPolyline2D(String id, IProjection projection, GeneralPathX gpx) {
-		super(id, projection, gpx);		
+	public FPolyline2D(String id, CoordinateReferenceSystem crs,
+			GeneralPathX gpx) {
+		super(id, crs, gpx);		
 	}
 
 	public FPolyline2D(GeneralPathX gpx) {
@@ -73,7 +74,7 @@ public class FPolyline2D extends FOrientablePolyline2D implements Curve{
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {
-		return new FPolyline2D(id, projection, (GeneralPathX) gp.clone());
+		return new FPolyline2D(id, crs, (GeneralPathX) gp.clone());
 	}
 }
 

@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.graph.core.GraphException;
 import org.gvsig.graph.core.GvEdge;
 import org.gvsig.graph.core.GvNode;
@@ -15,14 +15,13 @@ import org.gvsig.graph.core.Network;
 import org.gvsig.graph.core.loaders.NetworkRedLoader;
 import org.gvsig.graph.solvers.Route;
 import org.gvsig.graph.solvers.ShortestPathSolverDijkstra;
-import org.jgrapht.Graphs;
 import org.jgrapht.alg.BellmanFordShortestPath;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.AsWeightedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
@@ -134,10 +133,10 @@ public class TestJGraphT_BAD_SHORTEST_PATH extends TestCase {
 		dsf = LayerFactory.getDataSourceFactory();
 
 
-		IProjection prj = CRSFactory.getCRS("EPSG:23030");
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 		File shpFile = new File("test_files/ejes.shp");
 		lyr = (FLyrVect) LayerFactory.createLayer("Ejes", "gvSIG shp driver",
-				shpFile, prj);
+				shpFile, crs);
 
 	}
 

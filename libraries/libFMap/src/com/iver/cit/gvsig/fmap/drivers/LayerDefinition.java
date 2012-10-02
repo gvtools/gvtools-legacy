@@ -43,7 +43,7 @@
  */
 package com.iver.cit.gvsig.fmap.drivers;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.core.FShape;
 
@@ -54,7 +54,7 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 public class LayerDefinition extends TableDefinition implements ILayerDefinition {
 
 	protected int shapeType = FShape.MULTI;
-	protected IProjection proj;
+	protected CoordinateReferenceSystem crs;
 
 
 	/* (non-Javadoc)
@@ -71,12 +71,12 @@ public class LayerDefinition extends TableDefinition implements ILayerDefinition
 		this.shapeType = shapeType;
 	}
 
-	public IProjection getProjection() {
-		return proj;
+	public CoordinateReferenceSystem getCrs() {
+		return crs;
 	}
 
-	public void setProjection(IProjection proj) {
-		this.proj = proj;
+	public void setCrs(CoordinateReferenceSystem crs) {
+		this.crs = crs;
 	}
 
 }

@@ -170,7 +170,7 @@ public class ViewRasterAnalysisTocMenuEntry extends AbstractTocContextMenuAction
 				path = ((FLyrRasterSE) lyr).getLoadParams();
 
 			try {
-				lyr = FLyrRasterSE.createLayer(lyr.getName(), path, lyr.getProjection());
+				lyr = FLyrRasterSE.createLayer(lyr.getName(), path, lyr.getCrs());
 				rasterNameInLoc = lyr.getName();
 				mcCurrentLoc.getMapContext().getLayers().addLayer(lyr);
 			} catch (LoadLayerException e) {

@@ -55,7 +55,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.remoteClient.arcims.ArcImsFeatureClient;
 import org.gvsig.remoteClient.arcims.ArcImsProtocolHandler;
 import org.gvsig.remoteClient.arcims.utils.MyCancellable;
@@ -63,11 +63,11 @@ import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformation;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformationLayer;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformationLayerFeatures;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.CancelationException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
@@ -142,7 +142,7 @@ public class FFeatureLyrArcIMSCollection extends FLayers
             }
 
             // --------------------------------------------
-            IProjection srs = CRSFactory.getCRS(_srs);
+            CoordinateReferenceSystem srs = ProjectionUtils.getCRS(_srs);
 
             MyCancellable myCanc = new MyCancellable(new DefaultCancellableMonitorable());
             FMapFeatureArcImsDriver drv = new FMapFeatureArcImsDriver(host,
@@ -199,7 +199,8 @@ public class FFeatureLyrArcIMSCollection extends FLayers
                 ServiceInformationLayerFeatures silf = (ServiceInformationLayerFeatures) si.getLayerById(item);
                 String lyrname = silf.getName();
 
-                individualLayers[i].setProjectionInStatus(srs.getAbrev());
+				individualLayers[i].setProjectionInStatus(ProjectionUtils
+						.getAbrev(srs));
                 individualLayers[i].setHostInStatus(new URL(host));
                 individualLayers[i].setServiceInStatus(service);
 
@@ -233,7 +234,7 @@ public class FFeatureLyrArcIMSCollection extends FLayers
                 individualLayers[i].setServiceType(ServiceInfoTags.vFEATURESERVICE);
                 individualLayers[i].setTransparency(0);
                 individualLayers[i].setLayerQuery(item);
-                individualLayers[i].setProjection(srs);
+                individualLayers[i].setCrs(srs);
                 individualLayers[i].setName(lyrname);
 
                 Rectangle2D fext = ((ArcImsFeatureClient) drv.getClient()).getLayerExtent(individualLayers[i].getArcimsStatus());
@@ -255,15 +256,15 @@ public class FFeatureLyrArcIMSCollection extends FLayers
                 // ------ -------------
                 if ((si.getFeaturecoordsys() == null) ||
                         (si.getFeaturecoordsys().equals(""))) {
-                    si.setFeaturecoordsys(srs.getAbrev()
-                                             .substring(ServiceInfoTags.vINI_SRS.length())
-                                             .trim());
+					si.setFeaturecoordsys(ProjectionUtils.getAbrev(srs)
+							.substring(ServiceInfoTags.vINI_SRS.length())
+							.trim());
                     logger.warn("Server provides no SRS. ");
                 }
             }
 
             setName(name);
-            setProjection(srs);
+            setCrs(srs);
 
             for (int i = 0; i < count; i++) {
                 addLayer(individualLayers[i]);
@@ -396,7 +397,7 @@ public class FFeatureLyrArcIMSCollection extends FLayers
         setVisible(xml.getBooleanProperty("visible"));
 
         if (xml.contains("proj")) {
-            setProjection(CRSFactory.getCRS(xml.getStringProperty("proj")));
+            setCrs(ProjectionUtils.getCRS(xml.getStringProperty("proj")));
         }
 
         if (xml.contains("transparency")) {
@@ -438,8 +439,8 @@ public class FFeatureLyrArcIMSCollection extends FLayers
         xml.putProperty("maxScale", getMaxScale());
         xml.putProperty("visible", isVisible());
 
-        if (getProjection() != null) {
-            xml.putProperty("proj", getProjection().getAbrev());
+        if (getCrs() != null) {
+			xml.putProperty("proj", ProjectionUtils.getAbrev(getCrs()));
         }
 
         xml.putProperty("transparency", getTransparency());

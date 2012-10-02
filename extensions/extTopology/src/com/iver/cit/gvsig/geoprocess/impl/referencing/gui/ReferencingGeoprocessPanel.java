@@ -213,7 +213,7 @@ public class ReferencingGeoprocessPanel extends AbstractGeoprocessGridbagPanel i
 				(TransformationRegistryEntry)getTransformationOptionCb().getSelectedItem();
 			RubberSheetBuilder transformBuilder = 
 				(RubberSheetBuilder) transformRegistryEntry.createTransformBuilder(mp.getAsList());
-			FLyrVect tinLyr = ReferencingUtil.getInstance().getTinAsFMapLyr(transformBuilder, currentView.getProjection());
+			FLyrVect tinLyr = ReferencingUtil.getInstance().getTinAsFMapLyr(transformBuilder, currentView.getCrs());
 			return new FLyrVect[]{tinLyr};
 		}else{
 			return new FLyrVect[]{};

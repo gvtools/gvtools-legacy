@@ -40,8 +40,8 @@
  */
 package com.iver.cit.gvsig.fmap.core;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.Curve;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Polilinea 3D.
@@ -57,8 +57,9 @@ public class FPolyline3D extends FPolyline2D implements FShape3D, Curve {
 	 * @param gpx GeneralPathX
 	 * @param pZ Vector con la Z.
 	 */
-	public FPolyline3D(String id, IProjection projection, GeneralPathX gpx, double[] pZ) {
-		super(id, projection, gpx);
+	public FPolyline3D(String id, CoordinateReferenceSystem crs,
+			GeneralPathX gpx, double[] pZ) {
+		super(id, crs, gpx);
 		this.pZ = pZ;
 	}
 	
@@ -86,6 +87,7 @@ public class FPolyline3D extends FPolyline2D implements FShape3D, Curve {
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {
-		return new FPolyline3D(id, projection, (GeneralPathX) gp.clone(), (double[]) pZ);
+		return new FPolyline3D(id, crs, (GeneralPathX) gp.clone(),
+				(double[]) pZ);
 	}
 }

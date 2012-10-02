@@ -55,12 +55,12 @@ import java.util.HashMap;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.topology.ui.util.GUIUtil;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.fmap.edition.ShpSchemaManager;
@@ -78,7 +78,7 @@ public class SnapAndCrackGeoprocessTest extends TestCase {
 
 	private File baseDataPath;
 	private File baseDriversPath;
-	private IProjection PROJECTION_DEFAULT;
+	private CoordinateReferenceSystem DEFAULT_CRS;
 	private FLyrVect line1;
 	private FLyrVect line2;
 	private FLyrVect poly1;
@@ -106,7 +106,7 @@ public class SnapAndCrackGeoprocessTest extends TestCase {
 		if (LayerFactory.getDM().getDriverNames().length < 1)
 			throw new Exception("Can't find drivers in path: "
 					+ baseDriversPath);
-		PROJECTION_DEFAULT = CRSFactory.getCRS("EPSG:23030");
+		DEFAULT_CRS = ProjectionUtils.getCRS("EPSG:23030");
 		
 		
 		line1 = (FLyrVect) newLayer("lineas1.shp", "gvSIG shp driver");
@@ -129,7 +129,7 @@ public class SnapAndCrackGeoprocessTest extends TestCase {
 		FLayer solution = null;
 		File file = new File(baseDataPath, fileName);
 		solution = com.iver.cit.gvsig.fmap.layers.LayerFactory.createLayer(
-				fileName, driverName, file, PROJECTION_DEFAULT);
+				fileName, driverName, file, DEFAULT_CRS);
 		solution.setAvailable(true);
 		return solution;
 

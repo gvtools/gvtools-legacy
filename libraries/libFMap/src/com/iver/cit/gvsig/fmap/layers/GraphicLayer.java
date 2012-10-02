@@ -51,7 +51,7 @@ import java.util.Collection;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.ViewPort;
@@ -204,7 +204,7 @@ public class GraphicLayer extends FLyrDefault {
         //double escala;
         ISymbol theSymbol = null;
 
-        ICoordTrans ct = getCoordTrans();
+        MathTransform transform = getCrsTransform();
 
         for (numReg = 0; numReg < graphics.size(); numReg++) {
             if (cancel.isCanceled()) {
@@ -215,9 +215,9 @@ public class GraphicLayer extends FLyrDefault {
             IGeometry geom = theGraphic.getGeom();
 
             // Modificación para Jorge, para que le reproyecte los gráficos.
-			if (ct != null) {
+			if (transform != null) {
 		        geom = geom.cloneGeometry();
-				geom.reProject(ct);
+				geom.reProject(transform);
 			}
 
             if (geom.fastIntersects(elExtent.getMinX(),

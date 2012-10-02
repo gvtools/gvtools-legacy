@@ -56,9 +56,10 @@ import java.io.File;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.tools.file.PathGenerator;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -89,7 +90,6 @@ import com.iver.cit.gvsig.fmap.core.symbols.IMarkerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ITextSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleTextSymbol;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.BoundedShapes;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.edition.Annotation_EditableAdapter;
@@ -257,7 +257,7 @@ public class Annotation_Layer extends FLyrVect {
 				source.start();
 				IGeometry geom = source.getShape(i);
 				source.stop();
-				ICoordTrans ct = getCoordTrans();
+				MathTransform trans = getCrsTransform();
 
 				boolean bMustClone = false;
 
@@ -265,12 +265,12 @@ public class Annotation_Layer extends FLyrVect {
 					return;
 				}
 
-				if (ct != null) {
+				if (trans != null) {
 					if (bMustClone) {
 						geom = geom.cloneGeometry();
 					}
 
-					geom.reProject(ct);
+					geom.reProject(trans);
 				}
 				geom.transform(viewPort.getAffineTransform());
 				Shape shape=geom.getInternalShape();
@@ -391,13 +391,13 @@ public class Annotation_Layer extends FLyrVect {
 		getSource().stop();
 
 		// Si existe reproyección, reproyectar el extent
-		ICoordTrans ct = getCoordTrans();
+		MathTransform trans = getCrsTransform();
 
-		if (ct != null) {
+		if (trans != null) {
 			Point2D pt1 = new Point2D.Double(rAux.getMinX(), rAux.getMinY());
 			Point2D pt2 = new Point2D.Double(rAux.getMaxX(), rAux.getMaxY());
-			pt1 = ct.convert(pt1, null);
-			pt2 = ct.convert(pt2, null);
+			pt1 = ProjectionUtils.transform(pt1, trans);
+			pt2 = ProjectionUtils.transform(pt2, trans);
 			rAux = new Rectangle2D.Double();
 			rAux.setFrameFromDiagonal(pt1, pt2);
 		}
@@ -484,10 +484,10 @@ public class Annotation_Layer extends FLyrVect {
 	 * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#setXMLEntity(com.iver.utiles.XMLEntity)
 	 */
 	public void setXMLEntity(XMLEntity xml) throws XMLException {
-		IProjection proj = null;
+		CoordinateReferenceSystem crs = null;
 
 		if (xml.contains("proj")) {
-			proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
+			crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
 		}
 
 		if (xml.contains("file")) {
@@ -502,12 +502,12 @@ public class Annotation_Layer extends FLyrVect {
 
 			FLyrVect lv = (FLyrVect) LayerFactory.createLayer(xml.getName(),
 					(VectorialFileDriver) d,
-					new File(PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("file"))), proj);
+					new File(PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("file"))), crs);
 
 			try {
 				this.setSource(lv.getSource());
 				this.setRecordset(lv.getRecordset());
-				this.setProjection(lv.getProjection());
+				this.setCrs(lv.getCrs());
 				this.setLegend((IVectorLegend) lv.getLegend());
 
 
@@ -575,7 +575,7 @@ public class Annotation_Layer extends FLyrVect {
 		spatialIndex = new QuadtreeJts();
 
 		ReadableVectorial va = getSource();
-		ICoordTrans ct = getCoordTrans();
+		MathTransform trans = getCrsTransform();
 		BoundedShapes shapeBounds = (BoundedShapes) va.getDriver();
 
 		try {
@@ -591,8 +591,8 @@ public class Annotation_Layer extends FLyrVect {
 				}
 
 				// TODO: MIRAR COMO SE TRAGARÍA ESTO LO DE LAS REPROYECCIONES
-				if (ct != null) {
-					r = ct.convert(r);
+				if (trans != null) {
+					r = ProjectionUtils.transform(r, trans);
 				}
 
 				if (r != null) {
@@ -681,7 +681,7 @@ public class Annotation_Layer extends FLyrVect {
 				((VectorialEditableAdapter) super.getSource()).cancelEdition(EditionEvent.GRAPHIC);
 				aea.start();
 
-				aea.setCoordTrans(getCoordTrans());
+				aea.setCrsTransform(getCrsTransform());
 				// CHEMA
 				aea.startEdition(EditionEvent.GRAPHIC);
 				setSource(aea);
@@ -715,10 +715,10 @@ public class Annotation_Layer extends FLyrVect {
 	 */
 	public static Annotation_Layer createLayerFromVect(FLyrVect layer) throws ReadDriverException {
 		Annotation_Layer la = new Annotation_Layer();
-		FLyrVect lv=(FLyrVect)LayerFactory.createLayer(layer.getName(),layer.getSource().getDriver(),layer.getProjection());
+		FLyrVect lv=(FLyrVect)LayerFactory.createLayer(layer.getName(),layer.getSource().getDriver(),layer.getCrs());
 		la.setSource(lv.getSource());
 		la.setRecordset(lv.getRecordset());
-		la.setProjection(layer.getProjection());
+		la.setCrs(layer.getCrs());
 		la.getRecordset().setSelection(layer.getRecordset().getSelection());
 
 		return la;
@@ -811,7 +811,7 @@ public FLayer cloneLayer() throws Exception {
 		clonedLayer.setVisible(isVisible());
 		clonedLayer.setISpatialIndex(getISpatialIndex());
 		clonedLayer.setName(getName());
-		clonedLayer.setCoordTrans(getCoordTrans());
+		clonedLayer.setCrsTransform(getCrsTransform());
 		clonedLayer.setLegend((IVectorLegend)getLegend());
 		clonedLayer.mapping=mapping;
 		clonedLayer.aLegend=aLegend;

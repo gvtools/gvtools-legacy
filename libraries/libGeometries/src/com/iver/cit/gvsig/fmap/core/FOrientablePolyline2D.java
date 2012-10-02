@@ -1,7 +1,7 @@
 package com.iver.cit.gvsig.fmap.core;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.OrientableCurve;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -56,9 +56,8 @@ import org.gvsig.fmap.geometries.iso.primitive.OrientableCurve;
  * @author Jorge Piera Llodrá (jorge.piera@iver.es)
  */
 public abstract class FOrientablePolyline2D extends FOrientablePrimitive2D implements OrientableCurve{
-
-	public FOrientablePolyline2D(String id, IProjection projection, GeneralPathX gpx) {
-		super(id, projection, gpx);		
+	public FOrientablePolyline2D(String id, CoordinateReferenceSystem crs,
+			GeneralPathX gpx) {
+		super(id, crs, gpx);		
 	}
-
 }

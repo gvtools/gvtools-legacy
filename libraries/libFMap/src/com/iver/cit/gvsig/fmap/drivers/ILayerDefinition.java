@@ -1,6 +1,6 @@
 package com.iver.cit.gvsig.fmap.drivers;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * @author fjp
@@ -13,7 +13,7 @@ public interface ILayerDefinition extends ITableDefinition {
 	public int getShapeType();
 	public void setShapeType(int shapeType);
 	
-	public IProjection getProjection();
-	public void setProjection(IProjection proj);
+	public CoordinateReferenceSystem getCrs();
+	public void setCrs(CoordinateReferenceSystem proj);
 
 }

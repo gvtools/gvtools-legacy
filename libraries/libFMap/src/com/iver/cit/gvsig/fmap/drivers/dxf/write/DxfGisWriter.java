@@ -48,14 +48,13 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.Vector;
 
-import org.cresques.cts.IProjection;
-import org.cresques.geo.Ellipsoid;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.Point3D;
-import org.cresques.geo.UtmZone;
 import org.cresques.io.DxfFile;
 import org.cresques.io.DxfGroup;
 import org.cresques.io.DxfGroupVector;
 import org.cresques.px.dxf.DxfEntityMaker;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.core.FGeometry;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
@@ -66,16 +65,18 @@ import com.iver.cit.gvsig.fmap.core.IGeometry;
 public class DxfGisWriter {
     private DxfFile.EntityFactory entityMaker;
     private DxfFile dxfFile;
-    private IProjection proj;
+    private CoordinateReferenceSystem crs;
 
     public DxfGisWriter() {}
 
     public void write(IGeometry[] geometries, File file) throws Exception {
-        proj = UtmZone.getProjection(Ellipsoid.hayford, 30, UtmZone.NORTH);
+    	// TODO geotools refactoring
+    	crs = ProjectionUtils.getCRS("EPSG:23030");
+		// crs = UtmZone.getProjection(Ellipsoid.hayford, 30, UtmZone.NORTH);
         // NOTA: La proyección no se usa absolutamente para nada (al menos
         // por ahora). Las entidades se escribirán con las coordenadas con
         // las que se crean.
-        entityMaker = new DxfEntityMaker(proj);
+        entityMaker = new DxfEntityMaker(crs);
         int handle = 40; // Revisar porqué es 40.
         int k=0;
         boolean dxf3DFile = false;
@@ -105,7 +106,7 @@ public class DxfGisWriter {
                 k++;
             }
         }
-        dxfFile = new DxfFile(proj, file.getAbsolutePath(), entityMaker);
+        dxfFile = new DxfFile(crs, file.getAbsolutePath(), entityMaker);
         dxfFile.setCadFlag(true);
         if (dxf3DFile) dxfFile.setDxf3DFlag(true);
         dxfFile.save(file.getAbsolutePath());

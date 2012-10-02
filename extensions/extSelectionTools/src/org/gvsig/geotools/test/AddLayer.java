@@ -30,7 +30,7 @@ public class AddLayer extends Extension {
 			// + "cursos/gvsig_2012/datos/municipios.shp";
 			FLyrVect layer = new GTFLyrVect(new File(file));
 			layer.setName("municipios");
-			layer.setProjection(null);
+			layer.setCrs(null);
 			layer.setLegend(LegendFactory.createSingleSymbolLegend(layer
 					.getShapeType()));
 			context.getLayers().addLayer(layer);

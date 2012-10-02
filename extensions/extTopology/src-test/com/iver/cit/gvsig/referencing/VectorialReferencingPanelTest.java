@@ -62,9 +62,9 @@ import javax.swing.ImageIcon;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.gvsig.exceptions.BaseException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
@@ -123,7 +123,7 @@ javax.swing.JFrame f = new javax.swing.JFrame();
 				return null;
 			}
 
-			public ICoordTrans getCoordTrans() {
+			public MathTransform getCrsTransform() {
 				// TODO Auto-generated method stub
 				return null;
 			}
@@ -323,7 +323,7 @@ javax.swing.JFrame f = new javax.swing.JFrame();
 				
 			}
 
-			public void setCoordTrans(ICoordTrans ct) {
+			public void setCrsTransform(MathTransform ct) {
 				// TODO Auto-generated method stub
 				
 			}
@@ -393,12 +393,12 @@ javax.swing.JFrame f = new javax.swing.JFrame();
 				return false;
 			}
 
-			public IProjection getProjection() {
+			public CoordinateReferenceSystem getCrs() {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
-			public void reProject(ICoordTrans ct) {
+			public void reProject(MathTransform ct) {
 				// TODO Auto-generated method stub
 				
 			}});

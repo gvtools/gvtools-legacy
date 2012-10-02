@@ -136,7 +136,7 @@ public class EditionUtilities {
 		}
 		lyrDef = new LayerDefinition();
 		lyrDef.setShapeType(layer.getShapeType());
-		lyrDef.setProjection(layer.getProjection());
+		lyrDef.setCrs(layer.getCrs());
 		lyrDef.setName(layer.getName());
 				
 			lyrDef.setFieldsDesc(layer.getRecordset().getFieldsDescription());

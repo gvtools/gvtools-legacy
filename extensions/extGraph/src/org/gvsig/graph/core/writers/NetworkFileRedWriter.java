@@ -50,13 +50,11 @@ import java.util.Hashtable;
 
 import javax.imageio.stream.FileImageOutputStream;
 
-import org.cresques.cts.ICoordTrans;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.graph.core.GraphException;
 import org.gvsig.graph.core.NodeGv;
+import org.opengis.referencing.operation.MathTransform;
 
-import com.hardcode.gdbms.engine.instruction.IncompatibleTypesException;
-import com.hardcode.gdbms.engine.values.BooleanValue;
 import com.hardcode.gdbms.engine.values.NumericValue;
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
@@ -210,7 +208,7 @@ public class NetworkFileRedWriter extends AbstractNetworkWriter {
 			adapter.start();
 			int numTramos;
 
-			ICoordTrans ct = lyr.getCoordTrans();
+			MathTransform trans = lyr.getCrsTransform();
 
 			numTramos = adapter.getShapeCount();
 			// Cambiamos otra vez: Escribimos primero el nº de tramos. Luego va
@@ -263,10 +261,10 @@ public class NetworkFileRedWriter extends AbstractNetworkWriter {
 				IGeometry geom = adapter.getShape(i);
 				if (geom == null)
 					continue;
-				if (ct != null) {
+				if (trans != null) {
 					if (bMustClone)
 						geom = geom.cloneGeometry();
-					geom.reProject(ct);
+					geom.reProject(trans);
 
 				}
 				Geometry jtsGeom = geom.toJTSGeometry();

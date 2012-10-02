@@ -50,7 +50,7 @@ package com.iver.cit.gvsig.drivers.featureiterators;
 
 import java.util.List;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
@@ -70,13 +70,10 @@ public class FeatureListIntIterator extends DefaultFeatureIterator {
 	List<Integer> listInt;
 
 	public FeatureListIntIterator(ReadableVectorial source,
-									IProjection sourceProj, 
-									IProjection targetProj,
-									String[] fieldNames,
-									List<Integer> listInt)
-									throws ReadDriverException {
-	
-		super(source, sourceProj, targetProj, fieldNames);
+			CoordinateReferenceSystem sourceCrs,
+			CoordinateReferenceSystem targetCrs, String[] fieldNames,
+			List<Integer> listInt) throws ReadDriverException {
+		super(source, sourceCrs, targetCrs, fieldNames);
 		this.listInt = listInt;
 	}
 	

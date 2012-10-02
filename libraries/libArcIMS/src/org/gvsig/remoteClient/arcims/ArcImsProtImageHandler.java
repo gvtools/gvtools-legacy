@@ -43,10 +43,22 @@
 
 package org.gvsig.remoteClient.arcims;
 
+import java.awt.Rectangle;
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.net.ConnectException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Vector;
+
 import org.apache.log4j.Logger;
-
-import org.cresques.cts.IProjection;
-
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.remoteClient.arcims.exceptions.ArcImsException;
 import org.gvsig.remoteClient.arcims.utils.ArcImsDownloadUtils;
 import org.gvsig.remoteClient.arcims.utils.GetImageTags;
@@ -55,27 +67,9 @@ import org.gvsig.remoteClient.arcims.utils.ServiceInformation;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformationLayer;
 import org.gvsig.remoteClient.exceptions.ServerErrorException;
 import org.gvsig.remoteClient.utils.BoundaryBox;
-
 import org.kxml2.io.KXmlParser;
-
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.xmlpull.v1.XmlPullParserException;
-
-import java.awt.Rectangle;
-import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-
-import java.net.ConnectException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import java.util.Vector;
 
 
 /**
@@ -88,12 +82,12 @@ public class ArcImsProtImageHandler extends ArcImsProtocolHandler {
 
     /**
      * Method to obtain the correct extent of the Service in a specific SRS
-     * @param srsFlyr The SRS of the View
+     * @param crsFlyr The SRS of the View
      * @param status
      * @return Rectangle2D The boundary box of the Service
      * @throws ArcImsException
      */
-    public Rectangle2D getServiceExtent(IProjection srsFlyr, ArcImsStatus status)
+    public Rectangle2D getServiceExtent(CoordinateReferenceSystem crsFlyr, ArcImsStatus status)
         throws ArcImsException {
         Rectangle2D rect = new Rectangle();
 
@@ -116,7 +110,7 @@ public class ArcImsProtImageHandler extends ArcImsProtocolHandler {
                  * the ArcIMS server will reproject data into this
                  * code, see <a href="http://www.epsg.org">EPSG</a>
                  */
-            String srsView = srsFlyr.getAbrev();
+            String srsView = ProjectionUtils.getAbrev(crsFlyr);
 
             /**
                  * We suppose that status.getSrs() allways will give a

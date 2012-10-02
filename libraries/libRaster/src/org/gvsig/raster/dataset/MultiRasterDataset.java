@@ -23,7 +23,6 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.buffer.RasterBuffer;
 import org.gvsig.raster.buffer.cache.RasterReadOnlyBuffer;
@@ -37,6 +36,7 @@ import org.gvsig.raster.datastruct.Extent;
 import org.gvsig.raster.datastruct.Histogram;
 import org.gvsig.raster.datastruct.HistogramException;
 import org.gvsig.raster.datastruct.Transparency;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Clase que representa una imagen de raster georreferenciada formada por varias
@@ -79,7 +79,7 @@ public class MultiRasterDataset implements IRasterDataSource {
 	public IRasterDataSource newDataset() {
 		try {
 			String[] fileList = getNameDatasetStringList(0, 0);
-			MultiRasterDataset multiRasterDataset = MultiRasterDataset.open(getDataset(0)[0].getProjection(), fileList[0]);
+			MultiRasterDataset multiRasterDataset = MultiRasterDataset.open(getDataset(0)[0].getCrs(), fileList[0]);
 			for (int j = 1; j < fileList.length; j++)
 				multiRasterDataset.addDataset(new String[] { fileList[j] });
 			return multiRasterDataset;
@@ -98,19 +98,21 @@ public class MultiRasterDataset implements IRasterDataSource {
 	 * buscar el driver que lo gestiona. Si proporcionamos un array de cadenas se tratarán como la ruta a N ficheros
 	 * de disco. También puede ser un buffer de datos en memoria o cualquier otro objeto
 	 * que pueda aceptar un driver.  
-	 * @param proj PRoyección
+	 * @param crs PRoyección
 	 * @param datasetOpenParam Parámetros al driver
 	 * @return RasterMultiDatset
 	 * @throws NotSupportedExtensionException
 	 * @throws RasterDriverException
 	 */
-	public static MultiRasterDataset open(IProjection proj, Object datasetOpenParam) throws NotSupportedExtensionException, RasterDriverException{
+	public static MultiRasterDataset open(CoordinateReferenceSystem crs,
+			Object datasetOpenParam) throws NotSupportedExtensionException,
+			RasterDriverException {
 		MultiRasterDataset rmd = new MultiRasterDataset();
 		if (datasetOpenParam instanceof String[]) {
 			String[] param = (String[]) datasetOpenParam;
 			for (int dataset = 0; dataset < param.length; dataset++)
 				try {
-					rmd.addDataset(new RasterDataset[] { RasterDataset.open(proj, param[dataset]) });
+					rmd.addDataset(new RasterDataset[] { RasterDataset.open(crs, param[dataset]) });
 				} catch (FileNotFoundInListException e) {
 					// No lo añadimos en el dataset pq ya existe
 				}
@@ -119,12 +121,12 @@ public class MultiRasterDataset implements IRasterDataSource {
 				IBuffer[] param = (IBuffer[]) datasetOpenParam;
 				for (int dataset = 0; dataset < param.length; dataset++)
 					try {
-						rmd.addDataset(new RasterDataset[] { RasterDataset.open(proj, param[dataset]) });
+						rmd.addDataset(new RasterDataset[] { RasterDataset.open(crs, param[dataset]) });
 					} catch (FileNotFoundInListException e) {
 						// No lo añadimos en el dataset pq ya existe
 					}
 			} else {
-				RasterDataset rd = RasterDataset.open(proj, datasetOpenParam);
+				RasterDataset rd = RasterDataset.open(crs, datasetOpenParam);
 				try {
 					rmd.addDataset(new RasterDataset[] { rd });
 				} catch (FileNotFoundInListException e) {

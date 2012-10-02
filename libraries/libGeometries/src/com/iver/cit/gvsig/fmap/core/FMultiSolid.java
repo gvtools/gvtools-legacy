@@ -1,7 +1,7 @@
 package com.iver.cit.gvsig.fmap.core;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.aggregate.MultiSolid;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -60,13 +60,13 @@ import org.gvsig.fmap.geometries.iso.aggregate.MultiSolid;
  */
 public class FMultiSolid extends FGeometryCollection implements MultiSolid{
 	
-	public FMultiSolid(String id, IProjection projection) {
-		super(id, projection);	
+	public FMultiSolid(String id, CoordinateReferenceSystem crs) {
+		super(id, crs);	
 	}
 	
 
-	public FMultiSolid(String id, IProjection projection, FSolid[] solids) {
-		super(id, projection, solids);		
+	public FMultiSolid(String id, CoordinateReferenceSystem crs, FSolid[] solids) {
+		super(id, crs, solids);		
 	}	
 
 	/*

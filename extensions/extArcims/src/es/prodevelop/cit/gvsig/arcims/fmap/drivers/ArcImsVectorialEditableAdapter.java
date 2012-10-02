@@ -2,7 +2,7 @@ package es.prodevelop.cit.gvsig.arcims.fmap.drivers;
 
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
@@ -33,20 +33,11 @@ public class ArcImsVectorialEditableAdapter extends VectorialEditableAdapter {
 	* @return
 	 * @throws ReadDriverException
 	*/
-	public IFeatureIterator getFeatureIterator(
-			Rectangle2D rect,
-			String[] fields,
-			IProjection newProjection,
+	public IFeatureIterator getFeatureIterator(Rectangle2D rect,
+			String[] fields, CoordinateReferenceSystem newCrs,
 			boolean fastIteration) throws ReadDriverException {
-
-		return new SpatialQueryFeatureIterator(
-				this,
-				projection,
-				newProjection,
-				fields,
-				rect,
+		return new SpatialQueryFeatureIterator(this, crs, newCrs, fields, rect,
 				fastIteration);
-		
 	}	
 
 }

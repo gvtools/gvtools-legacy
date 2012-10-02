@@ -274,8 +274,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
@@ -331,9 +332,9 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	 * IProjection (of the layer) and to ISpatialIndex (of the layer)
 	 * to allow iteration with different criteria
 	 * */
-	protected IProjection projection;
+	protected CoordinateReferenceSystem crs;
 //	protected ISpatialIndex fmapSpatialIndex;
-	private ICoordTrans ct;
+	private MathTransform crsTransform;
 
 	//private double flatness=0.8;
 	/*
@@ -483,12 +484,9 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 
 						r = g.getBounds2D();
 					}
-					if (ct != null) {
-						r = ct.convert(r);
+					if (crsTransform != null) {
+						r = ProjectionUtils.transform(r, crsTransform);
 					}
-//					Envelope e = new Envelope(r.getX(),
-//							r.getX() + r.getWidth(), r.getY(), r.getY()
-//									+ r.getHeight());
 					fmapSpatialIndex.insert(r, new Integer(i));
 					if (fullExtent == null) {
 						fullExtent = r;
@@ -1043,13 +1041,13 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	}
 
 	public IFeatureIterator getFeatureIterator() throws ReadDriverException {
-		return new DefaultFeatureIterator(this, projection, null, null);
+		return new DefaultFeatureIterator(this, crs, null, null);
 	}
 
 
-	public IFeatureIterator getFeatureIterator(String[] fields, IProjection newProjection)
-	throws ReadDriverException{
-		return new DefaultFeatureIterator(this, projection, newProjection, fields);
+	public IFeatureIterator getFeatureIterator(String[] fields,
+			CoordinateReferenceSystem newCrs) throws ReadDriverException {
+		return new DefaultFeatureIterator(this, crs, newCrs, fields);
 	}
 
 	/**
@@ -1061,9 +1059,8 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	* @return feature iterator
 	* */
 	public IFeatureIterator getFeatureIterator(String sql,
-								IProjection newProjection) throws ReadDriverException{
-
-		return new AttrQueryFeatureIterator(this, projection, newProjection, sql);
+			CoordinateReferenceSystem newCrs) throws ReadDriverException{
+		return new AttrQueryFeatureIterator(this, crs, newCrs, sql);
 	}
 
 
@@ -1076,10 +1073,10 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	* @return
 	 * @throws ReadDriverException
 	*/
-	public IFeatureIterator getFeatureIterator(Rectangle2D rect, String[] fields,
-									IProjection newProjection, boolean fastIteration) throws ReadDriverException{
+	public IFeatureIterator getFeatureIterator(Rectangle2D rect,
+			String[] fields, CoordinateReferenceSystem newCrs, boolean fastIteration) throws ReadDriverException{
 //		if(index == null){
-			return new SpatialQueryFeatureIterator(this, projection, newProjection, fields, rect, fastIteration);
+			return new SpatialQueryFeatureIterator(this, crs, newCrs, fields, rect, fastIteration);
 //		}else{
 //			return new IndexedSptQueryFeatureIterator(this, projection, newProjection, fields, rect, fmapSpatialIndex, fastIteration);
 //		}
@@ -1093,12 +1090,12 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 //		this.fmapSpatialIndex = spatialIndex;
 	}
 
-	public void setProjection(IProjection projection) {
-		this.projection = projection;
+	public void setCrs(CoordinateReferenceSystem crs) {
+		this.crs = crs;
 	}
 
-	public IProjection getProjection() {
-		return projection;
+	public CoordinateReferenceSystem getCrs() {
+		return crs;
 	}
 
 	public void cancelEdition(int sourceType) throws CancelEditingLayerException {
@@ -1113,15 +1110,17 @@ public class VectorialEditableAdapter extends EditableAdapter implements
 	 *
 	 * @param ct Coordenadas de transformación.
 	 */
-	public void setCoordTrans(ICoordTrans ct) {
-		this.ct=ct;
+	public void setCrsTransform(MathTransform ct) {
+		this.crsTransform = ct;
 	}
 
-	public IFeatureIterator getFeatureIterator(String sql, IProjection newProjection, boolean withSelection) throws ReadDriverException {
+	public IFeatureIterator getFeatureIterator(String sql,
+			CoordinateReferenceSystem newCrs, boolean withSelection)
+			throws ReadDriverException {
 		if (withSelection)
-			return new AttrQuerySelectionFeatureIterator(this, projection, newProjection, sql);
+			return new AttrQuerySelectionFeatureIterator(this, crs, newCrs, sql);
 		else
-			return getFeatureIterator(sql,newProjection);
+			return getFeatureIterator(sql,newCrs);
 	}
 
 }

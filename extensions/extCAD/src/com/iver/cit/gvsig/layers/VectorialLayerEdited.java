@@ -8,7 +8,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 
-import org.cresques.cts.ICoordTrans;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -145,7 +146,7 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 		Rectangle2D rect = new Rectangle2D.Double(firstPoint.getX() - tam,
 				firstPoint.getY() - tam, tam * 2, tam * 2);
 
-		String strEPSG = vp.getProjection().getAbrev();
+		String strEPSG = ProjectionUtils.getAbrev(vp.getCrs());
 		IRowEdited[] feats;
 
 		try {
@@ -163,7 +164,7 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 			Graphics2D gs = selectionImage.createGraphics();
 
 			Graphics2D gh = handlersImage.createGraphics();
-			ICoordTrans ct=getLayer().getCoordTrans();
+			MathTransform trans = getLayer().getCrsTransform();
 			for (int i = 0; i < feats.length; i++) {
 				IFeature feat = (IFeature) feats[i].getLinkedRow();
 				IGeometry geom = feat.getGeometry();
@@ -171,8 +172,8 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 					continue;
 				}
 				IGeometry geomReproject=geom.cloneGeometry();
-				if (ct!=null)
-					geomReproject.reProject(ct);
+				if (trans!=null)
+					geomReproject.reProject(trans);
 				if (geomReproject.intersects(rect)) { // , 0.1)){
 					selection.set(feats[i].getIndex(), true);
 					selectedRow.add(feats[i]);
@@ -227,7 +228,7 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 
 		Rectangle2D rect = new Rectangle2D.Double(x1, y1, w1, h1);
 
-		String strEPSG = vp.getProjection().getAbrev();
+		String strEPSG = ProjectionUtils.getAbrev(vp.getCrs());
 		IRowEdited[] feats;
 		try {
 			feats = vea.getFeatures(rect, strEPSG);
@@ -235,7 +236,7 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 			Graphics2D gs = selectionImage.createGraphics();
 			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gh = handlersImage.createGraphics();
-			ICoordTrans ct=getLayer().getCoordTrans();
+			MathTransform trans = getLayer().getCrsTransform();
 			for (int i = 0; i < feats.length; i++) {
 				IGeometry geom = ((IFeature) feats[i].getLinkedRow())
 						.getGeometry();
@@ -244,8 +245,8 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 					continue;
 				}
 				IGeometry geomReproject=geom.cloneGeometry();
-				if (ct!=null)
-					geomReproject.reProject(ct);
+				if (trans!=null)
+					geomReproject.reProject(trans);
 				if (firstPoint.getX() < lastPoint.getX()) {
 					if (rect.contains(geomReproject.getBounds2D())) {
 						selectedRow.add(feats[i]);
@@ -283,7 +284,7 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 
 		Rectangle2D rect = polygon.getBounds2D();
 
-		String strEPSG = vp.getProjection().getAbrev();
+		String strEPSG = ProjectionUtils.getAbrev(vp.getCrs());
 		IRowEdited[] feats;
 		try {
 			feats = vea.getFeatures(rect, strEPSG);
@@ -291,7 +292,7 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 			Graphics2D gs = selectionImage.createGraphics();
 			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gh = handlersImage.createGraphics();
-			ICoordTrans ct=getLayer().getCoordTrans();
+			MathTransform trans = getLayer().getCrsTransform();
 			for (int i = 0; i < feats.length; i++) {
 				IGeometry geom = ((IFeature) feats[i].getLinkedRow())
 					.getGeometry();
@@ -299,8 +300,8 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 					continue;
 				}
 				IGeometry geomReproject=geom.cloneGeometry();
-				if (ct!=null)
-					geomReproject.reProject(ct);
+				if (trans!=null)
+					geomReproject.reProject(trans);
 				if (contains(polygon,geomReproject)) {
 					selectedRow.add(feats[i]);
 					selection.set(feats[i].getIndex(), true);
@@ -329,7 +330,7 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 
 		Rectangle2D rect = polygon.getBounds2D();
 
-		String strEPSG = vp.getProjection().getAbrev();
+		String strEPSG = ProjectionUtils.getAbrev(vp.getCrs());
 		IRowEdited[] feats;
 		try {
 			feats = vea.getFeatures(rect, strEPSG);
@@ -337,7 +338,7 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 			Graphics2D gs = selectionImage.createGraphics();
 			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gh = handlersImage.createGraphics();
-			ICoordTrans ct=getLayer().getCoordTrans();
+			MathTransform trans = getLayer().getCrsTransform();
 			for (int i = 0; i < feats.length; i++) {
 				IGeometry geom = ((IFeature) feats[i].getLinkedRow())
 					.getGeometry();
@@ -345,8 +346,8 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 					continue;
 				}
 				IGeometry geomReproject=geom.cloneGeometry();
-				if (ct!=null)
-					geomReproject.reProject(ct);
+				if (trans!=null)
+					geomReproject.reProject(trans);
 				if (contains(polygon,geomReproject) || intersects(polygon,geomReproject)) {
 					selectedRow.add(feats[i]);
 					selection.set(feats[i].getIndex(), true);
@@ -378,7 +379,7 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 			Graphics2D gs = selectionImage.createGraphics();
 			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gh = handlersImage.createGraphics();
-			ICoordTrans ct=getLayer().getCoordTrans();
+			MathTransform trans = getLayer().getCrsTransform();
 			for (int i = 0; i < vea.getRowCount(); i++) {
 				IRowEdited rowEd=vea.getRow(i);
 				IGeometry geom = ((IFeature)rowEd.getLinkedRow())
@@ -387,8 +388,8 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 					continue;
 				}
 				IGeometry geomReproject=geom.cloneGeometry();
-				if (ct!=null)
-					geomReproject.reProject(ct);
+				if (trans!=null)
+					geomReproject.reProject(trans);
 				if (!contains(polygon,geomReproject) && !intersects(polygon,geomReproject)) {
 					selectedRow.add(rowEd);
 					selection.set(rowEd.getIndex(), true);
@@ -419,13 +420,13 @@ public class VectorialLayerEdited extends DefaultLayerEdited implements LayerDra
 			Graphics2D gs = selectionImage.createGraphics();
 			BufferedImage handlersImage = new BufferedImage(vp.getImageWidth(), vp.getImageHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gh = handlersImage.createGraphics();
-			ICoordTrans ct=getLayer().getCoordTrans();
+			MathTransform trans = getLayer().getCrsTransform();
 			for (int i = 0; i < vea.getRowCount(); i++) {
 				IRowEdited rowEd=vea.getRow(i);
 				IGeometry geom = ((IFeature)rowEd.getLinkedRow())
 						.getGeometry();
-				if (ct!=null)
-					geom.reProject(ct);
+				if (trans!=null)
+					geom.reProject(trans);
 				addSelectionCache((DefaultRowEdited)rowEd);
 				selection.set(rowEd.getIndex(), true);
 				geom.cloneGeometry().draw(gs, vp, DefaultCADTool.selectionSymbol);

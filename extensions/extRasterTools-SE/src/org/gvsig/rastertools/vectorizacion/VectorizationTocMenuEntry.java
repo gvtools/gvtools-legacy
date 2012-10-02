@@ -187,7 +187,7 @@ public class VectorizationTocMenuEntry extends AbstractTocContextMenuAction impl
 		GrayConversionData grayConvData = new GrayConversionData();
 		StretchData stretchData = new StretchData();
 		VectorData vectorData = new VectorData();
-		vectorData.setProjLayer(lyr.getMapContext().getProjection());
+		vectorData.setProjLayer(lyr.getMapContext().getCrs());
 
 		//2-Creamos los paneles
 		ClipPanel clipPanel = new ClipPanel();

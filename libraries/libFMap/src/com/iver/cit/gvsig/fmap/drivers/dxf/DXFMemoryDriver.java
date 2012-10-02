@@ -62,7 +62,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.table.DefaultTableModel;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.Point3D;
 import org.cresques.io.DxfFile;
 import org.cresques.px.IObjList;
@@ -75,9 +75,9 @@ import org.cresques.px.gml.LineString3D;
 import org.cresques.px.gml.Point;
 import org.cresques.px.gml.Polygon;
 import org.cresques.px.gml.Polygon3D;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.DriverUtilities;
-import com.hardcode.gdbms.driver.exceptions.FileNotFoundDriverException;
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -101,7 +101,6 @@ import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.IFillSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.AbstractCadMemoryDriver;
 import com.iver.cit.gvsig.fmap.drivers.DriverAttributes;
 import com.iver.cit.gvsig.fmap.drivers.ILayerDefinition;
@@ -161,10 +160,10 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 
 		attr.setLoadedInMemory(true);
 
-		IProjection proj = CRSFactory.getCRS("EPSG:23030");
-		featureMaker = new DxfFeatureMaker(proj);
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
+		featureMaker = new DxfFeatureMaker(crs);
 		headerManager = new DxfHeaderManager();
-		dxfFeatureFile = new DxfFile(proj, m_Fich.getAbsolutePath(),
+		dxfFeatureFile = new DxfFile(crs, m_Fich.getAbsolutePath(),
 				featureMaker, headerManager);
 		try {
 			dxfFeatureFile.load();
@@ -826,7 +825,7 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 		fieldsMapping.setHeightText("HeightText");
 		fieldsMapping.setRotationText("Layer");
 		dxfWriter.setFieldMapping(fieldsMapping);
-		dxfWriter.setProjection(((ILayerDefinition)layerDef).getProjection());
+		dxfWriter.setCrs(((ILayerDefinition)layerDef).getCrs());
 	}
 
 	public void preProcess() throws StartWriterVisitorException {

@@ -46,8 +46,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.Surface;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.edition.UtilFunctions;
 
@@ -66,8 +66,9 @@ public class FEllipse2D extends FPolygon2D implements Surface {
 	 *
 	 * @param gpx
 	 */
-	public FEllipse2D(String id, IProjection projection, GeneralPathX gpx,Point2D i,Point2D e,double d) {
-		super(id, projection, gpx);
+	public FEllipse2D(String id, CoordinateReferenceSystem crs,
+			GeneralPathX gpx, Point2D i, Point2D e, double d) {
+		super(id, crs, gpx);
 		init=i;
 		end=e;
 		ydist=d;
@@ -86,7 +87,8 @@ public class FEllipse2D extends FPolygon2D implements Surface {
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {
-		return new FEllipse2D(id, projection, (GeneralPathX) gp.clone(),init,end,ydist);
+		return new FEllipse2D(id, crs, (GeneralPathX) gp.clone(), init, end,
+				ydist);
 	}
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#getShapeType()

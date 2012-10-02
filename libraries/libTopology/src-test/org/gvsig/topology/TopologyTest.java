@@ -57,17 +57,17 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.topology.topologyrules.MustBeLargerThanClusterTolerance;
 import org.gvsig.topology.topologyrules.MustNotHaveRepeatedPoints;
 import org.gvsig.topology.topologyrules.jtsisvalidrules.GeometryMustHaveValidCoordinates;
 import org.gvsig.topology.util.LayerFactory;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.FShape;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -83,7 +83,7 @@ public class TopologyTest extends TestCase {
 	
 	File baseDriversPath;
 	
-	IProjection PROJECTION_DEFAULT;
+	CoordinateReferenceSystem DEFAULT_CRS;
 	
 	ViewPort VIEWPORT;
 	
@@ -121,8 +121,8 @@ public class TopologyTest extends TestCase {
 		com.iver.cit.gvsig.fmap.layers.LayerFactory.setDriversPath(baseDriversPath.getAbsolutePath());
 		
 		
-		PROJECTION_DEFAULT = CRSFactory.getCRS("EPSG:23030");
-		VIEWPORT = new ViewPort(PROJECTION_DEFAULT);
+		DEFAULT_CRS = ProjectionUtils.getCRS("EPSG:23030");
+		VIEWPORT = new ViewPort(DEFAULT_CRS);
 		mapContext = new MapContext(VIEWPORT);
 		ROOT = mapContext.getLayers();
 		errorContainer = new SimpleTopologyErrorContainer();
@@ -149,9 +149,8 @@ public class TopologyTest extends TestCase {
 		throws LoadLayerException {
 		FLayer solution = null;	
 		File file = new File(baseDataPath, fileName);
-		solution = com.iver.cit.gvsig.fmap.layers.LayerFactory.createLayer(fileName,
-								driverName,
-								file, PROJECTION_DEFAULT);
+		solution = com.iver.cit.gvsig.fmap.layers.LayerFactory.createLayer(
+				fileName, driverName, file, DEFAULT_CRS);
 		solution.setAvailable(true);
 		return solution;
 			

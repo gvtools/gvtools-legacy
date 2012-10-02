@@ -240,7 +240,7 @@ public class BandSelectorListener implements ActionListener {
 					try {
 						Rectangle2D extentOrigin = prop.getFullRasterExtent().toRectangle2D();
 
-						RasterDataset geoRasterDataset = RasterDataset.open(prop.getProjection(), files[i].getAbsolutePath());
+						RasterDataset geoRasterDataset = RasterDataset.open(prop.getCrs(), files[i].getAbsolutePath());
 						Extent extentNewFile = geoRasterDataset.getExtent();
 						nbands += geoRasterDataset.getBandCount();
 
@@ -305,7 +305,7 @@ public class BandSelectorListener implements ActionListener {
 				String pathName = objects[i].toString();
 				RasterDataset geoRasterFile = null;
 				try {
-					geoRasterFile = RasterDataset.open(prop.getProjection(), pathName);
+					geoRasterFile = RasterDataset.open(prop.getCrs(), pathName);
 				} catch (NotSupportedExtensionException e) {
 					NotificationManager.addError(e.getMessage(), e);
 				} catch (RasterDriverException e1) {

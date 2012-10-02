@@ -22,12 +22,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.raster.dataset.io.rmf.ClassSerializer;
 import org.gvsig.raster.dataset.io.rmf.ParsingException;
-import org.gvsig.raster.projection.CRS;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
 import org.kxml2.io.KXmlParser;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.xmlpull.v1.XmlPullParserException;
 /**
  * <P>
@@ -46,7 +46,7 @@ import org.xmlpull.v1.XmlPullParserException;
  */
 public class ProjectionRmfSerializer extends ClassSerializer {
 	private final String MAIN_TAG   = "Projection";
-	private IProjection  projection = null;
+	private CoordinateReferenceSystem crs = null;
 
 	/**
 	 * Registra ProjectionRmfSerializer en los puntos de extension de Serializer
@@ -56,8 +56,8 @@ public class ProjectionRmfSerializer extends ClassSerializer {
 		point.register("Projection", ProjectionRmfSerializer.class);
 	}
 
-	public ProjectionRmfSerializer(IProjection projection) {
-		this.projection = projection;
+	public ProjectionRmfSerializer(CoordinateReferenceSystem crs) {
+		this.crs = crs;
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class ProjectionRmfSerializer extends ClassSerializer {
 	 * @see org.gvsig.raster.dataset.io.rmf.IRmfBlock#getResult()
 	 */
 	public Object getResult() {
-		return projection;
+		return crs;
 	}
 
 	/*
@@ -107,7 +107,8 @@ public class ProjectionRmfSerializer extends ClassSerializer {
 							if (parser.getName().equals("WktProjection")) {
 								for (int i = 0; i < parser.getAttributeCount(); i++) {
 									if (parser.getAttributeName(i).equals("value")) {
-										projection = CRS.convertWktToIProjection((String) parser.getAttributeValue(i));
+									crs = ProjectionUtils.parseWKT((String) parser
+											.getAttributeValue(i));
 									}
 								}
 							}
@@ -130,12 +131,12 @@ public class ProjectionRmfSerializer extends ClassSerializer {
 	public String write() throws IOException {
 		StringBuffer b = new StringBuffer();
 
-		if (projection == null)
+		if (crs == null)
 			return null;
 
 		b.append("<" + MAIN_TAG + ">\n");
 		b.append("\t<WktProjection");
-		b.append(" value=\"" + CRS.convertIProjectionToWkt(projection) + "\"/>\n");
+		b.append(" value=\"" + crs.toWKT() + "\"/>\n");
 		b.append("</" + MAIN_TAG + ">\n");
 
 		return b.toString();

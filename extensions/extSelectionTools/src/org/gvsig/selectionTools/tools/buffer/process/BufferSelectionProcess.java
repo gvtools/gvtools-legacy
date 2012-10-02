@@ -31,11 +31,14 @@ import java.util.HashMap;
 
 import javax.swing.JButton;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanel;
 import org.gvsig.gui.beans.incrementabletask.IncrementableProcess;
 import org.gvsig.gui.beans.incrementabletask.IncrementableTask;
+import org.gvsig.selectionTools.tools.buffer.gui.BufferConfigurationPanel;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
@@ -44,9 +47,7 @@ import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.symbols.IFillSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleFillSymbol;
-import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.fmap.edition.ShpSchemaManager;
@@ -264,7 +265,7 @@ public class BufferSelectionProcess extends IncrementableProcess {
 			File outputFile = null; //, outputFile2 = null;
 			FLayers tocLayers = mapControl.getMapContext().getLayers();
 			FLyrVect layerWithInfluenceAreas = null; //, layerWithBuffers = null;
-			IProjection tempProjection = null;
+			CoordinateReferenceSystem tempCrs = null;
 			double inc;
 			byte side;
 			long number = 0;
@@ -286,13 +287,10 @@ public class BufferSelectionProcess extends IncrementableProcess {
 			params.put("cap", new Byte(BufferVisitor.CAP_ROUND));
 			
 			// Sets projection
-			IProjection proj =  ((View)PluginServices.
-					getMDIManager().
-					getActiveWindow()).
-					getMapControl().
-					getViewPort().
-					getProjection();
-			params.put("projection", proj);
+			CoordinateReferenceSystem crs = ((View) PluginServices
+					.getMDIManager().getActiveWindow()).getMapControl()
+					.getViewPort().getCrs();
+			params.put("projection", crs);
 			
 			// Sets distance units
 			int distanceUnits = ((View)PluginServices.
@@ -301,9 +299,8 @@ public class BufferSelectionProcess extends IncrementableProcess {
 			params.put("distanceunits", new Integer(distanceUnits));
 			
 			// Sets map units
-			boolean isProjected = proj.isProjected();
 			int mapUnits = -1;
-			if(isProjected){
+			if(crs instanceof ProjectedCRS){
 				mapUnits = ((View)PluginServices.
 					getMDIManager().
 					getActiveWindow()).getMapControl().getViewPort().getMapUnits();
@@ -359,10 +356,13 @@ public class BufferSelectionProcess extends IncrementableProcess {
 					}
 					
 					//width = f_width * relationDistanceUnitsToMeters;
-					if (layer.getProjection().getAbrev().equals(mapControl.getViewPort().getProjection().getAbrev())) {
-//					if (layer.getProjection() == mapControl.getViewPort().getProjection()) {
+					CoordinateReferenceSystem layerCrs = layer.getCrs();
+					CoordinateReferenceSystem mapCrs = mapControl.getViewPort()
+							.getCrs();
+					if (layerCrs.getName().equals(mapCrs.getName())) {
+						//					if (layer.getProjection() == mapControl.getViewPort().getProjection()) {
 						/* 4.2.1- If the layer isn't projected -> Geographic coordinates (the default units are grades) */
-						if (! layer.getProjection().isProjected()) {
+						if (!(layerCrs instanceof ProjectedCRS)) {
 							log.addLine(PluginServices.getText(null, "Wont_select_geometries_on_the_layer_because_has_incompatible_projection") + ": " + layer.getName());
 							continue;
 							// UNSUPORTED
@@ -381,9 +381,9 @@ public class BufferSelectionProcess extends IncrementableProcess {
 					else {
 						/* 4.2.1.1- If the layer isn't projected -> Geographic coordinates (the default units are grades) */
 						/* 4.2.1.2- If the layer has been re-projected */
-						if (! mapControl.getProjection().isProjected()) {
+						if (!(mapControl.getCrs() instanceof ProjectedCRS)) {
 							// UNSUPORTED
-							if (! layer.getProjection().isProjected()) {
+							if (!(layerCrs instanceof ProjectedCRS)) {
 								log.addLine(PluginServices.getText(null, "Wont_select_geometries_on_the_layer_because_has_incompatible_projection") + ": " + layer.getName());
 								continue;
 							}
@@ -407,8 +407,8 @@ public class BufferSelectionProcess extends IncrementableProcess {
 							throw new InterruptedException();
 						}
 
-						tempProjection = layer.getProjection();
-						layer.setProjection(mapControl.getProjection());
+						tempCrs = layerCrs;
+						layer.setCrs(mapControl.getCrs());
 					}
 
 					/* 4.4- Sets the buffer width */
@@ -417,13 +417,13 @@ public class BufferSelectionProcess extends IncrementableProcess {
 
 					/* 4.5- Shows width information */
 					if (cancelProcess.isCanceled()) {
-						if (tempProjection != null)
-							layer.setProjection(tempProjection);
+						if (tempCrs != null)
+							layer.setCrs(tempCrs);
 
 						throw new InterruptedException();
 					}
 
-					if (mapControl.getProjection().isProjected()) {
+					if (mapControl.getCrs() instanceof ProjectedCRS) {
 						log.addLine("    " + PluginServices.getText(null, "Buffer_width") + ": " + width + " m.");
 					}
 					else {
@@ -449,8 +449,8 @@ public class BufferSelectionProcess extends IncrementableProcess {
 					
 					/* 4.3- Creates the influence area using the BufferGeoprocess */
 					if (cancelProcess.isCanceled()) {
-						if (tempProjection != null)
-							layer.setProjection(tempProjection);
+						if (tempCrs != null)
+							layer.setCrs(tempCrs);
 
 						throw new InterruptedException();
 					}
@@ -488,8 +488,8 @@ public class BufferSelectionProcess extends IncrementableProcess {
 					}
 
 					if (cancelProcess.isCanceled()) {
-						if (tempProjection != null)
-							layer.setProjection(tempProjection);
+						if (tempCrs != null)
+							layer.setCrs(tempCrs);
 
 						throw new InterruptedException();
 					}
@@ -509,8 +509,8 @@ public class BufferSelectionProcess extends IncrementableProcess {
 
 					/* 4.3.3- Creates the temporal shape layer with the influence areas */
 					if (cancelProcess.isCanceled()) {
-						if (tempProjection != null)
-							layer.setProjection(tempProjection);
+						if (tempCrs != null)
+							layer.setCrs(tempCrs);
 
 						throw new InterruptedException();
 					}
@@ -534,8 +534,8 @@ public class BufferSelectionProcess extends IncrementableProcess {
 
 					/* 4.3.4- Sets the properties to create the result layer */
 					if (cancelProcess.isCanceled()) {
-						if (tempProjection != null)
-							layer.setProjection(tempProjection);
+						if (tempCrs != null)
+							layer.setCrs(tempCrs);
 
 						throw new InterruptedException();
 					}
@@ -557,19 +557,23 @@ public class BufferSelectionProcess extends IncrementableProcess {
 						log.addLine(PluginServices.getText(null, "Layer_with_influence_areas_created"));
 
 						switch (typeReprojection) {
-							case LAYER_NOT_REPROJECTED:
-								break;
-							case LAYER_REPROJECTED_TO_GEOGRAPHIC_COORDINATES: case LAYER_REPROJECTED_TO_PLAIN_COORDINATES:
-								layer.setProjection(tempProjection);
+						case LAYER_NOT_REPROJECTED:
+							break;
+						case LAYER_REPROJECTED_TO_GEOGRAPHIC_COORDINATES:
+						case LAYER_REPROJECTED_TO_PLAIN_COORDINATES:
+							layer.setCrs(tempCrs);
 
-								// Reprojects the layer
-//								layerWithInfluenceAreas.reProject(mapControl);
-								ViewPort vPort = mapControl.getViewPort();
-								ICoordTrans ct = layer.getProjection().getCT(vPort.getProjection());
-								layer.setCoordTrans(ct);
+							// Reprojects the layer
+							// layerWithInfluenceAreas.reProject(mapControl);
+							ViewPort vPort = mapControl.getViewPort();
+							MathTransform transform = ProjectionUtils
+									.getCrsTransform(layerCrs,
+											vPort.getCrs());
+							layer.setCrsTransform(transform);
 
-								log.addLine(PluginServices.getText(null, "Layer_with_influence_areas_reprojected"));
-								break;
+							log.addLine(PluginServices.getText(null,
+									"Layer_with_influence_areas_reprojected"));
+							break;
 						}
 
 						/* 4.3.7- (Opcional) Adds the temporal layers with the influence areas */
@@ -719,7 +723,7 @@ public class BufferSelectionProcess extends IncrementableProcess {
 							case LAYER_NOT_REPROJECTED:
 								break;
 							case LAYER_REPROJECTED_TO_GEOGRAPHIC_COORDINATES: case LAYER_REPROJECTED_TO_PLAIN_COORDINATES:
-								aux_geometry.reProject(layer.getCoordTrans());
+								aux_geometry.reProject(layer.getCrsTransform());
 								break;
 						}
 
@@ -731,7 +735,7 @@ public class BufferSelectionProcess extends IncrementableProcess {
 							for (int j = 0; j < layers.length; j++) {
 								// Only in different layers
 								if (i != j) {
-									if (! layers[j].getProjection().isProjected()) {
+									if (!(layers[j].getCrs() instanceof ProjectedCRS)) {
 										log.addLine(PluginServices.getText(null, "Wont_select_geometries_on_the_layer_because_has_incompatible_projection") + ": " + layer.getName());
 										continue;
 									}

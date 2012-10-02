@@ -58,8 +58,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.AcceptCancelPanel;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -118,8 +119,8 @@ public class InputCoordinatesPanel extends JPanel implements IWindow {
      *
      */
     private void initializeCoordinates() {
-        IProjection proj = mapControl.getProjection();
-        if (proj.isProjected()) {
+    	CoordinateReferenceSystem crs = mapControl.getCrs();
+        if (crs instanceof ProjectedCRS) {
             firstCoordinate = "X";
             secondCoordinate = "Y";
         } else {

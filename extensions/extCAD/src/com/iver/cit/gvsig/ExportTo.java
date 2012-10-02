@@ -16,7 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -140,7 +141,7 @@ public class ExportTo extends Extension {
 		public void run() throws Exception {
 			lyrVect.setWaitTodraw(true);
 			va.start();
-			ICoordTrans ct = lyrVect.getCoordTrans();
+			MathTransform trans = lyrVect.getCrsTransform();
 			DriverAttributes attr = va.getDriverAttributes();
 			boolean bMustClone = false;
 			if (attr != null) {
@@ -184,10 +185,10 @@ public class ExportTo extends Extension {
 					}
 					if (isCanceled())
 						break;
-					if (ct != null) {
+					if (trans != null) {
 						if (bMustClone)
 							geom = geom.cloneGeometry();
-						geom.reProject(ct);
+						geom.reProject(trans);
 					}
 					reportStep();
 					setNote(PluginServices.getText(this, "exporting_") + i);
@@ -219,10 +220,10 @@ public class ExportTo extends Extension {
 					}
 					if (isCanceled())
 						break;
-					if (ct != null) {
+					if (trans != null) {
 						if (bMustClone)
 							geom = geom.cloneGeometry();
-						geom.reProject(ct);
+						geom.reProject(trans);
 					}
 					reportStep();
 					setNote(PluginServices.getText(this, "exporting_") + counter);
@@ -255,7 +256,7 @@ public class ExportTo extends Extension {
 					PostProcessSupport.executeCalls();
 					ILayerDefinition lyrDef = (ILayerDefinition) writer.getTableDefinition();
 					FLayer newLayer = LayerFactory.createLayer(
-							lyrDef.getName(), reader, mapContext.getProjection());
+							lyrDef.getName(), reader, mapContext.getCrs());
 					mapContext.getLayers().addLayer(newLayer);
 				}
 			}
@@ -491,7 +492,7 @@ public class ExportTo extends Extension {
 			dbLayerDef.setFieldGeometry(dbLayerDef.getFieldGeometry().toLowerCase());
 
 			dbLayerDef.setWhereClause("");
-			String strSRID = layer.getProjection().getAbrev();
+			String strSRID = ProjectionUtils.getAbrev(layer.getCrs());
 			dbLayerDef.setSRID_EPSG(strSRID);
 			dbLayerDef.setConnection(_conex);
 
@@ -649,7 +650,7 @@ public class ExportTo extends Extension {
 				lyrDef.setShapeType(layer.getShapeType());
 				writer.setFile(newFile);
 				writer.initialize(lyrDef);
-				writer.setProjection(layer.getProjection());
+				writer.setCrs(layer.getCrs());
 				DxfFieldsMapping fieldsMapping = new DxfFieldsMapping();
 				// TODO: Recuperar aquí los campos del cuadro de diálogo.
 				writer.setFieldMapping(fieldsMapping);

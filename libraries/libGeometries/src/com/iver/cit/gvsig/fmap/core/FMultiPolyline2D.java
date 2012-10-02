@@ -1,7 +1,7 @@
 package com.iver.cit.gvsig.fmap.core;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.aggregate.MultiCurve;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -64,12 +64,13 @@ import com.vividsolutions.jts.geom.LineString;
  */
 public class FMultiPolyline2D extends FGeometryCollection implements MultiCurve{
 	
-	public FMultiPolyline2D(String id, IProjection projection) {
-		super(id, projection);
+	public FMultiPolyline2D(String id, CoordinateReferenceSystem crs) {
+		super(id, crs);
 	}
 
-	public FMultiPolyline2D(String id, IProjection projection, FPolyline2D[] lines) {
-		super(id, projection, lines);		
+	public FMultiPolyline2D(String id, CoordinateReferenceSystem crs,
+			FPolyline2D[] lines) {
+		super(id, crs, lines);		
 	}
 
 	/* (non-Javadoc)
@@ -80,7 +81,7 @@ public class FMultiPolyline2D extends FGeometryCollection implements MultiCurve{
 		for (int i=0; i < getPrimitivesNumber(); i++){
 			aux[i] = (FPolyline2D) geometries[i].cloneGeometry();
 		}
-		return new FMultiPolyline2D(id, projection, aux);
+		return new FMultiPolyline2D(id, crs, aux);
 	}
 	
 	/* (non-Javadoc)

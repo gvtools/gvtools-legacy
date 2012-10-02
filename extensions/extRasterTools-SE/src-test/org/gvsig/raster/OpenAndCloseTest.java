@@ -126,7 +126,7 @@ public class OpenAndCloseTest extends ClippingBaseTest {
 			ViewPort vp = new ViewPort(null);
 			vp.setImageSize(new Dimension(1118, 662));
 			vp.setExtent(new Rectangle2D.Double(-346.88, 0, 1563.762, 870));
-			vp.setProjection(null);
+			vp.setCrs(null);
 			BufferedImage bi = new BufferedImage(1118, 662, BufferedImage.TYPE_INT_ARGB);
 			Cancellable cancel = new Cancellable() {
 				public boolean isCanceled() {

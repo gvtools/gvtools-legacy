@@ -76,8 +76,6 @@ package com.iver.cit.gvsig.geoprocess.impl.spatialjoin;
 
 import java.net.URL;
 
-import org.cresques.cts.IProjection;
-
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
@@ -108,7 +106,6 @@ public class SpatialJoinGeoprocessPlugin extends GeoprocessPluginAbstract  imple
 		View vista = (View)PluginServices.getMDIManager().getActiveWindow();
 		MapContext mapContext = vista.getModel().getMapContext();
         FLayers layers = mapContext.getLayers();
-        IProjection proj = mapContext.getProjection();
         GeoProcessingSpatialJoinPanel2 dataSelectionPanel = 
 			new GeoProcessingSpatialJoinPanel2(layers);
         return dataSelectionPanel;

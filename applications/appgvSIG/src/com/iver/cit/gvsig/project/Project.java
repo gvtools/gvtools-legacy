@@ -44,7 +44,6 @@ import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -56,8 +55,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.tools.file.PathGenerator;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -79,8 +79,6 @@ import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.Version;
 import com.iver.cit.gvsig.fmap.MapContext;
-import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
@@ -124,9 +122,9 @@ import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 public class Project implements Serializable, PropertyChangeListener {
 	public static String VERSION = Version.format();
 
-	static private IProjection defaultProjection = null;
+	static private CoordinateReferenceSystem defaultCrs = null;
 
-	static private IProjection defaultFactoryProjection = CRSFactory
+	static private CoordinateReferenceSystem defaultFactoryCrs = ProjectionUtils
 			.getCRS("EPSG:23030");
 
 	/*
@@ -176,7 +174,7 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * this is a runtime-calculated value, do NOT persist it!
 	 */
 	private long signatureAtStartup;
-	private IProjection projection;
+	private CoordinateReferenceSystem crs;
 
 	/**
 	 * Stores the initial properties of the windows, to be restored just after
@@ -212,7 +210,7 @@ public class Project implements Serializable, PropertyChangeListener {
 		creationDate = DateFormat.getDateInstance().format(new Date());
 		modificationDate = creationDate;
 		setSelectionColor(getDefaultSelectionColor());
-		getDefaultProjection(); //For initialize it
+		getDefaultCrs(); //For initialize it
 		// signatureAtStartup = computeSignature();
 
 		/*
@@ -736,7 +734,7 @@ public class Project implements Serializable, PropertyChangeListener {
 		 *
 		 * e.showError(); } } xml.putProperty("numTables", numTables);
 		 */
-		xml.putProperty("projection", defaultProjection.getAbrev());
+		xml.putProperty("projection", ProjectionUtils.getAbrev(defaultCrs));
 
 		saveWindowProperties(xml);
 		return xml;
@@ -1106,7 +1104,7 @@ public class Project implements Serializable, PropertyChangeListener {
 
 			String strProj = xml.getStringProperty("projection");
 			if (strProj != null)
-				p.setProjection(CRSFactory.getCRS(strProj));
+				p.setCrs(ProjectionUtils.getCRS(strProj));
 		} catch (Exception e) {
 			throw new OpenException(e, p.getClass().getName());
 		}
@@ -1232,7 +1230,7 @@ public class Project implements Serializable, PropertyChangeListener {
 			String strProj = xml.getStringProperty("projection");
 
 			if (strProj != null) {
-				p.setProjection(CRSFactory.getCRS(strProj));
+				p.setCrs(ProjectionUtils.getCRS(strProj));
 			}
 
 			if (childNumber < xml.getChildrenCount()) { // restore the position
@@ -1364,10 +1362,10 @@ public class Project implements Serializable, PropertyChangeListener {
 	 *
 	 * @return DOCUMENT ME!
 	 */
-	public IProjection getProjection() {
-		if (projection == null)
-			projection = Project.defaultProjection;
-		return projection;
+	public CoordinateReferenceSystem getCrs() {
+		if (crs == null)
+			crs = Project.defaultCrs;
+		return crs;
 	}
 
 	/**
@@ -1376,22 +1374,22 @@ public class Project implements Serializable, PropertyChangeListener {
 	 * @param defaultProjection
 	 *            DOCUMENT ME!
 	 */
-	public void setProjection(IProjection projection) {
-		this.projection = projection;
+	public void setCrs(CoordinateReferenceSystem crs) {
+		this.crs = crs;
 	}
 
 	/**
 	 * Sets the projection used when no projection is defined
 	 *
-	 * @param defaultProjection
+	 * @param defaultCrs
 	 *            DOCUMENT ME!
 	 */
-	public static void setDefaultProjection(IProjection defaultProjection) {
-		Project.defaultProjection = defaultProjection;
+	public static void setDefaultCrs(CoordinateReferenceSystem defaultCrs) {
+		Project.defaultCrs = defaultCrs;
 	}
 
-	public static IProjection getDefaultProjection() {
-		if (defaultProjection == null){
+	public static CoordinateReferenceSystem getDefaultCrs() {
+		if (defaultCrs == null){
 			XMLEntity xml = PluginServices.getPluginServices("com.iver.cit.gvsig")
 			.getPersistentXML();
 
@@ -1399,13 +1397,13 @@ public class Project implements Serializable, PropertyChangeListener {
 			String projCode = null;
 			if (xml.contains("DefaultProjection")) {
 				projCode = xml.getStringProperty("DefaultProjection");
-				Project.setDefaultProjection(CRSFactory.getCRS(projCode));
+				Project.setDefaultCrs(ProjectionUtils.getCRS(projCode));
 			} else {
-				Project.setDefaultProjection(defaultFactoryProjection);
+				Project.setDefaultCrs(defaultFactoryCrs);
 			}
 
 		}
-		return Project.defaultProjection;
+		return Project.defaultCrs;
 	}
 
 	/**

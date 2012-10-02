@@ -22,7 +22,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.MapControl;
@@ -61,7 +61,8 @@ public interface IFileOpen {
 	 * @param driverName
 	 * @return
 	 */
-	public Rectangle2D createLayer(File file, MapControl mapControl, String driverName, IProjection proj);
+	public Rectangle2D createLayer(File file, MapControl mapControl,
+			String driverName, CoordinateReferenceSystem crs);
 
 	/**
 	 * Devolverá todos los FileFilter que puede manejar dicha extensión

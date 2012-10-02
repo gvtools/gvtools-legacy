@@ -51,7 +51,7 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
@@ -85,7 +85,7 @@ public class FShapeGeneralPathX implements FShape{
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#reProject(org.cresques.cts.ICoordTrans)
 	 */
-	public void reProject(ICoordTrans ct) {
+	public void reProject(MathTransform trans) {
 		throw new RuntimeException();
 	}
 

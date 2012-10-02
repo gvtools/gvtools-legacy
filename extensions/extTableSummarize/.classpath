@@ -3,7 +3,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="org/gvsig/crs/test/" kind="src" path="src-test"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/libJCRS"/>
 	<classpathentry kind="src" path="/_fwAndami"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>

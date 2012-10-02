@@ -26,7 +26,7 @@ package org.cresques.ui.cts;
 import javax.swing.JPanel;
 
 import org.cresques.Messages;
-import org.cresques.cts.ProjectionPool;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.ui.DefaultDialogPanel;
 
 
@@ -60,7 +60,8 @@ public class CSSelectionDialogPanel extends DefaultDialogPanel {
         	contentPane = new CSSelectionPanel(Messages.getText("reference_system"));
         	contentPane.setBounds(14, 12, 280, 163);
 
-            ((CSSelectionPanel) contentPane).setProjection(new ProjectionPool().get("EPSG:32619"));
+			((CSSelectionPanel) contentPane).setCrs(ProjectionUtils
+					.getCRS("EPSG:32619"));
         }
 
         return contentPane;

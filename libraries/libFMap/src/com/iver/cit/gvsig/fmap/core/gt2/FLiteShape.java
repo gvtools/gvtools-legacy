@@ -51,7 +51,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.ICoordTrans;
 import org.geotools.geometry.coordinatesequence.InPlaceCoordinateSequenceTransformer;
 import org.geotools.geometry.jts.AbstractLiteIterator;
 import org.geotools.geometry.jts.CoordinateSequenceTransformer;
@@ -872,7 +871,7 @@ public class FLiteShape implements FShape, Cloneable  {
         return null;
     }
 
-    public void reProject(ICoordTrans ct) {
+    public void reProject(MathTransform ct) {
         // TODO
         /* Point2D pt = new Point2D.Double();
         for (int i = 0; i < numCoords; i+=2)

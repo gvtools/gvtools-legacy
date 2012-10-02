@@ -23,7 +23,7 @@ import java.sql.Types;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import org.cresques.cts.ProjectionPool;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.raster.dataset.NotSupportedExtensionException;
 import org.gvsig.raster.dataset.io.RasterDriverException;
 import org.gvsig.raster.vectorization.VectorizationBinding;
@@ -84,15 +84,15 @@ public class TestRasterPotrace {
 			sFields[1] = fieldName + "";
 
 			LayerDefinition tableDef = null;
-			if(fileOutShape.endsWith(".dxf")) {
+			if (fileOutShape.endsWith(".dxf")) {
 				writer = new DxfWriter();
-				((DxfWriter)writer).setFile(new File(fileOutShape));
-				ProjectionPool pool = new ProjectionPool();
-				((DxfWriter)writer).setProjection(pool.get("EPSG:23030"));
+				((DxfWriter) writer).setFile(new File(fileOutShape));
+				((DxfWriter) writer).setCrs(ProjectionUtils
+						.getCRS("EPSG:23030"));
 				tableDef = new DXFLayerDefinition();
 
 				DxfFieldsMapping fieldsMapping = new DxfFieldsMapping();
-				((DxfWriter)writer).setFieldMapping(fieldsMapping);
+				((DxfWriter) writer).setFieldMapping(fieldsMapping);
 			}
 			if(fileOutShape.endsWith(".shp")) {
 				writer = new ShpWriter();

@@ -1209,7 +1209,7 @@ public class PostGisDriver extends DefaultJDBCDriver implements ICanReproject,
 		clonedLyrDef.setFieldsDesc(lyrDef.getFieldsDesc());
 
 		clonedLyrDef.setShapeType(lyrDef.getShapeType());
-		clonedLyrDef.setProjection(lyrDef.getProjection());
+		clonedLyrDef.setCrs(lyrDef.getCrs());
 
 		clonedLyrDef.setConnection(lyrDef.getConnection());
 		clonedLyrDef.setCatalogName(lyrDef.getCatalogName());

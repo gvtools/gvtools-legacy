@@ -2,7 +2,8 @@ package com.iver.cit.gvsig.fmap.edition.writers.shp;
 
 import java.io.File;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.driverManager.DriverManager;
@@ -16,7 +17,6 @@ import com.iver.cit.gvsig.exceptions.visitors.StartWriterVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StopWriterVisitorException;
 import com.iver.cit.gvsig.fmap.core.DefaultFeature;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.drivers.WithDefaultLegend;
@@ -33,7 +33,7 @@ import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 public class Prueba {
 
 	public FLayer createLayer(String layerName, VectorialFileDriver d,
-			File f, IProjection proj) throws ReadDriverException {
+			File f, CoordinateReferenceSystem crs) throws ReadDriverException {
 		VectorialFileAdapter adapter = new VectorialFileAdapter(f);
 		adapter.setDriver((VectorialDriver) d);
 		VectorialEditableAdapter vea=new VectorialEditableAdapter();
@@ -55,7 +55,7 @@ public class Prueba {
 		if (false) {
 		} else {
 			capa.setSource(adapter);
-			capa.setProjection(proj);
+			capa.setCrs(crs);
 		}
 
 		try {
@@ -119,7 +119,12 @@ public class Prueba {
 		Prueba prueba=new Prueba();
 		FLayer layer=null;
 		try {
-			layer=prueba.createLayer("prueba", (VectorialFileDriver)LayerFactory.getDM().getDriver("gvSIG shp driver"),new File("c:/Layers/puntosPrueba.shp"),CRSFactory.getCRS("EPSG:23030"));
+			layer = prueba.createLayer(
+					"prueba",
+					(VectorialFileDriver) LayerFactory.getDM().getDriver(
+							"gvSIG shp driver"), new File(
+							"c:/Layers/puntosPrueba.shp"), ProjectionUtils
+							.getCRS("EPSG:23030"));
 		} catch (ReadDriverException e) {
 			e.printStackTrace();
 		} catch (DriverLoadException e) {

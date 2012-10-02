@@ -64,6 +64,7 @@ import java.util.Map;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.ImageIcon;
 
+import org.cresques.cts.ProjectionUtils;
 import org.exolab.castor.xml.ValidationException;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.fmap.raster.layers.IRasterLayerActions;
@@ -91,7 +92,6 @@ import com.iver.cit.gvsig.exceptions.layers.ConnectionErrorLayerException;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.exceptions.layers.UnsupportedVersionLayerException;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
 import com.iver.cit.gvsig.fmap.drivers.wcs.FMapWCSDriver;
 import com.iver.cit.gvsig.fmap.drivers.wcs.FMapWCSDriverFactory;
@@ -552,7 +552,7 @@ public class FLyrWCS extends FLyrRasterSE {
 				firstLoad = false;
 			}
 			ViewPortData vpData = new ViewPortData(
-				vp.getProjection(), new Extent(bBox), sz );
+				vp.getCrs(), new Extent(bBox), sz );
 			vpData.setMat(vp.getAffineTransform());
 
 			String filePath = f.getAbsolutePath();
@@ -621,7 +621,7 @@ public class FLyrWCS extends FLyrRasterSE {
 	 */
 	private void rasterProcess(String filePath, Graphics2D g, ViewPort vp, double scale, Cancellable cancel, int nLyr) throws ReadDriverException, LoadLayerException, FilterTypeException {
 		//Cargamos el dataset con el raster de disco.
-		layerRaster[nLyr] = FLyrRasterSE.createLayer("", filePath, vp.getProjection());
+		layerRaster[nLyr] = FLyrRasterSE.createLayer("", filePath, vp.getCrs());
 		//layerRaster[nLyr].getRender().setBufferFactory(layerRaster[nLyr].getBufferFactory());
 		
 		if(visualStatus.dataType == IBuffer.TYPE_UNDEFINED && layerRaster[nLyr].getDataType() != null)
@@ -935,7 +935,7 @@ public class FLyrWCS extends FLyrRasterSE {
 		}
 		this.srs = srs;
 		this.updateDrawVersion();
-		setProjection(CRSFactory.getCRS(srs));
+		setCrs(ProjectionUtils.getCRS(srs));
 	}
 
 	public void setFormat(String format) {
@@ -1166,7 +1166,7 @@ public class FLyrWCS extends FLyrRasterSE {
 			FLyrRasterSE ly = null;
 			if(lastNColumns == 0 && lastNRows == 0) {  //Una capa sin tilear => MultirasterDataset
 				try {
-					ly = createLayer(layerRaster[0].getName(), layerRaster[0].getLoadParams(), layerRaster[0].getProjection());
+					ly = createLayer(layerRaster[0].getName(), layerRaster[0].getLoadParams(), layerRaster[0].getCrs());
 				} catch (LoadLayerException e) {
 					return null;
 				}
@@ -1179,7 +1179,7 @@ public class FLyrWCS extends FLyrRasterSE {
 					}
 				}
 				try {
-					ly = createLayer("preview", s, getProjection());
+					ly = createLayer("preview", s, getCrs());
 				} catch (LoadLayerException e) {
 					return null;
 				}

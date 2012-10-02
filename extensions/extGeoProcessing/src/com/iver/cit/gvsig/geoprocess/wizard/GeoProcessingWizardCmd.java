@@ -64,7 +64,7 @@
 */
 package com.iver.cit.gvsig.geoprocess.wizard;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapContext;
@@ -80,9 +80,9 @@ public class GeoProcessingWizardCmd implements AndamiCmd {
 		View vista = (View)PluginServices.getMDIManager().getActiveWindow();
 		MapContext mapContext = vista.getModel().getMapContext();
         FLayers layers = mapContext.getLayers();
-        IProjection proj = mapContext.getProjection();
-		GeoProcessingPanel dataSelectionPanel = 
-			new GeoProcessingPanel(layers, proj);
+		CoordinateReferenceSystem crs = mapContext.getCrs();
+		GeoProcessingPanel dataSelectionPanel = new GeoProcessingPanel(layers,
+				crs);
 		PluginServices.getMDIManager().addWindow(dataSelectionPanel);
 
 	}

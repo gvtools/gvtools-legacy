@@ -549,7 +549,13 @@ public class MosaicProcess extends RasterProcess {
 			GeoRasterWriter grw = null;
 			writerBufferServer = new WriterBufferServer(mosaicGrid.getRasterBuf());
 			AffineTransform aTransform = new AffineTransform(fullExtend.getCellSize(),0.0,0.0,-fullExtend.getCellSize(),fullExtend.getMin().getX(),fullExtend.getMax().getY());
-			grw = GeoRasterWriter.getWriter(writerBufferServer, fileName, mosaicGrid.getBandCount(),aTransform, mosaicGrid.getRasterBuf().getWidth(), mosaicGrid.getRasterBuf().getHeight(), mosaicGrid.getRasterBuf().getDataType(), GeoRasterWriter.getWriter(fileName).getParams(), inputRasterLayers[0].getProjection());
+			grw = GeoRasterWriter.getWriter(writerBufferServer, fileName,
+					mosaicGrid.getBandCount(), aTransform, mosaicGrid
+							.getRasterBuf().getWidth(), mosaicGrid
+							.getRasterBuf().getHeight(), mosaicGrid
+							.getRasterBuf().getDataType(), GeoRasterWriter
+							.getWriter(fileName).getParams(),
+					inputRasterLayers[0].getCrs());
 			grw.dataWrite();
 			grw.setWkt((String)((FLyrRasterSE)inputRasterLayers[0]).getWktProjection());
 			grw.writeClose();

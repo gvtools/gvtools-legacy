@@ -28,10 +28,11 @@ import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.ViewPortData;
 import org.cresques.px.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -54,8 +55,8 @@ public class DxfSolid extends DxfEntity {
      * @param layer, capa del DXF en la que se encuentra el DxfSolid.
      * @param pts, puntos 2D que componen el DxfSolid.
      */
-    public DxfSolid(IProjection proj, DxfLayer layer, Point2D[] pts) {
-        super(proj, layer);
+	public DxfSolid(CoordinateReferenceSystem crs, DxfLayer layer, Point2D[] pts) {
+        super(crs, layer);
 
         Point2D aux = pts[2];
         pts[2] = pts[3];
@@ -91,7 +92,7 @@ public class DxfSolid extends DxfEntity {
      * Permite reproyectar un DxfSolid dado un conjunto de coordenadas de transformación.
      * @param rp, coordenadas de transformación.
      */
-    public void reProject(ICoordTrans rp) {
+    public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         Point2D[] savePts = pts;
 
         pts = new Point2D[savePts.length];
@@ -100,13 +101,12 @@ public class DxfSolid extends DxfEntity {
         Point2D ptDest = null;
 
         for (int i = 0; i < savePts.length; i++) {
-            ptDest = rp.getPDest().createPoint(0.0, 0.0);
-            ptDest = rp.convert((Point2D) savePts[i], ptDest);
+			ptDest = ProjectionUtils.transform((Point2D) savePts[i], trans);
             pts[i] = ptDest;
             extent.add(ptDest);
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
 
     /**

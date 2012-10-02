@@ -60,8 +60,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.remoteClient.arcims.ArcImsClientP;
 import org.gvsig.remoteClient.arcims.ArcImsFeatureClient;
 import org.gvsig.remoteClient.arcims.ArcImsVectStatus;
@@ -72,6 +71,7 @@ import org.gvsig.remoteClient.arcims.utils.ServiceInfoTags;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformation;
 import org.gvsig.remoteClient.arcims.utils.ServiceInformationLayerFeatures;
 import org.gvsig.remoteClient.utils.Utilities;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
@@ -83,7 +83,6 @@ import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.CartographicSupport;
-import com.iver.cit.gvsig.fmap.core.DefaultFeature;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -95,11 +94,9 @@ import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.edition.VectorialEditableAdapter;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.cit.gvsig.fmap.layers.ISpatialDB;
 import com.iver.cit.gvsig.fmap.layers.LegendChangedEvent;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
-import com.iver.cit.gvsig.fmap.layers.SpatialCache;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.InfoByPoint;
 import com.iver.cit.gvsig.fmap.rendering.IClassifiedVectorLegend;
@@ -208,7 +205,7 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
 
         IGeometry geom, clongeom;
         
-        ICoordTrans layerTransf = getCoordTrans();
+        MathTransform layerTransf = getCrsTransform();
         Rectangle2D bBox = viewPort.getAdjustedExtent();
         
         arcimsStatus.setExtent(bBox);
@@ -219,7 +216,7 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
         arcimsStatus.setLayerIds(Utilities.createVector(layerQuery, ","));
         arcimsStatus.setServer(host.toString());
         arcimsStatus.setService(service);
-        arcimsStatus.setSrs(this.getProjection().getAbrev());
+        arcimsStatus.setSrs(ProjectionUtils.getAbrev(getCrs()));
         arcimsStatus.setTransparency(this.arcImsTransparency);
 
         FMapFeatureArcImsDriver drv =
@@ -311,7 +308,7 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
     				clongeom = geom.cloneGeometry();
     				geom = clongeom; 
     		        
-    		        if ((layerTransf != null) && (isNotSame(layerTransf))) {
+    		        if (layerTransf != null) {
     		        	geom.reProject(layerTransf);
     		        }
 
@@ -506,13 +503,6 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
 		if (str.compareToIgnoreCase("zIDz") == 0) return "#ID#";
 		if (str.compareToIgnoreCase("zSHAPEz") == 0) return "#SHAPE#";
 		return str;
-	}
-
-	private boolean isNotSame(ICoordTrans trans) {
-    	
-    	String from_abb = trans.getPOrig().getAbrev(); 
-    	String to_abb = trans.getPDest().getAbrev();
-    	return (from_abb.compareTo(to_abb) != 0);
 	}
 
 	private String[] appendAtringArrays(String[] arr1, String[] arr2) {
@@ -944,7 +934,8 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
         XMLEntity resp = super.getXMLEntity();
 
         // PluginServices.getMDIManager().addView(null);
-        resp.putProperty("srs_abrev", getMapContext().getProjection().getAbrev());
+		resp.putProperty("srs_abrev",
+				ProjectionUtils.getAbrev(getMapContext().getCrs()));
         resp.putProperty("_host", host.toString());
         resp.putProperty("_service", service);
         resp.putProperty("layerQuery", layerQuery);
@@ -1119,13 +1110,13 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
         rv.stop();
 
         // Si existe reproyección, reproyectar el extent
-        ICoordTrans ct = getCoordTrans();
+        MathTransform trans = getCrsTransform();
 		try{
-        	if ((ct != null) && (!sourceEqualsTarget(ct))) {
+        	if (trans != null) {
             	Point2D pt1 = new Point2D.Double(rAux.getMinX(), rAux.getMinY());
             	Point2D pt2 = new Point2D.Double(rAux.getMaxX(), rAux.getMaxY());
-            	pt1 = ct.convert(pt1, null);
-            	pt2 = ct.convert(pt2, null);
+            	pt1 = ProjectionUtils.transform(pt1, trans);
+            	pt2 = ProjectionUtils.transform(pt2, trans);
             	rAux = new Rectangle2D.Double();
             	rAux.setFrameFromDiagonal(pt1, pt2);
         	}
@@ -1133,8 +1124,7 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
 			// this.setAvailable(false);
 			// this.addError(new ReprojectLayerException(getName(), e));
 			logger.error("Unable to reproject extent: " + rAux.toString());
-			logger.error("Transf from CRS: " + ct.getPOrig().getFullCode());
-			logger.error("Transf to CRS  : " + ct.getPDest().getFullCode());
+			logger.error("Transf WKT: " + trans.toWKT());
 			logger.warn("No reprojection made.");
 		}
         //Esto es para cuando se crea una capa nueva con el fullExtent de ancho y alto 0.
@@ -1146,18 +1136,6 @@ public class FFeatureLyrArcIMS extends FLyrVect implements InfoByPoint,
 
     }
     
-    private boolean sourceEqualsTarget(ICoordTrans ct) {
-    	
-    	IProjection p1 = ct.getPOrig();
-    	IProjection p2 = ct.getPDest();
-    	String str1 = p1.getFullCode();
-    	String str2 = p2.getFullCode();
-    	return (str1.compareTo(str2) == 0);
-}
-    
-    
-    
-
     /**
      * Keeps the image's height and width or the image's tiles' height and
      * width, if any. These values are the same as the viewPort's height and

@@ -9,8 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/libFMap/lib/org.gvsig.fmap.raster.jar" sourcepath="/extRasterTools-SE"/>
-	<classpathentry kind="lib" path="/libFMap/lib/org.gvsig.raster.gui.jar" sourcepath="/extRasterTools-SE/src"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar" sourcepath="/libUIComponent/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libRaster"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/libIverUtiles/src"/>
@@ -18,5 +16,6 @@
 	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
 	<classpathentry kind="lib" path="lib/flanagan.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/extRasterTools-SE"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -29,18 +29,18 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanel;
 import org.gvsig.gui.beans.defaultbuttonspanel.DefaultButtonsPanel;
 import org.gvsig.gui.util.StatusComponent;
 import org.gvsig.raster.beans.createlayer.NewLayerPanel;
 import org.gvsig.raster.util.RasterToolsUtil;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.gui.panels.CRSSelectPanel;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
@@ -56,8 +56,8 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 	private JPanel                 nameFile              = null;
 	private CRSSelectPanel         projectionSrcSelector = null;
 	private CRSSelectPanel         projectionDstSelector = null;
-	private IProjection            projSrc               = null;
-	private IProjection            projDst               = null;
+	private CoordinateReferenceSystem sourceCrs = null;
+	private CoordinateReferenceSystem targetCrs = null;
 	private JPanel                 filePanel             = null;
 	private LayerReprojectListener reprojectListener     = null;
 	private FLyrRasterSE           lyr                   = null;
@@ -72,8 +72,8 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 		this.isInTOC = isInTOC;
 		setLayer(lyr);
 		init();
-		projSrc = getProjectionSrcSelector().getCurProj();
-		projDst = getProjectionDstSelector().getCurProj();
+		sourceCrs = getProjectionSrcSelector().getCurrentCrs();
+		targetCrs = getProjectionDstSelector().getCurrentCrs();
 	}
 	
 	/*
@@ -98,11 +98,11 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 		BaseView view = (BaseView) PluginServices.getMDIManager().getActiveWindow();
 		viewName = PluginServices.getMDIManager().getWindowInfo(view).getTitle();
 		
-		projSrc = this.lyr.readProjection();
-		if (projSrc == null)
-			projSrc = CRSFactory.getCRS("EPSG:23030");
+		sourceCrs = this.lyr.readProjection();
+		if (sourceCrs == null)
+			sourceCrs = ProjectionUtils.getCRS("EPSG:23030");
 
-		projDst = CRSFactory.getCRS("EPSG:23030");
+		targetCrs = ProjectionUtils.getCRS("EPSG:23030");
 
 		getLayerReprojectListener().setIsInTOC(isInTOC);
 		getLayerReprojectListener().setLayer(this.lyr);
@@ -248,19 +248,19 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 	private CRSSelectPanel getProjectionSrcSelector() {
 		if (projectionSrcSelector == null) {
 			
-			IProjection projectionAux = null;
+			CoordinateReferenceSystem auxCrs = null;
 			IWindow activeWindow = PluginServices.getMDIManager().getActiveWindow();
 			if (activeWindow instanceof BaseView) {		
 				BaseView activeView = (BaseView) activeWindow;
-				projectionAux = activeView.getProjection();
-				activeView.setProjection(projSrc);
+				auxCrs = activeView.getCrs();
+				activeView.setCrs(sourceCrs);
 			}
 			
-			projectionSrcSelector = CRSSelectPanel.getPanel(projSrc);
+			projectionSrcSelector = CRSSelectPanel.getPanel(sourceCrs);
 			
 			if (activeWindow instanceof BaseView) {		
 				BaseView activeView = (BaseView) activeWindow;
-				activeView.setProjection(projectionAux);
+				activeView.setCrs(auxCrs);
 			}
 			
 			//projectionSrcSelector.setTransPanelActive(true);
@@ -268,7 +268,7 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 			projectionSrcSelector.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (projectionSrcSelector.isOkPressed()) {
-						projSrc = projectionSrcSelector.getCurProj();
+						sourceCrs = projectionSrcSelector.getCurrentCrs();
 					}
 				}
 			});
@@ -286,13 +286,13 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 	 */
 	private CRSSelectPanel getProjectionDstSelector() {
 		if (projectionDstSelector == null) {
-			projectionDstSelector = CRSSelectPanel.getPanel(projDst);
+			projectionDstSelector = CRSSelectPanel.getPanel(targetCrs);
 			//projectionDstSelector.setTransPanelActive(true);
 			projectionDstSelector.setPreferredSize(null);
 			projectionDstSelector.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (projectionDstSelector.isOkPressed()) {
-						projDst = projectionDstSelector.getCurProj();
+						targetCrs = projectionDstSelector.getCurrentCrs();
 					}
 				}
 			});
@@ -304,18 +304,12 @@ public class LayerReprojectPanel extends DefaultButtonsPanel implements IWindow 
 		return projectionDstSelector;
 	}
 
-	/**
-	 * @return the projSrc
-	 */
-	public IProjection getProjectionSrc() {
-		return projSrc;
+	public CoordinateReferenceSystem getSourceCrs() {
+		return sourceCrs;
 	}
 
-	/**
-	 * @return the projDst
-	 */
-	public IProjection getProjectionDst() {
-		return projDst;
+	public CoordinateReferenceSystem getTargetCrs() {
+		return targetCrs;
 	}
 
 	public Object getWindowProfile() {

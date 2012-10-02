@@ -28,20 +28,20 @@ import java.awt.geom.Point2D;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-import org.cresques.geo.Projected;
+import org.cresques.geo.Georeferenced;
 import org.cresques.geo.ViewPortData;
 import org.cresques.px.Extent;
 import org.cresques.px.IObjList;
 import org.cresques.px.PxObj;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 /**
  * Entidad BLOCK de un fichero DXF.
  * @author jmorell
  */
 public class DxfBlock extends PxObj implements IObjList {
-    IProjection proj = null;
+	CoordinateReferenceSystem crs = null;
     Vector data = null;
     int flags = 0;
     String blkName = "";
@@ -51,7 +51,7 @@ public class DxfBlock extends PxObj implements IObjList {
      * Constructor de DxfBlock.
      * @param proj, proyección cartográfica en la que se encuentra el DxfBlock.
      */
-    public DxfBlock(IProjection proj) {
+    public DxfBlock(CoordinateReferenceSystem crs) {
         extent = new Extent();
         data = new Vector();
     }
@@ -63,7 +63,7 @@ public class DxfBlock extends PxObj implements IObjList {
      * @return IObjList, Conjunto de objetos gráficos que contienen a pt.
      */
     public IObjList getAt(Point2D pt) {
-        IObjList oList = new DxfEntityList(proj);
+        IObjList oList = new DxfEntityList(crs);
         Iterator iter = iterator();
 
         while (iter.hasNext()) {
@@ -133,23 +133,23 @@ public class DxfBlock extends PxObj implements IObjList {
      * Devuelve la proyección cartográfica en la que se encuentra el DxfBlock.
      * @return IProjection, proyección cartográfica.
      */
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
     
     /**
      * Establece la proyección cartográfica en la que se encuentra el DxfBlock.
      * @param p, Proyección cartográfica.
      */
-    public void setProjection(IProjection p) {
-        proj = p;
+    public void setCrs(CoordinateReferenceSystem crs) {
+        this.crs = crs;
     }
     
     /**
      * Permite reproyectar un DxfBlock dado un conjunto de coordenadas de transformación.
      * @param rp, coordenadas de transformación.
      */
-    public void reProject(ICoordTrans rp) {
+    public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         extent = new Extent();
 
         PxObj o;
@@ -157,11 +157,11 @@ public class DxfBlock extends PxObj implements IObjList {
 
         while (iter.hasNext()) {
             o = (PxObj) iter.next();
-            ((Projected) o).reProject(rp);
+            ((Georeferenced) o).reProject(trans, target);
             extent.add(o.getExtent());
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
     
     /**

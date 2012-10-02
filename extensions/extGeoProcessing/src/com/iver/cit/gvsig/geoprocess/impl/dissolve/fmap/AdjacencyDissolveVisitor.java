@@ -71,7 +71,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Stack;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -267,7 +267,7 @@ public class AdjacencyDissolveVisitor extends DissolveVisitor {
 		try {
 			if (visitor.start(dissolvedLayer)) {
 				ReadableVectorial va = dissolvedLayer.getSource();
-				ICoordTrans ct = dissolvedLayer.getCoordTrans();
+				MathTransform trans = dissolvedLayer.getCrsTransform();
 				List lstRecs = dissolvedLayer.getISpatialIndex().query(query);
 				Integer idRec;
 				int index;
@@ -293,10 +293,10 @@ public class AdjacencyDissolveVisitor extends DissolveVisitor {
 						IGeometry geom = va.getShape(index);
 						if (geom == null)// azabala
 							continue;
-						if (ct != null) {
+						if (trans != null) {
 							if (bMustClone)
 								geom = geom.cloneGeometry();
-							geom.reProject(ct);
+							geom.reProject(trans);
 						}
 						if (geom.intersects(query))
 							visitor.visit(geom, index);

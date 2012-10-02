@@ -127,7 +127,7 @@ public class AddLayerNodesExtension extends Extension {
 	 */
 	private void add_nodes_layer(MapControl mapCtrl, Network net) throws GraphException {
 		NodesDriver driver = new NodesDriver(net);
-		FLyrVect lyr = (FLyrVect) LayerFactory.createLayer("tmpNodes", driver, net.getLayer().getProjection());
+		FLyrVect lyr = (FLyrVect) LayerFactory.createLayer("tmpNodes", driver, net.getLayer().getCrs());
 		URL legendPath = this.getClass().getClassLoader().getResource("images/nodos.gvl");
 		NetworkUtils.loadLegend(lyr, legendPath.getPath());
 		mapCtrl.getMapContext().beginAtomicEvent();

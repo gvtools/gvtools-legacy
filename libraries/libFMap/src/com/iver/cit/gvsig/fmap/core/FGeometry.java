@@ -55,7 +55,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
@@ -226,11 +226,9 @@ public class FGeometry extends AbstractGeometry implements IGeometry3D {
 			return new FGeometry(shp.cloneFShape());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#reProject(org.cresques.cts.ICoordTrans)
-	 */
-	public void reProject(ICoordTrans ct) {
-		shp.reProject(ct);
+	@Override
+	public void reProject(MathTransform trans) {
+		shp.reProject(trans);
 		bounds2D=reCalculateBounds2D();
 	}
 

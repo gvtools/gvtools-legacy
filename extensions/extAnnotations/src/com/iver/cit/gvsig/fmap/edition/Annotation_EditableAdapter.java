@@ -49,7 +49,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.List;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.NullValue;
@@ -217,13 +217,13 @@ public class Annotation_EditableAdapter extends VectorialEditableAdapter {
         start();
         IGeometry geom = getShape(index);
         stop();
-        ICoordTrans ct = lyrAnnotation.getCoordTrans();
+        MathTransform trans = lyrAnnotation.getCrsTransform();
         boolean bMustClone = false;
-        if (ct != null) {
+        if (trans != null) {
             if (bMustClone) {
                 geom = geom.cloneGeometry();
             }
-            geom.reProject(ct);
+            geom.reProject(trans);
         }
         geom.transform(vp.getAffineTransform());
         int unit=-1;

@@ -27,8 +27,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.dataset.BandAccessException;
 import org.gvsig.raster.dataset.BandList;
 import org.gvsig.raster.dataset.FileNotOpenException;
@@ -44,6 +42,8 @@ import org.gvsig.raster.datastruct.Extent;
 import org.gvsig.raster.datastruct.Transparency;
 import org.gvsig.raster.util.RasterUtilities;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import es.gva.cit.jgdal.GdalException;
 /**
@@ -125,12 +125,12 @@ public class GdalDriver extends RasterDataset {
 	/**
 	 * Constructor del driver de Gdal. Crea las referencias al fichero y carga
 	 * las estructuras con la información y los metadatos. 
-	 * @param proj Proyección
+	 * @param crs Proyección
 	 * @param param Parametros de carga
 	 * @throws NotSupportedExtensionException
 	 */
-	public GdalDriver(IProjection proj, Object param)throws NotSupportedExtensionException {
-		super(proj, param);
+	public GdalDriver(CoordinateReferenceSystem crs, Object param)throws NotSupportedExtensionException {
+		super(crs, param);
 		try {
 			if(param instanceof String) {
 				setParam(translateFileName((String)param));
@@ -517,7 +517,7 @@ public class GdalDriver extends RasterDataset {
 		return "gvSIG Gdal Raster Driver";
 	}
 	
-	public void reProject(ICoordTrans rp) {
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
 	}
 	
 	/*

@@ -23,11 +23,10 @@
  */
 package org.cresques.px;
 
-import org.cresques.cts.IProjection;
+import java.awt.Graphics2D;
 
 import org.cresques.geo.ViewPortData;
-
-import java.awt.Graphics2D;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
 public class PxLayer extends PxObjList {
@@ -36,8 +35,8 @@ public class PxLayer extends PxObjList {
     protected String name = "Capa";
     protected int id = 0;
 
-    public PxLayer(String name, IProjection proj) {
-        super(proj);
+    public PxLayer(String name, CoordinateReferenceSystem crs) {
+        super(crs);
         id = PxLayer.layerSeed++;
         this.name = name;
     }

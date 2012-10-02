@@ -52,7 +52,7 @@ import java.util.Iterator;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
@@ -149,7 +149,7 @@ public class Annotation_TaskCreate extends AbstractMonitorableTask {
         }
 
         // va.start();
-        ICoordTrans ct = lyrVect.getCoordTrans();
+        MathTransform trans = lyrVect.getCrsTransform();
         DriverAttributes attr = va.getDriverAttributes();
         boolean bMustClone = false;
 
@@ -179,12 +179,12 @@ public class Annotation_TaskCreate extends AbstractMonitorableTask {
                 IGeometry geom = ShapeFactory.createPoint2D(rectangle.getCenterX(),
                         rectangle.getCenterY());
 
-                if (ct != null) {
+                if (trans != null) {
                     if (bMustClone) {
                         geom = geom.cloneGeometry();
                     }
 
-                    geom.reProject(ct);
+                    geom.reProject(trans);
                 }
 
                 reportStep();
@@ -214,12 +214,12 @@ public class Annotation_TaskCreate extends AbstractMonitorableTask {
 									.getY());
 						}
 
-						if (ct != null) {
+						if (trans != null) {
 							if (bMustClone) {
 								geom = geom.cloneGeometry();
 							}
 
-							geom.reProject(ct);
+							geom.reProject(trans);
 						}
 
 						reportStep();
@@ -255,12 +255,12 @@ public class Annotation_TaskCreate extends AbstractMonitorableTask {
 									.getY());
 						}
 
-						if (ct != null) {
+						if (trans != null) {
 							if (bMustClone) {
 								geom = geom.cloneGeometry();
 							}
 
-							geom.reProject(ct);
+							geom.reProject(trans);
 						}
 
 						reportStep();
@@ -306,7 +306,7 @@ public class Annotation_TaskCreate extends AbstractMonitorableTask {
                 lyrDef = (SHPLayerDefinition) writer.getTableDefinition();
 
                 FLayer newLayer = LayerFactory.createLayer(lyrDef.getName(),
-                        reader, lyrVect.getProjection());
+                        reader, lyrVect.getCrs());
 
                 Annotation_Layer la = Annotation_Layer.createLayerFromVect((FLyrVect)newLayer);
 //                LayerListener[] layerListeners = newLayer.getLayerListeners();

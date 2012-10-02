@@ -28,11 +28,12 @@ import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.ViewPortData;
 import org.cresques.io.DxfGroup;
 import org.cresques.px.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -57,8 +58,8 @@ public class DxfCircle extends DxfEntity {
      * @param layer, capa del DXF en la que se encuentra el DxfCircle.
      * @param pts, puntos 2D que componen el DxfCircle.
      */
-    public DxfCircle(IProjection proj, DxfLayer layer, Point2D[] pts) {
-        super(proj, layer);
+    public DxfCircle(CoordinateReferenceSystem crs, DxfLayer layer, Point2D[] pts) {
+        super(crs, layer);
         this.pts = pts;
         extent = new Extent();
 
@@ -90,22 +91,19 @@ public class DxfCircle extends DxfEntity {
      * Permite reproyectar un DxfCircle dado un conjunto de coordenadas de transformación.
      * @param rp, coordenadas de transformación.
      */
-    public void reProject(ICoordTrans rp) {
+    public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         Point2D[] savePts = pts;
 
         pts = new Point2D[savePts.length];
         extent = new Extent();
 
-        Point2D ptDest = null;
-
         for (int i = 0; i < savePts.length; i++) {
-            ptDest = rp.getPDest().createPoint(0.0, 0.0);
-            ptDest = rp.convert((Point2D) savePts[i], ptDest);
-            this.pts[i] = ptDest;
-            extent.add(ptDest);
+			this.pts[i] = ProjectionUtils
+					.transform((Point2D) savePts[i], trans);
+            extent.add(this.pts[i]);
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
     
     /**

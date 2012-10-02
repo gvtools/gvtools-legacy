@@ -73,7 +73,9 @@ public class StartEditing extends Extension {
 //			boolean bEditingStarted = false;
 			if (actives.length == 1 &&	actives[0] instanceof FLyrVect) {
 				FLyrVect lv = (FLyrVect) actives[0];
-				if (!mapControl.getProjection().getAbrev().equals(lv.getProjection().getAbrev())){
+				
+				if (!mapControl.getCrs().getName()
+						.equals(lv.getCrs().getName())) {
 					NotificationManager.showMessageInfo(PluginServices.getText(this,"no_es_posible_editar_capa_reproyectada"),null);
 					return;
 				}

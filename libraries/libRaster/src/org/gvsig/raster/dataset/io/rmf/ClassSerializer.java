@@ -22,7 +22,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
-import org.cresques.cts.ProjectionPool;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.raster.datastruct.Extent;
 import org.gvsig.raster.datastruct.ViewPortData;
 import org.kxml2.io.KXmlParser;
@@ -208,7 +208,7 @@ public abstract class ClassSerializer implements IRmfBlock {
 							vp.setExtent(ext);
 							vp.pxSize = new Point2D.Double(dim.getX(), dim.getY());
 							if (project != null && project != "")
-								vp.setProjection(new ProjectionPool().get(project));
+								vp.setCrs(ProjectionUtils.getCRS(project));
 							begin = false;
 						} else {
 							if (begin) {// Condicion de salida

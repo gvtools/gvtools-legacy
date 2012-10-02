@@ -42,17 +42,16 @@
  */
 package com.prodevelop.cit.gvsig.vectorialdb.wizard;
 
-import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.addlayer.AddLayerDialog;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.core.ICanReproject;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.DBException;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.IConnection;
@@ -181,7 +180,7 @@ public class TablesListItem extends TablesListItemSimple {
     }
     public CRSSelectPanel projectionPanel(String espView,
 			FieldComboItem[] ids_ci, FieldComboItem[] geos_ci) {
-		IProjection proj = AddLayerDialog.getLastProjection();
+		CoordinateReferenceSystem crs = AddLayerDialog.getLastCrs();
 		if (driver instanceof ICanReproject) {
 			try {
 				DBLayerDefinition lyrDef = new DBLayerDefinition();
@@ -216,23 +215,23 @@ public class TablesListItem extends TablesListItemSimple {
 				if (srcProjection != null && srcProjection.length() > 0
 						&& !srcProjection.equals("-1")) {
 
-					proj = CRSFactory.getCRS("EPSG:" + srcProjection);
+					crs = ProjectionUtils.getCRS("EPSG:" + srcProjection);
 				} else{
-					proj = null;
+					crs = null;
 				}
 			} catch (Exception e) {
 				NotificationManager.addInfo("Incorrect projection", e);
 			}
 		}
-		return getJPanelProj(proj);
+		return getJPanelProj(crs);
 	}
-    private CRSSelectPanel getJPanelProj(IProjection proj) {
+    private CRSSelectPanel getJPanelProj(CoordinateReferenceSystem crs) {
 //		if (jPanelProj == null) {
 //			IProjection proj = CRSFactory.getCRS("EPSG:23030");
 //			if (PluginServices.getMainFrame() != null) {
 //				proj = FOpenDialog.getLastProjection();
 //			}
-			jPanelProj = CRSSelectPanel.getPanel(proj);
+			jPanelProj = CRSSelectPanel.getPanel(crs);
 
 			jPanelProj.setTransPanelActive(true);
 			jPanelProj.setBounds(new java.awt.Rectangle(210, 22, 280, 32));
@@ -240,7 +239,7 @@ public class TablesListItem extends TablesListItemSimple {
 			jPanelProj.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 			        if (jPanelProj.isOkPressed()) {
-			        	AddLayerDialog.setLastProjection(jPanelProj.getCurProj());
+			        	AddLayerDialog.setLastCrs(jPanelProj.getCurrentCrs());
 			        }
 				}
 			});

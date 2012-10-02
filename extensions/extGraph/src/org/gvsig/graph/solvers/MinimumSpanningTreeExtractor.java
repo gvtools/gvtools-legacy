@@ -244,9 +244,12 @@ public class MinimumSpanningTreeExtractor implements IDijkstraListener {
 		try {
 			geom = adapter.getShape(edge.getIdArc());
 			FLyrVect lyr = net.getLayer();
-		    if (lyr.getCoordTrans() != null) {
-		    	if (!lyr.getProjection().getAbrev().equals(lyr.getMapContext().getViewPort().getProjection().getAbrev())){
-		    		geom.reProject(lyr.getCoordTrans());
+		    if (lyr.getCrsTransform() != null) {
+				if (!lyr.getCrs()
+						.getName()
+						.equals(lyr.getMapContext().getViewPort().getCrs()
+								.getName())) {
+		    		geom.reProject(lyr.getCrsTransform());
 		    	}
 		    }			
 			

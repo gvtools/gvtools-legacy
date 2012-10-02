@@ -160,7 +160,7 @@ public class MinimumSpanningTreeExtension extends Extension {
 		extractor.endExtraction();
 		
 		FLyrVect lyrLine = extractor.getLineLayer();
-		lyrLine.setProjection(map.getProjection());
+		lyrLine.setCrs(map.getCrs());
 		map.beginAtomicEvent();
 		map.getLayers().addLayer(lyrLine);
 		map.endAtomicEvent();

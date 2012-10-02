@@ -96,7 +96,7 @@ public class ClipProcess implements IProcessActions {
 		FLyrRasterSE clip = null;
 		try {
 			if(param instanceof Object[] && ((Object[])param).length == 2 && ((Object[])param)[0] instanceof String) {
-				clip = FLyrRasterSE.createLayer(RasterLibrary.getOnlyLayerName(), (String)((Object[])param)[0], sourceLayer.getProjection());
+				clip = FLyrRasterSE.createLayer(RasterLibrary.getOnlyLayerName(), (String)((Object[])param)[0], sourceLayer.getCrs());
 			}
 		} catch (LoadLayerException e) {
 			RasterToolsUtil.messageBoxError("error_generating_layer", null, e);

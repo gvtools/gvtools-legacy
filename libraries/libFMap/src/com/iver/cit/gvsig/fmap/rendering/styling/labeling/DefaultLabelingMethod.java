@@ -140,7 +140,7 @@ public class DefaultLabelingMethod implements ILabelingMethod {
 			sql.append(lc.getSQLQuery());
 		}
 		sql.append(";");
-		return layer.getSource().getFeatureIterator(sql.toString(), viewPort.getProjection());
+		return layer.getSource().getFeatureIterator(sql.toString(), viewPort.getCrs());
 //		}
 //		else {
 //			return layer.getSource().getFeatureIterator(

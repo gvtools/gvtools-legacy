@@ -23,7 +23,7 @@ public class JoinFeatureIterator extends DefaultFeatureIterator implements
 			it = layer.getSource().getFeatureIterator(
 					viewPort.getAdjustedExtent(),
 					none,
-					viewPort.getProjection(),
+					viewPort.getCrs(),
 					true);
 			dbAdapter = (ISpatialDB) layer.getSource();
 		}
@@ -31,7 +31,7 @@ public class JoinFeatureIterator extends DefaultFeatureIterator implements
 			it = layer.getSource().getFeatureIterator(
 					viewPort.getAdjustedExtent(),
 					fields,
-					viewPort.getProjection(),
+					viewPort.getCrs(),
 					true);
 			if (it instanceof DefaultFeatureIterator) {
 				((DefaultFeatureIterator) it).setRecordset(layer.getRecordset());

@@ -160,7 +160,7 @@ public class FeatureDependentLabeled implements ILabelingMethod {
 			sql.append(lc.getSQLQuery());
 		}
 		sql.append(";");
-		return layer.getSource().getFeatureIterator(sql.toString(), layer.getProjection());
+		return layer.getSource().getFeatureIterator(sql.toString(), layer.getCrs());
 //		}
 //		else {
 //			return layer.getSource().getFeatureIterator(

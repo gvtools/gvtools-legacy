@@ -37,7 +37,7 @@ public class FileNotFoundSolve implements ISolveErrorListener {
 	 * @param file
 	 */
 	public void createLayer(File file){
-		layer=(FLyrVect)LayerFactory.createLayer(file.getName(),(VectorialFileDriver)driver,file,layer.getProjection());
+		layer=(FLyrVect)LayerFactory.createLayer(file.getName(),(VectorialFileDriver)driver,file,layer.getCrs());
 		solved=true;
 	}
 	/**

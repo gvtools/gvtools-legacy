@@ -82,7 +82,8 @@
 */
 package com.iver.cit.gvsig.geoprocess.core.util;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.iver.cit.gvsig.fmap.MapContext;
 
@@ -124,9 +125,7 @@ public class UnitUtils {
 	 *
 	 * */
 	public static double getInInternalUnits(double userEntryDistance,
-													IProjection proj,
-													int distanceUnits,
-													int mapUnits){
+			CoordinateReferenceSystem crs, int distanceUnits, int mapUnits){
 		// VCN he modificado esto a como creo que debería de estar,
 		//así tiene en cuenta para calcular la distancia tanto las unidades
 		//en las que se encuentra la cartografía como las unidades de medida
@@ -140,7 +139,7 @@ public class UnitUtils {
 		coords, pass distance to a angular measure
 		*/
 
-		if( (proj != null) && !(proj.isProjected())){
+		if ((crs != null) && !(crs instanceof ProjectedCRS)) {
 			distInInternalUnits =
 				UnitUtils.toSexaAngularMeasure(distInInternalUnits);
 		}

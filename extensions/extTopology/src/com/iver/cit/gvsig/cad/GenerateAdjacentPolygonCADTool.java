@@ -55,10 +55,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.fmap.core.FGeometryUtil;
 import org.gvsig.fmap.core.NewFConverter;
 import org.gvsig.jts.JtsUtil;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
@@ -111,8 +113,6 @@ public class GenerateAdjacentPolygonCADTool extends SplitGeometryCADTool {
 		try {
 			VectorialLayerEdited layer = getVLE();
 			VectorialEditableAdapter adapter = layer.getVEA();
-			String epsg = layer.getLayer().getMapContext().getViewPort()
-					.getProjection().getAbrev();
 			Point2D[] clickedPts = new Point2D[this.clickedPoints.size()];
 			clickedPoints.toArray(clickedPts);
 			Coordinate[] digitizedCoords = JtsUtil
@@ -126,7 +126,10 @@ public class GenerateAdjacentPolygonCADTool extends SplitGeometryCADTool {
 			Rectangle2D rect = FGeometryUtil.envelopeToRectangle2D(digitizedLine
 					.getEnvelopeInternal());
 
-			IRowEdited[] features = adapter.getFeatures(rect, epsg);
+			CoordinateReferenceSystem crs = layer.getLayer().getMapContext().getViewPort()
+					.getCrs();
+			IRowEdited[] features = adapter.getFeatures(rect,
+					ProjectionUtils.getAbrev(crs));
 			for (int i = 0; i < features.length; i++) {
 				IRowEdited row = features[i];
 				IFeature feature = (IFeature) row.getLinkedRow().cloneRow();

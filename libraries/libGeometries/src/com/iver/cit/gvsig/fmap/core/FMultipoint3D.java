@@ -42,8 +42,8 @@ package com.iver.cit.gvsig.fmap.core;
 
 import java.awt.geom.Point2D;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.aggregate.MultiPoint;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Multipunto 3D.
@@ -60,8 +60,9 @@ public class FMultipoint3D extends FMultiPoint2D implements MultiPoint{
 	 * @param y Array de Ys.
 	 * @param z Array de Zs.
 	 */
-	public FMultipoint3D(String id, IProjection projection, double[] x, double[] y, double[] z) {
-		super(id, projection, x, y);
+	public FMultipoint3D(String id, CoordinateReferenceSystem crs, double[] x,
+			double[] y, double[] z) {
+		super(id, crs, x, y);
 		this.z = z;
 	}
 
@@ -78,8 +79,7 @@ public class FMultipoint3D extends FMultiPoint2D implements MultiPoint{
 			x[i] = p.getX();
 			y[i] = p.getY();
 		}
-		return new FMultipoint3D(id, projection, x,y,
-			(double[]) z.clone());
+		return new FMultipoint3D(id, crs, x, y, (double[]) z.clone());
 	}
 
 	/**

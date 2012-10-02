@@ -161,7 +161,7 @@ public class TestMemoryDriverWizard extends WizardPanel implements ActionListene
 		
 		try {
 			layer = FLyrRasterSE.createLayer("test-memoryDriver", 
-					new MemoryRasterDriverParam(bf.getRasterBuf(), bf.getDataExtent()),  m_MapContext.getProjection());
+					new MemoryRasterDriverParam(bf.getRasterBuf(), bf.getDataExtent()),  m_MapContext.getCrs());
 			m_MapContext.getLayers().addLayer(layer);
 		} catch (LoadLayerException e1) {
 			return;

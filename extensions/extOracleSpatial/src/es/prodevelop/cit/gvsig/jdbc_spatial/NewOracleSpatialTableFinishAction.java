@@ -11,6 +11,7 @@ import jwizardcomponent.FinishAction;
 import jwizardcomponent.JWizardComponents;
 
 import org.apache.log4j.Logger;
+import org.geotools.referencing.CRS;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -74,7 +75,7 @@ public class NewOracleSpatialTableFinishAction extends FinishAction {
 		
 		lyr_def.setTableName(table_name);
 		lyr_def.setUser(usr.toUpperCase());
-		String epsg_code = vp.getProjection().getAbrev();
+		String epsg_code = CRS.toSRS(vp.getCrs(), true);
 		lyr_def.setSRID_EPSG(epsg_code.substring(5));
 		
 		lyr_def.setFieldID(OracleSpatialDriver.ORACLE_ID_FIELD);
@@ -118,7 +119,7 @@ public class NewOracleSpatialTableFinishAction extends FinishAction {
 		FLyrVect lyr = (FLyrVect) LayerFactory.createDBLayer(
 				oracleDrv,
 				lyr_name,
-				vp.getProjection());
+				vp.getCrs());
 
 		lyr.setVisible(true);
 		theMapContext.getLayers().addLayer(lyr);

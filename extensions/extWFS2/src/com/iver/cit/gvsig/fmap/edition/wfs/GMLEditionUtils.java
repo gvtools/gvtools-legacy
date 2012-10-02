@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.drivers.gpe.writer.ExportGeometry;
 import org.gvsig.gpe.exceptions.WriterHandlerCreationException;
 import org.gvsig.gpe.writer.GPEWriterHandler;
@@ -15,10 +15,10 @@ import org.gvsig.remoteClient.gml.types.GMLGeometryType;
 import org.gvsig.remoteClient.wfs.WFSClient;
 import org.gvsig.remoteClient.wfs.WFSFeature;
 import org.gvsig.remoteClient.wfs.WFSStatus;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.core.IFeature;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
@@ -78,14 +78,15 @@ public class GMLEditionUtils {
 	 * It creates a GML to insert a new feature
 	 * @param row
 	 * @param fields
-	 * @param projection
+	 * @param crs
 	 * @return
 	 * @throws IOException
 	 * @throws GPEWriterHandlerCreationException 
 	 */
 	public static String getInsertQuery(IRowEdited row,
-			FieldDescription[] fields, IProjection projection,
-			WFSStatus status, WFSClient wfsClient) throws IOException, WriterHandlerCreationException{
+			FieldDescription[] fields, CoordinateReferenceSystem crs,
+			WFSStatus status, WFSClient wfsClient) throws IOException,
+			WriterHandlerCreationException {
 		OutputStream os = new ByteArrayOutputStream();
 		GPEWriterHandler writer = new WFSTWriterHandler(new WFSTWriterHandlerImplementor("WFST", "WFSTWriter",os),os);
 		writer.setOutputStream(os);
@@ -96,8 +97,8 @@ public class GMLEditionUtils {
 		XMLElement geometry = getGeometry(status, wfsClient);
 		ExportGeometry exportGeometry = new ExportGeometry(writer);
 		exportGeometry.setGeometry(geometry);
-		exportGeometry.setProjOrig(getCRSView());
-		exportGeometry.setProjDest(getCRSLayer(status, wfsClient));
+		exportGeometry.setSourceCrs(getCRSView());
+		exportGeometry.setTargetCrs(getCRSLayer(status, wfsClient));
 		//If the geometry is an element
 		if (geometry != null){
 			writer.startElement(status.getNamespacePrefix() + ":" + geometry.getName(),
@@ -137,9 +138,9 @@ public class GMLEditionUtils {
 	 * updated coordinates are on this CRS. This method will
 	 * be removed.
 	 */
-	private static IProjection getCRSView(){
+	private static CoordinateReferenceSystem getCRSView(){
 		BaseView view = (BaseView)PluginServices.getMDIManager().getActiveWindow();
-		return view.getProjection();
+		return view.getCrs();
 	}
 
 	/**
@@ -147,13 +148,14 @@ public class GMLEditionUtils {
 	 * updated coordinates has to be converted to this
 	 * CRS. This method will be removed.
 	 */
-	private static IProjection getCRSLayer(WFSStatus status, WFSClient wfsClient){
+	private static CoordinateReferenceSystem getCRSLayer(WFSStatus status,
+			WFSClient wfsClient) {
 		Hashtable features = wfsClient.getFeatures();
-		WFSFeature feature = (WFSFeature)features.get(status.getFeatureName());
+		WFSFeature feature = (WFSFeature) features.get(status.getFeatureName());
 		Vector crss = feature.getSrs();
-		if ((crss != null) && (crss.size() > 0)){
-			String srs = (String)crss.get(0);
-			return CRSFactory.getCRS(srs);
+		if ((crss != null) && (crss.size() > 0)) {
+			String srs = (String) crss.get(0);
+			return ProjectionUtils.getCRS(srs);
 		}
 		return null;
 	}
@@ -222,8 +224,8 @@ public class GMLEditionUtils {
 			writer.setOutputStream(os);
 			ExportGeometry exportGeometry = new ExportGeometry(writer);
 			exportGeometry.setGeometry(geometry);
-			exportGeometry.setProjOrig(getCRSView());
-			exportGeometry.setProjDest(getCRSLayer(status, remoteServicesClient));
+			exportGeometry.setSourceCrs(getCRSView());
+			exportGeometry.setTargetCrs(getCRSLayer(status, remoteServicesClient));
 			exportGeometry.writeGeometry(((IFeature)row.getLinkedRow()).getGeometry());
 			query.append(createProperty(status, geometry.getName(),
 					os.toString()));

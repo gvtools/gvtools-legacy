@@ -23,61 +23,60 @@
  */
 package org.cresques.px;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-
-import org.cresques.geo.Projected;
-import org.cresques.geo.Projection;
-import org.cresques.geo.ReProjection;
-import org.cresques.geo.ViewPortData;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-
+import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.cresques.cts.ProjectionUtils;
+import org.cresques.geo.ViewPortData;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.Projection;
+
 
 public class PxObjList implements Colored, Drawable, IObjList {
-    IProjection proj = null;
+    CoordinateReferenceSystem crs = null;
     private Color pc = null;
     private Color fColor = null;
     protected Extent extent = null;
-    Vector data = null;
+    Vector<Extent.Has> data = null;
 
     public PxObjList() {
-        data = new Vector();
+        data = new Vector<Extent.Has>();
         extent = new Extent();
     }
 
-    public PxObjList(IProjection proj) {
-        data = new Vector();
-        this.proj = proj;
+    public PxObjList(CoordinateReferenceSystem proj) {
+        data = new Vector<Extent.Has>();
+        this.crs = proj;
         extent = new Extent();
     }
 
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
 
-    public void setProjection(IProjection p) {
-        proj = p;
+    public void setCrs(CoordinateReferenceSystem crs) {
+        this.crs = crs;
     }
 
-    public void reProject(ICoordTrans rp) {
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         extent = new Extent();
 
-        Iterator iter = data.iterator();
-        Projected obj = null;
+        Iterator<Extent.Has> iter = data.iterator();
+        Extent.Has obj = null;
 
         while (iter.hasNext()) {
-            obj = (Projected) iter.next();
-            obj.reProject(rp);
-            extent.add(((Extent.Has) obj).getExtent());
+            obj = iter.next();
+			Rectangle2D rect = ProjectionUtils.transform(obj.getExtent()
+					.toRectangle2D(), trans);
+            extent.add(new Extent(rect));
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
 
     public Extent getExtent() {
@@ -180,17 +179,16 @@ public class PxObjList implements Colored, Drawable, IObjList {
      *
      */
     public void drawPxContour(Graphics2D g, ViewPortData vp, PxContour obj) {
-        IProjection prj = obj.getProjection();
+        CoordinateReferenceSystem crs = obj.getCrs();
         obj.setColor(pc);
         obj.setFillColor(fColor);
 
-        if (prj != null) {
-            if (prj != vp.getProjection()) {
-                ICoordTrans rp = null;
+        if (crs != null) {
+            if (crs != vp.getCrs()) {
+                MathTransform rp = null;
 
-                if (proj instanceof Projection) {
-                    rp = new ReProjection(((Projection) proj),
-                                          ((Projection) vp.getProjection()));
+                if (this.crs instanceof Projection) {
+					rp = ProjectionUtils.getCrsTransform(this.crs, vp.getCrs());
                 }
 
                 obj.draw(g, vp, rp);

@@ -71,7 +71,8 @@ import java.awt.geom.Rectangle2D;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.ICoordTrans;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
@@ -121,8 +122,11 @@ public class PerformanceFeatureIteratorTest extends TestCase {
 			//Sin indice espacial, rapida
 			//si pedimos reproyeccion, el rectangulo de consulta debe estar en la proyeccion
 			//de destino
-			ICoordTrans trans = FeatureIteratorTest.PROJECTION_DEFAULT.getCT(FeatureIteratorTest.newProjection);
-			rect = trans.convert(rect);
+			MathTransform trans = ProjectionUtils.getCrsTransform(
+					FeatureIteratorTest.PROJECTION_DEFAULT,
+					FeatureIteratorTest.newProjection);
+			rect = ProjectionUtils.transform(rect, trans);
+
 			IFeatureIterator iterator = lyr.getSource().getFeatureIterator(rect,
 															null,
 															FeatureIteratorTest.newProjection,
@@ -224,12 +228,12 @@ public class PerformanceFeatureIteratorTest extends TestCase {
 		double ymax = 4374300;
 		System.out.println("TEST 2: ESPACIAL CON RECTANGULO PEQUEÑO Y REPROYECCIÓN");
 		Rectangle2D rect = new Rectangle2D.Double(xmin, ymin, (xmax-xmin), (ymax-ymin));
-		ICoordTrans trans = FeatureIteratorTest.PROJECTION_DEFAULT.
-							getCT(FeatureIteratorTest.newProjection);
+		MathTransform trans = ProjectionUtils.getCrsTransform(
+				FeatureIteratorTest.PROJECTION_DEFAULT,
+				FeatureIteratorTest.newProjection);
 		//si pedimos reproyeccion, el rectangulo de consulta debe estar en la proyeccion
 		//de destino
-		rect = trans.convert(rect);
-
+		rect = ProjectionUtils.transform(rect, trans);
 
 		IFeature feature = null;
 		//fast iteration
@@ -499,11 +503,12 @@ public class PerformanceFeatureIteratorTest extends TestCase {
 			Rectangle2D rect = new Rectangle2D.Double(xmin, ymin, width, height);
 			while(width <= lyrWidth){
 
-				ICoordTrans trans = FeatureIteratorTest.PROJECTION_DEFAULT.
-									getCT(FeatureIteratorTest.newProjection);
+				MathTransform trans = ProjectionUtils.getCrsTransform(
+						FeatureIteratorTest.PROJECTION_DEFAULT,
+						FeatureIteratorTest.newProjection);
 				//si pedimos reproyeccion, el rectangulo de consulta debe estar en la proyeccion
 				//de destino
-				rect = trans.convert(rect);
+				rect = ProjectionUtils.transform(rect, trans);
 //				SpatialQueryFeatureIterator.BOUNDED_SHAPES_FACTOR = 4d;
 				BOUND_FACTOR = SpatialQueryFeatureIterator.BOUNDED_SHAPES_FACTOR;
 				while (BOUND_FACTOR >= 1){

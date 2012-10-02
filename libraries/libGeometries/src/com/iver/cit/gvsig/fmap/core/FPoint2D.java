@@ -47,9 +47,10 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.geometries.iso.primitive.Point;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -66,13 +67,13 @@ public class FPoint2D extends FGeometry implements Point{
 	 * @param x Coordenada x del punto.
 	 * @param y Coordenada y del punto.
 	 */
-	public FPoint2D(String id, IProjection projection, double x, double y) {
-		super(id, projection);
+	public FPoint2D(String id, CoordinateReferenceSystem crs, double x, double y) {
+		super(id, crs);
 		p = new Point2D.Double(x, y);
 	}
 
-    public FPoint2D(String id, IProjection projection, Point2D p) {
-       super(id, projection);
+    public FPoint2D(String id, CoordinateReferenceSystem crs, Point2D p) {
+       super(id, crs);
     	this.p = p;
     }  
     
@@ -206,14 +207,14 @@ public class FPoint2D extends FGeometry implements Point{
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {
-		return new FPoint2D(id, projection, p.getX(), p.getY());
+		return new FPoint2D(id, crs, p.getX(), p.getY());
 	}
 
 	/* (non-Javadoc)
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#reProject(org.cresques.cts.ICoordTrans)
 	 */
-	public void reProject(ICoordTrans ct) {
-		p = ct.convert(p, p);
+	public void reProject(MathTransform trans) {
+		p = ProjectionUtils.transform(p, trans);
 	}
 
 	/* (non-Javadoc)

@@ -172,7 +172,7 @@ public class GeoPoint {
 
 		if(leftViewPort != null){
 			gp.leftViewPort = new ViewPortData();
-			gp.leftViewPort.setProjection(leftViewPort.getProjection());
+			gp.leftViewPort.setCrs(leftViewPort.getCrs());
 			gp.leftViewPort.setExtent(leftViewPort.getExtent());
 			gp.leftViewPort.setSize((Dimension)leftViewPort.getSize().clone());
 			gp.leftViewPort.reExtent();
@@ -180,7 +180,7 @@ public class GeoPoint {
 
 		if(rightViewPort != null){
 			gp.rightViewPort = new ViewPortData();
-			gp.rightViewPort.setProjection(rightViewPort.getProjection());
+			gp.rightViewPort.setCrs(rightViewPort.getCrs());
 			gp.rightViewPort.setExtent(rightViewPort.getExtent());
 			gp.rightViewPort.setSize((Dimension)rightViewPort.getSize().clone());
 			gp.rightViewPort.reExtent();

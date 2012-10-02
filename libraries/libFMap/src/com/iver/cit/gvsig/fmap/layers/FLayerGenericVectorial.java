@@ -1,6 +1,7 @@
 package com.iver.cit.gvsig.fmap.layers;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -10,7 +11,6 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.exceptions.layers.NameLayerException;
 import com.iver.cit.gvsig.exceptions.layers.ProjectionLayerException;
 import com.iver.cit.gvsig.exceptions.layers.XMLLayerException;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 import com.iver.cit.gvsig.fmap.drivers.WithDefaultLegend;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
@@ -27,13 +27,8 @@ public class FLayerGenericVectorial extends FLyrVect {
 
 
 	/* Esto deberia ir en el FLyrDefault */
-	public void setProjectionByName(String projectionName) throws Exception{
-		IProjection proj = CRSFactory.getCRS(projectionName);
-		if (proj == null) {
-			throw new Exception("No se ha encontrado la proyeccion: "+ projectionName);
-		}
-		this.setProjection(proj);
-
+	public void setCrs(String crsCode) throws Exception{
+		setCrs(ProjectionUtils.getCRS(crsCode));
 	}
 
 
@@ -89,7 +84,7 @@ public class FLayerGenericVectorial extends FLyrVect {
 			this.setAvailable(false);
 			throw new DriverLayerException(getName(),null);
 		}
-		if (this.getProjection() == null) {
+		if (getCrs() == null) {
 			this.setAvailable(false);
 			throw new ProjectionLayerException(getName(),null);
 		}
@@ -118,16 +113,16 @@ public class FLayerGenericVectorial extends FLyrVect {
 	}
 
 	public void setXMLEntity(XMLEntity xml) throws XMLException {
-        IProjection proj = null;
+        CoordinateReferenceSystem crs = null;
         if (xml.contains("proj")) {
-            proj = CRSFactory.getCRS(xml.getStringProperty("proj"));
+            crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
         }
         else
         {
-            proj = this.getMapContext().getViewPort().getProjection();
+            crs = this.getMapContext().getViewPort().getCrs();
         }
 		this.setName(xml.getName());
-		this.setProjection(proj);
+		setCrs(crs);
 
         String driverName = xml.getStringProperty("other");
         VectorialDriver driver = null;

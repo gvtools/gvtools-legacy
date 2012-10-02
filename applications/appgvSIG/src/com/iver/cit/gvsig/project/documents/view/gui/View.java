@@ -50,6 +50,8 @@ import java.util.Iterator;
 
 import javax.swing.JSplitPane;
 
+import org.cresques.cts.ProjectionUtils;
+
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.ColorEvent;
@@ -58,7 +60,6 @@ import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ProjectionEvent;
 import com.iver.cit.gvsig.fmap.ViewPortListener;
-import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -196,8 +197,21 @@ public class View extends BaseView {
         	viewPortListener=new ViewPortListener() {
 				public void extentChanged(ExtentEvent e) {
 					if (PluginServices.getMainFrame() != null){
-						PluginServices.getMainFrame().getStatusBar().setControlValue("scale",String.valueOf(m_MapControl.getMapContext().getScaleView()));
-						PluginServices.getMainFrame().getStatusBar().setMessage("projection", getMapControl().getViewPort().getProjection().getAbrev());
+						PluginServices
+								.getMainFrame()
+								.getStatusBar()
+								.setControlValue(
+										"scale",
+										String.valueOf(m_MapControl
+												.getMapContext().getScaleView()));
+						PluginServices
+								.getMainFrame()
+								.getStatusBar()
+								.setMessage(
+										"projection",
+										ProjectionUtils
+												.getAbrev(getMapControl()
+														.getViewPort().getCrs()));
 					}
 				}
 
@@ -205,7 +219,7 @@ public class View extends BaseView {
 				}
 
 				public void projectionChanged(ProjectionEvent e) {
-					m_MapLoc.setProjection(e.getNewProjection());
+					m_MapLoc.setCrs(e.getNewCrs());
 				}
         	};
 	        m_MapControl.getViewPort().addViewPortListener(viewPortListener);
@@ -498,10 +512,29 @@ public class View extends BaseView {
      * @see com.iver.mdiApp.ui.MDIManager.IWindow#windowActivated()
      */
     public void windowActivated() {
-    	PluginServices.getMainFrame().getStatusBar().setMessage("units",
-    			PluginServices.getText(this, MapContext.getDistanceNames()[getMapControl().getMapContext().getViewPort().getDistanceUnits()]));
-    	PluginServices.getMainFrame().getStatusBar().setControlValue("scale",String.valueOf(m_MapControl.getMapContext().getScaleView()));
-		PluginServices.getMainFrame().getStatusBar().setMessage("projection", getMapControl().getViewPort().getProjection().getAbrev());
+		PluginServices
+				.getMainFrame()
+				.getStatusBar()
+				.setMessage(
+						"units",
+						PluginServices.getText(this,
+								MapContext.getDistanceNames()[getMapControl()
+										.getMapContext().getViewPort()
+										.getDistanceUnits()]));
+		PluginServices
+				.getMainFrame()
+				.getStatusBar()
+				.setControlValue(
+						"scale",
+						String.valueOf(m_MapControl.getMapContext()
+								.getScaleView()));
+		PluginServices
+				.getMainFrame()
+				.getStatusBar()
+				.setMessage(
+						"projection",
+						ProjectionUtils.getAbrev(getMapControl().getViewPort()
+								.getCrs()));
     }
     /**
 	 * @see com.iver.andami.ui.mdiManager.IWindowListener#windowClosed()

@@ -69,7 +69,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
@@ -113,7 +113,7 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 
 	private IGeometry secondGeometry;
 
-	private ICoordTrans ct;
+	private MathTransform crsTrans;
 
 	private AdjacencyFeatureBuilder builder;
 
@@ -127,8 +127,8 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 		try {
 			fetchGeometry(featureIndex1);
 			secondGeometry = source.getShape(featureIndex2);
-			if(ct != null)
-				secondGeometry.reProject(ct);
+			if(crsTrans != null)
+				secondGeometry.reProject(crsTrans);
 			Geometry secondJts = secondGeometry.toJTSGeometry();
 			return cachedJts.intersects(secondJts);
 		} catch (ReadDriverException e) {
@@ -145,8 +145,8 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 		if(cachedJts == null){
 			try {
 				firstGeometry = this.source.getShape(index);
-				if(ct != null)
-					firstGeometry.reProject(ct);
+				if(crsTrans != null)
+					firstGeometry.reProject(crsTrans);
 				cachedJts = firstGeometry.toJTSGeometry();
 			} catch (ReadDriverException e) {
 				// TODO Auto-generated catch block
@@ -210,8 +210,8 @@ public class AdjacencyDissolveCriteria implements IDissolveCriteria,
 	}
 
 
-	public void setCoordTrans(ICoordTrans coordTrans) {
-		this.ct = coordTrans;
+	public void setCrsTransform(MathTransform crsTrans) {
+		this.crsTrans = crsTrans;
 	}
 
 	public ILayerDefinition createLayerDefinition(Map numFields_SumFunc) {

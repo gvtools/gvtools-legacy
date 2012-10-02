@@ -85,7 +85,7 @@ public class RasterizerLayer implements IDataWriter, IIncrementable {
 										);
 		}
 
-		viewPortBlock = new ViewPort(vp.getProjection());
+		viewPortBlock = new ViewPort(vp.getCrs());
 		viewPortBlock.setExtent(ext);
 		viewPortBlock.setImageSize(dimension);
 		viewPortBlock.refreshExtent();
@@ -101,7 +101,7 @@ public class RasterizerLayer implements IDataWriter, IIncrementable {
 	public RasterizerLayer(FLayers flyrs, ViewPort vp, int blockSize) {
 		this.blockSize = blockSize;
 		backgroundColor = vp.getBackColor();
-		viewPort = new ViewPort(vp.getProjection());
+		viewPort = new ViewPort(vp.getCrs());
 		viewPort.setImageSize(vp.getImageSize());
 		viewPort.setExtent(vp.getExtent());
 

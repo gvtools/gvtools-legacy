@@ -46,8 +46,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.Surface;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.edition.UtilFunctions;
 
@@ -68,8 +68,9 @@ public class FCircle2D extends FPolygon2D implements Surface {
 	 *
 	 * @param gpx
 	 */
-	public FCircle2D(String id, IProjection projection, GeneralPathX gpx,Point2D c,double r) {
-		super(id, projection, gpx);
+	public FCircle2D(String id, CoordinateReferenceSystem crs,
+			GeneralPathX gpx, Point2D c, double r) {
+		super(id, crs, gpx);
 		center=c;
 		radio=r;
 	}
@@ -83,7 +84,7 @@ public class FCircle2D extends FPolygon2D implements Surface {
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {
-		return new FCircle2D(id, projection, (GeneralPathX) gp.clone(),center,radio);
+		return new FCircle2D(id, crs, (GeneralPathX) gp.clone(), center, radio);
 	}
 	/**
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#getShapeType()

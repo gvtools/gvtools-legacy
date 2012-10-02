@@ -48,8 +48,8 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.cresques.cts.ICoordTrans;
 import org.geotools.renderer.lite.StyledShapePainter;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
@@ -191,7 +191,7 @@ public interface IGeometry extends Shape, Serializable {
 	 *
 	 * @param ct Coordinate Transformer.
 	 */
-	void reProject(ICoordTrans ct);
+	void reProject(MathTransform ct);
 
 	/**
 	 * Devuelve el GeneralPathXIterator con la información relativa a la geometría.

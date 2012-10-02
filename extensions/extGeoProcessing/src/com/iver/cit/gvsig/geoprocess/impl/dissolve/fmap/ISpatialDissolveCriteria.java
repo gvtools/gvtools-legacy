@@ -55,7 +55,7 @@
 */
 package com.iver.cit.gvsig.geoprocess.impl.dissolve.fmap;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.vividsolutions.jts.geom.Geometry;
@@ -77,6 +77,6 @@ public interface ISpatialDissolveCriteria {
 	
 	public void setSecondGeometry(IGeometry g);
 	public IGeometry getSecondGeometry();
-	public void setCoordTrans(ICoordTrans coordTrans);
+	public void setCrsTransform(MathTransform crsTransform);
 }
 

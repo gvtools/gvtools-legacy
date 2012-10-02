@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URI;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.hyperlink.AbstractActionManager;
 import org.gvsig.hyperlink.AbstractHyperLinkPanel;
@@ -15,7 +14,6 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.project.documents.view.gui.BaseView;
 
 
@@ -58,7 +56,7 @@ public class LoadRasterLayer extends AbstractActionManager implements Serializab
 //				FLayer newLayer = LayerFactory.createLayer(fileName, "gvSIG Image Driver",
 //						new File(fileName), view.getProjection());
 				FLayer newLayer = FLyrRasterSE.createLayer(fileName, fileName,
-						view.getProjection());
+						view.getCrs());
 				view.getMapControl().getMapContext().getLayers().addLayer(newLayer);
 			} catch (LoadLayerException e) {
 				PluginServices.getLogger().warn("Hyperlink - Error loading raster layer", e);

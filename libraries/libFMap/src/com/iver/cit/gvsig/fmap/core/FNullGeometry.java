@@ -49,7 +49,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
@@ -119,10 +119,8 @@ public class FNullGeometry extends AbstractGeometry {
 		return this;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#reProject(org.cresques.cts.ICoordTrans)
-	 */
-	public void reProject(ICoordTrans ct) {
+	@Override
+	public void reProject(MathTransform trans) {
 	}
 
 

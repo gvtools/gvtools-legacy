@@ -150,7 +150,7 @@ public class ROIsTablePanelListener implements ButtonsPanelListener, ActionListe
 			fileChooser.addChoosableFileFilter(new ShpFileFilter());
 			if (fileChooser.showSaveDialog(tablePanel) == JFileChooser.APPROVE_OPTION){
 				File file = fileChooser.getSelectedFile();
-				VectorialROIsWriter writer = new VectorialROIsWriter(file.getPath(),tablePanel.getFLayer().getProjection());
+				VectorialROIsWriter writer = new VectorialROIsWriter(file.getPath(),tablePanel.getFLayer().getCrs());
 				writer.write((VectorialROI[])tablePanel.getROIs().toArray(new VectorialROI[0]));
 			}
 		}else if (e.getSource() == tablePanel.getImportButton()){
@@ -160,7 +160,7 @@ public class ROIsTablePanelListener implements ButtonsPanelListener, ActionListe
 			if (fileChooser.showOpenDialog(tablePanel) == JFileChooser.APPROVE_OPTION){
 				File file = fileChooser.getSelectedFile();
 				try {
-					VectorialROIsReader reader = new VectorialROIsReader(file.getPath(),tablePanel.getGrid(),tablePanel.getFLayer().getProjection());
+					VectorialROIsReader reader = new VectorialROIsReader(file.getPath(),tablePanel.getGrid(),tablePanel.getFLayer().getCrs());
 					ArrayList rois = reader.read(tablePanel.getROIs());
 					tablePanel.clearROIs();
 					tablePanel.setROIs(rois);

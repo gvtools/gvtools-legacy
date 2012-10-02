@@ -50,7 +50,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.edition.UtilFunctions;
 
@@ -69,8 +69,9 @@ public class FArc2D extends FPolyline2D {
 	 *
 	 * @param gpx
 	 */
-	public FArc2D(String id, IProjection projection, GeneralPathX gpx,Point2D i,Point2D c, Point2D e) {
-		super(id, projection, gpx);
+	public FArc2D(String id, CoordinateReferenceSystem crs, GeneralPathX gpx,
+			Point2D i, Point2D c, Point2D e) {
+		super(id, crs, gpx);
 		init=i;
 		center=c;
 		end=e;
@@ -91,7 +92,8 @@ public class FArc2D extends FPolyline2D {
 	 * @see com.iver.cit.gvsig.fmap.core.FShape#cloneFShape()
 	 */
 	public FShape cloneFShape() {
-		FArc2D arc=new FArc2D(id, projection, (GeneralPathX) gp.clone(),init,center,end);
+		FArc2D arc = new FArc2D(id, crs, (GeneralPathX) gp.clone(), init,
+				center, end);
 		return arc;
 	}
 	public void transform(AffineTransform at) {

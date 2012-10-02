@@ -31,11 +31,12 @@ import java.util.Arrays;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.gui.beans.buttonspanel.ButtonsPanel;
 import org.gvsig.gui.beans.incrementabletask.IncrementableEvent;
 import org.gvsig.gui.beans.incrementabletask.IncrementableProcess;
 import org.gvsig.gui.beans.incrementabletask.IncrementableTask;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
@@ -148,7 +149,7 @@ public class AddDerivedGeometrySHPProcess extends IncrementableProcess {
 							parameters.getDestinationFile(),
 							parameters.getDestinationLayerName(),
 							parameters.getDestinationLayerShapeType(),
-							parameters.getSourceLayer().getProjection(),
+							parameters.getSourceLayer().getCrs(),
 							fieldDescriptions); // ¿A cambiar?
 		
 					if (layerAdded == null)
@@ -291,7 +292,7 @@ public class AddDerivedGeometrySHPProcess extends IncrementableProcess {
 				String operationName;
 				IGeometry source_geometry = null, dest_geometry = null;
 				Value[] source_row_values;
-				IProjection tempProjection = null;
+				CoordinateReferenceSystem tempCrs = null;
 				DefaultFeature newFeature;
 				String source_id;
 				final short LAYER_NOT_REPROJECTED = 0;
@@ -301,9 +302,10 @@ public class AddDerivedGeometrySHPProcess extends IncrementableProcess {
 				long index;
 				short inc;
 
-				if (sourceLayer.getProjection().getAbrev().equals(mapControl.getViewPort().getProjection().getAbrev())) {
+				if (sourceLayer.getCrs().getName()
+						.equals(mapControl.getViewPort().getCrs().getName())) {
 					/* 4.2.1- If the layer isn't projected -> Geographic coordinates (the default units are grades) */
-					if (! sourceLayer.getProjection().isProjected()) {
+					if (!(sourceLayer.getCrs() instanceof ProjectedCRS)) {
 						log.addLine(PluginServices.getText(null, "Incompatible_projection") + ": " + sourceLayer.getName());
 						// UNSUPORTED
 						new InterruptedException();
@@ -316,9 +318,9 @@ public class AddDerivedGeometrySHPProcess extends IncrementableProcess {
 				else {
 					/* 4.2.1.1- If the layer isn't projected -> Geographic coordinates (the default units are grades) */
 					/* 4.2.1.2- If the layer has been re-projected */
-					if (! mapControl.getProjection().isProjected()) {
+					if (!(mapControl.getCrs() instanceof ProjectedCRS)) {
 						// UNSUPORTED
-						if (! sourceLayer.getProjection().isProjected()) {
+						if (!(sourceLayer.getCrs() instanceof ProjectedCRS)) {
 							log.addLine(PluginServices.getText(null, "Incompatible_projection") + ": " + sourceLayer.getName());
 							new InterruptedException();
 						}
@@ -334,8 +336,8 @@ public class AddDerivedGeometrySHPProcess extends IncrementableProcess {
 						throw new InterruptedException();
 					}
 
-					tempProjection = sourceLayer.getProjection();
-					sourceLayer.setProjection(mapControl.getProjection());
+					tempCrs = sourceLayer.getCrs();
+					sourceLayer.setCrs(mapControl.getCrs());
 					
 				}
 
@@ -383,7 +385,7 @@ public class AddDerivedGeometrySHPProcess extends IncrementableProcess {
 												case LAYER_NOT_REPROJECTED:
 													break;
 												case LAYER_REPROJECTED_TO_GEOGRAPHIC_COORDINATES: case LAYER_REPROJECTED_TO_PLAIN_COORDINATES:
-													source_geometry.reProject(sourceLayer.getCoordTrans());
+													source_geometry.reProject(sourceLayer.getCrsTransform());
 												break;
 											}
 
@@ -495,7 +497,7 @@ public class AddDerivedGeometrySHPProcess extends IncrementableProcess {
 												case LAYER_NOT_REPROJECTED:
 													break;
 												case LAYER_REPROJECTED_TO_GEOGRAPHIC_COORDINATES: case LAYER_REPROJECTED_TO_PLAIN_COORDINATES:
-													source_geometry.reProject(sourceLayer.getCoordTrans());
+													source_geometry.reProject(sourceLayer.getCrsTransform());
 												break;
 											}
 
@@ -604,7 +606,7 @@ public class AddDerivedGeometrySHPProcess extends IncrementableProcess {
 									case LAYER_NOT_REPROJECTED:
 										break;
 									case LAYER_REPROJECTED_TO_GEOGRAPHIC_COORDINATES: case LAYER_REPROJECTED_TO_PLAIN_COORDINATES:
-										source_geometry.reProject(sourceLayer.getCoordTrans());
+										source_geometry.reProject(sourceLayer.getCrsTransform());
 									break;
 								}
 
@@ -667,7 +669,7 @@ public class AddDerivedGeometrySHPProcess extends IncrementableProcess {
 					case LAYER_NOT_REPROJECTED:
 						break;
 					case LAYER_REPROJECTED_TO_GEOGRAPHIC_COORDINATES: case LAYER_REPROJECTED_TO_PLAIN_COORDINATES:
-							sourceLayer.setProjection(tempProjection);
+							sourceLayer.setCrs(tempCrs);
 						break;
 				}
 				

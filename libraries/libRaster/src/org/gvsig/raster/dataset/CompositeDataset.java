@@ -23,7 +23,6 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.buffer.RasterBuffer;
 import org.gvsig.raster.dataset.io.RasterDriverException;
@@ -39,6 +38,7 @@ import org.gvsig.raster.datastruct.HistogramException;
 import org.gvsig.raster.datastruct.Transparency;
 import org.gvsig.raster.util.MathUtils;
 import org.gvsig.raster.util.RasterUtilities;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 /**
  * Esta clase está compuestas de multiples datasets formando una rejilla de NxM
  * rasters. Un cliente de esta clase debe tener una visión de la rejilla como si
@@ -159,19 +159,21 @@ public class CompositeDataset implements IRasterDataSource {
 	 * buscar el driver que lo gestiona. Si proporcionamos un array de cadenas se tratarán como la ruta a N ficheros
 	 * de disco. También puede ser un buffer de datos en memoria o cualquier otro objeto
 	 * que pueda aceptar un driver.  
-	 * @param proj PRoyección
+	 * @param crs PRoyección
 	 * @param datasetOpenParam Parámetros al driver
 	 * @return RasterMultiDatset
 	 * @throws NotSupportedExtensionException
 	 * @throws RasterDriverException
 	 */
-	public static CompositeDataset open(IProjection proj, Object datasetOpenParam) throws NotSupportedExtensionException, RasterDriverException {
+	public static CompositeDataset open(CoordinateReferenceSystem crs,
+			Object datasetOpenParam) throws NotSupportedExtensionException,
+			RasterDriverException {
 		if(datasetOpenParam instanceof String[][]) {
 			String[][] param = (String[][])datasetOpenParam;
 			MultiRasterDataset[][] mosaic = new MultiRasterDataset[param.length][param[0].length];
 			for (int i = 0; i < param.length; i++) {
 				for (int j = 0; j < param[i].length; j++) 
-					mosaic[i][j] = MultiRasterDataset.open(proj, param[i][j]);
+					mosaic[i][j] = MultiRasterDataset.open(crs, param[i][j]);
 			}
 			CompositeDataset cd;
 			try {

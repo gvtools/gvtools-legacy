@@ -32,14 +32,14 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gui.beans.swing.JFileChooser;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.addlayer.AddLayerDialog;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.gui.WizardPanel;
 import com.iver.cit.gvsig.gui.panels.CRSSelectPanel;
@@ -242,19 +242,19 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 	 */
 	private CRSSelectPanel getJPanelProj() {
 		if (jPanelProj == null) {
-			IProjection proj = CRSFactory.getCRS("EPSG:23030");
+			CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 			if (PluginServices.getMainFrame() != null) {
-				proj = AddLayerDialog.getLastProjection();
+				crs = AddLayerDialog.getLastCrs();
 			}
 
-			jPanelProj = CRSSelectPanel.getPanel(proj);
+			jPanelProj = CRSSelectPanel.getPanel(crs);
 			jPanelProj.setTransPanelActive(true);
 			jPanelProj.setBounds(11, 400, 448, 35);
 			jPanelProj.setPreferredSize(new Dimension(448, 35));
 			jPanelProj.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (jPanelProj.isOkPressed()) {
-						AddLayerDialog.setLastProjection(jPanelProj.getCurProj());
+						AddLayerDialog.setLastCrs(jPanelProj.getCurrentCrs());
 					}
 				}
 			});

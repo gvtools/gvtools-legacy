@@ -3,10 +3,11 @@ package org.gvsig.fmap.drivers.gpe.writer;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gpe.writer.GPEWriterHandler;
 import org.gvsig.remoteClient.gml.schemas.XMLElement;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.core.FMultiPoint2D;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
@@ -69,9 +70,9 @@ public class ExportGeometry {
 	//To know if the geometry is multiple
 	private boolean isMultiple = false;
 	//To reproject geometries
-	private IProjection projOrig = null;
-	private IProjection projDest = null;
-	private ICoordTrans coordTrans = null;
+	private CoordinateReferenceSystem sourceCrs = null;
+	private CoordinateReferenceSystem targetCrs = null;
+	private MathTransform crsTransform = null;
 	private String crs = null;
 
 	public ExportGeometry(GPEWriterHandler writer) {
@@ -89,8 +90,8 @@ public class ExportGeometry {
 	 */
 	public void writeGeometry(IGeometry geom){
 		crs = null;
-		if (projDest != null){
-			crs = projDest.getAbrev();
+		if (targetCrs != null){
+			crs = ProjectionUtils.getAbrev(targetCrs);
 		}
 		if (geom instanceof FMultiPoint2D){
 			FMultiPoint2D multi = (FMultiPoint2D)geom;
@@ -118,14 +119,14 @@ public class ExportGeometry {
 	 * @param shp
 	 */
 	private void reproject(FShape shp){
-		ICoordTrans coordTrans = getCoordTrans();
+		MathTransform coordTrans = getCrsTransform();
 		if (coordTrans != null){
 			try{
 				shp.reProject(coordTrans);
 			}catch(Exception e){
 				//The server is the responsible to reproject
-				if (projOrig != null){
-					crs = projOrig.getAbrev();
+				if (sourceCrs != null){
+					crs = ProjectionUtils.getAbrev(sourceCrs);
 				}
 			}
 		}
@@ -252,30 +253,31 @@ public class ExportGeometry {
 	}
 
 	/**
-	 * @param projOrig the projOrig to set
+	 * @param sourceCrs the projOrig to set
 	 */
-	public void setProjOrig(IProjection projOrig) {
-		this.projOrig = projOrig;
+	public void setSourceCrs(CoordinateReferenceSystem sourceCrs) {
+		this.sourceCrs = sourceCrs;
 	}
 
 	/**
-	 * @param projDest the projDest to set
+	 * @param targetCrs the projDest to set
 	 */
-	public void setProjDest(IProjection projDest) {
-		this.projDest = projDest;
+	public void setTargetCrs(CoordinateReferenceSystem targetCrs) {
+		this.targetCrs = targetCrs;
 	}
 
 	/**
 	 * @return the coordTrans
 	 */
-	private ICoordTrans getCoordTrans() {
-		if (coordTrans == null){
-			if ((projOrig == null) || (projDest == null)){
+	private MathTransform getCrsTransform() {
+		if (crsTransform == null){
+			if ((sourceCrs == null) || (targetCrs == null)){
 				return null;
 			}
-			coordTrans = projOrig.getCT(projDest);
+			crsTransform = ProjectionUtils
+					.getCrsTransform(sourceCrs, targetCrs);
 		}
-		return coordTrans;
+		return crsTransform;
 	}
 
 	/**
@@ -317,26 +319,26 @@ public class ExportGeometry {
 	/**
 	 * @return the projDest
 	 */
-	public IProjection getProjDest() {
-		return projDest;
+	public CoordinateReferenceSystem getTargetCrs() {
+		return targetCrs;
 	}
 
 
-	public IProjection getProjOrig() {
-		return projOrig;
+	public CoordinateReferenceSystem getSourceCrs() {
+		return sourceCrs;
 	}
 
 
 	public Rectangle2D getExtent(Rectangle2D fullExtent) {
-		if (getProjDest().getAbrev().compareTo(getProjOrig().getAbrev())!=0){
-			coordTrans = getCoordTrans();
-			if (coordTrans != null){
+		if (!getTargetCrs().getName().equals(getSourceCrs().getName())) {
+			crsTransform = getCrsTransform();
+			if (crsTransform != null){
 				try{
-					return coordTrans.convert(fullExtent);
+					return ProjectionUtils.transform(fullExtent, crsTransform);
 				}catch(Exception e){
 					//The server is the responsible to reproject
-					if (projOrig != null){
-						crs = projOrig.getAbrev();
+					if (sourceCrs != null){
+						crs = ProjectionUtils.getAbrev(sourceCrs);
 					}
 				}
 			}

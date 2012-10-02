@@ -182,7 +182,7 @@ public abstract class ClassificationGeneralProcess extends RasterProcess {
 			lyr = FLyrRasterSE.createLayer(
 					filename.substring(filename.lastIndexOf(File.separator) + 1, endIndex),
 					filename,
-					view.getMapControl().getProjection()
+					view.getMapControl().getCrs()
 					);
 			
 			/*

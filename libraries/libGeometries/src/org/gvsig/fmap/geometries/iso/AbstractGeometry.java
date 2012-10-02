@@ -6,11 +6,11 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.Box;
 import org.gvsig.fmap.geometries.operation.GeometryOperation;
 import org.gvsig.fmap.geometries.operation.GeometryOperationException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.core.Handler;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
@@ -90,7 +90,7 @@ public interface AbstractGeometry {
 	 * system just as is described on the ISO 10136. 
 	 * @return the projection
 	 */
-	public IProjection getSRS();
+	public CoordinateReferenceSystem getSRS();
 	
 	/**
 	 * This method has been created because of the ISO 19107
@@ -114,11 +114,11 @@ public interface AbstractGeometry {
 	/**
 	 * This method has been created because of the ISO 19107. It
 	 * returns a cloned geometry in the new SRS
-	 * @param newProjection
+	 * @param newCrs
 	 * The new projection
      * @return the boundary that encloses the geometry
 	 */
-	public AbstractGeometry transform(IProjection newProjection);
+	public AbstractGeometry transform(CoordinateReferenceSystem newCrs);
 			
 	/**
 	 * Gets a concrete operation
@@ -187,7 +187,7 @@ public interface AbstractGeometry {
 	 * @param ct Coordinate Transformer.
 	 * @deprecated
 	 */
-	void reProject(ICoordTrans ct);
+	void reProject(MathTransform trans);
 
 	/**
 	 * Devuelve el GeneralPathXIterator con la información relativa a la geometría.

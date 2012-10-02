@@ -47,7 +47,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.ICoordTrans;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.utiles.XMLEntity;
 
@@ -197,11 +198,9 @@ public class FPoint2D implements FShape {
 		return new FPoint2D(p.getX(), p.getY());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.FShape#reProject(org.cresques.cts.ICoordTrans)
-	 */
-	public void reProject(ICoordTrans ct) {
-		p = ct.convert(p, p);
+	@Override
+	public void reProject(MathTransform trans) {
+		p = ProjectionUtils.transform(p, trans);
 	}
 
 	/**

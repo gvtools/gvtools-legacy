@@ -51,7 +51,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 
@@ -305,7 +306,7 @@ public class FLayoutUtilities {
 	*/
 	public static long getScaleView(ViewPort viewPort,double wcm,double wpixels) {
 		double dpi = wpixels/wcm*2.54;
-		IProjection proj = viewPort.getProjection();
+		CoordinateReferenceSystem crs = viewPort.getCrs();
 
 		//if (viewPort.getImageSize() == null)
 		//    return -1;
@@ -313,14 +314,14 @@ public class FLayoutUtilities {
 			return 0;
 		}
 
-		if (proj == null || viewPort.getImageSize() == null) {
+		if (crs == null || viewPort.getImageSize() == null) {
 			return (long) (viewPort.getAdjustedExtent().getHeight() / wcm * Attributes.CHANGE[viewPort
 																					.getMapUnits()]);
 		}
 
-		return (long) proj.getScale(viewPort.getAdjustedExtent().getMinX(),
-			viewPort.getAdjustedExtent().getMaxX(),
-			wpixels, dpi);
+		return (long) ProjectionUtils.getScale(crs, viewPort
+				.getAdjustedExtent().getMinX(), viewPort.getAdjustedExtent()
+				.getMaxX(), wpixels, dpi);
 	}
 
 }

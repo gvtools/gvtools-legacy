@@ -50,8 +50,8 @@ package org.gvsig.referencing;
 
 import java.util.List;
 
-import org.cresques.cts.IProjection;
 import org.geotools.referencing.operation.builder.MappedPosition;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
@@ -69,5 +69,5 @@ public interface MappedPositionContainer {
 	public int getCount();
 	public List<MappedPosition> getAsList();
 	public boolean existsLinksLyr();
-	public FLyrVect getLinkLyr(IProjection proj);
+	public FLyrVect getLinkLyr(CoordinateReferenceSystem crs);
 }

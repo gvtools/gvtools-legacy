@@ -5,11 +5,12 @@ import java.io.File;
 
 import junit.framework.TestCase;
 
+import org.cresques.cts.ProjectionUtils;
+
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
 import com.iver.cit.gvsig.ProjectExtension;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.edition.EditableAdapter;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -49,7 +50,7 @@ public class Persistence extends TestCase {
 		 * Añadimos una vista con una capa
 		 */
 		ProjectView v = new ProjectView();
-		ViewPort vp = new ViewPort( CRSFactory.getCRS("EPSG:23030"));
+		ViewPort vp = new ViewPort( ProjectionUtils.getCRS("EPSG:23030"));
 		vp.setImageSize(new Dimension(500, 500));
 
 		MapContext fmap = new MapContext(vp);
@@ -57,7 +58,7 @@ public class Persistence extends TestCase {
 		FLayer l = LayerFactory.createLayer("Vias",
 			(VectorialFileDriver) LayerFactory.getDM().getDriver("gvSIG shp driver"),
 			new File("test/cities.shp"),
-			CRSFactory.getCRS("EPSG:23030"));
+			ProjectionUtils.getCRS("EPSG:23030"));
 		fmap.getLayers().addLayer(l);
 
 		/*

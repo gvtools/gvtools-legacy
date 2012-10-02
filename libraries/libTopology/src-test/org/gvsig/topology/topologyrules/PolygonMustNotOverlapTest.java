@@ -51,17 +51,19 @@ package org.gvsig.topology.topologyrules;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cresques.cts.IProjection;
+import junit.framework.TestCase;
+
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.core.NewFConverter;
 import org.gvsig.jcs.JCSUtil;
 import org.gvsig.jts.JtsUtil;
 import org.gvsig.topology.TopologyRuleDefinitionException;
 import org.gvsig.topology.util.LayerFactory;
 import org.gvsig.topology.util.TestTopologyErrorContainer;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.core.IFeature;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.vividsolutions.jts.geom.Geometry;
@@ -69,15 +71,15 @@ import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.precision.EnhancedPrecisionOp;
 
-import junit.framework.TestCase;
-
 public class PolygonMustNotOverlapTest extends TestCase {
 	
-	IProjection PROJECTION_DEFAULT = CRSFactory.getCRS("EPSG:23030");
+	private static final CoordinateReferenceSystem DEFAULT_CRS = ProjectionUtils
+			.getCRS("EPSG:23030");
+	
 	public void testDontOverlaps() throws ParseException, TopologyRuleDefinitionException{
 		FLyrVect lyrWithOverlaps = 
 			LayerFactory.createPolygonForMustNotOverlapTest();
-		lyrWithOverlaps.setProjection(PROJECTION_DEFAULT);
+		lyrWithOverlaps.setCrs(DEFAULT_CRS);
 		
 		PolygonMustNotOverlap rule = 
 			new PolygonMustNotOverlap(null, lyrWithOverlaps, 0.1d);
@@ -93,7 +95,7 @@ public class PolygonMustNotOverlapTest extends TestCase {
 		
 		errorContainer.clear();
 		FLyrVect lyr2 = LayerFactory.createPolygonForMustNotHaveGapsTest();
-		lyr2.setProjection(PROJECTION_DEFAULT);
+		lyr2.setCrs(DEFAULT_CRS);
 		PolygonMustNotHaveGaps rule2 = new PolygonMustNotHaveGaps(null,lyr2 , 0.1d);
 		rule2.setTopologyErrorContainer(errorContainer);
 		rule2.checkPreconditions();

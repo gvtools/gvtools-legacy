@@ -145,7 +145,7 @@ public class ViewMapRequestManager implements IExtensionRequest {
 		ViewPort vp = new ViewPort(null);
 		vp.setImageSize(new Dimension(view.getCanvasWidth(), view.getCanvasHeight()));
 		vp.setExtent(extent);
-		vp.setProjection(mapControl.getMapContext().getProjection());
+		vp.setCrs(mapControl.getMapContext().getCrs());
 		try {
 			//Dibujamos a través del render de la capa en un graphics como el de la vista
 			BufferedImage initImg = new BufferedImage(view.getCanvasWidth(), view.getCanvasHeight(), BufferedImage.TYPE_INT_RGB);

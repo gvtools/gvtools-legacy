@@ -23,7 +23,7 @@
  */
 package org.cresques.px;
 
-import org.cresques.geo.Projection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
 /**
@@ -32,7 +32,7 @@ import org.cresques.geo.Projection;
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
 public class Minuteo extends PxObjList {
-    public Minuteo(Projection proj) {
-        super(proj);
+    public Minuteo(CoordinateReferenceSystem crs) {
+        super(crs);
     }
 }

@@ -71,7 +71,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
@@ -157,13 +158,9 @@ public class XYShiftGeoprocessController extends AbstractGeoprocessController {
 			return false;
 		}
 		
-		IProjection proj =  ((View)PluginServices.
-				getMDIManager().
-				getActiveWindow()).
-				getMapControl().
-				getViewPort().
-				getProjection();
-		params.put("projection", proj);
+		CoordinateReferenceSystem crs = ((View) PluginServices.getMDIManager()
+				.getActiveWindow()).getMapControl().getViewPort().getCrs();
+		params.put("projection", crs);
 		
 		
 		int distanceUnits = ((View)PluginServices.
@@ -172,9 +169,8 @@ public class XYShiftGeoprocessController extends AbstractGeoprocessController {
 		params.put("distanceunits", new Integer(distanceUnits));
 		
 		
-		boolean isProjected = proj.isProjected();
 		int mapUnits = -1;
-		if(isProjected){
+		if(crs instanceof ProjectedCRS){
 			mapUnits = ((View)PluginServices.
 				getMDIManager().
 				getActiveWindow()).getMapControl().getViewPort().getMapUnits();

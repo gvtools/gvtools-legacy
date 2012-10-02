@@ -8,11 +8,11 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.aggregate.MultiGeometry;
 import org.gvsig.fmap.geometries.iso.primitive.AbstractGeometryPrimitive;
 import org.gvsig.fmap.geometries.iso.primitive.Box;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -80,25 +80,26 @@ public class FGeometryCollection extends AbstractGeometry implements MultiGeomet
 	
 	protected IGeometry[] geometries = null;
 		
-	public FGeometryCollection(String id, IProjection projection, IGeometry[] geometries) {
-		super(id, projection);	
+	public FGeometryCollection(String id, CoordinateReferenceSystem crs, IGeometry[] geometries) {
+		super(id, crs);	
 		this.geometries = geometries;	
 	}
 	
-	public FGeometryCollection(IProjection projection) {
-		this(null, projection, null);
+	public FGeometryCollection(CoordinateReferenceSystem crs) {
+		this(null, crs, null);
 	}
 	
-	public FGeometryCollection(IProjection projection, IGeometry[] geometries) {
-		this(null, projection, geometries);
+	public FGeometryCollection(CoordinateReferenceSystem crs,
+			IGeometry[] geometries) {
+		this(null, crs, geometries);
 	}
-	
+
 	public FGeometryCollection(IGeometry[] geometries) {
 		this(null, null, geometries);
 	}
 
-	public FGeometryCollection(String id, IProjection projection) {
-		this(id, projection, null);
+	public FGeometryCollection(String id, CoordinateReferenceSystem crs) {
+		this(id, crs, null);
 	}
 
 	/*
@@ -110,7 +111,7 @@ public class FGeometryCollection extends AbstractGeometry implements MultiGeomet
 		for (int i=0; i < getPrimitivesNumber(); i++){
 			aux[i] = (FGeometry) geometries[i].cloneGeometry().getInternalShape();
 		}
-		return new FGeometryCollection(id, projection, aux);
+		return new FGeometryCollection(id, crs, aux);
 	}	
 
 	/*
@@ -327,9 +328,9 @@ public class FGeometryCollection extends AbstractGeometry implements MultiGeomet
 	 * (non-Javadoc)
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#reProject(org.cresques.cts.ICoordTrans)
 	 */
-	public void reProject(ICoordTrans ct) {
+	public void reProject(MathTransform trans) {
 		for (int i=0; i < getPrimitivesNumber(); i++){
-			geometries[i].reProject(ct);
+			geometries[i].reProject(trans);
 		}
 	}
 

@@ -27,8 +27,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.cresques.Messages;
-import org.cresques.cts.IProjection;
 import org.cresques.ui.LoadableComboBox;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
 //import es.gva.cit.geoexplorer.ui.LoadableComboBox;
@@ -131,8 +131,8 @@ public class CSSelectionPanel extends JPanel {
         getDatumComboBox().setEnabled(enabled);
     }
 
-    public void setProjection(IProjection proj) {
-        model.setProjection(proj);
+    public void setCrs(CoordinateReferenceSystem crs) {
+        model.setCrs(crs);
 
         setDatumComboBoxEnabled(true);
         getDatumComboBox().setSelectedIndex(model.getSelectedDatum());
@@ -140,16 +140,16 @@ public class CSSelectionPanel extends JPanel {
         getProjComboBox().removeAllItems();
         getProjComboBox().loadData(model.getProjectionList());
 
-        model.setProjection(proj);
+        model.setCrs(crs);
         getProjComboBox().setSelectedIndex(model.getSelectedProj());
-        model.setProjection(proj);
+        model.setCrs(crs);
         
         if (model.getSelectedZone() >= 0) {
             setHuseComboBoxEnabled(true);
             getHuseComboBox().removeAllItems();
             getHuseComboBox().loadData(model.getZoneList());
 
-            model.setProjection(proj);
+            model.setCrs(crs);
             getHuseComboBox().setSelectedIndex(model.getSelectedZone());
         } else {
             setHuseComboBoxEnabled(false);
@@ -233,10 +233,7 @@ public class CSSelectionPanel extends JPanel {
         return huseComboBox;
     }
 
-    /**
-     * @return
-     */
-    public IProjection getProjection() {
-        return model.getProjection();
+    public CoordinateReferenceSystem getCrs() {
+        return model.getCrs();
     }
 }

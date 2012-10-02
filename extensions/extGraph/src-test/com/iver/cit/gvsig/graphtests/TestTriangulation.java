@@ -33,23 +33,21 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.fmap.algorithm.contouring.ContourCalculator;
-import org.gvsig.fmap.algorithm.triangulation.ChewTriangulator;
-import org.gvsig.fmap.algorithm.triangulation.FJenettTriangulator;
 import org.gvsig.fmap.algorithm.triangulation.OrbisGisTriangulator;
 import org.gvsig.fmap.algorithm.triangulation.TIN;
 import org.gvsig.fmap.algorithm.triangulation.Triangle;
 import org.gvsig.fmap.algorithm.triangulation.Vertex;
 import org.gvsig.fmap.algorithm.triangulation.WatsonTriangulator;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.engine.values.NumericValue;
 import com.iver.cit.gvsig.fmap.core.FMultiPoint2D;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
@@ -67,10 +65,10 @@ public class TestTriangulation extends TestCase {
 
 		// Setup del factory de DataSources
 
-		IProjection prj = CRSFactory.getCRS("EPSG:23030");
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 		File shpFile = new File("test_files/pts_pirol.shp");
 		lyr = (FLyrVect) LayerFactory.createLayer("Puntos", "gvSIG shp driver",
-				shpFile, prj);
+				shpFile, crs);
 		
 	}
 

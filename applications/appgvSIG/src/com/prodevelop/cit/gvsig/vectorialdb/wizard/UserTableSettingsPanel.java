@@ -42,16 +42,6 @@
  */
 package com.prodevelop.cit.gvsig.vectorialdb.wizard;
 
-import com.iver.andami.PluginServices;
-
-import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.gui.panels.CRSSelectPanel;
-
-import org.apache.log4j.Logger;
-import org.cresques.cts.IProjection;
-
-import org.gvsig.gui.beans.swing.JButton;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -67,6 +57,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import org.apache.log4j.Logger;
+import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
+import com.iver.andami.PluginServices;
+import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.gui.panels.CRSSelectPanel;
 
 
 /**
@@ -505,7 +503,7 @@ public class UserTableSettingsPanel extends JPanel implements ActionListener,
     public boolean isSqlActive() {
         return getActivateSQLCheckBox().isSelected();
     }
-    public IProjection getProjection() {
-		return panelProj.getCurProj();
+    public CoordinateReferenceSystem getCrs() {
+		return panelProj.getCurrentCrs();
 	}
 }

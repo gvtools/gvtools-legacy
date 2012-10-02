@@ -122,15 +122,15 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.kxml2.io.KXmlParser;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.exceptions.layers.UnsupportedVersionLayerException;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.exceptions.ImportMapContextException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
@@ -371,22 +371,27 @@ public class WebMapContext {
 										if (parser.getName().compareTo(WebMapContextTags.LAYER) == 0) {
 											FLyrWMS layer = parseLayer1_1_0(parser);
 											// will use the mapcontext's bounding box as layer's fullextent
-											IProjection proj =  CRSFactory.getCRS(srs);
-											if (proj == null) {
+										CoordinateReferenceSystem crs = ProjectionUtils
+												.getCRS(srs);
+											if (crs == null) {
 												// non supported srs, and cannot continue
 												String msg = PluginServices.getText(this, "unsupported_crs") +
 															 " (" + srs + ")";
 												throw new ImportMapContextException(msg, true);
 											}
 											String[] availableSRS = layer.getSRS().split(",");
-											ICoordTrans ct = null;
+											MathTransform trans = null;
 											String mySRS = null;
 											for (int i = 0; i < availableSRS.length; i++) {
 												mySRS = availableSRS[i];
-												IProjection dstProj = CRSFactory.getCRS(mySRS);
-												if (dstProj != null) {
+											CoordinateReferenceSystem targetCrs = ProjectionUtils
+													.getCRS(mySRS);
+												if (targetCrs != null) {
 													try{
-														ct = proj.getCT(dstProj);
+													trans = ProjectionUtils
+															.getCrsTransform(
+																	crs,
+																	targetCrs);
 													}catch(Exception e){
 														NotificationManager.showMessageError(e.getLocalizedMessage(), e);
 													}
@@ -397,9 +402,10 @@ public class WebMapContext {
 												}
 											}
 
-											if (ct != null) {
+											if (trans != null) {
 												// I've found a supported projection
-												layer.setFullExtent(ct.convert(bBox));
+											layer.setFullExtent(ProjectionUtils
+													.transform(bBox, trans));
 												layer.setSRS(mySRS);
 											} else {
 												// can't reproject
@@ -829,7 +835,7 @@ public class WebMapContext {
 				// </Window>
 
 				// <BoundingBox>
-				xmlAttrs.put(WebMapContextTags.SRS, v.getProjection().getAbrev());
+				xmlAttrs.put(WebMapContextTags.SRS, ProjectionUtils.getAbrev(v.getCrs()));
 				xmlAttrs.put(WebMapContextTags.X_MIN, bBox.getMinX()+"");
 				xmlAttrs.put(WebMapContextTags.Y_MIN, bBox.getMinY()+"");
 				xmlAttrs.put(WebMapContextTags.X_MAX, bBox.getMaxX()+"");

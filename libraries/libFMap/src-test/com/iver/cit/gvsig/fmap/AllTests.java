@@ -7,7 +7,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.core.TestCartographicSupportForSymbol;
@@ -16,7 +17,6 @@ import com.iver.cit.gvsig.fmap.core.rendering.styling.labeling.TestILabelingMeth
 import com.iver.cit.gvsig.fmap.core.rendering.styling.labeling.TestLabelClass;
 import com.iver.cit.gvsig.fmap.core.symbols.TestISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.TestMultiLayerSymbol;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.dbf.TestDbf;
 import com.iver.cit.gvsig.fmap.drivers.dgn.TestDgn;
 import com.iver.cit.gvsig.fmap.featureiterators.DBFeatureIteratorTest;
@@ -26,26 +26,16 @@ import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.LayersIteratorTest;
 import com.iver.cit.gvsig.fmap.rendering.FIntervalTest;
+import com.iver.cit.gvsig.fmap.spatialindex.SpatialIndexTest;
 import com.iver.cit.gvsig.fmap.tools.AreaListenerTest;
 import com.vividsolutions.jts.operation.overlay.SnappingOverlayOperationTest;
 
 public class AllTests extends TestCase {
-	/**
-	 * The EPSG:4326 projection
-	 */
-	public static IProjection TEST_DEFAULT_PROJECTION = CRSFactory
+	public static CoordinateReferenceSystem TEST_DEFAULT_PROJECTION = ProjectionUtils
 			.getCRS("EPSG:4326");
-
-	/**
-	 * The EPSG:23030 projection
-	 */
-	public static IProjection TEST_DEFAULT_MERCATOR_PROJECTION = CRSFactory
+	public static CoordinateReferenceSystem TEST_DEFAULT_MERCATOR_PROJECTION = ProjectionUtils
 			.getCRS("EPSG:23030");
-
-	/**
-	 * The EPSG:23029 projection
-	 */
-	public static IProjection test_newProjection = CRSFactory
+	public static CoordinateReferenceSystem test_newProjection = ProjectionUtils
 			.getCRS("EPSG:23029");
 
 	public static Test suite() {
@@ -90,7 +80,7 @@ public class AllTests extends TestCase {
 		suite.addTestSuite(DBFeatureIteratorTest.class);
 		suite.addTestSuite(PerformanceFeatureIteratorTest.class);
 		suite.addTestSuite(SnappingOverlayOperationTest.class);
-		// suite.addTestSuite(SpatialIndexTest.class);
+		suite.addTestSuite(SpatialIndexTest.class);
 		suite.addTestSuite(TestDbf.class);
 		suite.addTestSuite(TestDgn.class);
 
@@ -139,8 +129,8 @@ public class AllTests extends TestCase {
 				TEST_DEFAULT_MERCATOR_PROJECTION);
 	}
 
-	public static MapContext newMapContext(IProjection projection) {
-		ViewPort vp = new ViewPort(projection);
+	public static MapContext newMapContext(CoordinateReferenceSystem crs) {
+		ViewPort vp = new ViewPort(crs);
 		return new MapContext(vp);
 	}
 

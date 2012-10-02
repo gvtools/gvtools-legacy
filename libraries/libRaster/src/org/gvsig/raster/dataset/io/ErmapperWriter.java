@@ -23,7 +23,6 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.dataset.GeoRasterWriter;
 import org.gvsig.raster.dataset.IBuffer;
@@ -36,6 +35,7 @@ import org.gvsig.raster.process.RasterTask;
 import org.gvsig.raster.process.RasterTaskQueue;
 import org.gvsig.raster.util.RasterUtilities;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import es.gva.cit.jecwcompress.EcwException;
 import es.gva.cit.jecwcompress.JniObject;
@@ -127,21 +127,15 @@ public class ErmapperWriter extends GeoRasterWriter {
 	 * @param outSizeY
 	 * @param dataType
 	 * @param params
-	 * @param proj
+	 * @param crs
 	 * @param geo
 	 * @throws EcwException
 	 * @throws IOException
 	 */
-	public ErmapperWriter(	IDataWriter dataWriter,
-			String outFileName,
-			Integer nBands,
-			AffineTransform at,
-			Integer outSizeX,
-			Integer outSizeY,
-			Integer dataType,
-			Params params,
-			IProjection proj, 
-			Boolean geo) throws EcwException, IOException {
+	public ErmapperWriter(IDataWriter dataWriter, String outFileName,
+			Integer nBands, AffineTransform at, Integer outSizeX,
+			Integer outSizeY, Integer dataType, Params params,
+			CoordinateReferenceSystem crs, Boolean geo) throws EcwException, IOException {
 		
 		//La libreria de ECW no se traga caracteres raros al escribir. Los cambiamos por X de momento y ya se apaña el usuario
 		
@@ -149,7 +143,7 @@ public class ErmapperWriter extends GeoRasterWriter {
 		String fname = outFileName.substring(outFileName.lastIndexOf(File.separator) + 1, outFileName.lastIndexOf(".")).replaceAll("[^a-zA-Z0-9_]", "X");
 		outFileName = outFileName.substring(0, outFileName.lastIndexOf(File.separator) + 1) + fname + "." + ext;
 		
-		this.proj = proj;
+		this.crs = crs;
 		ident = RasterUtilities.getExtensionFromFileName(outFileName);
 		driver = ((WriteFileFormatFeatures)fileFeature.get(ident)).getDriverName();
 		this.dataType = dataType.intValue();

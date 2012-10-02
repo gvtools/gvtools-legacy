@@ -44,7 +44,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.io.Serializable;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -133,9 +133,9 @@ public interface FShape extends Shape, Serializable {
 	/**
 	 * <p>Re-projects this shape using <code>ct</code> as transformation coordinates.</p>
 	 *
-	 * @param ct the transformation coordinates
+	 * @param crsTransform the transformation coordinates
 	 */
-	public void reProject(ICoordTrans ct);
+	public void reProject(MathTransform crsTransform);
 
 	/**
 	 * <p>Returns the handlers they utilized to stretch the geometries.</p>

@@ -120,7 +120,7 @@ public class TestImageNavigator implements IClientImageNavigator {
 		Dimension2D dimension = new Dimension(width, height);
 		Extent extent = new Extent(x1, y1, x2, y2);
 
-		ViewPortData vp2 = new ViewPortData(vp.getProjection(), extent, dimension);
+		ViewPortData vp2 = new ViewPortData(vp.getCrs(), extent, dimension);
 		vp2.setMat(new AffineTransform(zoom, 0.0, 0.0, zoom, -x1*zoom, -y1*zoom));
 
 		AffineTransform trans = g.getTransform();

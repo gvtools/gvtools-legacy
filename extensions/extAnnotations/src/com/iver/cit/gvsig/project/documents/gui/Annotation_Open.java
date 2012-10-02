@@ -350,11 +350,11 @@ public class Annotation_Open extends WizardPanel {
      */
     private CRSSelectPanel getPProyection() {
         if (pProyection == null) {
-            pProyection = CRSSelectPanel.getPanel(AddLayerDialog.getLastProjection());
+            pProyection = CRSSelectPanel.getPanel(AddLayerDialog.getLastCrs());
             pProyection.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent e) {
                         if (pProyection.isOkPressed()) {
-                        	AddLayerDialog.setLastProjection(pProyection.getCurProj());
+                        	AddLayerDialog.setLastCrs(pProyection.getCurrentCrs());
                         }
                     }
                 });
@@ -459,7 +459,7 @@ public class Annotation_Open extends WizardPanel {
     private boolean loadFileAnnotationLayer(MapControl mapControl, File file) {
     	try {
 			Annotation_Layer al = Annotation_LayerFactory.createLayer(file
-					.getName(), file, AddLayerDialog.getLastProjection(),
+					.getName(), file, AddLayerDialog.getLastCrs(),
 					getCmbUnits().getSelectedUnitIndex(), mapControl
 							.getViewPort().getBackColor());
 

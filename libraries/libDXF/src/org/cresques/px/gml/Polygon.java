@@ -27,11 +27,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.Polygon2D;
 import org.cresques.geo.ViewPortData;
 import org.cresques.px.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -118,15 +119,15 @@ public class Polygon extends Geometry {
         return fillColor;
     }
 
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
 
-    public void setProjection(IProjection p) {
-        proj = p;
+    public void setCrs(CoordinateReferenceSystem crs) {
+        this.crs = crs;
     }
 
-    public void reProject(ICoordTrans rp) {
+	public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         Polygon2D savePol = outPol;
 
         outPol = new Polygon2D();
@@ -135,13 +136,12 @@ public class Polygon extends Geometry {
         Point2D ptDest = null;
 
         for (int i = 0; i < savePol.size(); i++) {
-            ptDest = rp.getPDest().createPoint(0.0, 0.0);
-            ptDest = rp.convert((Point2D) savePol.get(i), ptDest);
+			ptDest = ProjectionUtils.transform((Point2D) savePol.get(i), trans);
             outPol.addPoint(ptDest);
             extent.add(ptDest);
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
 
     public void draw(Graphics2D g, ViewPortData vp) {

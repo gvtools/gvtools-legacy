@@ -71,10 +71,11 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import org.gvsig.gui.beans.swing.JBlank;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -83,8 +84,6 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.fmap.drivers.DBLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
-import com.iver.cit.gvsig.fmap.drivers.dbf.DBFDriver;
-import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.edition.VectorialEditableAdapter;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrDefault;
@@ -601,23 +600,27 @@ public class General extends AbstractThemeManagerPage {
 			String info = ((FLyrDefault)layer).getInfoString();
 			if (info == null) {
 				Rectangle2D fullExtentViewPort = layer.getFullExtent();
-				IProjection viewPortProj = layer.getMapContext().getProjection();
-				info = PluginServices.getText(this,"Extent") + " " +
-				viewPortProj.getAbrev() +
-				" (" + PluginServices.getText(this, "view_projection") + "):\n\t" +
+				CoordinateReferenceSystem viewPortCrs = layer.getMapContext().getCrs();
+				info = PluginServices.getText(this, "Extent") + " "
+						+ ProjectionUtils.getAbrev(viewPortCrs) + " ("
+						+ PluginServices.getText(this, "view_projection") + "):\n\t" +
 				PluginServices.getText(this,"Superior") + ":\t" + fullExtentViewPort.getMaxY() + "\n\t" +
 				PluginServices.getText(this,"Inferior") + ":\t" + fullExtentViewPort.getMinY() + "\n\t" +
 				PluginServices.getText(this,"Izquierda") + ":\t" + fullExtentViewPort.getMinX() + "\n\t" +
 				PluginServices.getText(this,"Derecha") + ":\t" + fullExtentViewPort.getMaxX() + "\n";
 
 				// show layer native projection
-				if (!layer.getProjection().getAbrev().equals(viewPortProj.getAbrev())) {
-					IProjection nativeLayerProj = layer.getProjection();
-					ICoordTrans ct = viewPortProj.getCT(nativeLayerProj);
-					Rectangle2D nativeLayerExtent = ct.convert(fullExtentViewPort);
-					info += PluginServices.getText(this,"Extent") + " " +
-					nativeLayerProj.getAbrev() +
-					" (" + PluginServices.getText(this, "layer_native_projection") + "):\n\t" +
+				if (!layer.getCrs().getName().equals(viewPortCrs.getName())) {
+					CoordinateReferenceSystem nativeLayerCrs = layer.getCrs();
+					MathTransform trans = ProjectionUtils.getCrsTransform(
+							viewPortCrs, nativeLayerCrs);
+					Rectangle2D nativeLayerExtent = ProjectionUtils.transform(
+							fullExtentViewPort, trans);
+					info += PluginServices.getText(this, "Extent")
+							+ " "
+							+ ProjectionUtils.getAbrev(nativeLayerCrs)
+							+ " ("
+							+ PluginServices.getText(this, "layer_native_projection") + "):\n\t" +
 					PluginServices.getText(this,"Superior") + ":\t" + nativeLayerExtent.getMaxY() + "\n\t" +
 					PluginServices.getText(this,"Inferior") + ":\t" + nativeLayerExtent.getMinY() + "\n\t" +
 					PluginServices.getText(this,"Izquierda") + ":\t" + nativeLayerExtent.getMinX() + "\n\t" +

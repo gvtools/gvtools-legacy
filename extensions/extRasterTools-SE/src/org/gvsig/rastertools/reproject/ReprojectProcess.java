@@ -22,11 +22,11 @@ import java.io.IOException;
 
 import javax.swing.SwingUtilities;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.raster.RasterProcess;
 import org.gvsig.raster.util.RasterToolsUtil;
 import org.gvsig.raster.util.RasterUtilities;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 /**
@@ -38,8 +38,8 @@ import com.iver.andami.PluginServices;
 public class ReprojectProcess extends RasterProcess {
 	private FLyrRasterSE lyr       = null;
 	private String       filename  = null;
-	private IProjection  proj      = null;
-	private IProjection  projsrc   = null;
+	private CoordinateReferenceSystem  crs      = null;
+	private CoordinateReferenceSystem  sourceCrs   = null;
 	private Reproject    reproject = null;
 	private long         milis     = 0;
 	private Boolean      isInTOC   = null;
@@ -51,8 +51,8 @@ public class ReprojectProcess extends RasterProcess {
 	public void init() {
 		lyr = getLayerParam("layer");
 		filename = getStringParam("path");
-		proj = (IProjection) getParam("projection");
-		projsrc = (IProjection) getParam("srcprojection");
+		crs = (CoordinateReferenceSystem) getParam("projection");
+		sourceCrs = (CoordinateReferenceSystem) getParam("srcprojection");
 		isInTOC = (Boolean) getParam("isintoc");
 		if(lyr.getFileName() != null)
 		for (int i = 0; i < lyr.getFileName().length; i++) {
@@ -73,7 +73,7 @@ public class ReprojectProcess extends RasterProcess {
 		insertLineLog(PluginServices.getText(this, "reprojecting"));
 		reproject = new Reproject(lyr, filename);
 		try {
-			int result = reproject.warp(proj, projsrc);
+			int result = reproject.warp(crs, sourceCrs);
 			if(result != 0) {
 				if (incrementableTask != null) {
 					incrementableTask.processFinalize();

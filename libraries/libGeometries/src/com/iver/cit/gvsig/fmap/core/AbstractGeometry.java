@@ -3,14 +3,14 @@ package com.iver.cit.gvsig.fmap.core;
 import java.awt.Shape;
 import java.io.Serializable;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.geometries.iso.primitive.Box;
 import org.gvsig.fmap.geometries.operation.GeometryOperation;
 import org.gvsig.fmap.geometries.operation.GeometryOperationException;
 import org.gvsig.fmap.geometries.operation.GeometryOperationsRegistry;
 import org.gvsig.fmap.geometries.operation.GeometryOperationsSet;
 import org.gvsig.fmap.geometries.operation.NotRegisteredOperationSetException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
  *
@@ -69,13 +69,13 @@ import org.gvsig.fmap.geometries.operation.NotRegisteredOperationSetException;
  */
 public abstract class AbstractGeometry implements IGeometry, java.awt.Shape, Serializable, org.gvsig.fmap.geometries.iso.AbstractGeometry {
 	protected String id = null;
-	protected IProjection projection = null;
+	protected CoordinateReferenceSystem crs = null;
 	protected GeometryOperationsSet operationsSet = null;
 		
-	public AbstractGeometry(String id, IProjection projection) {
+	public AbstractGeometry(String id, CoordinateReferenceSystem crs) {
 		super();
 		this.id = id;
-		this.projection = projection;
+		this.crs = crs;
 		try {
 			operationsSet = GeometryOperationsRegistry.getOperationSet(getGeometryType());
 		} catch (NotRegisteredOperationSetException e) {
@@ -83,8 +83,8 @@ public abstract class AbstractGeometry implements IGeometry, java.awt.Shape, Ser
 		}
 	}	
 
-	public AbstractGeometry(IProjection projection) {
-		this(null, projection);		
+	public AbstractGeometry(CoordinateReferenceSystem crs) {
+		this(null, crs);		
 	}
 	
 	/*
@@ -126,20 +126,13 @@ public abstract class AbstractGeometry implements IGeometry, java.awt.Shape, Ser
 		return id;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.geometries.iso.AbstractGeometry#getSRS()
-	 */
-	public IProjection getSRS() {
-		return projection;
+	public CoordinateReferenceSystem getSRS() {
+		return crs;
 	}	
 
-	/* (non-Javadoc)
-	 * @see org.gvsig.geometries.iso.AbstractGeometry#transform(org.cresques.cts.IProjection)
-	 */
-	public AbstractGeometry transform(IProjection newProjection) {
+	public AbstractGeometry transform(CoordinateReferenceSystem newCrs) {
 		IGeometry newGeom = cloneGeometry();
-		ICoordTrans coordTrans = projection.getCT(newProjection);
-		newGeom.reProject(coordTrans);
+		newGeom.reProject(ProjectionUtils.getCrsTransform(crs, newCrs));
 		return (AbstractGeometry)newGeom;
 	}	
 }

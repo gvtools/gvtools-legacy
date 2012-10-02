@@ -28,8 +28,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.gvsig.raster.RasterLibrary;
 import org.gvsig.raster.dataset.io.GdalDriver;
 import org.gvsig.raster.dataset.io.IRegistrableRasterFormat;
@@ -53,9 +51,10 @@ import org.gvsig.raster.datastruct.NoData;
 import org.gvsig.raster.datastruct.Transparency;
 import org.gvsig.raster.datastruct.serializer.ColorTableRmfSerializer;
 import org.gvsig.raster.datastruct.serializer.NoDataRmfSerializer;
-import org.gvsig.raster.projection.CRS;
 import org.gvsig.raster.util.RasterUtilities;
 import org.gvsig.raster.util.extensionPoints.ExtensionPoint;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 /**
  * Manejador de ficheros raster georeferenciados.
  * 
@@ -112,7 +111,7 @@ public abstract class RasterDataset extends GeoInfo {
 	 */
 	public Object clone() {
 		try {
-			RasterDataset dataset = RasterDataset.open(proj, param);
+			RasterDataset dataset = RasterDataset.open(crs, param);
 			// Estas van por referencia
 			dataset.histogram = histogram;
 			dataset.stats = stats;
@@ -134,11 +133,12 @@ public abstract class RasterDataset extends GeoInfo {
 	/**
 	 * Factoria para abrir distintos tipos de raster.
 	 * 
-	 * @param proj Proyección en la que está el raster.
+	 * @param crs Proyección en la que está el raster.
 	 * @param fName Nombre del fichero.
 	 * @return GeoRasterFile, o null si hay problemas.
 	 */
-	public static RasterDataset open(IProjection proj, Object param) throws NotSupportedExtensionException, RasterDriverException {
+	public static RasterDataset open(CoordinateReferenceSystem crs, Object param)
+			throws NotSupportedExtensionException, RasterDriverException {
 		String idFormat = null;
 
 		if (param instanceof String)
@@ -161,10 +161,10 @@ public abstract class RasterDataset extends GeoInfo {
 		if (clase == null)
 			clase = GdalDriver.class;
 		
-		Class [] args = {IProjection.class, Object.class};
+		Class[] args = { CoordinateReferenceSystem.class, Object.class };
 		try {
 			Constructor hazNuevo = clase.getConstructor(args);
-			Object [] args2 = {proj, param};
+			Object [] args2 = {crs, param};
 			grf = (RasterDataset) hazNuevo.newInstance(args2);
 		} catch (SecurityException e) {
 			throw new RasterDriverException("Error SecurityException in open", e);
@@ -220,11 +220,11 @@ public abstract class RasterDataset extends GeoInfo {
 	
 	/**
 	 * Constructor
-	 * @param proj	Proyección
+	 * @param crs	Proyección
 	 * @param name	Nombre del fichero de imagen.
 	 */
-	public RasterDataset(IProjection proj, Object param) {
-		super(proj, param);
+	public RasterDataset(CoordinateReferenceSystem crs, Object param) {
+		super(crs, param);
 		if(param instanceof String)
 			setFileSize(new File(getFName()).length());
 	}
@@ -285,7 +285,9 @@ public abstract class RasterDataset extends GeoInfo {
 		}
 
 		if (projectionRmfSerializer.getResult() != null) {
-			wktProjection = CRS.convertIProjectionToWkt((IProjection) projectionRmfSerializer.getResult());
+			CoordinateReferenceSystem result = (CoordinateReferenceSystem) projectionRmfSerializer
+					.getResult();
+			wktProjection = result.toWKT();
 		}
 	}
 
@@ -305,7 +307,8 @@ public abstract class RasterDataset extends GeoInfo {
 	 * Reproyección.
 	 * @param rp	Coordenadas de la transformación
 	 */
-	abstract public void reProject(ICoordTrans rp);
+	abstract public void reProject(MathTransform rp,
+			CoordinateReferenceSystem target);
 
 	/**
 	 * Asigna un nuevo Extent 

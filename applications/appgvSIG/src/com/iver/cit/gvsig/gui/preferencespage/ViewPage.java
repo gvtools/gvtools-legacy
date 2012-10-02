@@ -186,21 +186,20 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.preferences.AbstractPreferencePage;
 import com.iver.andami.preferences.StoreException;
 import com.iver.cit.gvsig.addlayer.AddLayerDialog;
 import com.iver.cit.gvsig.fmap.MapContext;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.gui.panels.CRSSelectPanel;
 import com.iver.cit.gvsig.gui.panels.ColorChooserPanel;
 import com.iver.cit.gvsig.gui.panels.crs.ISelectCrsPanel;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
-import com.iver.cit.gvsig.project.documents.view.info.gui.CSSelectionDialog;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.JComboBox;
@@ -310,31 +309,32 @@ public class ViewPage extends AbstractPreferencePage {
 		btnChangeProjection = new JButton(PluginServices.getText(this, "change"));
 		btnChangeProjection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ISelectCrsPanel panel = CRSSelectPanel.getUIFactory().getSelectCrsPanel(
-						CRSFactory.getCRS(lblDefaultProjection.getText()), false);
+				ISelectCrsPanel panel = CRSSelectPanel.getUIFactory()
+						.getSelectCrsPanel(
+								ProjectionUtils.getCRS(lblDefaultProjection.getText()), false);
 				PluginServices.getMDIManager().addWindow(panel);
 		        if (panel.isOkPressed()) {
-		        	IProjection proj = panel.getProjection();
-		        	lblDefaultProjection.setText(proj.getAbrev());
+		        	lblDefaultProjection.setText(ProjectionUtils.getAbrev(panel.getCrs()));
 		        }
 			}
 		});
 
 		addComponent(PluginServices.getText(this, "default_projection") + ":", lblDefaultProjection );
 
-		IProjection proj = CRSFactory.getCRS("EPSG:23030");
+		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
 		if (PluginServices.getMainFrame() != null) {
-			proj = AddLayerDialog.getLastProjection();
+			crs = AddLayerDialog.getLastCrs();
 		}
 
-		jPanelProj = CRSSelectPanel.getPanel(proj);
+		jPanelProj = CRSSelectPanel.getPanel(crs);
 		jPanelProj.setTransPanelActive(true);
 		jPanelProj.setBounds(11, 400, 448, 35);
 		jPanelProj.setPreferredSize(new Dimension(448, 35));
 		jPanelProj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (jPanelProj.isOkPressed()) {
-					lblDefaultProjection.setText(jPanelProj.getCurProj().getAbrev());
+					lblDefaultProjection.setText(ProjectionUtils
+							.getAbrev(jPanelProj.getCurrentCrs()));
 				}
 			}
 		});
@@ -418,7 +418,8 @@ public class ViewPage extends AbstractPreferencePage {
 		} else {
 			lblDefaultProjection.setText(FACTORY_DEFAULT_PROJECTION);
 		}
-		Project.setDefaultProjection( CRSFactory.getCRS(lblDefaultProjection.getText()));
+		Project.setDefaultCrs(ProjectionUtils
+				.getCRS(lblDefaultProjection.getText()));
 
 		// Adding invisible new layers
 		if (xml.contains(ADD_NEW_LAYERS_IN_INVISIBLE_MODE_KEY_NAME)) {
@@ -520,7 +521,7 @@ public class ViewPage extends AbstractPreferencePage {
 	}
 
 	public void storeValues() throws StoreException {
-		String projName = lblDefaultProjection.getText();
+		String crsName = lblDefaultProjection.getText();
 		double zif=1;
 		double zof=1;
 		boolean invisibleNewLayers, keepScaleOnResize, showFileExtensions;
@@ -541,7 +542,7 @@ public class ViewPage extends AbstractPreferencePage {
 //				//JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),PluginServices.getText(this,"numero_incorrecto")+" = "+ txtZoomInFactor.getText()+ ", "+txtZoomOutFactor.getText());
 //				throw new StoreException(PluginServices.getText(this,"numero_incorrecto")+" = "+ txtZoomInFactor.getText()+ ", "+txtZoomOutFactor.getText());
 //			}
-			Project.setDefaultProjection( CRSFactory.getCRS(projName));
+			Project.setDefaultCrs(ProjectionUtils.getCRS(crsName));
 
 			selectionColor = jccDefaultSelectionColor.getColor();
 			Project.setDefaultSelectionColor( selectionColor );
@@ -569,7 +570,7 @@ public class ViewPage extends AbstractPreferencePage {
 
 		PluginServices ps = PluginServices.getPluginServices(this);
 		XMLEntity xml = ps.getPersistentXML();
-		xml.putProperty(DEFAULT_PROJECTION_KEY_NAME, projName);
+		xml.putProperty(DEFAULT_PROJECTION_KEY_NAME, crsName);
 		xml.putProperty(ZOOM_IN_FACTOR_KEY_NAME, zif);
 		xml.putProperty(ZOOM_OUT_FACTOR_KEY_NAME, zof);
 		xml.putProperty(ADD_NEW_LAYERS_IN_INVISIBLE_MODE_KEY_NAME, invisibleNewLayers);

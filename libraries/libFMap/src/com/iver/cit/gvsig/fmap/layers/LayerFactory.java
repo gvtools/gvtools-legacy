@@ -49,8 +49,8 @@ import java.util.Hashtable;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.IProjection;
 import org.gvsig.exceptions.BaseException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -138,12 +138,12 @@ public class LayerFactory {
 	 * @throws DriverException @throws DriverIOException
 	 */
 	public static FLayer createLayer(String layerName, String driverName,
-			File f, IProjection proj) throws LoadLayerException {
-		return createLayer(layerName, driverName, f, proj, null);
+			File f, CoordinateReferenceSystem crs) throws LoadLayerException {
+		return createLayer(layerName, driverName, f, crs, null);
 	}
 
 	public static FLayer createLayer(String layerName, String driverName,
-			File f, IProjection proj, Color background)
+			File f, CoordinateReferenceSystem crs, Color background)
 			throws LoadLayerException {
 		// Se obtiene el driver que lee
 		DriverManager dm = getDM();
@@ -152,7 +152,7 @@ public class LayerFactory {
 			Driver d = dm.getDriver(driverName);
 
 			if (d instanceof VectorialFileDriver) {
-				return createLayer(layerName, (VectorialFileDriver) d, f, proj,
+				return createLayer(layerName, (VectorialFileDriver) d, f, crs,
 						background);
 			}
 		} catch (DriverLoadException e) {
@@ -162,11 +162,8 @@ public class LayerFactory {
 			//las excepciones de este metodo se dejan subir todas, puesto
 			//que las excepciones de los dos otros metodos createLayer si que
 			//se atrapan
-			DriverNotLoadedExceptionType exceptionType =
-				new DriverNotLoadedExceptionType();
+			DriverNotLoadedExceptionType exceptionType = new DriverNotLoadedExceptionType();
 			exceptionType.setDriverName(driverName);
-//			DriverException exception =
-//				new DriverException(e, exceptionType);
 			throw new LoadLayerException(layerName,e);
 		}
 
@@ -183,7 +180,7 @@ public class LayerFactory {
 	 *            vectorial file driver to read layer's data
 	 * @param f
 	 *            file associated to the driver
-	 * @param proj
+	 * @param crs
 	 *            layer projection
 	 *
 	 * @return FLayer new vectorial layer
@@ -192,12 +189,12 @@ public class LayerFactory {
 	 * @throws DriverException
 	 */
 	public static FLayer createLayer(String layerName, VectorialFileDriver d,
-			File f, IProjection proj) {
-		return createLayer(layerName, d, f, proj, null);
+			File f, CoordinateReferenceSystem crs) {
+		return createLayer(layerName, d, f, crs, null);
 	}
 
 	public static FLayer createLayer(String layerName, VectorialFileDriver d,
-			File f, IProjection proj, Color background) {
+			File f, CoordinateReferenceSystem crs, Color background) {
 		
 		FLyrVect layer = null;
 		try {
@@ -214,7 +211,7 @@ public class LayerFactory {
 		adapter.setDriver(d);
 
 		//TODO azo: adapter needs a reference to projection and to spatial index (review)
-		adapter.setProjection(proj);
+		adapter.setCrs(crs);
 
 		layer.setName(layerName);
 
@@ -222,7 +219,7 @@ public class LayerFactory {
 		if (false) {
 		} else {
 			layer.setSource(adapter);
-			layer.setProjection(proj);
+			layer.setCrs(crs);
 		}
 
 
@@ -283,15 +280,12 @@ public class LayerFactory {
 	 *
 	 * @param layerName
 	 * @param d
-	 * @param proj
+	 * @param crs
 	 * @return
 	 * @throws DriverException
 	 */
 	public static FLayer createLayer(String layerName, VectorialDriver d,
-			IProjection proj)
-	/*
-	throws DriverException
-	*/{
+			CoordinateReferenceSystem crs) {
 		VectorialAdapter adapter = null;
 		if (d instanceof VectorialFileDriver) {
 			adapter = new VectorialFileAdapter(((VectorialFileDriver) d)
@@ -303,7 +297,7 @@ public class LayerFactory {
 		}
 		adapter.setDriver((VectorialDriver) d);
 		//TODO azo:adapter needs a reference to the projection
-		adapter.setProjection(proj);
+		adapter.setCrs(crs);
 
 		FLyrVect layer = null;
 		try {
@@ -317,7 +311,7 @@ public class LayerFactory {
 		layer.setName(layerName);
 
 		layer.setSource(adapter);
-		layer.setProjection(proj);
+		layer.setCrs(crs);
 
 		try {
 
@@ -355,9 +349,7 @@ public class LayerFactory {
 	}
 
 	public static FLayer createArcSDELayer(String layerName,
-			IVectorialDatabaseDriver driver, IProjection proj) {
-		// throw new UnsupportedOperationException();
-
+			IVectorialDatabaseDriver driver, CoordinateReferenceSystem crs) {
 		FLyrVect layer = null;
 		try {
 			Class clase = LayerFactory.getLayerClassForLayerClassName("com.iver.cit.gvsig.fmap.layers.FLyrVect");
@@ -369,11 +361,11 @@ public class LayerFactory {
 		
 		VectorialAdapter adapter = new VectorialDBAdapter();
 		adapter.setDriver(driver);
-		adapter.setProjection(proj);
+		adapter.setCrs(crs);
 
 		layer.setName(layerName);
 		layer.setSource(adapter);
-		layer.setProjection(proj);
+		layer.setCrs(crs);
 		try {
 			if (driver instanceof WithDefaultLegend) {
 				WithDefaultLegend aux = (WithDefaultLegend) driver;
@@ -421,7 +413,7 @@ public class LayerFactory {
 	 * @param password
 	 * @param dbName
 	 * @param tableName
-	 * @param proj
+	 * @param crs
 	 *
 	 * @return Capa creada.
 	 *
@@ -429,17 +421,17 @@ public class LayerFactory {
 	 */
 	public static FLayer createLayer(IVectorialDatabaseDriver driver,
 			String host, int port, String user, String password, String dbName,
-			String tableName, IProjection proj) {
+			String tableName, CoordinateReferenceSystem crs) {
 		throw new UnsupportedOperationException();
 	}
 
 	public static FLayer createDBLayer(IVectorialDatabaseDriver driver,
-			String layerName, IProjection proj) {
-		return createDBLayer(driver, layerName, proj, null);
+			String layerName, CoordinateReferenceSystem crs) {
+		return createDBLayer(driver, layerName, crs, null);
 	}
 
 	public static FLayer createDBLayer(IVectorialDatabaseDriver driver,
-			String layerName, IProjection proj, Color background) {
+			String layerName, CoordinateReferenceSystem crs, Color background) {
 
 		FLyrVect layer = null;
 		try {
@@ -453,10 +445,10 @@ public class LayerFactory {
 		layer.setName(layerName);
 		VectorialDBAdapter dbAdapter = new VectorialDBAdapter();
 		dbAdapter.setDriver(driver);
-		dbAdapter.setProjection(proj);//adapter needs also a ref to prj. review (azo)
+		dbAdapter.setCrs(crs);//adapter needs also a ref to prj. review (azo)
 
 		layer.setSource(dbAdapter);
-		layer.setProjection(proj);
+		layer.setCrs(crs);
 		try {
 			if (driver instanceof WithDefaultLegend) {
 				WithDefaultLegend aux = (WithDefaultLegend) driver;
@@ -531,13 +523,13 @@ public class LayerFactory {
 	 * @throws
 	 */
 	public static FLayer createDisconnectedDBLayer(IVectorialJDBCDriver driver,
-			String layerName, IProjection proj, Color background,
+			String layerName, CoordinateReferenceSystem crs, Color background,
 			ProgressListener listener) throws DBException, DriverLoadException,
 			NoSuchTableException, ClassNotFoundException, ReadDriverException,
 			IOException, WriteDriverException {
 		VectorialDisconnectedDBAdapter dbAdapter = new VectorialDisconnectedDBAdapter();
 		dbAdapter.setDriver(driver);
-		dbAdapter.setProjection(proj);
+		dbAdapter.setCrs(crs);
 		DataSource ds = dbAdapter.getRecordset();
 		ds.start();
 		String database = dataSourceFactory.getTempFile();
@@ -619,7 +611,7 @@ public class LayerFactory {
 		cacheDriver.setData(ConnectionFactory.createConnection(
 				"jdbc:hsqldb:file:" + database, "sa", ""), lyrDef);
 		cacheDriver.setWorkingArea(driver.getWorkingArea());
-		return createDBLayer(cacheDriver, layerName, proj, background);
+		return createDBLayer(cacheDriver, layerName, crs, background);
 	}
 
 	/**

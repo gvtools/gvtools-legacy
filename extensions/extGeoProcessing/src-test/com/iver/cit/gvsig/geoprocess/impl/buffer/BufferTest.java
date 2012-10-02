@@ -61,11 +61,11 @@ import java.util.HashMap;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
 import com.iver.cit.gvsig.fmap.edition.ShpSchemaManager;
@@ -91,7 +91,8 @@ public class BufferTest extends TestCase {
 	private static File baseDriversPath;
 	public static String SHP_DRIVER_NAME = "gvSIG shp driver";
 
-	static IProjection PROJECTION_DEFAULT = CRSFactory.getCRS("EPSG:23030");
+	static CoordinateReferenceSystem DEFAULT_CRS = ProjectionUtils
+			.getCRS("EPSG:23030");
 	
 	
 	protected void setUp() throws Exception {
@@ -121,7 +122,7 @@ public class BufferTest extends TestCase {
 		File file = new File(baseDataPath, fileName);
 		return LayerFactory.createLayer(fileName,
 										driverName,
-										file, PROJECTION_DEFAULT);
+										file, DEFAULT_CRS);
 	}
 	
 	
@@ -141,7 +142,7 @@ public class BufferTest extends TestCase {
 		params.put("numRings", new Integer(1));
 		params.put("typePolBuffer", new Byte(BufferVisitor.BUFFER_OUTSIDE_POLY));
 		params.put("cap", new Byte(BufferVisitor.CAP_ROUND));
-		params.put("projection", PROJECTION_DEFAULT);
+		params.put("projection", DEFAULT_CRS);
 		params.put("distanceunits", new Integer(1));
 		params.put("mapunits", new Integer(1));
 		

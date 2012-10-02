@@ -66,7 +66,7 @@ package com.iver.cit.gvsig.geoprocess.impl.xyshift.fmap;
 
 import java.util.Map;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -134,7 +134,8 @@ public class XYShiftGeoprocess  extends AbstractGeoprocess {
 			this.onlyInputLayerSelection =
 				firstLayerSelection.booleanValue();
 		
-		IProjection projection = (IProjection) params.get("projection");
+		CoordinateReferenceSystem crs = (CoordinateReferenceSystem) params
+				.get("projection");
 		int distanceUnits = ((Integer)params.get("distanceunits")).intValue();
 		int mapUnits = ((Integer)params.get("mapunits")).intValue();
 		
@@ -142,12 +143,12 @@ public class XYShiftGeoprocess  extends AbstractGeoprocess {
 			params.get("xshift");
 		if(xShift != null)
 			this.offsetX = UnitUtils.
-				getInInternalUnits(xShift.doubleValue(), projection, distanceUnits, mapUnits);
+				getInInternalUnits(xShift.doubleValue(), crs, distanceUnits, mapUnits);
 		Double yShift = (Double)
 			params.get("yshift");
 		if(yShift != null)
 			this.offsetY = UnitUtils.
-				getInInternalUnits(yShift.doubleValue(), projection, distanceUnits, mapUnits);
+				getInInternalUnits(yShift.doubleValue(), crs, distanceUnits, mapUnits);
 	}
 
 	public void checkPreconditions() throws GeoprocessException {

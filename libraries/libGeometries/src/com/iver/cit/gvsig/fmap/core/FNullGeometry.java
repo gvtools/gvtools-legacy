@@ -47,8 +47,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -64,12 +64,12 @@ public class FNullGeometry extends AbstractGeometry {
 		super(null);		
 	}
 	
-	public FNullGeometry(IProjection projection) {
-		super(projection);		
+	public FNullGeometry(CoordinateReferenceSystem crs) {
+		super(crs);		
 	}
 
-	public FNullGeometry(String id, IProjection projection) {
-		super(id, projection);		
+	public FNullGeometry(String id, CoordinateReferenceSystem crs) {
+		super(id, crs);		
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class FNullGeometry extends AbstractGeometry {
 	/* (non-Javadoc)
 	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#reProject(org.cresques.cts.ICoordTrans)
 	 */
-	public void reProject(ICoordTrans ct) {
+	public void reProject(MathTransform trans) {
 	}
 
 

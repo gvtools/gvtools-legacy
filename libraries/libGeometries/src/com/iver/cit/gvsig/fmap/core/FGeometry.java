@@ -3,8 +3,8 @@ package com.iver.cit.gvsig.fmap.core;
 import java.awt.Shape;
 import java.io.IOException;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.fmap.geometries.iso.primitive.AbstractGeometryPrimitive;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.vividsolutions.jts.geom.Geometry;
@@ -67,12 +67,12 @@ import com.vividsolutions.jts.io.WKBWriter;
 public abstract class FGeometry extends AbstractGeometry implements FShape, AbstractGeometryPrimitive {
 	private static final WKBWriter writer = new WKBWriter();
 	
-	public FGeometry(String id, IProjection projection) {
-		super(id, projection);		
+	public FGeometry(String id, CoordinateReferenceSystem crs) {
+		super(id, crs);		
 	}
 	
-	public FGeometry(IProjection projection) {
-		this(null, projection);
+	public FGeometry(CoordinateReferenceSystem crs) {
+		this(null, crs);
 	}
 	
 	/*

@@ -40,6 +40,7 @@ import org.gvsig.raster.util.MathUtils;
 import org.gvsig.raster.util.RasterUtilities;
 import org.gvsig.rastertools.saveraster.ui.SaveRasterDialog;
 import org.gvsig.rastertools.saveraster.ui.SaveRasterPanel;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.addlayer.fileopen.FileOpenWizard;
@@ -189,7 +190,7 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 			if (obj.equals(controlPanel.getCbResolution())) {
 				String escala = controlPanel.getTScale().getValue();
 				try{
-					if(controlPanel.getProjection().isProjected())
+					if(controlPanel.getCrs() instanceof ProjectedCRS)
 						calcSizeMtsPixel(Double.parseDouble(escala), resolution);
 				}
 				catch(NumberFormatException exc){
@@ -202,7 +203,7 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 			if(	controlPanel.getRbScale().isSelected() &&
 				!controlPanel.getTScale().getValue().equals("")) {
 				double scale = Double.parseDouble(controlPanel.getTScale().getValue());
-				if(controlPanel.getProjection().isProjected())
+				if(controlPanel.getCrs() instanceof ProjectedCRS)
 					calcSizeMtsPixel(scale, resolution);
 				else
 					calcSizeMtsPixelGeodesicas(scale, resolution);
@@ -216,19 +217,19 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 					!controlPanel.getTWidth().getValue().equals("")) {
 					this.widthInPixels = this.getCorrectMeasure(controlPanel.getTWidth().getValue());
 					this.heightInPixels = (int)Math.floor(this.widthInPixels / rel);
-					if(controlPanel.getProjection().isProjected())
+					if(controlPanel.getCrs() instanceof ProjectedCRS)
 						calcScaleMtsPixel(this.widthInPixels, this.heightInPixels, resolution);
 				}
 				if(	obj != null && obj.equals(controlPanel.getTHeight().getDataInputField()) &&
 							!controlPanel.getTHeight().getValue().equals("")) {
 					this.heightInPixels = this.getCorrectMeasure(controlPanel.getTHeight().getValue());
 					this.widthInPixels = (int)Math.ceil(this.heightInPixels * rel);
-					if(controlPanel.getProjection().isProjected())
+					if(controlPanel.getCrs() instanceof ProjectedCRS)
 						calcScaleMtsPixel(this.widthInPixels, this.heightInPixels, resolution);
 				}
 				if(	obj != null &&
 					obj.equals(controlPanel.getCbMeasureType())) {
-						if(controlPanel.getProjection().isProjected())
+						if(controlPanel.getCrs()  instanceof ProjectedCRS)
 							calcScaleMtsPixel(this.widthInPixels, this.heightInPixels, resolution);
 				}
 			}
@@ -237,7 +238,7 @@ public class DataInputListener implements ActionListener, MouseListener, FocusLi
 			if(	controlPanel.getRbMtsPixel().isSelected() &&
 				!controlPanel.getTMtsPixel().getValue().equals("")) {
 				double mtsPixel = Double.parseDouble(controlPanel.getTMtsPixel().getValue());
-				if(controlPanel.getProjection().isProjected())
+				if(controlPanel.getCrs() instanceof ProjectedCRS)
 					calcSizeScale(mtsPixel, resolution);
 			}
 		}

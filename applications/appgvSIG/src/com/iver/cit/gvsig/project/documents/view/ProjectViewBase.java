@@ -10,8 +10,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.exceptions.BaseException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
@@ -77,7 +77,7 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 	 */
 	public void setMapOverViewContext(MapContext fmap) {
 		mapOverViewContext = fmap;
-		mapOverViewContext.setProjection(mapContext.getProjection());
+		mapOverViewContext.setCrs(mapContext.getCrs());
 	}
 
 	public void showErrors(){
@@ -155,13 +155,8 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 *
-	 * @return DOCUMENT ME!
-	 */
-	public IProjection getProjection() {
-		return mapContext.getProjection();
+	public CoordinateReferenceSystem getCrs() {
+		return mapContext.getCrs();
 	}
 
 	/**
@@ -169,13 +164,13 @@ public abstract class ProjectViewBase extends ProjectDocument implements ErrorLi
 	 *
 	 * @return DOCUMENT ME!
 	 */
-	public IProjection getOverViewProjection() {
-		return mapOverViewContext.getProjection();
+	public CoordinateReferenceSystem getOverViewCrs() {
+		return mapOverViewContext.getCrs();
 	}
 
-	public void setProjection (IProjection proj) {
-		mapContext.setProjection(proj);
-		mapOverViewContext.setProjection(proj);
+	public void setCrs(CoordinateReferenceSystem crs) {
+		mapContext.setCrs(crs);
+		mapOverViewContext.setCrs(crs);
 	}
 
 	/**

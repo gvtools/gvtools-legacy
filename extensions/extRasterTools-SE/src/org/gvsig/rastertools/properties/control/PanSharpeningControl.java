@@ -211,7 +211,7 @@ public class PanSharpeningControl implements ActionListener, SliderListener, Cha
 			try {
 			 
 				 lyr = FLyrRasterSE.createLayer(fileNameOutput.substring(
-						 fileNameOutput.lastIndexOf(File.separator) + 1, endIndex),new File(fileNameOutput), dataset.getDataSource().getDataset(0)[0].getProjection());
+						 fileNameOutput.lastIndexOf(File.separator) + 1, endIndex),new File(fileNameOutput), dataset.getDataSource().getDataset(0)[0].getCrs());
 			} catch (LoadLayerException e) {
 				 
 				 JOptionPane.showMessageDialog((Component)PluginServices.getMainFrame(),

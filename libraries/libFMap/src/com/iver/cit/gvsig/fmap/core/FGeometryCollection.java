@@ -50,7 +50,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
@@ -196,12 +196,10 @@ public class FGeometryCollection extends AbstractGeometry {
 		return geomCol;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.core.IGeometry#reProject(org.cresques.cts.ICoordTrans)
-	 */
-	public void reProject(ICoordTrans ct) {
+	@Override
+	public void reProject(MathTransform trans) {
 		for (int i = 0; i < geometries.size(); i++)
-			((IGeometry)geometries.get(i)).reProject(ct);
+			((IGeometry)geometries.get(i)).reProject(trans);
 	}
 
 	/**

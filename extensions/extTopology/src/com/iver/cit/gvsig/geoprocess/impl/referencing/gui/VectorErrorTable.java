@@ -69,7 +69,6 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.vecmath.MismatchedSizeException;
 
-import org.cresques.cts.IProjection;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.referencing.operation.builder.MappedPosition;
 import org.geotools.referencing.operation.builder.MathTransformBuilder;
@@ -88,6 +87,7 @@ import org.opengis.geometry.DirectPosition;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.geometry.MismatchedReferenceSystemException;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -562,7 +562,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 
 			if (!verrorContainer.existsLinksLyr()) {
 				FLyrVect linkLyr = verrorContainer
-				.getLinkLyr(currentView.getProjection());
+				.getLinkLyr(currentView.getCrs());
 				MapContext mapContext = currentView.getMapContext();
 
 				//each time we create a new link layer, we are creating a new spatial adjusting session
@@ -717,7 +717,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 			if (selectedLyr instanceof FLayerGenericVectorial) {
 				FLayerGenericVectorial genericLyr = (FLayerGenericVectorial) selectedLyr;
 				VectorialDriver driver = genericLyr.getDriver();
-				IProjection projection = genericLyr.getProjection();
+				CoordinateReferenceSystem crs = genericLyr.getCrs();
 				IVectorLegend legend = (IVectorLegend) genericLyr.getLegend();
 				if (driver instanceof VectorErrorMemoryDriver) {
 					VectorErrorMemoryDriver errorDriver = (VectorErrorMemoryDriver) driver;
@@ -726,7 +726,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 				clonedSelectedLyr = new FLayerGenericVectorial();
 				((FLayerGenericVectorial)clonedSelectedLyr).setName(name);
 				((FLayerGenericVectorial)clonedSelectedLyr).setDriver(driver);
-				((FLayerGenericVectorial)clonedSelectedLyr).setProjection(projection);
+				((FLayerGenericVectorial)clonedSelectedLyr).setCrs(crs);
 				try {
 					((FLayerGenericVectorial)clonedSelectedLyr).load();
 					((FLayerGenericVectorial)clonedSelectedLyr).setLegend(legend);

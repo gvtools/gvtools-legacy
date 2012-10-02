@@ -63,9 +63,12 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.edition.commands.CommandListener;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.GraphicLayer;
@@ -398,7 +401,7 @@ public class MapControl extends JComponent implements ComponentListener, Command
 		// TODO: Cuando creamos un mapControl, deberíamos asignar
 		// la projección por defecto con la que vayamos a trabajar.
 		// 23030 es el código EPSG del UTM30 elipsoide ED50
-		vp = new ViewPort(CRSFactory.getCRS("EPSG:23030"));
+		vp = new ViewPort(ProjectionUtils.getCRS("EPSG:23030"));
 		setMapContext(new MapContext(vp));
 
 		//eventos
@@ -464,11 +467,11 @@ public class MapControl extends JComponent implements ComponentListener, Command
 	 *
 	 * @return this component's {@link MapContext MapContext} projection
 	 *
-	 * @see MapContext#getProjection()
-	 * @see MapControl#setProjection(IProjection)
+	 * @see MapContext#getCrs()
+	 * @see MapControl#setCRS(IProjection)
 	 */
-	public IProjection getProjection() {
-		return getMapContext().getProjection();
+	public CoordinateReferenceSystem getCrs() {
+		return getMapContext().getCrs();
 	}
 
 	/**
@@ -476,11 +479,11 @@ public class MapControl extends JComponent implements ComponentListener, Command
 	 *
 	 * @param proj the kind of projection to this component's {@link MapContext MapContext}
 	 *
-	 * @see MapContext#setProjection(IProjection)
-	 * @see MapControl#getProjection()
+	 * @see MapContext#setCRS(IProjection)
+	 * @see MapControl#getCrs()
 	 */
-	public void setProjection(IProjection proj) {
-		getMapContext().setProjection(proj);
+	public void setCrs(CoordinateReferenceSystem proj) {
+		getMapContext().setCrs(proj);
 	}
 
 	/**

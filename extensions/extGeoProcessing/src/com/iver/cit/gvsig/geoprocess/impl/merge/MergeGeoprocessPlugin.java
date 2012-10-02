@@ -76,15 +76,12 @@ package com.iver.cit.gvsig.geoprocess.impl.merge;
 
 import java.net.URL;
 
-import org.cresques.cts.IProjection;
-
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.geoprocess.core.GeoprocessPluginAbstract;
 import com.iver.cit.gvsig.geoprocess.core.IGeoprocessController;
 import com.iver.cit.gvsig.geoprocess.core.IGeoprocessPlugin;
-import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessPanel;
 import com.iver.cit.gvsig.geoprocess.core.gui.IGeoprocessUserEntries;
 import com.iver.cit.gvsig.geoprocess.impl.merge.gui.GeoProcessingMergePanel2;
 import com.iver.cit.gvsig.geoprocess.manager.GeoprocessManager;
@@ -112,7 +109,6 @@ public class MergeGeoprocessPlugin  extends GeoprocessPluginAbstract implements 
 		View vista = (View)PluginServices.getMDIManager().getActiveWindow();
 		MapContext mapContext = vista.getModel().getMapContext();
         FLayers layers = mapContext.getLayers();
-        IProjection proj = mapContext.getProjection();
 		GeoProcessingMergePanel2 dataSelectionPanel = 
 			new GeoProcessingMergePanel2(layers);
 		return dataSelectionPanel;

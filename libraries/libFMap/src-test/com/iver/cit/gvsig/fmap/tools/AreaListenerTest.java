@@ -4,17 +4,18 @@ import java.awt.geom.Point2D;
 
 import junit.framework.TestCase;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 
 public class AreaListenerTest extends TestCase{
-	private IProjection projectionUTM = CRSFactory.getCRS("EPSG:23030");
-	private IProjection projectionGeo = CRSFactory.getCRS("EPSG:4230");
-	public void test1() {
+	private CoordinateReferenceSystem projectionUTM = ProjectionUtils.getCRS("EPSG:23030");
+	private CoordinateReferenceSystem projectionGeo = ProjectionUtils.getCRS("EPSG:4230");
+	public void test1() throws FactoryException {
 		AreaListenerImpl areaListenerUTM=new AreaListenerImpl(newMapControlUTM());
 		AreaListenerImpl areaListenerGeo=new AreaListenerImpl(newMapControlGeo());
 		Double[] xsUTM=new Double[] {new Double(731292),new Double(731901),new Double(730138)};
@@ -25,13 +26,13 @@ public class AreaListenerTest extends TestCase{
 		double areaGeo=areaListenerGeo.returnGeoCArea(xsGeo,ysGeo,new Point2D.Double(-0.33268401,39.26117368));
 		assertTrue("Area UTM igual a Geo",areaUTM<(areaGeo+1000)&& areaUTM>(areaGeo-1000));
 	}
-	private MapControl newMapControlUTM() {
+	private MapControl newMapControlUTM() throws FactoryException {
 		ViewPort vp = new ViewPort(projectionUTM);
 		MapControl mc=new MapControl();
 		mc.setMapContext(new MapContext(vp));
 		return mc;
 	}
-	private MapControl newMapControlGeo() {
+	private MapControl newMapControlGeo() throws FactoryException {
 		ViewPort vp = new ViewPort(projectionGeo);
 		MapControl mc=new MapControl();
 		mc.setMapContext(new MapContext(vp));

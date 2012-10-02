@@ -279,12 +279,12 @@ public class FeatherProcessBuff extends RasterProcess {
 					resultGrid.getBandCount(), aTransform, resultGridExtent
 							.getNX(), resultGridExtent.getNY(), resultGrid
 							.getDataType(), GeoRasterWriter.getWriter(fileName)
-							.getParams(), inputRasterLayers[0].getProjection());
+							.getParams(), inputRasterLayers[0].getCrs());
 			grw.dataWrite();
 			grw.writeClose();
 			resultGrid.getRasterBuf().free();
 			outputRasterLayer = FLyrRasterSE.createLayer("outputLayer",
-					fileName, inputRasterLayers[0].getProjection());
+					fileName, inputRasterLayers[0].getCrs());
 				
 		} catch (NotSupportedExtensionException e) {
 			RasterToolsUtil.messageBoxError(PluginServices.getText(this,

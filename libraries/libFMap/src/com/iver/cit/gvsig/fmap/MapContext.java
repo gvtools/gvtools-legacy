@@ -55,9 +55,9 @@ import java.util.prefs.Preferences;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
-import org.cresques.geo.Projected;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
@@ -105,7 +105,7 @@ import com.iver.utiles.swing.threads.Cancellable;
  *
  * @author Fernando González Cortés
  */
-public class MapContext implements Projected {
+public class MapContext {
 	/**
 	 * <p>Defines the value which a unit of a distance measurement must be divided to obtain its equivalent <b>in meters</b>.</p>
 	 *
@@ -833,7 +833,7 @@ public class MapContext implements Projected {
 	 */
 	public long getScaleView() {
 		double dpi = getScreenDPI();
-		IProjection proj = viewPort.getProjection();
+		CoordinateReferenceSystem crs = viewPort.getCrs();
 
 		if (viewPort.getImageSize() == null)
 			return -1;
@@ -842,17 +842,20 @@ public class MapContext implements Projected {
 			return 0;
 		}
 		double[] trans2Meter=getDistanceTrans2Meter();
-		if (proj == null) {
+		if (crs == null) {
 			double w = ((viewPort.getImageSize().getWidth() / dpi) * 2.54);
 			return (long) (viewPort.getAdjustedExtent().getWidth() / w * trans2Meter[getViewPort()
 					.getMapUnits()]);
 		}
 
-		return Math.round(proj.getScale((viewPort.getAdjustedExtent().getMinX()*trans2Meter[getViewPort().getMapUnits()]),
-				(viewPort.getAdjustedExtent().getMaxX()*trans2Meter[getViewPort().getMapUnits()]), viewPort.getImageSize()
-						.getWidth(), dpi));
-
-
+		return (long) ProjectionUtils
+				.getScale(
+						crs,
+						(viewPort.getAdjustedExtent().getMinX() * trans2Meter[getViewPort()
+								.getMapUnits()]), (viewPort.getAdjustedExtent()
+								.getMaxX() * trans2Meter[getViewPort()
+								.getMapUnits()]), viewPort.getImageSize()
+								.getWidth(), dpi);
 	}
 
 	/**
@@ -862,7 +865,7 @@ public class MapContext implements Projected {
 	 *
 	 * @param scale the new scale for the view
 	 *
-	 * @see ViewPort#setProjection(IProjection)
+	 * @see ViewPort#setCrs(IProjection)
 	 * @see #getScaleView()
 	 */
 	public void setScaleView(long scale) {
@@ -870,18 +873,17 @@ public class MapContext implements Projected {
 		double dpi = getScreenDPI();
 		if (viewPort.getImageSize() == null)
 			return;
-		IProjection proj = viewPort.getProjection();
+		CoordinateReferenceSystem crs = viewPort.getCrs();
 		if (viewPort.getAdjustedExtent() == null) {
 			return;
 		}
 		double[] trans2Meter=getDistanceTrans2Meter();
-		Rectangle2D rec=proj.getExtent(viewPort.getAdjustedExtent(), //extent
-				scale, //scale
-				viewPort.getImageWidth(), //wImage
-				viewPort.getImageHeight(), //hImage
-				100*trans2Meter[getViewPort().getMapUnits()], //mapUnits
-				trans2Meter[getViewPort().getDistanceUnits()], //distanceUnits
-				dpi); //dpi
+		Rectangle2D rec = ProjectionUtils.getExtent(
+				crs,
+				viewPort.getAdjustedExtent(), // extent
+				scale, viewPort.getImageWidth(), viewPort.getImageHeight(),
+				100 * trans2Meter[getViewPort().getMapUnits()],
+				trans2Meter[getViewPort().getDistanceUnits()], dpi);
 		getViewPort().setExtent(rec);
 	}
 
@@ -935,36 +937,29 @@ public class MapContext implements Projected {
 	public void createIndex() {
 	}
 
-	/**
-	 * @see org.cresques.geo.Projected#getProjection()
-	 *
-	 * @see ViewPort#getProjection()
-	 * @see #setProjection(IProjection)
-	 * @see #reProject(ICoordTrans)
-	 */
-	public IProjection getProjection() {
-		return getViewPort().getProjection();
+	public CoordinateReferenceSystem getCrs() {
+		return getViewPort().getCrs();
 	}
 
 	/**
 	 * <p>Sets the new projection.</p>
 	 *
-	 * @param proj the new projection
+	 * @param crs the new projection
 	 *
-	 * @see #getProjection()
-	 * @see ViewPort#setProjection(IProjection)
+	 * @see #getCrs()
+	 * @see ViewPort#setCrs(IProjection)
 	 * @see #reProject(ICoordTrans)
 	 */
-	public void setProjection(IProjection proj) {
+	public void setCrs(CoordinateReferenceSystem crs) {
 		if (getViewPort() != null) {
-			getViewPort().setProjection(proj);
+			getViewPort().setCrs(crs);
 		}
 	}
 
 	/**
-	 * @see org.cresques.geo.Projected#reProject(org.cresques.cts.ICoordTrans)
+	 * @see org.cresques.geo.Georeferenced#reProject(org.cresques.cts.ICoordTrans)
 	 */
-	public void reProject(ICoordTrans arg0) {
+	public void reProject(MathTransform trans) {
 		// TODO implementar reprojecciï¿½n (lo que sea eso)
 	}
 

@@ -470,7 +470,7 @@ private DBLayerDefinition cloneLyrDef(DBLayerDefinition lyrDef){
 	clonedLyrDef.setFieldsDesc(lyrDef.getFieldsDesc());
 
 	clonedLyrDef.setShapeType(lyrDef.getShapeType());
-	clonedLyrDef.setProjection(lyrDef.getProjection());
+	clonedLyrDef.setCrs(lyrDef.getCrs());
 
 	clonedLyrDef.setConnection(lyrDef.getConnection());
 	clonedLyrDef.setCatalogName(lyrDef.getCatalogName());

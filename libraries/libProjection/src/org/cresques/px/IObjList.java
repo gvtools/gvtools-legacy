@@ -49,13 +49,13 @@ package org.cresques.px;
 import java.awt.geom.Point2D;
 import java.util.Iterator;
 
-import org.cresques.geo.Projected;
+import org.cresques.geo.Georeferenced;
 
 
 /**
  * @author "Luis W. Sevilla" <sevilla_lui@gva.es>
  */
-public interface IObjList extends Extent.Has, Projected {
+public interface IObjList extends Extent.Has, Georeferenced {
     public Iterator iterator();
 
     public int size();

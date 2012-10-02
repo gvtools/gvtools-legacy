@@ -49,7 +49,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
@@ -163,7 +163,7 @@ public class OracleWriteTask extends AbstractMonitorableTask {
     }
 
     public void run() throws Exception {
-        ICoordTrans ct = lyrVect.getCoordTrans();
+        MathTransform trans = lyrVect.getCrsTransform();
         DriverAttributes attr = va.getDriverAttributes();
         boolean bMustClone = false;
 
@@ -196,12 +196,12 @@ public class OracleWriteTask extends AbstractMonitorableTask {
                     geom = ShapeFactory.createPoint2D(p.getX(), p.getY());
                 }
 
-                if ((ct != null) && (geom != null)) {
+                if ((trans != null) && (geom != null)) {
                     if (bMustClone) {
                         geom = geom.cloneGeometry();
                     }
 
-                    geom.reProject(ct);
+                    geom.reProject(trans);
                 }
 
                 reportStep();
@@ -236,12 +236,12 @@ public class OracleWriteTask extends AbstractMonitorableTask {
                     geom = ShapeFactory.createPoint2D(p.getX(), p.getY());
                 }
 
-                if (ct != null) {
+                if (trans != null) {
                     if (bMustClone) {
                         geom = geom.cloneGeometry();
                     }
 
-                    geom.reProject(ct);
+                    geom.reProject(trans);
                 }
 
                 reportStep();
@@ -282,7 +282,7 @@ public class OracleWriteTask extends AbstractMonitorableTask {
             	reader.setData(setDataParams);
                 ILayerDefinition lyrDef = (ILayerDefinition) writer.getTableDefinition();
                 FLayer newLayer = LayerFactory.createLayer(lyrDef.getName(),
-                        reader, mapContext.getProjection());
+                        reader, mapContext.getCrs());
                 mapContext.getLayers().addLayer(newLayer);
             }
         }

@@ -182,8 +182,6 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import org.apache.log4j.Logger;
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
 import org.gvsig.exceptions.BaseException;
 import org.gvsig.fmap.layers.LayerListenerAdapter;
 import org.gvsig.graph.core.GraphException;
@@ -194,10 +192,11 @@ import org.gvsig.graph.core.NetworkUtils;
 import org.gvsig.graph.solvers.FlagsMemoryDriver;
 import org.gvsig.graph.solvers.Route;
 import org.gvsig.graph.solvers.RouteMemoryDriver;
-import org.gvsig.graph.tools.FlagListener;
 import org.gvsig.gui.beans.swing.GridBagLayoutPanel;
 import org.gvsig.gui.beans.swing.JBlank;
 import org.gvsig.gui.beans.swing.JButton;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.engine.values.Value;
 import com.hardcode.gdbms.engine.values.ValueFactory;
@@ -1052,9 +1051,9 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 		}
 
 		FlagsMemoryDriver driver = new FlagsMemoryDriver(features);
-		IProjection projection = AddLayerDialog.getLastProjection();
+		CoordinateReferenceSystem crs = AddLayerDialog.getLastCrs();
 		FLyrVect routeLayer = (FLyrVect) LayerFactory.createLayer("Flags",
-				driver, projection);
+				driver, crs);
 
 		FormatSelectionPanel selectionPanel =
 			new FormatSelectionPanel(PluginServices.
@@ -1101,9 +1100,9 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 		}
 		Route lastRoute = (Route) routes.get(routes.size() - 1);
 		RouteMemoryDriver driver = new RouteMemoryDriver(lastRoute.getFeatureList());
-		IProjection projection = AddLayerDialog.getLastProjection();
+		CoordinateReferenceSystem crs = AddLayerDialog.getLastCrs();
 		FLyrVect routeLayer = (FLyrVect) LayerFactory.createLayer("Route",
-				driver, projection);
+				driver, crs);
 
 		FormatSelectionPanel selectionPanel = new FormatSelectionPanel(PluginServices.getText(null,
 		"Seleccione_un_formato_para_guardar_la_ruta"));
@@ -1188,7 +1187,7 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 				double realTol = Double.parseDouble(getTxtTolerance().getText());
 //						.toMapDistance(FlagListener.pixelTolerance);
 				reader.start();
-				ICoordTrans ct = vectLyr.getCoordTrans();
+				MathTransform trans = vectLyr.getCrsTransform();
 				DriverAttributes attr = reader.getDriverAttributes();
 				boolean bMustClone = false;
 				if (attr != null) {
@@ -1200,10 +1199,10 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 				ArrayList errors = new ArrayList();
 				for (int i = 0; i < numShapes; i++) {
 					IGeometry geom = reader.getShape(i);
-					if (ct != null) {
+					if (trans != null) {
 						if (bMustClone)
 							geom = geom.cloneGeometry();
-						geom.reProject(ct);
+						geom.reProject(trans);
 					}
 					
 					Geometry geo = geom.toJTSGeometry();

@@ -63,10 +63,13 @@ public class DefaultFeatureExtractor implements IFeatureExtractor {
 		try {
 			va.start();
 			f = va.getFeature((int) i);
-		    if (lyr.getCoordTrans() != null) {
-		    	if (!lyr.getProjection().getAbrev().equals(lyr.getMapContext().getViewPort().getProjection().getAbrev())){
+		    if (lyr.getCrsTransform() != null) {
+				if (!lyr.getCrs()
+						.getName()
+						.equals(lyr.getMapContext().getViewPort().getCrs()
+								.getName())) {
 		    		IGeometry geom = f.getGeometry();
-		    		geom.reProject(lyr.getCoordTrans());
+		    		geom.reProject(lyr.getCrsTransform());
 		    		f.setGeometry(geom);
 		    	}
 		    }
@@ -112,9 +115,12 @@ public class DefaultFeatureExtractor implements IFeatureExtractor {
 		try {
 			va.start();
 			geom = va.getShape((int) i);
-		    if (lyr.getCoordTrans() != null) {
-		    	if (!lyr.getProjection().getAbrev().equals(lyr.getMapContext().getViewPort().getProjection().getAbrev())){
-		    		geom.reProject(lyr.getCoordTrans());
+		    if (lyr.getCrsTransform() != null) {
+				if (!lyr.getCrs()
+						.getName()
+						.equals(lyr.getMapContext().getViewPort().getCrs()
+								.getName())) {
+		    		geom.reProject(lyr.getCrsTransform());
 		    	}
 		    }			
 			va.stop();

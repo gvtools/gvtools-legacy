@@ -78,10 +78,11 @@ import java.awt.event.ItemEvent;
 
 import javax.swing.JLabel;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.geoprocess.core.gui.AbstractGeoprocessGridbagPanel;
@@ -91,11 +92,11 @@ public class GeoprocessingReprojectPanel extends AbstractGeoprocessGridbagPanel 
 	/**
 	 * projection of the input layer
 	 */
-	private IProjection inputLayerProjection;
+	private CoordinateReferenceSystem inputLayerCrs;
 	/**
 	 * projection of the target layer
 	 */
-	private IProjection targetLayerProjection;
+	private CoordinateReferenceSystem targetLayerCrs;
 	
 	/**
 	 * label to show input projection name
@@ -122,12 +123,10 @@ public class GeoprocessingReprojectPanel extends AbstractGeoprocessGridbagPanel 
 
 	protected void addSpecificDesign() {
 		Insets insets = new Insets(5, 5, 5, 5);
-		inputLayerProjection = getInputLayer().getProjection();
-		targetLayerProjection = CRSFactory.getCRS("EPSG:23030");
-		String inputProjectionText = PluginServices.
-								getText(this, "Proyeccion_Actual")+
-								":  "+
-								inputLayerProjection.getAbrev();
+		inputLayerCrs = getInputLayer().getCrs();
+		targetLayerCrs = ProjectionUtils.getCRS("EPSG:23030");
+		String inputProjectionText = PluginServices.getText(this,
+				"Proyeccion_Actual") + ":  " + CRS.toSRS(inputLayerCrs, true);
 		inputProjectionLabel = new JLabel(inputProjectionText);
 		addComponent(inputProjectionLabel,  insets);
 		
@@ -148,14 +147,14 @@ public class GeoprocessingReprojectPanel extends AbstractGeoprocessGridbagPanel 
 	
 	private CRSSelectPanel getTargetPanelProj() {
 		if (targetPanelProj == null) {
-			targetPanelProj = CRSSelectPanel.getPanel(targetLayerProjection);
+			targetPanelProj = CRSSelectPanel.getPanel(targetLayerCrs);
 			targetPanelProj.getJLabel().setText(PluginServices.
 						getText(this, "Proyeccion_Destino"));
 			targetPanelProj.setPreferredSize(new java.awt.Dimension(330,35));
 			targetPanelProj.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (targetPanelProj.isOkPressed()) {
-						targetLayerProjection = targetPanelProj.getCurProj();
+						targetLayerCrs = targetPanelProj.getCurrentCrs();
 					}
 				}
 			});
@@ -193,17 +192,15 @@ public class GeoprocessingReprojectPanel extends AbstractGeoprocessGridbagPanel 
 	 */
 	protected void processLayerComboBoxStateChange(ItemEvent e) {
 		FLyrVect inputLyr = getInputLayer();
-		inputLayerProjection = inputLyr.getProjection();
-		String inputProjectionText = PluginServices.
-		getText(this, "Proyeccion_Actual")+
-		":  "+
-		inputLayerProjection.getAbrev();
+		inputLayerCrs = inputLyr.getCrs();
+		String inputProjectionText = PluginServices.getText(this,
+				"Proyeccion_Actual") + ":  " + CRS.toSRS(inputLayerCrs, true);
 		
 		inputProjectionLabel.setText(inputProjectionText);
 	}
 	
-	public IProjection getTargetProjection(){
-		return targetLayerProjection;
+	public CoordinateReferenceSystem getTargetCrs(){
+		return targetLayerCrs;
 	}
 
 

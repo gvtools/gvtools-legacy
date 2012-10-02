@@ -46,7 +46,9 @@ import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.ICoordTrans;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.NoninvertibleTransformException;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -142,7 +144,7 @@ public class MoveCADTool extends DefaultCADTool {
         VectorialEditableAdapter vea = vle.getVEA();
         ArrayList selectedRow=getSelectedRows();
         ArrayList selectedRowAux=new ArrayList();
-        ICoordTrans ct=getVLE().getLayer().getCoordTrans();
+		MathTransform trans = getVLE().getLayer().getCrsTransform();
         if (status.equals("Move.FirstPointToMove")) {
             firstPoint = new Point2D.Double(x, y);
         } else if (status.equals("Move.SecondPointToMove")) {
@@ -157,10 +159,12 @@ public class MoveCADTool extends DefaultCADTool {
         			IGeometry ig = feat.getGeometry();
         			if (ig == null)
         				continue;
-        			if (ct!=null) {
-        				lastPoint=ct.getInverted().convert(lastPoint,null);
-        				firstPoint=ct.getInverted().convert(firstPoint,null);
-
+        			if (trans!=null) {
+						MathTransform inverse = trans.inverse();
+						firstPoint = ProjectionUtils.transform(lastPoint,
+								inverse);
+						lastPoint = ProjectionUtils.transform(firstPoint,
+								inverse);
         			}
 //        			if (ct!=null)
 //        				ig.reProject(ct);
@@ -184,6 +188,8 @@ public class MoveCADTool extends DefaultCADTool {
 			} catch (ExpansionFileWriteException e) {
 				NotificationManager.addError(e.getMessage(),e);
 			} catch (ReadDriverException e) {
+				NotificationManager.addError(e.getMessage(),e);
+			} catch (NoninvertibleTransformException e) {
 				NotificationManager.addError(e.getMessage(),e);
 			}
             PluginServices.getMDIManager().restoreCursor();

@@ -98,7 +98,7 @@ public class SaveRasterProcess extends RasterProcess {
 		//Creamos el driver
 		Extent ex = new Extent(viewPort.getAdjustedExtent());
 		Dimension imgSz = viewPort.getImageSize();
-		ViewPortData vpData = new ViewPortData(viewPort.getProjection(), ex, imgSz );
+		ViewPortData vpData = new ViewPortData(viewPort.getCrs(), ex, imgSz );
 		AffineTransform at = new AffineTransform(vpData.getExtent().width() / imgSz.width,
 												 0, 0,
 												 -(vpData.getExtent().height() / imgSz.height),

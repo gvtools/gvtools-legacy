@@ -64,7 +64,7 @@ package com.iver.cit.gvsig.fmap.drivers.featureiterators;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.Value;
@@ -103,8 +103,8 @@ public class IndexedSptQueryFeatureIterator extends SpatialQueryFeatureIterator 
 	 * Constructor.
 	 *
 	 * @param source
-	 * @param sourceProj
-	 * @param targetProj
+	 * @param sourceCrs
+	 * @param targetCrs
 	 * @param fieldNames
 	 * @param spatialQuery
 	 * @param spatialIndex
@@ -112,13 +112,11 @@ public class IndexedSptQueryFeatureIterator extends SpatialQueryFeatureIterator 
 	 * @throws ReadDriverException
 	 */
 	public IndexedSptQueryFeatureIterator(ReadableVectorial source,
-											IProjection sourceProj,
-											IProjection targetProj,
-											String[] fieldNames,
-											Rectangle2D spatialQuery,
-											ISpatialIndex spatialIndex,
-											boolean fastIteration)throws ReadDriverException {
-		super(source, sourceProj, targetProj, fieldNames, spatialQuery,
+			CoordinateReferenceSystem sourceCrs,
+			CoordinateReferenceSystem targetCrs, String[] fieldNames,
+			Rectangle2D spatialQuery, ISpatialIndex spatialIndex,
+			boolean fastIteration)throws ReadDriverException {
+		super(source, sourceCrs, targetCrs, fieldNames, spatialQuery,
 				fastIteration);
 		this.spatialIndex = spatialIndex;
 		this.fastIteration = fastIteration;

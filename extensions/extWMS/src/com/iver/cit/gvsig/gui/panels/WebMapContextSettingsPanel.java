@@ -129,6 +129,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 
+import org.cresques.cts.ProjectionUtils;
 import org.gvsig.gui.beans.swing.JButton;
 import org.gvsig.gui.beans.swing.JFileChooser;
 
@@ -1065,7 +1066,7 @@ public class WebMapContextSettingsPanel extends JPanel implements SingletonWindo
 				}
 			}
 			// SRS
-			wmc.srs = mc.getProjection().getAbrev();
+			wmc.srs = ProjectionUtils.getAbrev(mc.getCrs());
 
 			// Bounding Box
 			if (useFullExtent)

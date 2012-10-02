@@ -58,7 +58,9 @@ import java.util.Iterator;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
@@ -75,7 +77,6 @@ import com.iver.cit.gvsig.fmap.layers.LegendChangedEvent;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.cit.gvsig.fmap.rendering.LegendListener;
 import com.iver.cit.gvsig.project.Project;
-import com.iver.cit.gvsig.project.documents.exceptions.OpenException;
 import com.iver.cit.gvsig.project.documents.exceptions.SaveException;
 import com.iver.cit.gvsig.project.documents.layout.FLayoutUtilities;
 import com.iver.cit.gvsig.project.documents.layout.LayoutControl;
@@ -327,10 +328,11 @@ public class FFrameView extends FFrame implements ViewPortListener,
             (wextent / 2.0);
         double newy = m_fmap.getViewPort().getExtent().getCenterY() -
             (hextent / 2.0);
-        IProjection proj=m_fmap.getViewPort().getProjection();
+		CoordinateReferenceSystem crs = m_fmap.getViewPort().getCrs();
  		Rectangle2D r = new Rectangle2D.Double(newx, newy, wextent, hextent);
-        if (!proj.isProjected()){
-			 r = m_fmap.getViewPort().getProjection().getExtent(r,scale,wview,hview,1,100,2.54);
+		if (!(crs instanceof ProjectedCRS)) {
+			r = ProjectionUtils.getExtent(m_fmap.getViewPort().getCrs(), r,
+					scale, wview, hview, 1, 100, 2.54);
 		}
         return r;
     }
@@ -853,7 +855,7 @@ public class FFrameView extends FFrame implements ViewPortListener,
      */
 	public void projectionChanged(ProjectionEvent e) {
         if (getTypeScale() == AUTOMATICO) {
-            m_fmap.getViewPort().setProjection(e.getNewProjection());
+            m_fmap.getViewPort().setCrs(e.getNewCrs());
 
             if (getLayout() != null) {
             	getLayout().getLayoutControl().setStatus(LayoutControl.DESACTUALIZADO);

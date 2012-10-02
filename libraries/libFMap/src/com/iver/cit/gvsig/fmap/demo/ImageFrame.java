@@ -48,11 +48,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import org.cresques.cts.ProjectionUtils;
+
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.layers.CancelationException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -92,9 +93,9 @@ public class ImageFrame extends JFrame {
 			l = LayerFactory.createLayer("Provin",
 					(VectorialFileDriver) LayerFactory.getDM().getDriver("gvSIG shp driver"),
 					new File("C:/Documents and Settings/fjp/Mis documentos/provin.shp"),
-					CRSFactory.getCRS("EPSG:23030"));
+					ProjectionUtils.getCRS("EPSG:23030"));
 
-			ViewPort vp = new ViewPort(CRSFactory.getCRS("EPSG:23030"));
+			ViewPort vp = new ViewPort(ProjectionUtils.getCRS("EPSG:23030"));
 			vp.setImageSize(new Dimension(getWidth(), getHeight()));
 
 			MapContext mapa = new MapContext(vp);

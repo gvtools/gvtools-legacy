@@ -227,7 +227,7 @@ public class TinExtension extends Extension {
 	//			graphicLayer.addGraphic(graf);
 			}
 		} // indexContour
-		FLayer lyrContour = LayerFactory.createLayer("Contours", memDriver, mapContext.getProjection());
+		FLayer lyrContour = LayerFactory.createLayer("Contours", memDriver, mapContext.getCrs());
 		mapContext.getLayers().addLayer(lyrContour);
 		
 		Value[] att = new Value[1];
@@ -254,7 +254,7 @@ public class TinExtension extends Extension {
 		
 		
 		VectorialFileDriver shpDriver = new IndexedShpDriver();
-		FLyrVect lyrTri = (FLyrVect) LayerFactory.createLayer("Triangles", shpDriver, triShpFile, mapContext.getProjection());
+		FLyrVect lyrTri = (FLyrVect) LayerFactory.createLayer("Triangles", shpDriver, triShpFile, mapContext.getCrs());
 		mapContext.getLayers().addLayer(lyrTri);
 		
 

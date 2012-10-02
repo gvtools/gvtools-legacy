@@ -48,10 +48,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.cresques.cts.IProjection;
 import org.gvsig.exceptions.BaseException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.drivers.DriverIOException;
@@ -203,11 +202,13 @@ public class Network {
 					.nextSetBit(i + 1)) {
 				IGeometry geom;
 				geom = va.getShape(i);
-				IProjection proj = lyrVect.getProjection();
-			    if (proj != null) {
-			    	if (!proj.getAbrev().equals(lyrVect.getMapContext().getViewPort().getProjection().getAbrev())){
-			    		geom.reProject(lyrVect.getCoordTrans());
-			    	}
+				CoordinateReferenceSystem crs = lyrVect.getCrs();
+			    if (crs != null) {
+					if (!crs.getName().equals(
+							lyrVect.getMapContext().getViewPort().getCrs()
+									.getName())) {
+						geom.reProject(lyrVect.getCrsTransform());
+					}
 			    }
 				
 				Point2D nearest = getNearestPoint(p, geom, tolerance);
@@ -753,9 +754,13 @@ public class Network {
 		this.lyrVect = lyr;
 		this.featExtractor = new DefaultFeatureExtractor(lyr);
 		// FJP: Workarround to avoid using SpatialIndex with reprojected layers
-	    if (lyrVect.getCoordTrans() != null) {
-	    	if (!lyrVect.getProjection().getAbrev().equals(lyrVect.getMapContext().getViewPort().getProjection().getAbrev()))
-	    		lyrVect.setISpatialIndex(null);
+	    if (lyrVect.getCrsTransform() != null) {
+			if (!lyrVect
+					.getCrs()
+					.getName()
+					.equals(lyrVect.getMapContext().getViewPort().getCrs()
+							.getName()))
+				lyrVect.setISpatialIndex(null);
 		}
 		
 		// fin 

@@ -31,10 +31,11 @@ import java.awt.geom.Point2D;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.cresques.cts.ICoordTrans;
-import org.cresques.cts.IProjection;
+import org.cresques.cts.ProjectionUtils;
 import org.cresques.geo.ViewPortData;
 import org.cresques.px.Extent;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 
 /**
@@ -79,15 +80,15 @@ public class LineString extends Geometry {
         return fColor;
     }
 
-    public IProjection getProjection() {
-        return proj;
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
     }
 
-    public void setProjection(IProjection p) {
-        proj = p;
+    public void setCrs(CoordinateReferenceSystem crs) {
+        this.crs = crs;
     }
 
-    public void reProject(ICoordTrans rp) {
+    public void reProject(MathTransform trans, CoordinateReferenceSystem target) {
         Vector saveLine = data;
 
         data = new Vector();
@@ -96,13 +97,13 @@ public class LineString extends Geometry {
         Point2D ptDest = null;
 
         for (int i = 0; i < saveLine.size(); i++) {
-            ptDest = rp.getPDest().createPoint(0.0, 0.0);
-            ptDest = rp.convert((Point2D) saveLine.get(i), ptDest);
+			ptDest = ProjectionUtils
+					.transform((Point2D) saveLine.get(i), trans);
             data.add(ptDest);
             extent.add(ptDest);
         }
 
-        setProjection(rp.getPDest());
+        setCrs(target);
     }
 
     public void draw(Graphics2D g, ViewPortData vp) {

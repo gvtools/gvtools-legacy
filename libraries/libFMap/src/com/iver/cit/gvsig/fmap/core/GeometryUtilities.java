@@ -26,14 +26,11 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import org.cresques.cts.IProjection;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.ProjectedCRS;
 
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.core.FPoint2D;
-import com.iver.cit.gvsig.fmap.core.GeneralPathX;
-import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.tools.geo.Geo;
@@ -61,16 +58,16 @@ public class GeometryUtilities {
 			Double[][] xsys=(Double[][])parts.get(i);//getXY(geom);
 			Double[] xs=xsys[0];
 			Double[] ys=xsys[1];
-			IProjection proj=layer.getMapContext().getProjection();
+			CoordinateReferenceSystem proj = layer.getMapContext().getCrs();
 			if (isCCW(xs, ys)){
-				if (proj.isProjected()) {
+				if (proj instanceof ProjectedCRS) {
 					ViewPort vp =layer.getMapContext().getViewPort();
 					area-= getCoordsArea(vp, xs,ys,new Point2D.Double(xs[xs.length-1].doubleValue(),ys[ys.length-1].doubleValue()));
 				}else{
 					area-= getGeoCArea(xs,ys);
 				}
 			}else{
-				if (proj.isProjected()) {
+				if (proj instanceof ProjectedCRS) {
 					ViewPort vp =layer.getMapContext().getViewPort();
 					area+= getCoordsArea(vp, xs,ys,new Point2D.Double(xs[xs.length-1].doubleValue(),ys[ys.length-1].doubleValue()));
 				}else{
