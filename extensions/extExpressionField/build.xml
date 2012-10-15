@@ -20,8 +20,6 @@
 	<property name="andamiLibs" location="${andami}/lib"/>
 	<property name="fmap" location="../libFMap"/>
 	<property name="fmapLibs" location="${fmap}/lib"/>
-	<property name="scripting" location="../extScripting"/>
-	<property name="scriptingLibs" location="${scripting}/lib"/>
 	<property name="installLibDir" location="${extensionDir}/${mainplugin}/lib"/>
 	<property name="cad_gvsig_jar" location="${extensionDir}/${mainplugin}.cad/${mainplugin}.cad.jar"/>
 	<import file="../binaries/ant/utilities.xml"/>
@@ -145,12 +143,6 @@
 	<target name="clean">
 		<delete dir="${dist}" failonerror="false"/>
 		<delete dir="${dist-src}" failonerror="false"/>
-	</target>
-
-	<target name="run-tests" depends="batch-build,compile-tests">
-		<antcall target="generic-run-tests">
-			<param name="TestSuite.Name" value="org.gvsig.scripting.AllTests"/>
-		</antcall>
 	</target>
 </project>
 

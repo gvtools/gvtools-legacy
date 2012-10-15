@@ -605,7 +605,6 @@
 			<file>jogr.jar</file>
 			<file>mysql_spatial.jar</file>
 			<file>oracle_spatial.jar</file>
-			<file>org.gvsig.scripting.jar</file>
 			<file>postgis_spatial.jar</file>
 			<file>spatialindex.jar</file>
 			<file>csvstring.jar</file>

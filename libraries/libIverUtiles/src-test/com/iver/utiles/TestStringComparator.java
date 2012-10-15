@@ -99,7 +99,6 @@ public class TestStringComparator {
 		v.add("extJDBC");
 		v.add("extMyPlugin");
 		v.add("extRasterTools");
-		v.add("extScripting");
 		v.add("extWCS");
 		v.add("extWFS2");
 		v.add("extwfs2");		// If both are null -> true

@@ -69,7 +69,6 @@
 		extTopology,
 		extOracleSpatial,
 		extSDE,
-		extScripting,
 		extAnnotations,
 		extExpressionField,
 		extWCS,

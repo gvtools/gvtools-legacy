@@ -2510,9 +2510,6 @@ public class JPanelUserTestOfJComboBoxConfigurableLookUp extends JPanel implemen
 				parameters[0] = "extNomenclatorIGN";		
 				addItemMethod.invoke(object, parameters);
 
-				parameters[0] = "extScripting";		
-				addItemMethod.invoke(object, parameters);
-
 				parameters[0] = "extWCS";		
 				addItemMethod.invoke(object, parameters);
 

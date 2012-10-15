@@ -20,7 +20,6 @@ com.iver.cit.gvsig.geoprocessextensions
 es.gva.cit.gvsig.catalogClient
 org.gvsig.georeferencing
 org.gvsig.rasterTools
-org.gvsig.scripting
 com.iver.gvsig.centerviewpoint
 es.prodevelop.cit.gvsig.arcims
 com.iver.gvsig.expresionfield
