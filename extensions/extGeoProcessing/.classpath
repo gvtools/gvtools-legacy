@@ -11,10 +11,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libIverUtiles"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
-	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/org.cresques.cts.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar" sourcepath="/libExceptions/src"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
