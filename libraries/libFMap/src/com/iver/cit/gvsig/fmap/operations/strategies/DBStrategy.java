@@ -103,10 +103,6 @@ public class DBStrategy extends DefaultStrategy {
 			// TODO: EXPLORAR LAS LEYENDAS PARA SABER LOS CAMPOS QUE VAMOS
 			// A NECESITAR RECUPERAR, PARA INCLUIR EN LA CONSULTA SOLO
 			// AQUELLOS QUE VAMOS A NECESITAR. CON ESO GANAREMOS VELOCIDAD.
-			// Ejemplo:
-			// En ArcSDE:
-			// con Vias cogiendo un campo solo: 5 segundos
-			// con todos los campos de Vias: 11 segundos.
 			// => MODIFICAR EL getFeatureIterator para que admita los nombres
 			// de los campos además del rectángulo que pides.
 			String[] usedFields = null;

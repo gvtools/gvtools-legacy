@@ -660,24 +660,11 @@ public class SingleView extends JFrame implements IView, WindowListener {
 		abrirGT2_MySQL_propio.addActionListener(m_acL);
 		abrirGT2.add(abrirGT2_MySQL_propio);
 
-        // ADD_GT2_ARCSDE_PROPIO
-        JMenuItem abrirGT2_ArcSDE_propio = new JMenuItem();
-        abrirGT2_ArcSDE_propio.setText("ArcSDE propio");
-        abrirGT2_ArcSDE_propio.setActionCommand("ADD_GT2_ARCSDE_PROPIO");
-        abrirGT2_ArcSDE_propio.addActionListener(m_acL);
-        abrirGT2.add(abrirGT2_ArcSDE_propio);
-
 		JMenuItem abrirGT2_PostGIS = new JMenuItem();
 		abrirGT2_PostGIS.setText("PostGIS");
 		abrirGT2_PostGIS.setActionCommand("ADD_GT2_POSTGIS");
 		abrirGT2_PostGIS.addActionListener(m_acL);
 		abrirGT2.add(abrirGT2_PostGIS);
-
-		JMenuItem abrirGT2_ArcSDE = new JMenuItem();
-		abrirGT2_ArcSDE.setText("ArcSDE");
-		abrirGT2_ArcSDE.setActionCommand("ADD_GT2_ARCSDE");
-		abrirGT2_ArcSDE.addActionListener(m_acL);
-		abrirGT2.add(abrirGT2_ArcSDE);
 
 		fileMenu.add(abrirGT2);
 

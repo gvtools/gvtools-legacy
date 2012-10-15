@@ -354,62 +354,6 @@ public class LayerFactory {
 		return layer;
 	}
 
-	public static FLayer createArcSDELayer(String layerName,
-			IVectorialDatabaseDriver driver, IProjection proj) {
-		// throw new UnsupportedOperationException();
-
-		FLyrVect layer = null;
-		try {
-			Class clase = LayerFactory.getLayerClassForLayerClassName("com.iver.cit.gvsig.fmap.layers.FLyrVect");
-			layer = (FLyrVect) clase.newInstance();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			return null;
-		}
-		
-		VectorialAdapter adapter = new VectorialDBAdapter();
-		adapter.setDriver(driver);
-		adapter.setProjection(proj);
-
-		layer.setName(layerName);
-		layer.setSource(adapter);
-		layer.setProjection(proj);
-		try {
-			if (driver instanceof WithDefaultLegend) {
-				WithDefaultLegend aux = (WithDefaultLegend) driver;
-				adapter.start();
-				layer.setLegend((IVectorLegend) aux.getDefaultLegend());
-
-				ILabelingStrategy labeler = aux.getDefaultLabelingStrategy();
-				if (labeler instanceof AttrInTableLabelingStrategy) {
-					((AttrInTableLabelingStrategy) labeler).setLayer(layer);
-				}
-				layer.setLabelingStrategy(labeler);layer.setIsLabeled(true); // TODO: ací no s'hauria de detectar si té etiquetes?????
-
-				adapter.stop();
-			} else {
-				layer.setLegend(LegendFactory.createSingleSymbolLegend(layer
-						.getShapeType()));
-			}
-		} catch (LegendLayerException e) {
-			throw new UnsupportedOperationException(e.getMessage());
-		} catch (InitializeDriverException e) {
-			throw new UnsupportedOperationException(e.getMessage());
-		} catch (ReadDriverException e) {
-			throw new UnsupportedOperationException(e.getMessage());
-		}
-
-		try {
-			layer.setLegend(LegendFactory.createSingleSymbolLegend(layer
-					.getShapeType()));
-		} catch (LegendLayerException e) {
-			e.printStackTrace();
-		} catch (ReadDriverException e) {
-			e.printStackTrace();
-		}
-		return layer;
-	}
-
 	/**
 	 * Crea un RandomVectorialWFS con el driver que se le pasa como parámetro y
 	 * guardándose la URL del servidor que se pasa como parámetro

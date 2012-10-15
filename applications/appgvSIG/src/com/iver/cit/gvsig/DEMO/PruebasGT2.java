@@ -73,13 +73,16 @@ import com.vividsolutions.jts.geom.MultiPoint;
 import com.vividsolutions.jts.geom.Point;
 
 /**
- * Pruebas de capas GT2 (ArcSDE, etc), hechas por Fran, sacadas del
+ * Pruebas de capas GT2, hechas por Fran, sacadas del
  * CommandListener
  * @author Luis W. Sevilla (sevilla_lui@gva.es)
  */
+/**
+ * @author victorzinho
+ *
+ */
 public class PruebasGT2 implements ActionListener {
     static PostgisDataStoreFactory postGisFactory = new PostgisDataStoreFactory();
-    // static ArcSDEDataStoreFactory arcSdeFactory = new ArcSDEDataStoreFactory();
 
     Map remote;
     private MapContext m_Mapa;
@@ -165,26 +168,6 @@ public class PruebasGT2 implements ActionListener {
         e.printStackTrace();
     }
         */
-   }
-   protected void addLayer_ArcSDE_propio()
-   {
-     /*  String nomTabla = "vias"; //JOptionPane.showInputDialog(null, "¿Nombre de la tabla a cargar?", "vias");
-       ArcSdeDriver driver = new ArcSdeDriver();
-       String dbHost = "Alvaro";
-       String dbuser = "sde";
-       String dbpass = "sde";
-       // String[] fields = {"Shape", "NOM_PROVIN"};
-       String[] fields = null; //{"Shape", "RD_5", "RD_11"};
-       int instance      = 5151;
-       String database   = "sigespa";
-
-       String whereClause = "";
-
-
-        driver.setData(dbHost, instance, database, dbuser, dbpass, nomTabla, fields, whereClause);
-        FLayer lyr = LayerFactory.createArcSDELayer(nomTabla, driver, null);
-        m_Mapa.getLayers().addLayer(lyr);
-       */
    }
 
    protected void addLayer_mySQL()
@@ -297,30 +280,6 @@ public class PruebasGT2 implements ActionListener {
 
    }
 
-   protected void addLayerGT2_ArcSDE()
-   {
-	    /* remote = new HashMap();
-	    remote.put("dbtype","arcsde");
-	    remote.put("server","Alvaro"); //José Miguel
-	    remote.put("port", new Integer(5151));
-	    remote.put("instance", "sigespa");
-	    remote.put("user", "sde");
-	    remote.put("password", "sde");
-
-
-	    DataStore store;
-		try {
-			store = arcSdeFactory.createDataStore(remote);
-			loadLayer(store, "SDE.VIAS");
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} */
-
-
-   }
-
    public void setMapContext(MapContext map)
    {
    		m_Mapa = map;
@@ -333,18 +292,12 @@ public class PruebasGT2 implements ActionListener {
 		if (e.getActionCommand() == "ADD_GT2_MYSQL_PROPIO") {
 			addLayer_mySQL();
 		}
-        if (e.getActionCommand() == "ADD_GT2_ARCSDE_PROPIO") {
-            addLayer_ArcSDE_propio();
-        }
 
 		if (e.getActionCommand() == "ADD_GT2_POSTGIS") {
 			addLayerGT2_PostGIS();
 		}
 		if (e.getActionCommand() == "ADD_GT2_SHP") {
 		    addLayerGT2_Shp();
-		}
-		if (e.getActionCommand() == "ADD_GT2_ARCSDE") {
-		    addLayerGT2_ArcSDE();
 		}
 	}
 }

@@ -68,7 +68,6 @@
 		extGeoreferencing,
 		extTopology,
 		extOracleSpatial,
-		extSDE,
 		extAnnotations,
 		extExpressionField,
 		extWCS,

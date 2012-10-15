@@ -85,7 +85,6 @@
 	<project dir="extQuickInfo"/>
 	<project dir="extQuickPrint"/>
 	<project dir="extRasterTools-SE" />
-	<project dir="extSDE" />
 	<project dir="extSelectionTools" />
 	<project dir="extSymbology" />
 	<project dir="extTableExport"/>
