@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -42,7 +42,6 @@ package com.iver.cit.gvsig.fmap.layers;
 
 import java.awt.Image;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -63,6 +62,7 @@ import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
 import com.iver.cit.gvsig.exceptions.layers.StartEditionLayerException;
 import com.iver.cit.gvsig.fmap.MapContext;
+import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.ComposedLayer;
 import com.iver.cit.gvsig.fmap.operations.strategies.Strategy;
@@ -368,13 +368,13 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 		projection = proj;
 		this.updateDrawVersion();
 
-		// Comprobar que la proyección es la misma que la de FMap
-		// Si no lo es, es una capa que está reproyectada al vuelo
+		// Comprobar que la proyecciï¿½n es la misma que la de FMap
+		// Si no lo es, es una capa que estï¿½ reproyectada al vuelo
 		if ((proj != null) && (getMapContext() != null))
 			if (proj != getMapContext().getProjection()) {
 				ICoordTrans ct = proj.getCT(getMapContext().getProjection());
 				setCoordTrans(ct);
-				logger.debug("Cambio proyección: FMap con "
+				logger.debug("Cambio proyecciï¿½n: FMap con "
 						+ getMapContext().getProjection().getAbrev() + " y capa "
 						+ getName() + " con " + proj.getAbrev());
 			}

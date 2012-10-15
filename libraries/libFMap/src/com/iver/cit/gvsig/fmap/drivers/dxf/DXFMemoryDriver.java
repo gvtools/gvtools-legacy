@@ -3,7 +3,7 @@
  *
  * @author jmorell (jose.morell@gmail.com)
  */
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -25,7 +25,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -77,7 +77,6 @@ import org.cresques.px.gml.Polygon;
 import org.cresques.px.gml.Polygon3D;
 
 import com.hardcode.gdbms.driver.DriverUtilities;
-import com.hardcode.gdbms.driver.exceptions.FileNotFoundDriverException;
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -142,7 +141,7 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 	private DriverAttributes attr = new DriverAttributes();
 
 	/**
-	 * Habilita la utilización del lector del HEADER del DXF.
+	 * Habilita la utilizaciï¿½n del lector del HEADER del DXF.
 	 */
 	private DxfFile.VarSettings headerManager;
 	private AttrInTableLabelingStrategy labeling;
@@ -177,7 +176,7 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 				.getAcadVersion();
 		System.out.println("initialize(): acadVersion = " + acadVersion);
 		if (!featureMaker.isDxf3DFile() && !headerManager.isWritedDxf3D()) { // y no
-																				// están
+																				// estï¿½n
 																				// todos
 																				// a
 																				// 9999
@@ -544,7 +543,7 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 			} else if (fea.getGeometry() instanceof Polygon
 					&& !(fea.getGeometry() instanceof Polygon3D)) {
 				GeneralPathX genPathX = new GeneralPathX();
-				// 050112: Añado una posición más para el punto que cierra y
+				// 050112: Aï¿½ado una posiciï¿½n mï¿½s para el punto que cierra y
 				// creo el objeto firstPt.
 				Point2D firstPt = new Point2D.Double();
 				firstPt = fea.getGeometry().get(0);
@@ -552,8 +551,8 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 				for (int j = 0; j < fea.getGeometry().pointNr(); j++) {
 					pts[j] = fea.getGeometry().get(j);
 				}
-				// 050112: Añado el primer punto al final para cerrar los
-				// polígonos.
+				// 050112: Aï¿½ado el primer punto al final para cerrar los
+				// polï¿½gonos.
 				pts[fea.getGeometry().pointNr()] = firstPt;
 				genPathX.moveTo(pts[0].getX(), pts[0].getY());
 				for (int j = 1; j < pts.length; j++) {
@@ -591,7 +590,7 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 				addShape(nuevoShp, auxRow);
 			} else if (fea.getGeometry() instanceof Polygon3D) {
 				GeneralPathX genPathX = new GeneralPathX();
-				// 050112: Añado una posición más para el punto que cierra y
+				// 050112: Aï¿½ado una posiciï¿½n mï¿½s para el punto que cierra y
 				// creo el objeto firstPt.
 				Point2D firstPt = new Point3D();
 				Point2D p=((Polygon3D) fea.getGeometry())
@@ -609,8 +608,8 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 					}else
 						pts[j] = p;
 				}
-				// 050112: Añado el primer punto al final para cerrar los
-				// polígonos.
+				// 050112: Aï¿½ado el primer punto al final para cerrar los
+				// polï¿½gonos.
 				pts[fea.getGeometry().pointNr()] = firstPt;
 				genPathX.moveTo(pts[0].getX(), pts[0].getY());
 				for (int j = 1; j < pts.length; j++) {
@@ -670,7 +669,7 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 		ISymbol theSymbol = null;
 
 		try {
-			// TODO: Provisional hasta que cambiemos los símbolos.
+			// TODO: Provisional hasta que cambiemos los sï¿½mbolos.
 			/*
 			 * BufferedImage bi= new BufferedImage(5, 5,
 			 * BufferedImage.TYPE_INT_ARGB); Graphics2D big =
@@ -690,7 +689,7 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 					// theSymbol.setFill(fillProv);
 					// 050202, jmorell: Asigna los colores de Autocad a los
 					// bordes
-					// de los polígonos.
+					// de los polï¿½gonos.
 					theSymbol.setOutlineColor(AcadColor.getColor(clave
 							.getValue()));
 
@@ -712,7 +711,7 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 					theSymbol.setDescription(clave.toString());
 					// Asigna los colores de Autocad a los
 					// bordes
-					// de los polígonos.
+					// de los polï¿½gonos.
 					if (theSymbol instanceof IFillSymbol) {
 						((IFillSymbol) theSymbol).getOutline().setLineColor(color);
 
@@ -959,9 +958,9 @@ public class DXFMemoryDriver extends AbstractCadMemoryDriver implements
 	 * @return Text fixed
 	 */
 	private String fixUnicode(String s){
-		// Viene una cadena tal que así CA\U+00D1O1
+		// Viene una cadena tal que asï¿½ CA\U+00D1O1
 		// (una especie de formato Unicode de Autocad)
-		// y hay que devolver CAÑO1
+		// y hay que devolver CAï¿½O1
 
 		String s2 = "";
 		String patron = "(\\\\[U][+])([0-9A-Fa-f]{4})";

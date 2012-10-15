@@ -30,10 +30,6 @@ import org.cresques.cts.IProjection;
 
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
-import com.iver.cit.gvsig.fmap.core.FPoint2D;
-import com.iver.cit.gvsig.fmap.core.GeneralPathX;
-import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.core.ShapeFactory;
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.tools.geo.Geo;
@@ -46,9 +42,9 @@ import com.vividsolutions.jts.geom.CoordinateList;
  * get multipolygon or multiline parts, etc).
  *
  * @author Vicente Caballero Navarro (vicente.caballero@iver.es)
- * @author Jaume Domínguez Faus (jaume.dominguez@iver.es)
- * @author César Martínez Izquierdo (cesar.martinez@iver.es)
- * @author Pablo Piqueras Bartolomé (pablo.piqueras@iver.es)
+ * @author Jaume Domï¿½nguez Faus (jaume.dominguez@iver.es)
+ * @author Cï¿½sar Martï¿½nez Izquierdo (cesar.martinez@iver.es)
+ * @author Pablo Piqueras Bartolomï¿½ (pablo.piqueras@iver.es)
  */
 public class GeometryUtilities {
 	/**
@@ -249,9 +245,9 @@ public class GeometryUtilities {
 	 * Calculates the area for a polygon whose coordinates are defined
 	 * in a projected CRS.
 	 *
-	 * @param aux último punto.
+	 * @param aux ï¿½ltimo punto.
 	 *
-	 * @return Área.
+	 * @return ï¿½rea.
 	 */
 	private static double getCoordsArea(ViewPort vp, Double[] xs,Double[] ys, Point2D point) {
 		Point2D aux=point;

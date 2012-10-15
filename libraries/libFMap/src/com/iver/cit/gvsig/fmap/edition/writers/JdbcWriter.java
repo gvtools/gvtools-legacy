@@ -7,8 +7,6 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
-import sun.jdbc.odbc.JdbcOdbcConnection;
-
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.exceptions.visitors.ProcessWriterVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.StartWriterVisitorException;
@@ -16,7 +14,6 @@ import com.iver.cit.gvsig.exceptions.visitors.StopWriterVisitorException;
 import com.iver.cit.gvsig.fmap.core.IRow;
 import com.iver.cit.gvsig.fmap.drivers.XTypes;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
 public class JdbcWriter extends AbstractWriter {
 	
@@ -37,18 +34,14 @@ public class JdbcWriter extends AbstractWriter {
 		this.conn = conn;
 		this.rs = rs;
 		metaData = rs.getMetaData();
-		System.out.println("INICIO CONEXIÓN DE ESCRITURA");
+		System.out.println("INICIO CONEXIï¿½N DE ESCRITURA");
 	}
 	public void preProcess() throws StartWriterVisitorException {
 			numRecord = 0;
 			try {
 				conn.setAutoCommit(false);
 			} catch (SQLException e) {
-				if (conn instanceof JdbcOdbcConnection) {
-					logger.warn("Driver does not allow autocommit method: " + conn.getClass().getName());
-				} else {
-					throw new StartWriterVisitorException(getName(),e);
-				}
+				throw new StartWriterVisitorException(getName(),e);
 			}
 			/* Statement st = conn.createStatement();
 
@@ -174,7 +167,7 @@ public class JdbcWriter extends AbstractWriter {
 	{
 		rs.close();
 		// conn.close();
-		System.out.println("CIERRO CONEXIÓN DE ESCRITURA");
+		System.out.println("CIERRO CONEXIï¿½N DE ESCRITURA");
 	}
 	public boolean canAlterTable() {
 		// TODO Auto-generated method stub

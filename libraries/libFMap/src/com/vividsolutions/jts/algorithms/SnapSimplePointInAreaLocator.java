@@ -1,7 +1,7 @@
 /*
  * Created on 06-oct-2006
  *
- * gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+ * gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -23,7 +23,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -63,6 +63,7 @@ package com.vividsolutions.jts.algorithms;
 
 import java.util.Iterator;
 
+import com.vividsolutions.jts.algorithm.locate.SimplePointInAreaLocator;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
@@ -70,7 +71,6 @@ import com.vividsolutions.jts.geom.GeometryCollectionIterator;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Location;
 import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.algorithm.locate.SimplePointInAreaLocator;
 
 public class SnapSimplePointInAreaLocator extends SimplePointInAreaLocator {
 	  public SnapSimplePointInAreaLocator(Geometry geom) {

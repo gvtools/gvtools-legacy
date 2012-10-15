@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -108,7 +108,6 @@ import com.iver.cit.gvsig.fmap.Messages;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
-import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLegend implements IVectorialIntervalLegend{
 	protected int shapeType;
@@ -294,11 +293,11 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 
 
 	/**
-	 * EQUAL INTERVAL Devuelve un Array con el número de intervalos que se
-	 * quieren crear. Los intervalos se crean con un tamaño igual entre ellos.
-	 * @param numIntervals número de intervalos
-	 * @param minValue Valor mínimo.
-	 * @param maxValue Valor máximo.
+	 * EQUAL INTERVAL Devuelve un Array con el nï¿½mero de intervalos que se
+	 * quieren crear. Los intervalos se crean con un tamaï¿½o igual entre ellos.
+	 * @param numIntervals nï¿½mero de intervalos
+	 * @param minValue Valor mï¿½nimo.
+	 * @param maxValue Valor mï¿½ximo.
 	 * @param fieldName Nombre del campo
 	 *
 	 * @return Array con los intervalos.
@@ -326,12 +325,12 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 	}
 
 	/**
-	 * NATURAL INTERVAL Devuelve un Array con el número de intervalos que se
+	 * NATURAL INTERVAL Devuelve un Array con el nï¿½mero de intervalos que se
 	 * quieren crear. Los intervalos se distribuyen de forma natural.
 	 *
-	 * @param numIntervals número de intervalos
-	 * @param minValue Valor mínimo.
-	 * @param maxValue Valor máximo.
+	 * @param numIntervals nï¿½mero de intervalos
+	 * @param minValue Valor mï¿½nimo.
+	 * @param maxValue Valor mï¿½ximo.
 	 * @param fieldName Nombre del campo
 	 *
 	 * @return Array con los intervalos.
@@ -377,13 +376,13 @@ public abstract class AbstractIntervalLegend extends AbstractClassifiedVectorLeg
 	}
 
 	/**
-	 * QUANTILE INTERVAL Devuelve un Array con el número de intervalos que se
+	 * QUANTILE INTERVAL Devuelve un Array con el nï¿½mero de intervalos que se
 	 * quieren crear. Los intervalos se distribuyen de forma quantile.
 	 * @param recordSet
 	 *
-	 * @param numIntervals número de intervalos
-	 * @param minValue Valor mínimo.
-	 * @param maxValue Valor máximo.
+	 * @param numIntervals nï¿½mero de intervalos
+	 * @param minValue Valor mï¿½nimo.
+	 * @param maxValue Valor mï¿½ximo.
 	 * @param fieldName Nombre del campo
 	 *
 	 * @return Array con los intervalos.

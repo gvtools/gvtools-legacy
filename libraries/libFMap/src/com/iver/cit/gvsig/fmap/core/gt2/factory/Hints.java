@@ -23,8 +23,14 @@ import java.awt.RenderingHints;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.media.jai.JAI;
 
 import org.geotools.resources.Utilities;
+import org.opengis.referencing.crs.CRSAuthorityFactory;
+import org.opengis.referencing.cs.CSAuthorityFactory;
+import org.opengis.referencing.cs.CSFactory;
+import org.opengis.referencing.datum.DatumAuthorityFactory;
+import org.opengis.referencing.datum.DatumFactory;
 
 
 /**

@@ -4,7 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -26,7 +26,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -68,7 +68,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.cresques.cts.ICoordTrans;
-
 import org.gvsig.geoutils.sun.awt.geom.Crossings;
 import org.gvsig.geoutils.sun.awt.geom.Curve;
 
@@ -836,15 +835,15 @@ public class GeneralPathX implements Shape, Cloneable, Serializable {
 
 	/**
 	 * Use this function to ensure you get real polygons or holes
-	 * En JTS, con bCCW = false obtienes un polígono exterior.
+	 * En JTS, con bCCW = false obtienes un polï¿½gono exterior.
 	 * Nota: Solo se le da la vuelta (si es que lo necesita) al
-	 * polígono exterior. El resto, por ahora, no se tocan.
-	 * Si se necesita tenerlos en cuenta, habría que mirar
-	 * si están dentro del otro, y entonces revisar que tiene
+	 * polï¿½gono exterior. El resto, por ahora, no se tocan.
+	 * Si se necesita tenerlos en cuenta, habrï¿½a que mirar
+	 * si estï¿½n dentro del otro, y entonces revisar que tiene
 	 * un CCW contrario al exterior.
 	 * @param bCCW true if you want the GeneralPath in CCW order
 	 * @return true si se le ha dado la vuelta. (true if flipped)
-	 * TODO: TERMINAR ESTO!! NO ESTÁ COMPLETO!! NO sirve para multipoligonos
+	 * TODO: TERMINAR ESTO!! NO ESTï¿½ COMPLETO!! NO sirve para multipoligonos
 	 */
 	public boolean ensureOrientation(boolean bCCW) {
         byte[] pointTypesAux = new byte[numTypes+1];

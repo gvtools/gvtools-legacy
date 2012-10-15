@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -54,6 +54,7 @@ import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.tools.BehaviorException;
 import com.iver.cit.gvsig.fmap.tools.Events.MeasureEvent;
 import com.iver.cit.gvsig.fmap.tools.Listeners.CircleListener;
+import com.iver.cit.gvsig.fmap.tools.Listeners.PolylineListener;
 import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
 
 
@@ -62,7 +63,7 @@ import com.iver.cit.gvsig.fmap.tools.Listeners.ToolListener;
  *  <code>MapControl</code> using a {@link PolylineListener PolylineListener}.</p>
  *
  * @author Laura
- * @author Pablo Piqueras Bartolomé
+ * @author Pablo Piqueras Bartolomï¿½
  */
 public class CircleBehavior extends Behavior {
 	/**

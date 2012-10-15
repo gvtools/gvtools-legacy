@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -50,8 +50,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
-import java.nio.channels.WritableByteChannel;
 import java.nio.channels.FileChannel.MapMode;
+import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.sql.Types;
 import java.text.DateFormat;
@@ -90,7 +90,7 @@ import com.iver.utiles.bigfile.BigByteBuffer2;
 
 
 /**
- * Implementación en memoria de ExpansionFile.
+ * Implementaciï¿½n en memoria de ExpansionFile.
  *
  * @author Vicente Caballero Navarro
  */
@@ -215,7 +215,7 @@ public class PruebaVicenteExpansionFile2 implements ExpansionFile {
 	}
 
 	/**
-	 * Devuelve la geometria a partir de un índice.
+	 * Devuelve la geometria a partir de un ï¿½ndice.
 	 *
 	 * @param index DOCUMENT ME!
 	 *
@@ -245,7 +245,7 @@ public class PruebaVicenteExpansionFile2 implements ExpansionFile {
 		///bb.position(bb.position()+4);
 		shapeType = bbRead.getInt();
 		System.err.println("type= "+shapeType);
-		//el shape tal con tema tal y númro tal es null
+		//el shape tal con tema tal y nï¿½mro tal es null
 		if (shapeType==SHP.NULL){
 			return null;
 		}
@@ -801,7 +801,7 @@ public class PruebaVicenteExpansionFile2 implements ExpansionFile {
 					return FConstant.SHAPE_TYPE_POLYGONZ;
 
 				case FShape.MULTIPOINT:
-					return FConstant.SHAPE_TYPE_MULTIPOINTZ; //TODO falta aclarar cosas aquí.
+					return FConstant.SHAPE_TYPE_MULTIPOINTZ; //TODO falta aclarar cosas aquï¿½.
 			}
 
 			}else{
@@ -819,7 +819,7 @@ public class PruebaVicenteExpansionFile2 implements ExpansionFile {
 						return FConstant.SHAPE_TYPE_POLYGON;
 
 					case FShape.MULTIPOINT:
-						return FConstant.SHAPE_TYPE_MULTIPOINT; //TODO falta aclarar cosas aquí.
+						return FConstant.SHAPE_TYPE_MULTIPOINT; //TODO falta aclarar cosas aquï¿½.
 				}
 			}
 				return FConstant.SHAPE_TYPE_NULL;

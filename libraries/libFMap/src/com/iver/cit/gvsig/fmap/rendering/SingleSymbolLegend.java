@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -43,8 +43,6 @@ package com.iver.cit.gvsig.fmap.rendering;
 import com.hardcode.gdbms.engine.data.DataSource;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IFeature;
-import com.iver.cit.gvsig.fmap.core.ISLDCompatible;
-import com.iver.cit.gvsig.fmap.core.SLDTags;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.IFillSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ILineSymbol;
@@ -63,7 +61,7 @@ import com.iver.utiles.XMLEntity;
  */
 public class SingleSymbolLegend extends AbstractLegend implements IVectorLegend {
 	private ISymbol defaultSymbol;
-    private int shapeType = FShape.POLYGON; // Por defecto, tipo polígono
+    private int shapeType = FShape.POLYGON; // Por defecto, tipo polï¿½gono
 	private ZSort zSort;
 
 	/**
@@ -75,7 +73,7 @@ public class SingleSymbolLegend extends AbstractLegend implements IVectorLegend 
 	/**
 	 * Convenience fast constructor.
 	 *
-	 * @param style Símbolo.
+	 * @param style Sï¿½mbolo.
 	 */
 	public SingleSymbolLegend(ISymbol style) {
 		defaultSymbol = style;

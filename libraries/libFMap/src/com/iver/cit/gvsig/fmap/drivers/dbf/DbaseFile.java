@@ -24,10 +24,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.prefs.Preferences;
 
-import javax.swing.JOptionPane;
-
-import org.apache.log4j.Logger;
-
 import com.hardcode.gdbms.driver.exceptions.FileNotFoundDriverException;
 import com.iver.utiles.bigfile.BigByteBuffer2;
 

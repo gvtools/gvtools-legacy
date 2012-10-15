@@ -1,20 +1,13 @@
 package com.iver.cit.gvsig.fmap.layers.order;
 
-import java.util.Map;
-
 import org.apache.log4j.Logger;
-
-import sun.print.PSPrinterJob.PluginPrinter;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.Messages;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
-import com.iver.cit.gvsig.fmap.layers.FLyrRasterMenuEntry;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
-import com.iver.utiles.XMLEntity;
-import com.iver.utiles.extensionPoints.ExtensionPoint;
 
 public class RasterPolLinePointOrderManager extends DefaultOrderManager {
 

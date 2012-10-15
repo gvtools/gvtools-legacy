@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -55,7 +55,6 @@ import javax.print.attribute.standard.PrintQuality;
 
 import org.apache.log4j.Logger;
 import org.cresques.cts.ICoordTrans;
-import org.gvsig.exceptions.BaseException;
 import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -88,7 +87,6 @@ import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 import com.iver.cit.gvsig.fmap.drivers.WithDefaultLegend;
-import com.iver.cit.gvsig.fmap.drivers.featureiterators.DefaultFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.featureiterators.JoinFeatureIterator;
 import com.iver.cit.gvsig.fmap.edition.AfterFieldEditEvent;
 import com.iver.cit.gvsig.fmap.edition.AfterRowEditEvent;
@@ -124,7 +122,6 @@ import com.iver.cit.gvsig.fmap.rendering.SymbolLegendEvent;
 import com.iver.cit.gvsig.fmap.rendering.ZSort;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.AttrInTableLabelingStrategy;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
-import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelClass;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelingFactory;
 import com.iver.cit.gvsig.fmap.spatialindex.IPersistentSpatialIndex;
 import com.iver.cit.gvsig.fmap.spatialindex.ISpatialIndex;
@@ -140,9 +137,9 @@ import com.iver.utiles.swing.threads.Cancellable;
 import com.iver.utiles.swing.threads.CancellableMonitorable;
 
 /**
- * Capa básica Vectorial.
+ * Capa bï¿½sica Vectorial.
  *
- * @author Fernando González Cortés
+ * @author Fernando Gonzï¿½lez Cortï¿½s
  */
 
 // TODO Cuando no sea para pruebas debe no ser public
@@ -151,11 +148,11 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
         AlphanumericData, InfoByPoint, SelectionListener, IEditionListener, LegendContentsChangedListener {
     private static Logger logger = Logger.getLogger(FLyrVect.class.getName());
     /**
-     * @deprecated Don´t use Strategy, you should be use iterators.
+     * @deprecated Donï¿½t use Strategy, you should be use iterators.
      */
 //    public static boolean forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD = true;
     /**
-     * @deprecated Don´t use Strategy, you should be use iterators.
+     * @deprecated Donï¿½t use Strategy, you should be use iterators.
      */
 //    private boolean useStrategy=false;
 
@@ -176,7 +173,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     private XMLEntity loadSelection = null;
     private IVectorLegend loadLegend = null;
 
-    //Lo añado. Características de HyperEnlace (LINK)
+    //Lo aï¿½ado. Caracterï¿½sticas de HyperEnlace (LINK)
     private FLyrVectLinkProperties linkProperties=new FLyrVectLinkProperties();
     //private ArrayList linkProperties=null;
     private boolean waitTodraw=false;
@@ -207,7 +204,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
      */
     private void loadSpatialIndex() {
         //FIXME: Al abrir el indice en fichero...
-        //¿Cómo lo liberamos? un metodo Layer.shutdown()
+        //ï¿½Cï¿½mo lo liberamos? un metodo Layer.shutdown()
 
 
         ReadableVectorial source = getSource();
@@ -265,9 +262,9 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
      */
     public boolean isExternallySpatiallyIndexed() {
         /*
-         * FIXME (AZABALA): Independizar del tipo de fichero de índice
+         * FIXME (AZABALA): Independizar del tipo de fichero de ï¿½ndice
           * con el que se trabaje (ahora mismo considera la extension .qix,
-         * pero esto dependerá del tipo de índice)
+         * pero esto dependerï¿½ del tipo de ï¿½ndice)
          * */
         ReadableVectorial source = getSource();
         if (!(source instanceof VectorialFileAdapter)) {
@@ -310,7 +307,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
             rAux = (Rectangle2D)source.getFullExtent().clone();
             source.stop();
 
-            // Si existe reproyección, reproyectar el extent
+            // Si existe reproyecciï¿½n, reproyectar el extent
             if (!(this.getProjection()!=null &&
             		this.getMapContext().getProjection()!=null &&
             		this.getProjection().getAbrev().equals(this.getMapContext().getProjection().getAbrev()))){
@@ -379,7 +376,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     						// check fields exists
     						if (sds.getFieldIndexByName(aux[i]) == -1) {
     							logger.warn("Error en leyenda de " + getName() +
-    									". El campo " + aux[i] + " no está.");
+    									". El campo " + aux[i] + " no estï¿½.");
     							legend = LegendFactory.createSingleSymbolLegend(getShapeType());
     							break;
     						}
@@ -460,7 +457,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 
     				if (sym == null) continue;
 
-    				//Código para poder acceder a los índices para ver si está seleccionado un Feature
+    				//Cï¿½digo para poder acceder a los ï¿½ndices para ver si estï¿½ seleccionado un Feature
     				ReadableVectorial rv=getSource();
     				int selectionIndex=-1;
     				if (rv instanceof ISpatialDB){
@@ -567,7 +564,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     							}
 
     							// -- visual FX stuff
-    							// Cuando el offset!=0 se está dibujando sobre el Layout y por tanto no tiene que ejecutar el siguiente código.
+    							// Cuando el offset!=0 se estï¿½ dibujando sobre el Layout y por tanto no tiene que ejecutar el siguiente cï¿½digo.
     							if (offset.getX()==0 && offset.getY()==0)
     								if ((System.currentTimeMillis() - time) > screenRefreshDelay) {
     									virtualBim = new BufferedImage(image.getWidth(),image.getHeight(),BufferedImage.TYPE_INT_ARGB);
@@ -666,7 +663,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 
     /**
      * Se llama antes de empezar a pintar.
-     * Es útil para preparar la cache a emplear, las leyendas, etc.
+     * Es ï¿½til para preparar la cache a emplear, las leyendas, etc.
      * @param image
      * @param g
      * @param viewPort
@@ -786,7 +783,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     						bDrawCartographicSupport = (csSym.getUnit() != -1);
     					}
 
-    					System.err.println("passada "+mapPass+" pinte símboll "+sym.getDescription());
+    					System.err.println("passada "+mapPass+" pinte sï¿½mboll "+sym.getDescription());
 
     					if (!bDrawCartographicSupport) {
     						geom.drawInts(g, viewPort, sym, null);
@@ -919,7 +916,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     						csSym = (CartographicSupport) sym;
     					}
 
-//    					System.err.println("passada "+mapPass+" pinte símboll "+sym.getDescription());
+//    					System.err.println("passada "+mapPass+" pinte sï¿½mboll "+sym.getDescription());
 
     					if (csSym == null) {
     						geom.drawInts(g, viewPort, sym, null);
@@ -974,7 +971,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     * to monitor progress of spatial index creation, and cancel the process
     */
     public void createSpatialIndex(CancellableMonitorable cancelMonitor){
-         // FJP: ESTO HABRÁ QUE CAMBIARLO. PARA LAS CAPAS SECUENCIALES, TENDREMOS
+         // FJP: ESTO HABRï¿½ QUE CAMBIARLO. PARA LAS CAPAS SECUENCIALES, TENDREMOS
         // QUE ACCEDER CON UN WHILE NEXT. (O mejorar lo de los FeatureVisitor
         // para que acepten recorrer sin geometria, solo con rectangulos.
 
@@ -1102,11 +1099,11 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 
         /*
          * Parche para discriminar las leyendas clasificadas cuyos campos de
-         * clasificación no están en la fuente de la capa.
+         * clasificaciï¿½n no estï¿½n en la fuente de la capa.
          *
-         * Esto puede ocurrir porque en versiones anteriores se admitían
+         * Esto puede ocurrir porque en versiones anteriores se admitï¿½an
          * leyendas clasificadas en capas que se han unido a una tabla
-         * por campos que pertenecían a la tabla y no sólo a la capa.
+         * por campos que pertenecï¿½an a la tabla y no sï¿½lo a la capa.
          *
          */
 //		if(r instanceof IClassifiedVectorLegend){
@@ -1193,7 +1190,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
             e1.printStackTrace();
             throw new XMLException(e1);
         }
-        // Repongo el mismo ReadableVectorial más abajo para cuando se guarda el proyecto.
+        // Repongo el mismo ReadableVectorial mï¿½s abajo para cuando se guarda el proyecto.
         ReadableVectorial rv=getSource();
         xml.putProperty("type", "vectorial");
         if (source instanceof VectorialEditableAdapter) {
@@ -1234,7 +1231,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
                                                     // metido la leyenda y el
                                                     // selection support
         } else if (source instanceof VectorialAdapter) {
-            // Se supone que hemos hecho algo genérico.
+            // Se supone que hemos hecho algo genï¿½rico.
             xml.putProperty("type", "vectorial");
 
             VectorialDriver driver = source.getDriver();
@@ -1351,7 +1348,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     			this.setAvailable(false);
     			throw new XMLException(e1);
     		}
-    		// Si tiene una unión, lo marcamos para que no se cree la leyenda hasta
+    		// Si tiene una uniï¿½n, lo marcamos para que no se cree la leyenda hasta
     		// el final
     		// de la lectura del proyecto
     		if (xml.contains("hasJoin")) {
@@ -1427,7 +1424,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     								}
     							}
     						}
-    						labeling.setFixedSize(size/1.4);//Factor de corrección que se aplicaba antes en el etiquetado
+    						labeling.setFixedSize(size/1.4);//Factor de correcciï¿½n que se aplicaba antes en el etiquetado
     					}
 						labeling.setUsesFixedSize(useFixedSize);
 						labeling.setUnit(unit);
@@ -1471,7 +1468,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     								}
     							}
     						}
-    						labeling.setFixedSize(size/1.4);//Factor de corrección que se aplicaba antes en el etiquetado
+    						labeling.setFixedSize(size/1.4);//Factor de correcciï¿½n que se aplicaba antes en el etiquetado
     					}
 						labeling.setUsesFixedSize(useFixedSize);
 						labeling.setUnit(unit);
@@ -1553,7 +1550,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
                 this.setAvailable(false);
                 throw new XMLException(e1);
             }
-            // Si tiene una unión, lo marcamos para que no se cree la leyenda hasta
+            // Si tiene una uniï¿½n, lo marcamos para que no se cree la leyenda hasta
             // el final
             // de la lectura del proyecto
             if (xml.contains("hasJoin")) {
@@ -1576,7 +1573,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 
 
     /**
-     * Sobreimplementación del método toString para que las bases de datos
+     * Sobreimplementaciï¿½n del mï¿½todo toString para que las bases de datos
      * identifiquen la capa.
      *
      * @return DOCUMENT ME!
@@ -1584,7 +1581,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     public String toString() {
         /*
          * Se usa internamente para que la parte de datos identifique de forma
-         * unívoca las tablas
+         * unï¿½voca las tablas
          */
         String ret = super.toString();
 
@@ -1611,7 +1608,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
  * Esto es muy dudoso, y puede cambiar.
  * Estoy diciendo que las que no son fichero o no son
  * BoundedShapes estan indexadas. Esto es mentira, pero
- * así quien pregunte no querrá generar el indice.
+ * asï¿½ quien pregunte no querrï¿½ generar el indice.
  * Esta por ver si interesa generar el indice para capas
  * HSQLDB, WFS, etc.
  */
@@ -1670,10 +1667,10 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
         try {
             if (b) {
                 VectorialEditableAdapter vea = null;
-                // TODO: Qué pasa si hay más tipos de adapters?
-                // FJP: Se podría pasar como argumento el
+                // TODO: Quï¿½ pasa si hay mï¿½s tipos de adapters?
+                // FJP: Se podrï¿½a pasar como argumento el
                 // VectorialEditableAdapter
-                // que se quiera usar para evitar meter código aquí de este
+                // que se quiera usar para evitar meter cï¿½digo aquï¿½ de este
                 // estilo.
                 if (getSource() instanceof VectorialDBAdapter) {
                     vea = new VectorialEditableDBAdapter();
@@ -1744,8 +1741,8 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     }
 
     /**
-     * Para cuando haces una unión, sustituyes el recorset por el nuevo. De esta
-     * forma, podrás poner leyendas basadas en el nuevo recordset
+     * Para cuando haces una uniï¿½n, sustituyes el recorset por el nuevo. De esta
+     * forma, podrï¿½s poner leyendas basadas en el nuevo recordset
      *
      * @param newSds
      */
@@ -1983,7 +1980,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     }
 
 
-    //Métodos para el uso de HyperLinks en capas FLyerVect
+    //Mï¿½todos para el uso de HyperLinks en capas FLyerVect
 
     /**
      * Return true, because a Vectorial Layer supports HyperLink
@@ -2018,13 +2015,13 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
     	return linkProperties.getLink(this,point,tolerance);
     }
 //    /**
-//     * @deprecated Don´t use Strategy, you should be use iterators.
+//     * @deprecated Donï¿½t use Strategy, you should be use iterators.
 //     */
 //	public boolean isUseStrategy() {
 //		return useStrategy;
 //	}
 //	/**
-//     * @deprecated Don´t use Strategy, you should be use iterators.
+//     * @deprecated Donï¿½t use Strategy, you should be use iterators.
 //     */
 //	public void setUseStrategy(boolean useStrategy) {
 //		this.useStrategy = useStrategy;

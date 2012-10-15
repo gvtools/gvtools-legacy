@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -69,9 +69,7 @@ import org.apache.batik.ext.awt.geom.PathLength;
 
 import com.hardcode.gdbms.engine.spatial.fmap.FShapeGeneralPathX;
 import com.iver.cit.gvsig.fmap.Messages;
-import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.v02.FConstant;
-import com.iver.cit.gvsig.fmap.crs.CRSFactory;
 import com.vividsolutions.jts.algorithm.Angle;
 /**
  * <p>Class that represents baseline of a string and allows the baseline to

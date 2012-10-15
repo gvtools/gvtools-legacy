@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
 import com.hardcode.gdbms.engine.values.Value;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 /**
  * <p>Allows to access a field from a selection of rows in a DataSource,
  * using an Iterator interface (instead of the painful BitSet interface).</p>

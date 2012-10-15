@@ -3,7 +3,6 @@ package com.iver.cit.gvsig.fmap.rendering.styling.labeling;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -12,15 +11,12 @@ import java.util.logging.Logger;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.PrintQuality;
 
-import org.cresques.cts.ICoordTrans;
-
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.values.NullValue;
 import com.hardcode.gdbms.engine.values.NumericValue;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
-import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.CartographicSupport;
 import com.iver.cit.gvsig.fmap.core.CartographicSupportToolkit;
@@ -29,7 +25,6 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
 import com.iver.cit.gvsig.fmap.core.symbols.SimpleTextSymbol;
-import com.iver.cit.gvsig.fmap.core.v02.FConstant;
 import com.iver.cit.gvsig.fmap.core.v02.FLabel;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -129,7 +124,7 @@ public class AttrInTableLabelingStrategy implements ILabelingStrategy, Cartograp
 
 
 				if ((idTextField == -1) || (idTextField >= recordSet.getFieldCount())) {
-					System.err.println("Ha habido un error. Se ha perdido el campo de etiquetado. Probablemente por quitar un join o edición externa.");
+					System.err.println("Ha habido un error. Se ha perdido el campo de etiquetado. Probablemente por quitar un join o ediciï¿½n externa.");
 					return;
 				}
 
