@@ -301,9 +301,7 @@ public class FGraphicUtilities {
 			        g2.setPaint(theSymbol.getFill());
 
 			    if (theSymbol.getColor() != null)
-				    if (theSymbol.getStyle() != FConstant.SYMBOL_STYLE_DGNSPECIAL) {
 				        g2.fill(shp);
-				}
 
 				if (theSymbol.isOutlined()) {
 					g2.setColor(theSymbol.getOutlineColor());
@@ -768,15 +766,6 @@ public class FGraphicUtilities {
 				break;
 
 			case FConstant.SYMBOL_STYLE_MARKER_CROSS: // cruz
-			case FConstant.SYMBOL_STYLE_DGNSPECIAL: // Cruz
-
-				GeneralPathX genPathCruz = new GeneralPathX();
-				genPathCruz.moveTo(x, y - radio_simbolo);
-				genPathCruz.lineTo(x, y + radio_simbolo);
-				genPathCruz.moveTo(x - radio_simbolo, y);
-				genPathCruz.lineTo(x + radio_simbolo, y);
-				g2.draw(genPathCruz);
-
 				break;
 
 			case 34: // TrueType marker

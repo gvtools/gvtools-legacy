@@ -121,7 +121,6 @@ public class FeatureIteratorTest extends TestCase {
 	private static File baseDriversPath;
 
 	public static String SHP_DRIVER_NAME = "gvSIG shp driver";
-	public  static String DXF_DRIVER_NAME = "gvSIG DXF Memory Driver";
 
 	//TODO MOVER TODO LO ESTATICO A UNA CLASE AUXILIAR QUE NO SEA JUNIT
 	static IProjection PROJECTION_DEFAULT =
@@ -283,7 +282,7 @@ public class FeatureIteratorTest extends TestCase {
 
 
 
-	//pruebas de iteracion para shp (vectorialfileadapter) y dxf (vectorialadapter)
+	//pruebas de iteracion para shp (vectorialfileadapter)
 	public void test1() {
 		try {
 			//pruebas de reproyeccion y seleccion de numero de campos
@@ -381,21 +380,8 @@ public class FeatureIteratorTest extends TestCase {
 			assertTrue(numFeatures > numFeatures2);
 			iterator.closeIterator();
 
-			//pruebas con el driver dxf en vez del shp
-			FLyrVect lyr3 = (FLyrVect) newLayer("es1120003_2_02.dxf", DXF_DRIVER_NAME);
-			lyr3.setAvailable(true);
-			iterator = lyr3.getSource().getFeatureIterator("select * from "+lyr3.getRecordset().getName()+" where ID > 17;", null);
-			numFeatures2 = 0;
-			while(iterator.hasNext()){
-				feature = iterator.next();
-				numFeatures2++;
-			}
-			iterator.closeIterator();
-			assertTrue(numFeatures2 > 0);
-
 			//queda por probar los iteradores contra base de datos
 			//en base a criterios alfanumericos y espaciales
-
 		} catch (LoadLayerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

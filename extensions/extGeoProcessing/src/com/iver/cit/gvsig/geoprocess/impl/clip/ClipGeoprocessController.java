@@ -64,7 +64,7 @@
 * first version in cvs
 *
 * Revision 1.4  2006/06/12 19:15:38  azabala
-* cambios para poder trabajar en geoprocessing con capas MULTI (dxf, jdbc, etc)
+* cambios para poder trabajar en geoprocessing con capas MULTI (jdbc, etc)
 *
 * Revision 1.3  2006/06/02 18:21:28  azabala
 * *** empty log message ***
@@ -127,7 +127,7 @@ public class ClipGeoprocessController extends AbstractGeoprocessController {
 		 * Esta parte hay que mejorarla, pues está previsto que el
 		 * resultado de los geoprocesos se pueda guardar en distintos
 		 * formatos:
-		 * shp, dxf, dgn, JDBC, etc
+		 * shp, JDBC, etc
 		 *
 		 * Por este motivo, lo mas normal es que el usuario eliga
 		 * un driver de escritura, y el clipPanel devuelva una instancia

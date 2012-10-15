@@ -30,11 +30,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig</groupId>
-			<artifactId>libDXF</artifactId>
-			<version>1.9-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig</groupId>
 			<artifactId>libDriverManager</artifactId>
 			<version>1.9-SNAPSHOT</version>
 		</dependency>
@@ -214,36 +209,6 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>dgn</id>
-								<phase>install</phase>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-								<configuration>
-									<classifier>dgn</classifier>
-									<includes>
-										<include>**/drivers/dgn/**</include>
-									</includes>
-									<outputDirectory>${driver-path}/dgn/
-									</outputDirectory>
-								</configuration>
-							</execution>
-							<execution>
-								<id>dxf</id>
-								<phase>install</phase>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-								<configuration>
-									<classifier>dxf</classifier>
-									<includes>
-										<include>**/drivers/dxf/**</include>
-									</includes>
-									<outputDirectory>${driver-path}/dxf/
-									</outputDirectory>
-								</configuration>
-							</execution>
-							<execution>
 								<id>wfs</id>
 								<phase>install</phase>
 								<goals>
@@ -330,21 +295,6 @@
 										<include>**/fmap/edition/writers/shp/**</include>
 									</includes>
 									<outputDirectory>${driver-path}/shp/
-									</outputDirectory>
-								</configuration>
-							</execution>
-							<execution>
-								<id>dxfwriter</id>
-								<phase>install</phase>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-								<configuration>
-									<classifier>dxfwriter</classifier>
-									<includes>
-										<include>**/edition/writers/dxf/**</include>
-									</includes>
-									<outputDirectory>${driver-path}/dxf/
 									</outputDirectory>
 								</configuration>
 							</execution>

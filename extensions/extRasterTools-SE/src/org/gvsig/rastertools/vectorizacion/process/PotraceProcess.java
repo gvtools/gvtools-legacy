@@ -23,7 +23,6 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.sql.Types;
 
-import org.cresques.cts.ProjectionPool;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.raster.RasterProcess;
 import org.gvsig.raster.dataset.io.RasterDriverException;
@@ -42,15 +41,12 @@ import com.iver.cit.gvsig.fmap.core.FPolyline2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.drivers.DXFLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.LayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.edition.DefaultRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
-import com.iver.cit.gvsig.fmap.edition.writers.dxf.DxfFieldsMapping;
-import com.iver.cit.gvsig.fmap.edition.writers.dxf.DxfWriter;
 import com.iver.cit.gvsig.fmap.edition.writers.shp.ShpWriter;
 /**
  * Este proceso vectoriza la capa de entrada que debe estar ya preprocesada.
@@ -146,16 +142,6 @@ public class PotraceProcess extends RasterProcess {
 		sFields[1] = fileName + "";
 
 		LayerDefinition tableDef = null;
-		if (fileName.endsWith(".dxf")) {
-			writer = new DxfWriter();
-			((DxfWriter) writer).setFile(new File(fileName));
-			ProjectionPool pool = new ProjectionPool();
-			((DxfWriter) writer).setProjection(pool.get("EPSG:23030"));
-			tableDef = new DXFLayerDefinition();
-
-			DxfFieldsMapping fieldsMapping = new DxfFieldsMapping();
-			((DxfWriter) writer).setFieldMapping(fieldsMapping);
-		}
 		if (fileName.endsWith(".shp")) {
 			writer = new ShpWriter();
 			((ShpWriter) writer).setFile(new File(fileName));

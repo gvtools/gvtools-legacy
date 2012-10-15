@@ -41,7 +41,6 @@
 		extDockingSkin,
 		libProjection,
 		libRaster,
-		libDXF,
 		libDriverManager,
 		libRemoteServices,
 		libGDBMS,
@@ -54,8 +53,6 @@
 		libJCRS,
 		extJCRS,
 		libTopology,
-		libDwg,
-		extDwg,
 		libCacheService,
 		extSymbology,
 		extRasterTools-SE,
@@ -99,7 +96,6 @@
 		extLayerLoadingOrder,
 		extTableImport,
 		extTableExport,
-		org.gvsig.installer.app.extension,
 		binaries
 	"/>
 

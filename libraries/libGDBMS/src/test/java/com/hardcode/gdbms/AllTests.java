@@ -8,7 +8,6 @@ import com.hardcode.gdbms.engine.data.db.DataBaseTests;
 import com.hardcode.gdbms.engine.data.edition.EditionTests;
 import com.hardcode.gdbms.engine.data.edition.PKDataStructureTest;
 import com.hardcode.gdbms.engine.data.file.FilePKAccess;
-import com.hardcode.gdbms.engine.data.spatial.DrawingTests;
 import com.hardcode.gdbms.engine.data.spatial.PostGISTest;
 import com.hardcode.gdbms.engine.data.spatial.SHPTest;
 import com.hardcode.gdbms.engine.data.spatial.ViewportTests;
@@ -44,7 +43,6 @@ public class AllTests {
 		 */
 		suite.addTestSuite(ComplexValueTest.class);
 		suite.addTestSuite(DataSourceTestCase.class);
-		suite.addTestSuite(DrawingTests.class);		
 		suite.addTestSuite(PostGISTest.class);
 		suite.addTestSuite(SHPTest.class);
 		suite.addTestSuite(ViewportTests.class);

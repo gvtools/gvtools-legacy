@@ -156,44 +156,7 @@ public class StartEditing extends Extension {
 //				return;
 			}
 		}
-
-		/*
-		 * PluginServices.getMDIManager().setWaitCursor(); try { if
-		 * (((FLyrVect) capa).getSource().getDriver().getClass() ==
-		 * DXFCadDriver.class) { if (JOptionPane.showConfirmDialog(
-		 * (Component) PluginServices.getMainFrame(), "Todas las geometrías
-		 * del formato DXF no se pueden editar, de momento podemos editar:
-		 * Line, Point, Polyline, Arc, Circle y Ellipse. \n El resto de
-		 * geometrías se perderán con la edición. \n ¿Desea continuar?") ==
-		 * JOptionPane.YES_OPTION) { capa.startEdition();
-		 * vista.getMapControl().setCadTool("selection"); } else { } } else {
-		 * capa.startEdition();
-		 * vista.getMapControl().setCadTool("selection"); } } catch
-		 * (EditionException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 * PluginServices.getMDIManager().restoreCursor();
-		 */
-		// vista.getMapControl().drawMap(false);
 	}
-
-//	 private void registerKeyStrokes() {
-//		 JComponent theComponent = vista.getConsolePanel().getTxt();
-//
-//		 // The actions
-//		 Action F3Action = new AbstractAction("REFENT") {
-//			public void actionPerformed(ActionEvent evt) {
-//				System.err.println("SOY F3");
-//			}
-//		};
-//
-//		 InputMap inputMap = theComponent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-//		 inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), F3Action.getValue(Action.NAME));
-//
-//		 ActionMap actionMap = theComponent.getActionMap();
-//		 // actionMap.put("REFENT", new MyAction());
-//		 actionMap.put(F3Action.getValue(Action.NAME), F3Action);
-//
-//	}
 
 	public static void startCommandsApplicable(View vista,FLyrVect lv) {
 		if (vista==null)

@@ -59,20 +59,6 @@ public class LoadVectorLayer extends AbstractActionManager implements Serializab
 					newLayer = LayerFactory.createLayer(fileName, "gvSIG shp driver",
 							new File(fileName), view.getProjection());					
 				}
-				else if (fileName.toLowerCase().endsWith(".dgn")) {
-					newLayer = LayerFactory.createLayer(fileName, "gvSIG DGN Memory Driver",
-							new File(fileName), view.getProjection());	
-				}
-				else if (fileName.toLowerCase().endsWith(".dwg")) {
-					newLayer = LayerFactory.createLayer(fileName, "gvSIG DWG Memory Driver",
-							new File(fileName), view.getProjection());	
-					
-				}
-				else if (fileName.toLowerCase().endsWith(".dxf")) {
-					newLayer = LayerFactory.createLayer(fileName, "gvSIG DXF Memory Driver",
-							new File(fileName), view.getProjection());	
-
-				}
 				else if (fileName.toLowerCase().endsWith(".gml")) {
 					newLayer = LayerFactory.createLayer(fileName, "gvSIG GML Memory Driver",
 							new File(fileName), view.getProjection());

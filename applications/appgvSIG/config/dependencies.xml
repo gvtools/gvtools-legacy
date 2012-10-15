@@ -598,7 +598,6 @@
 			<file>gvsig-ui.jar</file>
 			<file>hsqldb_spatial.jar</file>
 			<file>jcrs.jar</file>
-			<file>jdwglib.jar</file>
 			<file>jecw-0.0.1.jar</file>
 			<file>jecwcompress-1.0.0.jar</file>
 			<file>jgdal-0.6.0.jar</file>
@@ -612,10 +611,6 @@
 			<file>csvstring.jar</file>
 			<file>dbf.jar</file>
 			<file>dbfWriter.jar</file>
-			<file>dgn.jar</file>
-			<file>dwg.jar</file>
-			<file>dxf.jar</file>
-			<file>dxfWriter.jar</file>
 			<file>gml.jar</file>
 			<file>gmlWriter.jar</file>
 			<file>hsqldb.jar</file>

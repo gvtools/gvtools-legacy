@@ -208,8 +208,6 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 
 
         ReadableVectorial source = getSource();
-        //REVISAR QUE PASA CON LOS DRIVERS DXF, DGN, etc.
-        //PUES SON VECTORIALFILEADAPTER
         if (!(source instanceof VectorialFileAdapter)) {
             // we are not interested in db adapters
             return;
@@ -1708,22 +1706,6 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
             if (getLegend() instanceof IVectorLegend) {
                 IVectorLegend ley = (IVectorLegend) getLegend();
                 ley.setDataSource(getSource().getRecordset());
-                // Esto lo pongo para evitar que al dibujar sobre un
-                // dxf, dwg, o dgn no veamos nada. Es debido al checkbox
-                // de la leyenda de textos "dibujar solo textos".
-//jaume
-//				if (!(getSource().getDriver() instanceof IndexedShpDriver)){
-//					FSymbol symbol=new FSymbol(getShapeType());
-//					symbol.setFontSizeInPixels(false);
-//					symbol.setFont(new Font("SansSerif", Font.PLAIN, 9));
-//					Color color=symbol.getColor();
-//					int alpha=symbol.getColor().getAlpha();
-//					if (alpha>250) {
-//						symbol.setColor(new Color(color.getRed(),color.getGreen(),color.getBlue(),100));
-//					}
-//					ley.setDefaultSymbol(symbol);
-//				}
-//jaume//
                 ley.useDefaultSymbol(true);
             }
         } catch (ReadDriverException e) {

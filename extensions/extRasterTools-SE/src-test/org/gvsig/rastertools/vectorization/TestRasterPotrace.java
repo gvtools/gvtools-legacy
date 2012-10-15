@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
  *
@@ -23,7 +23,6 @@ import java.sql.Types;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import org.cresques.cts.ProjectionPool;
 import org.gvsig.raster.dataset.NotSupportedExtensionException;
 import org.gvsig.raster.dataset.io.RasterDriverException;
 import org.gvsig.raster.vectorization.VectorizationBinding;
@@ -38,20 +37,17 @@ import com.iver.cit.gvsig.fmap.core.FPolyline2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.drivers.DXFLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.LayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.edition.DefaultRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
-import com.iver.cit.gvsig.fmap.edition.writers.dxf.DxfFieldsMapping;
-import com.iver.cit.gvsig.fmap.edition.writers.dxf.DxfWriter;
 import com.iver.cit.gvsig.fmap.edition.writers.shp.ShpWriter;
 /**
 * 
 * @version 05/08/2008
-* @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
+* @author BorSanZa - Borja Sï¿½nchez Zamorano (borja.sanchez@iver.es)
 */
 public class TestRasterPotrace {
 	private String        baseDir     = "./test-images/";
@@ -84,16 +80,6 @@ public class TestRasterPotrace {
 			sFields[1] = fieldName + "";
 
 			LayerDefinition tableDef = null;
-			if(fileOutShape.endsWith(".dxf")) {
-				writer = new DxfWriter();
-				((DxfWriter)writer).setFile(new File(fileOutShape));
-				ProjectionPool pool = new ProjectionPool();
-				((DxfWriter)writer).setProjection(pool.get("EPSG:23030"));
-				tableDef = new DXFLayerDefinition();
-
-				DxfFieldsMapping fieldsMapping = new DxfFieldsMapping();
-				((DxfWriter)writer).setFieldMapping(fieldsMapping);
-			}
 			if(fileOutShape.endsWith(".shp")) {
 				writer = new ShpWriter();
 				((ShpWriter)writer).setFile(new File(fileOutShape));

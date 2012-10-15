@@ -64,7 +64,7 @@
 * first version in cvs
 *
 * Revision 1.5  2006/06/12 19:15:38  azabala
-* cambios para poder trabajar en geoprocessing con capas MULTI (dxf, jdbc, etc)
+* cambios para poder trabajar en geoprocessing con capas MULTI (jdbc, etc)
 *
 * Revision 1.4  2006/06/08 18:25:34  azabala
 * modificaciones para admitir capas de shapeType MULTI

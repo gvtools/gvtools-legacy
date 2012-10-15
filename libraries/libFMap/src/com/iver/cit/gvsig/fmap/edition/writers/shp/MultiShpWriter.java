@@ -34,7 +34,7 @@ import com.iver.utiles.FileUtils;
  * a file for this geometry type. <br>
  * <code>
  * MultiShpWriter writer = new MultiShpWriter();
- * writer.setFile(dxfFile);
+ * writer.setFile(file);
  * writer.initialize(layerDefinition);
  * writer.preProcess();
  * # obtain features from an iterator

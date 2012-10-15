@@ -67,7 +67,7 @@
 * first version in cvs
 *
 * Revision 1.4  2006/06/12 19:15:38  azabala
-* cambios para poder trabajar en geoprocessing con capas MULTI (dxf, jdbc, etc)
+* cambios para poder trabajar en geoprocessing con capas MULTI (jdbc, etc)
 *
 * Revision 1.3  2006/06/02 18:20:04  azabala
 * cuando el buffer es con dissolve se crea indice espacial para optimizar

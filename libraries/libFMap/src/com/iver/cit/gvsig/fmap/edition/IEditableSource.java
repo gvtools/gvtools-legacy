@@ -217,9 +217,8 @@ public interface IEditableSource {
 	public void validateRow(IRow row, int sourceType) throws ValidateRowException;
 
 	/**
-	 *  Use it to add, remove or rename fields. If null, you cannot modifiy the table structure
-	 *  (for example, with dxf files, dgn files, etc).
-	 *  The changes will be applied when stopEditing() is called.
+	 * Use it to add, remove or rename fields. If null, you cannot modifiy the
+	 * table structure The changes will be applied when stopEditing() is called.
 	 */
 	public IFieldManager getFieldManager();
 

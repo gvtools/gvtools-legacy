@@ -99,7 +99,6 @@
 	<project dir="libCorePlugin" />
 	<project dir="libCq CMS for java" />
 	<project dir="libDriverManager" />
-	<project dir="libDwg" />
 	<project dir="libFMap" />
  	<project dir="libInternationalization" />
  	<project dir="libIverUtiles" />

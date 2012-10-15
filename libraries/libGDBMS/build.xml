@@ -108,14 +108,6 @@
 		<jar jarfile="${drivers-dir}/dbf/dbf.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/dbf/**" />
 	</target>
 
-	<target name="dxf" description="Genera el jar de dxf">
-		<delete failonerror="false">
-			<fileset dir="${drivers-dir}/dxf" excludes="**/.svn,**/.svn/**"/>
-		</delete>
-		<mkdir dir="${drivers-dir}/dxf" />
-		<jar jarfile="${drivers-dir}/dxf/dxf.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/dxf/**" />
-	</target>
-
 	<target name="shp" description="Genera el jar de shapefile de ESRI">
 		<delete failonerror="false">
 			<fileset dir="${drivers-dir}/shp" excludes="**/.svn,**/.svn/**"/>

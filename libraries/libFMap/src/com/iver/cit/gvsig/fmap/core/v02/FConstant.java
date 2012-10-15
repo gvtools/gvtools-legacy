@@ -68,9 +68,6 @@ public class FConstant {
 	public final static int SHAPE_TYPE_POLYLINEM = 23;
 	public final static int SHAPE_TYPE_POLYGONM = 25;
 	public final static int SHAPE_TYPE_MULTIPOINTM = 28;
-	public final static int LAYER_TYPE_DGN = 1;
-	public final static int LAYER_TYPE_DWG = 2;
-	public final static int LAYER_TYPE_DXF = 3;
 	public final static int LAYER_TYPE_JPEG2000 = 4;
 	public final static int LAYER_TYPE_SHP = 5;
 	public final static int LAYER_TYPE_WMS = 6;
@@ -109,7 +106,6 @@ public class FConstant {
 	public final static int SYMBOL_STYLE_MARKER_CROSS = 33;
 	public final static int SYMBOL_STYLE_MARKER_TRUETYPE = 34;
 	public final static int SYMBOL_STYLE_MARKER_IMAGEN = 35;
-	public final static int SYMBOL_STYLE_DGNSPECIAL = 40;
 
 	// Para símbolos de líneas
 	public final static int SYMBOL_STYLE_LINE_SOLID = 60;

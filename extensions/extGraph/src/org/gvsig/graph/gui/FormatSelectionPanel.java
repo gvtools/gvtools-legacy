@@ -55,7 +55,7 @@ class FormatSelectionPanel extends JPanel implements IWindow {
 
 	public FormatSelectionPanel(String introductoryText) {
 		super(new BorderLayout());
-		String[] formatos = { "SHP", "DXF", "POSTGIS" }; //, "GML" };
+		String[] formatos = { "SHP", "POSTGIS" }; //, "GML" };
 		data.setFormats(new JComboBox(formatos));
 		GridBagLayoutPanel contentPanel =
 			new GridBagLayoutPanel();

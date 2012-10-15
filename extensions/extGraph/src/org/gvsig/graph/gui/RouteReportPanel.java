@@ -100,7 +100,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
-import java.awt.print.PrinterException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -298,10 +297,6 @@ public class RouteReportPanel extends JPanel implements IWindow {
 		MapContext context = mapControl.getMapContext();
 			if (format.equalsIgnoreCase("SHP")) {
 				export.saveToShp(context, routeLayer);
-			} else if (format.equalsIgnoreCase("DXF")) {
-				export.saveToDxf(context, routeLayer);
-//			} else if (format.equalsIgnoreCase("GML")) {
-//				export.saveToGml(context, routeLayer);
 			} else if (format.equalsIgnoreCase("POSTGIS")) {
 				export.saveToPostGIS(context, routeLayer);
 			}

@@ -71,7 +71,7 @@ import com.iver.cit.gvsig.fmap.drivers.ITableDefinition;
  * Before writing in a persistent datastore with a writer,
  * usually we'll need to create a schema that describe
  * data entities we are going to save into.
- * Event thought ascii based datastores, like DXF, will need to
+ * Event thought ascii based datastores, will need to
  * create phisically file (this would be its schema).
  * 
  * This is the responsability of ISchemaManager: it will

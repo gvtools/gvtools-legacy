@@ -346,15 +346,6 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_SHP")) ) {
 					driverName = "gvSIG shp driver";
 				}
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_DGN")) ) {
-					driverName = "gvSIG DGN Memory Driver";
-				}
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_DWG")) ) {
-					driverName = "gvSIG DWG Memory Driver";
-				}				
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "dxf_files")) ) {
-					driverName = "gvSIG DXF Memory Driver";
-				}
 				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "gml_files")) ) {
 					driverName = "gvSIG GML Memory Driver";
 				}

@@ -104,9 +104,6 @@ public class FileBasedPanel extends JWizardPanel {
 		            if ( fileExt.equals("shp") ) {
 		            	SimpleFileFilter filterShp = new SimpleFileFilter(fileExt, PluginServices.getText(this,"shp_files"));
 		            	jfc.setFileFilter(filterShp);
-		            } else if ( fileExt.equals("dxf") ) {
-		            	SimpleFileFilter filterShp = new SimpleFileFilter(fileExt, PluginServices.getText(this,"dxf_files"));
-		            	jfc.setFileFilter(filterShp);
 		            } else {
 		            	SimpleFileFilter filterShp = new SimpleFileFilter(fileExt, PluginServices.getText(this,"file")+" "+fileExt);
 		            	jfc.setFileFilter(filterShp);
@@ -137,7 +134,7 @@ public class FileBasedPanel extends JWizardPanel {
 
 	/**
 	 * Use it to set the extension of the file you want to receive.
-	 * (Without . : Example: for shps: shp for dxfs: dxf)
+	 * (Without . : Example: for shps: shp)
 	 * @param extension
 	 */
 	public void setFileExtension(String extension)

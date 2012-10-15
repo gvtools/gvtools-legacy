@@ -100,7 +100,6 @@ public class SetUp {
 		dsf.addSpatialFileDataSource("GDBMS shapefile driver", "shppuntos", "src/test/resources/puntos.shp");
 		dsf.addSpatialFileDataSource("FMap ShapeFile Driver", "shplineas", "src/test/resources/lineas.shp");
 		dsf.addSpatialFileDataSource("FMap ShapeFile Driver", "shppoligonos", "src/test/resources/poligonos.shp");
-		dsf.addSpatialFileDataSource("FMap DXF Driver", "dxfprueba", "src/test/resources/dxfprueba.dxf");
 		dsf.addDataSource(new FakeObjectDriver(), "objectpersona");
 		
 		dsf.initialize("/tmp");
