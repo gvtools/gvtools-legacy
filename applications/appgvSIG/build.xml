@@ -62,7 +62,6 @@
 		extGPE-gvSIG,
 		appCatalogAndGazetteerClient,
 		extCatalogAndGazetteer,
-		extDataLocator,
 		extGeoProcessing,
 		extGeoprocessingExtensions,
 		extGeoreferencing,
@@ -94,6 +93,7 @@
 		extLayerLoadingOrder,
 		extTableImport,
 		extTableExport,
+		navtable,
 		binaries
 	"/>
 

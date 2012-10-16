@@ -157,9 +157,6 @@
 			<fileset dir="${basedir}/extCatalogYNomenclator/src">
 		        <include name="**/*.java"/>
 		    </fileset>
-			<fileset dir="${basedir}/extDataLocator/src">
-		        <include name="**/*.java"/>
-		    </fileset>
 			<fileset dir="${basedir}/extGeoProcessing/src">
 		        <include name="**/*.java"/>
 		    </fileset>

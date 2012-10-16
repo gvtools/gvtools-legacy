@@ -69,7 +69,6 @@
 	<project dir="extCAD" />
 	<project dir="extCatalogAndGazetteer" />
 	<project dir="extCenterViewToPoint" />
-	<project dir="extDataLocator" />
 	<project dir="extDeriverdGeometries" />
 	<project dir="extExpressionField" />
 	<project dir="extGeoProcessing" />
