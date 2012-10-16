@@ -41,14 +41,6 @@ public class SetUp {
 	    
 	}
 
-    /**
-     * @throws Exception
-     * 
-     */
-    private static void createCSV() throws Exception {
-        TestUtilities.copyFile(new File("src/test/resources/persona.backup.csv"), new File("src/test/resources/persona.csv"));
-    }
-    
 	/**
 	 * DOCUMENT ME!
 	 *
@@ -56,8 +48,6 @@ public class SetUp {
 	 */
 	public static DataSourceFactory setUp() throws Exception {
 	    createDataBase();
-	    
-	    createCSV();
 	    
 		//Setup del log4j
 		PropertyConfigurator.configure(SetUp.class.getClassLoader()
@@ -83,8 +73,6 @@ public class SetUp {
 		dsf.setDriverManager(dm);
 
 		//Setup de las tablas
-		dsf.addFileDataSource("csv", "persona", "src/test/resources/persona.csv");
-		dsf.addFileDataSource("csv", "sort", "src/test/resources/sort.csv");
 		dsf.addDBDataSourceByTable("hsqldbpersona", null, 0, "sa", "", "src/test/resources/testdb",
 				"persona", "GDBMS HSQLDB driver");
 		dsf.addDBDataSourceByTable("hsqldbpersonatransactional", null, 0, "sa", "", "src/test/resources/testdb",
@@ -92,7 +80,6 @@ public class SetUp {
 		dsf.addDBDataSourceBySQL("hsqldbapellido", null, 0, "sa", "",
 		        "src/test/resources/testdb", "select apellido from persona",
 		        "GDBMS HSQLDB driver");
-		dsf.addFileDataSource("csv", "nulos", "src/test/resources/nulos.csv");
 		
 		dsf.addSpatialDBDataSource("poligonos", "127.0.0.1", 5432, "root", "", "sigusal", "polygon0", "the_geom", "GDBMS PostGIS driver");
 		

@@ -20,15 +20,7 @@
 			Compiling ${ant.project.name}...</echo>
 	</target>
 
-	<target name="generar-todos" depends="init, csvstring, odbc, mysql, postgresql, hsqldb, oracle, create-jar" description="Genera los jars de todos los drivers ">
-	</target>
-
-	<target name="csvstring" description="Genera el jar de csvstring">
-		<delete failonerror="false">
-			<fileset dir="${drivers-dir}/csvstring" excludes="**/.svn,**/.svn/**"/>
-		</delete>
-		<mkdir dir="${drivers-dir}/csvstring" />
-		<jar jarfile="${drivers-dir}/csvstring/csvstring.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/csvstring/**" />
+	<target name="generar-todos" depends="init, odbc, mysql, postgresql, hsqldb, oracle, create-jar" description="Genera los jars de todos los drivers ">
 	</target>
 
 	<target name="postgis" description="Genera el jar de postgis">
@@ -89,17 +81,6 @@
 	</target>
 
 	<!-- los siguientes drivers no se usan, estan en FMap -->
-	<target name="csv" description="Genera el jar de csv">
-		<!--
-		Ojo No es un driver estandar, es para un formato concreto.
-		 -->
-		<delete failonerror="false">
-			<fileset dir="${drivers-dir}/csv" excludes="**/.svn,**/.svn/**"/>
-		</delete>
-		<mkdir dir="${drivers-dir}/csv" />
-		<jar jarfile="${drivers-dir}/csv/csv.jar" basedir="${classes-dir}" includes="com/hardcode/gdbms/driver/csv/**" />
-	</target>
-
 	<target name="dbf" description="Genera el jar de dbf">
 		<delete failonerror="false">
 			<fileset dir="${drivers-dir}/dbf" excludes="**/.svn,**/.svn/**"/>

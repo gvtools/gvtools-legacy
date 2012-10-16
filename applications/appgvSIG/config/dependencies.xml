@@ -607,7 +607,6 @@
 			<file>oracle_spatial.jar</file>
 			<file>postgis_spatial.jar</file>
 			<file>spatialindex.jar</file>
-			<file>csvstring.jar</file>
 			<file>dbf.jar</file>
 			<file>dbfWriter.jar</file>
 			<file>gml.jar</file>

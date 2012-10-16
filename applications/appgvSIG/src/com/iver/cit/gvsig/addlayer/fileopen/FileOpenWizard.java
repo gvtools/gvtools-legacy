@@ -357,10 +357,6 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 					driverName = "gdbms dbf driver";
 				}
 
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_csv")) ) {
-					driverName = "csv string";
-				}				
-				
 				/* add file to list of layers to add */
 				toAdd.add(new MyFile(newFiles[ind], driverName, lastFileOpen));
 			}

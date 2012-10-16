@@ -1,10 +1,8 @@
 package com.hardcode.gdbms.engine.data.edition;
 
-import java.io.File;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.sql.Types;
 
 import com.hardcode.gdbms.DataSourceTestCase;
 import com.hardcode.gdbms.engine.data.DataSource;
@@ -432,33 +430,5 @@ public class EditionTests extends DataSourceTestCase {
         dw.commitTrans();
         
 		assertTrue(true);
-    }
-    
-    public void testFileCreation() throws Exception {
-
-        String path = "src/test/resources/persona.csv";
-        new File(path).delete();
-        ds.createFileDataSource("csv string", "persona_created", path, new String[]{"id", "nombre"}, new int[]{Types.VARCHAR, Types.VARCHAR});
-        
-        Value v1 = ValueFactory.createValue("Fernando");
-        Value v2 = ValueFactory.createValue("González");
-
-        DataSource d = ds.createRandomDataSource("persona_created");
-
-        DataWare dw = d.getDataWare(DataSourceFactory.MANUAL_OPENING);
-        dw.beginTrans();
-        dw.insertFilledRow(new Value[]{
-                v1,
-                v2,
-                ValueFactory.createValue(0L)
-        });
-        dw.commitTrans();
-        d.start();
-        assertTrue(d.getRowCount() == 1);
-        assertTrue(d.getFieldCount() == 3);
-        assertTrue(((BooleanValue)d.getFieldValue(0, 0).equals(v1)).getValue());
-        assertTrue(((BooleanValue)d.getFieldValue(0, 1).equals(v2)).getValue());
-        d.stop();
-        
     }
 }

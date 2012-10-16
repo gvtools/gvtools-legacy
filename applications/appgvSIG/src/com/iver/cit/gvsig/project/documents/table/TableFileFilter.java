@@ -62,9 +62,6 @@ public class TableFileFilter extends FileFilter {
 		if (((Driver) driver).getName().equals ( "gdbms dbf driver" ) ) {			
 			return (PluginServices.getText(this, "Ficheros_dbf"));
 		}
-		if (((Driver) driver).getName().equals ( "csv string" ) ) {
-			return (PluginServices.getText(this, "Ficheros_csv"));
-		}		
 		return ((Driver) driver).getName();
 	}
 }
