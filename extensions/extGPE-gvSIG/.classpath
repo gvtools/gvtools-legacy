@@ -16,15 +16,14 @@
 	<classpathentry kind="lib" path="/libFMap/lib/gt2-main.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gt2-legacy.jar"/>
 	<classpathentry kind="lib" path="lib/kxml2.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.gpe.gml.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.gpe.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.gpe.kml.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.gpe.xml.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.xmlschema.jar"/>
 	<classpathentry kind="lib" path="lib/stax-1.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar" sourcepath="/libExceptions/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extCAD"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGPE"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGPE-GML"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGPE-KML"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGPE-XML"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
