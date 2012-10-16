@@ -92,7 +92,7 @@
 		extLayerLoadingOrder,
 		extTableImport,
 		extTableExport,
-		navtable,
+		extNormalization,
 		binaries
 	"/>
 
