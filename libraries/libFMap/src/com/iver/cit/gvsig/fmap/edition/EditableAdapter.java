@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
 
-import javax.swing.SwingUtilities;
-
 import org.apache.log4j.Logger;
 
 import com.hardcode.driverManager.Driver;
@@ -80,7 +78,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 
 	/**
 	 * Flag que indica que hay que tomar las siguientes operaciones como una
-	 * operación atómica
+	 * operaciï¿½n atï¿½mica
 	 */
 	private boolean complex = false;
 
@@ -93,14 +91,14 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 	protected boolean bFieldsHasBeenChanged = false;
 
 	/**
-	 * La clave será el fieldId. Para buscar si un value de una row ha de ser
+	 * La clave serï¿½ el fieldId. Para buscar si un value de una row ha de ser
 	 * rellenado con defaultValue o con lo que venga del expansion file,
 	 * miraremos si existe en este hash. Si existe, usamos el value del
-	 * expansion file. Si no existe, usamos el defaultValue del campo buscándolo
+	 * expansion file. Si no existe, usamos el defaultValue del campo buscï¿½ndolo
 	 * en la lista internalFields. Por cierto, en listInternalFields NO se
-	 * borran campos. Solo se van añadiendo nuevos actualFields.
+	 * borran campos. Solo se van aï¿½adiendo nuevos actualFields.
 	 */
-	protected TreeMap actualFields; // la clave será el fieldId.
+	protected TreeMap actualFields; // la clave serï¿½ el fieldId.
 
 	protected ArrayList fastAccessFields = new ArrayList();
 
@@ -127,22 +125,22 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 	}
 
 	/*
-	 * Establece una relación entre los índices de las geometrías en el
-	 * EditableFeatureSource y los índices en el fichero de expansión FJP:
+	 * Establece una relaciï¿½n entre los ï¿½ndices de las geometrï¿½as en el
+	 * EditableFeatureSource y los ï¿½ndices en el fichero de expansiï¿½n FJP:
 	 * CAMBIO: NECESITAMOS TRABAJAR CON FEATURE Y FEATUREITERATOR PARA IR
 	 * PREPARANDO EL CAMINO, GUARDAMOS EL FEATUREID (STRING) COMO CLAVE, Y COMO
 	 * VALOR, EL INDICE DENTRO DEL FICHERO DE EXPANSION (Integer). Lo de que
-	 * FeatureId sea un String es por compatibilidad con OGC. Según OGC, una
+	 * FeatureId sea un String es por compatibilidad con OGC. Segï¿½n OGC, una
 	 * Feature tiene que tener un Id string En el caso de los randomaccess,
-	 * serán el id de registro En los casos de base de datos espaciales, supongo
-	 * que siempre será numérico también, pero lo tendremos que convertir a
-	 * string. Lo que está claro es que NO se puede confiar nunca en que sea
+	 * serï¿½n el id de registro En los casos de base de datos espaciales, supongo
+	 * que siempre serï¿½ numï¿½rico tambiï¿½n, pero lo tendremos que convertir a
+	 * string. Lo que estï¿½ claro es que NO se puede confiar nunca en que sea
 	 * algo correlativo (1, 2, 3, 4, 5, ... => FALSO!!)
 	 */
 	protected HashMap relations = new HashMap();
 
 	/*
-	 * Fichero en el que se guardan las nuevas geometrías, producto de adiciones
+	 * Fichero en el que se guardan las nuevas geometrï¿½as, producto de adiciones
 	 * o de modificaciones
 	 */
 	protected ExpansionFile expansionFile;
@@ -258,13 +256,13 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 
 	/**
 	 * Se ejecuta preProcess() del IWriter, luego se itera por los registros
-	 * borrados por si el IWriter los quiere borrar (solo será necesario cuando
+	 * borrados por si el IWriter los quiere borrar (solo serï¿½ necesario cuando
 	 * escribimos sobre la misma tabla) y luego se itera por los nuevos
-	 * registros llamando a process con el registro correcto. (Añadidos,
+	 * registros llamando a process con el registro correcto. (Aï¿½adidos,
 	 * modificados). Para finalizar, se ejecuta PostProcess
 	 *
 	 * @param writer
-	 *            IWriter que recibirá las llamadas.
+	 *            IWriter que recibirï¿½ las llamadas.
 	 *
 	 * @throws EditionException
 	 *             DOCUMENT ME!
@@ -287,12 +285,12 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 		// SIN TENER QUE REESCRIBIR TODA LA TABLA CON POSTGIS)
 		if (bFieldsHasBeenChanged)
 		{
-			// Para cada campo de los originales, miramos si no está en
-			// los actuales. Si no está, le decimos al fieldManager
-			// que lo borre. Si está, pero le hemos cambiado el nombre
+			// Para cada campo de los originales, miramos si no estï¿½ en
+			// los actuales. Si no estï¿½, le decimos al fieldManager
+			// que lo borre. Si estï¿½, pero le hemos cambiado el nombre
 			// le pedimos al fieldManager que le cambie el nombre.
 			// Luego recorremos los campos actuales para ver cuales
-			// son nuevos, y los añadimos.
+			// son nuevos, y los aï¿½adimos.
 
 			TreeMap ancientFields = (TreeMap) listInternalFields
 					.get(0);
@@ -308,7 +306,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 						getFieldManager().renameField(f1, f2);
 					}
 				}
-				else {	// No está, hay que borrarlo
+				else {	// No estï¿½, hay que borrarlo
 					getFieldManager().removeField(fld.getFieldDesc().getFieldAlias());
 				}
 			}
@@ -317,7 +315,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 			while (it2.hasNext()) {
 				InternalField fld = (InternalField) it2.next();
 				if (!ancientFields.containsKey(fld.getFieldId())) {
-					// Es uno añadido
+					// Es uno aï¿½adido
 					getFieldManager().addField(fld.getFieldDesc());
 				}
 			}
@@ -347,7 +345,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 					.nextSetBit(i + 1)) {
 					int calculatedIndex = i;
 					Integer integer = new Integer(calculatedIndex);
-					// Si no está en el fichero de expansión, es de los originales
+					// Si no estï¿½ en el fichero de expansiï¿½n, es de los originales
 					// y hay que borrarlo
 					DefaultRowEdited edRow = null;
 					if (!relations.containsKey(integer)) {
@@ -362,12 +360,12 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 					int calculatedIndex = getCalculatedIndex(i);
 					Integer integer = new Integer(calculatedIndex);
 					DefaultRowEdited edRow = null;
-					// Si está en el fichero de expansión hay que modificar
+					// Si estï¿½ en el fichero de expansiï¿½n hay que modificar
 					if (relations.containsKey(integer)) {
 						int num = ((Integer) relations.get(integer)).intValue();
 						// ExpansionFile ya entrega el registro formateado como debe
 						IRowEdited rowFromExpansion = expansionFile.getRow(num);
-						// ¿Habría que hacer aquí setID(index + "")?
+						// ï¿½Habrï¿½a que hacer aquï¿½ setID(index + "")?
 						edRow = new DefaultRowEdited(rowFromExpansion.getLinkedRow()
 								.cloneRow(), rowFromExpansion.getStatus(), i);
 						writer.process(edRow);
@@ -438,7 +436,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 		int calculatedIndex = getCalculatedIndex(index);
 		Integer integer = new Integer(calculatedIndex);
 		DefaultRowEdited edRow = null;
-		// Si no está en el fichero de expansión
+		// Si no estï¿½ en el fichero de expansiï¿½n
 		if (!relations.containsKey(integer)) {
 				/*
 				 * edRow = new DefaultRowEdited(new
@@ -460,7 +458,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 		// ExpansionFile ya entrega el registro formateado como debe
 		IRowEdited rowFromExpansion;
 		rowFromExpansion = expansionFile.getRow(num);
-		// ¿Habría que hacer aquí setID(index + "")?
+		// ï¿½Habrï¿½a que hacer aquï¿½ setID(index + "")?
 		edRow = new DefaultRowEdited(rowFromExpansion.getLinkedRow()
 				.cloneRow(), rowFromExpansion.getStatus(), index);
 		return edRow;
@@ -625,17 +623,17 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 	}
 
 	/**
-	 * Actualiza en el mapa de índices, la posición en la que estaba la
-	 * geometría antes de ser modificada. Se marca como válida, en caso de que
-	 * fuera una modificación de una geometría que estuviese en el fichero de
-	 * expansión antes de ser modificada y se pone el puntero de escritura del
-	 * expansion file a justo despues de la penultima geometría
+	 * Actualiza en el mapa de ï¿½ndices, la posiciï¿½n en la que estaba la
+	 * geometrï¿½a antes de ser modificada. Se marca como vï¿½lida, en caso de que
+	 * fuera una modificaciï¿½n de una geometrï¿½a que estuviese en el fichero de
+	 * expansiï¿½n antes de ser modificada y se pone el puntero de escritura del
+	 * expansion file a justo despues de la penultima geometrï¿½a
 	 *
 	 * @param geometryIndex
-	 *            índice de la geometría que se quiere deshacer su modificación
+	 *            ï¿½ndice de la geometrï¿½a que se quiere deshacer su modificaciï¿½n
 	 * @param previousExpansionFileIndex
-	 *            índice que tenía antes la geometría en el expansionFile. Si
-	 *            vale -1 quiere decir que es una modificación de una geometría
+	 *            ï¿½ndice que tenï¿½a antes la geometrï¿½a en el expansionFile. Si
+	 *            vale -1 quiere decir que es una modificaciï¿½n de una geometrï¿½a
 	 *            original y por tanto no hay que actualizar el mapa de indices
 	 *            sino eliminar su entrada.
 	 * @throws IOException
@@ -662,7 +660,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 			}
 			if (cancel)
 				return -1;
-			// Se elimina de las relaciones y del fichero de expansión
+			// Se elimina de las relaciones y del fichero de expansiï¿½n
 			relations.remove(new Integer(geometryIndex));
 			expansionFile.deleteLastRow();
 		} else {
@@ -679,7 +677,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 			if (cancel)
 				return -1;
 			int numAnt=((Integer)relations.get(new Integer(geometryIndex))).intValue();
-			// Se actualiza la relación de índices
+			// Se actualiza la relaciï¿½n de ï¿½ndices
 			relations.put(new Integer(geometryIndex), new Integer(
 					previousExpansionFileIndex));
 			return numAnt;
@@ -689,13 +687,13 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 	}
 
 	/**
-	 * Elimina una geometria. Si es una geometría original de la capa en edición
-	 * se marca como eliminada (haya sido modificada o no). Si es una geometría
-	 * añadida posteriormente se invalida en el fichero de expansión, para que
-	 * una futura compactación termine con ella.
+	 * Elimina una geometria. Si es una geometrï¿½a original de la capa en ediciï¿½n
+	 * se marca como eliminada (haya sido modificada o no). Si es una geometrï¿½a
+	 * aï¿½adida posteriormente se invalida en el fichero de expansiï¿½n, para que
+	 * una futura compactaciï¿½n termine con ella.
 	 *
 	 * @param index
-	 *            Índice de la geometría.
+	 *            ï¿½ndice de la geometrï¿½a.
 	 * @throws ReadDriverException
 	 * @throws ExpansionFileReadException
 	 *
@@ -708,7 +706,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 			return null;
 		// Llega un calculatedIndex
 		delRows.set(index, true);
-		System.err.println("Elimina una Row en la posición: " + index);
+		System.err.println("Elimina una Row en la posiciï¿½n: " + index);
 		// TODO: Con tablas no es necesario devolver la anterior feature. Por
 		// ahora.
 		isFullExtentDirty = true;
@@ -717,11 +715,11 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 	}
 
 	/**
-	 ** Si se intenta modificar una geometría original de la capa en edición se
-	 * añade al fichero de expansión y se registra la posición en la que se
-	 * añadió. Si se intenta modificar una geometria que se encuentra en el
-	 * fichero de expansión, ésta puede estar ahí (en el ExpansionFile
-	 * por haber sido añadida o modificada. Si ha sido añadida, entonces hay
+	 ** Si se intenta modificar una geometrï¿½a original de la capa en ediciï¿½n se
+	 * aï¿½ade al fichero de expansiï¿½n y se registra la posiciï¿½n en la que se
+	 * aï¿½adiï¿½. Si se intenta modificar una geometria que se encuentra en el
+	 * fichero de expansiï¿½n, ï¿½sta puede estar ahï¿½ (en el ExpansionFile
+	 * por haber sido aï¿½adida o modificada. Si ha sido aï¿½adida, entonces hay
 	 * que respetar su estatus para que los writers puedan saber que es
 	 * un registro NUEVO).
 	 *
@@ -743,27 +741,27 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 
 		int pos = -1;
 		Integer integer = new Integer(index);
-//		System.err.println("Modifica una Row en la posición: " + index);
-		// Si la geometría no ha sido modificada
+//		System.err.println("Modifica una Row en la posiciï¿½n: " + index);
+		// Si la geometrï¿½a no ha sido modificada
 		if (!relations.containsKey(integer)) {
 			int expansionIndex = expansionFile.addRow(feat,
 					IRowEdited.STATUS_MODIFIED, actualIndexFields);
 			relations.put(integer, new Integer(expansionIndex));
 		} else {
-			// Obtenemos el índice en el fichero de expansión
+			// Obtenemos el ï¿½ndice en el fichero de expansiï¿½n
 			int num = ((Integer) relations.get(integer)).intValue();
 			pos = num;
 
 			/*
-			 * Se modifica la geometría y nos guardamos el índice dentro del
-			 * fichero de expansión en el que se encuentra la geometría
+			 * Se modifica la geometrï¿½a y nos guardamos el ï¿½ndice dentro del
+			 * fichero de expansiï¿½n en el que se encuentra la geometrï¿½a
 			 * modificada
 			 */
 			num = expansionFile.modifyRow(num, feat, actualIndexFields);
 
 			/*
-			 * Actualiza la relación del índice de la geometría al índice en el
-			 * fichero de expansión.
+			 * Actualiza la relaciï¿½n del ï¿½ndice de la geometrï¿½a al ï¿½ndice en el
+			 * fichero de expansiï¿½n.
 			 */
 			relations.put(integer, new Integer(num));
 		}
@@ -773,11 +771,11 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 	}
 
 	/**
-	 * Añade una geometria al fichero de expansión y guarda la correspondencia
+	 * Aï¿½ade una geometria al fichero de expansiï¿½n y guarda la correspondencia
 	 * en la tabla relations.
 	 *
 	 * @param feat
-	 *            geometría a guardar.
+	 *            geometrï¿½a a guardar.
 	 *
 	 * @return calculatedIndex
 	 * @throws ExpansionFileWriteException
@@ -788,7 +786,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 		boolean cancel = fireBeforeRowAdded(sourceType,feat.getID());
 		if (cancel)
 			return -1;
-		// Añade la geometría
+		// Aï¿½ade la geometrï¿½a
 		// int virtualIndex = 0;
 		int calculatedIndex = -1;
 
@@ -797,7 +795,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 		int pos = expansionFile.addRow(feat, IRowEdited.STATUS_ADDED, actualIndexFields);
 		relations.put(new Integer(calculatedIndex), new Integer(pos));
 		numAdd++;
-		System.err.println("Añade una Row en la posición: " + calculatedIndex);
+		System.err.println("Aï¿½ade una Row en la posiciï¿½n: " + calculatedIndex);
 		isFullExtentDirty = true;
 		fireAfterRowAdded(feat,calculatedIndex, sourceType);
 		return calculatedIndex;
@@ -830,12 +828,12 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 	}
 
 	/**
-	 * Se elimina del final del fichero de expansión poniendo el puntero de
-	 * escritura apuntando al final de la penúltima geometría. Deberá quitar la
-	 * relación del mapa de relaciones
+	 * Se elimina del final del fichero de expansiï¿½n poniendo el puntero de
+	 * escritura apuntando al final de la penï¿½ltima geometrï¿½a. Deberï¿½ quitar la
+	 * relaciï¿½n del mapa de relaciones
 	 *
 	 * @param fmapSpatialIndex
-	 *            Índice de la geometría que se añadió
+	 *            ï¿½ndice de la geometrï¿½a que se aï¿½adiï¿½
 	 * @throws DriverIOException
 	 * @throws IOException
 	 */
@@ -1042,7 +1040,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 		 *      int)
 		 */
 		public Value getFieldValue(long rowIndex, int fieldId) throws ReadDriverException {
-			// Si no está en el fichero de expansión
+			// Si no estï¿½ en el fichero de expansiï¿½n
 			// Integer integer = new Integer(getCalculatedIndex(rowIndex));
 
 
@@ -1449,7 +1447,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 		delRows.clear();
 		// TODO: Es muy probable que necesitemos un reload de los datasources, al
 		// igual que lo tenemos en las capas. Por ahora, basta con retocar
-		// listInternalFields, pero casi seguro que lo correcto sería hacer un
+		// listInternalFields, pero casi seguro que lo correcto serï¿½a hacer un
 		// reload completo.
 		initalizeFields(ods);
 
@@ -1477,7 +1475,7 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 
 	/**
 	 * Tiene en cuenta los campos actuales para formatear una row con ellos. Le
-	 * pasamos los campos que había en el momento en que se creó esa row.
+	 * pasamos los campos que habï¿½a en el momento en que se creï¿½ esa row.
 	 *
 	 * @param edRow
 	 * @param indexInternalFields
@@ -1502,13 +1500,13 @@ public class EditableAdapter implements IEditableSource, IWriteable {
 			// Para cada campo de los actuales, miramos si ya estaba cuando
 			// el registro estaba guardado.
 			// Si estaba, cogemos el valor de ese campo en el registro
-			// guardado. Si no estaba, ha sido añadido después y ponemos
+			// guardado. Si no estaba, ha sido aï¿½adido despuï¿½s y ponemos
 			// su valor por defecto.
-			// Nota importante: fieldIndex es el índice del campo cuando
-			// se guardó. NO es el índice actual dentro de actualFields.
+			// Nota importante: fieldIndex es el ï¿½ndice del campo cuando
+			// se guardï¿½. NO es el ï¿½ndice actual dentro de actualFields.
 			// Se usa SOLO para recuperar el valor de los atributos
 			// antiguos. Por eso no nos preocupamos de mantener actuallizados
-			// el resto de campos cuando se borra o añade un nuevo campo.
+			// el resto de campos cuando se borra o aï¿½ade un nuevo campo.
 			InternalField fld = (InternalField) it.next();
 			// System.err.println("fld = " + fld.getFieldDesc().getFieldAlias() +  " id=" + fld.getFieldId());
 			if (ancientFields.containsKey(fld.getFieldId())) {

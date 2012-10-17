@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -276,7 +276,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 	 */
 	public void addLayer(int pos,FLayer layer) {
 		try {
-			//Notificamos a la capa que va a ser añadida
+			//Notificamos a la capa que va a ser aï¿½adida
 			//FLyrDefault layerDef = (FLyrDefault)layer;
 			//if (!layerDef.isUnavailable()) {
 			if (layer instanceof FLyrDefault)
@@ -386,7 +386,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 				parent = lyr.getParentLayer();
 				removeLayer(i);
 				if (parent != null)
-					//Notificamos a la capa que va a ser añadida
+					//Notificamos a la capa que va a ser aï¿½adida
 					if (layer instanceof FLyrDefault)
 						((FLyrDefault)layer).wakeUp();
 
@@ -567,7 +567,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 			dpi = 72;
 		}
 
-		// TODO: A la hora de imprimir, isWithinScale falla, porque está
+		// TODO: A la hora de imprimir, isWithinScale falla, porque estï¿½
 		// calculando la escala en pantalla, no para el layout.
 		// Revisar esto.
 
@@ -903,8 +903,8 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 					}
 
 					layer.setXMLEntity03(xml.getChild(i));
-					// Comprobar que la proyección es la misma que la de FMap
-					// Si no lo es, es una capa que está reproyectada al vuelo
+					// Comprobar que la proyecciï¿½n es la misma que la de FMap
+					// Si no lo es, es una capa que estï¿½ reproyectada al vuelo
 					CoordinateReferenceSystem crs = layer.getCrs();
 					if (crs != null)
 						if (crs != fmap.getCrs()) {
@@ -1106,7 +1106,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 	 */
 	public double getMinScale() {
 		return -1; // La visibilidad o no la controla cada capa
-		// dentro de una colección
+		// dentro de una colecciï¿½n
 	}
 	/*
 	 * (non-Javadoc)
@@ -1250,7 +1250,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 
 
 			String className = xml.getStringProperty("className");
-			//TODO VCN FLyrAnnotation es un parche para no tener que duplicar todo el código de aqí y de los diferentes métodos de LayerFactory,
+			//TODO VCN FLyrAnnotation es un parche para no tener que duplicar todo el cï¿½digo de aqï¿½ y de los diferentes mï¿½todos de LayerFactory,
 			//ya que los drivers de una FLyrAnnotation no sabemos cual es puede ser cualquier Driver Vectorial.
 			if (className.equals(FLyrVect.class.getName()) || className.equals(FLyrAnnotation.class.getName())) {
 				String type = xml.getStringProperty("type");
@@ -1319,7 +1319,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 						}
 
 					}
-					// Clases con algun driver genérico creado por otro
+					// Clases con algun driver genï¿½rico creado por otro
 					// programador
 					if (xml.contains("other")) {
 						int classChild = 2;
@@ -1334,7 +1334,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 						} catch (DriverLoadException e) {
 							// Si no existe ese driver, no pasa nada.
 							// Puede que el desarrollador no quiera que
-							// aparezca en el cuadro de diálogo y ha metido
+							// aparezca en el cuadro de diï¿½logo y ha metido
 							// el jar con sus clases en nuestro directorio lib.
 							// Intentamos cargar esa clase "a pelo".
 							if (xml.getChild(classChild).contains("className"))
@@ -1349,7 +1349,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 						} catch (NullPointerException npe) {
 							// Si no existe ese driver, no pasa nada.
 							// Puede que el desarrollador no quiera que
-							// aparezca en el cuadro de diálogo y ha metido
+							// aparezca en el cuadro de diï¿½logo y ha metido
 							// el jar con sus clases en nuestro directorio lib.
 							// Intentamos cargar esa clase "a pelo".
 							if (xml.getChild(2).contains("className"))
@@ -1372,7 +1372,7 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 
 				}
 
-				//TODO VCN FLyrAnnotation es un parche para no tener que duplicar todo el código de aqí y de los diferentes métodos de LayerFactory,
+				//TODO VCN FLyrAnnotation es un parche para no tener que duplicar todo el cï¿½digo de aqï¿½ y de los diferentes mï¿½todos de LayerFactory,
 				//ya que los drivers de una FLyrAnnotation no sabemos cual es puede ser cualquier Driver Vectorial.
 				if (className.equals(FLyrAnnotation.class.getName())){
 					layer=FLyrAnnotation.createLayerFromVect((FLyrVect)layer);
@@ -1398,8 +1398,8 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 			}
 			this.addLayer(layer);
 			logger.debug("layer: "+ layer.getName() +" loaded");
-			// Comprobar que la proyección es la misma que la de FMap
-			// Si no lo es, es una capa que está reproyectada al vuelo
+			// Comprobar que la proyecciï¿½n es la misma que la de FMap
+			// Si no lo es, es una capa que estï¿½ reproyectada al vuelo
 			CoordinateReferenceSystem crs = layer.getCrs();
 			if ((crs != null))
 				if (!crs.getName().equals(getMapContext().getCrs().getName()))
@@ -1500,8 +1500,8 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 
 			this.addLayer(layer);
 			logger.debug("layer: "+ layer.getName() +" loaded");
-			// Comprobar que la proyección es la misma que la de FMap
-			// Si no lo es, es una capa que está reproyectada al vuelo
+			// Comprobar que la proyecciï¿½n es la misma que la de FMap
+			// Si no lo es, es una capa que estï¿½ reproyectada al vuelo
 			CoordinateReferenceSystem crs = layer.getCrs();
 			if ((crs != null))
 				if (crs != getMapContext().getCrs())

@@ -20,7 +20,7 @@
  *    http://gistoolkit.sourceforge.net/
  *
  */
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -42,7 +42,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -68,7 +68,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.charset.Charset;
 import java.sql.Types;
 import java.util.Calendar;
 import java.util.Date;
@@ -832,16 +831,16 @@ public class DbaseFileHeaderNIO {
 			String colName = fieldNames[i];
 
 			// /int fieldLen = ((DBFDriver)sds.getDriver()).getFieldLength(i);
-			int fieldLen = fieldLength[i]; // TODO aquí el tamaño no es
+			int fieldLen = fieldLength[i]; // TODO aquï¿½ el tamaï¿½o no es
 			// correcto hay que calcularlo,
-			// ahora mismo está puesto a piñón.
+			// ahora mismo estï¿½ puesto a piï¿½ï¿½n.
 			int decimales = 5;
 
 			// if (fieldLen <= 0) {
 			// fieldLen = 255;
 			// }
 			// TODO [AZABALA] HE INTENTADO CREAR UN TIPO Types.BIGINT y
-			// ha petado (por eso lo añado)
+			// ha petado (por eso lo aï¿½ado)
 			if ((type == Types.DOUBLE) || (type == Types.FLOAT)
 					|| (type == Types.INTEGER) || (type == Types.BIGINT))
 
@@ -888,12 +887,12 @@ public class DbaseFileHeaderNIO {
 			int type = fieldsDesc[i].getFieldType();
 			String colName = fieldsDesc[i].getFieldName();
 
-			int fieldLen = fieldsDesc[i].getFieldLength(); // TODO aquí el
-			// tamaño no es
+			int fieldLen = fieldsDesc[i].getFieldLength(); // TODO aquï¿½ el
+			// tamaï¿½o no es
 			// correcto hay que
 			// calcularlo, ahora
-			// mismo está puesto
-			// a piñón.
+			// mismo estï¿½ puesto
+			// a piï¿½ï¿½n.
 			int decimales = fieldsDesc[i].getFieldDecimalCount();
 
 			switch (type) {

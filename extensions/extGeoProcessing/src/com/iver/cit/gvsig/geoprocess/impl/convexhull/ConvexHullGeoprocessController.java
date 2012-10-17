@@ -67,7 +67,7 @@
 * first version in cvs
 *
 * Revision 1.3  2006/06/12 19:15:38  azabala
-* cambios para poder trabajar en geoprocessing con capas MULTI (dxf, jdbc, etc)
+* cambios para poder trabajar en geoprocessing con capas MULTI (jdbc, etc)
 *
 * Revision 1.2  2006/05/25 08:21:48  jmvivo
 * Añadida peticion de confirmacion para sobreescribir el fichero de salida, si este ya existiera

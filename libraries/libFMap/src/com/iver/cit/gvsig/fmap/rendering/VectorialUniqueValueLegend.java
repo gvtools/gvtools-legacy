@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -46,9 +46,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
@@ -170,7 +170,7 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 	private ArrayList<Value> keys = new ArrayList<Value>(); // En lugar de un
 															// HashSet, para
 															// tener acceso por
-															// índice
+															// ï¿½ndice
 
 	private String labelFieldName;
 
@@ -241,7 +241,7 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 		resul = symbols.put((Value) key, symbol);
 
 		if (resul != null) {
-			log.error("Error: la clave " + key + " ya existía. Resul = "
+			log.error("Error: la clave " + key + " ya existï¿½a. Resul = "
 					+ resul);
 			log.warn("symbol nuevo:" + symbol.getDescription() + " Sviejo= "
 					+ resul.getDescription());
@@ -305,14 +305,14 @@ public class VectorialUniqueValueLegend extends AbstractClassifiedVectorLegend
 	}
 
 	/**
-	 * Devuelve un símbolo a partir de una IFeature. OJO!! Cuando usamos un
-	 * feature iterator de base de datos el único campo que vendrá rellenado es
-	 * el de fieldID. Los demás vendrán a nulos para ahorra tiempo de creación.
+	 * Devuelve un sï¿½mbolo a partir de una IFeature. OJO!! Cuando usamos un
+	 * feature iterator de base de datos el ï¿½nico campo que vendrï¿½ rellenado es
+	 * el de fieldID. Los demï¿½s vendrï¿½n a nulos para ahorra tiempo de creaciï¿½n.
 	 *
 	 * @param feat
 	 *            IFeature
 	 *
-	 * @return Símbolo.
+	 * @return Sï¿½mbolo.
 	 */
 	public ISymbol getSymbolByFeature(IFeature feat) {
 		// Value val =

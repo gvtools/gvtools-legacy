@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -368,14 +368,14 @@ public abstract class FLyrDefault implements FLayer, LayerListener {
 		this.crs = crs;
 		this.updateDrawVersion();
 
-		// Comprobar que la proyección es la misma que la de FMap
-		// Si no lo es, es una capa que está reproyectada al vuelo
+		// Comprobar que la proyecciï¿½n es la misma que la de FMap
+		// Si no lo es, es una capa que estï¿½ reproyectada al vuelo
 		if ((crs != null) && (getMapContext() != null))
 			if (crs != getMapContext().getCrs()) {
 				MathTransform trans = ProjectionUtils.getCrsTransform(crs,
 						getMapContext().getCrs());
 				setCrsTransform(trans);
-				logger.debug("Cambio proyección: FMap con "
+				logger.debug("Cambio proyecciï¿½n: FMap con "
 						+ getMapContext().getCrs().getName().getCode()
 						+ " y capa " + getName() + " con "
 						+ crs.getName().getCode());

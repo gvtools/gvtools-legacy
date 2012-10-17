@@ -78,8 +78,6 @@ public class GDBMSMain {
 		ds.setDriverManager(dm);
 
 		//Setup de las tablas
-		ds.addFileDataSource("csv", "persona", "persona.csv");
-		ds.addFileDataSource("csv", "coche", "coche.csv");
 		ds.addFileDataSource("gdbms dbf driver", "vias",
 			"C:\\Documents and Settings\\fernando\\Mis documentos\\province.dbf");
 		ds.addFileDataSource("gdbms dbf driver", "vias",

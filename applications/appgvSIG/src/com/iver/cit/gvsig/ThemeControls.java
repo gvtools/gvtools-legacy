@@ -4,7 +4,7 @@
  * To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -26,7 +26,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -61,9 +61,7 @@ import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.MapContext;
-import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
-import com.iver.cit.gvsig.fmap.drivers.dxf.write.DxfGisWriter;
 import com.iver.cit.gvsig.fmap.drivers.shp.SHP;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
@@ -76,7 +74,7 @@ import com.iver.utiles.GenericFileFilter;
 
 
 /**
- * Extensión de operaciones sobre el tema.
+ * Extensiï¿½n de operaciones sobre el tema.
  *
  * @author Vicente Caballero Navarro
  */
@@ -90,15 +88,11 @@ public class ThemeControls extends Extension {
 		View vista = (View) PluginServices.getMDIManager().getActiveWindow();
 		IProjectView model = vista.getModel();
 		MapContext mapa = model.getMapContext();
-		MapControl mapCtrl = vista.getMapControl();
 		logger.debug("Command : " + s);
 
         if (s.equals("SHAPE_SELECTED")) {
 			createShape(mapa);
 			 ((ProjectDocument)vista.getModel()).setModified(true);
-		} else if (s.equals("DXF_SELECTED")) {
-			createDxf(mapa);
-			((ProjectDocument)vista.getModel()).setModified(true);
 		} else if (s.equals("ZOOM_SELECT")) {
 			Rectangle2D selectedExtent = mapa.getSelectionBounds();
 
@@ -130,10 +124,10 @@ public class ThemeControls extends Extension {
 				try {
 					map.getLayers().process(ssv);
 					}  catch (ReadDriverException e1) {
-						throw new RuntimeException("No se espera que SelectByPointVisitor lance esta excepción",
+						throw new RuntimeException("No se espera que SelectByPointVisitor lance esta excepciï¿½n",
 								e1);
 					} catch (VisitorException e1) {
-						throw new RuntimeException("No se espera que SelectByPointVisitor lance esta excepción",
+						throw new RuntimeException("No se espera que SelectByPointVisitor lance esta excepciï¿½n",
 								e1);
 					}
 				IGeometry[] fgs=ssv.getSelectedGeometries();
@@ -150,58 +144,6 @@ public class ThemeControls extends Extension {
 		} // else {
 
 		//}
-	}
-
-	/**
-	 * Crea un DXF partiendo de los objetos seleccionados. Desarrollado en el
-	 * piloto de CAD. Lo de aquí no sirve.
-	 * @param map
-	 */
-	private void createDxf(MapContext map) {
-		if (map.getSelectionBounds() != null) {
-			JFileChooser jfc = new JFileChooser();
-			jfc.addChoosableFileFilter(new GenericFileFilter("dxf",
-					PluginServices.getText(this, "Dxffiles")));
-
-			if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-				File file=jfc.getSelectedFile();
-				if (!(file.getPath().endsWith(".dxf") || file.getPath().endsWith(".DXF"))){
-					file=new File(file.getPath()+".dxf");
-				}
-				//SHP.SHPFileFromSelected(map, file);
-				SelectedShapeVisitor ssv=new SelectedShapeVisitor();
-				try {
-					map.getLayers().process(ssv);
-					} catch (ReadDriverException e1) {
-						throw new RuntimeException("No se espera que SelectByPointVisitor lance esta excepción",
-								e1);
-					} catch (VisitorException e) {
-						throw new RuntimeException("No se espera que SelectByPointVisitor lance esta excepción",
-								e);
-					}
-				IGeometry[] fgs=ssv.getSelectedGeometries();
-				DxfGisWriter dxfGisWriter = new DxfGisWriter();
-				try {
-					// map.getLayers() devuelve solo una capa porque la
-                    // herramienta está inhabilitada cuando hay varias capas
-                    // seleccionadas.
-                    FLayer layer = map.getLayers().getActives()[0];
-                    //dxfGisWriter.write(fgs, layer, file);
-				} catch (Exception e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-				/*SelectableDataSource sds=ssv.getSelectableDataSource();
-				BitSet bitset=ssv.getBitSet();
-				try {
-					sds.start();
-					SHP.SHPFileFromGeometries(fgs,bitset,sds,file);
-					sds.stop();
-				} catch (com.hardcode.gdbms.engine.data.DriverException e2) {
-					NotificationManager.addError("No se pudo escribir la capa", e2);
-				}*/
-			}
-		}
 	}
 
 	/**

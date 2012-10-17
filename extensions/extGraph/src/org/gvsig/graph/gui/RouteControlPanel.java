@@ -1071,19 +1071,11 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 		IView view = (View) window;
 		MapControl mapControl = view.getMapControl();
 		MapContext context = mapControl.getMapContext();
-//		try {
-			if (format.equalsIgnoreCase("SHP")) {
-				export.saveToShp(context, routeLayer);
-			} else if (format.equalsIgnoreCase("DXF")) {
-				export.saveToDxf(context, routeLayer);
-			} else if (format.equalsIgnoreCase("POSTGIS")) {
-				export.saveToPostGIS(context, routeLayer);
-			}
-//		} catch (BaseException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-
+		if (format.equalsIgnoreCase("SHP")) {
+			export.saveToShp(context, routeLayer);
+		} else if (format.equalsIgnoreCase("POSTGIS")) {
+			export.saveToPostGIS(context, routeLayer);
+		}
 	}
 	private void saveRoute() {
 		IWindow window = PluginServices.getMDIManager().getActiveWindow();
@@ -1113,8 +1105,6 @@ public class RouteControlPanel extends JPanel implements SingletonWindow,
 		MapContext context = mapControl.getMapContext();
 			if (format.equalsIgnoreCase("SHP")) {
 				export.saveToShp(context, routeLayer);
-			} else if (format.equalsIgnoreCase("DXF")) {
-				export.saveToDxf(context, routeLayer);
 //			} else if (format.equalsIgnoreCase("GML")) {
 //				export.saveToGml(context, routeLayer);
 			} else if (format.equalsIgnoreCase("POSTGIS")) {

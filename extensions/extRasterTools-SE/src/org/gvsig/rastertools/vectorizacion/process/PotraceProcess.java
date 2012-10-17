@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
  *
@@ -23,7 +23,6 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.sql.Types;
 
-import org.cresques.cts.ProjectionUtils;
 import org.gvsig.fmap.raster.layers.FLyrRasterSE;
 import org.gvsig.raster.RasterProcess;
 import org.gvsig.raster.dataset.io.RasterDriverException;
@@ -42,22 +41,19 @@ import com.iver.cit.gvsig.fmap.core.FPolyline2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.drivers.DXFLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.LayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.edition.DefaultRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
-import com.iver.cit.gvsig.fmap.edition.writers.dxf.DxfFieldsMapping;
-import com.iver.cit.gvsig.fmap.edition.writers.dxf.DxfWriter;
 import com.iver.cit.gvsig.fmap.edition.writers.shp.ShpWriter;
 /**
  * Este proceso vectoriza la capa de entrada que debe estar ya preprocesada.
  * Usa la libreria de potrace por debajo.
  * 
  * @version 15/09/2008
- * @author BorSanZa - Borja Sánchez Zamorano (borja.sanchez@iver.es)
+ * @author BorSanZa - Borja Sï¿½nchez Zamorano (borja.sanchez@iver.es)
  */
 public class PotraceProcess extends RasterProcess {
 	private double       percent               = 0;
@@ -146,15 +142,6 @@ public class PotraceProcess extends RasterProcess {
 		sFields[1] = fileName + "";
 
 		LayerDefinition tableDef = null;
-		if (fileName.endsWith(".dxf")) {
-			writer = new DxfWriter();
-			((DxfWriter) writer).setFile(new File(fileName));
-			((DxfWriter) writer).setCrs(ProjectionUtils.getCRS("EPSG:23030"));
-			tableDef = new DXFLayerDefinition();
-
-			DxfFieldsMapping fieldsMapping = new DxfFieldsMapping();
-			((DxfWriter) writer).setFieldMapping(fieldsMapping);
-		}
 		if (fileName.endsWith(".shp")) {
 			writer = new ShpWriter();
 			((ShpWriter) writer).setFile(new File(fileName));

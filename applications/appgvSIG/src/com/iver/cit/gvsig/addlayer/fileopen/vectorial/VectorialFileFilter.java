@@ -70,15 +70,6 @@ public class VectorialFileFilter extends FileFilter {
 		if ( ((Driver) driver).getName() == "gvSIG shp driver" ) {
 			return ( PluginServices.getText(this, "Ficheros_SHP") );
 		}
-		if ( ((Driver) driver).getName() == "gvSIG DGN Memory Driver" ) {
-			return ( PluginServices.getText(this, "Ficheros_DGN") );
-		}
-		if ( ((Driver) driver).getName() == "gvSIG DWG Memory Driver" ) {
-			return ( PluginServices.getText(this, "Ficheros_DWG") );
-		}				
-		if ( ((Driver) driver).getName() == "gvSIG DXF Memory Driver" ) {
-			return ( PluginServices.getText(this, "dxf_files") );
-		}		
 		if ( ((Driver) driver).getName() == "gvSIG GML Memory Driver" ) {
 			return ( PluginServices.getText(this, "gml_files") );
 		}		

@@ -46,7 +46,7 @@
 * $Id: IGeoprocess.java 5795 2006-06-12 19:15:38Z azabala $
 * $Log$
 * Revision 1.2  2006-06-12 19:15:38  azabala
-* cambios para poder trabajar en geoprocessing con capas MULTI (dxf, jdbc, etc)
+* cambios para poder trabajar en geoprocessing con capas MULTI (jdbc, etc)
 *
 * Revision 1.1  2006/05/24 21:12:16  azabala
 * primera version en cvs despues de refactoring orientado a crear un framework extensible de geoprocessing

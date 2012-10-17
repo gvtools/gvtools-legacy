@@ -96,22 +96,6 @@ public void execute(String actionCommand) {
 							new MyFinishAction(wizard.getWizardComponents(),
 									vista, actionCommand));
 				}
-				if (actionCommand.equals("DXF")) {
-					panelChoose.setDriver(writerManager
-							.getDriver("gvSIG DXF Memory Driver"));
-					FileBasedPanel filePanel = new FileBasedPanel(wizard
-							.getWizardComponents());
-					filePanel.setFileExtension("dxf");
-					wizard.getWizardComponents().addWizardPanel(filePanel);
-					wizard.getWizardComponents().getBackButton().setEnabled(
-							false);
-					wizard.getWizardComponents().getNextButton().setEnabled(
-							false);
-
-					wizard.getWizardComponents().setFinishAction(
-							new MyFinishAction(wizard.getWizardComponents(),
-									vista, actionCommand));
-				}
 				if (actionCommand.equals("POSTGIS")) {
 					wizard.getWizardComponents().addWizardPanel(panelChoose);
 					wizard.getWizardComponents().addWizardPanel(panelFields);

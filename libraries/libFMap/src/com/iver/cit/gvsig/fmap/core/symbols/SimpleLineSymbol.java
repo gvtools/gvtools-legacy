@@ -114,7 +114,6 @@ import java.awt.geom.AffineTransform;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 
-import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.core.FPolygon2D;
 import com.iver.cit.gvsig.fmap.core.FShape;

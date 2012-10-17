@@ -338,8 +338,7 @@ public class SymbologyFactory {
 			int fSymbolStyle = fSymbol.getStyle();
 
 			fill = SymbologyFactory.createDefaultFillSymbol();
-			if (fSymbolStyle == FConstant.SYMBOL_STYLE_FILL_TRANSPARENT ||
-					fSymbolStyle == FConstant.SYMBOL_STYLE_DGNSPECIAL) {
+			if (fSymbolStyle == FConstant.SYMBOL_STYLE_FILL_TRANSPARENT) {
 				color = null;
 			}
 			// De momento no tenemos tipos simbolos apropiados en el core de fmap para estos.

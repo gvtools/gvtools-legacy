@@ -97,8 +97,6 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
-import com.iver.cit.gvsig.fmap.drivers.dgn.DgnMemoryDriver;
-import com.iver.cit.gvsig.fmap.drivers.dxf.DXFMemoryDriver;
 import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
@@ -313,9 +311,7 @@ public class GeoProcessingMergePanel2
 
       // sin florituras. cogemos la primera que haya
 		final CoordinateReferenceSystem crs = layers.getLayer(0).getCrs();
-      DgnMemoryDriver dgnDriver = null;
       IndexedShpDriver shpDriver = null;
-      DXFMemoryDriver dxfDriver = null;
       VectorialFileDriver driver = null;
       final ArrayList errors = new ArrayList();
       for (int i = 0; i < inputLayersToAdd.length; i++) {
@@ -323,23 +319,11 @@ public class GeoProcessingMergePanel2
          final String fullPath = file.getAbsolutePath() + "/" + fileName;
          final File afile = new File(fullPath);
          try {
-            if (fileName.endsWith("dxf") || fileName.endsWith("DXF")) {
-               dxfDriver = new DXFMemoryDriver();
-               dxfDriver.open(afile);
-               dxfDriver.initialize();
-               driver = dxfDriver;
-            }
-            else if (fileName.endsWith("shp") || fileName.endsWith("SHP")) {
+            if (fileName.endsWith("shp") || fileName.endsWith("SHP")) {
                shpDriver = new IndexedShpDriver();
                shpDriver.open(afile);
                shpDriver.initialize();
                driver = shpDriver;
-            }
-            else if (fileName.endsWith("dgn") || fileName.endsWith("DGN")) {
-               dgnDriver = new DgnMemoryDriver();
-               dgnDriver.open(afile);
-               dgnDriver.initialize();
-               driver = dxfDriver;
             }
 				newLyrList.add(LayerFactory.createLayer(fileName, driver,
 						afile, crs));
@@ -415,7 +399,7 @@ public class GeoProcessingMergePanel2
    public void openDirectoryLayersDialog() {
       final JFileChooser jfc = new JFileChooser();
       jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-      final String[] extensions = { "shp", "dxf", "dwg" };
+      final String[] extensions = { "shp" };
       jfc.addChoosableFileFilter(new GenericFileFilter(extensions, PluginServices.getText(this, "Ficheros_de_cartografia")));
       if (jfc.showOpenDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
          final File file = jfc.getSelectedFile();

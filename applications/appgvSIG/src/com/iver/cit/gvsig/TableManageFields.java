@@ -77,8 +77,7 @@ public class TableManageFields extends Extension {
 	    {
 	    	IWriteable aux = (IWriteable) ies.getOriginalDriver();
 	    	IWriter writer = aux.getWriter();
-	    	// No todos los writer pueden cambiar los campos (ejemplo: el dxf
-	    	// o el dgn siempre tienen los mismos campos).
+	    	// No todos los writer pueden cambiar los campos 
 	    	if (writer.canAlterTable())
 	    	{
 //	    		IFieldManager fieldManager = (IFieldManager) writer;

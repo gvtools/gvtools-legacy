@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -588,7 +588,7 @@ public class ViewPort {
 		this.updateDrawVersion();
 		extent = extents.removePrev();
 
-		//Calcula la transformación afín
+		//Calcula la transformaciï¿½n afï¿½n
 		calculateAffineTransform();
 
 		// Lanzamos los eventos de extent cambiado
@@ -641,7 +641,7 @@ public class ViewPort {
 		Rectangle2D newExtent=null;
 
 		//Esto comprueba que el extent no es de anchura o altura = "0"
-		//y si es así lo redimensiona.
+		//y si es asï¿½ lo redimensiona.
 		if (r!=null &&((r.getWidth() == 0) || (r.getHeight() == 0))) {
 			newExtent = new Rectangle2D.Double(r.getMinX() - 0.1,
 					r.getMinY() - 0.1, r.getWidth() + 0.2, r.getHeight() + 0.2);
@@ -657,7 +657,7 @@ public class ViewPort {
 		this.updateDrawVersion();
 		this.extent = newExtent;
 
-		//Calcula la transformación afín
+		//Calcula la transformaciï¿½n afï¿½n
 		calculateAffineTransform();
 
 		// Lanzamos los eventos de extent cambiado
@@ -679,7 +679,7 @@ public class ViewPort {
 	public void refreshExtent() {
 		//this.scale = scale;
 
-		//Calcula la transformación afín
+		//Calcula la transformaciï¿½n afï¿½n
 		calculateAffineTransform();
 
 		// Lanzamos los eventos de extent cambiado
@@ -879,8 +879,8 @@ public class ViewPort {
 
 		trans.concatenate(translacion);
 
-		// Calculamos las distancias de 1 pixel y 3 pixel con esa transformación
-		// de coordenadas, de forma que estén precalculadas para cuando las necesitemos
+		// Calculamos las distancias de 1 pixel y 3 pixel con esa transformaciï¿½n
+		// de coordenadas, de forma que estï¿½n precalculadas para cuando las necesitemos
 		AffineTransform at;
 
 		try {
@@ -1161,7 +1161,7 @@ public class ViewPort {
 	}
 
 //  -----------------------------------------------------------------------------------------------------------
-//  NOTA PARA DESARROLLADORES SOBRE EL MÉTODO "public void setAffineTransform(AffineTransform at)"
+//  NOTA PARA DESARROLLADORES SOBRE EL Mï¿½TODO "public void setAffineTransform(AffineTransform at)"
 //  ==============================================================================================
 //	  Only used for print, should be removed, redefining the {@link RasterAdapter RasterAdapter} interface,
 //	   allowing it to receive a {@link ViewPortData ViewPortData} .
@@ -1328,7 +1328,7 @@ public class ViewPort {
 					xml.getDoubleProperty("extentW"),
 					xml.getDoubleProperty("extentH")));
 
-			//Calcula la transformación afín
+			//Calcula la transformaciï¿½n afï¿½n
 			vp.calculateAffineTransform();
 
 			// Lanzamos los eventos de extent cambiado
@@ -1399,7 +1399,7 @@ public class ViewPort {
 					xml.getDoubleProperty("extentW"),
 					xml.getDoubleProperty("extentH")));
 
-			//Calcula la transformación afín
+			//Calcula la transformaciï¿½n afï¿½n
 			vp.calculateAffineTransform();
 
 			// Lanzamos los eventos de extent cambiado

@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -41,13 +41,11 @@
 package com.iver.cit.gvsig.fmap.drivers.shp.write;
 
 import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
 
-import com.iver.cit.gvsig.fmap.core.FGeometryM;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.FPolyline2D;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
@@ -60,7 +58,7 @@ import com.iver.cit.gvsig.fmap.drivers.shp.SHP;
 
 
 /**
- * Elemento shape de tipo multilínea.
+ * Elemento shape de tipo multilï¿½nea.
  *
  * @author Vicente Caballero Navarro
  */
@@ -69,7 +67,7 @@ public class SHPMultiLine implements SHPShape {
 	protected int[] parts;
 	protected FPoint2D[] points;
 	protected double[] zs;
-	//double flatness = 0.8; // Por ejemplo. Cuanto más pequeño, más segmentos necesitará la curva
+	//double flatness = 0.8; // Por ejemplo. Cuanto mï¿½s pequeï¿½o, mï¿½s segmentos necesitarï¿½ la curva
 
 	/**
 	 * Crea un nuevo SHPMultiLine.
@@ -81,7 +79,7 @@ public class SHPMultiLine implements SHPShape {
 	/**
 	 * Crea un nuevo SHPMultiLine.
 	 *
-	 * @param type Tipo de multilínea.
+	 * @param type Tipo de multilï¿½nea.
 	 *
 	 * @throws ShapefileException
 	 */

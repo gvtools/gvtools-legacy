@@ -46,6 +46,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -53,6 +56,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -60,6 +64,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.border.TitledBorder;
 
 import org.gvsig.gui.beans.swing.JButton;
@@ -129,7 +134,13 @@ public class ProjectWindow extends JPanel implements PropertyChangeListener,
 		super();
 		initialize();
 		refreshControls();
-		Help.getHelp().enableHelp(this, "Manual-usuario-gvSIG-1.10-Proyectos-de-gvSIG-Introdución");
+		registerKeyboardAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Help.show();
+			}
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0),
+				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 	}
 
 	/**

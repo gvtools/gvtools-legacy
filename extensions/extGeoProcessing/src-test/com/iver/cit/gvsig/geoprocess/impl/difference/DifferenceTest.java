@@ -71,7 +71,6 @@ public class DifferenceTest extends TestCase {
 	private File baseDriversPath;
 	
 	private String SHP_DRIVER_NAME = "gvSIG shp driver";
-	private String DXF_DRIVER_NAME = "gvSIG DXF Memory Driver";
 	
 	private CoordinateReferenceSystem DEFAULT_CRS = ProjectionUtils
 			.getCRS("EPSG:23030");

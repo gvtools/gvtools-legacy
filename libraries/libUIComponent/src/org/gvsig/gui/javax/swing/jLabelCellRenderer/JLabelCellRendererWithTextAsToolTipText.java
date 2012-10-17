@@ -53,13 +53,13 @@ import javax.swing.ListCellRenderer;
  * 
  * @author Pablo Piqueras Bartolomé (p_queras@hotmail.com)
  */
-public class JLabelCellRendererWithTextAsToolTipText extends JLabelCellRenderer implements ListCellRenderer, Serializable {
+public class JLabelCellRendererWithTextAsToolTipText extends JLabelCellRenderer implements ListCellRenderer<Object>, Serializable {
 	private static final long serialVersionUID = 4799667459274027212L;
 
 	/* (non-Javadoc)
 	 * @see javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing.JList, java.lang.Object, int, boolean, boolean)
 	 */
-	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+	public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         /* The DefaultListCellRenderer class will take care of
          * the JLabels text property, it's foreground and background
          * colors, and so on.

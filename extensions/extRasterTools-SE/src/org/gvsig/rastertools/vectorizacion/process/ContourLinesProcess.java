@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
 *
 * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
 *
@@ -44,15 +44,12 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.drivers.DXFLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.FieldDescription;
 import com.iver.cit.gvsig.fmap.drivers.LayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.edition.DefaultRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
-import com.iver.cit.gvsig.fmap.edition.writers.dxf.DxfFieldsMapping;
-import com.iver.cit.gvsig.fmap.edition.writers.dxf.DxfWriter;
 import com.iver.cit.gvsig.fmap.edition.writers.shp.ShpWriter;
 /**
  * Este proceso vectoriza la capa de entrada que debe estar ya preprocesada.
@@ -83,7 +80,7 @@ public class ContourLinesProcess extends RasterProcess {
 	}
 	
 	/**
-	 * Parámetros obligatorios al proceso:
+	 * Parï¿½metros obligatorios al proceso:
 	 * <UL>
 	 * <LI></LI>
 	 * <LI>filename: Nombre del fichero de salida</LI>
@@ -106,15 +103,6 @@ public class ContourLinesProcess extends RasterProcess {
 		sFields[1] = lyr.getName();
 		
 		LayerDefinition tableDef = null;
-		if (fileName.endsWith(".dxf")) {
-			writer = new DxfWriter();
-			((DxfWriter) writer).setFile(new File(fileName));
-			((DxfWriter) writer).setCrs(lyr.getCrs());
-			tableDef = new DXFLayerDefinition();
-
-			DxfFieldsMapping fieldsMapping = new DxfFieldsMapping();
-			((DxfWriter) writer).setFieldMapping(fieldsMapping);
-		}
 		if(fileName.endsWith(".shp")) {
 			writer = new ShpWriter();
 			((ShpWriter)writer).setFile(new File(fileName));

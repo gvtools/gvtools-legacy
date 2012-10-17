@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -42,10 +42,7 @@ package com.iver.cit.gvsig.fmap.rendering;
 
 import java.awt.Color;
 
-import com.iver.cit.gvsig.fmap.core.ISLDCompatible;
-import com.iver.cit.gvsig.fmap.core.SLDTags;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
-import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
@@ -130,11 +127,11 @@ public class VectorialIntervalLegend extends AbstractIntervalLegend {
         fieldNames = new String[] {xml.getStringProperty("fieldName")};
         index = xml.getIntProperty("index");
 
-        if (xml.contains("intervalType")) { /* TODO Esta condición es para
-        									   poder cargar la versión 0.3,
+        if (xml.contains("intervalType")) { /* TODO Esta condiciï¿½n es para
+        									   poder cargar la versiï¿½n 0.3,
         									   se puede eliminar cuando ya
         									   no queramos soportar esta
-        									   versión. */
+        									   versiï¿½n. */
             intervalType = xml.getIntProperty("intervalType");
         }
 
@@ -177,7 +174,7 @@ public class VectorialIntervalLegend extends AbstractIntervalLegend {
         fieldNames = new String[] {xml.getStringProperty("fieldName")};
         index = xml.getIntProperty("index");
 
-        if (xml.contains("intervalType")) { //TODO Esta condición es para poder cargar la versión 0.3, se puede eliminar cuando ya no queramos soportar esta versión.
+        if (xml.contains("intervalType")) { //TODO Esta condiciï¿½n es para poder cargar la versiï¿½n 0.3, se puede eliminar cuando ya no queramos soportar esta versiï¿½n.
             intervalType = xml.getIntProperty("intervalType");
         }
         useDefaultSymbol = xml.getBooleanProperty("useDefaultSymbolB");

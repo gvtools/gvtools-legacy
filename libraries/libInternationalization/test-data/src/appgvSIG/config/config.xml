@@ -162,7 +162,6 @@
 			description="Extensión encargada de gestionar los eventos realizados sobre una capa."
 			active="true">
 			<!-- <menu text="Capa/shape_seleccion" action-command="SHAPE_SELECTED" icon="images/shapeseleccion.png"/> -->
-			<!-- menu text="Capa/Exportar selección a DXF" action-command="DXF_SELECTED"/-->
 			<menu text="Capa/borra_seleccion" action-command="DEL_SELECTION" icon="images/delselection.png"/>
 			<menu text="Vista/navegacion/Zoom_Select" action-command="ZOOM_SELECT" icon="images/ZoomSeleccion.png"/>
 			<tool-bar name="View_Tools_Select" position="6">

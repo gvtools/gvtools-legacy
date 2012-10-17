@@ -61,7 +61,6 @@
 				<include>org.gvsig.legacy:kxml2</include>
 				<include>log4j:log4j</include>
 				<include>org.gvsig:libProjection</include>
-				<include>org.gvsig:libDXF</include>
 				<include>org.gvsig:libRaster</include>
 <!--				<include>org.gvsig.legacy:pdf-transcoder</include>-->
 				<include>org.gvsig.legacy:postgis</include>

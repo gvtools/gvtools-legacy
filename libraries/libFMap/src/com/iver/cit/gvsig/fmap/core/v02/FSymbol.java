@@ -252,9 +252,8 @@ public class FSymbol implements ISymbol, ISLDCompatible{
 
 		selecSymbol.setFill(null);
 		// 050215, jmorell: Si en los drivers cambiamos el estilo, aqu� tenemos que
-		// actualizar los cambios. SYMBOL_STYLE_MARKER_SQUARE --> SYMBOL_STYLE_DGNSPECIAL.
-		if ((selecSymbol.getStyle() == FConstant.SYMBOL_STYLE_FILL_TRANSPARENT)
-		        || (selecSymbol.getStyle() == FConstant.SYMBOL_STYLE_DGNSPECIAL))
+		// actualizar los cambios.
+		if ((selecSymbol.getStyle() == FConstant.SYMBOL_STYLE_FILL_TRANSPARENT))
 		    selecSymbol.setStyle(FConstant.SYMBOL_STYLE_FILL_SOLID);
 
 

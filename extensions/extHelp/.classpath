@@ -2,10 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/jh.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.8.jar"/>
-	<classpathentry kind="lib" path="/_fwAndami/andami.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libCorePlugin"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

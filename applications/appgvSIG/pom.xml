@@ -142,11 +142,6 @@
 			<version>gvsig</version>
 		</dependency>
 		<dependency>
-			<groupId>org.gvsig.drivers</groupId>
-			<artifactId>csvstring</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.gvsig.legacy</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>gvsig</version>

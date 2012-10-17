@@ -17,7 +17,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/extGPE-gvSIG"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extCAD"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar" sourcepath="/libUIComponent/src"/>
-	<classpathentry kind="lib" path="/extGPE-gvSIG/lib/org.gvsig.xmlschema.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libRemoteServices"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libGPE"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libGPE-GML"/>

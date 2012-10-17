@@ -127,7 +127,7 @@ public class AttrInTableLabelingStrategy implements ILabelingStrategy, Cartograp
 						&& (layer.getCrsTransform() != null);
 
 				if ((idTextField == -1) || (idTextField >= recordSet.getFieldCount())) {
-					System.err.println("Ha habido un error. Se ha perdido el campo de etiquetado. Probablemente por quitar un join o edición externa.");
+					System.err.println("Ha habido un error. Se ha perdido el campo de etiquetado. Probablemente por quitar un join o ediciï¿½n externa.");
 					return;
 				}
 

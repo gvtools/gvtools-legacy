@@ -122,7 +122,6 @@ public class TestBinarySearchUsingFirstCharacters extends TestCase {
 		v1.add(new Item("extJDBC"));
 		v1.add(new Item("extMyPlugin"));
 		v1.add(new Item("extRasterTools"));
-		v1.add(new Item("extScripting"));
 		v1.add(new Item("extWCS"));
 		v1.add(new Item("extWFS2"));
 		v1.add(new Item("extwfs2"));
@@ -189,7 +188,6 @@ public class TestBinarySearchUsingFirstCharacters extends TestCase {
 		v2.add("extJDBC");
 		v2.add("extMyPlugin");
 		v2.add("extRasterTools");
-		v2.add("extScripting");
 		v2.add("extWCS");
 		v2.add("extWFS2");
 		v2.add("extwfs2");
@@ -281,7 +279,6 @@ public class TestBinarySearchUsingFirstCharacters extends TestCase {
 			results.add(new Item("extJDBC"));
 			results.add(new Item("extMyPlugin"));
 			results.add(new Item("extRasterTools"));
-			results.add(new Item("extScripting"));
 			results.add(new Item("extWCS"));
 			results.add(new Item("extWCS"));
 			results.add(new Item("extWFS2"));
@@ -585,7 +582,6 @@ public class TestBinarySearchUsingFirstCharacters extends TestCase {
 			results.add(new Item("extJDBC"));
 			results.add(new Item("extMyPlugin"));
 			results.add(new Item("extRasterTools"));
-			results.add(new Item("extScripting"));
 			results.add(new Item("extWCS"));
 			results.add(new Item("extWCS"));
 			results.add(new Item("extWFS2"));
@@ -874,7 +870,6 @@ public class TestBinarySearchUsingFirstCharacters extends TestCase {
 			results.add("extJDBC");
 			results.add("extMyPlugin");
 			results.add("extRasterTools");
-			results.add("extScripting");
 			results.add("extWCS");
 			results.add("extWCS");
 			results.add("extwfs2");
@@ -1190,7 +1185,6 @@ public class TestBinarySearchUsingFirstCharacters extends TestCase {
 			results.add("extJDBC");
 			results.add("extMyPlugin");
 			results.add("extRasterTools");
-			results.add("extScripting");
 			results.add("extWCS");
 			results.add("extWCS");
 			results.add("EXTWCS");

@@ -3,14 +3,12 @@
 	<libraries library-dir="./"/>
 	<depends plugin-name="com.iver.cit.gvsig" />
 	<depends plugin-name="com.iver.cit.gvsig.jdbc_spatial" />
-	<depends plugin-name="org.gvsig.scripting" />
 	<resourceBundle name="text"/>
 	<extensions>
 		<extension class-name="com.iver.cit.gvsig.CreateNewLayer"
 			description="Crear una nueva capa."
 			active="true" >
 			<menu text="Vista/new_layer/new_shp" key="n" position="-90" action-command="SHP"/>
-			<menu text="Vista/new_layer/new_dxf" position="0" action-command="DXF"/>
 			<menu text="Vista/new_layer/new_postgis" icon="images/postgres.png" position="1" action-command="POSTGIS"/>
 		</extension>
 
@@ -18,7 +16,6 @@
 			description="Exportar a diversos formatos"
 			active="true">
 			<menu text="Capa/export_to/shp" action-command="SHP" position="-80"/>
-			<menu text="Capa/export_to/dxf" action-command="DXF" position="2"/>
 			<menu text="Capa/export_to/postgis" icon="images/postgres.png" action-command="POSTGIS" position="3"/>
 		</extension>
 

@@ -41,7 +41,7 @@
 	</target>
 
 
-	<target name="generar-todos" depends="init, compile,shp, dbf, dgn, dxf, shpwriter, dxfwriter, dbfwriter, copy-drivers" description="Genera los jars de todos los drivers ">
+	<target name="generar-todos" depends="init, compile,shp, dbf, shpwriter, dbfwriter, copy-drivers" description="Genera los jars de todos los drivers ">
 	</target>
 
 	<target name="copy-drivers" >
@@ -60,17 +60,6 @@
 		<jar jarfile="${drivers-dir}/dbf/dbf.jar" basedir="./bin" includes="com/iver/cit/gvsig/fmap/drivers/dbf/**" />
 	</target>
 
-	<target name="dgn" depends="" description="Genera el jar de dgn">
-		<mkdir dir="${drivers-dir}/dgn" />
-		<jar jarfile="${drivers-dir}/dgn/dgn.jar" basedir="./bin" includes="com/iver/cit/gvsig/fmap/drivers/dgn/**" />
-	</target>
-
-	<target name="dxf" depends="" description="Genera el jar de dxf">
-		<mkdir dir="${drivers-dir}/dxf" />
-		<jar jarfile="${drivers-dir}/dxf/dxf.jar" basedir="./bin" includes="com/iver/cit/gvsig/fmap/drivers/dxf/**" />
-	</target>
-
-
 	<target name="wfs" depends="" description="Genera el jar de wfs">
 		<mkdir dir="${drivers-dir}/wfs" />
 		<jar jarfile="${drivers-dir}/wfs/wfs.jar" basedir="./bin" includes="com/iver/cit/gvsig/fmap/drivers/wfs/**"/>
@@ -87,10 +76,6 @@
 	<target name="shpwriter" depends="" description="Genera el jar de shp writer">
 		<mkdir dir="${writers-dir}/shp" />
 		<jar jarfile="${writers-dir}/shp/shpWriter.jar" basedir="./bin" includes="com/iver/cit/gvsig/fmap/edition/writers/shp/**" />
-	</target>
-	<target name="dxfwriter" depends="" description="Genera el jar de dxf writer">
-		<mkdir dir="${writers-dir}/dxf" />
-		<jar jarfile="${writers-dir}/dxf/dxfWriter.jar" basedir="./bin" includes="com/iver/cit/gvsig/fmap/edition/writers/dxf/**" />
 	</target>
 
 	<target name="dbfwriter" depends="" description="Genera el jar de dbf writer">

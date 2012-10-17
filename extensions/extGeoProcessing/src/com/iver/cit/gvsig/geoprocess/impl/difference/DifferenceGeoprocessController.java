@@ -64,7 +64,7 @@
 * first version in cvs
 *
 * Revision 1.5  2006/06/12 19:15:38  azabala
-* cambios para poder trabajar en geoprocessing con capas MULTI (dxf, jdbc, etc)
+* cambios para poder trabajar en geoprocessing con capas MULTI (jdbc, etc)
 *
 * Revision 1.4  2006/06/08 18:23:56  azabala
 * cambios para considerar las capas DB como espacialmente indexadas (aunque la referencia de ISpatialIndex sea null)

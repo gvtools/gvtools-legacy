@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -53,9 +53,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.PrintQuality;
 
-import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.CartographicSupportToolkit;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
@@ -64,7 +62,6 @@ import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
-import com.iver.cit.gvsig.fmap.core.v02.FConverter;
 import com.iver.utiles.StringUtilities;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
@@ -104,11 +101,11 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 
 		g.rotate(rotation);
 		Rectangle2D bounds = getHorizontalTextWrappingShape(new FPoint2D(0,0)).getBounds();
-		// Antes tomabamos el resultado de getBounds pero ya se le había aplicado
-		// la rotación, con lo que no obteníamos el la altura correcta de la fuente.
+		// Antes tomabamos el resultado de getBounds pero ya se le habï¿½a aplicado
+		// la rotaciï¿½n, con lo que no obtenï¿½amos el la altura correcta de la fuente.
 
 		// Alineamos el texto de manera que la parte inferior
-		// izquierda de la primera letra esté en (0,0).
+		// izquierda de la primera letra estï¿½ en (0,0).
 		// Para chino hay que escoger una fuente como esta (SimSun)
 //		g.setFont(new Font("SimSun",Font.PLAIN, 12));
 
@@ -282,9 +279,9 @@ public class SimpleTextSymbol extends AbstractSymbol implements ITextSymbol {
 	private FShape getHorizontalTextWrappingShape(FPoint2D p) {
 		if (this.horizontalTextWrappingShape  == null){
 			Font font = getFont();
-			/* Para tamaños de fuente de letras excesivamente grandes obtenemos
-			 * shapes con todas las coordenadas a 0, por eso limitamos el tamaño
-			 * a 1000 y después reescalamos el bounds.
+			/* Para tamaï¿½os de fuente de letras excesivamente grandes obtenemos
+			 * shapes con todas las coordenadas a 0, por eso limitamos el tamaï¿½o
+			 * a 1000 y despuï¿½s reescalamos el bounds.
 			 */
 			double scale = 1;
 			float fontSize = font.getSize2D();

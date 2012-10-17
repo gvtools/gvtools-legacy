@@ -8,7 +8,6 @@ import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ISpatialDB;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 
 public class JoinFeatureIterator extends DefaultFeatureIterator implements
 		IFeatureIterator {

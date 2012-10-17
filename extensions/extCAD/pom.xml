@@ -35,11 +35,6 @@
 			<version>1.9-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.gvsig</groupId>
-			<artifactId>extScripting</artifactId>
-			<version>1.9-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.gvsig.legacy</groupId>
 			<artifactId>bsf</artifactId>
 			<version>gvsig</version>

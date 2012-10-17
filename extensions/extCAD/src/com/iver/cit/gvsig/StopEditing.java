@@ -85,7 +85,6 @@ public class StopEditing extends Extension {
 	 */
 	public void initialize() {
 		addExportFormat("SHP", ExportTo.class);
-		addExportFormat("DXF", ExportTo.class);
 		addExportFormat("POSTGIS", ExportTo.class);
 	}
 

@@ -52,7 +52,7 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
 
 /**
  * Los drivers que deseen proporcionar una leyenda por defecto deben
- * implementar este interfaz. Se usa en el driver de DGN, por ejemplo.
+ * implementar este interfaz.
  *
  * @author FJP
  */

@@ -214,13 +214,6 @@ public abstract class MemoryDriver implements VectorialDriver, ObjectDriver,
  * (o todos) a NullValue, devolvera como tipo de dato Types.NULL.
  * Quizas, habra que hacer que los MemoryDriver tb tengan un ITableDefinition.
  *
- * DxfMemoryDriver no obstante si que tiene informacion sobre el esquema, asi
- * que debera sobreescribir este metodo para salvar el bug
- * (metodo getTableDefinition)
- *
- *
- *
- *
  */
 	public int getFieldType(int i) throws ReadDriverException {
 	    // TODO: Revisar esto. Por ejemplo, el long

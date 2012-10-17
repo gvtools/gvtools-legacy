@@ -157,12 +157,6 @@
 			<fileset dir="${basedir}/extCatalogYNomenclator/src">
 		        <include name="**/*.java"/>
 		    </fileset>
-			<fileset dir="${basedir}/extDataLocator/src">
-		        <include name="**/*.java"/>
-		    </fileset>
-			<fileset dir="${basedir}/extDwg/src">
-		        <include name="**/*.java"/>
-		    </fileset>
 			<fileset dir="${basedir}/extGeoProcessing/src">
 		        <include name="**/*.java"/>
 		    </fileset>
@@ -188,9 +182,6 @@
 		        <include name="**/*.java"/>
 		    </fileset>			 -->
 			<fileset dir="${basedir}/libDriverManager/src">
-		        <include name="**/*.java"/>
-		    </fileset>
-			<fileset dir="${basedir}/libDwg/src">
 		        <include name="**/*.java"/>
 		    </fileset>
 			<fileset dir="${basedir}/libFMap/src">

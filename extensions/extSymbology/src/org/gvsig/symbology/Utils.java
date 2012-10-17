@@ -130,8 +130,7 @@ public class Utils {
 //			if (fSymbolStyle == FConstant.SYMBOL_STYLE_FILL_SOLID) {
 //				fill = SymbologyFactory.createDefaultFillSymbol();
 //				color = fSymbol.getColor();
-//			} else if (fSymbolStyle == FConstant.SYMBOL_STYLE_FILL_TRANSPARENT ||
-//					   fSymbolStyle == FConstant.SYMBOL_STYLE_DGNSPECIAL) {
+//			} else if (fSymbolStyle == FConstant.SYMBOL_STYLE_FILL_TRANSPARENT) {
 //				fill = SymbologyFactory.createDefaultFillSymbol();
 //			} else {
 //				// lets see how to derive FSymbol with fill patterns

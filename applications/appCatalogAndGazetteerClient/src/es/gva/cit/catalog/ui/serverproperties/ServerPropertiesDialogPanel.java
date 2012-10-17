@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
-import sun.security.krb5.internal.UDPClient;
-
 import com.iver.utiles.swing.jcomboServer.ServerData;
 
 import es.gva.cit.catalog.CatalogClient;

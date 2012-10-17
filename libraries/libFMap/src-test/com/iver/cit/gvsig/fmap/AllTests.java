@@ -18,7 +18,6 @@ import com.iver.cit.gvsig.fmap.core.rendering.styling.labeling.TestLabelClass;
 import com.iver.cit.gvsig.fmap.core.symbols.TestISymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.TestMultiLayerSymbol;
 import com.iver.cit.gvsig.fmap.drivers.dbf.TestDbf;
-import com.iver.cit.gvsig.fmap.drivers.dgn.TestDgn;
 import com.iver.cit.gvsig.fmap.featureiterators.DBFeatureIteratorTest;
 import com.iver.cit.gvsig.fmap.featureiterators.FeatureIteratorTest;
 import com.iver.cit.gvsig.fmap.featureiterators.PerformanceFeatureIteratorTest;
@@ -82,7 +81,6 @@ public class AllTests extends TestCase {
 		suite.addTestSuite(SnappingOverlayOperationTest.class);
 		suite.addTestSuite(SpatialIndexTest.class);
 		suite.addTestSuite(TestDbf.class);
-		suite.addTestSuite(TestDgn.class);
 
 		suite.addTestSuite(FIntervalTest.class);
 

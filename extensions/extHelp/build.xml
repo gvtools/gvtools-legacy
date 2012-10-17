@@ -19,8 +19,6 @@
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
     <mkdir dir="${dist}"/>
-    <mkdir dir="${dist}/manuals"/>
-
   </target>
 
 	<target name="batch-build"
@@ -54,10 +52,6 @@
 	    	<fileset dir="./config" includes="**/**"/>
 	    </copy>
 		<copy file="package.info" todir="${dist}"/>
-	    <copy todir="${dist}/lib">
-	    	<fileset dir="./lib" includes="**/**"/>
-	    </copy>
-
 	</target>
 
 

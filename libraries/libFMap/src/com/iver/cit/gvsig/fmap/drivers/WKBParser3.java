@@ -4,9 +4,9 @@
  * PostGIS extension for PostgreSQL JDBC driver - Binary Parser
  *
  * NOTA: Es posible que lo mejor sea crear un PostGisGeometry que implemente
- * la interfaz IGeometry, y así nos sirve de base para tener IGeometries
- * que encapsulan otras posibles geometrías. Por ejemplo, un JTSGeometry.
- * De esta forma, un driver no necesitaría reescribirse.
+ * la interfaz IGeometry, y asï¿½ nos sirve de base para tener IGeometries
+ * que encapsulan otras posibles geometrï¿½as. Por ejemplo, un JTSGeometry.
+ * De esta forma, un driver no necesitarï¿½a reescribirse.
  *
  * (C) 2005 Markus Schaber, schabios@logi-track.com
  *
@@ -52,7 +52,6 @@ import com.iver.cit.gvsig.fmap.core.FShapeM;
 import com.iver.cit.gvsig.fmap.core.GeneralPathX;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ShapeFactory;
-import com.iver.cit.gvsig.fmap.core.ShapeMFactory;
 import com.vividsolutions.jts.io.WKBConstants;
 
 /**

@@ -72,8 +72,6 @@ import com.iver.andami.PluginServices;
 import com.iver.andami.ui.mdiManager.IWindow;
 import com.iver.andami.ui.mdiManager.WindowInfo;
 import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
-import com.iver.cit.gvsig.fmap.drivers.dgn.DgnMemoryDriver;
-import com.iver.cit.gvsig.fmap.drivers.dxf.DXFMemoryDriver;
 import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
@@ -535,7 +533,7 @@ public class GeoProcessingMergePanel
 	public void openDirectoryLayersDialog() {
 		 JFileChooser jfc = new JFileChooser();
 		 jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		 final String[] extensions = {"shp", "dxf", "dwg"};
+		 final String[] extensions = {"shp"};
          jfc.addChoosableFileFilter(
         		 new GenericFileFilter(extensions,
         				 PluginServices.getText(this, "Ficheros_de_cartografia")));
@@ -571,9 +569,7 @@ public class GeoProcessingMergePanel
 			solution = new FLyrVect[inputLayersToAdd.length];
 		//sin florituras. cogemos la primera que haya
 		CoordinateReferenceSystem crs = layers.getLayer(0).getCrs();
-		DgnMemoryDriver dgnDriver = null;
 		IndexedShpDriver shpDriver = null;
-		DXFMemoryDriver dxfDriver = null;
 		VectorialFileDriver driver = null;
 		//if we found layers with errors in the directory,
 		//we'll save error descriptions in errors
@@ -583,21 +579,11 @@ public class GeoProcessingMergePanel
 			String fullPath = file.getAbsolutePath() + "/" + fileName;
 			File afile = new File(fullPath);
 			try {
-				if(fileName.endsWith("dxf") || fileName.endsWith("DXF")){
-					dxfDriver = new DXFMemoryDriver();
-					dxfDriver.open(afile);
-					dxfDriver.initialize();
-					driver = dxfDriver;
-				}else if (fileName.endsWith("shp") || fileName.endsWith("SHP")){
+				if (fileName.endsWith("shp") || fileName.endsWith("SHP")){
 					shpDriver = new IndexedShpDriver();
 					shpDriver.open(afile);
 					shpDriver.initialize();
 					driver = shpDriver;
-				}else if (fileName.endsWith("dgn") || fileName.endsWith("DGN")){
-					dgnDriver = new DgnMemoryDriver();
-					dgnDriver.open(afile);
-					dgnDriver.initialize();
-					driver = dxfDriver;
 				}
 				solution[i] = (FLyrVect) LayerFactory.createLayer(fileName,
 						driver, afile, crs);

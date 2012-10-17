@@ -1,124 +1,81 @@
-<project name="extNormalization" default="move-andami" basedir=".">
+<project name="extNormalization" default="generate-without-source" basedir=".">
 	<description>
         Install the Normalization plugin
     </description>
 
 	<!-- set global properties for this build -->
 	<property name="src" location="src" />
-	<property name="src-test" location="src-test" />
-	<property name="build-test" location="bin-test" />
 	<property name="build" location="bin" />
 	<property name="dist" location="dist" />
 	<property name="lib" value="lib" />
 	<property name="plugin" value="org.gvsig.normalization" />
 	<property name="extension-dir" location="../_fwAndami/gvSIG/extensiones" />
-	<!--<import file="../binaries/ant/utilities.xml" /> -->
+	<property name="andami-dir" location="../_fwAndami"/>
+	<import file="../binaries/ant/utilities.xml"/>
 
+	<target name="init">
+		<!-- Create the time stamp -->
+	    <tstamp/>
+	    <!-- Create the build directory structure used by compile -->
+	    <mkdir dir="${build}"/>
+	    <mkdir dir="${dist}"/>
+	</target>
 
-	<!-- ================================= 
-			          target: distribution          
-			         ================================= -->
-	<target name="create-dist" depends="clean-dist" description="generate the distribution without the source file">
+	<target name="batch-build"
+		description="compile the sources, create the jar file"
+		depends="init,compile,create-jar,copy-data-files,move-to-andami">
+	</target>
 
-		<echo>Creating extension JAR and others folders</echo>
-		<jar jarfile="${dist}/${plugin}/${lib}/${plugin}.jar" basedir="${build}" />
-		<copy file="config/config.xml" todir="${dist}/${plugin}/" />
+	<target name="compile" description="compile the source" >
+		<!-- Compile the Java code from ${src} to ${build} -->
+		<mkdir dir="${build}" />
+		<loadEclipseClasspath project="${basedir}"/>
+		<gvSIG-javac
+			classpath="${eclipseClasspath}"
+		/>
+	</target>
 
-		<copy todir="${dist}/${plugin}/">
-			<fileset dir="config" includes="text*.properties" />
-		</copy>
-		<copy todir="${dist}/${plugin}/">
+	<target name="generate-without-source"
+  		description="generate the distribution without the source file"
+	  	depends="init,create-jar,copy-data-files,move-to-andami">
+
+	</target>
+
+	<target name="create-jar"
+		description="Creates the plugin jar">
+		<jar jarfile="${dist}/${lib}/${plugin}.jar" basedir="${build}"/>
+	</target>
+
+	<target name="copy-data-files" depends="make-package-info">
+	    <mkdir dir="${dist}"/>
+	    <copy todir="${dist}/">
+	        <fileset dir="./config" includes="**/**"/>
+	    </copy>
+		<copy todir="${dist}/">
 			<fileset dir="." includes="gpl.txt" />
 		</copy>
-
-		<copy todir="${dist}/${plugin}/${lib}">
-			<fileset dir="${lib}" includes="**/**" />
+		<mkdir dir="${dist}/${lib}"/>
+		<copy todir="${dist}/${lib}">
+			<fileset dir="${lib}" includes="*"/>
 		</copy>
-		<copy todir="${dist}/${plugin}/images">
-			<fileset dir="images/" includes="**/**" />
+		<mkdir dir="${dist}/images"/>
+		<copy todir="${dist}/images">
+			<fileset dir="images" includes="**/**"/>
 		</copy>
-		<copy todir="${dist}/${plugin}/about">
-			<fileset dir="about/" includes="**/**" />
-		</copy>
-		<echo>Created dist ended</echo>
-	</target>
-
-	<!-- ================================= 
-				          target: distribution          
-				         ================================= -->
-	<target name="create-dist-bn" depends="build-number,create-dist" description="generate the distribution without the source file with BN">
-		<echo>Changing de Build Number</echo>
-
-		<delete dir="${dist}/${plugin}/about" />
-		<mkdir dir="${dist}/${plugin}/about" />
-
-		<mkdir dir="${dist}/tmp" />
-
-		<copy todir="${dist}/tmp">
-			<fileset dir="about" includes="**" />
-		</copy>
-
-		<loadproperties srcFile="build.number" />
-		<replace casesensitive="true" file="${dist}/tmp/normabout.htm" token="#build.number#" value="${build.number}" />
-
-		<copy todir="${dist}/${plugin}/about">
-			<fileset dir="${dist}/tmp" includes="**" />
-		</copy>
-
-		<copy file="build.number" todir="${dist}/${plugin}" />
-
-		<delete dir="${dist}/tmp" />
-
-	</target>
-
-	<!-- ================================= 
-		          target: move andami            
-		         ================================= -->
-	<target name="move-andami" depends="create-dist" description="Move andami the extension">
-		<echo>copy to Andami</echo>
-		<copy todir="${extension-dir}/">
-			<fileset dir="${dist}" includes="**/**" />
+		<mkdir dir="${dist}/about"/>
+		<copy todir="${dist}/about">
+			<fileset dir="about" includes="*"/>
 		</copy>
 	</target>
 
-	<!-- ================================= 
-	          target: change build number             
-	         ================================= -->
-	<target name="build-number" description="up build number">
-		<propertyfile file="build.number" comment="Build number for ANT. Do not edit!">
-			<entry key="build.number" default="0" type="int" operation="+" />
-		</propertyfile>
-		<property file="build.number" />
+	<target name="move-to-andami">
+		<move todir="${extension-dir}/${plugin}/">
+			<fileset dir="${dist}" includes="**/**"/>
+		</move>
 	</target>
-
-	<!-- ================================= 
-	          target: delete dist folder          
-	         ================================= -->
-	<target name="clean" description="clean up">
-		<echo>Delete dist folder</echo>
-		<delete dir="${dist}" />
+	
+	<target name="clean">
+		<delete dir="${dist}" failonerror="no"/>
+		<delete dir="${build}" failonerror="no"/>
 	</target>
-
-	<!-- ================================= 
-          target: make the dist folder             
-         ================================= -->
-	<target name="clean-dist" depends="clean" description="Cleans the dist folder and prepares it to receive the extension files">
-		<echo>Creating dist folder</echo>
-		<mkdir dir="${dist}" />
-		<mkdir dir="${dist}/${plugin}" />
-		<mkdir dir="${dist}/${plugin}/images" />
-		<mkdir dir="${dist}/${plugin}/lib" />
-		<mkdir dir="${dist}/${plugin}/about" />
-	</target>
-
-	<!-- ================================= 
-	          target: generate installer            
-	         ================================= -->
-	<target name="generate-installer" depends="create-dist-bn" description="generate the extension installer for win, linux and mac">
-		<ant antfile="install/buildExt.xml" target="init">
-			<property name="basedir" location="install" />
-		</ant>
-	</target>
-
-
 </project>

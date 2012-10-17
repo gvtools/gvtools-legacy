@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2005 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -85,7 +85,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import com.iver.utiles.XMLEntity;
-import com.sun.org.apache.xerces.internal.impl.dtd.models.CMLeaf;
 
 /**
  * Defines the style that a Label symbol can contain which typically define

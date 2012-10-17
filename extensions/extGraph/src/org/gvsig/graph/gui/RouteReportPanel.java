@@ -297,10 +297,6 @@ public class RouteReportPanel extends JPanel implements IWindow {
 		MapContext context = mapControl.getMapContext();
 			if (format.equalsIgnoreCase("SHP")) {
 				export.saveToShp(context, routeLayer);
-			} else if (format.equalsIgnoreCase("DXF")) {
-				export.saveToDxf(context, routeLayer);
-//			} else if (format.equalsIgnoreCase("GML")) {
-//				export.saveToGml(context, routeLayer);
 			} else if (format.equalsIgnoreCase("POSTGIS")) {
 				export.saveToPostGIS(context, routeLayer);
 			}

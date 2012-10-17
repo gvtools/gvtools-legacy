@@ -80,7 +80,7 @@ public interface FShape extends Shape, Serializable {
 	public final static int TEXT = 8;
 
 	/**
-	 * <p>A set that can contain points, lines and polygons. This is usual in <i>CAD</i> layers <i>(dxf, dgn, dwg)</i>.</p>
+	 * <p>A set that can contain points, lines and polygons.
 	 */
 	public final static int MULTI = 16;
 

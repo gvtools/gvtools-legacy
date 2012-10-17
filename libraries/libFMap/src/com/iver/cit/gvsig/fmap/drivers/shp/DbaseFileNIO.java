@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -47,12 +47,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 import java.nio.charset.UnsupportedCharsetException;
-
-import javax.swing.JOptionPane;
-
-import org.apache.log4j.Logger;
 
 import com.iver.cit.gvsig.fmap.drivers.dbf.DbfEncodings;
 import com.iver.utiles.bigfile.BigByteBuffer2;
@@ -78,27 +73,27 @@ public class DbaseFileNIO {
 	/**
 	 * Retrieve number of records in the DbaseFile
 	 *
-	 * @return Número de registros.
+	 * @return Nï¿½mero de registros.
 	 */
 	public int getRecordCount() {
 		return myHeader.getNumRecords();
 	}
 
 	/**
-	 * Devuelve el número de fields.
+	 * Devuelve el nï¿½mero de fields.
 	 *
-	 * @return Número de fields.
+	 * @return Nï¿½mero de fields.
 	 */
 	public int getFieldCount() {
 		return myHeader.getNumFields();
 	}
 
 	/**
-	 * Devuelve el valor de un boolean a partir de su número de fila y de
+	 * Devuelve el valor de un boolean a partir de su nï¿½mero de fila y de
 	 * field.
 	 *
-	 * @param rowIndex Número de fila.
-	 * @param fieldId Número columna.
+	 * @param rowIndex Nï¿½mero de fila.
+	 * @param fieldId Nï¿½mero columna.
 	 *
 	 * @return boolean.
 	 */
@@ -122,10 +117,10 @@ public class DbaseFileNIO {
 	}
 
 	/**
-	 * Devuelve el String a partir del número de fila y columna.
+	 * Devuelve el String a partir del nï¿½mero de fila y columna.
 	 *
-	 * @param rowIndex Número de fila.
-	 * @param fieldId Número de columna.
+	 * @param rowIndex Nï¿½mero de fila.
+	 * @param fieldId Nï¿½mero de columna.
 	 *
 	 * @return String.
 	 * @throws UnsupportedEncodingException
@@ -155,8 +150,8 @@ public class DbaseFileNIO {
 	/**
 	 * Devuelve el Number a partir de una fila y columna.
 	 *
-	 * @param rowIndex Número fila.
-	 * @param fieldId Número columna.
+	 * @param rowIndex Nï¿½mero fila.
+	 * @param fieldId Nï¿½mero columna.
 	 *
 	 * @return Number.
 	 */
@@ -290,7 +285,7 @@ public class DbaseFileNIO {
 	/**
 	 * Retrieve the name of the given column.
 	 *
-	 * @param inIndex índice.
+	 * @param inIndex ï¿½ndice.
 	 *
 	 * @return nombre del campo.
 	 */
@@ -309,7 +304,7 @@ public class DbaseFileNIO {
 	/**
 	 * Retrieve the type of the given column.
 	 *
-	 * @param inIndex índice.
+	 * @param inIndex ï¿½ndice.
 	 *
 	 * @return tipo de campo.
 	 */
@@ -358,9 +353,9 @@ public class DbaseFileNIO {
 	/**
 	 * Retrieve the location of the decimal point.
 	 *
-	 * @param inIndex índice.
+	 * @param inIndex ï¿½ndice.
 	 *
-	 * @return localización.
+	 * @return localizaciï¿½n.
 	 */
 	public int getFieldDecimalLength(int inIndex) {
 		return myHeader.getFieldDecimalCount(inIndex);

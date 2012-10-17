@@ -1,13 +1,8 @@
 package com.iver.cit.gvsig.fmap.core;
 
 import java.awt.geom.PathIterator;
-import java.util.ArrayList;
 
 import com.iver.cit.gvsig.fmap.core.v02.FConverter;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.CoordinateArrays;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
 
 //import com.iver.andami.PluginServices;
 

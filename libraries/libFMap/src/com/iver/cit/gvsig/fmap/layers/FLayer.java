@@ -1,4 +1,4 @@
-/* gvSIG. Sistema de Información Geográfica de la Generalitat Valenciana
+/* gvSIG. Sistema de Informaciï¿½n Geogrï¿½fica de la Generalitat Valenciana
  *
  * Copyright (C) 2004 IVER T.I. and Generalitat Valenciana.
  *
@@ -20,7 +20,7 @@
  *
  *  Generalitat Valenciana
  *   Conselleria d'Infraestructures i Transport
- *   Av. Blasco Ibáñez, 50
+ *   Av. Blasco Ibï¿½ï¿½ez, 50
  *   46010 VALENCIA
  *   SPAIN
  *
@@ -597,7 +597,7 @@ public interface FLayer extends Georeferenced {
 	 */
 	Image getTocStatusImage();
 
-//	Métodos para la utilización de HyperLinks
+//	Mï¿½todos para la utilizaciï¿½n de HyperLinks
 
 	/**
 	 * Returns information about if the layer allows HyperLink or not

@@ -26,7 +26,6 @@
 	    <pathelement location="${gvSIGLibs}/batik-xml.jar"/>
 	    <pathelement location="${andamiLibs}/beans.jar"/>
 	    <pathelement location="${andamiLibs}/castor-0.9.5.3-xml.jar"/>
-		<pathelement location="${driversDir}/csvstring/csvstring.jar" />
 	    <pathelement location="${fmap}/dist/lib/fmap.jar"/>
 	    <pathelement location="${gvSIGLibs}/itext-1.4.2.jar"/>
 	    <pathelement location="${andamiJar}"/>

@@ -50,15 +50,12 @@ import com.iver.cit.gvsig.fmap.drivers.SHPLayerDefinition;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
 import com.iver.cit.gvsig.fmap.drivers.dbf.DbaseFile;
-import com.iver.cit.gvsig.fmap.drivers.dxf.DXFMemoryDriver;
 import com.iver.cit.gvsig.fmap.drivers.jdbc.postgis.PostGISWriter;
 import com.iver.cit.gvsig.fmap.drivers.jdbc.postgis.PostGisDriver;
 import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.edition.DefaultRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IRowEdited;
 import com.iver.cit.gvsig.fmap.edition.IWriter;
-import com.iver.cit.gvsig.fmap.edition.writers.dxf.DxfFieldsMapping;
-import com.iver.cit.gvsig.fmap.edition.writers.dxf.DxfWriter;
 import com.iver.cit.gvsig.fmap.edition.writers.shp.ShpWriter;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
@@ -353,9 +350,6 @@ public class ExportTo extends Extension {
 						if (actionCommand.equals("SHP")) {
 							saveToShp(mapa, lv);
 						}
-						if (actionCommand.equals("DXF")) {
-							saveToDxf(mapa, lv);
-						}
 						if (actionCommand.equals("POSTGIS")) {
 							saveToPostGIS(mapa, lv);
 						}
@@ -388,7 +382,7 @@ public class ExportTo extends Extension {
 				}
 			} while (tableNameNotFilled);
 
-			CharSequence seq = "\\/=.:,;¿?*{}´$%&()@#|!¬";
+			CharSequence seq = "\\/=.:,;ï¿½?*{}ï¿½$%&()@#|!ï¿½";
 			for (int i = 0; i < seq.length(); i++) {
 				char c = seq.charAt(i);
 				if(tableName != null && tableName.indexOf(c) != -1) {
@@ -422,11 +416,11 @@ public class ExportTo extends Extension {
 
 			DBLayerDefinition dbLayerDef = new DBLayerDefinition();
 			// Fjp:
-			// Cambio: En Postgis, el nombre de catálogo está siempre vacío. Es algo heredado de Oracle, que no se usa.
+			// Cambio: En Postgis, el nombre de catï¿½logo estï¿½ siempre vacï¿½o. Es algo heredado de Oracle, que no se usa.
 			// dbLayerDef.setCatalogName(cs.getDb());
 			dbLayerDef.setCatalogName("");
 
-			// Añadimos el schema dentro del layer definition para poder tenerlo en cuenta.
+			// Aï¿½adimos el schema dentro del layer definition para poder tenerlo en cuenta.
 			dbLayerDef.setSchema(cwp.getSchema());
 
 			dbLayerDef.setTableName(tableName);
@@ -436,8 +430,8 @@ public class ExportTo extends Extension {
 
 			FieldDescription[] fieldsDescrip = sds.getFieldsDescription();
 			dbLayerDef.setFieldsDesc(fieldsDescrip);
-			// Creamos el driver. OJO: Hay que añadir el campo ID a la
-			// definición de campos.
+			// Creamos el driver. OJO: Hay que aï¿½adir el campo ID a la
+			// definiciï¿½n de campos.
 
 			if (originalDef != null){
 				dbLayerDef.setFieldID(originalDef.getFieldID());
@@ -524,7 +518,7 @@ public class ExportTo extends Extension {
 
 	/**
 	 * Lanza un thread en background que escribe las features. Cuando termina, pregunta al usuario si quiere
-	 * añadir la nueva capa a la vista. Para eso necesita un driver de lectura ya configurado.
+	 * aï¿½adir la nueva capa a la vista. Para eso necesita un driver de lectura ya configurado.
 	 * @param mapContext
 	 * @param layer
 	 * @param writer
@@ -625,52 +619,6 @@ public class ExportTo extends Extension {
 		progress.close();
 	}
 
-	public void saveToDxf(MapContext mapContext, FLyrVect layer)  {
-		try {
-			JFileChooser jfc = new JFileChooser(lastPath);
-			SimpleFileFilter filterShp = new SimpleFileFilter("dxf",
-					PluginServices.getText(this, "dxf_files"));
-			jfc.setFileFilter(filterShp);
-			if (jfc.showSaveDialog((Component) PluginServices.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
-				File newFile = jfc.getSelectedFile();
-				String path = newFile.getAbsolutePath();
-				if (!(path.toLowerCase().endsWith(".dxf"))) {
-					path = path + ".dxf";
-				}
-				newFile = new File(path);
-
-				DxfWriter writer = (DxfWriter) LayerFactory.getWM().getWriter(
-				"DXF Writer");
-				SHPLayerDefinition lyrDef = new SHPLayerDefinition();
-				SelectableDataSource sds = layer.getRecordset();
-				FieldDescription[] fieldsDescrip = sds.getFieldsDescription();
-				lyrDef.setFieldsDesc(fieldsDescrip);
-				lyrDef.setFile(newFile);
-				lyrDef.setName(newFile.getName());
-				lyrDef.setShapeType(layer.getShapeType());
-				writer.setFile(newFile);
-				writer.initialize(lyrDef);
-				writer.setCrs(layer.getCrs());
-				DxfFieldsMapping fieldsMapping = new DxfFieldsMapping();
-				// TODO: Recuperar aquí los campos del cuadro de diálogo.
-				writer.setFieldMapping(fieldsMapping);
-				DXFMemoryDriver dxfDriver=new DXFMemoryDriver();
-				dxfDriver.open(newFile);
-				writeFeatures(mapContext, layer, writer, dxfDriver);
-				String fileName = newFile.getAbsolutePath();
-				lastPath  = fileName.substring(0, fileName.lastIndexOf(File.separatorChar));
-			}
-
-		} catch (ReadDriverException e) {
-			NotificationManager.addError(e.getMessage(),e);
-		} catch (InitializeWriterException e) {
-			NotificationManager.addError(e.getMessage(),e);
-		} catch (DriverLoadException e) {
-			NotificationManager.addError(e.getMessage(),e);
-		}
-
-	}
-
 	public void saveToShp(MapContext mapContext, FLyrVect layer) {
 		try {
 			JFileChooser jfc = new JFileChooser();
@@ -742,7 +690,7 @@ public class ExportTo extends Extension {
 
 					ShpWriter writer3 = (ShpWriter) LayerFactory.getWM().getWriter(
 					"Shape Writer");
-					// Polígonos
+					// Polï¿½gonos
 					String auxPolygon = path.replaceFirst("\\.shp", "_polygons.shp");
 					SHPLayerDefinition lyrDefPolygon = new SHPLayerDefinition();
 					lyrDefPolygon.setFieldsDesc(fieldsDescrip);
