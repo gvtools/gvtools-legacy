@@ -569,7 +569,7 @@ public class ViewPort {
 		dist = pt1.distance(pt2);
 
 		if (crs != null && !(crs instanceof ProjectedCRS)) {
-			// TODO GT: should not it be fromGeo instead of toGeo?
+			// TODO gt: should not it be fromGeo instead of toGeo?
 			// dist = new GeoCalc(crs).distanceVincenty(crs.toGeo(pt1),
 			// crs.toGeo(pt2));
 			return dist;

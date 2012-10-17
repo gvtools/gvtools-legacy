@@ -261,7 +261,7 @@ public class VectorErrorTable extends BoxLayoutPanel {
 							break;
 						}
 					}
-					// TODO geotools refactoring
+					// TODO gt: error
 					solution = "mappedPosition.getError(mathTransform, buffer)";
 					// solution =
 					// "mappedPosition.getError(mathTransform, buffer)"

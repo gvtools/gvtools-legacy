@@ -427,7 +427,7 @@ public class ReferencingUtil {
 		return new Point2D.Double(coordinates[0], coordinates[1]);
 	}
 	public FLyrVect getTinAsFMapLyr(RubberSheetBuilder rbBuilder, CoordinateReferenceSystem crs){
-		// TODO GT: lost functionality getTinAsFMapLyr
+		// TODO gt: lost functionality getTinAsFMapLyr
 		throw new UnsupportedOperationException();
 		// FLyrVect solution = null;
 		// List<IFeature> features = new ArrayList<IFeature>();

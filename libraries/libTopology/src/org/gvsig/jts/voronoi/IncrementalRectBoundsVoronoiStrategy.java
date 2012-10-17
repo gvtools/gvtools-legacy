@@ -60,7 +60,7 @@ public class IncrementalRectBoundsVoronoiStrategy extends
 	public List<TriangleFeature> createTin(VoronoiAndTinInputLyr inputLyr,
 			boolean onlySelection, CancellableProgressTask progressMonitor)
 			throws BaseException {
-		// TODO GT: lost functionality: createTin
+		// TODO gt: lost functionality: createTin
 		throw new UnsupportedOperationException();
 		// List<TriangleFeature> solution = new ArrayList<TriangleFeature>();
 		// Polygon bbox = (Polygon) Voronoier.getThiessenBoundingBox(inputLyr,
