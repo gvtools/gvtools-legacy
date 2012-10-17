@@ -6,32 +6,31 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.sql.Types;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.PrintQuality;
 
 import org.apache.log4j.Logger;
 import org.cresques.cts.ProjectionUtils;
-import org.geotools.data.DataStore;
-import org.geotools.data.DataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.feature.collection.SimpleFeatureIteratorImpl;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.feature.type.AttributeType;
+import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.instruction.FieldNotFoundException;
 import com.hardcode.gdbms.engine.values.Value;
+import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
 import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
@@ -112,20 +111,16 @@ public class GTFLyrVect extends FLyrVect {
 	private XMLEntity loadSelection = null;
 	private IVectorLegend loadLegend = null;
 	private SimpleFeatureSource source;
+	private GTVectorialAdapter readableVectorialAdapter;
+	private SelectableDataSource recordSet;
 
 	private FLyrVectLinkProperties linkProperties = new FLyrVectLinkProperties();
 	private boolean waitTodraw = false;
 
-	public GTFLyrVect(File file) throws IOException {
-		Map<Object, Object> map = new HashMap<Object, Object>();
-		map.put("url", file.toURI().toURL());
-		DataStore store = DataStoreFinder.getDataStore(map);
-		String typeName = store.getTypeNames()[0];
-		source = store.getFeatureSource(typeName);
-	}
-
-	public GTFLyrVect(SimpleFeatureSource source) {
+	public GTFLyrVect(SimpleFeatureSource source) throws ReadDriverException {
 		this.source = source;
+		this.readableVectorialAdapter = new GTVectorialAdapter(this);
+		this.recordSet = new SelectableDataSource(new GTDataSource(this));
 	}
 
 	public boolean isWaitTodraw() {
@@ -134,7 +129,7 @@ public class GTFLyrVect extends FLyrVect {
 
 	@Override
 	public ReadableVectorial getSource() {
-		return null;
+		return readableVectorialAdapter;
 	}
 
 	public void setWaitTodraw(boolean waitTodraw) {
@@ -282,9 +277,6 @@ public class GTFLyrVect extends FLyrVect {
 				if (getDriverAttributes() != null) {
 					isInMemory = getDriverAttributes().isLoadedInMemory();
 				}
-				// TODO geotools refactoring: currently no selection
-				// SelectionSupport selectionSupport = getSelectionSupport();
-				// Iteration over each feature
 				while (!cancel.isCanceled() && it.hasNext()) {
 					IFeature feat = it.next();
 					IGeometry geom = null;
@@ -310,13 +302,14 @@ public class GTFLyrVect extends FLyrVect {
 
 					// Código para poder acceder a los índices para ver si está
 					// seleccionado un Feature
-					// TODO geotools refactoring: currently no selection
-					// int selectionIndex = Integer.parseInt(feat.getID());
-					// if (selectionIndex != -1) {
-					// if (selectionSupport.isSelected(selectionIndex)) {
-					// sym = sym.getSymbolForSelection();
-					// }
-					// }
+					int selectionIndex = Integer.parseInt(feat.getID()
+							.substring(feat.getID().lastIndexOf('.') + 1)) - 1;
+					if (selectionIndex != -1) {
+						if (recordSet.getSelectionSupport().isSelected(
+								selectionIndex)) {
+							sym = sym.getSymbolForSelection();
+						}
+					}
 
 					// Check if this symbol is sized with CartographicSupport
 					CartographicSupport csSym = null;
@@ -793,7 +786,7 @@ public class GTFLyrVect extends FLyrVect {
 	@Override
 	public int getShapeType() throws ReadDriverException {
 		// TODO implement correctly
-		return FShape.LINE;
+		return FShape.POLYGON;
 	}
 
 	public XMLEntity getXMLEntity() throws XMLException {
@@ -1188,8 +1181,7 @@ public class GTFLyrVect extends FLyrVect {
 	}
 
 	public SelectableDataSource getRecordset() throws ReadDriverException {
-		// TODO geotools refactoring
-		return null;
+		return recordSet;
 	}
 
 	public void setEditing(boolean b) throws StartEditionLayerException {
@@ -1379,13 +1371,7 @@ public class GTFLyrVect extends FLyrVect {
 	}
 
 	public SelectionSupport getSelectionSupport() {
-		// TODO geotools refactoring: currently no selection
-		// try {
-		// return getRecordset().getSelectionSupport();
-		// } catch (ReadDriverException e) {
-		// e.printStackTrace();
-		// }
-		return null;
+		return recordSet.getSelectionSupport();
 	}
 
 	protected boolean isOnePoint(AffineTransform graphicsTransform,
@@ -1638,24 +1624,38 @@ public class GTFLyrVect extends FLyrVect {
 		}
 	}
 
-	private int getShapeCount() throws IOException {
+	int getShapeCount() throws IOException {
 		return source.getFeatures().size();
 	}
 
-	private IGeometry getShape(int index) throws IOException {
+	SimpleFeature getFeature(long index) throws IOException {
 		SimpleFeatureIterator features = source.getFeatures().features();
-		int i = -1;
+		int i = 0;
 		SimpleFeature feature = null;
-		do {
-			i++;
-			assert features.hasNext();
+
+		while (i <= index) {
+			if (!features.hasNext()) {
+				feature = null;
+				break;
+			}
 			feature = features.next();
-		} while (i < index);
+			i++;
+		}
+
+		features.close();
+		return feature;
+	}
+
+	IGeometry getShape(int index) throws IOException {
+		SimpleFeature feature = getFeature(index);
+		if (feature == null) {
+			return null;
+		}
 		Geometry geom = (Geometry) feature.getDefaultGeometry();
 		return ShapeFactory.createGeometry(new FLiteShape(geom));
 	}
 
-	private DriverAttributes getDriverAttributes() {
+	DriverAttributes getDriverAttributes() {
 		return new DriverAttributes();
 	}
 
@@ -1670,12 +1670,95 @@ public class GTFLyrVect extends FLyrVect {
 		return -1;
 	}
 
-	private IFeatureIterator getFeatureIterator(Rectangle2D adjustedExtent,
-			String[] array, CoordinateReferenceSystem crs) throws ReadDriverException {
+	IFeatureIterator getFeatureIterator(Rectangle2D adjustedExtent,
+			String[] array, CoordinateReferenceSystem crs)
+			throws ReadDriverException {
 		try {
 			return new GTFeatureIterator(adjustedExtent, array, crs);
 		} catch (IOException e) {
 			throw new ReadDriverException(getName(), e);
+		}
+	}
+
+	int getFieldCount() {
+		return source.getSchema().getAttributeCount();
+	}
+
+	int getRowCount() throws IOException {
+		return source.getFeatures().size();
+	}
+
+	String getFieldName(int field) {
+		return source.getSchema().getAttributeDescriptors().get(field)
+				.getLocalName();
+	}
+
+	int getFieldType(int field) {
+		AttributeType type = source.getSchema().getAttributeDescriptors()
+				.get(field).getType();
+		return geotools2gvsigType(type);
+	}
+
+	String getDataSourceName() {
+		return source.getName().getLocalPart();
+	}
+
+	int getFieldWidth(int field) {
+		// TODO gt: implement
+		return 255;
+	}
+
+	Value getFieldValue(long row, int field) throws IOException {
+		SimpleFeature feature = getFeature(row);
+		return attributeToValue(feature, field);
+	}
+
+	private Value attributeToValue(SimpleFeature feature, int field) {
+		Object attribute = feature.getAttribute(field);
+		int type = getFieldType(field);
+		switch (type) {
+		case Types.INTEGER:
+			return ValueFactory.createValue((Integer) attribute);
+		case Types.DOUBLE:
+			return ValueFactory.createValue((Double) attribute);
+		case Types.FLOAT:
+			return ValueFactory.createValue((Float) attribute);
+		case Types.BOOLEAN:
+			return ValueFactory.createValue((Boolean) attribute);
+		case Types.VARCHAR:
+			return ValueFactory.createValue((String) attribute);
+		default:
+			throw new IllegalArgumentException(
+					"bug! Unrecognized attribute type: " + type);
+		}
+	}
+
+	void start() {
+		// TODO gt: called when the related data source
+		// (DataSource.start() method is called) or adapter
+		// (ReadableVectorial.start() method is called) is started
+	}
+
+	void stop() {
+		// TODO gt: called when the related data source
+		// (DataSource.stop() method is called) or adapter
+		// (ReadableVectorial.stop() method is called) is stopped
+	}
+
+	private int geotools2gvsigType(AttributeType type) {
+		if (Integer.class.isAssignableFrom(type.getBinding())) {
+			return Types.INTEGER;
+		} else if (Boolean.class.isAssignableFrom(type.getBinding())) {
+			return Types.BOOLEAN;
+		} else if (Float.class.isAssignableFrom(type.getBinding())) {
+			return Types.FLOAT;
+		} else if (Double.class.isAssignableFrom(type.getBinding())) {
+			return Types.DOUBLE;
+		} else if (String.class.isAssignableFrom(type.getBinding())) {
+			return Types.VARCHAR;
+		} else {
+			throw new IllegalArgumentException(
+					"bug! Unrecognized attribute type: " + type);
 		}
 	}
 
@@ -1698,8 +1781,14 @@ public class GTFLyrVect extends FLyrVect {
 			SimpleFeature feature = delegate.next();
 			Geometry jts = (Geometry) feature.getDefaultGeometry();
 			Value[] values = new Value[feature.getAttributeCount()];
+			GeometryDescriptor geomDescriptor = feature
+					.getDefaultGeometryProperty().getDescriptor();
 			for (int i = 0; i < values.length; i++) {
-				// TODO Auto-generated method stub
+				AttributeDescriptor attributeDescriptor = feature.getType()
+						.getDescriptor(i);
+				if (!attributeDescriptor.equals(geomDescriptor)) {
+					values[i] = attributeToValue(feature, i);
+				}
 			}
 			FGeometry geom = ShapeFactory.createGeometry(new FLiteShape(jts));
 			return new DefaultFeature(geom, values, feature.getID());

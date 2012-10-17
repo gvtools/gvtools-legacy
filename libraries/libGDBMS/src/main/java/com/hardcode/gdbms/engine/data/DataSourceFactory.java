@@ -335,6 +335,10 @@ public class DataSourceFactory {
 		return (SourceInfo) tableSource.get(dataSourceName);
 	}
 
+	public void addSourceInfo(String name, SourceInfo info) {
+		tableSource.put(name, info);
+	}
+	
 	/**
 	 * Gets the information of all data sources registered in the system
 	 *
@@ -1088,7 +1092,11 @@ public class DataSourceFactory {
 			adapter.setDataSourceFactory(this);
 
 			return getModedDataSource(adapter, mode);
+		} else if (info instanceof DataSourceInfo) {
+			DataSourceInfo dsi = (DataSourceInfo) info;
+			return new AutomaticDataSource(dsi.dataSource, delay);
 		} else {
+			
 			throw new RuntimeException();
 		}
 	}
