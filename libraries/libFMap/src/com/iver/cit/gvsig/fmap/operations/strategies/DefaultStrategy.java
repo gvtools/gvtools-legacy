@@ -45,11 +45,15 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.BitSet;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 
 import org.apache.log4j.Logger;
+import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.data.simple.SimpleFeatureSource;
+import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.operation.MathTransform;
 
 import com.hardcode.gdbms.driver.exceptions.InitializeDriverException;
@@ -60,6 +64,8 @@ import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
+import com.iver.cit.gvsig.fmap.core.ShapeFactory;
+import com.iver.cit.gvsig.fmap.core.gt2.FLiteShape;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.drivers.DriverAttributes;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
@@ -70,45 +76,47 @@ import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.ClassifiableVectorial;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.Selectable;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.SingleLayer;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.utiles.swing.threads.Cancellable;
 import com.iver.utiles.swing.threads.CancellableMonitorable;
-
+import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * Implementa la Strategy por defecto. Los métodos que tendrán en común la
- * mayor parte de las estrategias
+ * Implementa la Strategy por defecto. Los métodos que tendrán en común la mayor
+ * parte de las estrategias
  */
 public class DefaultStrategy implements Strategy {
-    public static final int EQUALS = 0;
-    public static final int DISJOINT = 1;
-    public static final int INTERSECTS = 2;
-    public static final int TOUCHES = 3;
-    public static final int CROSSES = 4;
-    public static final int WITHIN = 5;
-    public static final int CONTAINS = 6;
-    public static final int OVERLAPS = 7;
+	public static final int EQUALS = 0;
+	public static final int DISJOINT = 1;
+	public static final int INTERSECTS = 2;
+	public static final int TOUCHES = 3;
+	public static final int CROSSES = 4;
+	public static final int WITHIN = 5;
+	public static final int CONTAINS = 6;
+	public static final int OVERLAPS = 7;
 
-	private static Logger logger = Logger.getLogger(DefaultStrategy.class.getName());
+	private static Logger logger = Logger.getLogger(DefaultStrategy.class
+			.getName());
 	FLayer capa = null;
 
 	/**
 	 * Crea un nuevo DefaultStrategy.
-	 *
-	 * @param capa DOCUMENT ME!
+	 * 
+	 * @param capa
+	 *            DOCUMENT ME!
 	 */
 	public DefaultStrategy(FLayer capa) {
 		this.capa = capa;
 
-		SingleLayer foo = (SingleLayer) capa;
+		FLyrVect foo = (FLyrVect) capa;
 		ClassifiableVectorial vectorial = (ClassifiableVectorial) capa;
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByRect(java.awt.geom.Rectangle2D)
 	 */
-	public FBitSet queryByRect(Rectangle2D rect, CancellableMonitorable cancel) throws ReadDriverException, VisitorException {
+	public FBitSet queryByRect(Rectangle2D rect, CancellableMonitorable cancel)
+			throws ReadDriverException, VisitorException {
 		QueryByRectVisitor visitor = new QueryByRectVisitor();
 
 		visitor.setRect(rect);
@@ -118,11 +126,13 @@ public class DefaultStrategy implements Strategy {
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByShape(com.iver.cit.gvsig.fmap.fshape.IGeometry,
-	 * 		int)
+	 *      int)
 	 */
-	public FBitSet queryByShape(IGeometry g, int relationship, CancellableMonitorable cancel)
-		throws ReadDriverException, VisitorException {
-		QueryByGeometryVisitor visitor = new QueryByGeometryVisitor(g, relationship);
+	public FBitSet queryByShape(IGeometry g, int relationship,
+			CancellableMonitorable cancel) throws ReadDriverException,
+			VisitorException {
+		QueryByGeometryVisitor visitor = new QueryByGeometryVisitor(g,
+				relationship);
 		process(visitor);
 
 		return visitor.getBitSet();
@@ -144,20 +154,21 @@ public class DefaultStrategy implements Strategy {
 	/**
 	 * @throws ReadDriverException
 	 * @see com.iver.cit.gvsig.fmap.operations.LayerOperations#draw(java.awt.image.BufferedImage,
-	 * 		ISymbol, FShape)
+	 *      ISymbol, FShape)
 	 */
 	public void draw(BufferedImage image, Graphics2D g, ViewPort viewPort,
-		Cancellable cancel) throws ReadDriverException {
+			Cancellable cancel) throws ReadDriverException {
 		try {
-			ReadableVectorial adapter = ((SingleLayer) capa).getSource();
+			ReadableVectorial adapter = ((FLyrVect) capa).getSource();
 			MathTransform trans = getCapa().getCrsTransform();
-//			logger.info("adapter.start()");
+			// logger.info("adapter.start()");
 			adapter.start();
 
-//			logger.info("getCapa().getRecordset().start()");
-			SelectableDataSource rsSel = ((AlphanumericData) getCapa()).getRecordset();
+			// logger.info("getCapa().getRecordset().start()");
+			SelectableDataSource rsSel = ((AlphanumericData) getCapa())
+					.getRecordset();
 			if (rsSel != null)
-			    rsSel.start();
+				rsSel.start();
 
 			int sc;
 			Rectangle2D extent = viewPort.getAdjustedExtent();
@@ -168,24 +179,22 @@ public class DefaultStrategy implements Strategy {
 			// de comunicación con los drivers.
 			DriverAttributes attr = adapter.getDriverAttributes();
 			boolean bMustClone = false;
-			if (attr != null)
-			{
-			    if (attr.isLoadedInMemory())
-			    {
-			        bMustClone = attr.isLoadedInMemory();
-			    }
+			if (attr != null) {
+				if (attr.isLoadedInMemory()) {
+					bMustClone = attr.isLoadedInMemory();
+				}
 			}
-			IVectorLegend l = (IVectorLegend) ((ClassifiableVectorial) capa).getLegend();
-            FBitSet bitSet = null;
-            if (getCapa() instanceof Selectable){
-                Selectable selection = (Selectable) getCapa();
-                bitSet = selection.getSelection();
-            }
+			IVectorLegend l = (IVectorLegend) ((ClassifiableVectorial) capa)
+					.getLegend();
+			FBitSet bitSet = null;
+			if (getCapa() instanceof Selectable) {
+				Selectable selection = (Selectable) getCapa();
+				bitSet = selection.getSelection();
+			}
 			for (int i = 0; i < sc; i++) {
 				if (cancel.isCanceled()) {
 					break;
 				}
-
 
 				IGeometry geom = adapter.getShape(i);
 
@@ -194,63 +203,56 @@ public class DefaultStrategy implements Strategy {
 				}
 
 				if (trans != null) {
-				    if (bMustClone)
-				        geom = geom.cloneGeometry();
+					if (bMustClone)
+						geom = geom.cloneGeometry();
 					geom.reProject(trans);
 				}
 
 				// if (geom.intersects(extent)) {
 				if (geom.fastIntersects(extent.getMinX(), extent.getMinY(),
-				         extent.getWidth(), extent.getHeight())) {
+						extent.getWidth(), extent.getHeight())) {
 					ISymbol symbol = l.getSymbol(i);
 
-                    if (symbol ==null)
-                        continue;
-                    if (bitSet != null)
-                        if (bitSet.get(i)) {
-    						symbol = symbol.getSymbolForSelection();
-    					}
-                    if (symbol != null)
-                    	geom.draw(g, viewPort, symbol, cancel);
+					if (symbol == null)
+						continue;
+					if (bitSet != null)
+						if (bitSet.get(i)) {
+							symbol = symbol.getSymbolForSelection();
+						}
+					if (symbol != null)
+						geom.draw(g, viewPort, symbol, cancel);
 
 				}
-				/* else
-				{
-				    System.out.println("no pinto id=" + i);
-				} */
+				/*
+				 * else { System.out.println("no pinto id=" + i); }
+				 */
 			}
 
-//			logger.info("getCapa().getRecordset().stop()");
+			// logger.info("getCapa().getRecordset().stop()");
 			if (rsSel != null)
-			    rsSel.stop();
+				rsSel.stop();
 
-
-//			logger.debug("adapter.stop()");
+			// logger.debug("adapter.stop()");
 			adapter.stop();
 			// TODO: A revisar si es o no conveniente este sistema
 			// de comunicación con los drivers.
 			// DriverAttributes attr = adapter.getDriverAttributes();
-			/* if (attr != null)
-			{
-			    if (attr.isLoadedInMemory())
-			    {
-			        // Quitamos lo de la reproyección al vuelo para que
-			        // solo se haga una vez.
-			        getCapa().setCoordTrans(null);
-			    }
-			} */
+			/*
+			 * if (attr != null) { if (attr.isLoadedInMemory()) { // Quitamos lo
+			 * de la reproyección al vuelo para que // solo se haga una vez.
+			 * getCapa().setCoordTrans(null); } }
+			 */
 
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		} catch (InitializeDriverException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		}
 	}
 
-
 	/**
 	 * Devuelve la capa.
-	 *
+	 * 
 	 * @return Returns the capa.
 	 */
 	public FLayer getCapa() {
@@ -260,194 +262,221 @@ public class DefaultStrategy implements Strategy {
 	/**
 	 * @throws ExpansionFileReadException
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#process(com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor,
-	 * 		java.util.BitSet)
+	 *      java.util.BitSet)
 	 */
 	public void process(FeatureVisitor visitor, BitSet subset)
-		throws ReadDriverException, ExpansionFileReadException, VisitorException {
+			throws ReadDriverException, ExpansionFileReadException,
+			VisitorException {
 		process(visitor, subset, null);
 	}
 
 	/**
 	 * DOCUMENT ME!
-	 *
-	 * @param visitor DOCUMENT ME!
+	 * 
+	 * @param visitor
+	 *            DOCUMENT ME!
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#process(com.iver.cit.gvsig.fmap.operations.strategies.FeatureVisitor)
 	 */
-	public void process(FeatureVisitor visitor)
-		throws ReadDriverException, VisitorException {
-		process(visitor, (CancellableMonitorable)null);
+	public void process(FeatureVisitor visitor) throws ReadDriverException,
+			VisitorException {
+		process(visitor, (CancellableMonitorable) null);
 	}
 
 	/**
 	 * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#queryByPoint(Point2D,
-	 * 		double)
+	 *      double)
 	 */
-	public FBitSet queryByPoint(Point2D p, double tolerance, CancellableMonitorable cancel)
-		throws ReadDriverException, VisitorException {
-        // TODO: OJO!!!!. Está implementado como un rectangulo.
-        // Lo correcto debería ser calculando las distancias reales
-        // es decir, con un círculo.
-        Rectangle2D recPoint = new Rectangle2D.Double(p.getX() - (tolerance / 2),
-                p.getY() - (tolerance / 2), tolerance, tolerance);
+	public FBitSet queryByPoint(Point2D p, double tolerance,
+			CancellableMonitorable cancel) throws ReadDriverException,
+			VisitorException {
+		// TODO: OJO!!!!. Está implementado como un rectangulo.
+		// Lo correcto debería ser calculando las distancias reales
+		// es decir, con un círculo.
+		Rectangle2D recPoint = new Rectangle2D.Double(p.getX()
+				- (tolerance / 2), p.getY() - (tolerance / 2), tolerance,
+				tolerance);
 		return queryByRect(recPoint);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.operations.strategies.Strategy#print(java.awt.Graphics2D, com.iver.cit.gvsig.fmap.ViewPort)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.iver.cit.gvsig.fmap.operations.strategies.Strategy#print(java.awt
+	 * .Graphics2D, com.iver.cit.gvsig.fmap.ViewPort)
 	 */
-	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel, PrintRequestAttributeSet properties)
-		throws ReadDriverException {
-		// (jaume) symbols handle the PrintProperties automatically, the following is unnecessary
-//		if (capa instanceof FLyrVect) {
-//			((FLyrVect)capa).beforePrinting(properties);
-//			draw(null, g, viewPort, cancel); // Quiero ejecutar el draw del padre, que es el que va sin acelaración!!
-//			((FLyrVect)capa).afterPrinting();
-//		}else{
-//			draw(null, g, viewPort, cancel); // Quiero ejecutar el draw del padre, que es el que va sin acelaración!!
-//		}
+	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
+			PrintRequestAttributeSet properties) throws ReadDriverException {
+		// (jaume) symbols handle the PrintProperties automatically, the
+		// following is unnecessary
+		// if (capa instanceof FLyrVect) {
+		// ((FLyrVect)capa).beforePrinting(properties);
+		// draw(null, g, viewPort, cancel); // Quiero ejecutar el draw del
+		// padre, que es el que va sin acelaración!!
+		// ((FLyrVect)capa).afterPrinting();
+		// }else{
+		// draw(null, g, viewPort, cancel); // Quiero ejecutar el draw del
+		// padre, que es el que va sin acelaración!!
+		// }
 		draw(null, g, viewPort, cancel);
 	}
 
-	public void process(FeatureVisitor visitor, Rectangle2D rectangle) throws ReadDriverException, ExpansionFileReadException, VisitorException {
+	public void process(FeatureVisitor visitor, Rectangle2D rectangle)
+			throws ReadDriverException, ExpansionFileReadException,
+			VisitorException {
 		process(visitor, rectangle, null);
 	}
 
 	/**
-	 * Verifies cancelation events, and return a boolean flag
-	 * if processes must be stopped for this cancelations events.
-	 *
+	 * Verifies cancelation events, and return a boolean flag if processes must
+	 * be stopped for this cancelations events.
+	 * 
 	 * @param cancel
-	 * @param va
 	 * @param visitor
 	 * @return
 	 */
-	protected boolean verifyCancelation(Cancellable cancel, ReadableVectorial va, FeatureVisitor visitor){
-		if(cancel != null){
-			if(cancel.isCanceled()){
+	protected boolean verifyCancelation(Cancellable cancel,
+			FeatureVisitor visitor) {
+		if (cancel != null) {
+			if (cancel.isCanceled()) {
 				try {
-					va.stop();
 					visitor.stop(capa);
 				} catch (VisitorException e) {
 					return false;
-				} catch (ReadDriverException e) {
-					return false;
 				}
-//				logger.info("visitor canceled");
+				// logger.info("visitor canceled");
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public void process(FeatureVisitor visitor, BitSet subset, CancellableMonitorable cancel) throws ReadDriverException, ExpansionFileReadException, VisitorException {
-//		try {
-//			logger.info("visitor.start()");
+	public void process(FeatureVisitor visitor, BitSet subset,
+			CancellableMonitorable cancel) throws ReadDriverException,
+			ExpansionFileReadException, VisitorException {
+		// try {
+		// logger.info("visitor.start()");
 
-			if (visitor.start(capa)) {
-				ReadableVectorial va = ((SingleLayer) capa).getSource();
-				try {
-					va.start();
-				} catch (InitializeDriverException e) {
-					throw new ReadDriverException(getCapa().getName(),e);
-				}
-				for (int i = 0; i < va.getShapeCount(); i++) {
-
-					if(verifyCancelation(cancel, va, visitor))
-						return;
-					if (subset.get(i)) {
-						if(cancel != null){
-							cancel.reportStep();
-						}
-						visitor.visit(va.getShape(i), i);
-					}
-				}
-				va.stop();
-
-//				logger.info("visitor.stop()");
-				visitor.stop(capa);
-			}
-//		} catch (ExpansionFileReadException e) {
-//			throw new ReadDriverException();
-//		}
-	}
-
-	public void process(FeatureVisitor visitor, CancellableMonitorable cancel) throws ReadDriverException, VisitorException {
-		try {
-//			logger.info("visitor.start()");
-
-			if (visitor.start(capa)) {
-				ReadableVectorial va = ((SingleLayer) capa).getSource();
-				MathTransform trans = getCapa().getCrsTransform();
+		if (visitor.start(capa)) {
+			ReadableVectorial va = ((FLyrVect) capa).getSource();
+			try {
 				va.start();
-				for (int i = 0; i < va.getShapeCount(); i++) {
-					if(cancel != null){
+			} catch (InitializeDriverException e) {
+				throw new ReadDriverException(getCapa().getName(), e);
+			}
+			for (int i = 0; i < va.getShapeCount(); i++) {
+
+				if (verifyCancelation(cancel, visitor))
+					return;
+				if (subset.get(i)) {
+					if (cancel != null) {
 						cancel.reportStep();
 					}
-					if(verifyCancelation(cancel, va, visitor))
+					visitor.visit(va.getShape(i), i);
+				}
+			}
+			va.stop();
+
+			// logger.info("visitor.stop()");
+			visitor.stop(capa);
+		}
+		// } catch (ExpansionFileReadException e) {
+		// throw new ReadDriverException();
+		// }
+	}
+
+	public void process(FeatureVisitor visitor, CancellableMonitorable cancel)
+			throws ReadDriverException, VisitorException {
+		try {
+			// logger.info("visitor.start()");
+
+			if (visitor.start(capa)) {
+				SimpleFeatureSource featureSource = ((FLyrVect) capa)
+						.getFeatureSource();
+				SimpleFeatureIterator features = featureSource.getFeatures().features();
+				MathTransform trans = getCapa().getCrsTransform();
+				int i = 0;
+				while (features.hasNext()) {
+					SimpleFeature feature = features.next();
+					if (cancel != null) {
+						cancel.reportStep();
+					}
+					if (verifyCancelation(cancel, visitor))
 						return;
-				    IGeometry geom = va.getShape(i);
-				    if (geom == null) {
+					Geometry defaultGeometry = (Geometry) feature
+							.getDefaultGeometry();
+					if (defaultGeometry == null) {
 						continue;
 					}
-				    if (trans != null) {
+					IGeometry geom = ShapeFactory
+							.createGeometry(new FLiteShape(defaultGeometry));
+					if (trans != null) {
 						if (!capa
 								.getCrs()
 								.getName()
 								.equals(capa.getMapContext().getViewPort()
 										.getCrs().getName())) {
-				    		geom.reProject(trans);
-				    	}
-				    }
+							geom.reProject(trans);
+						}
+					}
 
 					visitor.visit(geom, i);
+					i++;
 				}
-				va.stop();
-//				logger.info("visitor.stop()");
+				// logger.info("visitor.stop()");
 				visitor.stop(capa);
 			}
 		} catch (ExpansionFileReadException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
 		} catch (InitializeDriverException e) {
-			throw new ReadDriverException(getCapa().getName(),e);
+			throw new ReadDriverException(getCapa().getName(), e);
+		} catch (IOException e) {
+			throw new ReadDriverException(getCapa().getName(), e);
 		}
 	}
 
-	public void process(FeatureVisitor visitor, Rectangle2D rectangle, CancellableMonitorable cancel) throws ReadDriverException, ExpansionFileReadException, VisitorException {
+	public void process(FeatureVisitor visitor, Rectangle2D rectangle,
+			CancellableMonitorable cancel) throws ReadDriverException,
+			ExpansionFileReadException, VisitorException {
 		FilterRectVisitor filterVisitor = new FilterRectVisitor();
 		filterVisitor.setRectangle(rectangle);
 		filterVisitor.setWrappedVisitor(visitor);
 		process(filterVisitor, cancel);
 	}
 
-	public FBitSet queryByPoint(Point2D p, double tolerance) throws ReadDriverException, VisitorException {
+	public FBitSet queryByPoint(Point2D p, double tolerance)
+			throws ReadDriverException, VisitorException {
 		return queryByPoint(p, tolerance, null);
 	}
 
-	public FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException, VisitorException {
+	public FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException,
+			VisitorException {
 		return queryByRect(rect, null);
 	}
 
-	public FBitSet queryByShape(IGeometry g, int relationship) throws ReadDriverException, VisitorException {
+	public FBitSet queryByShape(IGeometry g, int relationship)
+			throws ReadDriverException, VisitorException {
 		return queryByShape(g, relationship, null);
 	}
 
 	/**
 	 * Tells when in a spatial query the use of an spatial index is an advanced,
-	 * or it would be better to use a secuential search.
-	 * <br>
-	 * The criteria to decide is the area of the query region. If it is less than
-	 * 1/4 of full extent layer region, the spatial index will be an improve.
-	 * Else, a secuential scan would be better
+	 * or it would be better to use a secuential search. <br>
+	 * The criteria to decide is the area of the query region. If it is less
+	 * than 1/4 of full extent layer region, the spatial index will be an
+	 * improve. Else, a secuential scan would be better
+	 * 
 	 * @param rectangle
 	 * @return
 	 * @throws ExpansionFileReadException
 	 * @throws DriverException
 	 */
-	protected boolean isSpatialIndexNecessary(Rectangle2D extent) throws ReadDriverException, ExpansionFileReadException {
+	protected boolean isSpatialIndexNecessary(Rectangle2D extent)
+			throws ReadDriverException, ExpansionFileReadException {
 		FLyrVect lyr = (FLyrVect) getCapa();
 		double areaExtent = extent.getWidth() * extent.getHeight();
-		double areaFullExtent = lyr.getFullExtent().getWidth() *
-			                                lyr.getFullExtent().getHeight();
+		double areaFullExtent = lyr.getFullExtent().getWidth()
+				* lyr.getFullExtent().getHeight();
 		return areaExtent < (areaFullExtent / 4.0);
 
 	}

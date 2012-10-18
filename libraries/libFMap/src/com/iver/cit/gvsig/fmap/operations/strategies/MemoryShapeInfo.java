@@ -50,7 +50,7 @@ import java.util.ArrayList;
  *
  * @author Vicente Caballero Navarro
  */
-public class MemoryShapeInfo implements ShapeInfo {
+public class MemoryShapeInfo {
 	ArrayList infos = new ArrayList();
 
 	/**

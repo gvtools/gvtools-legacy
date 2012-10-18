@@ -47,8 +47,7 @@ import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.SingleLayer;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.VectorialData;
+import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 
 
 /**
@@ -81,7 +80,7 @@ public class QueryByThemeVisitor implements FeatureVisitor {
 	 * 		int)
 	 */
 	public void visit(IGeometry g, int index) throws ReadDriverException, VisitorException, ProcessVisitorException {
-		Strategy s = StrategyManager.getStrategy((SingleLayer) toQuery);
+		Strategy s = StrategyManager.getStrategy((FLyrVect) toQuery);
 		QueryByGeometryVisitor visitor = new QueryByGeometryVisitor(g, relation);
 		s.process(visitor);
 
@@ -100,8 +99,7 @@ public class QueryByThemeVisitor implements FeatureVisitor {
 	public boolean start(FLayer layer) throws StartVisitorException {
 		bitset = new FBitSet();
 
-		return (layer instanceof SingleLayer) &&
-		(layer instanceof VectorialData);
+		return layer instanceof FLyrVect;
 	}
 
 	/**

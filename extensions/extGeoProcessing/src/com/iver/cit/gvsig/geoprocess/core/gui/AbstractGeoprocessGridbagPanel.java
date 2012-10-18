@@ -91,7 +91,6 @@ import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.SingleLayer;
 import com.iver.cit.gvsig.geoprocess.core.fmap.FMapUtil;
 import com.iver.cit.gvsig.project.documents.view.legend.CreateSpatialIndexMonitorableTask;
 import com.iver.utiles.GenericFileFilter;
@@ -238,7 +237,7 @@ public abstract class AbstractGeoprocessGridbagPanel
 			}
 			numSelectedLabel.setText(new Integer(fBitSet.cardinality()).toString());
         } else {
-        	ReadableVectorial va = ((SingleLayer)(layers.
+        	ReadableVectorial va = ((FLyrVect)(layers.
         			getLayer((String)layersComboBox.
         					getSelectedItem()))).
         							getSource();

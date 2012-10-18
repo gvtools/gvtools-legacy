@@ -56,8 +56,8 @@ import javax.swing.JPanel;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
+import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.ClassifiableVectorial;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.SingleLayer;
 
 
 /**
@@ -794,7 +794,7 @@ public class General extends JPanel {
         if (jLabel17 == null) {
             jLabel17 = new javax.swing.JLabel();
             // TODO: REVISAR. AQUÍ DEBERÍA PONER EL ORIGEN DE DATOS DE ESTA CAPA
-            jLabel17.setText(((SingleLayer)m_layer).getSource().getDriver().toString());
+            jLabel17.setText(((FLyrVect)m_layer).getSource().getDriver().toString());
         }
 
         return jLabel17;

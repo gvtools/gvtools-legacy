@@ -71,7 +71,6 @@ import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.SingleLayer;
 import com.iver.cit.gvsig.geoprocess.core.fmap.FMapUtil;
 
 public class GeoProcessingOverlayPanel2 extends AbstractGeoprocessGridbagPanel
@@ -195,7 +194,7 @@ public class GeoProcessingOverlayPanel2 extends AbstractGeoprocessGridbagPanel
 							toString());
 		} else {
 			ReadableVectorial va =
-				((SingleLayer) (layers.getLayer(
+				((FLyrVect) (layers.getLayer(
 						(String) secondLayerComboBox.
 						getSelectedItem()))).getSource();
 			try {

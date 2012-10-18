@@ -43,9 +43,8 @@ package com.iver.cit.gvsig.fmap.operations.strategies;
 import com.iver.cit.gvsig.fmap.drivers.BoundedShapes;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrAnnotation;
+import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ISpatialDB;
-import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.SingleLayer;
 
 
 /**
@@ -63,7 +62,7 @@ public class StrategyManager {
 	 *
 	 * @return Estrategia.
 	 */
-	public static Strategy getStrategy(SingleLayer v) {
+	public static Strategy getStrategy(FLyrVect v) {
         if (v.getStrategy() != null)
         {
             return v.getStrategy();
@@ -81,18 +80,5 @@ public class StrategyManager {
 
 		}
 		return new DefaultStrategy((FLayer) v);
-	}
-
-	/**
-	 * Crea un ShapeInfo en memoria o en disco en función de la memoria
-	 * disponible
-	 *
-	 * @param adapter VectorialAdapter.
-	 *
-	 * @return ShapeInfo.
-	 */
-	public static ShapeInfo createShapeInfo(ReadableVectorial adapter) {
-		//TODO falta que implementar el DiskShapeInfo.
-		return new MemoryShapeInfo();
 	}
 }

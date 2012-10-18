@@ -68,7 +68,6 @@ import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ISpatialDB;
 import com.iver.cit.gvsig.fmap.layers.SpatialCache;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.Selectable;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.SingleLayer;
 import com.iver.cit.gvsig.fmap.rendering.IClassifiedVectorLegend;
 import com.iver.utiles.swing.threads.Cancellable;
 import com.iver.utiles.swing.threads.CancellableMonitorable;
@@ -93,7 +92,7 @@ public class DBStrategy extends DefaultStrategy {
 		// Nos aprovechamos del SQL para lanzar la consulta
 		// teniendo en cuenta el boundingbox que toca.
 		FLyrVect lyr = (FLyrVect) getCapa();
-		ISpatialDB dbAdapter = (ISpatialDB) ((SingleLayer) capa).getSource();
+		ISpatialDB dbAdapter = (ISpatialDB) ((FLyrVect) capa).getSource();
 		//IVectorialDatabaseDriver dbDriver = (IVectorialDatabaseDriver) dbAdapter.getDriver();
 		try {
 			dbAdapter.start();
@@ -217,7 +216,7 @@ public class DBStrategy extends DefaultStrategy {
 	throws ReadDriverException, ExpansionFileReadException, VisitorException{
 		FLyrVect lyr = (FLyrVect) getCapa();
 		if (visitor.start(lyr)){
-			ISpatialDB dbAdapter = (ISpatialDB) ((SingleLayer) capa).getSource();
+			ISpatialDB dbAdapter = (ISpatialDB) ((FLyrVect) capa).getSource();
 			IVectorialDatabaseDriver dbDriver = (IVectorialDatabaseDriver) dbAdapter.getDriver();
 			try {
 				dbAdapter.start();
@@ -278,7 +277,7 @@ public class DBStrategy extends DefaultStrategy {
 		// Nos aprovechamos del SQL para lanzar la consulta
 		// teniendo en cuenta el boundingbox que toca.
 		FLyrVect lyr = (FLyrVect) getCapa();
-		ISpatialDB dbAdapter = (ISpatialDB) ((SingleLayer) capa).getSource();
+		ISpatialDB dbAdapter = (ISpatialDB) ((FLyrVect) capa).getSource();
 		//        IVectorialDatabaseDriver dbDriver = (IVectorialDatabaseDriver) dbAdapter.getDriver();
 		try {
 			dbAdapter.start();

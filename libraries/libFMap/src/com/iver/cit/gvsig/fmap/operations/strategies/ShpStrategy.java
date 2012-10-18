@@ -717,7 +717,7 @@ public class ShpStrategy extends DefaultStrategy {
 					if (cancel != null) {
 						cancel.reportStep();
 					}
-					if (verifyCancelation(cancel, va, visitor))
+					if (verifyCancelation(cancel, visitor))
 						return;
 					idRec = (Integer) lstRecs.get(i);
 					index = idRec.intValue();

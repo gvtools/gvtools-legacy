@@ -64,7 +64,6 @@ import com.iver.cit.gvsig.fmap.layers.FBitSet;
 import com.iver.cit.gvsig.fmap.layers.FLayers;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.SingleLayer;
 import com.iver.utiles.GenericFileFilter;
 /**
  * Panel that allows user to enter clip geoprocess params
@@ -176,7 +175,7 @@ public class GeoProcessingOverlayPanel extends AbstractGeoprocessPanel
 			}
             jLabel3.setText(new Integer(fBitSet.cardinality()).toString());
         } else {
-        	ReadableVectorial va = ((SingleLayer)(layers.
+        	ReadableVectorial va = ((FLyrVect)(layers.
         			getLayer((String)layersComboBox.
         					getSelectedItem()))).
         							getSource();
@@ -200,7 +199,7 @@ public class GeoProcessingOverlayPanel extends AbstractGeoprocessPanel
 			}
             jLabel6.setText(new Integer(fBitSet.cardinality()).toString());
         } else {
-        	ReadableVectorial va = ((SingleLayer)(layers.getLayer(
+        	ReadableVectorial va = ((FLyrVect)(layers.getLayer(
         			(String)secondLayerComboBox.getSelectedItem())))
         			.getSource();
             try {

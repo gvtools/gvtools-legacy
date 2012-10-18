@@ -40,14 +40,11 @@
  */
 package com.iver.cit.gvsig.project.documents.table;
 
-import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
-
-import org.gvsig.tools.file.PathGenerator;
 
 import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -71,12 +68,9 @@ import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.layers.XMLException;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.SingleLayer;
 import com.iver.cit.gvsig.fmap.rendering.IClassifiedVectorLegend;
-import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.AttrInTableLabelingStrategy;
-import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelingFactory;
 import com.iver.cit.gvsig.project.Project;
 import com.iver.cit.gvsig.project.documents.ProjectDocument;
@@ -516,7 +510,7 @@ public class ProjectTable extends ProjectDocument {
 			associatedTable = (AlphanumericData) layer;
 
 			LayerFactory.getDataSourceFactory().addDataSource(
-					(ObjectDriver) ((SingleLayer) layer).getSource()
+					(ObjectDriver) ((FLyrVect) layer).getSource()
 							.getDriver(), xml.getStringProperty("gdbmsname"));
 		} else if (xml.getStringProperty("type").equals("db")) {
 			LayerFactory.getDataSourceFactory().addDBDataSourceByTable(

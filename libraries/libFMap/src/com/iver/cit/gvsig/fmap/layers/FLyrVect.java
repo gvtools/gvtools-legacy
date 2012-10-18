@@ -135,7 +135,6 @@ import com.iver.cit.gvsig.fmap.layers.layerOperations.AlphanumericData;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.ClassifiableVectorial;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.InfoByPoint;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.RandomVectorialData;
-import com.iver.cit.gvsig.fmap.layers.layerOperations.SingleLayer;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.VectorialData;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.VectorialXMLItem;
 import com.iver.cit.gvsig.fmap.layers.layerOperations.XMLItem;
@@ -171,7 +170,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 // TODO Cuando no sea para pruebas debe no ser public
 public class FLyrVect extends FLyrDefault implements ILabelable,
-		ClassifiableVectorial, SingleLayer, VectorialData, RandomVectorialData,
+		ClassifiableVectorial, VectorialData, RandomVectorialData,
 		AlphanumericData, InfoByPoint, SelectionListener, IEditionListener,
 		LegendContentsChangedListener {
 	private static Logger logger = Logger.getLogger(FLyrVect.class.getName());
@@ -254,6 +253,10 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 		return new ExtendedDataStore(dataStore);
 	}
 
+	public SimpleFeatureSource getFeatureSource() throws IOException {
+		return getDataStore().getDefaultFeatureSource();
+	}
+	
 	public boolean isWaitTodraw() {
 		return waitTodraw;
 	}
@@ -479,11 +482,14 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 					it = new JoinFeatureIterator(this, viewPort,
 							fieldList.toArray(new String[fieldList.size()]));
 				} else {
-					ReadableVectorial rv = getSource();
 					// rv.start();
-					it = rv.getFeatureIterator(viewPort.getAdjustedExtent(),
-							fieldList.toArray(new String[fieldList.size()]),
-							viewPort.getCrs(), true);
+					try {
+						it = new GTFeatureIterator(viewPort.getAdjustedExtent(),
+								fieldList.toArray(new String[fieldList.size()]),
+								viewPort.getCrs());
+					} catch (IOException e) {
+						throw new ReadDriverException("", e);
+					}
 					// rv.stop();
 				}
 
@@ -552,12 +558,12 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 					// est� seleccionado un Feature
 					ReadableVectorial rv = getSource();
 					int selectionIndex = -1;
-					if (rv instanceof ISpatialDB) {
-						selectionIndex = ((ISpatialDB) rv)
-								.getRowIndexByFID(feat);
-					} else {
-						selectionIndex = Integer.parseInt(feat.getID());
-					}
+//					if (rv instanceof ISpatialDB) {
+//						selectionIndex = ((ISpatialDB) rv)
+//								.getRowIndexByFID(feat);
+//					} else {
+//						selectionIndex = Integer.parseInt(feat.getID());
+//					}
 					if (selectionIndex != -1) {
 						if (selectionSupport.isSelected(selectionIndex)) {
 							sym = sym.getSymbolForSelection();
@@ -2279,6 +2285,8 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 			return ValueFactory.createValue((Double) attribute);
 		case Types.FLOAT:
 			return ValueFactory.createValue((Float) attribute);
+		case Types.BIGINT:
+			return ValueFactory.createValue((Long) attribute);
 		case Types.BOOLEAN:
 			return ValueFactory.createValue((Boolean) attribute);
 		case Types.VARCHAR:
@@ -2308,6 +2316,8 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 			return Types.BOOLEAN;
 		} else if (Float.class.isAssignableFrom(type.getBinding())) {
 			return Types.FLOAT;
+		} else if (Long.class.isAssignableFrom(type.getBinding())) {
+			return Types.BIGINT;
 		} else if (Double.class.isAssignableFrom(type.getBinding())) {
 			return Types.DOUBLE;
 		} else if (String.class.isAssignableFrom(type.getBinding())) {
