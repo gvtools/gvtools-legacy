@@ -38,7 +38,6 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.addlayer.AddLayerDialog;
-import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.gui.WizardPanel;
@@ -291,40 +290,24 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 
 		int result = fileChooser.showOpenDialog(this);
 
-		File[] newFiles = null;
-		ArrayList<MyFile> toAdd = new ArrayList<MyFile>();
 		if (result == JFileChooser.APPROVE_OPTION) {
 			lastPath = fileChooser.getCurrentDirectory().getAbsolutePath();
-			lastFileFilter = (FileFilter) fileChooser.getFileFilter();
-			newFiles = fileChooser.getSelectedFiles();
+			File[] newFiles = fileChooser.getSelectedFiles();
+			MyFile[] ret = new MyFile[newFiles.length];
 
-			IFileOpen lastFileOpen = null;
-			for (int i = 0; i < listFileOpen.size(); i++) {
-				IFileOpen fileOpen = listFileOpen.get(i);
-				ArrayList<FileFilter> aux = fileOpen.getFileFilter();
-				for (int j = 0; j < aux.size(); j++) {
-					for (int iFile = 0; iFile < newFiles.length; iFile++) {
-						try {
-							newFiles[iFile] = fileOpen.post(newFiles[iFile]);
-						} catch (LoadLayerException e) {
-							newFiles[iFile] = null;
-						}
+			for (int i = 0; i < ret.length; i++) {
+				for (IFileOpen fileOpen : listFileOpen) {
+					if (fileOpen.accepts(newFiles[i])) {
+						ret[i] = new MyFile(newFiles[i], null, fileOpen);
+						break;
 					}
-					lastFileOpen = fileOpen;
-					break;
 				}
 			}
 
-			for (int ind = 0; ind < newFiles.length; ind++) {
-				if (newFiles[ind] == null)
-					continue;
-				/* add file to list of layers to add */
-				toAdd.add(new MyFile(newFiles[ind], null, lastFileOpen));
-			}
-
-			return toAdd.toArray();
-		} else
+			return ret;
+		} else {
 			return new Object[0];
+		}
 	}
 
 	/**

@@ -63,13 +63,5 @@
 				<action-tool icon="select-by-buffer-icon" action-command="SELBUFFER" enable-text="select_by_buffer" tooltip="select_by_buffer" position="3"/>
 			</tool-bar>
 		</extension>
-		<extension class-name="org.gvsig.geotools.test.AddLayer"
-			description="Extension that allows select all geometries of the selected vectorial layers that intersect with a buffer around their previously selected geometries."
-			active="true"
-			priority="30">
-			<tool-bar name="Tools_Select_Advanced" position="8">
-				<action-tool icon="select-by-buffer-icon" action-command="SELBUFFER" enable-text="select_by_buffer" tooltip="GEOTOOLS!!" position="3"/>
-			</tool-bar>
-		</extension>
 	</extensions>
 </plugin-config>

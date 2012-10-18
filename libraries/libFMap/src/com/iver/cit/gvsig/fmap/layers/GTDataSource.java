@@ -1,4 +1,4 @@
-package org.gvsig.geotools.test;
+package com.iver.cit.gvsig.fmap.layers;
 
 import java.io.IOException;
 
@@ -10,12 +10,11 @@ import com.hardcode.gdbms.engine.data.DataSourceFactory;
 import com.hardcode.gdbms.engine.data.edition.DataWare;
 import com.hardcode.gdbms.engine.values.Value;
 import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
-import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 
 public class GTDataSource extends AbstractDataSource {
-	private GTFLyrVect layer;
+	private FLyrVect layer;
 
-	public GTDataSource(GTFLyrVect layer) {
+	public GTDataSource(FLyrVect layer) {
 		this.layer = layer;
 	}
 
@@ -55,7 +54,11 @@ public class GTDataSource extends AbstractDataSource {
 
 	@Override
 	public String getName() {
-		return layer.getDataSourceName();
+		try {
+			return layer.getDataSourceName();
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot get datasource name", e);
+		}
 	}
 
 	@Override

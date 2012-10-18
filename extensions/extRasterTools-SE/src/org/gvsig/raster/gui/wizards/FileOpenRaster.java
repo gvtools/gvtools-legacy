@@ -388,4 +388,9 @@ public class FileOpenRaster extends AbstractFileOpen {
 	}
 	
 	public void pre() {}
+	
+	@Override
+	public boolean accepts(File file) {
+		return false;
+	}
 }

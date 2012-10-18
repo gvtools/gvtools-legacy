@@ -50,7 +50,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,12 +66,16 @@ import org.geotools.data.LockingManager;
 import org.geotools.data.Query;
 import org.geotools.data.ServiceInfo;
 import org.geotools.data.Transaction;
+import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.feature.collection.SimpleFeatureIteratorImpl;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.gvsig.tools.file.PathGenerator;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.feature.type.AttributeType;
+import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.feature.type.Name;
 import org.opengis.filter.Filter;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -80,8 +84,9 @@ import org.opengis.referencing.operation.MathTransform;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSourceFactory;
 import com.hardcode.gdbms.engine.data.NoSuchTableException;
-import com.hardcode.gdbms.engine.data.driver.DriverException;
 import com.hardcode.gdbms.engine.instruction.FieldNotFoundException;
+import com.hardcode.gdbms.engine.values.Value;
+import com.hardcode.gdbms.engine.values.ValueFactory;
 import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
 import com.iver.cit.gvsig.exceptions.layers.ReloadLayerException;
@@ -95,16 +100,21 @@ import com.iver.cit.gvsig.fmap.Source;
 import com.iver.cit.gvsig.fmap.SourceManager;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.CartographicSupport;
+import com.iver.cit.gvsig.fmap.core.DefaultFeature;
+import com.iver.cit.gvsig.fmap.core.FGeometry;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.ILabelable;
 import com.iver.cit.gvsig.fmap.core.IRow;
+import com.iver.cit.gvsig.fmap.core.ShapeFactory;
+import com.iver.cit.gvsig.fmap.core.gt2.FLiteShape;
 import com.iver.cit.gvsig.fmap.core.symbols.IMultiLayerSymbol;
 import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
 import com.iver.cit.gvsig.fmap.drivers.BoundedShapes;
+import com.iver.cit.gvsig.fmap.drivers.DriverAttributes;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 import com.iver.cit.gvsig.fmap.drivers.WithDefaultLegend;
@@ -151,6 +161,7 @@ import com.iver.utiles.PostProcessSupport;
 import com.iver.utiles.XMLEntity;
 import com.iver.utiles.swing.threads.Cancellable;
 import com.iver.utiles.swing.threads.CancellableMonitorable;
+import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * Capa b�sica Vectorial.
@@ -197,6 +208,10 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 	private boolean waitTodraw = false;
 	private static PathGenerator pathGenerator = PathGenerator.getInstance();
 
+	private ReadableVectorial readableVectorialAdapter;
+	private SelectableDataSource recordSet;
+	private AttributeDescriptor[] attributeDescriptors;
+
 	/**
 	 * @deprecated source attribute should never be null and this constructor
 	 *             allows to be so. It is only maintained for backward
@@ -206,7 +221,28 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 	}
 
 	public FLyrVect(Source source) {
-		this.source = source;
+		try {
+			this.source = source;
+
+			// Initialize attribute descriptors
+			SimpleFeatureType schema = getDataStore().getDefaultFeatureSource()
+					.getSchema();
+			attributeDescriptors = new AttributeDescriptor[schema
+					.getAttributeCount() - 1];
+			int index = 0;
+			GeometryDescriptor geomDescriptor = schema.getGeometryDescriptor();
+			for (int i = 0; i < schema.getAttributeCount(); i++) {
+				AttributeDescriptor descriptor = schema.getDescriptor(i);
+				if (!descriptor.equals(geomDescriptor)) {
+					attributeDescriptors[index++] = descriptor;
+				}
+			}
+
+			this.readableVectorialAdapter = new GTVectorialAdapter(this);
+			this.recordSet = new SelectableDataSource(new GTDataSource(this));
+		} catch (Exception e) {
+			throw new RuntimeException("Cannot create layer!!!", e);
+		}
 	}
 
 	public Source getDataSource() {
@@ -215,7 +251,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 
 	private ExtendedDataStore getDataStore() throws IOException {
 		DataStore dataStore = SourceManager.instance.getDataStore(source);
-		return new ExtendedDataStore(dataStore, dataStore.getTypeNames()[0]);
+		return new ExtendedDataStore(dataStore);
 	}
 
 	public boolean isWaitTodraw() {
@@ -234,8 +270,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 	public ReadableVectorial getSource() {
 		if (!this.isAvailable())
 			return null;
-
-		throw new RuntimeException("Return the adapter to DataStore");
+		return readableVectorialAdapter;
 	}
 
 	/**
@@ -274,7 +309,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 
 		try {
 			source.start();
-			// TODO geotools refactoring
+			// TODO gt: spatial index
 			spatialIndex = new QuadtreeJts();
 			// spatialIndex = new
 			// QuadtreeGt2(FileUtils.getFileWithoutExtension(sptFile),
@@ -426,18 +461,13 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 					if (aux != null) {
 						for (int i = 0; i < aux.length; i++) {
 							// check fields exists
-							try {
-								if (getDataStore().getFieldIndexByName(aux[i]) == -1) {
-									logger.warn("Error en leyenda de "
-											+ getName() + ". El campo "
-											+ aux[i] + " no est�.");
-									legend = LegendFactory
-											.createSingleSymbolLegend(getShapeType());
-									break;
-								}
-							} catch (IOException e) {
-								throw new ReadDriverException(
-										"Cannot access layer", e);
+							if (getFieldIndexByName(aux[i]) == -1) {
+								logger.warn("Error en leyenda de " + getName()
+										+ ". El campo " + aux[i]
+										+ " no est�.");
+								legend = LegendFactory
+										.createSingleSymbolLegend(getShapeType());
+								break;
 							}
 							fieldList.add(aux[i]);
 						}
@@ -1171,21 +1201,10 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 		return legend;
 	}
 
-	/**
-	 * Devuelve el tipo de shape que contiene la capa.
-	 * 
-	 * @return tipo de shape.
-	 * 
-	 * @throws DriverException
-	 */
+	@Override
 	public int getShapeType() throws ReadDriverException {
-		if (typeShape == -1) {
-			getSource().start();
-			typeShape = getSource().getShapeType();
-			getSource().stop();
-		}
-
-		return typeShape;
+		// TODO implement correctly
+		return FShape.POLYGON;
 	}
 
 	public XMLEntity getXMLEntity() throws XMLException {
@@ -1640,8 +1659,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 	public SelectableDataSource getRecordset() throws ReadDriverException {
 		if (!this.isAvailable())
 			return null;
-
-		throw new RuntimeException("Return adapter");
+		return recordSet;
 	}
 
 	public void setEditing(boolean b) throws StartEditionLayerException {
@@ -1711,8 +1729,8 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 	 * @param newSds
 	 */
 	public void setRecordset(SelectableDataSource newSds) {
-		throw new RuntimeException("Maybe set the DataStore? We should "
-				+ "free the previous one in that case");
+		getSelectionSupport().addSelectionListener(this);
+		this.updateDrawVersion();
 	}
 
 	public void clearSpatialCache() {
@@ -2158,6 +2176,181 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 		return typeInt;
 	}
 
+	int getShapeCount() throws IOException {
+		return getDataStore().getDefaultFeatureSource().getFeatures().size();
+	}
+
+	SimpleFeature getFeature(long index) throws IOException {
+		SimpleFeatureIterator features = getDataStore()
+				.getDefaultFeatureSource().getFeatures().features();
+		int i = 0;
+		SimpleFeature feature = null;
+
+		while (i <= index) {
+			if (!features.hasNext()) {
+				feature = null;
+				break;
+			}
+			feature = features.next();
+			i++;
+		}
+
+		features.close();
+		return feature;
+	}
+
+	IGeometry getShape(int index) throws IOException {
+		SimpleFeature feature = getFeature(index);
+		if (feature == null) {
+			return null;
+		}
+		Geometry geom = (Geometry) feature.getDefaultGeometry();
+		return ShapeFactory.createGeometry(new FLiteShape(geom));
+	}
+
+	DriverAttributes getDriverAttributes() {
+		return new DriverAttributes();
+	}
+
+	private int getFieldIndexByName(String name) {
+		try {
+			List<AttributeDescriptor> descriptors = getDataStore()
+					.getDefaultFeatureSource().getSchema()
+					.getAttributeDescriptors();
+			for (int i = 0; i < descriptors.size(); i++) {
+				if (descriptors.get(i).getLocalName().equals(name)) {
+					return i;
+				}
+			}
+			return -1;
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot get data store", e);
+		}
+	}
+
+	IFeatureIterator getFeatureIterator(Rectangle2D adjustedExtent,
+			String[] array, CoordinateReferenceSystem crs)
+			throws ReadDriverException {
+		try {
+			return new GTFeatureIterator(adjustedExtent, array, crs);
+		} catch (IOException e) {
+			throw new ReadDriverException(getName(), e);
+		}
+	}
+
+	int getFieldCount() {
+		return attributeDescriptors.length;
+	}
+
+	int getRowCount() throws IOException {
+		return getDataStore().getDefaultFeatureSource().getFeatures().size();
+	}
+
+	String getFieldName(int field) {
+		return attributeDescriptors[field].getLocalName();
+	}
+
+	int getFieldType(int field) {
+		return geotools2gvsigType(attributeDescriptors[field].getType());
+	}
+
+	String getDataSourceName() throws IOException {
+		return getDataStore().getDefaultFeatureSource().getName()
+				.getLocalPart();
+	}
+
+	int getFieldWidth(int field) {
+		// TODO gt: implement
+		return 255;
+	}
+
+	Value getFieldValue(long row, int field) throws IOException {
+		return attributeToValue(getFeature(row), field);
+	}
+
+	private Value attributeToValue(SimpleFeature feature, int field) {
+		Object attribute = feature.getAttribute(attributeDescriptors[field]
+				.getName());
+		int type = getFieldType(field);
+		switch (type) {
+		case Types.INTEGER:
+			return ValueFactory.createValue((Integer) attribute);
+		case Types.DOUBLE:
+			return ValueFactory.createValue((Double) attribute);
+		case Types.FLOAT:
+			return ValueFactory.createValue((Float) attribute);
+		case Types.BOOLEAN:
+			return ValueFactory.createValue((Boolean) attribute);
+		case Types.VARCHAR:
+			return ValueFactory.createValue((String) attribute);
+		default:
+			throw new IllegalArgumentException(
+					"bug! Unrecognized attribute type: " + type);
+		}
+	}
+
+	void start() {
+		// TODO gt: called when the related data source
+		// (DataSource.start() method is called) or adapter
+		// (ReadableVectorial.start() method is called) is started
+	}
+
+	void stop() {
+		// TODO gt: called when the related data source
+		// (DataSource.stop() method is called) or adapter
+		// (ReadableVectorial.stop() method is called) is stopped
+	}
+
+	private int geotools2gvsigType(AttributeType type) {
+		if (Integer.class.isAssignableFrom(type.getBinding())) {
+			return Types.INTEGER;
+		} else if (Boolean.class.isAssignableFrom(type.getBinding())) {
+			return Types.BOOLEAN;
+		} else if (Float.class.isAssignableFrom(type.getBinding())) {
+			return Types.FLOAT;
+		} else if (Double.class.isAssignableFrom(type.getBinding())) {
+			return Types.DOUBLE;
+		} else if (String.class.isAssignableFrom(type.getBinding())) {
+			return Types.VARCHAR;
+		} else {
+			throw new IllegalArgumentException(
+					"bug! Unrecognized attribute type: " + type);
+		}
+	}
+
+	private class GTFeatureIterator implements IFeatureIterator {
+		private SimpleFeatureIterator delegate;
+
+		private GTFeatureIterator(Rectangle2D extent, String[] array,
+				CoordinateReferenceSystem crs) throws IOException {
+			// TODO geotools refactoring: no extent/array/projection considered
+			delegate = new SimpleFeatureIteratorImpl(getDataStore()
+					.getDefaultFeatureSource().getFeatures());
+		}
+
+		@Override
+		public boolean hasNext() throws ReadDriverException {
+			return delegate.hasNext();
+		}
+
+		@Override
+		public IFeature next() throws ReadDriverException {
+			SimpleFeature feature = delegate.next();
+			Geometry jts = (Geometry) feature.getDefaultGeometry();
+			Value[] values = new Value[attributeDescriptors.length];
+			for (int i = 0; i < attributeDescriptors.length; i++) {
+				values[i] = attributeToValue(feature, i);
+			}
+			FGeometry geom = ShapeFactory.createGeometry(new FLiteShape(jts));
+			return new DefaultFeature(geom, values, feature.getID());
+		}
+
+		@Override
+		public void closeIterator() throws ReadDriverException {
+			delegate.close();
+		}
+	}
+
 	/**
 	 * DataStore implementation that delegates on an inner DataStore instance
 	 * and provides some utility methods.
@@ -2167,34 +2360,9 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 	private class ExtendedDataStore implements DataStore {
 
 		private DataStore dataStore;
-		private String featureName;
 
-		public ExtendedDataStore(DataStore dataStore, String featureName) {
+		public ExtendedDataStore(DataStore dataStore) {
 			this.dataStore = dataStore;
-			this.featureName = featureName;
-		}
-
-		/**
-		 * Returns the index of the first attribute whose local name is equal to
-		 * the specified name
-		 * 
-		 * @param fieldName
-		 * @return
-		 * @throws IOException
-		 */
-		public int getFieldIndexByName(String fieldName) throws IOException {
-			SimpleFeatureType schema = dataStore.getSchema(this.featureName);
-			List<AttributeDescriptor> attributeDescriptors = schema
-					.getAttributeDescriptors();
-			for (int i = 0; i < attributeDescriptors.size(); i++) {
-				AttributeDescriptor attributeDescriptor = attributeDescriptors
-						.get(i);
-
-				if (attributeDescriptor.getLocalName().equals(fieldName)) {
-					return i;
-				}
-			}
-			return 0;
 		}
 
 		public SimpleFeatureSource getDefaultFeatureSource() throws IOException {

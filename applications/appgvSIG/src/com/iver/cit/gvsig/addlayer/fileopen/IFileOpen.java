@@ -68,4 +68,6 @@ public interface IFileOpen {
 	 * @return
 	 */
 	public ArrayList getFileFilter();
+	
+	boolean accepts(File file);
 }

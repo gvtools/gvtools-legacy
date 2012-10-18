@@ -13,6 +13,10 @@ public class SourceManager {
 
 	private HashMap<Source, DataStore> urlSource = new HashMap<Source, DataStore>();
 
+	public void addDataStore(Source source, DataStore store) {
+		urlSource.put(source, store);
+	}
+	
 	public DataStore getDataStore(Source source) throws IOException {
 		DataStore dataStore = urlSource.get(source);
 		if (dataStore == null) {

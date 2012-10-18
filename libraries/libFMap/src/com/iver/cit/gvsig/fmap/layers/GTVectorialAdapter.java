@@ -1,4 +1,4 @@
-package org.gvsig.geotools.test;
+package com.iver.cit.gvsig.fmap.layers;
 
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -21,15 +21,13 @@ import com.iver.cit.gvsig.fmap.drivers.featureiterators.AttrQuerySelectionFeatur
 import com.iver.cit.gvsig.fmap.drivers.featureiterators.DefaultFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.featureiterators.IndexedSptQueryFeatureIterator;
 import com.iver.cit.gvsig.fmap.drivers.featureiterators.SpatialQueryFeatureIterator;
-import com.iver.cit.gvsig.fmap.layers.ReadableVectorial;
-import com.iver.cit.gvsig.fmap.layers.SelectableDataSource;
 import com.iver.cit.gvsig.fmap.spatialindex.ISpatialIndex;
 
 public class GTVectorialAdapter implements ReadableVectorial {
-	private GTFLyrVect layer;
+	private FLyrVect layer;
 	private ISpatialIndex spatialIndex;
 
-	public GTVectorialAdapter(GTFLyrVect layer) {
+	public GTVectorialAdapter(FLyrVect layer) {
 		this.layer = layer;
 	}
 

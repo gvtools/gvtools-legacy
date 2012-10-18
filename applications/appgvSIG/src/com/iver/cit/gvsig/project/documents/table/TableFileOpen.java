@@ -20,18 +20,11 @@ package com.iver.cit.gvsig.project.documents.table;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.TreeSet;
 
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.hardcode.driverManager.DriverLoadException;
-import com.hardcode.gdbms.engine.data.driver.FileDriver;
-import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.addlayer.fileopen.AbstractFileOpen;
 import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 /**
  * Clase que indicará que ficheros puede tratar al panel de apertura de ficheros
  *
@@ -53,5 +46,10 @@ public class TableFileOpen extends AbstractFileOpen {
 	public Rectangle2D createLayer(File file, MapControl mapControl,
 			CoordinateReferenceSystem crs) {
 		return null;
+	}
+	
+	@Override
+	public boolean accepts(File file) {
+		return false;
 	}
 }

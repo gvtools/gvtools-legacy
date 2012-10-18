@@ -1,5 +1,6 @@
-package org.gvsig.geotools.test;
+package com.iver.cit.gvsig.fmap.layers;
 
+import java.net.URL;
 import java.sql.Types;
 
 import junit.framework.TestCase;
@@ -12,16 +13,19 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.hardcode.gdbms.engine.values.NumericValue;
 import com.hardcode.gdbms.engine.values.StringValue;
+import com.iver.cit.gvsig.fmap.Source;
+import com.iver.cit.gvsig.fmap.SourceManager;
 import com.iver.cit.gvsig.fmap.core.FShape;
 import com.iver.cit.gvsig.fmap.core.IFeature;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.gt2.FLiteShape;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
+import com.iver.cit.gvsig.fmap.drivers.WithDefaultLegend;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-public class GTFLyrVectTest extends TestCase {
+public class FLyrVectTest extends TestCase {
 	private static final GeometryFactory gf = new GeometryFactory();
 
 	private static final String ATTRIBUTE_GEOM = "geom";
@@ -34,17 +38,17 @@ public class GTFLyrVectTest extends TestCase {
 	private static final String CRS = "EPSG:23030";
 
 	public void testShapeType() throws Exception {
-		GTFLyrVect layer = mockPointLayer();
+		FLyrVect layer = mockPointLayer();
 		assertEquals(FShape.POINT, layer.getShapeType());
 	}
 
 	public void testShapeCount() throws Exception {
-		GTFLyrVect layer = mockPointLayer();
+		FLyrVect layer = mockPointLayer();
 		assertEquals(3, layer.getShapeCount());
 	}
 
 	public void testGetFeature() throws Exception {
-		GTFLyrVect layer = mockPointLayer();
+		FLyrVect layer = mockPointLayer();
 
 		// First feature
 		SimpleFeature feature = layer.getFeature(0);
@@ -66,7 +70,7 @@ public class GTFLyrVectTest extends TestCase {
 	}
 
 	public void testGetShape() throws Exception {
-		GTFLyrVect layer = mockPointLayer();
+		FLyrVect layer = mockPointLayer();
 
 		// First geom
 		assertEquals(gf.createPoint(new Coordinate(0, 0)),
@@ -81,17 +85,17 @@ public class GTFLyrVectTest extends TestCase {
 	}
 
 	public void testGetFieldCount() throws Exception {
-		GTFLyrVect layer = mockPointLayer();
+		FLyrVect layer = mockPointLayer();
 		assertEquals(2, layer.getFieldCount());
 	}
 
 	public void testGetRowCount() throws Exception {
-		GTFLyrVect layer = mockPointLayer();
+		FLyrVect layer = mockPointLayer();
 		assertEquals(3, layer.getRowCount());
 	}
 
 	public void testGetFieldName() throws Exception {
-		GTFLyrVect layer = mockPointLayer();
+		FLyrVect layer = mockPointLayer();
 		assertEquals(ATTRIBUTE_NAME, layer.getFieldName(ATTRIBUTE_INDEX_NAME));
 		assertEquals(ATTRIBUTE_VALUE, layer.getFieldName(ATTRIBUTE_INDEX_VALUE));
 
@@ -109,7 +113,7 @@ public class GTFLyrVectTest extends TestCase {
 	}
 
 	public void testGetFieldType() throws Exception {
-		GTFLyrVect layer = mockPointLayer();
+		FLyrVect layer = mockPointLayer();
 		assertEquals(Types.VARCHAR, layer.getFieldType(ATTRIBUTE_INDEX_NAME));
 		assertEquals(Types.INTEGER, layer.getFieldType(ATTRIBUTE_INDEX_VALUE));
 
@@ -131,7 +135,7 @@ public class GTFLyrVectTest extends TestCase {
 	}
 
 	public void testGetFieldValue() throws Exception {
-		GTFLyrVect layer = mockPointLayer();
+		FLyrVect layer = mockPointLayer();
 
 		StringValue stringValue = (StringValue) layer.getFieldValue(1,
 				ATTRIBUTE_INDEX_NAME);
@@ -150,7 +154,7 @@ public class GTFLyrVectTest extends TestCase {
 	}
 
 	public void testFeatureIterator() throws Exception {
-		GTFLyrVect layer = mockPointLayer();
+		FLyrVect layer = mockPointLayer();
 		IFeatureIterator iterator = layer.getFeatureIterator(null, null, null);
 
 		assertTrue(iterator.hasNext());
@@ -183,7 +187,7 @@ public class GTFLyrVectTest extends TestCase {
 		return shape.getGeometry();
 	}
 
-	private GTFLyrVect mockPointLayer() throws Exception {
+	private FLyrVect mockPointLayer() throws Exception {
 		Geometry[] geoms = new Geometry[3];
 		geoms[0] = gf.createPoint(new Coordinate(0, 0));
 		geoms[1] = gf.createPoint(new Coordinate(10, 10));
@@ -195,8 +199,8 @@ public class GTFLyrVectTest extends TestCase {
 		return mockLayer(geoms, names, values);
 	}
 
-	private GTFLyrVect mockLayer(Geometry[] geoms, String[] names,
-			Integer[] ints) throws Exception {
+	private FLyrVect mockLayer(Geometry[] geoms, String[] names, Integer[] ints)
+			throws Exception {
 		// Schema
 		SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 		typeBuilder.setName("testType");
@@ -209,17 +213,31 @@ public class GTFLyrVectTest extends TestCase {
 		SimpleFeatureType schema = typeBuilder.buildFeatureType();
 
 		// Data store
-		MemoryDataStore source = new MemoryDataStore();
+		MemoryDataStore dataStore = new MemoryDataStore();
 		SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(schema);
 		for (int i = 0; i < geoms.length; i++) {
 			featureBuilder.add(geoms[i]);
 			featureBuilder.add(names[i]);
 			featureBuilder.add(ints[i]);
 			SimpleFeature feature = featureBuilder.buildFeature("" + i);
-			source.addFeature(feature);
+			dataStore.addFeature(feature);
 		}
 
 		// Layer
-		return new GTFLyrVect(source.getFeatureSource(source.getTypeNames()[0]));
+		MockSource source = new MockSource();
+		SourceManager.instance.addDataStore(source, dataStore);
+		return new FLyrVect(source);
+	}
+
+	private class MockSource implements Source {
+		@Override
+		public URL getURL() {
+			return null;
+		}
+
+		@Override
+		public WithDefaultLegend getDefaultLegend() {
+			return null;
+		}
 	}
 }

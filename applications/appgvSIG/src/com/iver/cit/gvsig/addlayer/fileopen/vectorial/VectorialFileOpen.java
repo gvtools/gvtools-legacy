@@ -22,29 +22,22 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.List;
 
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.hardcode.driverManager.Driver;
-import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.andami.PluginServices;
-import com.iver.andami.messages.NotificationManager;
 import com.iver.cit.gvsig.AddLayer;
 import com.iver.cit.gvsig.addlayer.fileopen.AbstractFileOpen;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
 import com.iver.cit.gvsig.fmap.MapControl;
-import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.drivers.gvl.FMapGVLDriver;
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.fmap.layers.GTLayerFactory;
-import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.utiles.XMLEntity;
 /**
@@ -59,41 +52,41 @@ public class VectorialFileOpen extends AbstractFileOpen{
 	 * Constructor de FileOpenRaster
 	 */
 	public VectorialFileOpen() {
-		TreeSet filters = new TreeSet(new Comparator() {
-			public int compare(Object o1, Object o2) {
-				VectorialFileFilter dff1 = (VectorialFileFilter) o1;
-				VectorialFileFilter dff2 = (VectorialFileFilter) o2;
-
-				return dff1.driver.getName().compareTo(dff2.driver.getName());
-			}
-		});
-
-		Class[] driverClasses = new Class[] { VectorialFileDriver.class };
-		String[] driverNames = LayerFactory.getDM().getDriverNames();
-		VectorialFileFilter auxF;
-		try {
-			for (int i = 0; i < driverNames.length; i++) {
-				System.err.println("DRIVER " + i + " : " + driverNames[i]);
-				boolean is = false;
-				for (int j = 0; j < driverClasses.length; j++) {
-					if (i == 0)
-						System.err.println("DRIVER CLASS " + j + " : " + driverClasses[j].toString());
-					if (LayerFactory.getDM().isA(driverNames[i], driverClasses[j]))
-						is = true;
-				}
-				if (is) {
-					auxF = new VectorialFileFilter(driverNames[i]);
-					filters.add(auxF);
-				}
-			}
-			Iterator i = filters.iterator();
-			while (i.hasNext()) {
-				VectorialFileFilter element = (VectorialFileFilter) i.next();
-				getFileFilter().add(element);
-			}
-		} catch (DriverLoadException e1) {
-			NotificationManager.addError("No se pudo acceder a los drivers", e1);
-		}
+//		TreeSet filters = new TreeSet(new Comparator() {
+//			public int compare(Object o1, Object o2) {
+//				VectorialFileFilter dff1 = (VectorialFileFilter) o1;
+//				VectorialFileFilter dff2 = (VectorialFileFilter) o2;
+//
+//				return dff1.driver.getName().compareTo(dff2.driver.getName());
+//			}
+//		});
+//
+//		Class[] driverClasses = new Class[] { VectorialFileDriver.class };
+//		String[] driverNames = LayerFactory.getDM().getDriverNames();
+//		VectorialFileFilter auxF;
+//		try {
+//			for (int i = 0; i < driverNames.length; i++) {
+//				System.err.println("DRIVER " + i + " : " + driverNames[i]);
+//				boolean is = false;
+//				for (int j = 0; j < driverClasses.length; j++) {
+//					if (i == 0)
+//						System.err.println("DRIVER CLASS " + j + " : " + driverClasses[j].toString());
+//					if (LayerFactory.getDM().isA(driverNames[i], driverClasses[j]))
+//						is = true;
+//				}
+//				if (is) {
+//					auxF = new VectorialFileFilter(driverNames[i]);
+//					filters.add(auxF);
+//				}
+//			}
+//			Iterator i = filters.iterator();
+//			while (i.hasNext()) {
+//				VectorialFileFilter element = (VectorialFileFilter) i.next();
+//				getFileFilter().add(element);
+//			}
+//		} catch (DriverLoadException e1) {
+//			NotificationManager.addError("No se pudo acceder a los drivers", e1);
+//		}
 
 	}
 
@@ -106,7 +99,7 @@ public class VectorialFileOpen extends AbstractFileOpen{
 		FLayer lyr = null;
 
 		// all catched errors will be saved here, to show user at the end of the method
-		ArrayList errors = new ArrayList();
+		List<Exception> errors = new ArrayList<Exception>();
 
 		// Envelope de cada fichero seleccionado por el usuario
 		String layerName = file.getName();
@@ -166,5 +159,10 @@ public class VectorialFileOpen extends AbstractFileOpen{
 			errors.add(e);
 		}
 		return null;
+	}
+	
+	@Override
+	public boolean accepts(File file) {
+		return true;
 	}
 }
