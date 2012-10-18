@@ -173,7 +173,7 @@ public class FileOpenRaster extends AbstractFileOpen {
 	 * (non-Javadoc)
 	 * @see org.gvsig.raster.gui.wizards.IFileOpen#execute(java.io.File[])
 	 */
-	public Rectangle2D createLayer(File file, MapControl mapControl, String driverName, CoordinateReferenceSystem crs) {
+	public Rectangle2D createLayer(File file, MapControl mapControl, CoordinateReferenceSystem crs) {
 		this.mapControl = mapControl;
 		FLyrRasterSE lyr = null;
 		

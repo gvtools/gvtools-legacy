@@ -48,6 +48,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -57,6 +58,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
+
+import org.cresques.cts.ProjectionUtils;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
@@ -74,6 +77,7 @@ import com.iver.cit.gvsig.fmap.layers.Annotation_Layer;
 import com.iver.cit.gvsig.fmap.layers.Annotation_LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.fmap.layers.GTLayerFactory;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.layers.VectorialFileAdapter;
 import com.iver.cit.gvsig.gui.JComboBoxUnits;
@@ -417,25 +421,15 @@ public class Annotation_Open extends WizardPanel {
             return false;
         }
 
-        VectorialFileAdapter adapter = new VectorialFileAdapter(file);
-        String driverName = "gvSIG shp driver";
+        FLyrVect capa;
+		try {
+			capa = GTLayerFactory.createVectorLayer("", file, null);
+		} catch (IOException e1) {
+			return false;
+		}
 
-        try {
-            Driver driver = LayerFactory.getDM().getDriver(driverName);
-            adapter.setDriver((VectorialDriver) driver);
-        } catch (DriverLoadException e) {
-            return false;
-        }
-
-        FLyrVect capa = new FLyrVect();
-        capa.setSource(adapter);
-
-        int type;
-
-        try {
-            ((VectorialFileDriver) capa.getSource().getDriver()).open(file);
-            ((VectorialFileDriver) capa.getSource().getDriver()).initialize();
-            type = capa.getSource().getShapeType();
+		try {
+			return capa.getShapeType() == FShape.POINT;
         } catch (OpenDriverException e) {
 			return false;
 		} catch (InitializeDriverException e) {
@@ -444,7 +438,6 @@ public class Annotation_Open extends WizardPanel {
 			return false;
 		}
 
-        return (type == FShape.POINT);
     }
 
     /**

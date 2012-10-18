@@ -122,8 +122,6 @@ public class AddLayer extends Extension {
 	 */
 	public void postInitialize() {
 		LayerFactory.initialize();
-		DriverManager dm=LayerFactory.getDM();
-		PluginServices.addLoaders(dm.getDriverClassLoaders());
 		WriterManager wm=LayerFactory.getWM();
 		PluginServices.addLoaders(wm.getWriterClassLoaders());
 

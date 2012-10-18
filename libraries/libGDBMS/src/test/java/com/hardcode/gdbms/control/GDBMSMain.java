@@ -61,21 +61,8 @@ public class GDBMSMain {
 		PropertyConfigurator.configure(this.getClass().getClassLoader()
 				 .getResource("log4j.properties"));
 
-		//Setup de los drivers
-		DriverManager dm = new DriverManager();
-		dm.setValidation(new DriverValidation() {
-				public boolean validate(Driver d) {
-					return ((d instanceof ObjectDriver) ||
-					(d instanceof DBDriver));
-				}
-			});
-		dm.loadDrivers(new File("drivers"));
-
-		dm.getLoadFailures();
-
 		//Setup del factory de DataSources
 		ds = new DataSourceFactory();
-		ds.setDriverManager(dm);
 
 		//Setup de las tablas
 		ds.addFileDataSource("gdbms dbf driver", "vias",

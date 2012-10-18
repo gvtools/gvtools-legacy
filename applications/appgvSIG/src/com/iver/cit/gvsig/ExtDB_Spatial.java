@@ -42,13 +42,9 @@
  */
 package com.iver.cit.gvsig;
 
-import java.security.KeyException;
-
 import org.apache.log4j.Logger;
 
 import com.iver.andami.plugins.Extension;
-import com.iver.cit.gvsig.fmap.layers.FLayerVectorialDB;
-import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 import com.prodevelop.cit.gvsig.vectorialdb.wizard.WizardVectorialDB;
@@ -70,17 +66,6 @@ public class ExtDB_Spatial extends Extension {
 
         ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
 
-        extensionPoints.add("Layers", FLayerVectorialDB.class.getName(),
-        		FLayerVectorialDB.class);
-
-        try {
-            ((ExtensionPoint) extensionPoints.get("Layers")).addAlias(FLayerVectorialDB.class.getName(),
-                "VectorialDB");
-        }
-        catch (KeyException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     public void execute(String actionCommand) {

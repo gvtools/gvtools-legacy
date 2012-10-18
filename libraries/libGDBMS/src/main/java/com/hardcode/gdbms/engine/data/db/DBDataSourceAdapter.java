@@ -234,18 +234,14 @@ public class DBDataSourceAdapter extends AbstractDataSource
      * @see com.hardcode.gdbms.engine.data.DataSource#getDataWare(int)
      */
     public DataWare getDataWare(int mode) throws ReadDriverException {
-		try {
 			DBDataWare dw = DBDataSourceFactory.newDataWareInstance(((DBDriver)getDriver()), mode);
 			DBDriver driver;
-			driver = (DBDriver) getDataSourceFactory().getDriverManager().getDriver(getDriver().getName());
+			driver = (DBDriver) null;
 	        ((GDBMSDriver) driver).setDataSourceFactory(getDataSourceFactory());
 	        dw.setDriver(driver);
 	        dw.setDataSourceFactory(dsf);
 	        dw.setSourceInfo(getSourceInfo());
 	        return dw;
-		} catch (DriverLoadException e) {
-			throw new ReadDriverException(getName(),e);
-		}
 
     }
 

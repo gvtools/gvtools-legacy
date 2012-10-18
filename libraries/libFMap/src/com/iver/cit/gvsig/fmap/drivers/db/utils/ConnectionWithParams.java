@@ -193,32 +193,33 @@ public class ConnectionWithParams {
 	 * @throws SQLException
 	 */
 	public void connect(String _pw) throws DBException {
-
-		try {
-			Driver _drv = LayerFactory.getDM().getDriver(drvName);
-			
-			if (_drv instanceof AlphanumericDBDriver) {
-				conn = SingleDBConnectionManager.getConnectionForDriver(
-						_drv, null, this.host, this.port, this.db, this.user, _pw);
-			} else {
-				if (_drv instanceof IVectorialDatabaseDriver) {
-					conn = ConnectionFactory.createConnection(this.connectionStr, this.user, _pw);
-				} else {
-					logger.error("CONNECT: Unexpected driver type: " + _drv.getClass().getName());
-					throw new DBException(new Exception("CONNECT: Unexpected driver type: " + _drv.getClass().getName()));
-				}
-			}
-		} catch (Exception e) {
-
-			pw = null;
-			conn = null;
-			connected = false;
-			// e.printStackTrace();
-			throw new DBException(e);
-		}
-
-		pw = _pw;
-		connected = true;
+		throw new RuntimeException("Not implemented");
+//
+//		try {
+//			Driver _drv = LayerFactory.getDM().getDriver(drvName);
+//			
+//			if (_drv instanceof AlphanumericDBDriver) {
+//				conn = SingleDBConnectionManager.getConnectionForDriver(
+//						_drv, null, this.host, this.port, this.db, this.user, _pw);
+//			} else {
+//				if (_drv instanceof IVectorialDatabaseDriver) {
+//					conn = ConnectionFactory.createConnection(this.connectionStr, this.user, _pw);
+//				} else {
+//					logger.error("CONNECT: Unexpected driver type: " + _drv.getClass().getName());
+//					throw new DBException(new Exception("CONNECT: Unexpected driver type: " + _drv.getClass().getName()));
+//				}
+//			}
+//		} catch (Exception e) {
+//
+//			pw = null;
+//			conn = null;
+//			connected = false;
+//			// e.printStackTrace();
+//			throw new DBException(e);
+//		}
+//
+//		pw = _pw;
+//		connected = true;
 	}
 
 	/**

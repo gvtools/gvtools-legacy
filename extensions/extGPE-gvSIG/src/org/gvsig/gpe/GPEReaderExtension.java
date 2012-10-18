@@ -91,10 +91,6 @@ public class GPEReaderExtension extends Extension{
 		loadProperties();
 		ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
 		extensionPoints.add("FileExtendingOpenDialog", "FileOpenGPE", new GPEFileOpen());
-		//Register the GML driver
-		DriverManager driverManager = LayerFactory.getDM();
-		driverManager.addDriver(new File(driversDir), GMLVectorialDriver.DRIVERNAME, GMLVectorialDriver.class);
-		driverManager.addDriver(new File(driversDir), KMLVectorialDriver.DRIVERNAME, KMLVectorialDriver.class);
 		//Register the GML driver in the WFS Driver
 		extensionPoints.add("FMAPWFSDriver","FMAPWFSDriver", GMLVectorialDriver.class);
 		/*

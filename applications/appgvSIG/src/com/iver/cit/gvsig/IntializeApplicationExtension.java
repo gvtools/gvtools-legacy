@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.security.KeyException;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -14,10 +13,7 @@ import org.apache.log4j.Logger;
 import com.iver.andami.Launcher;
 import com.iver.andami.PluginServices;
 import com.iver.andami.plugins.Extension;
-import com.iver.cit.gvsig.fmap.layers.FLayerFileVectorial;
-import com.iver.cit.gvsig.fmap.layers.FLayerGenericVectorial;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
-import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
@@ -29,18 +25,7 @@ public class IntializeApplicationExtension extends Extension {
 	public void initialize() {
 
 		addToLogInfo();
-		//this.extensionPoints.add("Layers","FileVectorial", FLayerFileVectorial.class);
-		this.extensionPoints.add("Layers",FLayerFileVectorial.class.getName(), FLayerFileVectorial.class);
 
-		//this.extensionPoints.add("Layers","GenericVectorial", FLayerGenericVectorial.class);
-		this.extensionPoints.add("Layers",FLayerGenericVectorial.class.getName(), FLayerGenericVectorial.class);
-		try {
-			((ExtensionPoint)this.extensionPoints.get("Layers")).addAlias(FLayerFileVectorial.class.getName(), "FileVectorial");
-			((ExtensionPoint)this.extensionPoints.get("Layers")).addAlias(FLayerGenericVectorial.class.getName(), "GenericVectorial");
-		} catch (KeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		registerIcons();
 	}
 

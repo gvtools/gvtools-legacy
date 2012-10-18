@@ -168,19 +168,14 @@ class FileDataSourceAdapter extends AbstractFileDataSource implements
 	 * @see com.hardcode.gdbms.engine.data.DataSource#getDataWare(int)
 	 */
 	public DataWare getDataWare(int mode) throws ReadDriverException {
-		try {
 			FileDataWare dw = FileDataSourceFactory.newDataWareInstance();
 			FileDriver driver;
-			driver = (FileDriver) getDataSourceFactory().getDriverManager()
-					.getDriver(getDriver().getName());
+			driver = null;
 			((GDBMSDriver) driver).setDataSourceFactory(getDataSourceFactory());
 			dw.setDriver(driver);
 			dw.setDataSourceFactory(dsf);
 			dw.setSourceInfo(getSourceInfo());
 			return dw;
-		} catch (DriverLoadException e) {
-			throw new ReadDriverException(getName(),e);
-		}
 
 	}
 

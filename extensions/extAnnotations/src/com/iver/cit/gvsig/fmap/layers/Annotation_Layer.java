@@ -484,53 +484,42 @@ public class Annotation_Layer extends FLyrVect {
 	 * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#setXMLEntity(com.iver.utiles.XMLEntity)
 	 */
 	public void setXMLEntity(XMLEntity xml) throws XMLException {
-		CoordinateReferenceSystem crs = null;
-
-		if (xml.contains("proj")) {
-			crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
-		}
-
-		if (xml.contains("file")) {
-			Driver d;
-
-			try {
-				d = LayerFactory.getDM().getDriver(xml.getStringProperty(
-						"driverName"));
-			} catch (DriverLoadException e1) {
-				throw new XMLException(e1);
-			}
-
-			FLyrVect lv = (FLyrVect) LayerFactory.createLayer(xml.getName(),
-					(VectorialFileDriver) d,
-					new File(PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("file"))), crs);
-
-			try {
-				this.setSource(lv.getSource());
-				this.setRecordset(lv.getRecordset());
-				this.setCrs(lv.getCrs());
-				this.setLegend((IVectorLegend) lv.getLegend());
-
-
-				Annotation_Mapping.addAnnotationMapping(this);
-			} catch (ReadDriverException e) {
-				throw new XMLException(e);
-			} catch (LegendLayerException e) {
-				throw new XMLException(e);
-			}
-		}
-		super.setXMLEntity(xml);
-//		if (this.getLabelingStrategy()==null){
-//			boolean isInPixel=((Annotation_Legend)this.getLegend()).isFontSizeInPixels();
-//			if (isInPixel){
-//				AttrInTableLabelingStrategy labeling = new AttrInTableLabelingStrategy();
-//				labeling.setUnit(-1);
-//				setLabelingStrategy(labeling);
-//			}else{
-//				AttrInTableLabelingStrategy labeling = new AttrInTableLabelingStrategy();
-//				labeling.setUnit(1);
-//				setLabelingStrategy(labeling);
+		throw new RuntimeException("Not supported");
+//		CoordinateReferenceSystem crs = null;
+//
+//		if (xml.contains("proj")) {
+//			crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
+//		}
+//
+//		if (xml.contains("file")) {
+//			Driver d;
+//
+//			try {
+//				d = LayerFactory.getDM().getDriver(xml.getStringProperty(
+//						"driverName"));
+//			} catch (DriverLoadException e1) {
+//				throw new XMLException(e1);
+//			}
+//
+//			FLyrVect lv = (FLyrVect) LayerFactory.createLayer(xml.getName(),
+//					(VectorialFileDriver) d,
+//					new File(PathGenerator.getInstance().getAbsolutePath(xml.getStringProperty("file"))), crs);
+//
+//			try {
+//				this.setSource(lv.getSource());
+//				this.setRecordset(lv.getRecordset());
+//				this.setCrs(lv.getCrs());
+//				this.setLegend((IVectorLegend) lv.getLegend());
+//
+//
+//				Annotation_Mapping.addAnnotationMapping(this);
+//			} catch (ReadDriverException e) {
+//				throw new XMLException(e);
+//			} catch (LegendLayerException e) {
+//				throw new XMLException(e);
 //			}
 //		}
+//		super.setXMLEntity(xml);
 	}
 
 	public Value getSymbolKey(int i) throws ReadDriverException {

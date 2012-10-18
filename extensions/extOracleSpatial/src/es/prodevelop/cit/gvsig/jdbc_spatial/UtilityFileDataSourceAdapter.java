@@ -47,6 +47,7 @@ import java.sql.Types;
 
 import com.hardcode.driverManager.Driver;
 import com.hardcode.driverManager.DriverLoadException;
+import com.hardcode.gdbms.driver.dbf.DBFDriver;
 import com.hardcode.gdbms.driver.exceptions.CloseDriverException;
 import com.hardcode.gdbms.driver.exceptions.OpenDriverException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
@@ -76,7 +77,7 @@ import com.hardcode.gdbms.engine.values.ValueFactory;
 public class UtilityFileDataSourceAdapter extends AbstractFileDataSource
     implements FileDataSource {
     private File file;
-    private FileDriver driver;
+    private DBFDriver driver;
     private int sem = 0;
     private int fieldCount = -1;
 
@@ -121,10 +122,9 @@ public class UtilityFileDataSourceAdapter extends AbstractFileDataSource
      * @param driver
      *            The driver to set.
      */
-    public void setDriver(FileDriver driver) {
-        this.driver = driver;
-    }
-
+	public void setDriver(FileDriver driver) {
+		this.driver = (DBFDriver) driver;
+	}
     /**
      * Sets the source information of the DataSource
      *
@@ -212,31 +212,25 @@ public class UtilityFileDataSourceAdapter extends AbstractFileDataSource
     /**
      * @see com.hardcode.gdbms.engine.data.file.FileDataSource#getDriver()
      */
-    public Driver getDriver() {
+    public DBFDriver getDriver() {
         return driver;
     }
 
-    /**
-     * @throws DriverException
-     * @see com.hardcode.gdbms.engine.data.DataSource#getDataWare(int)
-     */
-    public DataWare getDataWare(int mode) throws ReadDriverException {
-        try {
-            FileDataWare dw = FileDataSourceFactory.newDataWareInstance();
-            FileDriver driver;
-            driver = (FileDriver) getDataSourceFactory().getDriverManager()
-                                      .getDriver(getDriver().getName());
-            ((GDBMSDriver) driver).setDataSourceFactory(getDataSourceFactory());
-            dw.setDriver(driver);
-            dw.setDataSourceFactory(dsf);
-            dw.setSourceInfo(getSourceInfo());
+	/**
+	 * @throws DriverException
+	 * @see com.hardcode.gdbms.engine.data.DataSource#getDataWare(int)
+	 */
+	public DataWare getDataWare(int mode) throws ReadDriverException {
+		FileDataWare dw = FileDataSourceFactory.newDataWareInstance();
+		FileDriver driver;
+		driver = new DBFDriver();
+		((GDBMSDriver) driver).setDataSourceFactory(getDataSourceFactory());
+		dw.setDriver(driver);
+		dw.setDataSourceFactory(dsf);
+		dw.setSourceInfo(getSourceInfo());
 
-            return dw;
-        }
-        catch (DriverLoadException e) {
-            throw new ReadDriverException(driver.getName(), e);
-        }
-    }
+		return dw;
+	}
 
     public int getFieldWidth(int i) throws ReadDriverException {
         return getReadDriver().getFieldWidth(i);

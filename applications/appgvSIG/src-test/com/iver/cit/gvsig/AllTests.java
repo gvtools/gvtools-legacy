@@ -9,7 +9,6 @@ import com.iver.cit.gvsig.panelGroup.Test2ExceptionsUsingTabbedPanel;
 import com.iver.cit.gvsig.panelGroup.Test2ExceptionsUsingTreePanel;
 import com.iver.cit.gvsig.panelGroup.TestPanelGroupLoaderFromExtensionPoint;
 import com.iver.cit.gvsig.project.ProjectTest;
-import com.iver.cit.gvsig.project.TableTest;
 import com.iver.cit.gvsig.sqlQueryValidation.TestSQLQueryValidation;
 import com.iver.cit.gvsig.test.Persistence;
 
@@ -20,7 +19,6 @@ public class AllTests {
 		//$JUnit-BEGIN$
 		suite.addTestSuite(Persistence.class);
 		suite.addTestSuite(ProjectTest.class);
-		suite.addTestSuite(TableTest.class);
 		suite.addTestSuite(TestFilterExpressionFromWhereIsEmpty_Method.class);
 		suite.addTestSuite(TestSQLQueryValidation.class);
 		suite.addTestSuite(TestPanelGroupLoaderFromExtensionPoint.class);

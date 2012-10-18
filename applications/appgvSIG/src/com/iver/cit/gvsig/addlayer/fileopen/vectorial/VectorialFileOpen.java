@@ -20,6 +20,7 @@ package com.iver.cit.gvsig.addlayer.fileopen.vectorial;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Hashtable;
@@ -42,6 +43,7 @@ import com.iver.cit.gvsig.fmap.drivers.gvl.FMapGVLDriver;
 import com.iver.cit.gvsig.fmap.drivers.legend.LegendDriverException;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
+import com.iver.cit.gvsig.fmap.layers.GTLayerFactory;
 import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.utiles.XMLEntity;
@@ -100,19 +102,11 @@ public class VectorialFileOpen extends AbstractFileOpen{
 	 * @see org.gvsig.raster.gui.wizards.IFileOpen#execute(java.io.File[])
 	 */
 	public Rectangle2D createLayer(File file, MapControl mapControl,
-			String driverName, CoordinateReferenceSystem crs) {
+			CoordinateReferenceSystem crs) {
 		FLayer lyr = null;
-		Driver driver = null;
 
 		// all catched errors will be saved here, to show user at the end of the method
 		ArrayList errors = new ArrayList();
-
-		// try to load the drivers referenced by the file dialog
-		try {
-			driver = LayerFactory.getDM().getDriver(driverName);
-		} catch (DriverLoadException e) {
-			errors.add(e);
-		}
 
 		// Envelope de cada fichero seleccionado por el usuario
 		String layerName = file.getName();
@@ -137,13 +131,10 @@ public class VectorialFileOpen extends AbstractFileOpen{
 		
 		try {
 
-			if (driver instanceof VectorialFileDriver) {
-				lyr = LayerFactory.createLayer(layerName,
-						(VectorialFileDriver) driver, file, crs, mapControl
+				lyr = GTLayerFactory.createVectorLayer(layerName,
+						 file, crs, mapControl
 								.getViewPort().getBackColor());
-			}
 
-			if (lyr != null) {
 				AddLayer.checkProjection(lyr, mapControl.getViewPort());
 				mapControl.getMapContext().getLayers().addLayer(lyr);
 
@@ -165,12 +156,13 @@ public class VectorialFileOpen extends AbstractFileOpen{
 					}
 				}
 				return lyr.getFullExtent();
-			}
 		} catch (ReadDriverException e) {
 			errors.add(e);
 		} catch (LegendDriverException e) {
 			errors.add(e);
 		} catch (LegendLayerException e) {
+			errors.add(e);
+		} catch (IOException e) {
 			errors.add(e);
 		}
 		return null;

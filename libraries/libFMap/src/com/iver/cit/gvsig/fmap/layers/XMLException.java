@@ -54,6 +54,8 @@ import org.gvsig.exceptions.BaseException;
  * @author Vicente Caballero Navarro
  */
 public class XMLException extends BaseException {
+	private static final long serialVersionUID = 1L;
+
 	/**
  	 * <p>Constructs an XML exception with the specified cause.</p>
  	 *   

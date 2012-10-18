@@ -416,16 +416,7 @@ public class SingleDBConnectionManager {
 	 * @return driver instance
 	 */
 	public static Driver getInstanceFromName(String drvname) {
-
-		// IVectorialDatabaseDriver _driver = null;
-		Driver _driver = null;
-        try {
-            _driver = LayerFactory.getDM().getDriver(drvname);
-        } catch (Exception e) {
-        	logger.error("While getting driver (" + drvname + ") instance: " + e.getMessage());
-        	return null;
-        }
-        return _driver;
+		return null;
 	}
 }
 

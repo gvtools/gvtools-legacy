@@ -287,24 +287,7 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 		fileChooser.setMultiSelectionEnabled(true);
 		fileChooser.setAcceptAllFileFilterUsed(false);
 
-		boolean finded = false;
-		FileFilter auxFilter=null;
-		for (int i = 0; i < listFileOpen.size(); i++) {
-			IFileOpen fileOpen = listFileOpen.get(i);
-			fileOpen.pre();
-			ArrayList<FileFilter> aux = fileOpen.getFileFilter();
-
-			for (int j = 0; j < aux.size(); j++) {
-				FileFilter fileFilter = aux.get(j);
-				fileChooser.addChoosableFileFilter(fileFilter);
-				if (lastFileFilter!=null && lastFileFilter.getDescription().equals(fileFilter.getDescription())){
-					auxFilter=fileFilter;
-					finded = true;
-				}
-			}
-		}
-		if (finded && (lastFileFilter != null))
-			fileChooser.setFileFilter(auxFilter);
+		fileChooser.setFileFilter(null);
 
 		int result = fileChooser.showOpenDialog(this);
 
@@ -320,45 +303,23 @@ public class FileOpenWizard extends WizardPanel implements ListManagerListener {
 				IFileOpen fileOpen = listFileOpen.get(i);
 				ArrayList<FileFilter> aux = fileOpen.getFileFilter();
 				for (int j = 0; j < aux.size(); j++) {
-					if (fileChooser.getFileFilter() == aux.get(j)) {
-						for (int iFile = 0; iFile < newFiles.length; iFile++) {
-							try {
-								newFiles[iFile] = fileOpen.post(newFiles[iFile]);
-							} catch (LoadLayerException e) {
-								newFiles[iFile] = null;
-							}
+					for (int iFile = 0; iFile < newFiles.length; iFile++) {
+						try {
+							newFiles[iFile] = fileOpen.post(newFiles[iFile]);
+						} catch (LoadLayerException e) {
+							newFiles[iFile] = null;
 						}
-						lastFileOpen = fileOpen;
-						break;
 					}
+					lastFileOpen = fileOpen;
+					break;
 				}
 			}
 
 			for (int ind = 0; ind < newFiles.length; ind++) {
 				if (newFiles[ind] == null)
 					continue;
-				String driverName = ((FileFilter) fileChooser.getFileFilter()).getDescription();
-				
-				/* default: */
-				driverName = ((FileFilter) fileChooser.getFileFilter()).getDescription();
-				
-				/* translate known file chooser names to internal driver names */
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_SHP")) ) {
-					driverName = "gvSIG shp driver";
-				}
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "gml_files")) ) {
-					driverName = "gvSIG GML Memory Driver";
-				}
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_KML")) ) {
-					driverName = "gvSIG KML Memory Driver";
-				}
-
-				if ( fileChooser.getFileFilter().getDescription().equals(PluginServices.getText(this, "Ficheros_dbf")) ) {
-					driverName = "gdbms dbf driver";
-				}
-
 				/* add file to list of layers to add */
-				toAdd.add(new MyFile(newFiles[ind], driverName, lastFileOpen));
+				toAdd.add(new MyFile(newFiles[ind], null, lastFileOpen));
 			}
 
 			return toAdd.toArray();

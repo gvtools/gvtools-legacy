@@ -110,18 +110,6 @@ public interface FLayer extends Georeferenced {
 	void setXMLEntity(XMLEntity xml) throws XMLException;
 
 	/**
-	 * Inserts some properties to this layer.
-	 *
-	 * @param xml an <code>XMLEntity</code> with the information
-	 *
-	 * @throws com.iver.cit.gvsig.fmap.layers.XMLException if there is an error obtaining the object.
-	 *
-	 * @see #getXMLEntity()
-	 * @see #setXMLEntity(XMLEntity)
-	 */
-	void setXMLEntity03(XMLEntity xml) throws XMLException;
-
-	/**
 	 * <p>Changes the status of this layer to active or inactive.</p>
 	 * <p>One layer is active if is selected in TOC.</p>
 	 *

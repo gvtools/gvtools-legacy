@@ -4,8 +4,6 @@
 	<classpathentry kind="src" output="bin-test" path="src-test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="/libFMap"/>
-	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/ehcache-1.2beta4.jar"/>
 	<classpathentry kind="lib" path="lib/spatialindex.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
@@ -16,5 +14,7 @@
 	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar" sourcepath="/libExceptions/src"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGDBMS"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

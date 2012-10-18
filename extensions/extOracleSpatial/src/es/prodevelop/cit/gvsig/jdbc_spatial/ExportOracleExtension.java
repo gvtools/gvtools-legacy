@@ -42,8 +42,6 @@
  */
 package es.prodevelop.cit.gvsig.jdbc_spatial;
 
-import java.security.KeyException;
-
 import org.apache.log4j.Logger;
 
 import com.iver.andami.PluginServices;
@@ -53,10 +51,8 @@ import com.iver.cit.gvsig.About;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.layers.FLayerVectorialDB;
 import com.iver.cit.gvsig.fmap.layers.FLyrVect;
 import com.iver.cit.gvsig.project.documents.view.gui.View;
-import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
@@ -82,11 +78,6 @@ public class ExportOracleExtension extends Extension {
         About claseAbout = (About) PluginServices.getExtension(com.iver.cit.gvsig.About.class);
         claseAbout.getAboutPanel().addAboutUrl("JDBC Oracle Spatial", newurl);
         ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
-        try {
-			((ExtensionPoint)extensionPoints.get("Layers")).addAlias(FLayerVectorialDB.class.getName(), "VectorialDB");
-		} catch (KeyException e) {
-			logger.error("While adding alias to extension point: " + e.getMessage());
-		}
 
         OraEpsgTableLoader loader = new OraEpsgTableLoader();
         if (!loader.createOracleEpsgTable()) {

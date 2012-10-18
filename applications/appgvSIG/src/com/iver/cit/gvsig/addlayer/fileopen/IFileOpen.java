@@ -58,11 +58,10 @@ public interface IFileOpen {
 	 * ficheros.
 	 * @param file
 	 * @param mapControl
-	 * @param driverName
 	 * @return
 	 */
 	public Rectangle2D createLayer(File file, MapControl mapControl,
-			String driverName, CoordinateReferenceSystem crs);
+			CoordinateReferenceSystem crs);
 
 	/**
 	 * Devolverá todos los FileFilter que puede manejar dicha extensión

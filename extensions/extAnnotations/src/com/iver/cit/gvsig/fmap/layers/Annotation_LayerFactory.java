@@ -99,18 +99,14 @@ public class Annotation_LayerFactory {
 		}
 
 		FLayer lyr = null;
-		String driverName = "gvSIG shp driver";
-		Driver driver = null;
 
 		try {
-			driver = LayerFactory.getDM().getDriver(driverName);
-		} catch (DriverLoadException e) {
+			lyr = GTLayerFactory.createVectorLayer(layerName, 
+					file, crs, background);
+		} catch (IOException e) {
 			PluginServices.getLogger().error(e.getMessage(),e);
 			return null;
 		}
-
-		lyr = LayerFactory.createLayer(layerName, (VectorialFileDriver) driver,
-				file, crs, background);
 
 		Annotation_Layer al = new Annotation_Layer();
 		LayerListener[] layerListeners = lyr.getLayerListeners();

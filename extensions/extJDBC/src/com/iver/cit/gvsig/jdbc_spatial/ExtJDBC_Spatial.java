@@ -43,15 +43,7 @@
  */
 package com.iver.cit.gvsig.jdbc_spatial;
 
-import java.security.KeyException;
-
 import com.iver.andami.plugins.Extension;
-import com.iver.cit.gvsig.fmap.layers.FLayerVectorialDB;
-import com.iver.cit.gvsig.project.documents.view.legend.gui.General;
-import com.iver.cit.gvsig.project.documents.view.legend.gui.LabelingManager;
-import com.iver.cit.gvsig.project.documents.view.legend.gui.LegendManager;
-import com.iver.cit.gvsig.project.documents.view.legend.gui.ThemeManagerWindow;
-import com.iver.utiles.extensionPoints.ExtensionPoint;
 import com.iver.utiles.extensionPoints.ExtensionPoints;
 import com.iver.utiles.extensionPoints.ExtensionPointsSingleton;
 
@@ -63,15 +55,6 @@ public class ExtJDBC_Spatial extends Extension {
         ExtensionPoints extensionPoints = ExtensionPointsSingleton.getInstance();
     	extensionPoints.add("CatalogLayers","POSTGIS",new JDBCLayerBuilder());
 //    	extensionPoints.add("Layers",FLayerVectorialDB.class.getName(), FLayerVectorialDB.class);
-		try {
-			((ExtensionPoint)extensionPoints.get("Layers")).addAlias(FLayerVectorialDB.class.getName(), "VectorialDB");
-		} catch (KeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		ThemeManagerWindow.setTabEnabledForLayer(General.class, FLayerVectorialDB.class, true);
-		ThemeManagerWindow.setTabEnabledForLayer(LegendManager.class, FLayerVectorialDB.class, true);
-		ThemeManagerWindow.setTabEnabledForLayer(LabelingManager.class, FLayerVectorialDB.class, true);
     }
 
     public void execute(String actionCommand) {

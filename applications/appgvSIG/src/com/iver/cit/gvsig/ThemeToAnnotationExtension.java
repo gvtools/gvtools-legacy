@@ -178,7 +178,7 @@ public class ThemeToAnnotationExtension extends Extension {
             SimpleWizard wizard = new SimpleWizard(Logo);
 
             FLyrVect lv=(FLyrVect)map.getLayers().getActives()[0];
-            FLyrAnnotation la=new FLyrAnnotation();
+            FLyrAnnotation la=new FLyrAnnotation(null);
             LayerListener[] layerListeners=lv.getLayerListeners();
             for (int i=0;i<layerListeners.length;i++) {
                 la.addLayerListener(layerListeners[i]);

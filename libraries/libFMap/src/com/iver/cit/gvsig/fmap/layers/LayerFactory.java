@@ -43,12 +43,17 @@ package com.iver.cit.gvsig.fmap.layers;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.geotools.data.DataStore;
+import org.geotools.data.DataStoreFinder;
 import org.gvsig.exceptions.BaseException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -90,18 +95,19 @@ import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
  * Crea un adaptador del driver que se le pasa como parámetro en los métodos
  * createLayer. Si hay memoria suficiente se crea un FLyrMemory que pasa todas
  * las features del driver a memoria
+ * 
+ * @deprecated use {@link GTLayerFactory} instead
  */
 public class LayerFactory {
-//	private static ArrayList<ISolveErrorListener> solveListeners=new ArrayList<ISolveErrorListener>();
-	private static Hashtable<Class, ISolveErrorListener> solveListeners = new Hashtable<Class,ISolveErrorListener>();
-
+	// private static ArrayList<ISolveErrorListener> solveListeners=new
+	// ArrayList<ISolveErrorListener>();
+	private static Hashtable<Class, ISolveErrorListener> solveListeners = new Hashtable<Class, ISolveErrorListener>();
 
 	private static Logger logger = Logger.getLogger(LayerFactory.class
 			.getName());
 
 	private static String driversPath = "../FMap 03/drivers";
 	private static String writersPath = "../FMap 03/drivers";
-	private static DriverManager driverManager;
 	private static WriterManager writerManager;
 	private static DataSourceFactory dataSourceFactory;
 
@@ -116,25 +122,27 @@ public class LayerFactory {
 	private static TreeMap sourceAdapter;
 
 	/**
-	 * This Hashtable allows to register an alternative LayerClass for
-	 * an specific LayerClass than is attempting to create this factory
+	 * This Hashtable allows to register an alternative LayerClass for an
+	 * specific LayerClass than is attempting to create this factory
 	 */
 	private static Hashtable layerClassMapping = new Hashtable();
-	
+
 	static {
-		layerClassMapping.put("com.iver.cit.gvsig.fmap.layers.FLyrVect", FLyrVect.class);
+		layerClassMapping.put("com.iver.cit.gvsig.fmap.layers.FLyrVect",
+				FLyrVect.class);
 	}
 
 	/*
 	 * Crea un RandomVectorialFile con el driver que se le pasa como parámetro y
 	 * guardándose el nombre del fichero para realizar los accesos, la capa
 	 * tendrá asociada la proyección que se pasa como parametro también
-	 *
+	 * 
 	 * @param layerName Nombre de la capa. @param driverName Nombre del driver.
+	 * 
 	 * @param f fichero. @param proj Proyección.
-	 *
+	 * 
 	 * @return FLayer. @throws DriverException
-	 *
+	 * 
 	 * @throws DriverException @throws DriverIOException
 	 */
 	public static FLayer createLayer(String layerName, String driverName,
@@ -145,35 +153,14 @@ public class LayerFactory {
 	public static FLayer createLayer(String layerName, String driverName,
 			File f, CoordinateReferenceSystem crs, Color background)
 			throws LoadLayerException {
-		// Se obtiene el driver que lee
-		DriverManager dm = getDM();
-
-		try {
-			Driver d = dm.getDriver(driverName);
-
-			if (d instanceof VectorialFileDriver) {
-				return createLayer(layerName, (VectorialFileDriver) d, f, crs,
-						background);
-			}
-		} catch (DriverLoadException e) {
-			//hay un poco de lio sobre que excepciones se dejan subir
-			//arriba y que excepciones se quedan en LayerFactory
-			//(esto se debe a que queremos intentar recuperar ciertas capas)
-			//las excepciones de este metodo se dejan subir todas, puesto
-			//que las excepciones de los dos otros metodos createLayer si que
-			//se atrapan
-			DriverNotLoadedExceptionType exceptionType = new DriverNotLoadedExceptionType();
-			exceptionType.setDriverName(driverName);
-			throw new LoadLayerException(layerName,e);
-		}
-
-		return null;
+		return createLayer(layerName, (VectorialFileDriver) null, f, crs,
+				background);
 	}
 
 	/**
 	 * It creates a FLayer (FLyrVect) which reads its data from a file driver,
 	 * projected in the specified projection.
-	 *
+	 * 
 	 * @param layerName
 	 *            name of the layer
 	 * @param d
@@ -182,11 +169,9 @@ public class LayerFactory {
 	 *            file associated to the driver
 	 * @param crs
 	 *            layer projection
-	 *
+	 * 
 	 * @return FLayer new vectorial layer
-	 * @throws LoadLayerException
-	 *
-	 * @throws DriverException
+	 * @throws IOException
 	 */
 	public static FLayer createLayer(String layerName, VectorialFileDriver d,
 			File f, CoordinateReferenceSystem crs) {
@@ -194,90 +179,46 @@ public class LayerFactory {
 	}
 
 	public static FLayer createLayer(String layerName, VectorialFileDriver d,
-			File f, CoordinateReferenceSystem crs, Color background) {
-		
-		FLyrVect layer = null;
+			File file, CoordinateReferenceSystem crs, Color background) {
 		try {
-			Class clase = LayerFactory.getLayerClassForLayerClassName("com.iver.cit.gvsig.fmap.layers.FLyrVect");
-			layer = (FLyrVect) clase.newInstance();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			return null;
+			/*
+			 * Ignore driver
+			 */
+			return GTLayerFactory.createVectorLayer(layerName, file, crs,
+					background);
+		} catch (IOException e) {
+			throw new RuntimeException("Bug: Use GTLayerFactory please");
 		}
-
-		try {
-		// TODO Comprobar si hay un adaptador ya
-		VectorialFileAdapter adapter = new VectorialFileAdapter(f);
-		adapter.setDriver(d);
-
-		//TODO azo: adapter needs a reference to projection and to spatial index (review)
-		adapter.setCrs(crs);
-
-		layer.setName(layerName);
-
-		// TODO Meter esto dentro de la comprobación de si hay memoria
-		if (false) {
-		} else {
-			layer.setSource(adapter);
-			layer.setCrs(crs);
-		}
-
-
-			// Le asignamos también una legenda por defecto acorde con
-			// el tipo de shape que tenga. Tampoco sé si es aquí el
-			// sitio adecuado, pero en fin....
-			if (d instanceof WithDefaultLegend) {
-				WithDefaultLegend aux = (WithDefaultLegend) d;
-
-					adapter.start();
-					layer.setLegend((IVectorLegend) aux.getDefaultLegend());
-
-					ILabelingStrategy labeler = aux.getDefaultLabelingStrategy();
-					if (labeler instanceof AttrInTableLabelingStrategy) {
-						((AttrInTableLabelingStrategy) labeler).setLayer(layer);
-					}
-					layer.setLabelingStrategy(labeler);
-					layer.setIsLabeled(true); // TODO: ací no s'hauria de detectar si té etiquetes?????
-					adapter.stop();
-
-			} else {
-				IVectorLegend leg = LegendFactory.createSingleSymbolLegend(
-						layer.getShapeType(), background);
-				layer.setLegend(leg);
-
-			}
-	} catch (ReadDriverException e) {
-		layer=tryToSolveError(e,layer,d);
-	} catch (LoadLayerException e) {
-		layer=tryToSolveError(e,layer,d);
-	}
-		return layer;
 	}
 
-	private static FLyrVect tryToSolveError(BaseException e,FLayer layer,Driver d) {
+	private static FLyrVect tryToSolveError(BaseException e, FLayer layer,
+			Driver d) {
 		ISolveErrorListener sel = solveListeners.get(e.getClass());
-		if (sel!=null){
-			FLyrVect solvedLayer=null;
-			solvedLayer=(FLyrVect)sel.solve(layer,d);
-			if (solvedLayer!=null && sel!=null){
+		if (sel != null) {
+			FLyrVect solvedLayer = null;
+			solvedLayer = (FLyrVect) sel.solve(layer, d);
+			if (solvedLayer != null && sel != null) {
 				return solvedLayer;
 			}
 		}
 		layer.setAvailable(false);
 		layer.addError(e);
-		return (FLyrVect)layer;
+		return (FLyrVect) layer;
 	}
 
-	public static void addSolveErrorForLayer(Class exception, ISolveErrorListener sel) {
-		solveListeners.put(exception,sel);
+	public static void addSolveErrorForLayer(Class exception,
+			ISolveErrorListener sel) {
+		solveListeners.put(exception, sel);
 	}
-	public static void removeSolveErrorListener(Class exception){
+
+	public static void removeSolveErrorListener(Class exception) {
 		solveListeners.remove(exception);
 	}
+
 	/**
 	 * Creates a new vectorial layer from a generic layer (by generic whe mean
 	 * that we dont know a priory its origin: file, memory, jdbc database, etc.
-	 *
+	 * 
 	 * @param layerName
 	 * @param d
 	 * @param crs
@@ -288,26 +229,27 @@ public class LayerFactory {
 			CoordinateReferenceSystem crs) {
 		VectorialAdapter adapter = null;
 		if (d instanceof VectorialFileDriver) {
-			adapter = new VectorialFileAdapter(((VectorialFileDriver) d)
-					.getFile());
+			adapter = new VectorialFileAdapter(
+					((VectorialFileDriver) d).getFile());
 		} else if (d instanceof IVectorialDatabaseDriver) {
 			adapter = new VectorialDBAdapter();
 		} else {
 			adapter = new VectorialDefaultAdapter();
 		}
 		adapter.setDriver((VectorialDriver) d);
-		//TODO azo:adapter needs a reference to the projection
+		// TODO azo:adapter needs a reference to the projection
 		adapter.setCrs(crs);
 
 		FLyrVect layer = null;
 		try {
-			Class clase = LayerFactory.getLayerClassForLayerClassName("com.iver.cit.gvsig.fmap.layers.FLyrVect");
+			Class clase = LayerFactory
+					.getLayerClassForLayerClassName("com.iver.cit.gvsig.fmap.layers.FLyrVect");
 			layer = (FLyrVect) clase.newInstance();
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			return null;
 		}
-		
+
 		layer.setName(layerName);
 
 		layer.setSource(adapter);
@@ -327,7 +269,8 @@ public class LayerFactory {
 				if (labeler != null) {
 					labeler.setLayer(layer);
 					layer.setLabelingStrategy(labeler);
-					layer.setIsLabeled(true); // TODO: ací no s'hauria de detectar si té etiquetes?????
+					layer.setIsLabeled(true); // TODO: ací no s'hauria de
+												// detectar si té etiquetes?????
 				}
 
 				adapter.stop();
@@ -351,7 +294,7 @@ public class LayerFactory {
 	/**
 	 * Crea un RandomVectorialWFS con el driver que se le pasa como parámetro y
 	 * guardándose la URL del servidor que se pasa como parámetro
-	 *
+	 * 
 	 * @param driver
 	 * @param host
 	 * @param port
@@ -360,9 +303,9 @@ public class LayerFactory {
 	 * @param dbName
 	 * @param tableName
 	 * @param crs
-	 *
+	 * 
 	 * @return Capa creada.
-	 *
+	 * 
 	 * @throws UnsupportedOperationException
 	 */
 	public static FLayer createLayer(IVectorialDatabaseDriver driver,
@@ -381,7 +324,8 @@ public class LayerFactory {
 
 		FLyrVect layer = null;
 		try {
-			Class clase = LayerFactory.getLayerClassForLayerClassName("com.iver.cit.gvsig.fmap.layers.FLyrVect");
+			Class clase = LayerFactory
+					.getLayerClassForLayerClassName("com.iver.cit.gvsig.fmap.layers.FLyrVect");
 			layer = (FLyrVect) clase.newInstance();
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -391,7 +335,7 @@ public class LayerFactory {
 		layer.setName(layerName);
 		VectorialDBAdapter dbAdapter = new VectorialDBAdapter();
 		dbAdapter.setDriver(driver);
-		dbAdapter.setCrs(crs);//adapter needs also a ref to prj. review (azo)
+		dbAdapter.setCrs(crs);// adapter needs also a ref to prj. review (azo)
 
 		layer.setSource(dbAdapter);
 		layer.setCrs(crs);
@@ -407,42 +351,48 @@ public class LayerFactory {
 				}
 				layer.setLabelingStrategy(labeler);
 
-				layer.setIsLabeled(true); // TODO: ací no s'hauria de detectar si té etiquetes?????
+				layer.setIsLabeled(true); // TODO: ací no s'hauria de detectar
+											// si té etiquetes?????
 
 				dbAdapter.stop();
 			} else {
 				layer.setLegend(LegendFactory.createSingleSymbolLegend(
 						layer.getShapeType(), background));
 			}
-			if (driver instanceof IDelayedDriver){
+			if (driver instanceof IDelayedDriver) {
 				// Por defecto, los drivers están listos para entregar
 				// features al terminar su initialize. Pero con los drivers
 				// que implementan IDelayedDriver, el driver es responsable
 				// de avisar cuándo está listo
 				layer.getFLayerStatus().setDriverLoaded(false);
-				((IDelayedDriver) driver).addDriverEventListener(new DefaultDelayedDriverListener(layer));
+				((IDelayedDriver) driver)
+						.addDriverEventListener(new DefaultDelayedDriverListener(
+								layer));
 			}
 		} catch (LegendLayerException e) {
-//			LegendDriverExceptionType exceptType =
-//				new LegendDriverExceptionType("Error al construir la leyenda, campo no encontrado");
-			//TODO Para hacer esto extensible tiene que usarse puntos
-			//de extension, y comparar las clases de leyendas registradas
-//			IVectorialLegend legend = (IVectorialLegend)
-//				((WithDefaultLegend)driver).getDefaultLegend();
-//
-//			excepType.setLegendLabelField(legend.getLabelField());
-//			excepType.setLegendHeightField(legend.getLabelHeightField());
-//			excepType.setLegendRotationField(legend.getLabelRotationField());
-//			DriverException exception = new DriverException(e, excepType);
+			// LegendDriverExceptionType exceptType =
+			// new
+			// LegendDriverExceptionType("Error al construir la leyenda, campo no encontrado");
+			// TODO Para hacer esto extensible tiene que usarse puntos
+			// de extension, y comparar las clases de leyendas registradas
+			// IVectorialLegend legend = (IVectorialLegend)
+			// ((WithDefaultLegend)driver).getDefaultLegend();
+			//
+			// excepType.setLegendLabelField(legend.getLabelField());
+			// excepType.setLegendHeightField(legend.getLabelHeightField());
+			// excepType.setLegendRotationField(legend.getLabelRotationField());
+			// DriverException exception = new DriverException(e, excepType);
 			layer.setAvailable(false);
 			layer.addError(e);
 			return layer;
 			// throw new UnsupportedOperationException(e.getMessage());
 		} catch (Exception e) {
-//			ExceptionDescription excepType = new GenericDriverExceptionType();
-//			DriverException exception = new DriverException(e, excepType);
-//			layer.addError(null);
-			layer.addError(new LoadLayerException("No se ha podido cargar la capa",e));
+			// ExceptionDescription excepType = new
+			// GenericDriverExceptionType();
+			// DriverException exception = new DriverException(e, excepType);
+			// layer.addError(null);
+			layer.addError(new LoadLayerException(
+					"No se ha podido cargar la capa", e));
 			layer.setAvailable(false);
 			return layer;
 		}
@@ -452,154 +402,23 @@ public class LayerFactory {
 	}
 
 	/**
-	 * @param driver
-	 * @param layerName
-	 * @param object
-	 * @return
-	 * @throws SQLException
-	 * @throws DriverIOException
-	 * @throws IOException
-	 * @throws DriverLoadException
-	 * @throws com.hardcode.gdbms.engine.data.driver.DriverException
-	 * @throws NoSuchTableException
-	 * @throws ClassNotFoundException
-	 * @throws ReadDriverException
-	 * @throws IOException
-	 * @throws WriteDriverException
-	 * @throws
-	 */
-	public static FLayer createDisconnectedDBLayer(IVectorialJDBCDriver driver,
-			String layerName, CoordinateReferenceSystem crs, Color background,
-			ProgressListener listener) throws DBException, DriverLoadException,
-			NoSuchTableException, ClassNotFoundException, ReadDriverException,
-			IOException, WriteDriverException {
-		VectorialDisconnectedDBAdapter dbAdapter = new VectorialDisconnectedDBAdapter();
-		dbAdapter.setDriver(driver);
-		dbAdapter.setCrs(crs);
-		DataSource ds = dbAdapter.getRecordset();
-		ds.start();
-		String database = dataSourceFactory.getTempFile();
-		String[] fieldNames = new String[ds.getFieldCount() + 1];
-		System.arraycopy(ds.getFieldNames(), 0, fieldNames, 1, ds
-				.getFieldCount());
-		fieldNames[0] = "the_geom";
-		int[] types = new int[fieldNames.length];
-		types[0] = Types.BINARY;
-		for (int i = 1; i < types.length; i++) {
-			types[i] = ds.getFieldType(i - 1);
-		}
-		String dsName=null;
-		try {
-			dsName = dataSourceFactory.createTable(database,
-					ds.getPKNames(), fieldNames, types);
-		} catch (ReadDriverException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			throw new DBException(e);
-		}
-
-		DBLayerDefinition lyrDef = new DBLayerDefinition();
-		lyrDef.setTableName(dsName);
-		lyrDef.setName(layerName);
-		lyrDef.setFieldNames(ds.getFieldNames());
-		lyrDef.setFieldGeometry("the_geom");
-		lyrDef.setFieldID(ds.getPKNames()[0]);
-		lyrDef.setClassToInstantiate("org.hsqldb.jdbcDriver");
-
-		dataSourceFactory.addDBDataSourceByTable(dsName, null, 0, "sa", "",
-				database, dsName, "GDBMS HSQLDB Transactional driver");
-		DataSource local = dataSourceFactory.createRandomDataSource(dsName,
-				DataSourceFactory.AUTOMATIC_OPENING);
-		local.start();
-		DataWare dw = local
-				.getDataWare(DataSourceFactory.DATA_WARE_COHERENT_ROW_ORDER);
-		dw.start();
-		long t1 = System.currentTimeMillis();
-		dw.beginTrans();
-
-		if (listener == null) {
-			listener = new ProgressListener() {
-				/**
-				 * @see com.iver.cit.gvsig.fmap.ProgressListener#progress(int)
-				 */
-				public void progress(int n) {
-					// do nothing
-				}
-			};
-		}
-
-		for (int i = 0; i < dbAdapter.getShapeCount(); i++) {
-			Value[] row = new Value[ds.getFieldCount() + 1];
-
-			byte[] bytes = dbAdapter.getShape(i).toWKB();
-			row[0] = ValueFactory.createValue(bytes);
-
-			for (int j = 0; j < ds.getFieldCount(); j++) {
-				row[j + 1] = ds.getFieldValue(i, j);
-			}
-
-			dw.insertFilledRow(row);
-			listener.progress(100 * i / dbAdapter.getShapeCount());
-		}
-
-		long t2 = System.currentTimeMillis();
-		dw.commitTrans();
-		long t3 = System.currentTimeMillis();
-		System.out.println((t2 - t1) + " - " + (t3 - t2));
-		dw.stop();
-		local.stop();
-		ds.stop();
-		IVectorialJDBCDriver cacheDriver = (IVectorialJDBCDriver) LayerFactory
-				.getDM().getDriver("HSQLDB Driver");
-		Class.forName("org.hsqldb.jdbcDriver");
-
-		cacheDriver.setData(ConnectionFactory.createConnection(
-				"jdbc:hsqldb:file:" + database, "sa", ""), lyrDef);
-		cacheDriver.setWorkingArea(driver.getWorkingArea());
-		return createDBLayer(cacheDriver, layerName, crs, background);
-	}
-
-	/**
 	 * Devuelve el DriverManager.
-	 *
+	 * 
 	 * @return DriverManager.
 	 */
 	public static DriverManager getDM() {
-		initializeDriverManager();
-
-		return driverManager;
+		throw new RuntimeException("This has no sense anymore");
 	}
 
 	/**
 	 * Devuelve el WriterManager.
-	 *
+	 * 
 	 * @return WriterManager.
 	 */
 	public static WriterManager getWM() {
 		initializeWriterManager();
 
 		return writerManager;
-	}
-
-	/**
-	 * Inicializa el DriverManager.
-	 */
-	private static void initializeDriverManager() {
-		if (driverManager == null) {
-			driverManager = new DriverManager();
-			driverManager.loadDrivers(new File(LayerFactory.driversPath));
-
-			Throwable[] failures = driverManager.getLoadFailures();
-
-			for (int i = 0; i < failures.length; i++) {
-				logger.error("", failures[i]);
-			}
-
-			getDataSourceFactory().setDriverManager(driverManager);
-			getDataSourceFactory().initialize();
-			QueryManager.registerQuery(new ArcJoin());
-		}
 	}
 
 	/**
@@ -624,17 +443,16 @@ public class LayerFactory {
 
 	/**
 	 * sets drivers Directory
-	 *
+	 * 
 	 * @param path
 	 */
 	public static void setDriversPath(String path) {
-		LayerFactory.driversPath = path;
-		initializeDriverManager();
+		throw new RuntimeException("This has no sense anymore");
 	}
 
 	/**
 	 * sets writers Directory
-	 *
+	 * 
 	 * @param path
 	 */
 	public static void setWritersPath(String path) {
@@ -653,57 +471,63 @@ public class LayerFactory {
 	}
 
 	public static void initialize() {
-		initializeDriverManager();
 		initializeWriterManager();
 	}
 
 	/**
 	 * Set a class to use instead of the originalLayerClassName.
-	 *
-	 * @param originalLayerClassName name of class to relpace
-	 * @param layerClassToUse Class than implements FLayer interface to use
-	 *
-	 * @see  getLayerClassForLayerClassName(String,Class)
-	 * @see  unregisterLayerClassForName(String)
-	*/
-	public static void registerLayerClassForName (String originalLayerClassName, Class layerClassToUse){
+	 * 
+	 * @param originalLayerClassName
+	 *            name of class to relpace
+	 * @param layerClassToUse
+	 *            Class than implements FLayer interface to use
+	 * 
+	 * @see getLayerClassForLayerClassName(String,Class)
+	 * @see unregisterLayerClassForName(String)
+	 */
+	public static void registerLayerClassForName(String originalLayerClassName,
+			Class layerClassToUse) {
 		Class[] interfaces = layerClassToUse.getInterfaces();
-		for (int i = 0;i < interfaces.length; i++){
+		for (int i = 0; i < interfaces.length; i++) {
 			if (interfaces[i] == FLayer.class)
 				break;
 		}
 
-		layerClassMapping.put(originalLayerClassName,layerClassToUse);
+		layerClassMapping.put(originalLayerClassName, layerClassToUse);
 	}
 
 	/**
 	 * Unregister the originalLayerClassName class replacement.
-	 *
-	 * @param originalLayerClassName name of class to relpace
-	 * @param layerClassToUse Class than implements FLayer interface to use
+	 * 
+	 * @param originalLayerClassName
+	 *            name of class to relpace
+	 * @param layerClassToUse
+	 *            Class than implements FLayer interface to use
 	 * @return true if the class had been registered
-	 *
-	 * @see  getLayerClassForLayerClassName(String,Class)
-	 * @see  unregisterLayerClassForName(String)
-	*/
-	public static boolean unregisterLayerClassForName (String originalLayerClassName){
+	 * 
+	 * @see getLayerClassForLayerClassName(String,Class)
+	 * @see unregisterLayerClassForName(String)
+	 */
+	public static boolean unregisterLayerClassForName(
+			String originalLayerClassName) {
 		return layerClassMapping.remove(originalLayerClassName) != null;
 	}
 
 	/**
-	 * Gets the class to use for the layerClassName.
-	 * If isn't registered an alternative class for this layerClass
-	 * the this returns 'Class.forName(layerClassName)'
-	 *
+	 * Gets the class to use for the layerClassName. If isn't registered an
+	 * alternative class for this layerClass the this returns
+	 * 'Class.forName(layerClassName)'
+	 * 
 	 * @param layerClassName
 	 * @return Class implements FLayer to use
 	 * @throws ClassNotFoundException
-	 *
-	 * @see  registerLayerClassForName(String,Class)
-	 * @see  unregisterLayerClassForName(String)
+	 * 
+	 * @see registerLayerClassForName(String,Class)
+	 * @see unregisterLayerClassForName(String)
 	 */
-	public static Class getLayerClassForLayerClassName(String layerClassName) throws ClassNotFoundException{
-		Class layerClass = (Class)layerClassMapping.get(layerClassName);
+	public static Class getLayerClassForLayerClassName(String layerClassName)
+			throws ClassNotFoundException {
+		Class layerClass = (Class) layerClassMapping.get(layerClassName);
 		if (layerClass == null)
 			layerClass = Class.forName(layerClassName);
 		return layerClass;

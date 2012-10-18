@@ -69,11 +69,9 @@ public class InternalBuffer extends DBDataSourceAdapter {
 	        di.tableName = tableName;
 	        di.driverName = "GDBMS HSQLDB driver";
 	        setSourceInfo(di);
-			setDriver((AlphanumericDBDriver) dsf.getDriverManager().getDriver(di.driverName));
+			setDriver(null);
 			rowCount = 0;
 	    } catch (SQLException e) {
-	        throw new ReadDriverException(getName(),e);
-		} catch (DriverLoadException e) {
 	        throw new ReadDriverException(getName(),e);
 	    }
 

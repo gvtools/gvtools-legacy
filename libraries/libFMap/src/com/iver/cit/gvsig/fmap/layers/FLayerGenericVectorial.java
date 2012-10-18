@@ -1,9 +1,7 @@
 package com.iver.cit.gvsig.fmap.layers;
 
 import org.cresques.cts.ProjectionUtils;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.hardcode.driverManager.DriverLoadException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.iver.cit.gvsig.exceptions.layers.DriverLayerException;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
@@ -17,7 +15,6 @@ import com.iver.cit.gvsig.fmap.rendering.IVectorLegend;
 import com.iver.cit.gvsig.fmap.rendering.LegendFactory;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.AttrInTableLabelingStrategy;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
-import com.iver.utiles.IPersistence;
 import com.iver.utiles.XMLEntity;
 
 public class FLayerGenericVectorial extends FLyrVect {
@@ -39,13 +36,6 @@ public class FLayerGenericVectorial extends FLyrVect {
 	public VectorialDriver getDriver() {
 		return this.vDriver ;
 	}
-
-	public void setDriverByName(String driverName) throws DriverLoadException {
-		this.setDriver(
-		  (VectorialDriver)LayerFactory.getDM().getDriver(driverName)
-		);
-	}
-
 
 	/* Esto deberia ir en FLyrVect */
 	private void initializeLegendDefault() throws LegendLayerException, ReadDriverException {
@@ -113,61 +103,62 @@ public class FLayerGenericVectorial extends FLyrVect {
 	}
 
 	public void setXMLEntity(XMLEntity xml) throws XMLException {
-        CoordinateReferenceSystem crs = null;
-        if (xml.contains("proj")) {
-            crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
-        }
-        else
-        {
-            crs = this.getMapContext().getViewPort().getCrs();
-        }
-		this.setName(xml.getName());
-		setCrs(crs);
-
-        String driverName = xml.getStringProperty("other");
-        VectorialDriver driver = null;
-        try {
-            driver = (VectorialDriver) LayerFactory.getDM().getDriver(driverName);
-        } catch (DriverLoadException e) {
-            // Si no existe ese driver, no pasa nada.
-            // Puede que el desarrollador no quiera que
-            // aparezca en el cuadro de diálogo y ha metido
-            // el jar con sus clases en nuestro directorio lib.
-            // Intentamos cargar esa clase "a pelo".
-            if (xml.getChild(2).contains("className"))
-            {
-                String className2 = xml.getChild(2).getStringProperty("className");
-                try {
-                    driver = (VectorialDriver) Class.forName(className2).newInstance();
-                } catch (Exception e1) {
-                    throw new XMLException(e1);
-                }
-            }
-        } catch (NullPointerException npe) {
-            // Si no existe ese driver, no pasa nada.
-            // Puede que el desarrollador no quiera que
-            // aparezca en el cuadro de diálogo y ha metido
-            // el jar con sus clases en nuestro directorio lib.
-            // Intentamos cargar esa clase "a pelo".
-            if (xml.getChild(2).contains("className"))
-            {
-                String className2 = xml.getChild(2).getStringProperty("className");
-                try {
-                    driver = (VectorialDriver) Class.forName(className2).newInstance();
-                } catch (Exception e1) {
-                    throw new XMLException(e1);
-                }
-            }
-        }
-        if (driver == null) {
-        	throw new XMLException(new Exception("Error al cargar el driver"));
-        }
-        if (driver instanceof IPersistence)
-        {
-        	IPersistence persist = (IPersistence) driver;
-            persist.setXMLEntity(xml.getChild(2));
-        }
-        this.setDriver(driver);
-        super.setXMLEntityNew(xml);
+		throw new RuntimeException("To implement");
+//        CoordinateReferenceSystem crs = null;
+//        if (xml.contains("proj")) {
+//            crs = ProjectionUtils.getCRS(xml.getStringProperty("proj"));
+//        }
+//        else
+//        {
+//            crs = this.getMapContext().getViewPort().getCrs();
+//        }
+//		this.setName(xml.getName());
+//		setCrs(crs);
+//
+//        String driverName = xml.getStringProperty("other");
+//        VectorialDriver driver = null;
+//        try {
+//            driver = (VectorialDriver) LayerFactory.getDM().getDriver(driverName);
+//        } catch (DriverLoadException e) {
+//            // Si no existe ese driver, no pasa nada.
+//            // Puede que el desarrollador no quiera que
+//            // aparezca en el cuadro de diálogo y ha metido
+//            // el jar con sus clases en nuestro directorio lib.
+//            // Intentamos cargar esa clase "a pelo".
+//            if (xml.getChild(2).contains("className"))
+//            {
+//                String className2 = xml.getChild(2).getStringProperty("className");
+//                try {
+//                    driver = (VectorialDriver) Class.forName(className2).newInstance();
+//                } catch (Exception e1) {
+//                    throw new XMLException(e1);
+//                }
+//            }
+//        } catch (NullPointerException npe) {
+//            // Si no existe ese driver, no pasa nada.
+//            // Puede que el desarrollador no quiera que
+//            // aparezca en el cuadro de diálogo y ha metido
+//            // el jar con sus clases en nuestro directorio lib.
+//            // Intentamos cargar esa clase "a pelo".
+//            if (xml.getChild(2).contains("className"))
+//            {
+//                String className2 = xml.getChild(2).getStringProperty("className");
+//                try {
+//                    driver = (VectorialDriver) Class.forName(className2).newInstance();
+//                } catch (Exception e1) {
+//                    throw new XMLException(e1);
+//                }
+//            }
+//        }
+//        if (driver == null) {
+//        	throw new XMLException(new Exception("Error al cargar el driver"));
+//        }
+//        if (driver instanceof IPersistence)
+//        {
+//        	IPersistence persist = (IPersistence) driver;
+//            persist.setXMLEntity(xml.getChild(2));
+//        }
+//        this.setDriver(driver);
+//        super.setXMLEntityNew(xml);
 	}
 }

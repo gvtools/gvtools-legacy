@@ -310,15 +310,7 @@ public class SingleVectorialDBConnectionManager {
 	 * @return driver instance
 	 */
 	public static IVectorialDatabaseDriver getInstanceFromName(String drvname) {
-
-		IVectorialDatabaseDriver _driver = null;
-        try {
-            _driver = (IVectorialDatabaseDriver) LayerFactory.getDM().getDriver(drvname);
-        } catch (Exception e) {
-//        	logger.error("While getting driver instance: " + e.getMessage(), e);
-        	return null;
-        }
-        return _driver;
+		throw new RuntimeException("Not implemented");
 	}
 
 

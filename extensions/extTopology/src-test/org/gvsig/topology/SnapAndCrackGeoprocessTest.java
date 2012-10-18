@@ -103,9 +103,6 @@ public class SnapAndCrackGeoprocessTest extends TestCase {
 		com.iver.cit.gvsig.fmap.layers.LayerFactory
 				.setDriversPath(baseDriversPath.getAbsolutePath());
 		LayerFactory.setWritersPath(baseDriversPath.getAbsolutePath());
-		if (LayerFactory.getDM().getDriverNames().length < 1)
-			throw new Exception("Can't find drivers in path: "
-					+ baseDriversPath);
 		DEFAULT_CRS = ProjectionUtils.getCRS("EPSG:23030");
 		
 		

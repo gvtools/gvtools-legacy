@@ -63,32 +63,6 @@ public class LayerPreview extends ImageNavigator implements IClientImageNavigato
 		setEnabled(true);
 	}
 
-	public static void main(String[] args) {
-		JFrame jFrame = new JFrame("test");
-		String fwAndamiDriverPath = "../_fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers";
-		CoordinateReferenceSystem crs = ProjectionUtils.getCRS("EPSG:23030");
-		try {
-			LayerFactory.setDriversPath(new File(fwAndamiDriverPath).getAbsolutePath());
-			LayerPreview prev = new LayerPreview();
-
-			prev.setLayer(LayerFactory.
-					createLayer(
-							"line",
-							"gvSIG shp driver",
-							new File("/home/jaume/Documents/Cartografia/cv_300_polygons.shp"),
-							crs));
-
-			jFrame.setSize(new Dimension(598, 167));
-
-			jFrame.setContentPane(prev);
-
-			jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			jFrame.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void drawImage(Graphics2D g, double x1, double y1, double x2, double y2, double zoom, int width, int height) {
 		Cancel c = new Cancel();
 		while (!cancels.isEmpty()) cancels.pop().setCanceled(true);

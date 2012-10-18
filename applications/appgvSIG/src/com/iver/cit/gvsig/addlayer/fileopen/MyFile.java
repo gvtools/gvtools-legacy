@@ -38,7 +38,7 @@ import com.iver.cit.gvsig.fmap.MapControl;
 		}
 
 		public Rectangle2D createLayer(MapControl mapControl) {
-			return fileOpen.createLayer(f, mapControl, driverName, AddLayerDialog.getLastCrs());
+			return fileOpen.createLayer(f, mapControl, AddLayerDialog.getLastCrs());
 		}
 		public File getFile(){
 			return f;

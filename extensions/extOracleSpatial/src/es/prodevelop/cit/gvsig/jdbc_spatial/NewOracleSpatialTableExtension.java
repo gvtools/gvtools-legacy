@@ -54,7 +54,7 @@ public class NewOracleSpatialTableExtension extends Extension {
        			 wizard.getWizardComponents().addWizardPanel(panelFields);
        			 wizard.getWizardComponents().addWizardPanel(connPanel);
        			 
-       			 Driver driver = writerManager.getDriver(OracleSpatialDriver.NAME);
+       			 Driver driver = new OracleSpatialDriver();
        			 panelFields.setWriter(((IWriteable) driver).getWriter());
        			 panelChoose.setDriver(driver);
        			 

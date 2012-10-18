@@ -11,7 +11,6 @@
 	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/xerces_2_5_0.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/xml-apis.jar"/>
-	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/remote-clients.jar"/>
 	<classpathentry kind="lib" path="lib/zql.jar"/>
 	<classpathentry kind="src" path="src-test"/>
@@ -28,11 +27,12 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="lib" path="lib/org.gvsig.printing.cups-support.jar"/>
-	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libCorePlugin"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libRaster"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGDBMS"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -28,6 +28,7 @@ import com.iver.cit.gvsig.exceptions.expansionfile.ExpansionFileReadException;
 import com.iver.cit.gvsig.exceptions.layers.LegendLayerException;
 import com.iver.cit.gvsig.exceptions.layers.StartEditionLayerException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
+import com.iver.cit.gvsig.fmap.Source;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.IGeometry;
 import com.iver.cit.gvsig.fmap.core.SymbologyFactory;
@@ -65,8 +66,8 @@ public class FLyrAnnotation extends FLyrVect {
 	/**
 	 * Crea un nuevo FLyrAnnotation.
 	 */
-	public FLyrAnnotation() {
-		super();
+	public FLyrAnnotation(Source source) {
+		super(source);
 	}
 
 	/**
@@ -581,7 +582,7 @@ public class FLyrAnnotation extends FLyrVect {
 	}
 
 	public static FLayer createLayerFromVect(FLyrVect layer) throws ReadDriverException, LegendLayerException{
-		FLyrAnnotation la=new FLyrAnnotation();
+		FLyrAnnotation la=new FLyrAnnotation(layer.getDataSource());
 		la.setSource(layer.getSource());
 		la.setRecordset(layer.getRecordset());
 		la.setCrs(layer.getCrs());

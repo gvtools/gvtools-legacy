@@ -1831,7 +1831,7 @@ public class DataSourceFactory {
 		if (this.driversNamesAliases.containsKey(name)) {
 			name = (String)this.driversNamesAliases.get(name);
 		}
-		return this.dm.getDriver(name);
+		return null;
 
 	}
 

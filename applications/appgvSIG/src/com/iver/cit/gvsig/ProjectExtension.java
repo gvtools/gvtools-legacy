@@ -161,11 +161,6 @@ public class ProjectExtension extends Extension implements IExtensionStatus {
 				  .getAbsolutePath() +
 				  File.separator + "drivers");
 
-        LayerFactory.setDriversPath(PluginServices.getPluginServices(this)
-				  .getPluginDirectory()
-				  .getAbsolutePath() +
-				  File.separator + "drivers");
-
         initializeDocumentActionsExtensionPoint();
         registerDocuments();
 

@@ -214,16 +214,17 @@ public class NetworkLoader implements INetworkLoader {
 	public static void main(String[] args) {
 		NetworkLoader netLoader = new NetworkLoader(false);
 
-		//Setup de los drivers
-		DriverManager dm = new DriverManager();
-		dm.setValidation(new DriverValidation() {
-				public boolean validate(Driver d) {
-					return ((d instanceof ObjectDriver) ||
-					(d instanceof FileDriver) ||
-					(d instanceof DBDriver));
-				}
-			});
-		dm.loadDrivers(new File("../_fwAndami/gvSIG/extensiones/org.gvsig/drivers"));
+//		//Setup de los drivers
+		if (System.currentTimeMillis() > 0) throw new RuntimeException("Not maintaining mains");
+		DriverManager dm = null;//new DriverManager();
+//		dm.setValidation(new DriverValidation() {
+//				public boolean validate(Driver d) {
+//					return ((d instanceof ObjectDriver) ||
+//					(d instanceof FileDriver) ||
+//					(d instanceof DBDriver));
+//				}
+//			});
+//		dm.loadDrivers(new File("../_fwAndami/gvSIG/extensiones/org.gvsig/drivers"));
 
 		//Setup del factory de DataSources
         DataSourceFactory dsf = LayerFactory.getDataSourceFactory();

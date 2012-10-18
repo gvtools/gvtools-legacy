@@ -38,6 +38,8 @@ import com.iver.cit.gvsig.fmap.drivers.VectorialFileDriver;
 import com.iver.cit.gvsig.fmap.drivers.db.utils.ConnectionWithParams;
 import com.iver.cit.gvsig.fmap.drivers.dbf.DbaseFile;
 import com.iver.cit.gvsig.fmap.drivers.jdbc.postgis.PostGISWriter;
+import com.iver.cit.gvsig.fmap.drivers.jdbc.postgis.PostGisDriver;
+import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.edition.VectorialEditableAdapter;
 import com.iver.cit.gvsig.fmap.edition.rules.IRule;
 import com.iver.cit.gvsig.fmap.edition.rules.RulePolygon;
@@ -98,10 +100,6 @@ public class MyFinishAction extends FinishAction
 				int geometryType = geometryTypePanel.getSelectedGeometryType();
 				FieldDescription[] fieldsDesc = fieldDefinitionPanel.getFieldsDescription();
 
-				Driver drv = LayerFactory.getDM().getDriver(selectedDriver);
-
-
-
     		    SHPLayerDefinition lyrDef = new SHPLayerDefinition();
     		    lyrDef.setFieldsDesc(fieldsDesc);
     		    lyrDef.setFile(newFile);
@@ -118,7 +116,7 @@ public class MyFinishAction extends FinishAction
 
 
                 lyr = (FLyrVect) LayerFactory.createLayer(layerName,
-                        (VectorialFileDriver) drv, newFile, mapCtrl.getCrs());
+                        new IndexedShpDriver(), newFile, mapCtrl.getCrs());
 
 			}
 			else if (actionComand.equals("POSTGIS"))
@@ -134,7 +132,7 @@ public class MyFinishAction extends FinishAction
 				int geometryType = geometryTypePanel.getSelectedGeometryType();
 				FieldDescription[] fieldsDesc = fieldDefinitionPanel.getFieldsDescription();
 
-				Driver drv = LayerFactory.getDM().getDriver(selectedDriver);
+				Driver drv = new PostGisDriver();
 
 				IVectorialJDBCDriver dbDriver = (IVectorialJDBCDriver) drv;
 				NewVectorDBConnectionPanel postgisPanel = (NewVectorDBConnectionPanel) myWizardComponents.getWizardPanel(2);

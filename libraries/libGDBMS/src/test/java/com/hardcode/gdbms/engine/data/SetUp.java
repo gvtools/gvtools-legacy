@@ -53,24 +53,8 @@ public class SetUp {
 		PropertyConfigurator.configure(SetUp.class.getClassLoader()
 										   .getResource("log4j.properties"));
 
-		//Setup de los drivers
-		DriverManager dm = new DriverManager();
-		dm.setValidation(new DriverValidation() {
-				public boolean validate(Driver d) {
-					return ((d instanceof ObjectDriver) ||
-					(d instanceof FileDriver) ||
-					(d instanceof DBDriver));
-				}
-			});
-		dm.loadDrivers(new File("../fwAndami/gvSIG/extensiones/com.iver.cit.gvsig/drivers"));
-
-		Throwable[] t = dm.getLoadFailures();
-		if (t.length != 0) throw new RuntimeException(
-		        t[0]);
-
 		//Setup del factory de DataSources
         DataSourceFactory dsf = LayerFactory.getDataSourceFactory();
-		dsf.setDriverManager(dm);
 
 		//Setup de las tablas
 		dsf.addDBDataSourceByTable("hsqldbpersona", null, 0, "sa", "", "src/test/resources/testdb",

@@ -103,8 +103,6 @@ public class LineCleanTest extends TestCase {
 
 		LayerFactory.setDriversPath(baseDriversPath.getAbsolutePath());
 		LayerFactory.setWritersPath(baseDriversPath.getAbsolutePath());
-		if (LayerFactory.getDM().getDriverNames().length < 1)
-			throw new Exception("Can't find drivers in path: " + fwAndamiDriverPath);
 		
 	}
 

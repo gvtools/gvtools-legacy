@@ -52,6 +52,7 @@ import org.gvsig.app.documents.table.summarize.utils.IntList;
 import org.gvsig.app.documents.table.summarize.utils.SelectedStatistics;
 
 import com.hardcode.driverManager.DriverLoadException;
+import com.hardcode.gdbms.driver.dbf.DBFDriver;
 import com.hardcode.gdbms.driver.exceptions.InitializeWriterException;
 import com.hardcode.gdbms.driver.exceptions.ReadDriverException;
 import com.hardcode.gdbms.engine.data.DataSource;
@@ -395,15 +396,13 @@ public class Summarize {
 	public IWriter createDbfFile(File targetFile, String[] fieldNames, int[] fieldTypes) throws DBFExportException {
 		FileDriver driver = null;
 		try {
-			driver = (FileDriver) LayerFactory.getDM().getDriver("gdbms dbf driver");
+			driver = new DBFDriver();
 
 			driver.createSource(targetFile.getAbsolutePath(), fieldNames, fieldTypes);
 			targetFile.createNewFile();
 
 			driver.open(targetFile);
 			return ((IWriteable)driver).getWriter();
-		} catch (DriverLoadException e2) {
-			throw new DBFExportException(e2);
 		} catch (ReadDriverException e2) {
 			throw new DBFExportException(e2);
 		} catch (IOException e2) {

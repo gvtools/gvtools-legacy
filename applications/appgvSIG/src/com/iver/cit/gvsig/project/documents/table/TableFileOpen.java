@@ -44,42 +44,6 @@ public class TableFileOpen extends AbstractFileOpen {
 	 * Constructor de FileOpenRaster
 	 */
 	public TableFileOpen() {
-		TreeSet filters = new TreeSet(new Comparator() {
-			public int compare(Object o1, Object o2) {
-				TableFileFilter dff1 = (TableFileFilter) o1;
-				TableFileFilter dff2 = (TableFileFilter) o2;
-
-				return dff1.driver.getName().compareTo(dff2.driver.getName());
-			}
-		});
-
-		Class[] driverClasses = new Class[] { FileDriver.class };
-		String[] driverNames = LayerFactory.getDM().getDriverNames();
-		TableFileFilter auxF;
-		try {
-			for (int i = 0; i < driverNames.length; i++) {
-				System.err.println("DRIVER " + i + " : " + driverNames[i]);
-				boolean is = false;
-				for (int j = 0; j < driverClasses.length; j++) {
-					if (LayerFactory.getDM().isA(driverNames[i], driverClasses[j])) {
-						is = true;
-						break;
-					}
-				}
-				if (is) {
-					auxF = new TableFileFilter(driverNames[i]);
-					System.out.println("DRIVER " + i + " : " + driverNames[i]);
-					filters.add(auxF);
-				}
-			}
-			Iterator iterator = filters.iterator();
-			while (iterator.hasNext()) {
-				TableFileFilter filter = (TableFileFilter) iterator.next();
-				getFileFilter().add(filter);
-			}
-		} catch (DriverLoadException exception) {
-			NotificationManager.addError("No se pudo acceder a los drivers", exception);
-		}
 	}
 
 	/*
@@ -87,7 +51,7 @@ public class TableFileOpen extends AbstractFileOpen {
 	 * @see org.gvsig.raster.gui.wizards.IFileOpen#execute(java.io.File[])
 	 */
 	public Rectangle2D createLayer(File file, MapControl mapControl,
-			String driverName, CoordinateReferenceSystem crs) {
+			CoordinateReferenceSystem crs) {
 		return null;
 	}
 }

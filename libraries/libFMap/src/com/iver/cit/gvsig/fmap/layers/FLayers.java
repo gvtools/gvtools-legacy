@@ -831,124 +831,6 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 	}
 
 	/**
-	 * <p>Inserts layers and their properties to this collection, from an XML entity. Also adds properties to the collection of layers (root node).
-	 *
-	 * <p>The XML entity as parameter must have a tree-node structure, the root must have at least two properties, and each (first-level)
-	 *  child can be a raster layer <i>(<code>FLyrRaster</code>)</i>, a vectorial layer <i>(<code>FLyrVect</code>)</i>,
-	 *  another collection of layers <i>(<code>FLayers</code>)</i>, or another kind of layer <i>(<code>FLayer</code>)</i> .</p>
-	 *
-	 * <p> <b>Root node properties:</b>
-	 *  <ul>
-	 *   <li> properties described in <code>FLyrDefault#getXMLEntity03()</code>
-	 *   <li> numLayers : number of layers
-	 *   <li> LayerNames : name of the layers
-	 *  </ul>
-	 * </p>
-	 *
-	 * <p> <b>Layers: each first-level child: </b>
-	 *  <ul>
-	 *   <li> className : name of the class
-	 *   <li> <b> Capa Raster: </b>
-	 *   <ul>
-	 *    <li> name : name of the layer
-	 *    <li> properties described in <code>FLyrDefault#getXMLEntity03()</code>
-	 *   </ul>
-	 *   <li> <b> Capa Vectorial: </b>
-	 *   <ul>
-	 *    <li> file : the projection of this layer (only if it's defined)
-	 *    <li> driverName : name of the driver used to access to the file
-	 *    <li> properties described in <code>FLyrDefault#getXMLEntity03()</code>
-	 *   </ul>
-	 *   <li> <b> Collection of layers: </b>
-	 *   <ul>
-	 *    <li> that node
-	 *   </ul>
-	 *   <li> <b> Another kind of layer: </b>
-	 *   <ul>
-	 *    <li> name : the name of the layer
-	 *    <li> properties described in <code>FLyrDefault#getXMLEntity03()</code>
-	 *   </ul>
-	 *  </ul>
-	 * </p>
-	 *
-	 * @see FLyrDefault#getXMLEntity03()
-	 *
-	 * @param xml an <code>XMLEntity</code> with the information
-	 *
-	 * @throws com.iver.cit.gvsig.fmap.layers.XMLException if there is an error obtaining the object.
-	 */
-	public void setXMLEntity03(XMLEntity xml) throws XMLException{
-		super.setXMLEntity03(xml);
-		int numLayers = xml.getIntProperty("numLayers");
-
-		String[] s = xml.getStringArrayProperty("LayerNames");
-		try {
-			for (int i = 0; i < numLayers; i++) {
-				FLayer layer = null;
-
-				String className = xml.getChild(i).getStringProperty("className");
-
-				if (className.equals(FLyrVect.class.getName())) {
-					if (xml.getChild(i).contains("file")) {
-
-						layer = LayerFactory.createLayer(s[i],
-								(VectorialFileDriver)LayerFactory.getDM().getDriver(xml.getChild(i).getStringProperty("driverName")),
-								new File(xml.getChild(i).getStringProperty("file")),
-								this.getMapContext().getViewPort().getCrs());
-
-					} else if (true) {
-						//TODO falta por implementar
-					} else if (true) {
-						//TODO falta por implementar
-					}
-
-					layer.setXMLEntity03(xml.getChild(i));
-					// Comprobar que la proyecci�n es la misma que la de FMap
-					// Si no lo es, es una capa que est� reproyectada al vuelo
-					CoordinateReferenceSystem crs = layer.getCrs();
-					if (crs != null)
-						if (crs != fmap.getCrs()) {
-							MathTransform trans = ProjectionUtils
-									.getCrsTransform(crs, fmap.getCrs());
-							layer.setCrsTransform(trans);
-							logger.info("coordTrans = "
-									+ crs.getName().getCode() + " "
-									+ fmap.getCrs().getName().getCode());
-						}
-				} else {
-					try {
-						Class clazz = Class.forName(className);
-						if (FLayers.class.isAssignableFrom(clazz)) {
-							layer = (FLayer) clazz.newInstance();
-							((FLayers)layer).setMapContext(getMapContext());
-							((FLayers)layer).setParentLayer(this);
-							//							if (className.equals((FLayers.class.getName()))) {
-							//							layer = new FLayers(getMapContext(),this);
-							layer.setXMLEntity(xml.getChild(i));
-						} else {
-							// Capas Nuevas (externas)
-							Class clase = Class.forName(className);
-							layer = (FLayer) clase.newInstance();
-							layer.setName(s[i]);
-							layer.setXMLEntity03(xml.getChild(i));
-							layer.load();
-
-						}
-					} catch (Exception e) {
-						//e.printStackTrace();
-						throw new XMLException(e);
-					}
-				}
-				this.addLayer(layer);
-			}
-		}
-		catch (DriverLoadException e) {
-			throw new XMLException(e);
-		}
-
-	}
-
-	/**
 	 * <p>Inserts layers and properties to this collection of layers.</p>
 	 *
 	 * <p>This root node has the same properties that return <code>FlyrDefault#getXMLEntity()</code> adding:
@@ -1243,193 +1125,195 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 	 * @throws LoadLayerException if fails loading this layer.
 	 */
 	private void addLayerFromXML(XMLEntity xml, String name) throws LoadLayerException {
-		FLayer layer = null;
-
-		try {
-			if (name == null) name = xml.getName();
-
-
-			String className = xml.getStringProperty("className");
-			//TODO VCN FLyrAnnotation es un parche para no tener que duplicar todo el c�digo de aq� y de los diferentes m�todos de LayerFactory,
-			//ya que los drivers de una FLyrAnnotation no sabemos cual es puede ser cualquier Driver Vectorial.
-			if (className.equals(FLyrVect.class.getName()) || className.equals(FLyrAnnotation.class.getName())) {
-				String type = xml.getStringProperty("type");
-				if ("vectorial".equals(type)){
-					//String recordsetName = xml.getChild(i).getStringProperty("recordset-name");
-					CoordinateReferenceSystem crs = null;
-					if (xml.contains("proj")) {
-						crs = ProjectionUtils.getCRS(xml
-								.getStringProperty("proj"));
-					} else {
-						crs = this.getMapContext().getViewPort().getCrs();
-					}
-					if (xml.contains("file")) {
-						Driver d;
-						try {
-							d = LayerFactory.getDM().getDriver(xml.getStringProperty("driverName"));
-						} catch (DriverLoadException e1) {
-							throw new DriverLayerException(name,e1);
-						}
-						String path=pathGenerator.getAbsolutePath((String)xml.getStringProperty("file"));
-						if (path!=null){
-							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
-									new File(pathGenerator.getAbsolutePath((String)xml.getStringProperty("file"))),
-									crs);
-						}else if (xml.contains("absolutePath")){
-							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
-								new File(xml.getStringProperty("absolutePath")),
-								crs);
-						}else{
-							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
-								new File(xml.getStringProperty("file")),
-								crs);
-						}
-
-
-					}
-					if (xml.contains("db")) {
-
-						String driverName = xml.getStringProperty("db");
-						IVectorialDatabaseDriver driver;
-						try {
-							driver = (IVectorialDatabaseDriver) LayerFactory.getDM().getDriver(driverName);
-							//Hay que separar la carga de los datos del XMLEntity del load.
-							if (xml.firstIndexOfChild("className", "com.iver.cit.gvsig.fmap.layers.SelectionSupport")==2)
-								driver.setXMLEntity(xml.getChild(3));
-							else
-								driver.setXMLEntity(xml.getChild(2));
-
-							//						boolean loadOk = false;
-							try {
-								((DefaultJDBCDriver)driver).load();
-								//							loadOk = (((DefaultJDBCDriver)driver).getConnection() != null);
-								layer = LayerFactory.createDBLayer(driver, name, crs);
-								layer.setAvailable((((DefaultJDBCDriver)driver).getConnection() != null));
-							} catch (ReadDriverException e) {
-								layer = LayerFactory.createDBLayer(driver, name, crs);
-								layer.addError(e);
-								layer.setAvailable(false);
-							}
-						} catch (DriverLoadException e) {
-							throw new DriverLayerException(name,e);
-						} catch (XMLException e) {
-							throw new DriverLayerException(name,e);
-							//						} catch (ReadDriverException e) {
-							//						throw new DriverLayerException(name,e);
-						}
-
-					}
-					// Clases con algun driver gen�rico creado por otro
-					// programador
-					if (xml.contains("other")) {
-						int classChild = 2;
-						if(xml.contains("isLabeled") && xml.getBooleanProperty("isLabeled")){
-							classChild++;
-						}
-
-						String driverName = xml.getStringProperty("other");
-						VectorialDriver driver = null;
-						try {
-							driver = (VectorialDriver) LayerFactory.getDM().getDriver(driverName);
-						} catch (DriverLoadException e) {
-							// Si no existe ese driver, no pasa nada.
-							// Puede que el desarrollador no quiera que
-							// aparezca en el cuadro de di�logo y ha metido
-							// el jar con sus clases en nuestro directorio lib.
-							// Intentamos cargar esa clase "a pelo".
-							if (xml.getChild(classChild).contains("className"))
-							{
-								String className2 = xml.getChild(classChild).getStringProperty("className");
-								try {
-									driver = (VectorialDriver) Class.forName(className2).newInstance();
-								} catch (Exception e1) {
-									throw new DriverLayerException(name,e);
-								}
-							}
-						} catch (NullPointerException npe) {
-							// Si no existe ese driver, no pasa nada.
-							// Puede que el desarrollador no quiera que
-							// aparezca en el cuadro de di�logo y ha metido
-							// el jar con sus clases en nuestro directorio lib.
-							// Intentamos cargar esa clase "a pelo".
-							if (xml.getChild(2).contains("className"))
-							{
-								String className2 = xml.getChild(classChild).getStringProperty("className");
-								try {
-									driver = (VectorialDriver) Class.forName(className2).newInstance();
-								} catch (Exception e1) {
-									throw new DriverLayerException(name,e1);
-								}
-							}
-						}
-						if (driver instanceof IPersistence)
-						{
-							IPersistence persist = (IPersistence) driver;
-							persist.setXMLEntity(xml.getChild(classChild));
-						}
-						layer = LayerFactory.createLayer(name, driver, crs);
-					}
-
-				}
-
-				//TODO VCN FLyrAnnotation es un parche para no tener que duplicar todo el c�digo de aq� y de los diferentes m�todos de LayerFactory,
-				//ya que los drivers de una FLyrAnnotation no sabemos cual es puede ser cualquier Driver Vectorial.
-				if (className.equals(FLyrAnnotation.class.getName())){
-					layer=FLyrAnnotation.createLayerFromVect((FLyrVect)layer);
-				}
-
-
-				layer.setXMLEntity(xml);
-
-			} else {
-				Class clase = LayerFactory.getLayerClassForLayerClassName(className);
-				layer = (FLayer) clase.newInstance();
-				if (clase.isAssignableFrom(FLayers.class)) {
-					((FLayers)layer).setMapContext(getMapContext());
-					((FLayers)layer).setParentLayer(this);
-					//				layer = new FLayers(getMapContext(),this);
-					layer.setXMLEntity(xml);
-				} else {
-					// Capas Nuevas (externas)
-					layer.setName(name);
-					layer.setXMLEntity(xml);
-					layer.load();
-				}
-			}
-			this.addLayer(layer);
-			logger.debug("layer: "+ layer.getName() +" loaded");
-			// Comprobar que la proyecci�n es la misma que la de FMap
-			// Si no lo es, es una capa que est� reproyectada al vuelo
-			CoordinateReferenceSystem crs = layer.getCrs();
-			if ((crs != null))
-				if (!crs.getName().equals(getMapContext().getCrs().getName()))
-				{
-					MathTransform trans = ProjectionUtils.getCrsTransform(crs,
-							getMapContext().getCrs());
-					// TODO: REVISAR CON LUIS
-					// Se lo fijamos a todas, luego cada una que se reproyecte
-					// si puede, o que no haga nada
-					layer.setCrsTransform(trans);
-				}
-		} catch (XMLException e) {
-			fmap.addLayerError(xml.getStringProperty("name"));
-			throw new LoadLayerException(name,e);
-		} catch (ClassNotFoundException e) {
-			fmap.addLayerError(xml.getStringProperty("name"));
-			throw new LoadLayerException(name,e);
-		} catch (InstantiationException e) {
-			fmap.addLayerError(xml.getStringProperty("name"));
-			throw new LoadLayerException(name,e);
-		} catch (IllegalAccessException e) {
-			fmap.addLayerError(xml.getStringProperty("name"));
-			throw new LoadLayerException(name,e);
-		} catch (ReadDriverException e) {
-			fmap.addLayerError(xml.getStringProperty("name"));
-			throw new LoadLayerException(name,e);
-		} catch (LoadLayerException e){
-			fmap.addLayerError(xml.getStringProperty("name"));
-			throw e;
-		}
+		throw new RuntimeException("Create a schema, generate Java sources and rewrite this method");
+		
+//		FLayer layer = null;
+//
+//		try {
+//			if (name == null) name = xml.getName();
+//
+//
+//			String className = xml.getStringProperty("className");
+//			//TODO VCN FLyrAnnotation es un parche para no tener que duplicar todo el c�digo de aq� y de los diferentes m�todos de LayerFactory,
+//			//ya que los drivers de una FLyrAnnotation no sabemos cual es puede ser cualquier Driver Vectorial.
+//			if (className.equals(FLyrVect.class.getName()) || className.equals(FLyrAnnotation.class.getName())) {
+//				String type = xml.getStringProperty("type");
+//				if ("vectorial".equals(type)){
+//					//String recordsetName = xml.getChild(i).getStringProperty("recordset-name");
+//					CoordinateReferenceSystem crs = null;
+//					if (xml.contains("proj")) {
+//						crs = ProjectionUtils.getCRS(xml
+//								.getStringProperty("proj"));
+//					} else {
+//						crs = this.getMapContext().getViewPort().getCrs();
+//					}
+//					if (xml.contains("file")) {
+//						Driver d;
+//						try {
+////							d = LayerFactory.getDM().getDriver(xml.getStringProperty("driverName"));
+//						} catch (DriverLoadException e1) {
+//							throw new DriverLayerException(name,e1);
+//						}
+//						String path=pathGenerator.getAbsolutePath((String)xml.getStringProperty("file"));
+//						if (path!=null){
+////							layer = LayerFactory.createLayer(name,
+////									new File(pathGenerator.getAbsolutePath((String)xml.getStringProperty("file"))),
+////									crs);
+//						}else if (xml.contains("absolutePath")){
+//							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
+//								new File(xml.getStringProperty("absolutePath")),
+//								crs);
+//						}else{
+//							layer = LayerFactory.createLayer(name, (VectorialFileDriver) d,
+//								new File(xml.getStringProperty("file")),
+//								crs);
+//						}
+//
+//
+//					}
+//					if (xml.contains("db")) {
+//
+//						String driverName = xml.getStringProperty("db");
+//						IVectorialDatabaseDriver driver;
+//						try {
+////							driver = (IVectorialDatabaseDriver) LayerFactory.getDM().getDriver(driverName);
+//							//Hay que separar la carga de los datos del XMLEntity del load.
+//							if (xml.firstIndexOfChild("className", "com.iver.cit.gvsig.fmap.layers.SelectionSupport")==2)
+//								driver.setXMLEntity(xml.getChild(3));
+//							else
+//								driver.setXMLEntity(xml.getChild(2));
+//
+//							//						boolean loadOk = false;
+//							try {
+//								((DefaultJDBCDriver)driver).load();
+//								//							loadOk = (((DefaultJDBCDriver)driver).getConnection() != null);
+//								layer = LayerFactory.createDBLayer(driver, name, crs);
+//								layer.setAvailable((((DefaultJDBCDriver)driver).getConnection() != null));
+//							} catch (ReadDriverException e) {
+//								layer = LayerFactory.createDBLayer(driver, name, crs);
+//								layer.addError(e);
+//								layer.setAvailable(false);
+//							}
+//						} catch (DriverLoadException e) {
+//							throw new DriverLayerException(name,e);
+//						} catch (XMLException e) {
+//							throw new DriverLayerException(name,e);
+//							//						} catch (ReadDriverException e) {
+//							//						throw new DriverLayerException(name,e);
+//						}
+//
+//					}
+//					// Clases con algun driver gen�rico creado por otro
+//					// programador
+//					if (xml.contains("other")) {
+//						int classChild = 2;
+//						if(xml.contains("isLabeled") && xml.getBooleanProperty("isLabeled")){
+//							classChild++;
+//						}
+//
+//						String driverName = xml.getStringProperty("other");
+//						VectorialDriver driver = null;
+//						try {
+////							driver = (VectorialDriver) LayerFactory.getDM().getDriver(driverName);
+//						} catch (DriverLoadException e) {
+//							// Si no existe ese driver, no pasa nada.
+//							// Puede que el desarrollador no quiera que
+//							// aparezca en el cuadro de di�logo y ha metido
+//							// el jar con sus clases en nuestro directorio lib.
+//							// Intentamos cargar esa clase "a pelo".
+//							if (xml.getChild(classChild).contains("className"))
+//							{
+//								String className2 = xml.getChild(classChild).getStringProperty("className");
+//								try {
+//									driver = (VectorialDriver) Class.forName(className2).newInstance();
+//								} catch (Exception e1) {
+//									throw new DriverLayerException(name,e);
+//								}
+//							}
+//						} catch (NullPointerException npe) {
+//							// Si no existe ese driver, no pasa nada.
+//							// Puede que el desarrollador no quiera que
+//							// aparezca en el cuadro de di�logo y ha metido
+//							// el jar con sus clases en nuestro directorio lib.
+//							// Intentamos cargar esa clase "a pelo".
+//							if (xml.getChild(2).contains("className"))
+//							{
+//								String className2 = xml.getChild(classChild).getStringProperty("className");
+//								try {
+//									driver = (VectorialDriver) Class.forName(className2).newInstance();
+//								} catch (Exception e1) {
+//									throw new DriverLayerException(name,e1);
+//								}
+//							}
+//						}
+//						if (driver instanceof IPersistence)
+//						{
+//							IPersistence persist = (IPersistence) driver;
+//							persist.setXMLEntity(xml.getChild(classChild));
+//						}
+//						layer = LayerFactory.createLayer(name, driver, crs);
+//					}
+//
+//				}
+//
+//				//TODO VCN FLyrAnnotation es un parche para no tener que duplicar todo el c�digo de aq� y de los diferentes m�todos de LayerFactory,
+//				//ya que los drivers de una FLyrAnnotation no sabemos cual es puede ser cualquier Driver Vectorial.
+//				if (className.equals(FLyrAnnotation.class.getName())){
+//					layer=FLyrAnnotation.createLayerFromVect((FLyrVect)layer);
+//				}
+//
+//
+//				layer.setXMLEntity(xml);
+//
+//			} else {
+//				Class clase = LayerFactory.getLayerClassForLayerClassName(className);
+//				layer = (FLayer) clase.newInstance();
+//				if (clase.isAssignableFrom(FLayers.class)) {
+//					((FLayers)layer).setMapContext(getMapContext());
+//					((FLayers)layer).setParentLayer(this);
+//					//				layer = new FLayers(getMapContext(),this);
+//					layer.setXMLEntity(xml);
+//				} else {
+//					// Capas Nuevas (externas)
+//					layer.setName(name);
+//					layer.setXMLEntity(xml);
+//					layer.load();
+//				}
+//			}
+//			this.addLayer(layer);
+//			logger.debug("layer: "+ layer.getName() +" loaded");
+//			// Comprobar que la proyecci�n es la misma que la de FMap
+//			// Si no lo es, es una capa que est� reproyectada al vuelo
+//			CoordinateReferenceSystem crs = layer.getCrs();
+//			if ((crs != null))
+//				if (!crs.getName().equals(getMapContext().getCrs().getName()))
+//				{
+//					MathTransform trans = ProjectionUtils.getCrsTransform(crs,
+//							getMapContext().getCrs());
+//					// TODO: REVISAR CON LUIS
+//					// Se lo fijamos a todas, luego cada una que se reproyecte
+//					// si puede, o que no haga nada
+//					layer.setCrsTransform(trans);
+//				}
+//		} catch (XMLException e) {
+//			fmap.addLayerError(xml.getStringProperty("name"));
+//			throw new LoadLayerException(name,e);
+//		} catch (ClassNotFoundException e) {
+//			fmap.addLayerError(xml.getStringProperty("name"));
+//			throw new LoadLayerException(name,e);
+//		} catch (InstantiationException e) {
+//			fmap.addLayerError(xml.getStringProperty("name"));
+//			throw new LoadLayerException(name,e);
+//		} catch (IllegalAccessException e) {
+//			fmap.addLayerError(xml.getStringProperty("name"));
+//			throw new LoadLayerException(name,e);
+//		} catch (ReadDriverException e) {
+//			fmap.addLayerError(xml.getStringProperty("name"));
+//			throw new LoadLayerException(name,e);
+//		} catch (LoadLayerException e){
+//			fmap.addLayerError(xml.getStringProperty("name"));
+//			throw e;
+//		}
 	}
 
 	/**
@@ -1439,86 +1323,6 @@ public class FLayers extends FLyrDefault implements VectorialData, LayerCollecti
 	 */
 	public void setMapContext(MapContext mapContext) {
 		this.fmap = mapContext;
-	}
-
-	/**
-	 * <p>Creates a new layer of the same class as the property <i>className</i> of the XML, after, adds the XML entity to that layer
-	 *  and loads the layer. Then, adds the layer to this collection of layers, and if there is a projection defined,
-	 *  inserts the transformation coordinates to the layer.</p>
-	 *
-	 * <p>If the new layer is an instance of <code>FLyrVect</code>, and has a label field, creates a label layer on the layer.</p>
-	 *
-	 * @param xml tree-node structure with information about layers
-	 * @param name name of the layer to add
-	 */
-	private void addLayerFromXMLNew(XMLEntity xml, String name) {
-		FLayer layer = null;
-
-
-		try {
-			String className = xml.getStringProperty("className");
-			Class clazz = Class.forName(className);
-			if (FLayers.class.isAssignableFrom(clazz)) {
-				layer = (FLayer) clazz.newInstance();
-				((FLayers)layer).setMapContext(getMapContext());
-				((FLayers)layer).setParentLayer(this);
-				//		if (className.equals((FLayers.class.getName()))){
-				//			layer = new FLayers(getMapContext(),this);
-			} else {
-				//			Por compatibilidad
-				if (className.equals(FLyrVect.class.getName())) {
-					if (xml.contains("file")) {
-						layer = new FLayerFileVectorial();
-					} else if (xml.contains("db")) {
-						try {
-							layer = (FLayer)((ExtensionPoint)ExtensionPointsSingleton.getInstance().get("Layers")).create("com.iver.cit.gvsig.fmap.layers.FLayerJDBCVectorial");
-						} catch (Exception e) {
-							throw new XMLException(new Exception("No se tiene registrada la capa de tipo JDBC"));
-						}
-						//className = FLayerJDBCVectorial.class.getName();
-					} else if (xml.contains("other")){
-						layer = new FLayerGenericVectorial();
-					} else {
-						throw new XMLException(new Exception("Capa vectorial de tipo no reconocido"));
-					}
-					//				Fin por compatibilidad
-				} else {
-					try {
-						layer = (FLayer)(((ExtensionPoint)ExtensionPointsSingleton.getInstance().get("Layers")).create(className));
-					} catch (Exception e) {
-						//puende que no este registrada como punto de extension
-						Class clase = Class.forName(className);
-						layer = (FLayer) clase.newInstance();
-						// FIXME: Hacemos algo aqui o dejamos que suba el error?
-					}
-				}
-
-			}
-			layer.setXMLEntity(xml);
-			if (name != null) layer.setName(name);
-			layer.load();
-
-			this.addLayer(layer);
-			logger.debug("layer: "+ layer.getName() +" loaded");
-			// Comprobar que la proyecci�n es la misma que la de FMap
-			// Si no lo es, es una capa que est� reproyectada al vuelo
-			CoordinateReferenceSystem crs = layer.getCrs();
-			if ((crs != null))
-				if (crs != getMapContext().getCrs())
-				{
-					MathTransform trans = CRS.findMathTransform(crs,
-							getMapContext().getCrs());
-					// TODO: REVISAR CON LUIS
-					// Se lo fijamos a todas, luego cada una que se reproyecte
-					// si puede, o que no haga nada
-					layer.setCrsTransform(trans);
-
-				}
-		}catch (Exception e) {
-			fmap.addLayerError(xml.getStringProperty("name"));
-			logger.debug(Messages.getString("could_not_load_layer")+": "+xml.getStringProperty("name") + ".\n"
-					+Messages.getString("reason")+":", e);
-		}
 	}
 
 	public void beginDraw(Graphics2D g, ViewPort viewPort) {

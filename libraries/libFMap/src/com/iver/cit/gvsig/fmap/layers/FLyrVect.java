@@ -47,15 +47,33 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.PrintQuality;
 
 import org.apache.log4j.Logger;
 import org.cresques.cts.ProjectionUtils;
+import org.geotools.data.DataStore;
+import org.geotools.data.FeatureReader;
+import org.geotools.data.FeatureWriter;
+import org.geotools.data.LockingManager;
+import org.geotools.data.Query;
+import org.geotools.data.ServiceInfo;
+import org.geotools.data.Transaction;
+import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.gvsig.tools.file.PathGenerator;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.feature.type.Name;
+import org.opengis.filter.Filter;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 
@@ -73,6 +91,8 @@ import com.iver.cit.gvsig.exceptions.visitors.StartWriterVisitorException;
 import com.iver.cit.gvsig.exceptions.visitors.VisitorException;
 import com.iver.cit.gvsig.fmap.MapContext;
 import com.iver.cit.gvsig.fmap.MapControl;
+import com.iver.cit.gvsig.fmap.Source;
+import com.iver.cit.gvsig.fmap.SourceManager;
 import com.iver.cit.gvsig.fmap.ViewPort;
 import com.iver.cit.gvsig.fmap.core.CartographicSupport;
 import com.iver.cit.gvsig.fmap.core.FPoint2D;
@@ -86,7 +106,6 @@ import com.iver.cit.gvsig.fmap.core.symbols.ISymbol;
 import com.iver.cit.gvsig.fmap.core.v02.FSymbol;
 import com.iver.cit.gvsig.fmap.drivers.BoundedShapes;
 import com.iver.cit.gvsig.fmap.drivers.IFeatureIterator;
-import com.iver.cit.gvsig.fmap.drivers.IVectorialDatabaseDriver;
 import com.iver.cit.gvsig.fmap.drivers.VectorialDriver;
 import com.iver.cit.gvsig.fmap.drivers.WithDefaultLegend;
 import com.iver.cit.gvsig.fmap.drivers.featureiterators.JoinFeatureIterator;
@@ -125,10 +144,8 @@ import com.iver.cit.gvsig.fmap.rendering.ZSort;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.AttrInTableLabelingStrategy;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.ILabelingStrategy;
 import com.iver.cit.gvsig.fmap.rendering.styling.labeling.LabelingFactory;
-import com.iver.cit.gvsig.fmap.spatialindex.IPersistentSpatialIndex;
 import com.iver.cit.gvsig.fmap.spatialindex.ISpatialIndex;
 import com.iver.cit.gvsig.fmap.spatialindex.QuadtreeJts;
-import com.iver.utiles.IPersistence;
 import com.iver.utiles.NotExistInXMLEntity;
 import com.iver.utiles.PostProcessSupport;
 import com.iver.utiles.XMLEntity;
@@ -137,751 +154,797 @@ import com.iver.utiles.swing.threads.CancellableMonitorable;
 
 /**
  * Capa b�sica Vectorial.
- *
+ * 
  * @author Fernando Gonz�lez Cort�s
  */
 
 // TODO Cuando no sea para pruebas debe no ser public
 public class FLyrVect extends FLyrDefault implements ILabelable,
-        ClassifiableVectorial, SingleLayer, VectorialData, RandomVectorialData,
-        AlphanumericData, InfoByPoint, SelectionListener, IEditionListener, LegendContentsChangedListener {
-    private static Logger logger = Logger.getLogger(FLyrVect.class.getName());
-    /**
-     * @deprecated Don�t use Strategy, you should be use iterators.
-     */
-//    public static boolean forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD = true;
-    /**
-     * @deprecated Don�t use Strategy, you should be use iterators.
-     */
-//    private boolean useStrategy=false;
+		ClassifiableVectorial, SingleLayer, VectorialData, RandomVectorialData,
+		AlphanumericData, InfoByPoint, SelectionListener, IEditionListener,
+		LegendContentsChangedListener {
+	private static Logger logger = Logger.getLogger(FLyrVect.class.getName());
+	/**
+	 * @deprecated Don�t use Strategy, you should be use iterators.
+	 */
+	// public static boolean forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD =
+	// true;
+	/**
+	 * @deprecated Don�t use Strategy, you should be use iterators.
+	 */
+	// private boolean useStrategy=false;
 
-    /** Leyenda de la capa vectorial */
-    private IVectorLegend legend;
-    private int typeShape = -1;
-    private ReadableVectorial source;
-    private SelectableDataSource sds;
-    private SpatialCache spatialCache = new SpatialCache();
-    private boolean spatialCacheEnabled = false;
+	/** Leyenda de la capa vectorial */
+	private IVectorLegend legend;
+	private int typeShape = -1;
+	private SpatialCache spatialCache = new SpatialCache();
+	private boolean spatialCacheEnabled = false;
 
-    /**
-     * An implementation of gvSIG spatial index
-     */
-    protected ISpatialIndex spatialIndex = null;
-    private boolean bHasJoin = false;
-    private XMLEntity orgXMLEntity = null;
-    private XMLEntity loadSelection = null;
-    private IVectorLegend loadLegend = null;
+	private Source source = null;
 
-    //Lo a�ado. Caracter�sticas de HyperEnlace (LINK)
-    private FLyrVectLinkProperties linkProperties=new FLyrVectLinkProperties();
-    //private ArrayList linkProperties=null;
-    private boolean waitTodraw=false;
-    private static PathGenerator pathGenerator=PathGenerator.getInstance();
-    
-    public boolean isWaitTodraw() {
+	/**
+	 * An implementation of gvSIG spatial index
+	 */
+	protected ISpatialIndex spatialIndex = null;
+	private boolean bHasJoin = false;
+	private XMLEntity orgXMLEntity = null;
+	private XMLEntity loadSelection = null;
+	private IVectorLegend loadLegend = null;
+
+	// Lo a�ado. Caracter�sticas de HyperEnlace (LINK)
+	private FLyrVectLinkProperties linkProperties = new FLyrVectLinkProperties();
+	// private ArrayList linkProperties=null;
+	private boolean waitTodraw = false;
+	private static PathGenerator pathGenerator = PathGenerator.getInstance();
+
+	/**
+	 * @deprecated source attribute should never be null and this constructor
+	 *             allows to be so. It is only maintained for backward
+	 *             compatibility issues
+	 */
+	public FLyrVect() {
+	}
+
+	public FLyrVect(Source source) {
+		this.source = source;
+	}
+
+	public Source getDataSource() {
+		return source;
+	}
+
+	private ExtendedDataStore getDataStore() throws IOException {
+		DataStore dataStore = SourceManager.instance.getDataStore(source);
+		return new ExtendedDataStore(dataStore, dataStore.getTypeNames()[0]);
+	}
+
+	public boolean isWaitTodraw() {
 		return waitTodraw;
 	}
 
 	public void setWaitTodraw(boolean waitTodraw) {
 		this.waitTodraw = waitTodraw;
 	}
-    /**
-     * Devuelve el VectorialAdapater de la capa.
-     *
-     * @return VectorialAdapter.
-     */
-    public ReadableVectorial getSource() {
-        if (!this.isAvailable()) return null;
-        return source;
-    }
 
-    /**
-     * If we use a persistent spatial index associated with this layer, and the
-     * index is not intrisic to the layer (for example spatial databases) this
-     * method looks for existent spatial index, and loads it.
-     *
-     */
-    private void loadSpatialIndex() {
-        //FIXME: Al abrir el indice en fichero...
-        //�C�mo lo liberamos? un metodo Layer.shutdown()
+	/**
+	 * Devuelve el VectorialAdapater de la capa.
+	 * 
+	 * @return VectorialAdapter.
+	 */
+	public ReadableVectorial getSource() {
+		if (!this.isAvailable())
+			return null;
 
+		throw new RuntimeException("Return the adapter to DataStore");
+	}
 
-        ReadableVectorial source = getSource();
-        if (!(source instanceof VectorialFileAdapter)) {
-            // we are not interested in db adapters
-            return;
-        }
-        VectorialDriver driver = source.getDriver();
-        if (!(driver instanceof BoundedShapes)) {
-            // we dont spatially index layers that are not bounded
-            return;
-        }
-        File file = ((VectorialFileAdapter) source).getFile();
-        String fileName = file.getAbsolutePath();
-        File sptFile = new File(fileName + ".qix");
-        if (!sptFile.exists() || (!(sptFile.length() > 0))) {
-            // before to exit, look for it in temp path
-            String tempPath = System.getProperty("java.io.tmpdir");
-            fileName = tempPath + File.separator + sptFile.getName();
-            sptFile = new File(fileName);
-            // it doesnt exists, must to create
-            if (!sptFile.exists() || (!(sptFile.length() > 0))) {
-                return;
-            }// if
-        }// if
+	/**
+	 * If we use a persistent spatial index associated with this layer, and the
+	 * index is not intrisic to the layer (for example spatial databases) this
+	 * method looks for existent spatial index, and loads it.
+	 * 
+	 */
+	private void loadSpatialIndex() {
+		// FIXME: Al abrir el indice en fichero...
+		// �C�mo lo liberamos? un metodo Layer.shutdown()
 
-        try {
-            source.start();
-            // TODO geotools refactoring
+		ReadableVectorial source = getSource();
+		if (!(source instanceof VectorialFileAdapter)) {
+			// we are not interested in db adapters
+			return;
+		}
+		VectorialDriver driver = source.getDriver();
+		if (!(driver instanceof BoundedShapes)) {
+			// we dont spatially index layers that are not bounded
+			return;
+		}
+		File file = ((VectorialFileAdapter) source).getFile();
+		String fileName = file.getAbsolutePath();
+		File sptFile = new File(fileName + ".qix");
+		if (!sptFile.exists() || (!(sptFile.length() > 0))) {
+			// before to exit, look for it in temp path
+			String tempPath = System.getProperty("java.io.tmpdir");
+			fileName = tempPath + File.separator + sptFile.getName();
+			sptFile = new File(fileName);
+			// it doesnt exists, must to create
+			if (!sptFile.exists() || (!(sptFile.length() > 0))) {
+				return;
+			}// if
+		}// if
+
+		try {
+			source.start();
+			// TODO geotools refactoring
 			spatialIndex = new QuadtreeJts();
 			// spatialIndex = new
 			// QuadtreeGt2(FileUtils.getFileWithoutExtension(sptFile),
 			// "NM", source.getFullExtent(), source.getShapeCount(), false);
-            source.setSpatialIndex(spatialIndex);
-        } catch (ReadDriverException e) {
-            spatialIndex = null;
-            e.printStackTrace();
-            return;
-        }
-
-    }
-
-    /**
-     * Checks if it has associated an external spatial index
-     * (an spatial index file).
-     *
-     * It looks for it in main file path, or in temp system path.
-     * If main file is rivers.shp, it looks for a file called
-     * rivers.shp.qix.
-
-     * @return
-     */
-    public boolean isExternallySpatiallyIndexed() {
-        /*
-         * FIXME (AZABALA): Independizar del tipo de fichero de �ndice
-          * con el que se trabaje (ahora mismo considera la extension .qix,
-         * pero esto depender� del tipo de �ndice)
-         * */
-        ReadableVectorial source = getSource();
-        if (!(source instanceof VectorialFileAdapter)) {
-            // we are not interested in db adapters.
-            // think in non spatial dbs, like HSQLDB
-            return false;
-        }
-        File file = ((VectorialFileAdapter) source).getFile();
-        String fileName = file.getAbsolutePath();
-        File sptFile = new File(fileName + ".qix");
-        if (!sptFile.exists() || (!(sptFile.length() > 0))) {
-            // before to exit, look for it in temp path
-            // it doesnt exists, must to create
-            String tempPath = System.getProperty("java.io.tmpdir");
-            fileName = tempPath + File.separator + sptFile.getName();
-            sptFile = new File(fileName);
-            if (!sptFile.exists() || (!(sptFile.length() > 0))) {
-                return false;
-            }// if
-        }// if
-        return true;
-    }
-
-    /**
-     * Inserta el VectorialAdapter a la capa.
-     *
-     * @param va
-     *            VectorialAdapter.
-     */
-    public void setSource(ReadableVectorial rv) {
-        source = rv;
-        // azabala: we check if this layer could have a file spatial index
-        // and load it if it exists
-        loadSpatialIndex();
-    }
-
-    public Rectangle2D getFullExtent() throws ReadDriverException, ExpansionFileReadException {
-            Rectangle2D rAux;
-            source.start();
-            rAux = (Rectangle2D)source.getFullExtent().clone();
-            source.stop();
-
-            // Si existe reproyecci�n, reproyectar el extent
-		CoordinateReferenceSystem mapCrs = this.getMapContext().getCrs();
-		if (!(this.getCrs() != null && mapCrs != null && this.getCrs()
-				.getName().equals(mapCrs.getName()))){
-            	MathTransform trans = getCrsTransform();
-            	try{
-            		if (trans != null) {
-            			Point2D pt1 = new Point2D.Double(rAux.getMinX(), rAux.getMinY());
-            			Point2D pt2 = new Point2D.Double(rAux.getMaxX(), rAux.getMaxY());
-            			pt1 = ProjectionUtils.transform(pt1, trans);
-            			pt2 = ProjectionUtils.transform(pt2, trans);
-            			rAux = new Rectangle2D.Double();
-            			rAux.setFrameFromDiagonal(pt1, pt2);
-            		}
-            	}catch (IllegalStateException e) {
-            		this.setAvailable(false);
-            		this.addError(new ReprojectLayerException(getName(), e));
-            	}
-            }
-            //Esto es para cuando se crea una capa nueva con el fullExtent de ancho y alto 0.
-            if (rAux.getWidth()==0 && rAux.getHeight()==0) {
-                rAux=new Rectangle2D.Double(0,0,100,100);
-            }
-
-            return rAux;
-    }
-
-    /**
-     * Draws using IFeatureIterator. This method will replace the old draw(...) one.
-     * @autor jaume dominguez faus - jaume.dominguez@iver.es
-     * @param image
-     * @param g
-     * @param viewPort
-     * @param cancel
-     * @param scale
-     * @throws ReadDriverException
-     */
-    private void _draw(BufferedImage image, Graphics2D g, ViewPort viewPort,
-    		Cancellable cancel, double scale) throws ReadDriverException {
-    	boolean bDrawShapes = true;
-    	if (legend instanceof SingleSymbolLegend) {
-    		bDrawShapes = legend.getDefaultSymbol().isShapeVisible();
-    	}
-    	Point2D offset = viewPort.getOffset();
-    	double dpi = MapContext.getScreenDPI();
-
-
-
-    	if (bDrawShapes) {
-    		boolean cacheFeatures = isSpatialCacheEnabled();
-    		SpatialCache cache = null;
-    		if (cacheFeatures) {
-    			getSpatialCache().clearAll();
-    			cache = getSpatialCache();
-    		}
-
-    		try {
-    			ArrayList<String> fieldList = new ArrayList<String>();
-
-    			// fields from legend
-    			String[] aux = null;
-
-    			if (legend instanceof IClassifiedVectorLegend) {
-    				aux = ((IClassifiedVectorLegend) legend).getClassifyingFieldNames();
-    				if (aux!=null) {
-    					for (int i = 0; i < aux.length; i++) {
-    						// check fields exists
-    						if (sds.getFieldIndexByName(aux[i]) == -1) {
-    							logger.warn("Error en leyenda de " + getName() +
-    									". El campo " + aux[i] + " no est�.");
-    							legend = LegendFactory.createSingleSymbolLegend(getShapeType());
-    							break;
-    						}
-    						fieldList.add(aux[i]);
-    					}
-    				}
-    			}
-    			// Get the iterator over the visible features
-    			IFeatureIterator it = null;
-    			if (isJoined()) {
-    				it = new JoinFeatureIterator(this, viewPort,
-    						fieldList.toArray(new String[fieldList.size()]));
-    			}
-    			else {
-    				ReadableVectorial rv=getSource();
-//    				rv.start();
-    				it = rv.getFeatureIterator(
-    					viewPort.getAdjustedExtent(),
-    					fieldList.toArray(new String[fieldList.size()]),
-    					viewPort.getCrs(),
-    					true);
-//    				rv.stop();
-    			}
-
-    			ZSort zSort = ((IVectorLegend) getLegend()).getZSort();
-
-    			boolean bSymbolLevelError = false;
-
-    			// if layer has map levels it will use a ZSort
-    			boolean useZSort = zSort != null && zSort.isUsingZSort();
-
-    			// -- visual FX stuff
-    			long time = System.currentTimeMillis();
-    			BufferedImage virtualBim;
-    			Graphics2D virtualGraphics;
-
-    			// render temporary map each screenRefreshRate milliseconds;
-    			int screenRefreshDelay = (int) ((1D/MapControl.getDrawFrameRate())*3*1000);
-    			BufferedImage[] imageLevels = null;
-    			Graphics2D[] graphics = null;
-    			if (useZSort) {
-    				imageLevels = new BufferedImage[zSort.getLevelCount()];
-    				graphics = new Graphics2D[imageLevels.length];
-    				for (int i = 0; !cancel.isCanceled() && i < imageLevels.length; i++) {
-    					imageLevels[i] = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
-    					graphics[i] = imageLevels[i].createGraphics();
-    					graphics[i].setTransform(g.getTransform());
-    					graphics[i].setRenderingHints(g.getRenderingHints());
-    				}
-    			}
-    			// -- end visual FX stuff
-
-    			boolean isInMemory = false;
-    			if (getSource().getDriverAttributes() != null){
-    				isInMemory = getSource().getDriverAttributes().isLoadedInMemory();
-    			}
-    			SelectionSupport selectionSupport=getSelectionSupport();
-    			// Iteration over each feature
-    			while ( !cancel.isCanceled() && it.hasNext()) {
-    				IFeature feat = it.next();
-    				IGeometry geom = null;
-
-    				if (isInMemory){
-    					geom = feat.getGeometry().cloneGeometry();
-    				}else{
-    					geom = feat.getGeometry();
-    				}
-
-    				if (cacheFeatures) {
-    					if (cache.getMaxFeatures() >= cache.size()) {
-    						// already reprojected
-    						cache.insert(geom.getBounds2D(), geom);
-    					}
-    				}
-
-    				// retrieve the symbol associated to such feature
-    				ISymbol sym = legend.getSymbolByFeature(feat);
-
-    				if (sym == null) continue;
-
-    				//C�digo para poder acceder a los �ndices para ver si est� seleccionado un Feature
-    				ReadableVectorial rv=getSource();
-    				int selectionIndex=-1;
-    				if (rv instanceof ISpatialDB){
-    					selectionIndex = ((ISpatialDB)rv).getRowIndexByFID(feat);
-    				}else{
-    					selectionIndex = Integer.parseInt(feat.getID());
-    				}
-    				if (selectionIndex!=-1) {
-    					if (selectionSupport.isSelected(selectionIndex)) {
-    						sym = sym.getSymbolForSelection();
-    					}
-    				}
-
-    				// Check if this symbol is sized with CartographicSupport
-    				CartographicSupport csSym = null;
-    				int symbolType = sym.getSymbolType();
-    				boolean bDrawCartographicSupport = false;
-
-    				if (   symbolType == FShape.POINT
-    						|| symbolType == FShape.LINE
-    						|| sym instanceof CartographicSupport) {
-
-    					// patch
-    					if (!sym.getClass().equals(FSymbol.class)) {
-    						csSym = (CartographicSupport) sym;
-    						bDrawCartographicSupport = (csSym.getUnit() != -1);
-    					}
-    				}
-
-    				int x = -1;
-    				int y = -1;
-    				int[] xyCoords = new int[2];
-
-    				// Check if size is a pixel
-    				boolean onePoint = bDrawCartographicSupport ?
-    						isOnePoint(g.getTransform(), viewPort, MapContext.getScreenDPI(), csSym, geom, xyCoords) :
-    							isOnePoint(g.getTransform(), viewPort, geom, xyCoords);
-
-    						// Avoid out of bounds exceptions
-    						if (onePoint) {
-    							x = xyCoords[0];
-    							y = xyCoords[1];
-    							if (x<0 || y<0 || x>= viewPort.getImageWidth() || y>=viewPort.getImageHeight()) continue;
-    						}
-
-    						if (useZSort) {
-    							// Check if this symbol is a multilayer
-								int[] symLevels = zSort.getLevels(sym);
-    							if (sym instanceof IMultiLayerSymbol) {
-    								// if so, treat each of its layers as a single symbol
-    								// in its corresponding map level
-    								IMultiLayerSymbol mlSym = (IMultiLayerSymbol) sym;
-    								for (int i = 0; !cancel.isCanceled() && i < mlSym.getLayerCount(); i++) {
-    									ISymbol mySym = mlSym.getLayer(i);
-        								int symbolLevel = 0;
-        								if (symLevels != null) {
-        									symbolLevel = symLevels[i];
-        								} else {
-    										/* an error occured when managing symbol levels.
-    										 * some of the legend changed events regarding the
-    										 * symbols did not finish satisfactory and the legend
-    										 * is now inconsistent. For this drawing, it will finish
-    										 * as it was at the bottom (level 0) but, when done, the
-    										 * ZSort will be reset to avoid app crashes. This is
-    										 * a bug that has to be fixed.
-    										 */
-    										bSymbolLevelError = true;
-    									}
-
-    									if (onePoint) {
-    										if (x<0 || y<0 || x>= imageLevels[symbolLevel].getWidth() || y>=imageLevels[symbolLevel].getHeight()) continue;
-    										imageLevels[symbolLevel].setRGB(x, y, mySym.getOnePointRgb());
-    									} else {
-    										if (!bDrawCartographicSupport) {
-    											geom.drawInts(graphics[symbolLevel], viewPort, mySym, cancel);
-    										} else {
-    											geom.drawInts(graphics[symbolLevel], viewPort, dpi, (CartographicSupport) mySym, cancel);
-    										}
-    									}
-    								}
-    							} else {
-    								// else, just draw the symbol in its level
-    								int symbolLevel = 0;
-    								if (symLevels != null) {
-
-    									symbolLevel=symLevels[0];
-    								} else {
-    									/* If symLevels == null
-    									 * an error occured when managing symbol levels.
-    									 * some of the legend changed events regarding the
-    									 * symbols did not finish satisfactory and the legend
-    									 * is now inconsistent. For this drawing, it will finish
-    									 * as it was at the bottom (level 0). This is
-    									 * a bug that has to be fixed.
-    									 */
-//    									bSymbolLevelError = true;
-    								}
-
-    								if (!bDrawCartographicSupport) {
-    									geom.drawInts(graphics[symbolLevel], viewPort, sym, cancel);
-    								} else {
-    									geom.drawInts(graphics[symbolLevel], viewPort, dpi, (CartographicSupport) csSym, cancel);
-    								}
-    							}
-
-    							// -- visual FX stuff
-    							// Cuando el offset!=0 se est� dibujando sobre el Layout y por tanto no tiene que ejecutar el siguiente c�digo.
-    							if (offset.getX()==0 && offset.getY()==0)
-    								if ((System.currentTimeMillis() - time) > screenRefreshDelay) {
-    									virtualBim = new BufferedImage(image.getWidth(),image.getHeight(),BufferedImage.TYPE_INT_ARGB);
-    									virtualGraphics = virtualBim.createGraphics();
-    									virtualGraphics.drawImage(image,0,0, null);
-    									for (int i = 0; !cancel.isCanceled() && i < imageLevels.length; i++) {
-    										virtualGraphics.drawImage(imageLevels[i],0,0, null);
-    									}
-    									g.clearRect(0, 0, image.getWidth(), image.getHeight());
-    									g.drawImage(virtualBim, 0, 0, null);
-    									time = System.currentTimeMillis();
-    								}
-    							// -- end visual FX stuff
-
-    						} else {
-    							// no ZSort, so there is only a map level, symbols are
-    							// just drawn.
-    							if (onePoint) {
-    								if (x<0 || y<0 || x>= image.getWidth() || y>=image.getHeight()) continue;
-    								image.setRGB(x, y, sym.getOnePointRgb());
-    							} else {
-    								if (!bDrawCartographicSupport) {
-    									geom.drawInts(g, viewPort, sym, cancel);
-    								} else {
-    									geom.drawInts(g, viewPort, dpi, csSym, cancel);
-    								}
-    							}
-    						}
-    			}
-
-    			if (useZSort) {
-    				g.drawImage(image, (int)offset.getX(), (int)offset.getY(), null);
-    				g.translate(offset.getX(), offset.getY());
-    				for (int i = 0; !cancel.isCanceled() && i < imageLevels.length; i++) {
-    					g.drawImage(imageLevels[i],0,0, null);
-    					imageLevels[i] = null;
-    					graphics[i] = null;
-    				}
-    				g.translate(-offset.getX(), -offset.getY());
-    				imageLevels = null;
-    				graphics = null;
-    			}
-    			it.closeIterator();
-
-    			if (bSymbolLevelError) {
-    				((IVectorLegend) getLegend()).setZSort(null);
-    			}
-
-    		} catch (ReadDriverException e) {
-    			this.setVisible(false);
-    			this.setActive(false);
-    			throw e;
-    		}
-
-
-    	}
-    }
-
-   	public void draw(BufferedImage image, Graphics2D g, ViewPort viewPort,
-            Cancellable cancel, double scale) throws ReadDriverException {
-//    	forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD = true;
-//    	if (!isUseStrategy()) {
-   		if (isWaitTodraw()) {
+			source.setSpatialIndex(spatialIndex);
+		} catch (ReadDriverException e) {
+			spatialIndex = null;
+			e.printStackTrace();
 			return;
 		}
-   		_draw(image, g, viewPort, cancel, scale);
-//    	} else {
-////    		moved up to FLayers
-////    		if (isWithinScale(scale)) {
-//
-//
-//    			// Las que solo tienen etiquetado sin pintar el shape,
-//    			// no pasamos por ellas
-//    			boolean bDrawShapes = true;
-//    			if (legend instanceof SingleSymbolLegend) {
-//    				if (legend.getDefaultSymbol().isShapeVisible() == false)
-//    					bDrawShapes = false;
-//    			}
-//    			if (bDrawShapes) {
-//    				Strategy strategy = StrategyManager.getStrategy(this);
-//    				try {
-//    					prepareDrawing(image, g, viewPort);
-//    					strategy.draw(image, g, viewPort, cancel);
-//    				} catch (ReadDriverException e) {
-//    					this.setVisible(false);
-//    					this.setActive(false);
-//    					throw e;
-//    				}
-//    			}
-//    			if (getVirtualLayers() != null) {
-//    				getVirtualLayers().draw(image, g, viewPort, cancel, scale);
-//    			}
-////    		}
-//    	}
-    }
 
-    /**
-     * Se llama antes de empezar a pintar.
-     * Es �til para preparar la cache a emplear, las leyendas, etc.
-     * @param image
-     * @param g
-     * @param viewPort
-     */
-    private void prepareDrawing(BufferedImage image, Graphics2D g, ViewPort viewPort) {
+	}
 
-    }
+	/**
+	 * Checks if it has associated an external spatial index (an spatial index
+	 * file).
+	 * 
+	 * It looks for it in main file path, or in temp system path. If main file
+	 * is rivers.shp, it looks for a file called rivers.shp.qix.
+	 * 
+	 * @return
+	 */
+	public boolean isExternallySpatiallyIndexed() {
+		/*
+		 * FIXME (AZABALA): Independizar del tipo de fichero de �ndice con el
+		 * que se trabaje (ahora mismo considera la extension .qix, pero esto
+		 * depender� del tipo de �ndice)
+		 */
+		ReadableVectorial source = getSource();
+		if (!(source instanceof VectorialFileAdapter)) {
+			// we are not interested in db adapters.
+			// think in non spatial dbs, like HSQLDB
+			return false;
+		}
+		File file = ((VectorialFileAdapter) source).getFile();
+		String fileName = file.getAbsolutePath();
+		File sptFile = new File(fileName + ".qix");
+		if (!sptFile.exists() || (!(sptFile.length() > 0))) {
+			// before to exit, look for it in temp path
+			// it doesnt exists, must to create
+			String tempPath = System.getProperty("java.io.tmpdir");
+			fileName = tempPath + File.separator + sptFile.getName();
+			sptFile = new File(fileName);
+			if (!sptFile.exists() || (!(sptFile.length() > 0))) {
+				return false;
+			}// if
+		}// if
+		return true;
+	}
 
-    public void _print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
-    		double scale, PrintRequestAttributeSet properties) throws ReadDriverException {
-    	// TEST METHOD
+	/**
+	 * Inserta el VectorialAdapter a la capa.
+	 * 
+	 * @param va
+	 *            VectorialAdapter.
+	 */
+	public void setSource(ReadableVectorial rv) {
+		throw new RuntimeException("Maybe set the DataStore? We should "
+				+ "free the previous one in that case");
+		// source = rv;
+		// azabala: we check if this layer could have a file spatial index
+		// and load it if it exists
+		// loadSpatialIndex();
+	}
 
+	public Rectangle2D getFullExtent() throws ReadDriverException,
+			ExpansionFileReadException {
+		Rectangle2D rAux;
+		try {
+			SimpleFeatureSource featureSource = getDataStore()
+					.getDefaultFeatureSource();
+			ReferencedEnvelope bounds = featureSource.getBounds();
+			featureSource = null;
+			rAux = new Rectangle2D.Double(bounds.getMinX(), bounds.getMinY(),
+					bounds.getWidth(), bounds.getHeight());
+		} catch (IOException e1) {
+			throw new ReadDriverException("Cannot get the extent of the layer",
+					e1);
+		}
 
-    		/* SVN */
+		// Si existe reproyecci�n, reproyectar el extent
+		CoordinateReferenceSystem mapCrs = this.getMapContext().getCrs();
+		if (!(this.getCrs() != null && mapCrs != null && this.getCrs()
+				.getName().equals(mapCrs.getName()))) {
+			MathTransform trans = getCrsTransform();
+			try {
+				if (trans != null) {
+					Point2D pt1 = new Point2D.Double(rAux.getMinX(),
+							rAux.getMinY());
+					Point2D pt2 = new Point2D.Double(rAux.getMaxX(),
+							rAux.getMaxY());
+					pt1 = ProjectionUtils.transform(pt1, trans);
+					pt2 = ProjectionUtils.transform(pt2, trans);
+					rAux = new Rectangle2D.Double();
+					rAux.setFrameFromDiagonal(pt1, pt2);
+				}
+			} catch (IllegalStateException e) {
+				this.setAvailable(false);
+				this.addError(new ReprojectLayerException(getName(), e));
+			}
+		}
+		// Esto es para cuando se crea una capa nueva con el fullExtent de ancho
+		// y alto 0.
+		if (rAux.getWidth() == 0 && rAux.getHeight() == 0) {
+			rAux = new Rectangle2D.Double(0, 0, 100, 100);
+		}
 
-    /*	boolean bDrawShapes = true;
-    	if (legend instanceof SingleSymbolLegend) {
-    		bDrawShapes = legend.getDefaultSymbol().isShapeVisible();
-    	}
+		return rAux;
+	}
 
+	/**
+	 * Draws using IFeatureIterator. This method will replace the old draw(...)
+	 * one.
+	 * 
+	 * @autor jaume dominguez faus - jaume.dominguez@iver.es
+	 * @param image
+	 * @param g
+	 * @param viewPort
+	 * @param cancel
+	 * @param scale
+	 * @throws ReadDriverException
+	 */
+	private void _draw(BufferedImage image, Graphics2D g, ViewPort viewPort,
+			Cancellable cancel, double scale) throws ReadDriverException {
+		boolean bDrawShapes = true;
+		if (legend instanceof SingleSymbolLegend) {
+			bDrawShapes = legend.getDefaultSymbol().isShapeVisible();
+		}
+		Point2D offset = viewPort.getOffset();
+		double dpi = MapContext.getScreenDPI();
 
-    	if (bDrawShapes) {
-    		double dpi = 72;
+		if (bDrawShapes) {
+			boolean cacheFeatures = isSpatialCacheEnabled();
+			SpatialCache cache = null;
+			if (cacheFeatures) {
+				getSpatialCache().clearAll();
+				cache = getSpatialCache();
+			}
 
-    		PrintQuality resolution=(PrintQuality)properties.get(PrintQuality.class);
-    		if (resolution.equals(PrintQuality.NORMAL)){
-    			dpi = 300;
-    		} else if (resolution.equals(PrintQuality.HIGH)){
-    			dpi = 600;
-    		} else if (resolution.equals(PrintQuality.DRAFT)){
-    			dpi = 72;
-    		}
+			try {
+				ArrayList<String> fieldList = new ArrayList<String>();
 
+				// fields from legend
+				String[] aux = null;
 
-    		try {
-    			prepareDrawing(null, g, viewPort);
-    			ArrayList<String> fieldList = new ArrayList<String>();
-    			String[] aux;
+				if (legend instanceof IClassifiedVectorLegend) {
+					aux = ((IClassifiedVectorLegend) legend)
+							.getClassifyingFieldNames();
+					if (aux != null) {
+						for (int i = 0; i < aux.length; i++) {
+							// check fields exists
+							try {
+								if (getDataStore().getFieldIndexByName(aux[i]) == -1) {
+									logger.warn("Error en leyenda de "
+											+ getName() + ". El campo "
+											+ aux[i] + " no est�.");
+									legend = LegendFactory
+											.createSingleSymbolLegend(getShapeType());
+									break;
+								}
+							} catch (IOException e) {
+								throw new ReadDriverException(
+										"Cannot access layer", e);
+							}
+							fieldList.add(aux[i]);
+						}
+					}
+				}
+				// Get the iterator over the visible features
+				IFeatureIterator it = null;
+				if (isJoined()) {
+					it = new JoinFeatureIterator(this, viewPort,
+							fieldList.toArray(new String[fieldList.size()]));
+				} else {
+					ReadableVectorial rv = getSource();
+					// rv.start();
+					it = rv.getFeatureIterator(viewPort.getAdjustedExtent(),
+							fieldList.toArray(new String[fieldList.size()]),
+							viewPort.getCrs(), true);
+					// rv.stop();
+				}
 
-    			// fields from legend
-    			if (legend instanceof IClassifiedVectorLegend) {
-    				aux = ((IClassifiedVectorLegend) legend).
-    									getClassifyingFieldNames();
-    				for (int i = 0; i < aux.length; i++) {
-    					fieldList.add(aux[i]);
-    				}
-    			}
+				ZSort zSort = ((IVectorLegend) getLegend()).getZSort();
 
-    			// fields from labeling
-    			if (isLabeled()) {
-    				aux = getLabelingStrategy().getUsedFields();
-    				for (int i = 0; i < aux.length; i++) {
-    					fieldList.add(aux[i]);
-    				}
-    			}
+				boolean bSymbolLevelError = false;
 
-    			ZSort zSort = ((IVectorLegend) getLegend()).getZSort();
+				// if layer has map levels it will use a ZSort
+				boolean useZSort = zSort != null && zSort.isUsingZSort();
 
-    			// if layer has map levels it will use a ZSort
-    			boolean useZSort = zSort != null && zSort.isUsingZSort();
+				// -- visual FX stuff
+				long time = System.currentTimeMillis();
+				BufferedImage virtualBim;
+				Graphics2D virtualGraphics;
 
+				// render temporary map each screenRefreshRate milliseconds;
+				int screenRefreshDelay = (int) ((1D / MapControl
+						.getDrawFrameRate()) * 3 * 1000);
+				BufferedImage[] imageLevels = null;
+				Graphics2D[] graphics = null;
+				if (useZSort) {
+					imageLevels = new BufferedImage[zSort.getLevelCount()];
+					graphics = new Graphics2D[imageLevels.length];
+					for (int i = 0; !cancel.isCanceled()
+							&& i < imageLevels.length; i++) {
+						imageLevels[i] = new BufferedImage(image.getWidth(),
+								image.getHeight(), image.getType());
+						graphics[i] = imageLevels[i].createGraphics();
+						graphics[i].setTransform(g.getTransform());
+						graphics[i].setRenderingHints(g.getRenderingHints());
+					}
+				}
+				// -- end visual FX stuff
 
-    			int mapLevelCount = (useZSort) ? zSort.getLevelCount() : 1;
-    			for (int mapPass = 0; mapPass < mapLevelCount; mapPass++) {
-    				// Get the iterator over the visible features
-    				IFeatureIterator it = getSource().getFeatureIterator(
-    						viewPort.getAdjustedExtent(),
-    						fieldList.toArray(new String[fieldList.size()]),
-    						viewPort.getProjection(),
-    						true);
+				boolean isInMemory = false;
+				if (getSource().getDriverAttributes() != null) {
+					isInMemory = getSource().getDriverAttributes()
+							.isLoadedInMemory();
+				}
+				SelectionSupport selectionSupport = getSelectionSupport();
+				// Iteration over each feature
+				while (!cancel.isCanceled() && it.hasNext()) {
+					IFeature feat = it.next();
+					IGeometry geom = null;
 
-    				// Iteration over each feature
-    				while ( !cancel.isCanceled() && it.hasNext()) {
-    					IFeature feat = it.next();
-    					IGeometry geom = feat.getGeometry();
+					if (isInMemory) {
+						geom = feat.getGeometry().cloneGeometry();
+					} else {
+						geom = feat.getGeometry();
+					}
 
-    					// retreive the symbol associated to such feature
-    					ISymbol sym = legend.getSymbolByFeature(feat);
+					if (cacheFeatures) {
+						if (cache.getMaxFeatures() >= cache.size()) {
+							// already reprojected
+							cache.insert(geom.getBounds2D(), geom);
+						}
+					}
 
-    					if (useZSort) {
-    						// Check if this symbol is a multilayer
-							if (sym instanceof IMultiLayerSymbol) {
-								// if so, get the layer corresponding to the current
-								// level. If none, continue to next iteration
-								IMultiLayerSymbol mlSym = (IMultiLayerSymbol) sym;
-								for (int i = 0; i < mlSym.getLayerCount(); i++) {
-									ISymbol mySym = mlSym.getLayer(i);
-									if (zSort.getSymbolLevel(mySym) == mapPass) {
-										sym = mySym;
-										break;
+					// retrieve the symbol associated to such feature
+					ISymbol sym = legend.getSymbolByFeature(feat);
+
+					if (sym == null)
+						continue;
+
+					// C�digo para poder acceder a los �ndices para ver si
+					// est� seleccionado un Feature
+					ReadableVectorial rv = getSource();
+					int selectionIndex = -1;
+					if (rv instanceof ISpatialDB) {
+						selectionIndex = ((ISpatialDB) rv)
+								.getRowIndexByFID(feat);
+					} else {
+						selectionIndex = Integer.parseInt(feat.getID());
+					}
+					if (selectionIndex != -1) {
+						if (selectionSupport.isSelected(selectionIndex)) {
+							sym = sym.getSymbolForSelection();
+						}
+					}
+
+					// Check if this symbol is sized with CartographicSupport
+					CartographicSupport csSym = null;
+					int symbolType = sym.getSymbolType();
+					boolean bDrawCartographicSupport = false;
+
+					if (symbolType == FShape.POINT || symbolType == FShape.LINE
+							|| sym instanceof CartographicSupport) {
+
+						// patch
+						if (!sym.getClass().equals(FSymbol.class)) {
+							csSym = (CartographicSupport) sym;
+							bDrawCartographicSupport = (csSym.getUnit() != -1);
+						}
+					}
+
+					int x = -1;
+					int y = -1;
+					int[] xyCoords = new int[2];
+
+					// Check if size is a pixel
+					boolean onePoint = bDrawCartographicSupport ? isOnePoint(
+							g.getTransform(), viewPort,
+							MapContext.getScreenDPI(), csSym, geom, xyCoords)
+							: isOnePoint(g.getTransform(), viewPort, geom,
+									xyCoords);
+
+					// Avoid out of bounds exceptions
+					if (onePoint) {
+						x = xyCoords[0];
+						y = xyCoords[1];
+						if (x < 0 || y < 0 || x >= viewPort.getImageWidth()
+								|| y >= viewPort.getImageHeight())
+							continue;
+					}
+
+					if (useZSort) {
+						// Check if this symbol is a multilayer
+						int[] symLevels = zSort.getLevels(sym);
+						if (sym instanceof IMultiLayerSymbol) {
+							// if so, treat each of its layers as a single
+							// symbol
+							// in its corresponding map level
+							IMultiLayerSymbol mlSym = (IMultiLayerSymbol) sym;
+							for (int i = 0; !cancel.isCanceled()
+									&& i < mlSym.getLayerCount(); i++) {
+								ISymbol mySym = mlSym.getLayer(i);
+								int symbolLevel = 0;
+								if (symLevels != null) {
+									symbolLevel = symLevels[i];
+								} else {
+									/*
+									 * an error occured when managing symbol
+									 * levels. some of the legend changed events
+									 * regarding the symbols did not finish
+									 * satisfactory and the legend is now
+									 * inconsistent. For this drawing, it will
+									 * finish as it was at the bottom (level 0)
+									 * but, when done, the ZSort will be reset
+									 * to avoid app crashes. This is a bug that
+									 * has to be fixed.
+									 */
+									bSymbolLevelError = true;
+								}
+
+								if (onePoint) {
+									if (x < 0
+											|| y < 0
+											|| x >= imageLevels[symbolLevel]
+													.getWidth()
+											|| y >= imageLevels[symbolLevel]
+													.getHeight())
+										continue;
+									imageLevels[symbolLevel].setRGB(x, y,
+											mySym.getOnePointRgb());
+								} else {
+									if (!bDrawCartographicSupport) {
+										geom.drawInts(graphics[symbolLevel],
+												viewPort, mySym, cancel);
+									} else {
+										geom.drawInts(graphics[symbolLevel],
+												viewPort, dpi,
+												(CartographicSupport) mySym,
+												cancel);
 									}
-									System.out.println("avoided layer "+i+"of symbol '"+mlSym.getDescription()+"' (pass "+mapPass+")");
-								}
-
-								if (sym == null) {
-									continue;
-								}
-							} else {
-								// else, just draw the symbol in its level
-								if (zSort.getSymbolLevel(sym) != mapPass) {
-									System.out.println("avoided single layer symbol '"+sym.getDescription()+"' (pass "+mapPass+")");
-									continue;
 								}
 							}
-    					}
+						} else {
+							// else, just draw the symbol in its level
+							int symbolLevel = 0;
+							if (symLevels != null) {
 
-    					// Check if this symbol is sized with CartographicSupport
-    					CartographicSupport csSym = null;
-    					int symbolType = sym.getSymbolType();
-    					boolean bDrawCartographicSupport = false;
+								symbolLevel = symLevels[0];
+							} else {
+								/*
+								 * If symLevels == null an error occured when
+								 * managing symbol levels. some of the legend
+								 * changed events regarding the symbols did not
+								 * finish satisfactory and the legend is now
+								 * inconsistent. For this drawing, it will
+								 * finish as it was at the bottom (level 0).
+								 * This is a bug that has to be fixed.
+								 */
+								// bSymbolLevelError = true;
+							}
 
-    					if (   symbolType == FShape.POINT
-    							|| symbolType == FShape.LINE
-    							|| sym instanceof CartographicSupport) {
+							if (!bDrawCartographicSupport) {
+								geom.drawInts(graphics[symbolLevel], viewPort,
+										sym, cancel);
+							} else {
+								geom.drawInts(graphics[symbolLevel], viewPort,
+										dpi, (CartographicSupport) csSym,
+										cancel);
+							}
+						}
 
-    						csSym = (CartographicSupport) sym;
-    						bDrawCartographicSupport = (csSym.getUnit() != -1);
-    					}
+						// -- visual FX stuff
+						// Cuando el offset!=0 se est� dibujando sobre el
+						// Layout y por tanto no tiene que ejecutar el siguiente
+						// c�digo.
+						if (offset.getX() == 0 && offset.getY() == 0)
+							if ((System.currentTimeMillis() - time) > screenRefreshDelay) {
+								virtualBim = new BufferedImage(
+										image.getWidth(), image.getHeight(),
+										BufferedImage.TYPE_INT_ARGB);
+								virtualGraphics = virtualBim.createGraphics();
+								virtualGraphics.drawImage(image, 0, 0, null);
+								for (int i = 0; !cancel.isCanceled()
+										&& i < imageLevels.length; i++) {
+									virtualGraphics.drawImage(imageLevels[i],
+											0, 0, null);
+								}
+								g.clearRect(0, 0, image.getWidth(),
+										image.getHeight());
+								g.drawImage(virtualBim, 0, 0, null);
+								time = System.currentTimeMillis();
+							}
+						// -- end visual FX stuff
 
-    					System.err.println("passada "+mapPass+" pinte s�mboll "+sym.getDescription());
+					} else {
+						// no ZSort, so there is only a map level, symbols are
+						// just drawn.
+						if (onePoint) {
+							if (x < 0 || y < 0 || x >= image.getWidth()
+									|| y >= image.getHeight())
+								continue;
+							image.setRGB(x, y, sym.getOnePointRgb());
+						} else {
+							if (!bDrawCartographicSupport) {
+								geom.drawInts(g, viewPort, sym, cancel);
+							} else {
+								geom.drawInts(g, viewPort, dpi, csSym, cancel);
+							}
+						}
+					}
+				}
 
-    					if (!bDrawCartographicSupport) {
-    						geom.drawInts(g, viewPort, sym, null);
-    					} else {
-    						geom.drawInts(g, viewPort, dpi, (CartographicSupport) csSym);
-    					}
+				if (useZSort) {
+					g.drawImage(image, (int) offset.getX(),
+							(int) offset.getY(), null);
+					g.translate(offset.getX(), offset.getY());
+					for (int i = 0; !cancel.isCanceled()
+							&& i < imageLevels.length; i++) {
+						g.drawImage(imageLevels[i], 0, 0, null);
+						imageLevels[i] = null;
+						graphics[i] = null;
+					}
+					g.translate(-offset.getX(), -offset.getY());
+					imageLevels = null;
+					graphics = null;
+				}
+				it.closeIterator();
 
-    				}
-    				it.closeIterator();
-    			}
-    		} catch (ReadDriverException e) {
-    			this.setVisible(false);
-    			this.setActive(false);
-    			throw e;
-    		}
-	*/
+				if (bSymbolLevelError) {
+					((IVectorLegend) getLegend()).setZSort(null);
+				}
 
+			} catch (ReadDriverException e) {
+				this.setVisible(false);
+				this.setActive(false);
+				throw e;
+			}
 
-    	// TEST METHOD
-    	boolean bDrawShapes = true;
-    	if (legend instanceof SingleSymbolLegend) {
-    		bDrawShapes = legend.getDefaultSymbol().isShapeVisible();
-    	}
+		}
+	}
 
+	public void draw(BufferedImage image, Graphics2D g, ViewPort viewPort,
+			Cancellable cancel, double scale) throws ReadDriverException {
+		// forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD = true;
+		// if (!isUseStrategy()) {
+		if (isWaitTodraw()) {
+			return;
+		}
+		_draw(image, g, viewPort, cancel, scale);
+		// } else {
+		// // moved up to FLayers
+		// // if (isWithinScale(scale)) {
+		//
+		//
+		// // Las que solo tienen etiquetado sin pintar el shape,
+		// // no pasamos por ellas
+		// boolean bDrawShapes = true;
+		// if (legend instanceof SingleSymbolLegend) {
+		// if (legend.getDefaultSymbol().isShapeVisible() == false)
+		// bDrawShapes = false;
+		// }
+		// if (bDrawShapes) {
+		// Strategy strategy = StrategyManager.getStrategy(this);
+		// try {
+		// prepareDrawing(image, g, viewPort);
+		// strategy.draw(image, g, viewPort, cancel);
+		// } catch (ReadDriverException e) {
+		// this.setVisible(false);
+		// this.setActive(false);
+		// throw e;
+		// }
+		// }
+		// if (getVirtualLayers() != null) {
+		// getVirtualLayers().draw(image, g, viewPort, cancel, scale);
+		// }
+		// // }
+		// }
+	}
 
-    	if (bDrawShapes) {
+	/**
+	 * Se llama antes de empezar a pintar. Es �til para preparar la cache a
+	 * emplear, las leyendas, etc.
+	 * 
+	 * @param image
+	 * @param g
+	 * @param viewPort
+	 */
+	private void prepareDrawing(BufferedImage image, Graphics2D g,
+			ViewPort viewPort) {
 
-    		try {
-    			double dpi = 72;
+	}
 
-    			PrintQuality resolution=(PrintQuality)properties.get(PrintQuality.class);
-    			if (resolution.equals(PrintQuality.NORMAL)){
-    				dpi = 300;
-    			} else if (resolution.equals(PrintQuality.HIGH)){
-    				dpi = 600;
-    			} else if (resolution.equals(PrintQuality.DRAFT)){
-    				dpi = 72;
-    			}
-    			ArrayList<String> fieldList = new ArrayList<String>();
-    			String[] aux;
+	public void _print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
+			double scale, PrintRequestAttributeSet properties)
+			throws ReadDriverException {
+		// TEST METHOD
 
-    			// fields from legend
-    			if (legend instanceof IClassifiedVectorLegend) {
-    				aux = ((IClassifiedVectorLegend) legend).
-    				getClassifyingFieldNames();
-    				for (int i = 0; i < aux.length; i++) {
-    					fieldList.add(aux[i]);
-    				}
-    			}
-//
-//    			// fields from labeling
-//    			if (isLabeled()) {
-//    				aux = getLabelingStrategy().getUsedFields();
-//    				for (int i = 0; i < aux.length; i++) {
-//    					fieldList.add(aux[i]);
-//    				}
-//    			}
+		/* SVN */
 
-    			ZSort zSort = ((IVectorLegend) getLegend()).getZSort();
+		/*
+		 * boolean bDrawShapes = true; if (legend instanceof SingleSymbolLegend)
+		 * { bDrawShapes = legend.getDefaultSymbol().isShapeVisible(); }
+		 * 
+		 * 
+		 * if (bDrawShapes) { double dpi = 72;
+		 * 
+		 * PrintQuality
+		 * resolution=(PrintQuality)properties.get(PrintQuality.class); if
+		 * (resolution.equals(PrintQuality.NORMAL)){ dpi = 300; } else if
+		 * (resolution.equals(PrintQuality.HIGH)){ dpi = 600; } else if
+		 * (resolution.equals(PrintQuality.DRAFT)){ dpi = 72; }
+		 * 
+		 * 
+		 * try { prepareDrawing(null, g, viewPort); ArrayList<String> fieldList
+		 * = new ArrayList<String>(); String[] aux;
+		 * 
+		 * // fields from legend if (legend instanceof IClassifiedVectorLegend)
+		 * { aux = ((IClassifiedVectorLegend) legend).
+		 * getClassifyingFieldNames(); for (int i = 0; i < aux.length; i++) {
+		 * fieldList.add(aux[i]); } }
+		 * 
+		 * // fields from labeling if (isLabeled()) { aux =
+		 * getLabelingStrategy().getUsedFields(); for (int i = 0; i <
+		 * aux.length; i++) { fieldList.add(aux[i]); } }
+		 * 
+		 * ZSort zSort = ((IVectorLegend) getLegend()).getZSort();
+		 * 
+		 * // if layer has map levels it will use a ZSort boolean useZSort =
+		 * zSort != null && zSort.isUsingZSort();
+		 * 
+		 * 
+		 * int mapLevelCount = (useZSort) ? zSort.getLevelCount() : 1; for (int
+		 * mapPass = 0; mapPass < mapLevelCount; mapPass++) { // Get the
+		 * iterator over the visible features IFeatureIterator it =
+		 * getSource().getFeatureIterator( viewPort.getAdjustedExtent(),
+		 * fieldList.toArray(new String[fieldList.size()]),
+		 * viewPort.getProjection(), true);
+		 * 
+		 * // Iteration over each feature while ( !cancel.isCanceled() &&
+		 * it.hasNext()) { IFeature feat = it.next(); IGeometry geom =
+		 * feat.getGeometry();
+		 * 
+		 * // retreive the symbol associated to such feature ISymbol sym =
+		 * legend.getSymbolByFeature(feat);
+		 * 
+		 * if (useZSort) { // Check if this symbol is a multilayer if (sym
+		 * instanceof IMultiLayerSymbol) { // if so, get the layer corresponding
+		 * to the current // level. If none, continue to next iteration
+		 * IMultiLayerSymbol mlSym = (IMultiLayerSymbol) sym; for (int i = 0; i
+		 * < mlSym.getLayerCount(); i++) { ISymbol mySym = mlSym.getLayer(i); if
+		 * (zSort.getSymbolLevel(mySym) == mapPass) { sym = mySym; break; }
+		 * System
+		 * .out.println("avoided layer "+i+"of symbol '"+mlSym.getDescription
+		 * ()+"' (pass "+mapPass+")"); }
+		 * 
+		 * if (sym == null) { continue; } } else { // else, just draw the symbol
+		 * in its level if (zSort.getSymbolLevel(sym) != mapPass) {
+		 * System.out.println
+		 * ("avoided single layer symbol '"+sym.getDescription(
+		 * )+"' (pass "+mapPass+")"); continue; } } }
+		 * 
+		 * // Check if this symbol is sized with CartographicSupport
+		 * CartographicSupport csSym = null; int symbolType =
+		 * sym.getSymbolType(); boolean bDrawCartographicSupport = false;
+		 * 
+		 * if ( symbolType == FShape.POINT || symbolType == FShape.LINE || sym
+		 * instanceof CartographicSupport) {
+		 * 
+		 * csSym = (CartographicSupport) sym; bDrawCartographicSupport =
+		 * (csSym.getUnit() != -1); }
+		 * 
+		 * System.err.println("passada "+mapPass+" pinte s�mboll "+sym.
+		 * getDescription());
+		 * 
+		 * if (!bDrawCartographicSupport) { geom.drawInts(g, viewPort, sym,
+		 * null); } else { geom.drawInts(g, viewPort, dpi, (CartographicSupport)
+		 * csSym); }
+		 * 
+		 * } it.closeIterator(); } } catch (ReadDriverException e) {
+		 * this.setVisible(false); this.setActive(false); throw e; }
+		 */
 
-    			// if layer has map levels it will use a ZSort
-    			boolean useZSort = zSort != null && zSort.isUsingZSort();
+		// TEST METHOD
+		boolean bDrawShapes = true;
+		if (legend instanceof SingleSymbolLegend) {
+			bDrawShapes = legend.getDefaultSymbol().isShapeVisible();
+		}
 
+		if (bDrawShapes) {
 
-    			int mapLevelCount = (useZSort) ? zSort.getLevelCount() : 1;
-    			for (int mapPass = 0; mapPass < mapLevelCount; mapPass++) {
-    				// Get the iterator over the visible features
-//    				IFeatureIterator it = getSource().getFeatureIterator(
-//    						viewPort.getAdjustedExtent(),
-//    						fieldList.toArray(new String[fieldList.size()]),
-//    						viewPort.getProjection(),
-//    						true);
-        			IFeatureIterator it = null;
-        			if (isJoined()) {
-        				it = new JoinFeatureIterator(this, viewPort,
-        						fieldList.toArray(new String[fieldList.size()]));
-        			}
-        			else {
-        				it = getSource().getFeatureIterator(
-        					viewPort.getAdjustedExtent(),
-        					fieldList.toArray(new String[fieldList.size()]),
-        					viewPort.getCrs(),
-        					true);
-        			}
+			try {
+				double dpi = 72;
 
-    				// Iteration over each feature
-    				while ( !cancel.isCanceled() && it.hasNext()) {
-    					IFeature feat = it.next();
-    					IGeometry geom = feat.getGeometry();
+				PrintQuality resolution = (PrintQuality) properties
+						.get(PrintQuality.class);
+				if (resolution.equals(PrintQuality.NORMAL)) {
+					dpi = 300;
+				} else if (resolution.equals(PrintQuality.HIGH)) {
+					dpi = 600;
+				} else if (resolution.equals(PrintQuality.DRAFT)) {
+					dpi = 72;
+				}
+				ArrayList<String> fieldList = new ArrayList<String>();
+				String[] aux;
 
-    					// retreive the symbol associated to such feature
-    					ISymbol sym = legend.getSymbolByFeature(feat);
-    					if (sym == null) {
+				// fields from legend
+				if (legend instanceof IClassifiedVectorLegend) {
+					aux = ((IClassifiedVectorLegend) legend)
+							.getClassifyingFieldNames();
+					for (int i = 0; i < aux.length; i++) {
+						fieldList.add(aux[i]);
+					}
+				}
+				//
+				// // fields from labeling
+				// if (isLabeled()) {
+				// aux = getLabelingStrategy().getUsedFields();
+				// for (int i = 0; i < aux.length; i++) {
+				// fieldList.add(aux[i]);
+				// }
+				// }
+
+				ZSort zSort = ((IVectorLegend) getLegend()).getZSort();
+
+				// if layer has map levels it will use a ZSort
+				boolean useZSort = zSort != null && zSort.isUsingZSort();
+
+				int mapLevelCount = (useZSort) ? zSort.getLevelCount() : 1;
+				for (int mapPass = 0; mapPass < mapLevelCount; mapPass++) {
+					// Get the iterator over the visible features
+					// IFeatureIterator it = getSource().getFeatureIterator(
+					// viewPort.getAdjustedExtent(),
+					// fieldList.toArray(new String[fieldList.size()]),
+					// viewPort.getProjection(),
+					// true);
+					IFeatureIterator it = null;
+					if (isJoined()) {
+						it = new JoinFeatureIterator(this, viewPort,
+								fieldList.toArray(new String[fieldList.size()]));
+					} else {
+						it = getSource()
+								.getFeatureIterator(
+										viewPort.getAdjustedExtent(),
+										fieldList.toArray(new String[fieldList
+												.size()]), viewPort.getCrs(),
+										true);
+					}
+
+					// Iteration over each feature
+					while (!cancel.isCanceled() && it.hasNext()) {
+						IFeature feat = it.next();
+						IGeometry geom = feat.getGeometry();
+
+						// retreive the symbol associated to such feature
+						ISymbol sym = legend.getSymbolByFeature(feat);
+						if (sym == null) {
 							continue;
 						}
-    					if (useZSort) {
+						if (useZSort) {
 							int[] symLevels = zSort.getLevels(sym);
-							if(symLevels != null){
+							if (symLevels != null) {
 								// Check if this symbol is a multilayer
 								if (sym instanceof IMultiLayerSymbol) {
-									// if so, get the layer corresponding to the current
-									// level. If none, continue to next iteration
+									// if so, get the layer corresponding to the
+									// current
+									// level. If none, continue to next
+									// iteration
 									IMultiLayerSymbol mlSym = (IMultiLayerSymbol) sym;
 									for (int i = 0; i < mlSym.getLayerCount(); i++) {
 										ISymbol mySym = mlSym.getLayer(i);
@@ -889,971 +952,908 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 											sym = mySym;
 											break;
 										}
-										System.out.println("avoided layer "+i+"of symbol '"+mlSym.getDescription()+"' (pass "+mapPass+")");
+										System.out.println("avoided layer " + i
+												+ "of symbol '"
+												+ mlSym.getDescription()
+												+ "' (pass " + mapPass + ")");
 									}
 								} else {
 									// else, just draw the symbol in its level
 									if (symLevels[0] != mapPass) {
-										System.out.println("avoided single layer symbol '"+sym.getDescription()+"' (pass "+mapPass+")");
+										System.out
+												.println("avoided single layer symbol '"
+														+ sym.getDescription()
+														+ "' (pass "
+														+ mapPass
+														+ ")");
 										continue;
 									}
 								}
 							}
-    					}
+						}
 
-    					// Check if this symbol is sized with CartographicSupport
-    					CartographicSupport csSym = null;
-    					int symbolType = sym.getSymbolType();
+						// Check if this symbol is sized with
+						// CartographicSupport
+						CartographicSupport csSym = null;
+						int symbolType = sym.getSymbolType();
 
-    					if (   symbolType == FShape.POINT
-    							|| symbolType == FShape.LINE
-    							|| sym instanceof CartographicSupport) {
+						if (symbolType == FShape.POINT
+								|| symbolType == FShape.LINE
+								|| sym instanceof CartographicSupport) {
 
-    						csSym = (CartographicSupport) sym;
-    					}
+							csSym = (CartographicSupport) sym;
+						}
 
-//    					System.err.println("passada "+mapPass+" pinte s�mboll "+sym.getDescription());
+						// System.err.println("passada "+mapPass+" pinte s�mboll "+sym.getDescription());
 
-    					if (csSym == null) {
-    						geom.drawInts(g, viewPort, sym, null);
-    					} else {
-    						geom.drawInts(g, viewPort, dpi, (CartographicSupport) csSym, cancel);
-    					}
+						if (csSym == null) {
+							geom.drawInts(g, viewPort, sym, null);
+						} else {
+							geom.drawInts(g, viewPort, dpi,
+									(CartographicSupport) csSym, cancel);
+						}
 
-    				}
-    				it.closeIterator();
-    			}
-    		} catch (ReadDriverException e) {
-    			this.setVisible(false);
-    			this.setActive(false);
-    			throw e;
-    		}
-    	}
-    }
+					}
+					it.closeIterator();
+				}
+			} catch (ReadDriverException e) {
+				this.setVisible(false);
+				this.setActive(false);
+				throw e;
+			}
+		}
+	}
 
+	public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
+			double scale, PrintRequestAttributeSet properties)
+			throws ReadDriverException {
+		// if (forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD) {
+		_print(g, viewPort, cancel, scale, properties);
+		// } else {
+		// // moved up to Flayers
+		// // if (isVisible() && isWithinScale(scale)) {
+		// Strategy strategy = StrategyManager.getStrategy(this);
+		//
+		// strategy.print(g, viewPort, cancel, properties);
+		// ILabelingStrategy labeling;
+		// if ( (labeling = getLabelingStrategy() ) != null) {
+		// // contains labels
+		// labeling.print(g, viewPort, cancel, properties);
+		// }
+		// // }
+		// }
+	}
 
-    public void print(Graphics2D g, ViewPort viewPort, Cancellable cancel,
-            double scale, PrintRequestAttributeSet properties) throws ReadDriverException {
-//    	if (forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD) {
-    		_print(g, viewPort, cancel, scale, properties);
-//    	} else {
-////    		moved up to Flayers
-////    		if (isVisible() && isWithinScale(scale)) {
-//    			Strategy strategy = StrategyManager.getStrategy(this);
-//
-//    			strategy.print(g, viewPort, cancel, properties);
-//    			ILabelingStrategy labeling;
-//    			if ( (labeling = getLabelingStrategy() ) != null) {
-//    				// contains labels
-//    				labeling.print(g, viewPort, cancel, properties);
-//    			}
-////    		}
-//    	}
-    }
+	public void deleteSpatialIndex() {
+		// must we delete possible spatial indexes files?
+		spatialIndex = null;
+	}
 
-    public void deleteSpatialIndex() {
-        //must we delete possible spatial indexes files?
-        spatialIndex = null;
-    }
+	/**
+	 * <p>
+	 * Creates an spatial index associated to this layer. The spatial index will
+	 * used the native projection of the layer, so if the layer is reprojected,
+	 * it will be ignored.
+	 * </p>
+	 * 
+	 * @param cancelMonitor
+	 *            instance of CancellableMonitorable that allows to monitor
+	 *            progress of spatial index creation, and cancel the process
+	 */
+	public void createSpatialIndex(CancellableMonitorable cancelMonitor) {
+		throw new RuntimeException(
+				"GT uses the indexes automatically or it is a shit");
+	}
 
-   /**
-    * <p>
-    * Creates an spatial index associated to this layer.
-    * The spatial index will used
-    * the native projection of the layer, so if the layer is reprojected, it will
-    * be ignored.
-    * </p>
-    * @param cancelMonitor instance of CancellableMonitorable that allows
-    * to monitor progress of spatial index creation, and cancel the process
-    */
-    public void createSpatialIndex(CancellableMonitorable cancelMonitor){
-         // FJP: ESTO HABR� QUE CAMBIARLO. PARA LAS CAPAS SECUENCIALES, TENDREMOS
-        // QUE ACCEDER CON UN WHILE NEXT. (O mejorar lo de los FeatureVisitor
-        // para que acepten recorrer sin geometria, solo con rectangulos.
+	public void createSpatialIndex() {
+		createSpatialIndex(null);
+	}
 
-        //If this vectorial layer is based in a spatial database, the spatial
-        //index is already implicit. We only will index file drivers
-        ReadableVectorial va = getSource();
-        //We must think in non spatial databases, like HSQLDB
-        if(!(va instanceof VectorialFileAdapter)){
-            return;
-        }
-        if (!(va.getDriver() instanceof BoundedShapes)) {
-            return;
-        }
-        File file = ((VectorialFileAdapter) va).getFile();
-        String fileName = file.getAbsolutePath();
-        ISpatialIndex localCopy = null;
-        try {
-            va.start();
-			// TODO geotools refactoring
-			localCopy = new QuadtreeJts();
-//			localCopy = new QuadtreeGt2(fileName, "NM", va.getFullExtent(),
-//					va.getShapeCount(), true);
-        } catch(Exception e){
-            e.printStackTrace();
-        }//try
-        BoundedShapes shapeBounds = (BoundedShapes) va.getDriver();
-        try {
-            for (int i=0; i < va.getShapeCount(); i++)
-            {
-                if(cancelMonitor != null){
-                    if(cancelMonitor.isCanceled())
-                        return;
-                    cancelMonitor.reportStep();
-                }
-                Rectangle2D r = shapeBounds.getShapeBounds(i);
-                if(r != null)
-                    localCopy.insert(r, i);
-            } // for
-            va.stop();
-            if(localCopy instanceof IPersistentSpatialIndex)
-                ((IPersistentSpatialIndex) localCopy).flush();
-            spatialIndex = localCopy;
-            //vectorial adapter needs a reference to the spatial index, to solve
-            //request for feature iteration based in spatial queries
-            source.setSpatialIndex(spatialIndex);
-        } catch (ReadDriverException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+	public void process(FeatureVisitor visitor, FBitSet subset)
+			throws ReadDriverException, ExpansionFileReadException,
+			VisitorException {
+		Strategy s = StrategyManager.getStrategy(this);
+		s.process(visitor, subset);
+	}
 
-    public void createSpatialIndex() {
-        createSpatialIndex(null);
-    }
+	public void process(FeatureVisitor visitor) throws ReadDriverException,
+			VisitorException {
+		Strategy s = StrategyManager.getStrategy(this);
+		s.process(visitor);
+	}
 
-    public void process(FeatureVisitor visitor, FBitSet subset)
-            throws ReadDriverException, ExpansionFileReadException, VisitorException {
-        Strategy s = StrategyManager.getStrategy(this);
-        s.process(visitor, subset);
-    }
+	public void process(FeatureVisitor visitor, Rectangle2D rect)
+			throws ReadDriverException, ExpansionFileReadException,
+			VisitorException {
+		Strategy s = StrategyManager.getStrategy(this);
+		s.process(visitor, rect);
+	}
 
-    public void process(FeatureVisitor visitor) throws ReadDriverException, VisitorException {
-        Strategy s = StrategyManager.getStrategy(this);
-        s.process(visitor);
-    }
+	public FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException,
+			VisitorException {
+		Strategy s = StrategyManager.getStrategy(this);
 
-    public void process(FeatureVisitor visitor, Rectangle2D rect)
-            throws ReadDriverException, ExpansionFileReadException, VisitorException {
-        Strategy s = StrategyManager.getStrategy(this);
-        s.process(visitor, rect);
-    }
+		return s.queryByRect(rect);
+	}
 
-    public FBitSet queryByRect(Rectangle2D rect) throws ReadDriverException, VisitorException {
-        Strategy s = StrategyManager.getStrategy(this);
+	public FBitSet queryByPoint(Point2D p, double tolerance)
+			throws ReadDriverException, VisitorException {
+		Strategy s = StrategyManager.getStrategy(this);
+		return s.queryByPoint(p, tolerance);
+	}
 
-        return s.queryByRect(rect);
-    }
+	public FBitSet queryByShape(IGeometry g, int relationship)
+			throws ReadDriverException, VisitorException {
+		Strategy s = StrategyManager.getStrategy(this);
+		return s.queryByShape(g, relationship);
+	}
 
-    public FBitSet queryByPoint(Point2D p, double tolerance)
-            throws ReadDriverException, VisitorException {
-        Strategy s = StrategyManager.getStrategy(this);
-        return s.queryByPoint(p, tolerance);
-    }
+	public XMLItem[] getInfo(Point p, double tolerance, Cancellable cancel)
+			throws ReadDriverException, VisitorException {
+		Point2D pReal = this.getMapContext().getViewPort().toMapPoint(p);
+		FBitSet bs = queryByPoint(pReal, tolerance);
+		VectorialXMLItem[] item = new VectorialXMLItem[1];
+		item[0] = new VectorialXMLItem(bs, this);
 
-    public FBitSet queryByShape(IGeometry g, int relationship)
-            throws ReadDriverException, VisitorException {
-        Strategy s = StrategyManager.getStrategy(this);
-        return s.queryByShape(g, relationship);
-    }
+		return item;
+	}
 
-    public XMLItem[] getInfo(Point p, double tolerance, Cancellable cancel) throws ReadDriverException, VisitorException {
-        Point2D pReal = this.getMapContext().getViewPort().toMapPoint(p);
-        FBitSet bs = queryByPoint(pReal, tolerance);
-        VectorialXMLItem[] item = new VectorialXMLItem[1];
-        item[0] = new VectorialXMLItem(bs, this);
-
-        return item;
-    }
-
-    public void setLegend(IVectorLegend r) throws LegendLayerException {
-    	if (this.legend == r){
-    		return;
-    	}
-		if (this.legend != null && this.legend.equals(r)){
+	public void setLegend(IVectorLegend r) throws LegendLayerException {
+		if (this.legend == r) {
 			return;
 		}
-        IVectorLegend oldLegend = legend;
+		if (this.legend != null && this.legend.equals(r)) {
+			return;
+		}
+		IVectorLegend oldLegend = legend;
 
-        /*
-         * Parche para discriminar las leyendas clasificadas cuyos campos de
-         * clasificaci�n no est�n en la fuente de la capa.
-         *
-         * Esto puede ocurrir porque en versiones anteriores se admit�an
-         * leyendas clasificadas en capas que se han unido a una tabla
-         * por campos que pertenec�an a la tabla y no s�lo a la capa.
-         *
-         */
-//		if(r instanceof IClassifiedVectorLegend){
-//			IClassifiedVectorLegend classifiedLegend = (IClassifiedVectorLegend)r;
-//			String[] fieldNames = classifiedLegend.getClassifyingFieldNames();
-//
-//			for (int i = 0; i < fieldNames.length; i++) {
-//				try {
-//					if(this.getRecordset().getFieldIndexByName(fieldNames[i]) == -1){
-////					if(this.getSource().getRecordset().getFieldIndexByName(fieldNames[i]) == -1){
-//						logger.warn("Some fields of the classification of the legend doesn't belong with the source of the layer.");
-//						if (this.legend == null){
-//							r = LegendFactory.createSingleSymbolLegend(this.getShapeType());
-//						} else {
-//							return;
-//						}
-//					}
-//				} catch (ReadDriverException e1) {
-//					throw new LegendLayerException(getName(),e1);
-//				}
-//			}
-//		}
+		/*
+		 * Parche para discriminar las leyendas clasificadas cuyos campos de
+		 * clasificaci�n no est�n en la fuente de la capa.
+		 * 
+		 * Esto puede ocurrir porque en versiones anteriores se admit�an
+		 * leyendas clasificadas en capas que se han unido a una tabla por
+		 * campos que pertenec�an a la tabla y no s�lo a la capa.
+		 */
+		// if(r instanceof IClassifiedVectorLegend){
+		// IClassifiedVectorLegend classifiedLegend =
+		// (IClassifiedVectorLegend)r;
+		// String[] fieldNames = classifiedLegend.getClassifyingFieldNames();
+		//
+		// for (int i = 0; i < fieldNames.length; i++) {
+		// try {
+		// if(this.getRecordset().getFieldIndexByName(fieldNames[i]) == -1){
+		// //
+		// if(this.getSource().getRecordset().getFieldIndexByName(fieldNames[i])
+		// == -1){
+		// logger.warn("Some fields of the classification of the legend doesn't belong with the source of the layer.");
+		// if (this.legend == null){
+		// r = LegendFactory.createSingleSymbolLegend(this.getShapeType());
+		// } else {
+		// return;
+		// }
+		// }
+		// } catch (ReadDriverException e1) {
+		// throw new LegendLayerException(getName(),e1);
+		// }
+		// }
+		// }
 		/* Fin del parche */
 
 		legend = r;
-        try {
-            legend.setDataSource(getRecordset());
-        } catch (FieldNotFoundException e1) {
-            throw new LegendLayerException(getName(),e1);
-        } catch (ReadDriverException e1) {
-            throw new LegendLayerException(getName(),e1);
-        } finally{
-        	this.updateDrawVersion();
-        }
-        if (oldLegend != null){
-        	oldLegend.removeLegendListener(this);
-        }
-        if (legend != null){
-        	legend.addLegendListener(this);
-        }
-        LegendChangedEvent e = LegendChangedEvent.createLegendChangedEvent(
-                oldLegend, legend);
-        e.setLayer(this);
-        callLegendChanged(e);
-    }
+		try {
+			legend.setDataSource(getRecordset());
+		} catch (FieldNotFoundException e1) {
+			throw new LegendLayerException(getName(), e1);
+		} catch (ReadDriverException e1) {
+			throw new LegendLayerException(getName(), e1);
+		} finally {
+			this.updateDrawVersion();
+		}
+		if (oldLegend != null) {
+			oldLegend.removeLegendListener(this);
+		}
+		if (legend != null) {
+			legend.addLegendListener(this);
+		}
+		LegendChangedEvent e = LegendChangedEvent.createLegendChangedEvent(
+				oldLegend, legend);
+		e.setLayer(this);
+		callLegendChanged(e);
+	}
 
-    /**
-     * Devuelve la Leyenda de la capa.
-     *
-     * @return Leyenda.
-     */
-    public ILegend getLegend() {
-        return legend;
-    }
+	/**
+	 * Devuelve la Leyenda de la capa.
+	 * 
+	 * @return Leyenda.
+	 */
+	public ILegend getLegend() {
+		return legend;
+	}
 
-    /**
-     * Devuelve el tipo de shape que contiene la capa.
-     *
-     * @return tipo de shape.
-     *
-     * @throws DriverException
-     */
-    public int getShapeType() throws ReadDriverException {
-        if (typeShape == -1) {
-            getSource().start();
-            typeShape = getSource().getShapeType();
-            getSource().stop();
-        }
+	/**
+	 * Devuelve el tipo de shape que contiene la capa.
+	 * 
+	 * @return tipo de shape.
+	 * 
+	 * @throws DriverException
+	 */
+	public int getShapeType() throws ReadDriverException {
+		if (typeShape == -1) {
+			getSource().start();
+			typeShape = getSource().getShapeType();
+			getSource().stop();
+		}
 
-        return typeShape;
-    }
+		return typeShape;
+	}
 
-    public XMLEntity getXMLEntity() throws XMLException {
-        if (!this.isAvailable() && this.orgXMLEntity != null) {
-            return this.orgXMLEntity;
-        }
-        XMLEntity xml = super.getXMLEntity();
-        if (getLegend()!=null)
-            xml.addChild(getLegend().getXMLEntity());
-        try {
-            if (getRecordset()!=null)
-                xml.addChild(getRecordset().getSelectionSupport().getXMLEntity());
-        } catch (ReadDriverException e1) {
-            e1.printStackTrace();
-            throw new XMLException(e1);
-        }
-        // Repongo el mismo ReadableVectorial m�s abajo para cuando se guarda el proyecto.
-        ReadableVectorial rv=getSource();
-        xml.putProperty("type", "vectorial");
-        if (source instanceof VectorialEditableAdapter) {
-            setSource(((VectorialEditableAdapter) source).getOriginalAdapter());
-        }
-        if (source instanceof VectorialFileAdapter) {
-            xml.putProperty("type", "vectorial");
-            xml.putProperty("absolutePath",((VectorialFileAdapter) source)
-                    .getFile().getAbsolutePath());
-            xml.putProperty("file", pathGenerator.getPath(((VectorialFileAdapter) source)
-                    .getFile().getAbsolutePath()));
-            try {
-                xml.putProperty("recordset-name", source.getRecordset()
-                        .getName());
-            } catch (ReadDriverException e) {
-                throw new XMLException(e);
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
-        } else if (source instanceof VectorialDBAdapter) {
-            xml.putProperty("type", "vectorial");
+	public XMLEntity getXMLEntity() throws XMLException {
+		if (!this.isAvailable() && this.orgXMLEntity != null) {
+			return this.orgXMLEntity;
+		}
+		XMLEntity xml = super.getXMLEntity();
+		if (getLegend() != null)
+			xml.addChild(getLegend().getXMLEntity());
+		try {
+			if (getRecordset() != null)
+				xml.addChild(getRecordset().getSelectionSupport()
+						.getXMLEntity());
+		} catch (ReadDriverException e1) {
+			e1.printStackTrace();
+			throw new XMLException(e1);
+		}
+		// Repongo el mismo ReadableVectorial m�s abajo para cuando se guarda
+		// el proyecto.
+		xml.putProperty("type", "vectorial");
+		try {
+			xml.putProperty("url", getDataStore().getInfo().getSource().toURL()
+					.toExternalForm());
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(
+					"bug: an open layer with an invalid URL?");
+		} catch (IOException e) {
+			throw new XMLException(e);
+		}
+		if (bHasJoin)
+			xml.putProperty("hasJoin", "true");
 
-            IVectorialDatabaseDriver dbDriver = (IVectorialDatabaseDriver) source
-                    .getDriver();
+		// properties from ILabelable
+		xml.putProperty("isLabeled", isLabeled);
+		if (strategy != null) {
+			XMLEntity strategyXML = strategy.getXMLEntity();
+			strategyXML.putProperty("Strategy", strategy.getClassName());
+			xml.addChild(strategy.getXMLEntity());
+		}
+		xml.addChild(getLinkProperties().getXMLEntity());
+		return xml;
+	}
 
-            // Guardamos el nombre del driver para poder recuperarlo
-            // con el DriverManager de Fernando.
-            xml.putProperty("db", dbDriver.getName());
-            try {
-                xml.putProperty("recordset-name", source.getRecordset()
-                        .getName());
-            } catch (ReadDriverException e) {
-                throw new XMLException(e);
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
-            xml.addChild(dbDriver.getXMLEntity()); // Tercer child. Antes hemos
-                                                    // metido la leyenda y el
-                                                    // selection support
-        } else if (source instanceof VectorialAdapter) {
-            // Se supone que hemos hecho algo gen�rico.
-            xml.putProperty("type", "vectorial");
+	/**
+	 * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#setXMLEntity(com.iver.utiles.XMLEntity)
+	 */
+	public void setXMLEntity03(XMLEntity xml) throws XMLException {
 
-            VectorialDriver driver = source.getDriver();
+		super.setXMLEntity(xml);
+		legend = LegendFactory.createFromXML03(xml.getChild(0));
 
-            // Guardamos el nombre del driver para poder recuperarlo
-            // con el DriverManager de Fernando.
-            xml.putProperty("other", driver.getName());
-            // try {
-            try {
-                xml.putProperty("recordset-name", source.getRecordset()
-                        .getName());
-            } catch (ReadDriverException e) {
-                throw new XMLException(e);
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
-            if (driver instanceof IPersistence) {
-                // xml.putProperty("className", driver.getClass().getName());
-            	IPersistence persist = (IPersistence) driver;
-                xml.addChild(persist.getXMLEntity()); // Tercer child. Antes
-                                                        // hemos metido la
-                                                        // leyenda y el
-                                                        // selection support
-            }
-        }
-        if (rv!=null)
-            setSource(rv);
-        xml.putProperty("driverName", source.getDriver().getName());
-        if (bHasJoin)
-            xml.putProperty("hasJoin", "true");
+		try {
+			setLegend(legend);
+		} catch (LegendLayerException e) {
+			throw new XMLException(e);
+		}
 
-        // properties from ILabelable
-        xml.putProperty("isLabeled", isLabeled);
-        if (strategy != null) {
-            XMLEntity strategyXML = strategy.getXMLEntity();
-            strategyXML.putProperty("Strategy", strategy.getClassName());
-            xml.addChild(strategy.getXMLEntity());
-        }
-        xml.addChild(getLinkProperties().getXMLEntity());
-        return xml;
-    }
+		try {
+			getRecordset().getSelectionSupport()
+					.setXMLEntity03(xml.getChild(1));
+		} catch (ReadDriverException e) {
+			e.printStackTrace();
+		}
+	}
 
-    /**
-     * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#setXMLEntity(com.iver.utiles.XMLEntity)
-     */
-    public void setXMLEntity03(XMLEntity xml) throws XMLException {
+	/*
+	 * @see
+	 * com.iver.cit.gvsig.fmap.layers.FLyrDefault#setXMLEntity(com.iver.utiles
+	 * .XMLEntity)
+	 */
+	public void setXMLEntity(XMLEntity xml) throws XMLException {
+		try {
+			super.setXMLEntity(xml);
+			XMLEntity legendXML = xml.getChild(0);
+			IVectorLegend leg = LegendFactory.createFromXML(legendXML);
 
-        super.setXMLEntity(xml);
-        legend = LegendFactory.createFromXML03(xml.getChild(0));
-
-        try {
-            setLegend(legend);
-        } catch (LegendLayerException e) {
-            throw new XMLException(e);
-        }
-
-        try {
-            getRecordset().getSelectionSupport()
-                    .setXMLEntity03(xml.getChild(1));
-        } catch (ReadDriverException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /*
-     * @see com.iver.cit.gvsig.fmap.layers.FLyrDefault#setXMLEntity(com.iver.utiles.XMLEntity)
-     */
-    public void setXMLEntity(XMLEntity xml) throws XMLException {
-        try {
-    		super.setXMLEntity(xml);
-    		XMLEntity legendXML = xml.getChild(0);
-    		IVectorLegend leg = LegendFactory.createFromXML(legendXML);
-
-    		/*
-    		 * Parche para detectar cuando, por algun problema de persistencia
-    		 * respecto a versiones anteriores, la leyenda que se ha cargado
-    		 * no se corresponde con el tipo de shape de la capa.
-    		 */
-    		int legShapeType = leg.getShapeType();
-    		if (legShapeType != 0 && legShapeType != this.getShapeType()){
-    			leg = LegendFactory.createSingleSymbolLegend(this.getShapeType());
+			/*
+			 * Parche para detectar cuando, por algun problema de persistencia
+			 * respecto a versiones anteriores, la leyenda que se ha cargado no
+			 * se corresponde con el tipo de shape de la capa.
+			 */
+			int legShapeType = leg.getShapeType();
+			if (legShapeType != 0 && legShapeType != this.getShapeType()) {
+				leg = LegendFactory.createSingleSymbolLegend(this
+						.getShapeType());
 				logger.warn("Legend shape type and layer shape type does not match.");
-    		}
-    		/* Fin del parche */
+			}
+			/* Fin del parche */
 
-    		try {
-    			getRecordset().getSelectionSupport().setXMLEntity(xml.getChild(1));
-    			// JMVIVO: Esto sirve para algo????
-    			/*
-    			 *  Jaume: si, para restaurar el selectable datasource cuando se
-    			 *  clona la capa, cuando se carga de un proyecto. Si no esta ya
-    			 *  no se puede ni hacer consultas sql, ni hacer selecciones,
-    			 *  ni usar la mayor parte de las herramientas.
-    			 *
-    			 *  Lo vuelvo a poner.
-    			 */
+			try {
+				getRecordset().getSelectionSupport().setXMLEntity(
+						xml.getChild(1));
+				// JMVIVO: Esto sirve para algo????
+				/*
+				 * Jaume: si, para restaurar el selectable datasource cuando se
+				 * clona la capa, cuando se carga de un proyecto. Si no esta ya
+				 * no se puede ni hacer consultas sql, ni hacer selecciones, ni
+				 * usar la mayor parte de las herramientas.
+				 * 
+				 * Lo vuelvo a poner.
+				 */
 
-    			String recordsetName = xml.getStringProperty("recordset-name");
+				String recordsetName = xml.getStringProperty("recordset-name");
 
-//    			SelectableDataSource sds = new SelectableDataSource(LayerFactory
-//    					.getDataSourceFactory().createRandomDataSource(
-//    							recordsetName, DataSourceFactory.AUTOMATIC_OPENING));
+				// SelectableDataSource sds = new
+				// SelectableDataSource(LayerFactory
+				// .getDataSourceFactory().createRandomDataSource(
+				// recordsetName, DataSourceFactory.AUTOMATIC_OPENING));
 
-    			LayerFactory.getDataSourceFactory().changeDataSourceName(
-    					getSource().getRecordset().getName(), recordsetName);
-    			SelectableDataSource sds = new SelectableDataSource(LayerFactory
-    					.getDataSourceFactory().createRandomDataSource(
-    							recordsetName, DataSourceFactory.AUTOMATIC_OPENING));
+				LayerFactory.getDataSourceFactory().changeDataSourceName(
+						getSource().getRecordset().getName(), recordsetName);
+				SelectableDataSource sds = new SelectableDataSource(
+						LayerFactory.getDataSourceFactory()
+								.createRandomDataSource(recordsetName,
+										DataSourceFactory.AUTOMATIC_OPENING));
 
-    		} catch (NoSuchTableException e1) {
-    			this.setAvailable(false);
-    			throw new XMLException(e1);
-    		} catch (ReadDriverException e1) {
-    			this.setAvailable(false);
-    			throw new XMLException(e1);
-    		}
-    		// Si tiene una uni�n, lo marcamos para que no se cree la leyenda hasta
-    		// el final
-    		// de la lectura del proyecto
-    		if (xml.contains("hasJoin")) {
-    			setIsJoined(true);
-    			PostProcessSupport.addToPostProcess(this, "setLegend", leg, 1);
-    		} else {
-    			try {
-    				setLegend(leg);
-    			} catch (LegendLayerException e) {
-    				throw new XMLException(e);
-    			}
-    		}
+			} catch (NoSuchTableException e1) {
+				this.setAvailable(false);
+				throw new XMLException(e1);
+			} catch (ReadDriverException e1) {
+				this.setAvailable(false);
+				throw new XMLException(e1);
+			}
+			// Si tiene una uni�n, lo marcamos para que no se cree la leyenda
+			// hasta
+			// el final
+			// de la lectura del proyecto
+			if (xml.contains("hasJoin")) {
+				setIsJoined(true);
+				PostProcessSupport.addToPostProcess(this, "setLegend", leg, 1);
+			} else {
+				try {
+					setLegend(leg);
+				} catch (LegendLayerException e) {
+					throw new XMLException(e);
+				}
+			}
 
-    		//Por compatibilidad con proyectos anteriores a la 1.0
-    		boolean containsIsLabeled = xml.contains("isLabeled");
-    		if (containsIsLabeled){
-    			isLabeled = xml.getBooleanProperty("isLabeled");
-    		}
-    		// set properties for ILabelable
-    		XMLEntity labelingXML = xml.firstChild("labelingStrategy", "labelingStrategy");
-    		if (labelingXML!= null) {
-    			if(!containsIsLabeled){
-    				isLabeled = true;
-    			}
-    			try {
-    				ILabelingStrategy labeling = LabelingFactory.createStrategyFromXML(labelingXML, this);
-    				if (isJoined()) {
-    					PostProcessSupport.addToPostProcess(this, "setLabelingStrategy", labeling, 1);
-    				}
-    				else
-    					this.setLabelingStrategy(labeling);
+			// Por compatibilidad con proyectos anteriores a la 1.0
+			boolean containsIsLabeled = xml.contains("isLabeled");
+			if (containsIsLabeled) {
+				isLabeled = xml.getBooleanProperty("isLabeled");
+			}
+			// set properties for ILabelable
+			XMLEntity labelingXML = xml.firstChild("labelingStrategy",
+					"labelingStrategy");
+			if (labelingXML != null) {
+				if (!containsIsLabeled) {
+					isLabeled = true;
+				}
+				try {
+					ILabelingStrategy labeling = LabelingFactory
+							.createStrategyFromXML(labelingXML, this);
+					if (isJoined()) {
+						PostProcessSupport.addToPostProcess(this,
+								"setLabelingStrategy", labeling, 1);
+					} else
+						this.setLabelingStrategy(labeling);
 
-    			} catch (NotExistInXMLEntity neXMLEX) {
-    				// no strategy was set, just continue;
-    				logger.warn("Reached what should be unreachable code");
-    			}
-    		} else if (legendXML.contains("labelFieldName")|| legendXML.contains("labelfield")) {
-    			/* (jaume) begin patch;
-        		 * for backward compatibility purposes. Since gvSIG v1.1 labeling is
-        		 * no longer managed by the Legend but by the ILabelingStrategy. The
-        		 * following allows restoring older projects' labelings.
-        		 */
-    			String labelTextField =	null;
-    			if (legendXML.contains("labelFieldName")){
-    				labelTextField = legendXML.getStringProperty("labelFieldName");
-        			if (labelTextField != null) {
-        				AttrInTableLabelingStrategy labeling = new AttrInTableLabelingStrategy();
-        				labeling.setLayer(this);
+				} catch (NotExistInXMLEntity neXMLEX) {
+					// no strategy was set, just continue;
+					logger.warn("Reached what should be unreachable code");
+				}
+			} else if (legendXML.contains("labelFieldName")
+					|| legendXML.contains("labelfield")) {
+				/*
+				 * (jaume) begin patch; for backward compatibility purposes.
+				 * Since gvSIG v1.1 labeling is no longer managed by the Legend
+				 * but by the ILabelingStrategy. The following allows restoring
+				 * older projects' labelings.
+				 */
+				String labelTextField = null;
+				if (legendXML.contains("labelFieldName")) {
+					labelTextField = legendXML
+							.getStringProperty("labelFieldName");
+					if (labelTextField != null) {
+						AttrInTableLabelingStrategy labeling = new AttrInTableLabelingStrategy();
+						labeling.setLayer(this);
 						int unit = 1;
 						boolean useFixedSize = false;
-    					String labelFieldHeight = legendXML.getStringProperty("labelHeightFieldName");
-    					labeling.setTextField(labelTextField);
-    					if(labelFieldHeight!=null){
-    						labeling.setHeightField(labelFieldHeight);
-    					} else {
-    						double size = -1;
-    						for(int i=0; i<legendXML.getChildrenCount();i++){
-    							XMLEntity xmlChild = legendXML.getChild(i);
-    							if(xmlChild.contains("m_FontSize")){
-    								double childFontSize =  xmlChild.getDoubleProperty("m_FontSize");
-    								if(size<0){
-    									size = childFontSize;
-    									useFixedSize = true;
-    								} else {
-    									useFixedSize = useFixedSize && (size==childFontSize);
-    								}
-    								if(xmlChild.contains("m_bUseFontSize")){
-    									if(xmlChild.getBooleanProperty("m_bUseFontSize")){
-    										unit = -1;
-    									} else {
-    										unit = 1;
-    									}
-    								}
-    							}
-    						}
-    						labeling.setFixedSize(size/1.4);//Factor de correcci�n que se aplicaba antes en el etiquetado
-    					}
+						String labelFieldHeight = legendXML
+								.getStringProperty("labelHeightFieldName");
+						labeling.setTextField(labelTextField);
+						if (labelFieldHeight != null) {
+							labeling.setHeightField(labelFieldHeight);
+						} else {
+							double size = -1;
+							for (int i = 0; i < legendXML.getChildrenCount(); i++) {
+								XMLEntity xmlChild = legendXML.getChild(i);
+								if (xmlChild.contains("m_FontSize")) {
+									double childFontSize = xmlChild
+											.getDoubleProperty("m_FontSize");
+									if (size < 0) {
+										size = childFontSize;
+										useFixedSize = true;
+									} else {
+										useFixedSize = useFixedSize
+												&& (size == childFontSize);
+									}
+									if (xmlChild.contains("m_bUseFontSize")) {
+										if (xmlChild
+												.getBooleanProperty("m_bUseFontSize")) {
+											unit = -1;
+										} else {
+											unit = 1;
+										}
+									}
+								}
+							}
+							labeling.setFixedSize(size / 1.4);// Factor de
+																// correcci�n
+																// que se
+																// aplicaba
+																// antes en el
+																// etiquetado
+						}
 						labeling.setUsesFixedSize(useFixedSize);
 						labeling.setUnit(unit);
-        				labeling.setRotationField(legendXML.getStringProperty("labelRotationFieldName"));
-        				if (isJoined()) {
-        					PostProcessSupport.addToPostProcess(this, "setLabelingStrategy", labeling, 1);
-        				}
-        				else
-        					this.setLabelingStrategy(labeling);
-        				this.setIsLabeled(true);
-        			}
-    			}else{
-    				labelTextField = legendXML.getStringProperty("labelfield");
-    				if (labelTextField != null) {
-    					AttrInTableLabelingStrategy labeling = new AttrInTableLabelingStrategy();
-    					labeling.setLayer(this);
+						labeling.setRotationField(legendXML
+								.getStringProperty("labelRotationFieldName"));
+						if (isJoined()) {
+							PostProcessSupport.addToPostProcess(this,
+									"setLabelingStrategy", labeling, 1);
+						} else
+							this.setLabelingStrategy(labeling);
+						this.setIsLabeled(true);
+					}
+				} else {
+					labelTextField = legendXML.getStringProperty("labelfield");
+					if (labelTextField != null) {
+						AttrInTableLabelingStrategy labeling = new AttrInTableLabelingStrategy();
+						labeling.setLayer(this);
 						int unit = 1;
 						boolean useFixedSize = false;
-    					String labelFieldHeight = legendXML.getStringProperty("labelFieldHeight");
-    					labeling.setTextField(labelTextField);
-    					if(labelFieldHeight!=null){
-    						labeling.setHeightField(labelFieldHeight);
-    					} else {
-    						double size = -1;
-    						for(int i=0; i<legendXML.getChildrenCount();i++){
-    							XMLEntity xmlChild = legendXML.getChild(i);
-    							if(xmlChild.contains("m_FontSize")){
-    								double childFontSize =  xmlChild.getDoubleProperty("m_FontSize");
-    								if(size<0){
-    									size = childFontSize;
-    									useFixedSize = true;
-    								} else {
-    									useFixedSize = useFixedSize && (size==childFontSize);
-    								}
-    								if(xmlChild.contains("m_bUseFontSize")){
-    									if(xmlChild.getBooleanProperty("m_bUseFontSize")){
-    										unit = -1;
-    									} else {
-    										unit = 1;
-    									}
-    								}
-    							}
-    						}
-    						labeling.setFixedSize(size/1.4);//Factor de correcci�n que se aplicaba antes en el etiquetado
-    					}
+						String labelFieldHeight = legendXML
+								.getStringProperty("labelFieldHeight");
+						labeling.setTextField(labelTextField);
+						if (labelFieldHeight != null) {
+							labeling.setHeightField(labelFieldHeight);
+						} else {
+							double size = -1;
+							for (int i = 0; i < legendXML.getChildrenCount(); i++) {
+								XMLEntity xmlChild = legendXML.getChild(i);
+								if (xmlChild.contains("m_FontSize")) {
+									double childFontSize = xmlChild
+											.getDoubleProperty("m_FontSize");
+									if (size < 0) {
+										size = childFontSize;
+										useFixedSize = true;
+									} else {
+										useFixedSize = useFixedSize
+												&& (size == childFontSize);
+									}
+									if (xmlChild.contains("m_bUseFontSize")) {
+										if (xmlChild
+												.getBooleanProperty("m_bUseFontSize")) {
+											unit = -1;
+										} else {
+											unit = 1;
+										}
+									}
+								}
+							}
+							labeling.setFixedSize(size / 1.4);// Factor de
+																// correcci�n
+																// que se
+																// aplicaba
+																// antes en el
+																// etiquetado
+						}
 						labeling.setUsesFixedSize(useFixedSize);
 						labeling.setUnit(unit);
-    					labeling.setRotationField(legendXML.getStringProperty("labelFieldRotation"));
-        				if (isJoined()) {
-        					PostProcessSupport.addToPostProcess(this, "setLabelingStrategy", labeling, 1);
-        				}
-        				else
-        					this.setLabelingStrategy(labeling);
-    					this.setIsLabeled(true);
-    				}
-    			}
+						labeling.setRotationField(legendXML
+								.getStringProperty("labelFieldRotation"));
+						if (isJoined()) {
+							PostProcessSupport.addToPostProcess(this,
+									"setLabelingStrategy", labeling, 1);
+						} else
+							this.setLabelingStrategy(labeling);
+						this.setIsLabeled(true);
+					}
+				}
 
-        	}else if(!containsIsLabeled){
-    				isLabeled = false;
-    		}
+			} else if (!containsIsLabeled) {
+				isLabeled = false;
+			}
 
-    		// compatibility with hyperlink from 1.9 alpha version... do we really need to be compatible with alpha versions??
-    		XMLEntity xmlLinkProperties=xml.firstChild("typeChild", "linkProperties");
-    		if (xmlLinkProperties != null){
-    			try {
-    				String fieldName=xmlLinkProperties.getStringProperty("fieldName");
-    				xmlLinkProperties.remove("fieldName");
-    				String extName = xmlLinkProperties.getStringProperty("extName");
-    				xmlLinkProperties.remove("extName");
-    				int typeLink = xmlLinkProperties.getIntProperty("typeLink");
-    				xmlLinkProperties.remove("typeLink");
-    				if (fieldName!=null) {
-    					setProperty("legacy.hyperlink.selectedField", fieldName);
-    					setProperty("legacy.hyperlink.type", new Integer(typeLink));
-    					if (extName!=null) {
-    						setProperty("legacy.hyperlink.extension", extName);
-    					}
-    				}
-    			}
-    			catch (NotExistInXMLEntity ex) {
-    				logger.warn("Error getting old hyperlink configuration", ex);
-    			}
-    		}
+			// compatibility with hyperlink from 1.9 alpha version... do we
+			// really need to be compatible with alpha versions??
+			XMLEntity xmlLinkProperties = xml.firstChild("typeChild",
+					"linkProperties");
+			if (xmlLinkProperties != null) {
+				try {
+					String fieldName = xmlLinkProperties
+							.getStringProperty("fieldName");
+					xmlLinkProperties.remove("fieldName");
+					String extName = xmlLinkProperties
+							.getStringProperty("extName");
+					xmlLinkProperties.remove("extName");
+					int typeLink = xmlLinkProperties.getIntProperty("typeLink");
+					xmlLinkProperties.remove("typeLink");
+					if (fieldName != null) {
+						setProperty("legacy.hyperlink.selectedField", fieldName);
+						setProperty("legacy.hyperlink.type", new Integer(
+								typeLink));
+						if (extName != null) {
+							setProperty("legacy.hyperlink.extension", extName);
+						}
+					}
+				} catch (NotExistInXMLEntity ex) {
+					logger.warn("Error getting old hyperlink configuration", ex);
+				}
+			}
 
-    	} catch (XMLException e) {
-    		this.setAvailable(false);
-    		this.orgXMLEntity = xml;
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		this.setAvailable(false);
-    		this.orgXMLEntity = xml;
+		} catch (XMLException e) {
+			this.setAvailable(false);
+			this.orgXMLEntity = xml;
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.setAvailable(false);
+			this.orgXMLEntity = xml;
 
-    	}
+		}
 
+	}
 
-    }
+	public void setXMLEntityNew(XMLEntity xml) throws XMLException {
+		try {
+			super.setXMLEntity(xml);
 
-    public void setXMLEntityNew(XMLEntity xml) throws XMLException {
-        try {
-            super.setXMLEntity(xml);
+			XMLEntity legendXML = xml.getChild(0);
+			IVectorLegend leg = LegendFactory.createFromXML(legendXML);
+			/*
+			 * (jaume) begin patch; for backward compatibility purposes. Since
+			 * gvSIG v1.1 labeling is no longer managed by the Legend but by the
+			 * ILabelingStrategy. The following allows restoring older projects'
+			 * labelings.
+			 */
+			if (legendXML.contains("labelFieldHeight")) {
+				AttrInTableLabelingStrategy labeling = new AttrInTableLabelingStrategy();
+				labeling.setLayer(this);
+				labeling.setTextField(legendXML
+						.getStringProperty("labelFieldHeight"));
+				labeling.setRotationField(legendXML
+						.getStringProperty("labelFieldRotation"));
+				this.setLabelingStrategy(labeling);
+				this.setIsLabeled(true);
+			}
+			/* end patch */
+			try {
+				getRecordset().getSelectionSupport().setXMLEntity(
+						xml.getChild(1));
 
-            XMLEntity legendXML = xml.getChild(0);
-            IVectorLegend leg = LegendFactory.createFromXML(legendXML);
-            /* (jaume) begin patch;
-             * for backward compatibility purposes. Since gvSIG v1.1 labeling is
-             * no longer managed by the Legend but by the ILabelingStrategy. The
-             * following allows restoring older projects' labelings.
-             */
-            if (legendXML.contains("labelFieldHeight")) {
-                AttrInTableLabelingStrategy labeling = new AttrInTableLabelingStrategy();
-                labeling.setLayer(this);
-                labeling.setTextField(legendXML.getStringProperty("labelFieldHeight"));
-                labeling.setRotationField(legendXML.getStringProperty("labelFieldRotation"));
-                this.setLabelingStrategy(labeling);
-                this.setIsLabeled(true);
-              }
-            /* end patch */
-            try {
-                getRecordset().getSelectionSupport().setXMLEntity(xml.getChild(1));
+				this.setLoadSelection(xml.getChild(1));
+			} catch (ReadDriverException e1) {
+				this.setAvailable(false);
+				throw new XMLException(e1);
+			}
+			// Si tiene una uni�n, lo marcamos para que no se cree la leyenda
+			// hasta
+			// el final
+			// de la lectura del proyecto
+			if (xml.contains("hasJoin")) {
+				setIsJoined(true);
+				PostProcessSupport.addToPostProcess(this, "setLegend", leg, 1);
+			} else {
+				this.setLoadLegend(leg);
+			}
 
-                this.setLoadSelection(xml.getChild(1));
-            } catch (ReadDriverException e1) {
-                this.setAvailable(false);
-                throw new XMLException(e1);
-            }
-            // Si tiene una uni�n, lo marcamos para que no se cree la leyenda hasta
-            // el final
-            // de la lectura del proyecto
-            if (xml.contains("hasJoin")) {
-                setIsJoined(true);
-                PostProcessSupport.addToPostProcess(this, "setLegend", leg, 1);
-            } else {
-                this.setLoadLegend(leg);
-            }
+		} catch (XMLException e) {
+			this.setAvailable(false);
+			this.orgXMLEntity = xml;
+		} catch (Exception e) {
+			this.setAvailable(false);
+			this.orgXMLEntity = xml;
+		}
 
-        } catch (XMLException e) {
-            this.setAvailable(false);
-            this.orgXMLEntity = xml;
-        } catch (Exception e) {
-            this.setAvailable(false);
-            this.orgXMLEntity = xml;
-        }
+	}
 
+	/**
+	 * Sobreimplementaci�n del m�todo toString para que las bases de datos
+	 * identifiquen la capa.
+	 * 
+	 * @return DOCUMENT ME!
+	 */
+	public String toString() {
+		/*
+		 * Se usa internamente para que la parte de datos identifique de forma
+		 * un�voca las tablas
+		 */
+		String ret = super.toString();
 
-    }
+		return "layer" + ret.substring(ret.indexOf('@') + 1);
+	}
 
+	public boolean isJoined() {
+		return bHasJoin;
+	}
 
-    /**
-     * Sobreimplementaci�n del m�todo toString para que las bases de datos
-     * identifiquen la capa.
-     *
-     * @return DOCUMENT ME!
-     */
-    public String toString() {
-        /*
-         * Se usa internamente para que la parte de datos identifique de forma
-         * un�voca las tablas
-         */
-        String ret = super.toString();
+	/**
+	 * Returns if a layer is spatially indexed
+	 * 
+	 * @return if this layer has the ability to proces spatial queries without
+	 *         secuential scans.
+	 */
+	public boolean isSpatiallyIndexed() {
+		ReadableVectorial source = getSource();
+		if (source instanceof ISpatialDB)
+			return true;
 
-        return "layer" + ret.substring(ret.indexOf('@') + 1);
-    }
+		// FIXME azabala
+		/*
+		 * Esto es muy dudoso, y puede cambiar. Estoy diciendo que las que no
+		 * son fichero o no son BoundedShapes estan indexadas. Esto es mentira,
+		 * pero as� quien pregunte no querr� generar el indice. Esta por ver
+		 * si interesa generar el indice para capas HSQLDB, WFS, etc.
+		 */
+		if (!(source instanceof VectorialFileAdapter)) {
+			return true;
+		}
+		if (!(source.getDriver() instanceof BoundedShapes)) {
+			return true;
+		}
 
-    public boolean isJoined() {
-        return bHasJoin;
-    }
+		if (getISpatialIndex() != null)
+			return true;
+		return false;
+	}
 
-    /**
-     * Returns if a layer is spatially indexed
-     *
-     * @return if this layer has the ability to proces spatial queries without
-     *         secuential scans.
-     */
-    public boolean isSpatiallyIndexed() {
-        ReadableVectorial source = getSource();
-        if (source instanceof ISpatialDB)
-            return true;
+	public void setIsJoined(boolean hasJoin) {
+		bHasJoin = hasJoin;
+	}
 
-//FIXME azabala
-/*
- * Esto es muy dudoso, y puede cambiar.
- * Estoy diciendo que las que no son fichero o no son
- * BoundedShapes estan indexadas. Esto es mentira, pero
- * as� quien pregunte no querr� generar el indice.
- * Esta por ver si interesa generar el indice para capas
- * HSQLDB, WFS, etc.
- */
-        if(!(source instanceof VectorialFileAdapter)){
-            return true;
-        }
-        if (!(source.getDriver() instanceof BoundedShapes)) {
-            return true;
-        }
+	/**
+	 * @return Returns the spatialIndex.
+	 */
+	public ISpatialIndex getISpatialIndex() {
+		return spatialIndex;
+	}
 
-        if (getISpatialIndex() != null)
-            return true;
-        return false;
-    }
+	/**
+	 * Sets the spatial index. This could be useful if, for some reasons, you
+	 * want to work with a distinct spatial index (for example, a spatial index
+	 * which could makes nearest neighbour querys)
+	 * 
+	 * @param spatialIndex
+	 */
+	public void setISpatialIndex(ISpatialIndex spatialIndex) {
+		this.spatialIndex = spatialIndex;
+	}
 
-    public void setIsJoined(boolean hasJoin) {
-        bHasJoin = hasJoin;
-    }
+	public SelectableDataSource getRecordset() throws ReadDriverException {
+		if (!this.isAvailable())
+			return null;
 
-    /**
-     * @return Returns the spatialIndex.
-     */
-    public ISpatialIndex getISpatialIndex() {
-        return spatialIndex;
-    }
-    /**
-     * Sets the spatial index. This could be useful if, for some
-     * reasons, you want to work with a distinct spatial index
-     * (for example, a spatial index which could makes nearest
-     * neighbour querys)
-     * @param spatialIndex
-     */
-    public void setISpatialIndex(ISpatialIndex spatialIndex){
-        this.spatialIndex = spatialIndex;
-    }
+		throw new RuntimeException("Return adapter");
+	}
 
-    public SelectableDataSource getRecordset() throws ReadDriverException {
-        if (!this.isAvailable()) return null;
-        if (sds == null) {
+	public void setEditing(boolean b) throws StartEditionLayerException {
+		super.setEditing(b);
+		try {
+			if (b) {
+				VectorialEditableAdapter vea = null;
+				// TODO: Qu� pasa si hay m�s tipos de adapters?
+				// FJP: Se podr�a pasar como argumento el
+				// VectorialEditableAdapter
+				// que se quiera usar para evitar meter c�digo aqu� de este
+				// estilo.
+				if (getSource() instanceof VectorialDBAdapter) {
+					vea = new VectorialEditableDBAdapter();
+				} else if (this instanceof FLyrAnnotation) {
+					vea = new AnnotationEditableAdapter((FLyrAnnotation) this);
+				} else {
+					vea = new VectorialEditableAdapter();
+				}
+				vea.addEditionListener(this);
+				vea.setOriginalVectorialAdapter(getSource());
+				// azo: implementations of readablevectorial need
+				// references of projection and spatial index
+				vea.setCrs(getCrs());
+				vea.setSpatialIndex(spatialIndex);
 
-                SelectableDataSource ds = source.getRecordset();
+				// /vea.setSpatialIndex(getSpatialIndex());
+				// /vea.setFullExtent(getFullExtent());
+				vea.setCrsTransform(getCrsTransform());
+				vea.startEdition(EditionEvent.GRAPHIC);
+				setSource(vea);
+				getRecordset().setSelectionSupport(
+						vea.getOriginalAdapter().getRecordset()
+								.getSelectionSupport());
 
-                if (ds == null) {
-                    return null;
-                }
+			} else {
+				VectorialEditableAdapter vea = (VectorialEditableAdapter) getSource();
+				vea.removeEditionListener(this);
+				setSource(vea.getOriginalAdapter());
+			}
+			// Si tenemos una leyenda, hay que pegarle el cambiazo a su
+			// recordset
+			setRecordset(getSource().getRecordset());
+			if (getLegend() instanceof IVectorLegend) {
+				IVectorLegend ley = (IVectorLegend) getLegend();
+				ley.setDataSource(getSource().getRecordset());
+				ley.useDefaultSymbol(true);
+			}
+		} catch (ReadDriverException e) {
+			throw new StartEditionLayerException(getName(), e);
+		} catch (FieldNotFoundException e) {
+			throw new StartEditionLayerException(getName(), e);
+		} catch (StartWriterVisitorException e) {
+			throw new StartEditionLayerException(getName(), e);
+		}
 
-                sds = ds;
-                getSelectionSupport().addSelectionListener(this);
+		setSpatialCacheEnabled(b);
+		callEditionChanged(LayerEvent
+				.createEditionChangedEvent(this, "edition"));
 
-        }
-        return sds;
-    }
+	}
 
-    public void setEditing(boolean b) throws StartEditionLayerException {
-        super.setEditing(b);
-        try {
-            if (b) {
-                VectorialEditableAdapter vea = null;
-                // TODO: Qu� pasa si hay m�s tipos de adapters?
-                // FJP: Se podr�a pasar como argumento el
-                // VectorialEditableAdapter
-                // que se quiera usar para evitar meter c�digo aqu� de este
-                // estilo.
-                if (getSource() instanceof VectorialDBAdapter) {
-                    vea = new VectorialEditableDBAdapter();
-                } else if (this instanceof FLyrAnnotation) {
-                    vea = new AnnotationEditableAdapter(
-                            (FLyrAnnotation) this);
-                } else {
-                    vea = new VectorialEditableAdapter();
-                }
-                vea.addEditionListener(this);
-                vea.setOriginalVectorialAdapter(getSource());
-//				azo: implementations of readablevectorial need
-                //references of projection and spatial index
-                vea.setCrs(getCrs());
-                vea.setSpatialIndex(spatialIndex);
+	/**
+	 * Para cuando haces una uni�n, sustituyes el recorset por el nuevo. De
+	 * esta forma, podr�s poner leyendas basadas en el nuevo recordset
+	 * 
+	 * @param newSds
+	 */
+	public void setRecordset(SelectableDataSource newSds) {
+		throw new RuntimeException("Maybe set the DataStore? We should "
+				+ "free the previous one in that case");
+	}
 
+	public void clearSpatialCache() {
+		spatialCache.clearAll();
+	}
 
-                // /vea.setSpatialIndex(getSpatialIndex());
-                // /vea.setFullExtent(getFullExtent());
-                vea.setCrsTransform(getCrsTransform());
-                vea.startEdition(EditionEvent.GRAPHIC);
-                setSource(vea);
-                getRecordset().setSelectionSupport(
-                        vea.getOriginalAdapter().getRecordset()
-                                .getSelectionSupport());
+	public boolean isSpatialCacheEnabled() {
+		return spatialCacheEnabled;
+	}
 
-            } else {
-                VectorialEditableAdapter vea = (VectorialEditableAdapter) getSource();
-                vea.removeEditionListener(this);
-                setSource(vea.getOriginalAdapter());
-            }
-            // Si tenemos una leyenda, hay que pegarle el cambiazo a su
-            // recordset
-            setRecordset(getSource().getRecordset());
-            if (getLegend() instanceof IVectorLegend) {
-                IVectorLegend ley = (IVectorLegend) getLegend();
-                ley.setDataSource(getSource().getRecordset());
-                ley.useDefaultSymbol(true);
-            }
-        } catch (ReadDriverException e) {
-            throw new StartEditionLayerException(getName(),e);
-        } catch (FieldNotFoundException e) {
-            throw new StartEditionLayerException(getName(),e);
-        } catch (StartWriterVisitorException e) {
-            throw new StartEditionLayerException(getName(),e);
-        }
+	public void setSpatialCacheEnabled(boolean spatialCacheEnabled) {
+		this.spatialCacheEnabled = spatialCacheEnabled;
+	}
 
-        setSpatialCacheEnabled(b);
-        callEditionChanged(LayerEvent
-                .createEditionChangedEvent(this, "edition"));
+	public SpatialCache getSpatialCache() {
+		return spatialCache;
+	}
 
-    }
+	/**
+	 * Siempre es un numero mayor de 1000
+	 * 
+	 * @param maxFeatures
+	 */
+	public void setMaxFeaturesInEditionCache(int maxFeatures) {
+		if (maxFeatures > spatialCache.maxFeatures)
+			spatialCache.setMaxFeatures(maxFeatures);
 
-    /**
-     * Para cuando haces una uni�n, sustituyes el recorset por el nuevo. De esta
-     * forma, podr�s poner leyendas basadas en el nuevo recordset
-     *
-     * @param newSds
-     */
-    public void setRecordset(SelectableDataSource newSds) {
-    	// TODO: Deberiamos hacer comprobaciones del cambio
-        sds = newSds;
-		getSelectionSupport().addSelectionListener(this);
+	}
+
+	/**
+	 * This method returns a boolean that is used by the FPopMenu to make
+	 * visible the properties menu or not. It is visible by default, and if a
+	 * later don't have to show this menu only has to override this method.
+	 * 
+	 * @return If the properties menu is visible (or not)
+	 */
+	public boolean isPropertiesMenuVisible() {
+		return true;
+	}
+
+	public void reload() throws ReloadLayerException {
+		if (this.isEditing()) {
+			throw new ReloadLayerException(getName());
+		}
+		this.setAvailable(true);
+		super.reload();
 		this.updateDrawVersion();
-    }
+		try {
+			if (this.getLegend() == null) {
+				if (this.getRecordset().getDriver() instanceof WithDefaultLegend) {
+					WithDefaultLegend aux = (WithDefaultLegend) this
+							.getRecordset().getDriver();
+					this.setLegend((IVectorLegend) aux.getDefaultLegend());
+					this.setLabelingStrategy(aux.getDefaultLabelingStrategy());
+				} else {
+					this.setLegend(LegendFactory.createSingleSymbolLegend(this
+							.getShapeType()));
+				}
+			}
 
-    public void clearSpatialCache()
-    {
-        spatialCache.clearAll();
-    }
+		} catch (LegendLayerException e) {
+			this.setAvailable(false);
+			throw new ReloadLayerException(getName(), e);
+		} catch (ReadDriverException e) {
+			this.setAvailable(false);
+			throw new ReloadLayerException(getName(), e);
+		}
 
-    public boolean isSpatialCacheEnabled() {
-        return spatialCacheEnabled;
-    }
+	}
 
-    public void setSpatialCacheEnabled(boolean spatialCacheEnabled) {
-        this.spatialCacheEnabled = spatialCacheEnabled;
-    }
+	protected void setLoadSelection(XMLEntity xml) {
+		this.loadSelection = xml;
+	}
 
-    public SpatialCache getSpatialCache() {
-        return spatialCache;
-    }
+	protected void setLoadLegend(IVectorLegend legend) {
+		this.loadLegend = legend;
+	}
 
-    /**
-     * Siempre es un numero mayor de 1000
-     * @param maxFeatures
-     */
-    public void setMaxFeaturesInEditionCache(int maxFeatures) {
-        if (maxFeatures > spatialCache.maxFeatures)
-            spatialCache.setMaxFeatures(maxFeatures);
+	protected void putLoadSelection() throws XMLException {
+		if (this.loadSelection == null)
+			return;
+		try {
+			this.getRecordset().getSelectionSupport()
+					.setXMLEntity(this.loadSelection);
+		} catch (ReadDriverException e) {
+			throw new XMLException(e);
+		}
+		this.loadSelection = null;
 
-    }
+	}
 
-    /**
-     * This method returns a boolean that is used by the FPopMenu
-     * to make visible the properties menu or not. It is visible by
-     * default, and if a later don't have to show this menu only
-     * has to override this method.
-     * @return
-     * If the properties menu is visible (or not)
-     */
-    public boolean isPropertiesMenuVisible(){
-        return true;
-    }
+	protected void putLoadLegend() throws LegendLayerException {
+		if (this.loadLegend == null)
+			return;
+		this.setLegend(this.loadLegend);
+		this.loadLegend = null;
+	}
 
-    public void reload() throws ReloadLayerException {
-    	if(this.isEditing()){
-            throw new ReloadLayerException(getName());
-    	}
-        this.setAvailable(true);
-        super.reload();
-        this.updateDrawVersion();
-        try {
-            this.source.getDriver().reload();
-            if (this.getLegend() == null) {
-                if (this.getRecordset().getDriver() instanceof WithDefaultLegend) {
-                    WithDefaultLegend aux = (WithDefaultLegend) this.getRecordset().getDriver();
-                    this.setLegend((IVectorLegend) aux.getDefaultLegend());
-                    this.setLabelingStrategy(aux.getDefaultLabelingStrategy());
-                } else {
-                    this.setLegend(LegendFactory.createSingleSymbolLegend(
-                            this.getShapeType()));
-                }
-            }
+	protected void cleanLoadOptions() {
+		this.loadLegend = null;
+		this.loadSelection = null;
+	}
 
-        } catch (LegendLayerException e) {
-            this.setAvailable(false);
-            throw new ReloadLayerException(getName(),e);
-        } catch (ReadDriverException e) {
-            this.setAvailable(false);
-            throw new ReloadLayerException(getName(),e);
-        }
+	public boolean isWritable() {
+		VectorialDriver drv = getSource().getDriver();
+		if (!drv.isWritable())
+			return false;
+		if (drv instanceof IWriteable) {
+			IWriter writer = ((IWriteable) drv).getWriter();
+			if (writer != null) {
+				if (writer instanceof ISpatialWriter)
+					return true;
+			}
+		}
+		return false;
 
-    }
+	}
 
-    protected void setLoadSelection(XMLEntity xml) {
-        this.loadSelection = xml;
-    }
-
-    protected void setLoadLegend(IVectorLegend legend) {
-        this.loadLegend = legend;
-    }
-
-    protected void putLoadSelection() throws XMLException {
-        if (this.loadSelection == null) return;
-        try {
-            this.getRecordset().getSelectionSupport().setXMLEntity(this.loadSelection);
-        } catch (ReadDriverException e) {
-            throw new XMLException(e);
-        }
-        this.loadSelection = null;
-
-    }
-    protected void putLoadLegend() throws LegendLayerException {
-        if (this.loadLegend == null) return;
-        this.setLegend(this.loadLegend);
-        this.loadLegend = null;
-    }
-
-    protected void cleanLoadOptions() {
-        this.loadLegend = null;
-        this.loadSelection = null;
-    }
-
-    public boolean isWritable() {
-        VectorialDriver drv = getSource().getDriver();
-        if (!drv.isWritable())
-            return false;
-        if (drv instanceof IWriteable)
-        {
-            IWriter writer = ((IWriteable)drv).getWriter();
-            if (writer != null)
-            {
-                if (writer instanceof ISpatialWriter)
-                    return true;
-            }
-        }
-        return false;
-
-    }
-
-    public FLayer cloneLayer() throws Exception {
-        FLyrVect clonedLayer = new FLyrVect();
-        clonedLayer.setSource(getSource());
-        if (isJoined()) {
+	public FLayer cloneLayer() throws Exception {
+		FLyrVect clonedLayer = new FLyrVect(this.source);
+		clonedLayer.setSource(getSource());
+		if (isJoined()) {
 			clonedLayer.setIsJoined(true);
 			clonedLayer.setRecordset(getRecordset());
 		}
-        clonedLayer.setVisible(isVisible());
-        clonedLayer.setISpatialIndex(getISpatialIndex());
-        clonedLayer.setName(getName());
-        clonedLayer.setCrsTransform(getCrsTransform());
+		clonedLayer.setVisible(isVisible());
+		clonedLayer.setISpatialIndex(getISpatialIndex());
+		clonedLayer.setName(getName());
+		clonedLayer.setCrsTransform(getCrsTransform());
 
-        clonedLayer.setLegend((IVectorLegend)getLegend().cloneLegend());
+		clonedLayer.setLegend((IVectorLegend) getLegend().cloneLegend());
 
-        clonedLayer.setIsLabeled(isLabeled());
-        ILabelingStrategy labelingStrategy=getLabelingStrategy();
-        if (labelingStrategy!=null)
-        	clonedLayer.setLabelingStrategy(labelingStrategy);
+		clonedLayer.setIsLabeled(isLabeled());
+		ILabelingStrategy labelingStrategy = getLabelingStrategy();
+		if (labelingStrategy != null)
+			clonedLayer.setLabelingStrategy(labelingStrategy);
 
-        return clonedLayer;
-    }
+		return clonedLayer;
+	}
 
-    public SelectionSupport getSelectionSupport() {
+	public SelectionSupport getSelectionSupport() {
 		try {
 			return getRecordset().getSelectionSupport();
 		} catch (ReadDriverException e) {
@@ -1862,35 +1862,42 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 		return null;
 	}
 
-    protected boolean isOnePoint(AffineTransform graphicsTransform, ViewPort viewPort, double dpi, CartographicSupport csSym, IGeometry geom, int[] xyCoords) {
-    	return isOnePoint(graphicsTransform, viewPort, geom, xyCoords) && csSym.getCartographicSize(viewPort, dpi, (FShape)geom.getInternalShape()) <= 1;
-    }
+	protected boolean isOnePoint(AffineTransform graphicsTransform,
+			ViewPort viewPort, double dpi, CartographicSupport csSym,
+			IGeometry geom, int[] xyCoords) {
+		return isOnePoint(graphicsTransform, viewPort, geom, xyCoords)
+				&& csSym.getCartographicSize(viewPort, dpi,
+						(FShape) geom.getInternalShape()) <= 1;
+	}
 
-    protected boolean isOnePoint(AffineTransform graphicsTransform, ViewPort viewPort, IGeometry geom, int[] xyCoords) {
-    	boolean onePoint = false;
-    	int type=geom.getGeometryType() % FShape.Z;
-    	if (type!=FShape.POINT && type!=FShape.MULTIPOINT && type!=FShape.NULL) {
+	protected boolean isOnePoint(AffineTransform graphicsTransform,
+			ViewPort viewPort, IGeometry geom, int[] xyCoords) {
+		boolean onePoint = false;
+		int type = geom.getGeometryType() % FShape.Z;
+		if (type != FShape.POINT && type != FShape.MULTIPOINT
+				&& type != FShape.NULL) {
 
 			Rectangle2D geomBounds = geom.getBounds2D();
 
-		//	ICoordTrans ct = getCoordTrans();
+			// ICoordTrans ct = getCoordTrans();
 
 			// Se supone que la geometria ya esta
 			// repoyectada y no hay que hacer
 			// ninguna transformacion
-//			if (ct!=null) {
-////				geomBounds = ct.getInverted().convert(geomBounds);
-//				geomBounds = ct.convert(geomBounds);
-//			}
+			// if (ct!=null) {
+			// // geomBounds = ct.getInverted().convert(geomBounds);
+			// geomBounds = ct.convert(geomBounds);
+			// }
 
 			double dist1Pixel = viewPort.getDist1pixel();
 
-			onePoint = (geomBounds.getWidth()  <= dist1Pixel
-					 && geomBounds.getHeight() <= dist1Pixel);
+			onePoint = (geomBounds.getWidth() <= dist1Pixel && geomBounds
+					.getHeight() <= dist1Pixel);
 
 			if (onePoint) {
 				// avoid out of range exceptions
-				FPoint2D p = new FPoint2D(geomBounds.getMinX(), geomBounds.getMinY());
+				FPoint2D p = new FPoint2D(geomBounds.getMinX(),
+						geomBounds.getMinY());
 				p.transform(viewPort.getAffineTransform());
 				p.transform(graphicsTransform);
 				xyCoords[0] = (int) p.getX();
@@ -1899,102 +1906,109 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 			}
 
 		}
-    	return onePoint;
-    }
-    /*
-     * jaume. Stuff from ILabeled.
-     */
-    private boolean isLabeled;
-    private ILabelingStrategy strategy;
+		return onePoint;
+	}
 
-    public boolean isLabeled() {
-        return isLabeled;
-    }
+	/*
+	 * jaume. Stuff from ILabeled.
+	 */
+	private boolean isLabeled;
+	private ILabelingStrategy strategy;
 
-    public void setIsLabeled(boolean isLabeled) {
-        this.isLabeled = isLabeled;
-    }
+	public boolean isLabeled() {
+		return isLabeled;
+	}
 
-    public ILabelingStrategy getLabelingStrategy() {
-        return strategy;
-    }
+	public void setIsLabeled(boolean isLabeled) {
+		this.isLabeled = isLabeled;
+	}
 
-    public void setLabelingStrategy(ILabelingStrategy strategy) {
-        this.strategy = strategy;
-        try {
+	public ILabelingStrategy getLabelingStrategy() {
+		return strategy;
+	}
+
+	public void setLabelingStrategy(ILabelingStrategy strategy) {
+		this.strategy = strategy;
+		try {
 			strategy.setLayer(this);
 		} catch (ReadDriverException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
+	}
 
-    public void drawLabels(BufferedImage image, Graphics2D g, ViewPort viewPort,
-    		Cancellable cancel, double scale, double dpi) throws ReadDriverException {
-        if (strategy!=null && isWithinScale(scale)) {
-        	strategy.draw(image, g, viewPort, cancel, dpi);
-        }
-    }
-    public void printLabels(Graphics2D g, ViewPort viewPort,
-    		Cancellable cancel, double scale, PrintRequestAttributeSet properties) throws ReadDriverException {
-        if (strategy!=null) {
-        	strategy.print(g, viewPort, cancel, properties);
-        }
-    }
+	public void drawLabels(BufferedImage image, Graphics2D g,
+			ViewPort viewPort, Cancellable cancel, double scale, double dpi)
+			throws ReadDriverException {
+		if (strategy != null && isWithinScale(scale)) {
+			strategy.draw(image, g, viewPort, cancel, dpi);
+		}
+	}
 
+	public void printLabels(Graphics2D g, ViewPort viewPort,
+			Cancellable cancel, double scale,
+			PrintRequestAttributeSet properties) throws ReadDriverException {
+		if (strategy != null) {
+			strategy.print(g, viewPort, cancel, properties);
+		}
+	}
 
-    //M�todos para el uso de HyperLinks en capas FLyerVect
+	// M�todos para el uso de HyperLinks en capas FLyerVect
 
-    /**
-     * Return true, because a Vectorial Layer supports HyperLink
-     */
-    public boolean allowLinks()
-    {
-    	return true;
-    }
+	/**
+	 * Return true, because a Vectorial Layer supports HyperLink
+	 */
+	public boolean allowLinks() {
+		return true;
+	}
 
-    /**
-	 * Returns an instance of AbstractLinkProperties that contains the information
-	 * of the HyperLink
+	/**
+	 * Returns an instance of AbstractLinkProperties that contains the
+	 * information of the HyperLink
+	 * 
 	 * @return Abstra
 	 */
-    public AbstractLinkProperties getLinkProperties()
-    {
-    	return linkProperties;
-    }
+	public AbstractLinkProperties getLinkProperties() {
+		return linkProperties;
+	}
 
-    /**
-	 * Provides an array with URIs. Returns one URI by geometry that includes the point
-	 * in its own geometry limits with a allowed tolerance.
-	 * @param layer, the layer
-	 * @param point, the point to check that is contained or not in the geometries in the layer
-	 * @param tolerance, the tolerance allowed. Allowed margin of error to detect if the  point
-	 * 		is contained in some geometries of the layer
+	/**
+	 * Provides an array with URIs. Returns one URI by geometry that includes
+	 * the point in its own geometry limits with a allowed tolerance.
+	 * 
+	 * @param layer
+	 *            , the layer
+	 * @param point
+	 *            , the point to check that is contained or not in the
+	 *            geometries in the layer
+	 * @param tolerance
+	 *            , the tolerance allowed. Allowed margin of error to detect if
+	 *            the point is contained in some geometries of the layer
 	 * @return
 	 */
-    public URI[] getLink(Point2D point, double tolerance)
-    {
-    	//return linkProperties.getLink(this)
-    	return linkProperties.getLink(this,point,tolerance);
-    }
-//    /**
-//     * @deprecated Don�t use Strategy, you should be use iterators.
-//     */
-//	public boolean isUseStrategy() {
-//		return useStrategy;
-//	}
-//	/**
-//     * @deprecated Don�t use Strategy, you should be use iterators.
-//     */
-//	public void setUseStrategy(boolean useStrategy) {
-//		this.useStrategy = useStrategy;
-//	}
-//
-//	@Override
-//	public void load() throws LoadLayerException {
-//		super.load();
-//		useStrategy=forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD;
-//	}
+	public URI[] getLink(Point2D point, double tolerance) {
+		// return linkProperties.getLink(this)
+		return linkProperties.getLink(this, point, tolerance);
+	}
+
+	// /**
+	// * @deprecated Don�t use Strategy, you should be use iterators.
+	// */
+	// public boolean isUseStrategy() {
+	// return useStrategy;
+	// }
+	// /**
+	// * @deprecated Don�t use Strategy, you should be use iterators.
+	// */
+	// public void setUseStrategy(boolean useStrategy) {
+	// this.useStrategy = useStrategy;
+	// }
+	//
+	// @Override
+	// public void load() throws LoadLayerException {
+	// super.load();
+	// useStrategy=forTestOnlyVariableUseIterators_REMOVE_THIS_FIELD;
+	// }
 
 	public void selectionChanged(SelectionEvent e) {
 		this.updateDrawVersion();
@@ -2018,7 +2032,7 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 	}
 
 	public void processEvent(EditionEvent e) {
-		if (e.getChangeType()== e.ROW_EDITION){
+		if (e.getChangeType() == e.ROW_EDITION) {
 			this.updateDrawVersion();
 		}
 
@@ -2026,76 +2040,77 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 
 	public void legendCleared(LegendClearEvent event) {
 		this.updateDrawVersion();
-        LegendChangedEvent e = LegendChangedEvent.createLegendChangedEvent(
-                legend, legend);
-        this.callLegendChanged(e);
+		LegendChangedEvent e = LegendChangedEvent.createLegendChangedEvent(
+				legend, legend);
+		this.callLegendChanged(e);
 	}
 
 	public boolean symbolChanged(SymbolLegendEvent e) {
 		this.updateDrawVersion();
-        LegendChangedEvent event = LegendChangedEvent.createLegendChangedEvent(
-                legend, legend);
-        this.callLegendChanged(event);
-        return true;
+		LegendChangedEvent event = LegendChangedEvent.createLegendChangedEvent(
+				legend, legend);
+		this.callLegendChanged(event);
+		return true;
 	}
+
 	public String getTypeStringVectorLayer() throws ReadDriverException {
-		String typeString="";
-		int typeShape=((FLyrVect)this).getShapeType();
-		if (FShape.MULTI==typeShape){
-			ReadableVectorial rv=((FLyrVect)this).getSource();
-			int i=0;
-			boolean isCorrect=false;
-			while(rv.getShapeCount()>i && !isCorrect){
-				IGeometry geom=rv.getShape(i);
-				if (geom==null){
+		String typeString = "";
+		int typeShape = ((FLyrVect) this).getShapeType();
+		if (FShape.MULTI == typeShape) {
+			ReadableVectorial rv = ((FLyrVect) this).getSource();
+			int i = 0;
+			boolean isCorrect = false;
+			while (rv.getShapeCount() > i && !isCorrect) {
+				IGeometry geom = rv.getShape(i);
+				if (geom == null) {
 					i++;
 					continue;
 				}
-				isCorrect=true;
-				if ((geom.getGeometryType() & FShape.Z) == FShape.Z){
-					typeString="Geometries3D";
-				}else{
-					typeString="Geometries2D";
- 				}
- 			}
-		}else{
-			ReadableVectorial rv=((FLyrVect)this).getSource();
-			int i=0;
-			boolean isCorrect=false;
-			while(rv.getShapeCount()>i && !isCorrect){
-				IGeometry geom=rv.getShape(i);
-				if (geom==null){
+				isCorrect = true;
+				if ((geom.getGeometryType() & FShape.Z) == FShape.Z) {
+					typeString = "Geometries3D";
+				} else {
+					typeString = "Geometries2D";
+				}
+			}
+		} else {
+			ReadableVectorial rv = ((FLyrVect) this).getSource();
+			int i = 0;
+			boolean isCorrect = false;
+			while (rv.getShapeCount() > i && !isCorrect) {
+				IGeometry geom = rv.getShape(i);
+				if (geom == null) {
 					i++;
 					continue;
 				}
-				isCorrect=true;
-				int type=geom.getGeometryType();
-				if (FShape.POINT == type){
-					typeString="Point2D";
-				} else if (FShape.LINE == type){
-					typeString="Line2D";
-				} else if (FShape.POLYGON == type){
-					typeString="Polygon2D";
-				} else if (FShape.MULTIPOINT == type){
-					typeString="MultiPint2D";
-				} else if ((FShape.POINT | FShape.Z)  == type ){
-					typeString="Point3D";
-				} else if ((FShape.LINE | FShape.Z)  == type ){
-					typeString="Line3D";
-				} else if ((FShape.POLYGON | FShape.Z)  == type ){
-					typeString="Polygon3D";
-				} else if ((FShape.MULTIPOINT | FShape.Z)  == type ){
-					typeString="MultiPoint3D";
-				} else if ((FShape.POINT | FShape.M)  == type ){
-					typeString="PointM";
-				} else if ((FShape.LINE | FShape.M)  == type ){
-					typeString="LineM";
-				} else if ((FShape.POLYGON | FShape.M)  == type ){
-					typeString="PolygonM";
-				} else if ((FShape.MULTIPOINT | FShape.M)  == type ){
-					typeString="MultiPointM";
-				} else if ((FShape.MULTI | FShape.M)  == type ){
-					typeString="M";
+				isCorrect = true;
+				int type = geom.getGeometryType();
+				if (FShape.POINT == type) {
+					typeString = "Point2D";
+				} else if (FShape.LINE == type) {
+					typeString = "Line2D";
+				} else if (FShape.POLYGON == type) {
+					typeString = "Polygon2D";
+				} else if (FShape.MULTIPOINT == type) {
+					typeString = "MultiPint2D";
+				} else if ((FShape.POINT | FShape.Z) == type) {
+					typeString = "Point3D";
+				} else if ((FShape.LINE | FShape.Z) == type) {
+					typeString = "Line3D";
+				} else if ((FShape.POLYGON | FShape.Z) == type) {
+					typeString = "Polygon3D";
+				} else if ((FShape.MULTIPOINT | FShape.Z) == type) {
+					typeString = "MultiPoint3D";
+				} else if ((FShape.POINT | FShape.M) == type) {
+					typeString = "PointM";
+				} else if ((FShape.LINE | FShape.M) == type) {
+					typeString = "LineM";
+				} else if ((FShape.POLYGON | FShape.M) == type) {
+					typeString = "PolygonM";
+				} else if ((FShape.MULTIPOINT | FShape.M) == type) {
+					typeString = "MultiPointM";
+				} else if ((FShape.MULTI | FShape.M) == type) {
+					typeString = "M";
 				}
 
 			}
@@ -2103,42 +2118,166 @@ public class FLyrVect extends FLyrDefault implements ILabelable,
 		}
 		return "";
 	}
+
 	public int getTypeIntVectorLayer() throws ReadDriverException {
-		int typeInt=0;
-		int typeShape=((FLyrVect)this).getShapeType();
-		if (FShape.MULTI==typeShape){
-			ReadableVectorial rv=((FLyrVect)this).getSource();
-			int i=0;
-			boolean isCorrect=false;
-			while(rv.getShapeCount()>i && !isCorrect){
-				IGeometry geom=rv.getShape(i);
-				if (geom==null){
+		int typeInt = 0;
+		int typeShape = ((FLyrVect) this).getShapeType();
+		if (FShape.MULTI == typeShape) {
+			ReadableVectorial rv = ((FLyrVect) this).getSource();
+			int i = 0;
+			boolean isCorrect = false;
+			while (rv.getShapeCount() > i && !isCorrect) {
+				IGeometry geom = rv.getShape(i);
+				if (geom == null) {
 					i++;
 					continue;
 				}
-				isCorrect=true;
-				if ((geom.getGeometryType() & FShape.Z) == FShape.Z){
-					typeInt=FShape.MULTI | FShape.Z;
-				}else{
-					typeInt=FShape.MULTI;
+				isCorrect = true;
+				if ((geom.getGeometryType() & FShape.Z) == FShape.Z) {
+					typeInt = FShape.MULTI | FShape.Z;
+				} else {
+					typeInt = FShape.MULTI;
 				}
 			}
-		}else{
-			ReadableVectorial rv=((FLyrVect)this).getSource();
-			int i=0;
-			boolean isCorrect=false;
-			while(rv.getShapeCount()>i && !isCorrect){
-				IGeometry geom=rv.getShape(i);
-				if (geom==null){
+		} else {
+			ReadableVectorial rv = ((FLyrVect) this).getSource();
+			int i = 0;
+			boolean isCorrect = false;
+			while (rv.getShapeCount() > i && !isCorrect) {
+				IGeometry geom = rv.getShape(i);
+				if (geom == null) {
 					i++;
 					continue;
 				}
-				isCorrect=true;
-				int type=geom.getGeometryType();
-				typeInt=type;
+				isCorrect = true;
+				int type = geom.getGeometryType();
+				typeInt = type;
 			}
 			return typeInt;
 		}
 		return typeInt;
 	}
- }
+
+	/**
+	 * DataStore implementation that delegates on an inner DataStore instance
+	 * and provides some utility methods.
+	 * 
+	 * @author fergonco
+	 */
+	private class ExtendedDataStore implements DataStore {
+
+		private DataStore dataStore;
+		private String featureName;
+
+		public ExtendedDataStore(DataStore dataStore, String featureName) {
+			this.dataStore = dataStore;
+			this.featureName = featureName;
+		}
+
+		/**
+		 * Returns the index of the first attribute whose local name is equal to
+		 * the specified name
+		 * 
+		 * @param fieldName
+		 * @return
+		 * @throws IOException
+		 */
+		public int getFieldIndexByName(String fieldName) throws IOException {
+			SimpleFeatureType schema = dataStore.getSchema(this.featureName);
+			List<AttributeDescriptor> attributeDescriptors = schema
+					.getAttributeDescriptors();
+			for (int i = 0; i < attributeDescriptors.size(); i++) {
+				AttributeDescriptor attributeDescriptor = attributeDescriptors
+						.get(i);
+
+				if (attributeDescriptor.getLocalName().equals(fieldName)) {
+					return i;
+				}
+			}
+			return 0;
+		}
+
+		public SimpleFeatureSource getDefaultFeatureSource() throws IOException {
+			return dataStore.getFeatureSource(dataStore.getTypeNames()[0]);
+		}
+
+		//
+		// Delegate methods follow
+		//
+
+		public void createSchema(SimpleFeatureType arg0) throws IOException {
+			dataStore.createSchema(arg0);
+		}
+
+		public void dispose() {
+			dataStore.dispose();
+		}
+
+		public FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(
+				Query arg0, Transaction arg1) throws IOException {
+			return dataStore.getFeatureReader(arg0, arg1);
+		}
+
+		public SimpleFeatureSource getFeatureSource(Name arg0)
+				throws IOException {
+			return dataStore.getFeatureSource(arg0);
+		}
+
+		public SimpleFeatureSource getFeatureSource(String arg0)
+				throws IOException {
+			return dataStore.getFeatureSource(arg0);
+		}
+
+		public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriter(
+				String arg0, Filter arg1, Transaction arg2) throws IOException {
+			return dataStore.getFeatureWriter(arg0, arg1, arg2);
+		}
+
+		public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriter(
+				String arg0, Transaction arg1) throws IOException {
+			return dataStore.getFeatureWriter(arg0, arg1);
+		}
+
+		public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriterAppend(
+				String arg0, Transaction arg1) throws IOException {
+			return dataStore.getFeatureWriterAppend(arg0, arg1);
+		}
+
+		public ServiceInfo getInfo() {
+			return dataStore.getInfo();
+		}
+
+		public LockingManager getLockingManager() {
+			return dataStore.getLockingManager();
+		}
+
+		public List<Name> getNames() throws IOException {
+			return dataStore.getNames();
+		}
+
+		public SimpleFeatureType getSchema(Name arg0) throws IOException {
+			return dataStore.getSchema(arg0);
+		}
+
+		public SimpleFeatureType getSchema(String arg0) throws IOException {
+			return dataStore.getSchema(arg0);
+		}
+
+		public String[] getTypeNames() throws IOException {
+			return dataStore.getTypeNames();
+		}
+
+		public void updateSchema(Name arg0, SimpleFeatureType arg1)
+				throws IOException {
+			dataStore.updateSchema(arg0, arg1);
+		}
+
+		public void updateSchema(String arg0, SimpleFeatureType arg1)
+				throws IOException {
+			dataStore.updateSchema(arg0, arg1);
+		}
+
+		// Meaningful methods at the top please
+
+	}
+}

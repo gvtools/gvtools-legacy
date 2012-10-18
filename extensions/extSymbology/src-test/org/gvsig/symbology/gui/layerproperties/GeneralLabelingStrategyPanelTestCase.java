@@ -41,14 +41,13 @@
 package org.gvsig.symbology.gui.layerproperties;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.gvsig.symbology.AllTests;
 
-import com.iver.cit.gvsig.exceptions.layers.LoadLayerException;
 import com.iver.cit.gvsig.fmap.MapContext;
-import com.iver.cit.gvsig.fmap.featureiterators.FeatureIteratorTest;
 import com.iver.cit.gvsig.fmap.layers.FLayer;
-import com.iver.cit.gvsig.fmap.layers.LayerFactory;
+import com.iver.cit.gvsig.fmap.layers.GTLayerFactory;
 import com.iver.cit.gvsig.project.documents.view.legend.gui.ILabelingStrategyPanel;
 
 public class GeneralLabelingStrategyPanelTestCase extends LabelingPanelTestCase {
@@ -61,11 +60,10 @@ public class GeneralLabelingStrategyPanelTestCase extends LabelingPanelTestCase 
 	public FLayer getTestLayer() {
 		AllTests.setUpDrivers();
 		try {
-			return LayerFactory.createLayer("test layer",
-					FeatureIteratorTest.SHP_DRIVER_NAME,
+			return GTLayerFactory.createVectorLayer("test layer",
 					new File("src-test/test-data/layer-sample-files/cons_punt.shp"),
 					com.iver.cit.gvsig.fmap.AllTests.TEST_DEFAULT_MERCATOR_PROJECTION);
-		} catch (LoadLayerException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}

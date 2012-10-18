@@ -91,8 +91,6 @@ public class DifferenceTest extends TestCase {
 			throw new Exception("Can't find drivers path: " + fwAndamiDriverPath);
 
 		LayerFactory.setDriversPath(baseDriversPath.getAbsolutePath());
-		if (LayerFactory.getDM().getDriverNames().length < 1)
-			throw new Exception("Can't find drivers in path: " + fwAndamiDriverPath);
 	}
 
 

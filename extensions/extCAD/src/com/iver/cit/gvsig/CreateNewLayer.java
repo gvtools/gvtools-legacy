@@ -1,21 +1,15 @@
 package com.iver.cit.gvsig;
 
-import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
 
 import com.hardcode.driverManager.Driver;
-import com.hardcode.driverManager.DriverLoadException;
-import com.hardcode.driverManager.DriverManager;
 import com.iver.andami.PluginServices;
-import com.iver.andami.messages.NotificationManager;
 import com.iver.andami.plugins.Extension;
 import com.iver.andami.ui.wizard.WizardAndami;
 import com.iver.cit.gvsig.fmap.MapControl;
 import com.iver.cit.gvsig.fmap.drivers.jdbc.postgis.PostGisDriver;
-import com.iver.cit.gvsig.fmap.edition.ISpatialWriter;
+import com.iver.cit.gvsig.fmap.drivers.shp.IndexedShpDriver;
 import com.iver.cit.gvsig.fmap.edition.IWriteable;
-import com.iver.cit.gvsig.fmap.layers.LayerFactory;
 import com.iver.cit.gvsig.gui.cad.CADToolAdapter;
 import com.iver.cit.gvsig.gui.cad.MyFinishAction;
 import com.iver.cit.gvsig.gui.cad.panels.ChooseGeometryType;
@@ -46,7 +40,6 @@ public void execute(String actionCommand) {
 				.getActiveWindow();
 
 		if (f instanceof View) {
-			try {
 				View vista = (View) f;
 
 				LOGO = new javax.swing.ImageIcon(this.getClass()
@@ -66,15 +59,6 @@ public void execute(String actionCommand) {
 				 */
 				WizardAndami wizard = new WizardAndami(LOGO);
 
-				DriverManager writerManager = LayerFactory.getDM();
-				ArrayList spatialDrivers = new ArrayList();
-				String[] writerNames = writerManager.getDriverNames();
-				for (int i = 0; i < writerNames.length; i++) {
-					Driver drv = writerManager.getDriver(writerNames[i]);
-					if (drv instanceof ISpatialWriter)
-						spatialDrivers.add(drv.getName());
-				}
-
 				ChooseGeometryType panelChoose = new ChooseGeometryType(wizard
 						.getWizardComponents());
 				JPanelFieldDefinition panelFields = new JPanelFieldDefinition(
@@ -84,7 +68,7 @@ public void execute(String actionCommand) {
 					wizard.getWizardComponents().addWizardPanel(panelChoose);
 					wizard.getWizardComponents().addWizardPanel(panelFields);
 
-					Driver driver = writerManager.getDriver("gvSIG shp driver");
+					Driver driver = new IndexedShpDriver();
 					panelFields.setWriter(((IWriteable) driver).getWriter());
 					panelChoose.setDriver(driver);
 					FileBasedPanel filePanel = new FileBasedPanel(wizard
@@ -99,8 +83,7 @@ public void execute(String actionCommand) {
 				if (actionCommand.equals("POSTGIS")) {
 					wizard.getWizardComponents().addWizardPanel(panelChoose);
 					wizard.getWizardComponents().addWizardPanel(panelFields);
-					Driver driver = writerManager
-							.getDriver(PostGisDriver.NAME);
+					Driver driver = new PostGisDriver();
 					panelChoose.setDriver(driver);
 					panelFields.setWriter(((IWriteable) driver).getWriter());
 					
@@ -131,9 +114,6 @@ public void execute(String actionCommand) {
 				// wizardFrame.show();
 				PluginServices.getMDIManager().addWindow(wizard);
 				// System.out.println("Salgo con " + panelChoose.getLayerName());
-			} catch (DriverLoadException e) {
-				NotificationManager.addError(e.getMessage(),e);
-			}
 		}
 	}
 	/**
