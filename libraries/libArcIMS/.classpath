@@ -14,5 +14,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extSymbology"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt-referencing-8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

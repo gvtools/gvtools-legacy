@@ -1,60 +1,81 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.gvsig</groupId>
 	<artifactId>libProjection</artifactId>
 	<packaging>jar</packaging>
-	<version>1.9-SNAPSHOT</version>
+	<version>2.0-SNAPSHOT</version>
 	<name>libProjection</name>
 	<url>http://gvsig.org</url>
 	<parent>
 		<groupId>org.gvsig</groupId>
-		<artifactId>gvsig-library-base-pom</artifactId>
-		<version>1.9-SNAPSHOT</version>
+		<artifactId>gvSIGCE</artifactId>
+		<version>2.0-SNAPSHOT</version>
 	</parent>
-	<properties>
-        <build-dir>${basedir}/../build</build-dir>
-    </properties>
 	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.gvsig</groupId>
 			<artifactId>libInternationalization</artifactId>
-			<version>1.9-SNAPSHOT</version>
+			<version>2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>geoapi</artifactId>
+			<artifactId>jsr-275-1.0-beta-2</artifactId>
 			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/libraries/libFMap/lib/jsr-275-1.0-beta-2.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>gt2-legacy</artifactId>
+			<artifactId>gt-referencing-8.0</artifactId>
 			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/libraries/libFMap/lib/gt-referencing-8.0.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>gt2-main</artifactId>
+			<artifactId>gt-metadata-8.0</artifactId>
 			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/libraries/libFMap/lib/gt-metadata-8.0.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>geojava</artifactId>
+			<artifactId>gt-opengis-8.0</artifactId>
 			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/libraries/libFMap/lib/gt-opengis-8.0.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>javax.media</groupId>
-	        <artifactId>jai_core</artifactId>
-        	<version>1.1.3</version>
-      	</dependency>
-      	<dependency>
-        	<groupId>javax.media</groupId>
-        	<artifactId>jai_codec</artifactId>
-        	<version>1.1.3</version>
-      	</dependency>
+			<groupId>org.gvsig.legacy</groupId>
+			<artifactId>org.gvsig.raster</artifactId>
+			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/libraries/libFMap/lib/org.gvsig.raster.jar</systemPath>
+		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>src-test</testSourceDirectory>
+		<outputDirectory>bin</outputDirectory>
+		<testOutputDirectory>bin-test</testOutputDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12.4</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>

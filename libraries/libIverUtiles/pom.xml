@@ -4,54 +4,107 @@
 	<groupId>org.gvsig</groupId>
 	<artifactId>libIverUtiles</artifactId>
 	<packaging>jar</packaging>
-	<version>1.9-SNAPSHOT</version>
+	<version>2.0-SNAPSHOT</version>
 	<name>libIverUtiles</name>
 	<url>http://gvsig.org</url>
 	<parent>
 		<groupId>org.gvsig</groupId>
-		<artifactId>gvsig-library-base-pom</artifactId>
-		<version>1.9-SNAPSHOT</version>
+		<artifactId>gvSIGCE</artifactId>
+		<version>2.0-SNAPSHOT</version>
 	</parent>
-	<properties>
-        <build-dir>${basedir}/../build</build-dir>
-    </properties>
 	<dependencies>
 		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>castor</artifactId>
-			<version>gvsig</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>commons-dbcp</artifactId>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>mysql-connector-java-3.1.7-bin</artifactId>
 			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/libraries/libFMap/lib/mysql-connector-java-3.1.7-bin.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>commons-pool</artifactId>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>postgis-jdbc-driver</artifactId>
 			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/libraries/libFMap/lib/postgis-jdbc-driver.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>crimson</artifactId>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>postgresql-74.213</artifactId>
 			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/libraries/libFMap/lib/postgresql-74.213.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>commons-collections-3.1</artifactId>
+			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/frameworks/_fwAndami/lib/commons-collections-3.1.zip</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>commons-dbcp-1.0-dev-20020806</artifactId>
+			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/frameworks/_fwAndami/lib/commons-dbcp-1.0-dev-20020806.zip</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>commons-pool-1.2</artifactId>
+			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/frameworks/_fwAndami/lib/commons-pool-1.2.zip</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>castor-0.9.5.3-xml</artifactId>
+			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/frameworks/_fwAndami/lib/castor-0.9.5.3-xml.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>andami</artifactId>
+			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${repo-root}/frameworks/_fwAndami/andami.jar</systemPath>
 		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>src-test</testSourceDirectory>
+		<outputDirectory>bin</outputDirectory>
+		<testOutputDirectory>bin-test</testOutputDirectory>
 		<resources>
 			<resource>
 				<directory>src</directory>
-			<includes>
-				<include>**/*.gif</include>
-				<include>**/*.png</include>
-				<include>**/*.PNG</include>
-				<include> **/*.bmp</include>
-				<include> **/*.jpg</include>
-				<include> **/*.jpeg</include>
-			</includes>
+				<includes>
+					<include>**/*.gif</include>
+					<include>**/*.png</include>
+					<include>**/*.PNG</include>
+					<include> **/*.bmp</include>
+					<include> **/*.jpg</include>
+					<include> **/*.jpeg</include>
+				</includes>
 			</resource>
 		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12.4</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>
