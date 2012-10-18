@@ -8,23 +8,22 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/libIverUtiles"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
-	<classpathentry kind="lib" path="/libFMap/lib/remote-clients.jar" sourcepath="/libRemoteServices"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar" sourcepath="/libUIComponent/src"/>
 	<classpathentry kind="lib" path="lib/kxml2.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.gpe.gml.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.gpe.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.gpe.kml.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.gpe.xml.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.xmlschema.jar"/>
 	<classpathentry kind="lib" path="lib/stax-1.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/stax-api-1.0.1.jar"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar" sourcepath="/libExceptions/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extCAD"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gt-opengis-8.0.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gt-main-8.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libIverUtiles"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libUIComponent"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libRemoteServices"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGPE"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGPE-GML"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGPE-KML"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libGPE-XML"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

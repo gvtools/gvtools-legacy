@@ -4,11 +4,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/Utiles/src"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/mysql-connector-java-3.1.7-bin.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/ojdbc14.jar"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/JWizardComponent.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
@@ -16,5 +14,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libGDBMS"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gt-referencing-8.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libIverUtiles"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

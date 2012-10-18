@@ -3,18 +3,17 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/gvsig-i18n.jar" sourcepath="/libInternationalization/src"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/libIverUtiles"/>
 	<classpathentry kind="lib" path="/_fwAndami/andami.jar"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar" sourcepath="/libExceptions"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar" sourcepath="/libUIComponent/src"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.8.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libGeocoding"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/castor-0.9.5.3-xml.jar"/>
-	<classpathentry kind="lib" path="lib/org.gvsig.geocoding.normalization.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gdbms-0.8-SNAPSHOT.jar" sourcepath="/libGDBMS"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
 	<classpathentry kind="lib" path="/libFMap/lib/driver-manager-1.1.jar" sourcepath="/libDriverManager"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libIverUtiles"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libUIComponent"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libInternationalization"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

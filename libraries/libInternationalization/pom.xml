@@ -20,11 +20,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>kxml2-2.2.2</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${repo-root}/libraries/libGDBMS/lib/kxml2-2.2.2.jar</systemPath>
+			<groupId>kxml2</groupId>
+			<artifactId>kxml2</artifactId>
+			<version>2.2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>

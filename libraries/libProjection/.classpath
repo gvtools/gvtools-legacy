@@ -1,15 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry including="**/*.java" kind="src" output="bin-test" path="src-test"/>
-	<classpathentry including="**/*.java" kind="src" path="src"/>
-	<classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/libraries/libFMap/lib/gt-metadata-8.0.jar"/>
-	<classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/libraries/libFMap/lib/gt-opengis-8.0.jar"/>
-	<classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/libraries/libFMap/lib/gt-referencing-8.0.jar"/>
-	<classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/libraries/libFMap/lib/jsr-275-1.0-beta-2.jar"/>
-	<classpathentry kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar" sourcepath="M2_REPO/junit/junit/3.8.1/junit-3.8.1-sources.jar"/>
-	<classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/libraries/libGDBMS/lib/kxml2-2.2.2.jar"/>
-	<classpathentry kind="src" path="/libInternationalization"/>
-	<classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.8/log4j-1.2.8.jar" sourcepath="M2_REPO/log4j/log4j/1.2.8/log4j-1.2.8-sources.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="output" path="bin"/>
+  <classpathentry kind="src" path="src-test" output="bin-test" including="**/*.java"/>
+  <classpathentry kind="src" path="src" including="**/*.java"/>
+  <classpathentry kind="output" path="bin"/>
+  <classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/libraries/libFMap/lib/gt-metadata-8.0.jar"/>
+  <classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/libraries/libFMap/lib/gt-opengis-8.0.jar"/>
+  <classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/libraries/libFMap/lib/gt-referencing-8.0.jar"/>
+  <classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/libraries/libFMap/lib/jsr-275-1.0-beta-2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar" sourcepath="M2_REPO/junit/junit/3.8.1/junit-3.8.1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/net/sf/kxml/kxml2/2.2.2/kxml2-2.2.2.jar"/>
+  <classpathentry kind="src" path="/libInternationalization"/>
+  <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.8/log4j-1.2.8.jar" sourcepath="M2_REPO/log4j/log4j/1.2.8/log4j-1.2.8-sources.jar"/>
+  <classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/libraries/libFMap/lib/org.gvsig.raster.jar"/>
+  <classpathentry kind="var" path="M2_REPO/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 </classpath>

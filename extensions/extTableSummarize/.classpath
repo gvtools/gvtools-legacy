@@ -7,12 +7,12 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libUIComponent"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.exceptions.jar"/>
 	<classpathentry kind="lib" path="lib/swing-layout-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/swingx-2007_07_22.jar"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/libIverUtiles"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/log4j-1.2.8.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libDriverManager"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libGDBMS"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libIverUtiles"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

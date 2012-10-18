@@ -6,9 +6,9 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libFMap"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/org.gvsig.ui.jar"/>
 	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gt-referencing-8.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libUIComponent"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

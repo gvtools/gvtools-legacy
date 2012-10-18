@@ -14,8 +14,6 @@
 	<classpathentry kind="lib" path="lib/xalan.jar"/>
 	<classpathentry kind="lib" path="lib/amic-util.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/xerces_2_5_0.jar"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/iver-utiles.jar" sourcepath="/libIverUtiles"/>
-	<classpathentry kind="lib" path="/_fwAndami/lib/gvsig-i18n.jar"/>
 	<classpathentry kind="lib" path="/_fwAndami/lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/a2j_v2-2.0.9.jar"/>
 	<classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
@@ -26,7 +24,6 @@
 	<classpathentry kind="lib" path="lib/origin_MODIFIED.jar"/>
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="var" path="JUNIT_HOME/junit.jar" sourcepath="ECLIPSE_HOME/plugins/org.eclipse.jdt.source_3.1.1/src/org.junit_3.8.1/junitsrc.zip"/>
-	<classpathentry kind="lib" path="/libFMap/lib/remote-clients.jar"/>
 	<classpathentry kind="lib" path="/libFMap/lib/kxml2.jar"/>
 	<classpathentry kind="lib" path="lib/geonames-1.0-java5.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
@@ -35,5 +32,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/libGPE-GML"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libGPE-XML"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libIverUtiles"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libInternationalization"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libRemoteServices"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
