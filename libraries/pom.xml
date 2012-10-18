@@ -10,7 +10,6 @@
 	<modules>
 		<module>libDriverManager</module>
 		<module>libExceptions</module>
-		<module>libExpressions</module>
 		<module>libFMap</module>
 		<module>libInternationalization</module>
 		<module>libIverUtiles</module>
