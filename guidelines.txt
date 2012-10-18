@@ -1,0 +1,52 @@
+Plans for the geotools branch
+=============================
+
+After some efforts to adapt gvSIG design to Geotools we've created the following list of tasks:
+
+1.- Replace the adapter layer for DataStores.
+
+- There are many points were the instance of the adapter is checked. This can be implemented by
+  methods at the FLayer level (isFile, isDB, etc.). The layer gets the information from the
+  DataStore or at construction time.
+
+- Edition. Good question.
+
+- Intelligent usage of DataStores. They are heavy objects. They should be cached, shared between layers
+and closed when not used anymore (or when not used for some time). SourceManager in libFMap is a very primitive
+implementation of this.
+
+- An adapter has been developed to adapt the calls to old gvSIG adapters API to new GeoTools based one.
+
+2.- Remove libDriverManager
+
+- Move the drivers to a legacy project so that extensions that use them for writing can still use them. Deprecate
+  them since it can be done with Geotools.
+
+3.- Remove all raster stuff under FLyrRaster.
+
+- Analogous to the adapter layer removal.
+
+4.- Make layers become structured data object holders.
+
+They don't hold any functionality related with data. They will just provide a DataStore, a GridCoverage,
+a Geotools WMS client, etc. and the name of the layer, the relation with the other layers (parent, sibling, etc.)
+
+- There is no need for most of FLyrVect subclasses since the difference between file and db is at the DataStore
+  level. As holders of DataStore, a file based layer is exactly equal to a holder of a database. So no VectorialDBLayer,
+  VectorialFileLayer, etc.
+
+- Some subclases just add some functionality, like VoronoiAndTinInputLyr. This can be implemented like an adapter
+  system in Eclipse EMF generated classes and can be easier for persistence than subclassing.
+
+5.- Include OGR DataStores: OGR providers available as GT DataStores.
+
+6.- Include image-io-ext providers: GDAL providers available as GT GridCoverages.
+
+
+
+
+
+
+
+
+.- Remove libGDBMS.
