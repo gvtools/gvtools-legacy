@@ -28,9 +28,8 @@ public class GTFLyrVectTest extends TestCase {
 	private static final String ATTRIBUTE_NAME = "name";
 	private static final String ATTRIBUTE_VALUE = "value";
 
-	private static final int ATTRIBUTE_INDEX_GEOM = 0;
-	private static final int ATTRIBUTE_INDEX_NAME = 1;
-	private static final int ATTRIBUTE_INDEX_VALUE = 2;
+	private static final int ATTRIBUTE_INDEX_NAME = 0;
+	private static final int ATTRIBUTE_INDEX_VALUE = 1;
 
 	private static final String CRS = "EPSG:23030";
 
@@ -83,7 +82,7 @@ public class GTFLyrVectTest extends TestCase {
 
 	public void testGetFieldCount() throws Exception {
 		GTFLyrVect layer = mockPointLayer();
-		assertEquals(3, layer.getFieldCount());
+		assertEquals(2, layer.getFieldCount());
 	}
 
 	public void testGetRowCount() throws Exception {
@@ -93,15 +92,38 @@ public class GTFLyrVectTest extends TestCase {
 
 	public void testGetFieldName() throws Exception {
 		GTFLyrVect layer = mockPointLayer();
-		assertEquals(ATTRIBUTE_GEOM, layer.getFieldName(ATTRIBUTE_INDEX_GEOM));
 		assertEquals(ATTRIBUTE_NAME, layer.getFieldName(ATTRIBUTE_INDEX_NAME));
 		assertEquals(ATTRIBUTE_VALUE, layer.getFieldName(ATTRIBUTE_INDEX_VALUE));
+
+		try {
+			assertNull(layer.getFieldName(-10));
+			fail();
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			assertNull(layer.getFieldName(20));
+			fail();
+		} catch (IndexOutOfBoundsException e) {
+		}
 	}
 
 	public void testGetFieldType() throws Exception {
 		GTFLyrVect layer = mockPointLayer();
 		assertEquals(Types.VARCHAR, layer.getFieldType(ATTRIBUTE_INDEX_NAME));
 		assertEquals(Types.INTEGER, layer.getFieldType(ATTRIBUTE_INDEX_VALUE));
+
+		try {
+			assertNull(layer.getFieldType(-10));
+			fail();
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			assertNull(layer.getFieldType(20));
+			fail();
+		} catch (IndexOutOfBoundsException e) {
+		}
 	}
 
 	public void testGetFieldWidth() throws Exception {

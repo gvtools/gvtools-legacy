@@ -21,6 +21,7 @@ import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.feature.collection.SimpleFeatureIteratorImpl;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.AttributeType;
 import org.opengis.feature.type.GeometryDescriptor;
@@ -116,8 +117,22 @@ public class GTFLyrVect extends FLyrVect {
 
 	private FLyrVectLinkProperties linkProperties = new FLyrVectLinkProperties();
 	private boolean waitTodraw = false;
+	private AttributeDescriptor[] attributeDescriptors;
 
 	public GTFLyrVect(SimpleFeatureSource source) throws ReadDriverException {
+		// Initialize attribute descriptors
+		SimpleFeatureType schema = source.getSchema();
+		attributeDescriptors = new AttributeDescriptor[schema
+				.getAttributeCount() - 1];
+		int index = 0;
+		GeometryDescriptor geomDescriptor = schema.getGeometryDescriptor();
+		for (int i = 0; i < schema.getAttributeCount(); i++) {
+			AttributeDescriptor descriptor = schema.getDescriptor(i);
+			if (!descriptor.equals(geomDescriptor)) {
+				attributeDescriptors[index++] = descriptor;
+			}
+		}
+
 		this.source = source;
 		this.readableVectorialAdapter = new GTVectorialAdapter(this);
 		this.recordSet = new SelectableDataSource(new GTDataSource(this));
@@ -1681,7 +1696,7 @@ public class GTFLyrVect extends FLyrVect {
 	}
 
 	int getFieldCount() {
-		return source.getSchema().getAttributeCount();
+		return attributeDescriptors.length;
 	}
 
 	int getRowCount() throws IOException {
@@ -1689,14 +1704,11 @@ public class GTFLyrVect extends FLyrVect {
 	}
 
 	String getFieldName(int field) {
-		return source.getSchema().getAttributeDescriptors().get(field)
-				.getLocalName();
+		return attributeDescriptors[field].getLocalName();
 	}
 
 	int getFieldType(int field) {
-		AttributeType type = source.getSchema().getAttributeDescriptors()
-				.get(field).getType();
-		return geotools2gvsigType(type);
+		return geotools2gvsigType(attributeDescriptors[field].getType());
 	}
 
 	String getDataSourceName() {
@@ -1709,12 +1721,12 @@ public class GTFLyrVect extends FLyrVect {
 	}
 
 	Value getFieldValue(long row, int field) throws IOException {
-		SimpleFeature feature = getFeature(row);
-		return attributeToValue(feature, field);
+		return attributeToValue(getFeature(row), field);
 	}
 
 	private Value attributeToValue(SimpleFeature feature, int field) {
-		Object attribute = feature.getAttribute(field);
+		Object attribute = feature.getAttribute(attributeDescriptors[field]
+				.getName());
 		int type = getFieldType(field);
 		switch (type) {
 		case Types.INTEGER:
@@ -1780,15 +1792,9 @@ public class GTFLyrVect extends FLyrVect {
 		public IFeature next() throws ReadDriverException {
 			SimpleFeature feature = delegate.next();
 			Geometry jts = (Geometry) feature.getDefaultGeometry();
-			Value[] values = new Value[feature.getAttributeCount()];
-			GeometryDescriptor geomDescriptor = feature
-					.getDefaultGeometryProperty().getDescriptor();
-			for (int i = 0; i < values.length; i++) {
-				AttributeDescriptor attributeDescriptor = feature.getType()
-						.getDescriptor(i);
-				if (!attributeDescriptor.equals(geomDescriptor)) {
-					values[i] = attributeToValue(feature, i);
-				}
+			Value[] values = new Value[attributeDescriptors.length];
+			for (int i = 0; i < attributeDescriptors.length; i++) {
+				values[i] = attributeToValue(feature, i);
 			}
 			FGeometry geom = ShapeFactory.createGeometry(new FLiteShape(jts));
 			return new DefaultFeature(geom, values, feature.getID());
