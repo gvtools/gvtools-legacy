@@ -45,13 +45,6 @@
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
-			<artifactId>batik-ext</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${repo-root}/libraries/libFMap/lib/batik-ext.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>gvsig-legacy</groupId>
 			<artifactId>batik-gvt</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
