@@ -25,5 +25,6 @@
 	<classpathentry kind="lib" path="/libFMap/lib/batik-util.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libRaster"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt-referencing-8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

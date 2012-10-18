@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="lib/flanagan.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extRasterTools-SE"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt-referencing-8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

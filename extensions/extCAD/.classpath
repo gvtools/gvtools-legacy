@@ -19,5 +19,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/libFMap/lib/jts-1.12.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt-referencing-8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
