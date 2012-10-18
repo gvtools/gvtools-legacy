@@ -4,8 +4,8 @@
 	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
-	<classpathentry kind="lib" path="/libGPE/lib/gvsig-exceptions.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libGPE"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libGPE-XML"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libExceptions"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

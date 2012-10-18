@@ -12,9 +12,6 @@
 		<artifactId>gvSIGCE</artifactId>
 		<version>2.0-SNAPSHOT</version>
 	</parent>
-	<properties>
-		<lib>${repo-root}/libraries/libExceptions/lib</lib>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -23,11 +20,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>log4j-1.2.8</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${repo-root}/libraries/libExceptions/lib/log4j-1.2.8.jar</systemPath>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.8</version>
 		</dependency>
 	</dependencies>
 	<build>

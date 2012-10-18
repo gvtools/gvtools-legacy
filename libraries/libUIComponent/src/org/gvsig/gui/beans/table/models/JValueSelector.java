@@ -32,9 +32,8 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.gvsig.gui.beans.Messages;
 import org.gvsig.gui.beans.slidertext.SliderTextContainer;
-
-import com.iver.andami.PluginServices;
 
 /**
  * Ventana con el slider para la selección de Alpha en una entrada de la tabla que representa
@@ -204,7 +203,7 @@ class ValueSelector extends JDialog implements ActionListener {
 	 */
 	public JButton getBAccept(){
 		if(bAccept == null){
-			bAccept = new JButton(PluginServices.getText(this, "aceptar"));
+			bAccept = new JButton(Messages.getText("aceptar"));
 			bAccept.addActionListener(okListener);
 			bAccept.addActionListener(this);
 		}
@@ -217,7 +216,7 @@ class ValueSelector extends JDialog implements ActionListener {
 	 */
 	public JButton getBCancel(){
 		if(bCancel == null){
-			bCancel = new JButton(PluginServices.getText(this, "cancelar"));
+			bCancel = new JButton(Messages.getText("cancelar"));
 			bAccept.addActionListener(cancelListener);
 			bCancel.addActionListener(this);
 		}

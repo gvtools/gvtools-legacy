@@ -27,11 +27,9 @@
 			<systemPath>${repo-root}/libraries/libGDBMS/lib/kxml2-2.2.2.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>log4j-1.2.8</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${repo-root}/libraries/libGDBMS/lib/log4j-1.2.8.jar</systemPath>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.8</version>
 		</dependency>
 	</dependencies>
 	<build>

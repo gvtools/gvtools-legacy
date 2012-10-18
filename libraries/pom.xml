@@ -10,10 +10,12 @@
 	<modules>
 		<module>libDriverManager</module>
 		<module>libExceptions</module>
+		<module>libExpressions</module>
 		<module>libFMap</module>
 		<module>libInternationalization</module>
 		<module>libIverUtiles</module>
 		<module>libProjection</module>
+		<module>libTools</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>

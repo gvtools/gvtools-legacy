@@ -4,7 +4,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" output="bin-test" path="src-test"/>
-	<classpathentry kind="lib" path="lib/gvsig-i18n.jar"/>
 	<classpathentry kind="lib" path="lib/kxml2.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="lib" path="lib/jmrsid-0.0.6.jar" sourcepath="/libjni-mrsid/src"/>
@@ -14,5 +13,6 @@
 	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libProjection"/>
 	<classpathentry kind="lib" path="/libFMap/lib/gt-referencing-8.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libInternationalization"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
