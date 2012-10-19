@@ -1,22 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>libGDBMS</name>
-	<comment>GDBMS is a library that allows to make queries to data sets hosted in different formats and hosts. It follows the SQL92 syntax and extends it in several poins. Allows extensions to data sets types, queries, functions and data types.</comment>
-	<projects>
-	</projects>
-	<buildSpec>
-		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>de.loskutov.FileSync.FSBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-	</buildSpec>
-	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
-	</natures>
+  <name>libGDBMS</name>
+  <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects>
+    <project>_fwAndami</project>
+    <project>libDriverManager</project>
+    <project>libExceptions</project>
+    <project>libFMap</project>
+    <project>libInternationalization</project>
+    <project>libIverUtiles</project>
+    <project>libProjection</project>
+    <project>libTools</project>
+    <project>libUIComponent</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+    <buildCommand>
+      <name>de.loskutov.FileSync.FSBuilder</name>
+    </buildCommand>
+    <buildCommand>
+      <name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
+      <arguments>
+        <dictionary>
+          <key>LaunchConfigHandle</key>
+          <value>&lt;project&gt;/.externalToolBuilders/Maven_Ant_Builder.launch</value>
+        </dictionary>
+      </arguments>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
 </projectDescription>

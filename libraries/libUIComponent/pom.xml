@@ -11,9 +11,6 @@
 		<artifactId>gvSIGCE</artifactId>
 		<version>2.0-SNAPSHOT</version>
 	</parent>
-	<properties>
-		<lib>${repo-root}/libraries/libUIComponent/lib</lib>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -46,28 +43,24 @@
 			<artifactId>jcalendar</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/jcalendar.jar</systemPath>
+			<systemPath>${gvjars}/jcalendar.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>jfreechart-1.0.6</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${lib}/jfreechart-1.0.6.jar</systemPath>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.7</version>
 		</dependency>
 		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>jcommon-1.0.10</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${lib}/jcommon-1.0.10.jar</systemPath>
+			<groupId>jfree</groupId>
+			<artifactId>jcommon</artifactId>
+			<version>1.0.12</version>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>JWizardComponent</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/JWizardComponent.jar</systemPath>
+			<systemPath>${gvjars}/JWizardComponent.jar</systemPath>
 		</dependency>
 	</dependencies>
 	<build>

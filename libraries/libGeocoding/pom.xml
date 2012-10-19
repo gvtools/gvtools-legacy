@@ -2,11 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.gvsig</groupId>
-	<artifactId>libProjection</artifactId>
+	<artifactId>libGeocoding</artifactId>
 	<packaging>jar</packaging>
 	<version>2.0-SNAPSHOT</version>
-	<name>libProjection</name>
-	<url>http://gvsig.org</url>
+	<name>libGeocoding</name>
 	<parent>
 		<groupId>org.gvsig</groupId>
 		<artifactId>gvSIGCE</artifactId>
@@ -21,20 +20,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig</groupId>
-			<artifactId>libInternationalization</artifactId>
+			<artifactId>libFMap</artifactId>
 			<version>2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>jsr-275-1.0-beta-2</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${gvjars}/jsr-275-1.0-beta-2.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-referencing</artifactId>
-			<version>8.0</version>
+			<groupId>org.gvsig</groupId>
+			<artifactId>libGDBMS</artifactId>
+			<version>2.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -42,17 +34,5 @@
 		<testSourceDirectory>src-test</testSourceDirectory>
 		<outputDirectory>bin</outputDirectory>
 		<testOutputDirectory>bin-test</testOutputDirectory>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.12.4</version>
-				<configuration>
-					<excludes>
-						<exclude>**/*.java</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 </project>

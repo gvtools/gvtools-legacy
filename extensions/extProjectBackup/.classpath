@@ -2,10 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/_fwAndami/andami.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libCorePlugin"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/appgvSIG"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libIverUtiles"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libUIComponent"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/_fwAndami"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -6,7 +6,6 @@
 	<packaging>jar</packaging>
 	<version>2.0-SNAPSHOT</version>
 	<name>libInternationalization</name>
-	<url>http://gvsig.org</url>
 	<parent>
 		<groupId>org.gvsig</groupId>
 		<artifactId>gvSIGCE</artifactId>

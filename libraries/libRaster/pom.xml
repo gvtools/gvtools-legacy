@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.gvsig</groupId>
@@ -7,55 +6,62 @@
 	<packaging>jar</packaging>
 	<version>2.0-SNAPSHOT</version>
 	<name>libRaster</name>
-	<url>http://gvsig.org</url>
 	<parent>
 		<groupId>org.gvsig</groupId>
-		<artifactId>gvsig-library-base-pom</artifactId>
+		<artifactId>gvSIGCE</artifactId>
 		<version>2.0-SNAPSHOT</version>
 	</parent>
-	<properties>
-        <build-dir>${basedir}/../build</build-dir>
-    </properties>
 	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.gvsig</groupId>
 			<artifactId>libProjection</artifactId>
-			<version>1.9-SNAPSHOT</version>
+			<version>2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig</groupId>
-			<artifactId>libInternationalization</artifactId>
-			<version>1.9-SNAPSHOT</version>
+			<artifactId>_fwAndami</artifactId>
+			<version>2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>jecw</groupId>
-			<artifactId>jecw</artifactId>
-			<version>0.0.5</version>
-		</dependency>
-		<dependency>
-			<groupId>jgdal</groupId>
-			<artifactId>jgdal</artifactId>
-			<version>0.9.1</version>
-		</dependency>
-		<dependency>
-			<groupId>jmrsid</groupId>
-			<artifactId>jmrsid</artifactId>
-			<version>0.0.6</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig</groupId>
-			<artifactId>jpotrace</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>kxml2</artifactId>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>jecw-0.0.7</artifactId>
 			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${gvjars}/jecw-0.0.7.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>jgdal-0.9.2</artifactId>
+			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${gvjars}/jgdal-0.9.2.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>jpotrace-0.0.1</artifactId>
+			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${gvjars}/jpotrace-0.0.1.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>gvsig-legacy</groupId>
+			<artifactId>jmrsid-0.0.6</artifactId>
+			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${gvjars}/jmrsid-0.0.6.jar</systemPath>
 		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>src-test</testSourceDirectory>
+		<outputDirectory>bin</outputDirectory>
+		<testOutputDirectory>bin-test</testOutputDirectory>
 		<resources>
 			<resource>
 				<directory>src</directory>

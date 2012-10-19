@@ -6,15 +6,11 @@
 	<packaging>jar</packaging>
 	<version>2.0-SNAPSHOT</version>
 	<name>libFMap</name>
-	<url>http://maven.apache.org</url>
 	<parent>
 		<groupId>org.gvsig</groupId>
 		<artifactId>gvSIGCE</artifactId>
 		<version>2.0-SNAPSHOT</version>
 	</parent>
-	<properties>
-		<lib>${repo-root}/libraries/libFMap/lib</lib>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -27,210 +23,141 @@
 			<artifactId>batik-awt-util</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/batik-awt-util.jar</systemPath>
+			<systemPath>${gvjars}/batik-awt-util.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>batik-bridge</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/batik-bridge.jar</systemPath>
+			<systemPath>${gvjars}/batik-bridge.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>batik-ext</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/batik-ext.jar</systemPath>
+			<systemPath>${gvjars}/batik-ext.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>batik-gvt</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/batik-gvt.jar</systemPath>
+			<systemPath>${gvjars}/batik-gvt.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>batik-script</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/batik-script.jar</systemPath>
+			<systemPath>${gvjars}/batik-script.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>batik-util</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/batik-util.jar</systemPath>
+			<systemPath>${gvjars}/batik-util.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>gdbms-0.8-SNAPSHOT</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/gdbms-0.8-SNAPSHOT.jar</systemPath>
+			<systemPath>${gvjars}/gdbms-0.8-SNAPSHOT.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>geoutils</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/geoutils.jar</systemPath>
+			<systemPath>${gvjars}/geoutils.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/hsqldb.jar</systemPath>
+			<systemPath>${gvjars}/hsqldb.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>jts-1.12</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/jts-1.12.jar</systemPath>
+			<systemPath>${gvjars}/jts-1.12.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>spatialindex</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/spatialindex.jar</systemPath>
+			<systemPath>${gvjars}/spatialindex.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>trove-0.1.8</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/trove-0.1.8.jar</systemPath>
+			<systemPath>${gvjars}/trove-0.1.8.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>units-0.01</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/units-0.01.jar</systemPath>
+			<systemPath>${gvjars}/units-0.01.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>vecmath-1.3</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/vecmath-1.3.jar</systemPath>
+			<systemPath>${gvjars}/vecmath-1.3.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>wkb4j-1.0-RC1</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/wkb4j-1.0-RC1.jar</systemPath>
+			<systemPath>${gvjars}/wkb4j-1.0-RC1.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>gt-api-8.0</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${lib}/gt-api-8.0.jar</systemPath>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-epsg-wkt</artifactId>
+			<version>8.0</version>
 		</dependency>
 		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>gt-data-8.0</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${lib}/gt-data-8.0.jar</systemPath>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-render</artifactId>
+			<version>8.0</version>
 		</dependency>
 		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>gt-epsg-wkt-8.0</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${lib}/gt-epsg-wkt-8.0.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>gt-main-8.0</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${lib}/gt-main-8.0.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>gt-metadata-8.0</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${lib}/gt-metadata-8.0.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>gt-opengis-8.0</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${lib}/gt-opengis-8.0.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>gt-referencing-8.0</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${lib}/gt-referencing-8.0.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>gt-render-8.0</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${lib}/gt-render-8.0.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>gt-shapefile-8.0</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${lib}/gt-shapefile-8.0.jar</systemPath>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-shapefile</artifactId>
+			<version>8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>jsi-1.0b8</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/jsi-1.0b8.jar</systemPath>
+			<systemPath>${gvjars}/jsi-1.0b8.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>jsi-test-1.0b8</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/jsi-test-1.0b8.jar</systemPath>
+			<systemPath>${gvjars}/jsi-test-1.0b8.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>gvsig-legacy</groupId>
 			<artifactId>jsr-275-1.0-beta-2</artifactId>
 			<version>gvsig</version>
 			<scope>system</scope>
-			<systemPath>${lib}/jsr-275-1.0-beta-2.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>castor-0.9.5.3-xml</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${repo-root}/frameworks/_fwAndami/lib/castor-0.9.5.3-xml.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>org.gvsig.ui</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${repo-root}/frameworks/_fwAndami/lib/org.gvsig.ui.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>gvsig-legacy</groupId>
-			<artifactId>log4j-1.2.8</artifactId>
-			<version>gvsig</version>
-			<scope>system</scope>
-			<systemPath>${repo-root}/frameworks/_fwAndami/lib/log4j-1.2.8.jar</systemPath>
+			<systemPath>${gvjars}/jsr-275-1.0-beta-2.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig</groupId>
@@ -244,7 +171,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig</groupId>
-			<artifactId>libIverUtiles</artifactId>
+			<artifactId>_fwAndami</artifactId>
 			<version>2.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

@@ -4,108 +4,51 @@
 	<groupId>org.gvsig</groupId>
 	<artifactId>_fwAndami</artifactId>
 	<packaging>jar</packaging>
-	<version>1.9-SNAPSHOT</version>
+	<version>2.0-SNAPSHOT</version>
 	<name>_fwAndami</name>
-	<url>http://gvsig.org</url>
 	<parent>
 		<groupId>org.gvsig</groupId>
-		<artifactId>gvsig-library-base-pom</artifactId>
-		<version>1.9-SNAPSHOT</version>
+		<artifactId>gvSIGCE-frameworks</artifactId>
+		<version>2.0-SNAPSHOT</version>
 	</parent>
 	<properties>
-        <build-dir>${basedir}/../build</build-dir>
-    </properties>
+		<lib>${repo-root}/jars</lib>
+	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>org.gvsig</groupId>
-			<artifactId>libInternationalization
-			</artifactId>
-			<version>1.9-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig</groupId>
-			<artifactId>libExceptions</artifactId>
-			<version>1.9-SNAPSHOT</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig</groupId>
 			<artifactId>libIverUtiles</artifactId>
-			<version>1.9-SNAPSHOT</version>
+			<version>2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.gvsig</groupId>
 			<artifactId>libUIComponent</artifactId>
-			<version>1.9-SNAPSHOT</version>
+			<version>2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>gvsig-legacy</groupId>
 			<artifactId>javaws</artifactId>
 			<version>gvsig</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>jh</artifactId>
-			<version>gvsig</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>JWizardComponent</artifactId>
-			<version>1.2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>kxml2</artifactId>
-			<version>gvsig</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>castor</artifactId>
-			<version>gvsig</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>gvsig</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>gvsig</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>JUF</artifactId>
-			<version>gvsig</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>xerces</artifactId>
-			<version>gvsig</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>xml-apis</artifactId>
-			<version>gvsig</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>xmlrpc</artifactId>
-			<version>gvsig</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>tempFileManager</artifactId>
-			<version>gvsig</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gvsig.legacy</groupId>
-			<artifactId>looks</artifactId>
-			<version>gvsig</version>
+			<scope>system</scope>
+			<systemPath>${lib}/javaws.jar</systemPath>
 		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>src-test</testSourceDirectory>
+		<outputDirectory>bin</outputDirectory>
+		<testOutputDirectory>bin-test</testOutputDirectory>
 		<resources>
 			<resource>
 				<directory>src</directory>
@@ -119,95 +62,12 @@
 				</includes>
 			</resource>
 			<resource>
-                <directory>config</directory>
+				<directory>config</directory>
 				<includes>
-                	<include>**/*.properties</include>
-                </includes>
-            	<targetPath>com/iver/andami</targetPath>
+					<include>**/*.properties</include>
+				</includes>
+				<targetPath>com/iver/andami</targetPath>
 			</resource>
 		</resources>
-		<plugins>
-			<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory> ${gvsig-lib-dir}</directory>
-							<includes>
-								<include> **/**</include>
-							</includes>
-							<followSymlinks>false</followSymlinks>
-						</fileset>
-						
-						<fileset>
-							<directory> ${gvsig-path}</directory>
-							<includes>
-								<include>*_fwAndami*.jar</include>
-							</includes>
-						</fileset>
-						</filesets>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
-	<profiles>
-		<profile>
-			<id>install-extension</id>
-			<activation>
-				<property>
-					<name>install-extension</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins
-						</groupId>
-						<artifactId>maven-dependency-plugin
-						</artifactId>
-						<executions>
-							<execution>
-								<id>copy-own-dependencies-for-andami
-								</id>
-								<phase>install</phase>
-								<goals>
-									<goal>copy-dependencies</goal>
-								</goals>
-								<configuration>
-									<outputDirectory> ${gvsig-lib-dir}</outputDirectory>
-									<overWriteReleases>true</overWriteReleases>
-									<overWriteSnapshots> false</overWriteSnapshots>
-									<overWriteIfNewer>true</overWriteIfNewer>
-									<excludeTransitive>false</excludeTransitive>
-								</configuration>
-							</execution>
-							<execution>
-								<id>copy-andami</id>
-								<phase>install</phase>
-								<goals>
-									<goal>copy</goal>
-								</goals>
-								<configuration>
-									<artifactItems>
-										<artifactItem>
-											<groupId>org.gvsig</groupId>
-											<artifactId>_fwAndami</artifactId>
-											<version>1.9-SNAPSHOT</version>
-											<type>jar</type>
-											<overWrite>true</overWrite>
-										</artifactItem>
-									</artifactItems>
-									<outputDirectory> ${gvsig-path}</outputDirectory>
-									<overWriteReleases>true</overWriteReleases>
-									<overWriteSnapshots> false</overWriteSnapshots>
-									<overWriteIfNewer>true</overWriteIfNewer>
-									<excludeTransitive>false</excludeTransitive>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>

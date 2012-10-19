@@ -56,7 +56,7 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
-import com.iver.andami.PluginServices;
+import org.gvsig.i18n.Messages;
 /*
  * ImageFilter.java
  * 
@@ -85,7 +85,7 @@ public class ImageFilter extends FileFilter
 		return false; } //The description of this filter
 
 	public String getDescription() { 
-			return (PluginServices.getText(this, "image"));
+			return (Messages.getText("image"));
 	}
 	
 } 

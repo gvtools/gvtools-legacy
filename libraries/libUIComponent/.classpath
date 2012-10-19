@@ -2,11 +2,19 @@
   <classpathentry kind="src" path="src-test-ui" output="bin-test" including="**/*.java"/>
   <classpathentry kind="src" path="src"/>
   <classpathentry kind="output" path="bin"/>
-  <classpathentry kind="lib" path="lib/jcalendar.jar"/>
-  <classpathentry kind="lib" path="lib/jcommon-1.0.10.jar"/>
-  <classpathentry kind="lib" path="lib/jfreechart-1.0.6.jar"/>
+  <classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/jars/jcalendar.jar"/>
+  <classpathentry kind="var" path="M2_REPO/jfree/jcommon/1.0.12/jcommon-1.0.12.jar" sourcepath="M2_REPO/jfree/jcommon/1.0.12/jcommon-1.0.12-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/victorzinho/.m2/repository/jfree/jcommon/1.0.12/jcommon-1.0.12-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/jfree/jfreechart/1.0.7/jfreechart-1.0.7.jar" sourcepath="M2_REPO/jfree/jfreechart/1.0.7/jfreechart-1.0.7-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/victorzinho/.m2/repository/jfree/jfreechart/1.0.7/jfreechart-1.0.7-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
   <classpathentry kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar" sourcepath="M2_REPO/junit/junit/3.8.1/junit-3.8.1-sources.jar"/>
-  <classpathentry kind="lib" path="lib/JWizardComponent.jar"/>
+  <classpathentry kind="lib" path="/home/victorzinho/workspace/gvsigce-geotools-codesprint/repo/jars/JWizardComponent.jar"/>
   <classpathentry kind="var" path="M2_REPO/net/sf/kxml/kxml2/2.2.2/kxml2-2.2.2.jar"/>
   <classpathentry kind="src" path="/libExceptions"/>
   <classpathentry kind="src" path="/libInternationalization"/>

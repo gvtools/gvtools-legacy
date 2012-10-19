@@ -71,7 +71,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-import com.iver.andami.PluginServices;
+import org.gvsig.i18n.Messages;
 
 /**
  * Dialog that shows the evolution of the execution of a
@@ -200,7 +200,7 @@ public class UndefinedProgressMonitor extends JDialog
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
-			cancelButton.setText(PluginServices.getText(this, "cancelar"));
+			cancelButton.setText(Messages.getText("cancelar"));
 			cancelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					cancel();
