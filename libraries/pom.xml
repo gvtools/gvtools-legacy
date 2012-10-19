@@ -13,18 +13,24 @@
 		<version>2.0-SNAPSHOT</version>
 	</parent>
 	<modules>
+		<module>libArcIMS</module>
 		<module>libCorePlugin</module>
 		<module>libDriverManager</module>
 		<module>libExceptions</module>
 		<module>libFMap</module>
 		<module>libGDBMS</module>
 		<module>libGeocoding</module>
+		<module>libGPE</module>
+		<module>libGPE-GML</module>
+		<module>libGPE-KML</module>
+		<module>libGPE-XML</module>
 		<module>libInternationalization</module>
 		<module>libIverUtiles</module>
 		<module>libProjection</module>
 		<module>libRaster</module>
 		<module>libRemoteServices</module>
 		<module>libTools</module>
+		<module>libTopology</module>
 		<module>libUIComponent</module>
 	</modules>
 </project>

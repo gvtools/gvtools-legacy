@@ -1,17 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>extTableSummarize</name>
-	<comment></comment>
-	<projects>
-	</projects>
-	<buildSpec>
-		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-	</buildSpec>
-	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
-	</natures>
+  <name>extTableSummarize</name>
+  <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects>
+    <project>_fwAndami</project>
+    <project>appgvSIG</project>
+    <project>libDriverManager</project>
+    <project>libExceptions</project>
+    <project>libFMap</project>
+    <project>libGDBMS</project>
+    <project>libInternationalization</project>
+    <project>libIverUtiles</project>
+    <project>libProjection</project>
+    <project>libRaster</project>
+    <project>libTools</project>
+    <project>libUIComponent</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
 </projectDescription>

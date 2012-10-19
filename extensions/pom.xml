@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gvsig</groupId>
+	<artifactId>gvSIGCE-exts</artifactId>
+	<packaging>pom</packaging>
+	<version>2.0-SNAPSHOT</version>
+	<name>gvSIG CE Extensions</name>
+	<parent>
+		<groupId>org.gvsig</groupId>
+		<artifactId>gvSIGCE-root</artifactId>
+		<version>2.0-SNAPSHOT</version>
+	</parent>
+	<modules>
+		<module>extAddEventTheme</module>
+		<module>extAnnotations</module>
+		<module>extArcims</module>
+		<module>extCAD</module>
+		<module>extCatalogAndGazetteer</module>
+		<module>extCenterViewToPoint</module>
+		<module>extExpressionField</module>
+		<module>extGeoProcessing</module>
+		<module>extGeoprocessingExtensions</module>
+		<module>extGeoreferencing</module>
+		<module>extGPE-gvSIG</module>
+		<module>extGraph</module>
+		<module>extHelp</module>
+		<module>extHyperlink</module>
+		<module>extI18n</module>
+		<module>extIconThemeBase</module>
+		<module>extJDBC</module>
+		<module>extLayerLoadingOrder</module>
+		<module>extMeasureGeometry</module>
+		<module>extNormalization</module>
+		<module>extOracleSpatial</module>
+		<module>extProjectBackup</module>
+		<module>extQuickInfo</module>
+		<module>extQuickPrint</module>
+		<module>extRasterTools-SE</module>
+		<module>extRemoteSensing</module>
+		<module>extSelectionTools</module>
+		<module>extSymbology</module>
+		<module>extTableExport</module>
+		<module>extTableImport</module>
+		<module>extTableSummarize</module>
+		<module>extTopology</module>
+		<module>extWCS</module>
+		<module>extWFS2</module>
+		<module>extWMS</module>
+	</modules>
+</project>

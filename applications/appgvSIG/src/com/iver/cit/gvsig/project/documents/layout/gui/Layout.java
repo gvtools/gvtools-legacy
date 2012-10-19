@@ -331,13 +331,13 @@ public class Layout extends JPanel implements SingletonWindow, ViewPortListener,
             		// workaround a problem with Java 1.5 with moder CUPS versions
             		// this try-catch block may be safely removed when we move to Java 1.6
             		logger.debug("Opening gvSIG's internal Java 1.7 CUPS printing dialog");
-            		m_cachePrintService = backport1_7.javax.print.ServiceUI.printDialog(null, 200, 200,
+            		m_cachePrintService = ServiceUI.printDialog(null, 200, 200,
             				m_cachePrintServices, defaultService, flavor, att);
             	}
             }
             else {
             	PluginServices.getLogger().debug("Opening gvSIG's internal Java 1.7 CUPS printing dialog");
-            	m_cachePrintService = backport1_7.javax.print.ServiceUI.printDialog(null, 200, 200,
+            	m_cachePrintService = ServiceUI.printDialog(null, 200, 200,
             			m_cachePrintServices, defaultService, flavor, att);
             }
 

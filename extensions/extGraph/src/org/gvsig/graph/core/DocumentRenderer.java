@@ -15,7 +15,6 @@ import java.awt.Shape;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.Printable;
-import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
 import javax.print.Doc;
@@ -26,9 +25,7 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.ServiceUI;
 import javax.print.SimpleDoc;
-import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.MediaPrintableArea;
 import javax.print.event.PrintJobAdapter;
 import javax.print.event.PrintJobEvent;
 import javax.print.event.PrintJobListener;
@@ -40,8 +37,6 @@ import javax.swing.text.View;
 import javax.swing.text.html.HTMLDocument;
 
 import org.apache.log4j.Logger;
-
-import sun.font.FontManager;
 
 import com.iver.andami.PluginServices;
 import com.iver.cit.gvsig.project.documents.layout.Attributes;
@@ -308,13 +303,13 @@ public class DocumentRenderer implements Printable {
             		// workaround a problem with Java 1.5 with moder CUPS versions
             		// this try-catch block may be safely removed when we move to Java 1.6
             		logger.debug("Opening gvSIG's internal Java 1.7 CUPS printing dialog");
-            		m_cachePrintService = backport1_7.javax.print.ServiceUI.printDialog(null, 200, 200,
+            		m_cachePrintService = ServiceUI.printDialog(null, 200, 200,
             				m_cachePrintServices, defaultService, flavor, att);
             	}
             }
             else {
             	PluginServices.getLogger().debug("Opening gvSIG's internal Java 1.7 CUPS printing dialog");
-            	m_cachePrintService = backport1_7.javax.print.ServiceUI.printDialog(null, 200, 200,
+            	m_cachePrintService = ServiceUI.printDialog(null, 200, 200,
             			m_cachePrintServices, defaultService, flavor, att);
             }
 

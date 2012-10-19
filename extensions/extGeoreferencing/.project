@@ -1,24 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>extGeoreferencing</name>
-	<comment></comment>
-	<projects>
-	</projects>
-	<buildSpec>
-		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>de.loskutov.FileSync.FSBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-	</buildSpec>
-	<natures>
-		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
-		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.eclipse.jem.beaninfo.BeanInfoNature</nature>
-	</natures>
+  <name>extGeoreferencing</name>
+  <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects>
+    <project>_fwAndami</project>
+    <project>appgvSIG</project>
+    <project>extRasterTools-SE</project>
+    <project>libDriverManager</project>
+    <project>libExceptions</project>
+    <project>libFMap</project>
+    <project>libGDBMS</project>
+    <project>libInternationalization</project>
+    <project>libIverUtiles</project>
+    <project>libProjection</project>
+    <project>libRaster</project>
+    <project>libTools</project>
+    <project>libUIComponent</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+    <buildCommand>
+      <name>de.loskutov.FileSync.FSBuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+    <nature>org.eclipse.jem.beaninfo.BeanInfoNature</nature>
+  </natures>
 </projectDescription>
