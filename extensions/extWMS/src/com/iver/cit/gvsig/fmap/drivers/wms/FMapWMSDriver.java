@@ -42,101 +42,187 @@ package com.iver.cit.gvsig.fmap.drivers.wms;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
+import java.io.StringWriter;
+
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URL;
-import java.util.ArrayList;
+
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
+
+import org.apache.commons.io.IOUtils;
+import org.geotools.data.ows.Layer;
+import org.geotools.data.ows.StyleImpl;
+import org.geotools.data.wms.WMSUtils;
+import org.geotools.data.wms.WebMapServer;
+import org.geotools.data.wms.request.GetFeatureInfoRequest;
+import org.geotools.data.wms.request.GetLegendGraphicRequest;
+import org.geotools.data.wms.request.GetMapRequest;
+import org.geotools.data.wms.response.GetFeatureInfoResponse;
+import org.geotools.data.wms.response.GetLegendGraphicResponse;
+import org.geotools.data.wms.response.GetMapResponse;
+import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.ows.ServiceException;
+import org.geotools.referencing.CRS;
 import org.gvsig.remoteClient.exceptions.ServerErrorException;
+
+import org.gvsig.remoteClient.utils.Utilities;
 import org.gvsig.remoteClient.wms.ICancellable;
 import org.gvsig.remoteClient.wms.WMSClient;
-import org.gvsig.remoteClient.wms.WMSDimension;
 import org.gvsig.remoteClient.wms.WMSLayer;
 import org.gvsig.remoteClient.wms.WMSStatus;
-import org.gvsig.remoteClient.wms.WMSStyle;
-import org.gvsig.remoteClient.wms.WMSProtocolHandler.ServiceInformation;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
+
+import com.iver.cit.gvsig.fmap.layers.GTLayerAdaptareToWMSLayerNode;
 import com.iver.cit.gvsig.fmap.layers.WMSLayerNode;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 /**
  * Driver WMS.
  *
  * @author Jaume Dominguez Faus
  */
 public class FMapWMSDriver  {
-	private WMSClient client;
     private WMSLayerNode fmapRootLayer;
     private TreeMap layers = new TreeMap();
-    private URL url;
-
-    private FMapWMSDriver() {}
+    private WebMapServer wms;
 
     protected FMapWMSDriver(URL url) throws ConnectException, IOException {
-    	client = new WMSClient(url.toString());
+	try {
+	    wms = new WebMapServer(url);
+	} catch (ServiceException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 
     public String[] getLayerNames(){
-    	return client.getLayerNames();
+	List<Layer> layerList = wms.getCapabilities().getLayerList();
+	String[] layerNames = new String[layerList.size()];
+
+	for (int i = 0; i < layerList.size(); i++) {
+	    layerNames[i] = layerList.get(i).getName();
+	}
+	return layerNames;
     }
+
     public String[] getLayerTitles(){
-    	return client.getLayerTitles();
+	List<Layer> layerList = wms.getCapabilities().getLayerList();
+	String[] layerTitles = new String[layerList.size()];
+
+	for (int i = 0; i < layerList.size(); i++) {
+	    layerTitles[i] = layerList.get(i).getTitle();
+	}
+	return layerTitles;
     }
-    /*
-     *  (non-Javadoc)
-     * @see com.iver.cit.gvsig.fmap.drivers.WMSDriver#getCapabilities(java.net.URL)
-     */
+   
+    @Deprecated
 	public void getCapabilities(URL server)
 		throws WMSException {
-//		try {
-//			client.connect();
-//		} catch (Exception e) {
-//			throw new WMSException(e);
-//		}
 	}
 
-	/*
-	 *  (non-Javadoc)
-	 * @see com.iver.cit.gvsig.fmap.drivers.WMSDriver#getMap(org.gvsig.remoteClient.wms.WMSStatus)
-	 */
+
     public File getMap(WMSStatus status, ICancellable cancel) throws WMSException {
-        try {
-			return client.getMap(status, cancel);
-        } catch (org.gvsig.remoteClient.exceptions.WMSException e) {
-            throw new WMSException(e.getMessage());
-        } catch (ServerErrorException e) {
-            throw new WMSException("WMS Unexpected server error."+e.getMessage());
-        }
+	GetMapRequest mapRequest = createMapRequest(status);
+
+	try {
+	    GetMapResponse response = (GetMapResponse) wms
+		    .issueRequest(mapRequest);
+
+	    return getMyResponse(mapRequest.getFinalURL(), cancel, "wmsGetMap");
+	} catch (ServerErrorException e) {
+	    throw new WMSException("WMS Unexpected server error."
+		    + e.getMessage());
+	} catch (ServiceException e) {
+	    throw new WMSException("WMS Unexpected server error."
+		    + e.getMessage());
+	} catch (IOException e) {
+	    throw new WMSException("WMS Unexpected server error."
+		    + e.getMessage());
+	}
+    }
+
+    private GetMapRequest createMapRequest(WMSStatus status) {
+	GetMapRequest mapRequest = wms.createGetMapRequest();
+
+	mapRequest.setSRS(status.getSrs());
+
+	String bbox = status.getExtent().getMinX() + ","
+		+ status.getExtent().getMinY() + ","
+		+ status.getExtent().getMaxX() + ","
+		+ status.getExtent().getMaxY();
+	mapRequest.setBBox(bbox);
+	mapRequest.setDimensions(status.getWidth(), status.getHeight());
+	mapRequest.setFormat(status.getFormat());
+	mapRequest.setTransparent(status.getTransparency());
+	
+	Vector<String> stylesVector = status.getStyles();
+	if (stylesVector != null && stylesVector.size() > 0) {
+	    Vector<String> layerNamesVector = status.getLayerNames();
+	    for (int i=0; i < stylesVector.size(); i++) {
+		mapRequest.addLayer(layerNamesVector.get(i), stylesVector.get(i));
+	    }
+	} else {
+	    for (Layer layer : WMSUtils.getNamedLayers(wms.getCapabilities())) {
+		mapRequest.addLayer(layer);
+	    }
+	}
+	return mapRequest;
+    }
+    
+    public File getMyResponse(URL request, ICancellable cancel, String id)
+	    throws ServerErrorException {
+	File f;
+	try {
+	    f = Utilities.downloadFile(request, id, cancel);
+
+	    if (f == null) {
+		return null;
+	    }
+	    // TODO: fpuga: Exception must be parsed here
+	    return f;
+
+	} catch (IOException e) {
+	    e.printStackTrace();
+	    throw new ServerErrorException();
+	}
+
     }
 
     /**
      * Gets the legend graphic of one layer
      */
     public File getLegendGraphic(WMSStatus status, String layerName, ICancellable cancel) throws WMSException {
-        try {
-        	File f = client.getLegendGraphic(status, layerName, cancel);
-			return f;
-        } catch (org.gvsig.remoteClient.exceptions.WMSException e) {
-            throw new WMSException(e.getMessage());
-        } catch (ServerErrorException e) {
-            throw new WMSException("WMS Unexpected server error."+e.getMessage());
-        }
-    }
+	GetLegendGraphicRequest request = wms.createGetLegendGraphicRequest();
+	request.setLayer(layerName);
+	request.setFormat("image/png");
+	request.setStyle((String) status.getStyles().get(0));
 
-	/**
-	 * Devuelve WMSClient a partir de su URL.
-	 *
-	 * @param url URL.
-	 *
-	 * @return WMSClient.
-	 * @throws IOException
-	 * @throws ConnectException
-	 *
-	 * @throws UnsupportedVersionException
-	 * @throws IOException
-	 */
+	try {
+
+	    GetLegendGraphicResponse response = wms.issueRequest(request);
+	    return getMyResponse(request.getFinalURL(), cancel,
+		    "wmsGetLegendGraphic");
+	} catch (ServerErrorException e) {
+	    throw new WMSException("WMS Unexpected server error."
+		    + e.getMessage());
+	} catch (ServiceException e) {
+	    throw new WMSException("WMS Unexpected server error."
+		    + e.getMessage());
+	} catch (IOException e) {
+	    throw new WMSException("WMS Unexpected server error."
+		    + e.getMessage());
+	}
+    }
 
 
     /**
@@ -145,30 +231,26 @@ public class FMapWMSDriver  {
      * @return <b>true</b> if the connection was successful, or <b>false</b> if it was no possible
      * to establish the connection for any reason such as version negotiation.
      */
+    @Deprecated
     public boolean connect(boolean override, ICancellable cancel) {
     	if (override) {
     		fmapRootLayer = null;
     		layers.clear();
     	}
-		return client.connect(override, cancel);
+	return true;
     }
 
+    @Deprecated
     public boolean connect(ICancellable cancel) {
-    	return client.connect(false, cancel);
+	return true;
     }
 
-    /**
-     * @return the version of this client.
-     */
     public String getVersion() {
-    	return client.getVersion();
+	return wms.getCapabilities().getVersion();
     }
 
-    /**
-     * @return The title of the service offered by the WMS server.
-     */
     public String getServiceTitle() {
-		return client.getServiceInformation().title;
+	return wms.getInfo().getTitle();
     }
 
     /**
@@ -178,140 +260,49 @@ public class FMapWMSDriver  {
      * @return HashTable
      */
     public Hashtable getOnlineResources() {
-    	Hashtable onlineResources = new Hashtable();
-    	ServiceInformation si = client.getServiceInformation();
-    	Iterator it = si.operations.keySet().iterator();
-    	while (it.hasNext()) {
-    		String key = (String) it.next();
-    		String val = (String) si.operations.get(key);
-    		if (val==null && (si.online_resource!=null || si.online_resource!= ""))
-    			val = si.online_resource;
-    		if (val!=null) {
-    			onlineResources.put(key, val);
-    		}
-    	}
+	// fpuga TODO
 
-    	return onlineResources;
+	return new Hashtable<String, String>();
     }
-    /**
-     * @return <b>Vector</b> containing strings with the formats supported by this server.
-     */
+
+    // TODO: fpuga: This should return a List not a Vector. I let it no maintain
+    // the API
     public Vector getFormats() {
-
-    	return client.getFormats();
+	List<String> formatsList = wms.getCapabilities().getRequest()
+		.getGetMap()
+		.getFormats();
+	Vector<String> formats = new Vector<String>();
+	for (String f : formatsList) {
+	    formats.add(f);
+	}
+	return formats;
     }
 
-    /**
-     * @return <b>Boolean</b> returns if the WMS is queryable (suppports GetFeatureInfo)
-     */
+    
     public boolean isQueryable() {
-        return client.isQueryable();
+	return wms.getCapabilities().getRequest().getGetFeatureInfo() != null;
     }
-    /**
-     * @return <b>Boolean</b> returns if the WMS supports getLegendGraphic operation (suppports GetFeatureInfo)
-     */
+    
     public boolean hasLegendGraphic() {
-        return client.hasLegendGraphic();
+	return wms.getCapabilities().getRequest().getGetLegendGraphic() != null;
     }
+    
     /**
      * @return A tree containing the info of all layers available on this server.
      */
     public WMSLayerNode getLayersTree() {
         if (fmapRootLayer == null){
-            WMSLayer clientRoot;
-            if (client.getLayersRoot() == null) {
-            	client.connect(false, null);
-            }
-            clientRoot = client.getLayersRoot();
-
-
-            fmapRootLayer = parseTree(clientRoot, null);
+	    GTLayerAdaptareToWMSLayerNode adapter = new GTLayerAdaptareToWMSLayerNode();
+	    fmapRootLayer = adapter.adapter(wms.getCapabilities().getLayer(),
+		    null, layers);
         }
         return fmapRootLayer;
     }
 
-    /**
-     * Parses the client's layer node and translates it to a fmap's layer node
-     * @param WMSLayer
-     * @return WMSLayerNode
-     */
-    private WMSLayerNode parseTree(WMSLayer node, WMSLayerNode parentNode) {
-
-        WMSLayerNode myNode = new WMSLayerNode();
-
-        // Name
-        myNode.setName(node.getName());
-
-        // Title
-        myNode.setTitle(node.getTitle());
-
-        // Transparency
-        myNode.setTransparency(node.hasTransparency());
-
-        // SRS
-        myNode.setSrs(node.getAllSrs());
 
 
-        // Queryable
-
-        myNode.setQueryable(node.isQueryable() && client.getServiceInformation().isQueryable());
-
-        // Parent layer
-        myNode.setParent(parentNode);
-
-        // Abstract
-        myNode.setAbstract(node.getAbstract());
-        
-        myNode.setScaleMax(node.getScaleMax());
-        myNode.setScaleMin(node.getScaleMin());
-
-        // Fixed Size
-        myNode.setFixedSize(node.getfixedWidth(), node.getfixedHeight());
-
-        // LatLonBox
-        if (node.getLatLonBox()!=null)
-            myNode.setLatLonBox(node.getLatLonBox().toString());
-
-        // Keywords
-        ArrayList keywords = node.getKeywords();
-        for (int i = 0; i < keywords.size(); i++) {
-        	myNode.addKeyword((String) keywords.get(i));
-		}
-
-        // Styles
-        ArrayList styles = node.getStyles();
-        for (int i = 0; i < styles.size(); i++) {
-            WMSStyle style = (WMSStyle) styles.get(i);
-            myNode.addStyle(style);
-        }
-
-        // Dimensions
-        ArrayList dimensions = node.getDimensions();
-        for (int i = 0; i < dimensions.size(); i++) {
-            WMSDimension d = (WMSDimension) dimensions.get(i);
-            myNode.addDimension(d.getName(), d.getUnits(), d.getUnitSymbol(), d.getDimensionExpression());
-        }
-
-        // Children
-        int children = node.getChildren().size();
-        myNode.setChildren(new ArrayList());
-        for (int i = 0; i < children; i++) {
-            myNode.getChildren().add(parseTree((WMSLayer)node.getChildren().get(i), myNode));
-        }
-
-        if (myNode.getName()!=null)
-            layers.put(myNode.getName(), myNode);
-
-        return myNode;
-    }
-
-    /**
-     * @return
-     */
     public String getAbstract() {
-
-    	return client.getServiceInformation().abstr;
-
+	return wms.getInfo().getDescription();
     }
 
     /**
@@ -319,14 +310,28 @@ public class FMapWMSDriver  {
      * @param srs
      * @return
      */
-    public Rectangle2D getLayersExtent(String[] layerName, String srs) {
-    	return client.getLayersExtent(layerName, srs);
+    public Rectangle2D getLayersExtent(String[] layerNames, String srs) {
+
+	try {
+	    CoordinateReferenceSystem crs = CRS.decode(srs);
+	    Set<Layer> gtLayers = getGTLayersFromLayerTitles(Arrays
+		    .asList(layerNames));
+	    GeneralEnvelope envelope = new GeneralEnvelope(crs);
+	    for (Layer l : gtLayers) {
+		envelope.add(l.getEnvelope(crs));
+	    }
+
+	    return envelope.toRectangle2D();
+	} catch (NoSuchAuthorityCodeException e) {
+	    e.printStackTrace();
+	} catch (FactoryException e) {
+	    e.printStackTrace();
+	}
+	
+	return null;
     }
 
-    /**
-     * @param string
-     * @return
-     */
+
     public WMSLayerNode getLayer(String layerName) {
         if (getLayers().get(layerName) != null)
         {
@@ -335,9 +340,7 @@ public class FMapWMSDriver  {
         return null;
     }
 
-    /**
-     * @return
-     */
+
     private TreeMap getLayers() {
         if (fmapRootLayer == null){
             fmapRootLayer = getLayersTree();
@@ -354,24 +357,78 @@ public class FMapWMSDriver  {
      * @throws WMSException
      */
     public String getFeatureInfo(WMSStatus _wmsStatus, int i, int j, int max_value, ICancellable cancellable) throws WMSException {
-        try {
-            return client.getFeatureInfo(_wmsStatus, i, j, max_value, cancellable);
-        } catch (org.gvsig.remoteClient.exceptions.WMSException e) {
-            throw new WMSException();
+	GetFeatureInfoRequest request = wms
+		.createGetFeatureInfoRequest(createMapRequest(_wmsStatus));
+	request.setQueryPoint(i, j);
+	request.setFeatureCount(max_value);
+	request.setInfoFormat("application/vnd.ogc.gml");
+
+	Set<Layer> layerSet = getGTLayers(_wmsStatus);
+
+	request.setQueryLayers(layerSet);
+
+	try {
+	    GetFeatureInfoResponse response = wms.issueRequest(request);
+
+	    StringWriter writer = new StringWriter();
+	    IOUtils.copy(response.getInputStream(), writer, "UTF-8");
+	    return writer.toString();
+	} catch (ServiceException e1) {
+	    e1.printStackTrace();
+	    throw new WMSException();
+	} catch (IOException e1) {
+	    e1.printStackTrace();
+	    throw new WMSException();
+	}
+    }
+
+    private Set<Layer> getGTLayers(WMSStatus wmsStatus) {
+	Vector<String> layerNames = wmsStatus.getLayerNames();
+	return getGTLayersFromLayerTitles(layerNames);
+    }
+
+    private Set<Layer> getGTLayersFromLayerTitles(List<String> layerNames) {
+	List<Layer> layerList = wms.getCapabilities().getLayerList();
+	Set<Layer> layerSet = new HashSet<Layer>();
+
+	for (String layerName : layerNames) {
+	    for (Layer l : layerList) {
+		if (l.getTitle().equalsIgnoreCase(layerName)) {
+		    layerSet.add(l);
+		    break;
 		}
+	    }
+	}
+	return layerSet;
     }
 
     public String getHost(){
-    	return client.getHost();
-
+	// fpuga: this is not the original host, maybe we should return the
+	// original
+	String host = wms.getInfo().getSource().toString();
+	return host;
     }
 
     /**
-     * @return <b>Boolean</b> returns true if the layer has LegendUrl in the "style" section (capabilities)
+     * TODO: fpuga: I don't understand what is doing this method, y adapt it
+     * from WMSProtocolHandler only
+     * 
+     * @return true if the layer has legendurl (layer-->style object in
+     *         capabilities) returns false when more than one layer is selected
      * 
      */
     public boolean hasLegendUrl(WMSStatus wmsStatus, String layerQuery) {
-    	return client.hasLegendUrl(wmsStatus,layerQuery);
-    }
+	String statusStyle = (String) wmsStatus.getStyles().get(0);
 
+	for (Layer layer:wms.getCapabilities().getLayerList()) {
+	    if (layer.getName().equalsIgnoreCase(layerQuery)) {
+		for (StyleImpl style:layer.getStyles()) {
+		    if (style.getName().equalsIgnoreCase(statusStyle)) {
+			return true;
+		    }
+		}
+	    }
+	}
+	return false;
+    }
 }

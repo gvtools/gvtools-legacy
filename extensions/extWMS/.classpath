@@ -22,5 +22,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/libRaster"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libRemoteServices"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/extRasterTools-SE"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/gt-wms-8.0.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt-metadata-8.0.jar"/>
+	<classpathentry kind="lib" path="/libFMap/lib/gt-main-8.0.jar"/>
+	<classpathentry kind="lib" path="lib/gt-xml-8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
