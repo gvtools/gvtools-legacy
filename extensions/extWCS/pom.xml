@@ -30,7 +30,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>src-test</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
 		<outputDirectory>bin</outputDirectory>
 		<testOutputDirectory>bin-test</testOutputDirectory>

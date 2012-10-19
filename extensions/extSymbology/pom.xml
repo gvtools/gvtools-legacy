@@ -52,7 +52,7 @@
 	</dependencies>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
-		<testSourceDirectory>test</testSourceDirectory>
+		<testSourceDirectory>src-test</testSourceDirectory>
 		<outputDirectory>bin</outputDirectory>
 		<testOutputDirectory>bin-test</testOutputDirectory>
 	</build>
